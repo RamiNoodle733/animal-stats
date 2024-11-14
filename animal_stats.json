@@ -1,0 +1,53 @@
+[
+    {
+        "name": "Lion",
+        "scientific_name": "Panthera leo",
+        "habitat": "Savannah",
+        "size": "Large",
+        "weight_kg": 190,
+        "speed_mps": 20,
+        "lifespan_years": 12,
+        "isNocturnal": true,
+        "isSocial": true,
+        "diet": ["meat"],
+        "attack": 80,
+        "defense": 60,
+        "agility": 50,
+        "intelligence": 70,
+        "unique_traits": ["roaring", "pride hunting"]
+    },
+    {
+        "name": "Elephant",
+        "scientific_name": "Loxodonta africana",
+        "habitat": "Grasslands, forests",
+        "size": "Extra Large",
+        "weight_kg": 6000,
+        "speed_mps": 6,
+        "lifespan_years": 70,
+        "isNocturnal": false,
+        "isSocial": true,
+        "diet": ["plants", "fruit"],
+        "attack": 60,
+        "defense": 90,
+        "agility": 30,
+        "intelligence": 80,
+        "unique_traits": ["trunk usage", "memory"]
+    },
+    {
+        "name": "Cheetah",
+        "scientific_name": "Acinonyx jubatus",
+        "habitat": "Grasslands",
+        "size": "Medium",
+        "weight_kg": 72,
+        "speed_mps": 30,
+        "lifespan_years": 10,
+        "isNocturnal": false,
+        "isSocial": false,
+        "diet": ["meat"],
+        "attack": 70,
+        "defense": 40,
+        "agility": 100,
+        "intelligence": 60,
+        "unique_traits": ["fastest land speed"]
+    }
+]
