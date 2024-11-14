@@ -22,9 +22,10 @@ function displayAnimals(animals) {
         animalCard.className = "animal-card";
 
         animalCard.innerHTML = `
-            <h2>${animal.name} <span>(${animal.scientific_name})</span></h2>
-            <p><strong>Habitat:</strong> ${animal.habitat}</p>
+            <h2>${animal.name}</h2>
             <div class="animal-stats">
+                <p><strong>Scientific Name:</strong> ${animal.scientific_name}</p>
+                <p><strong>Habitat:</strong> ${animal.habitat}</p>
                 <p><strong>Size:</strong> ${animal.size}</p>
                 <p><strong>Weight (kg):</strong> ${animal.weight_kg}</p>
                 <p><strong>Speed (m/s):</strong> ${animal.speed_mps}</p>
