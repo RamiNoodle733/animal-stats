@@ -1,0 +1,9 @@
+<!-- SVG favicon created for animal battle stats -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <rect width="100" height="100" rx="20" fill="#344055"/>
+  <path d="M50,20 C65,20 75,30 75,45 C75,60 65,70 50,70 C35,70 25,60 25,45 C25,30 35,20 50,20 Z" fill="#ffcc00"/>
+  <circle cx="40" cy="40" r="5" fill="#344055"/>
+  <circle cx="60" cy="40" r="5" fill="#344055"/>
+  <path d="M40,55 C40,55 45,60 50,60 C55,60 60,55 60,55" stroke="#344055" stroke-width="3" fill="none"/>
+  <path d="M25,35 L15,25 M75,35 L85,25 M25,40 L10,40 M75,40 L90,40 M25,45 L15,55 M75,45 L85,55" stroke="#ffcc00" stroke-width="3"/>
+</svg>

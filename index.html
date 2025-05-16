@@ -3,12 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Animal Stats</title>
+    <meta name="description" content="Explore animal stats presented like video game characters with battle stats, abilities, and more!">
+    <title>Animal Battle Stats</title>
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body>
-    <h1>Animal Stats</h1>
-    <div id="animal-list"></div>
+<body>    <header>
+        <h1>ANIMAL BATTLE STATS</h1>
+        <div class="theme-toggle">
+            <input type="checkbox" id="theme-switch" class="theme-switch">
+            <label for="theme-switch" class="theme-label">
+                <i class="fas fa-sun"></i>
+                <i class="fas fa-moon"></i>
+                <span class="ball"></span>
+            </label>
+        </div>
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="Search animals...">
+            <div class="filter-controls">
+                <select id="class-filter">
+                    <option value="">All Classes</option>
+                </select>
+                <select id="type-filter">
+                    <option value="">All Types</option>
+                </select>
+                <select id="sort-by">
+                    <option value="name">Sort by Name</option>
+                    <option value="attack">Sort by Attack</option>
+                    <option value="defense">Sort by Defense</option>
+                    <option value="agility">Sort by Agility</option>
+                    <option value="intelligence">Sort by Intelligence</option>
+                    <option value="stamina">Sort by Stamina</option>
+                </select>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="view-toggle">
+            <button id="grid-view-btn" class="active"><i class="fas fa-th"></i> Grid</button>
+            <button id="compare-view-btn"><i class="fas fa-balance-scale"></i> Compare</button>
+        </div>
+        
+        <div id="grid-view" class="active-view">
+            <div id="animal-grid" class="animal-grid"></div>
+        </div>
+        
+        <div id="compare-view" class="inactive-view">
+            <div class="compare-selection">
+                <div class="compare-dropdown">
+                    <select id="animal1-select">
+                        <option value="">Select Animal 1</option>
+                    </select>
+                </div>
+                <div class="vs-badge">VS</div>
+                <div class="compare-dropdown">
+                    <select id="animal2-select">
+                        <option value="">Select Animal 2</option>
+                    </select>
+                </div>
+            </div>
+            <div id="comparison-container" class="comparison-container"></div>
+        </div>
+    </main>
+    
+    <div id="animal-detail-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div id="animal-detail-content"></div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2025 Animal Battle Stats | Explore the world's most amazing creatures</p>
+    </footer>
+    
     <script src="script.js"></script>
 </body>
 </html>
