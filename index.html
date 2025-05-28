@@ -3,35 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Explore animal stats presented like video game characters with battle stats, abilities, and more!">
-    <title>Animal Battle Stats</title>
+    <meta name="description" content="Explore scientifically accurate animal statistics presented like video game characters with detailed stats, abilities, and comparisons! Discover fascinating facts about wildlife.">
+    <meta name="keywords" content="animal stats, wildlife facts, animal comparison, nature education, animal abilities, scientific data">
+    <meta name="author" content="Animal Stats">
+    <meta property="og:title" content="Animal Stats - Scientifically Accurate Wildlife Data">
+    <meta property="og:description" content="Explore fascinating animal statistics with accurate scientific data presented in an engaging, game-like interface.">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <title>Animal Stats - Scientifically Accurate Wildlife Data</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 </head>
 <body>    <header>
-        <h1>ANIMAL BATTLE STATS</h1>
+        <h1>ANIMAL STATS</h1>
         <div class="theme-toggle">
-            <input type="checkbox" id="theme-switch" class="theme-switch">
+            <input type="checkbox" id="theme-switch" class="theme-switch" aria-label="Toggle dark mode">
             <label for="theme-switch" class="theme-label">
-                <i class="fas fa-sun"></i>
-                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun" aria-hidden="true"></i>
+                <i class="fas fa-moon" aria-hidden="true"></i>
                 <span class="ball"></span>
             </label>
         </div>
         <div class="search-container">
-            <input type="text" id="search-input" placeholder="Search animals...">
+            <input type="text" id="search-input" placeholder="Search animals..." aria-label="Search animals by name or scientific name">
             <div class="filter-controls">
-                <select id="class-filter">
+                <select id="class-filter" aria-label="Filter by animal class">
                     <option value="">All Classes</option>
                 </select>
-                <select id="type-filter">
+                <select id="type-filter" aria-label="Filter by animal type">
                     <option value="">All Types</option>
                 </select>
-                <select id="sort-by">
+                <select id="sort-by" aria-label="Sort animals by">
                     <option value="name">Sort by Name</option>
                     <option value="attack">Sort by Attack</option>
                     <option value="defense">Sort by Defense</option>
@@ -43,43 +49,45 @@
         </div>
     </header>
     
-    <main>
-        <div class="view-toggle">
-            <button id="grid-view-btn" class="active"><i class="fas fa-th"></i> Grid</button>
-            <button id="compare-view-btn"><i class="fas fa-balance-scale"></i> Compare</button>
+    <main role="main">
+        <div class="view-toggle" role="tablist" aria-label="View mode selection">
+            <button id="grid-view-btn" class="active" role="tab" aria-selected="true" aria-controls="grid-view">
+                <i class="fas fa-th" aria-hidden="true"></i> Grid View
+            </button>
+            <button id="compare-view-btn" role="tab" aria-selected="false" aria-controls="compare-view">
+                <i class="fas fa-balance-scale" aria-hidden="true"></i> Compare
+            </button>
+        </div>
+          <div id="grid-view" class="active-view" role="tabpanel" aria-labelledby="grid-view-btn">
+            <div id="animal-grid" class="animal-grid" role="grid" aria-label="Animal cards grid"></div>
         </div>
         
-        <div id="grid-view" class="active-view">
-            <div id="animal-grid" class="animal-grid"></div>
-        </div>
-        
-        <div id="compare-view" class="inactive-view">
+        <div id="compare-view" class="inactive-view" role="tabpanel" aria-labelledby="compare-view-btn">
             <div class="compare-selection">
                 <div class="compare-dropdown">
-                    <select id="animal1-select">
+                    <select id="animal1-select" aria-label="Select first animal for comparison">
                         <option value="">Select Animal 1</option>
                     </select>
                 </div>
-                <div class="vs-badge">VS</div>
+                <div class="vs-badge" aria-hidden="true">VS</div>
                 <div class="compare-dropdown">
-                    <select id="animal2-select">
+                    <select id="animal2-select" aria-label="Select second animal for comparison">
                         <option value="">Select Animal 2</option>
                     </select>
                 </div>
             </div>
-            <div id="comparison-container" class="comparison-container"></div>
+            <div id="comparison-container" class="comparison-container" role="region" aria-label="Animal comparison results"></div>
         </div>
     </main>
     
-    <div id="animal-detail-modal" class="modal">
+    <div id="animal-detail-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
         <div class="modal-content">
-            <span class="close-button">&times;</span>
+            <button class="close-button" aria-label="Close animal details">&times;</button>
             <div id="animal-detail-content"></div>
         </div>
     </div>
-    
-    <footer>
-        <p>© 2025 Animal Battle Stats | Explore the world's most amazing creatures</p>
+      <footer>
+        <p>© 2025 Animal Stats | Explore the world's most amazing creatures</p>
     </footer>
     
     <script src="script.js"></script>

@@ -1,9 +1,54 @@
-<!-- SVG favicon created for animal battle stats -->
+<!-- Modern Animal Stats Favicon -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="20" fill="#344055"/>
-  <path d="M50,20 C65,20 75,30 75,45 C75,60 65,70 50,70 C35,70 25,60 25,45 C25,30 35,20 50,20 Z" fill="#ffcc00"/>
-  <circle cx="40" cy="40" r="5" fill="#344055"/>
-  <circle cx="60" cy="40" r="5" fill="#344055"/>
-  <path d="M40,55 C40,55 45,60 50,60 C55,60 60,55 60,55" stroke="#344055" stroke-width="3" fill="none"/>
-  <path d="M25,35 L15,25 M75,35 L85,25 M25,40 L10,40 M75,40 L90,40 M25,45 L15,55 M75,45 L85,55" stroke="#ffcc00" stroke-width="3"/>
+  <defs>
+    <!-- Background gradient -->
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#667eea"/>
+      <stop offset="100%" stop-color="#764ba2"/>
+    </linearGradient>
+    <!-- Animal silhouette gradient -->
+    <linearGradient id="animal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f093fb"/>
+      <stop offset="100%" stop-color="#f5576c"/>
+    </linearGradient>
+    <!-- Stats bars gradient -->
+    <linearGradient id="stats" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4facfe"/>
+      <stop offset="100%" stop-color="#00f2fe"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background with rounded corners -->
+  <rect width="100" height="100" rx="18" fill="url(#bg)"/>
+  
+  <!-- Animal silhouette (stylized big cat) -->
+  <g fill="url(#animal)">
+    <!-- Body -->
+    <ellipse cx="50" cy="45" rx="22" ry="12"/>
+    <!-- Head -->
+    <circle cx="50" cy="30" r="15"/>
+    <!-- Ears -->
+    <ellipse cx="42" cy="20" rx="4" ry="6"/>
+    <ellipse cx="58" cy="20" rx="4" ry="6"/>
+    <!-- Tail -->
+    <ellipse cx="72" cy="50" rx="8" ry="3" transform="rotate(45 72 50)"/>
+    <!-- Legs -->
+    <rect x="38" y="55" width="3" height="8" rx="1.5"/>
+    <rect x="47" y="55" width="3" height="8" rx="1.5"/>
+    <rect x="53" y="55" width="3" height="8" rx="1.5"/>
+    <rect x="62" y="55" width="3" height="8" rx="1.5"/>
+  </g>
+  
+  <!-- Stats visualization bars -->
+  <g fill="url(#stats)" opacity="0.9">
+    <rect x="15" y="75" width="25" height="3" rx="1.5"/>
+    <rect x="15" y="82" width="35" height="3" rx="1.5"/>
+    <rect x="15" y="89" width="20" height="3" rx="1.5"/>
+    <rect x="60" y="75" width="25" height="3" rx="1.5"/>
+    <rect x="60" y="82" width="20" height="3" rx="1.5"/>
+    <rect x="60" y="89" width="25" height="3" rx="1.5"/>
+  </g>
+  
+  <!-- Subtle highlight -->
+  <rect width="100" height="100" rx="18" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
 </svg>
