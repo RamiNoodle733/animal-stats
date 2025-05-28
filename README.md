@@ -1,4 +1,4 @@
-# 🦁 Animal Stats
+# Animal Stats
 
 **Modern Interactive Animal Statistics Webapp**
 
