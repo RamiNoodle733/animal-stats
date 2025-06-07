@@ -33,7 +33,7 @@ A cutting-edge web application that presents scientifically accurate animal stat
 - **WCAG 2.1 AA Compliant**: Comprehensive accessibility features
 - **Screen Reader Support**: ARIA labels and semantic HTML
 - **Keyboard Navigation**: Full keyboard accessibility
-- **Performance Optimized**: Efficient rendering and smooth animations
+- **Performance Optimized**: Efficient rendering & smooth animations
 
 ## 🚀 Quick Start
 
