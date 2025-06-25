@@ -8,6 +8,7 @@
 
 A cutting-edge web application that presents scientifically accurate animal statistics in an engaging, game-style interface. Perfect for education, research, and wildlife enthusiasts.
 
+
 ## ✨ Features
 
 ### 🎮 Modern Game-Style Interface
