@@ -1,6 +1,6 @@
 # Animal Stats
 
-**Modern Interactive Animal Statistics Webapp**
+**Modern Interactive Animal Statistics Webapp** 
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://raminoodle733.github.io/animal-stats/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
