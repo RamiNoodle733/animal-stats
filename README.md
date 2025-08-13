@@ -16,10 +16,13 @@ A cutting-edge web application that presents scientifically accurate animal stat
 - **Gradient Backgrounds**: Eye-catching gradients and modern visual effects
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
 - **Dark Mode Ready**: Professional color scheme with excellent contrast
+ - **Fighting Game Aesthetic**: Dark, dramatic theme with glowing accents
+ - **Iconic Animal Art**: Clean, background-free icons for every creature
 
 ### 📊 Scientific Accuracy
 - **Research-Based Data**: All statistics derived from scientific studies
 - **Accurate Measurements**: Precise speed conversions (m/s), bite force (PSI), weights
+- **Ongoing Verification**: Key entries reviewed and corrected for accuracy
 - **Intelligence Ratings**: Based on cognitive research and brain-to-body ratios
 - **Real Abilities**: Documented special abilities and natural behaviors
 
@@ -29,6 +32,8 @@ A cutting-edge web application that presents scientifically accurate animal stat
 - **Animal Comparison**: Side-by-side statistical comparisons
 - **URL State Management**: Bookmarkable searches and filters
 - **Keyboard Navigation**: Full accessibility support
+- **Favorites**: Mark animals you love and quickly filter them
+- **Animated Interactions**: Favorite stars pop with satisfying feedback
 
 ### ♿ Accessibility & Performance
 - **WCAG 2.1 AA Compliant**: Comprehensive accessibility features
@@ -66,7 +71,7 @@ animal-stats/
 ├── index.html          # Main HTML file with semantic structure
 ├── styles.css          # Modern CSS with animations and responsiveness
 ├── script.js           # Enhanced JavaScript with accessibility features
-├── animal_stats.json   # Scientific animal database (20+ animals)
+├── animal_stats.json   # Scientific animal database (25+ animals)
 ├── favicon.svg         # Modern SVG favicon
 ├── README.md           # This file
 ├── LICENSE             # MIT License
@@ -137,6 +142,7 @@ Each animal entry contains scientifically accurate data:
 - ✅ Performance optimizations and smooth UX
 - ✅ Mobile-responsive design
 - ✅ Updated favicon with modern design
+- ✅ Expanded roster with new animals and background-free icons
 
 ## 🤝 Contributing
 
