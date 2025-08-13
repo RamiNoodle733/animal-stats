@@ -146,6 +146,30 @@ select:hover {
     transform: translateY(-1px);
 }
 
+.filter-controls button {
+    padding: 12px;
+    border: 2px solid transparent;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: var(--shadow-light);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #777;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filter-controls button:hover,
+.filter-controls button.active {
+    color: var(--accent-color);
+    box-shadow: var(--shadow-medium);
+}
+
+#favorites-filter.active i {
+    color: gold;
+}
+
 .view-toggle {
     display: flex;
     justify-content: center;
@@ -330,6 +354,28 @@ select:hover {
 .animal-card:hover .animal-class-badge {
     transform: translateY(-3px);
     box-shadow: var(--shadow-medium);
+}
+
+.favorite-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    transition: color 0.3s ease;
+}
+
+.favorite-btn.active,
+.favorite-btn:hover {
+    color: gold;
 }
 
 .animal-header h2 {

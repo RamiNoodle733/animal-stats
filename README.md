@@ -29,6 +29,7 @@ A cutting-edge web application that presents scientifically accurate animal stat
 - **Animal Comparison**: Side-by-side statistical comparisons
 - **URL State Management**: Bookmarkable searches and filters
 - **Keyboard Navigation**: Full accessibility support
+- **Favorites**: Mark animals you love and quickly filter them
 
 ### ♿ Accessibility & Performance
 - **WCAG 2.1 AA Compliant**: Comprehensive accessibility features

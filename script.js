@@ -1,4 +1,6 @@
 let allAnimals = [];
+let favorites = new Set(JSON.parse(localStorage.getItem('favorites') || '[]'));
+let favoritesOnly = false;
 
 document.addEventListener("DOMContentLoaded", () => {
     // Show loading state
@@ -137,9 +139,13 @@ function createAnimalCard(animal) {
     cardDiv.setAttribute('role', 'gridcell');
     cardDiv.setAttribute('tabindex', '0');
     cardDiv.setAttribute('aria-label', `${animal.name} - Click for details`);
-    
-    // Add image and badges
+    const isFavorite = favorites.has(animal.name);
+
+    // Add image, badges, and favorite button
     cardDiv.innerHTML = `
+        <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-name="${animal.name}" aria-label="${isFavorite ? 'Remove from favorites' : 'Add to favorites'}">
+            <i class="fas fa-star" aria-hidden="true"></i>
+        </button>
         <img src="${animal.image}" alt="${animal.name} in its natural habitat" class="animal-image" loading="lazy">
         <div class="animal-class-badge" aria-label="Animal class">${animal.class}</div>
         <div class="animal-type-badge" aria-label="Animal type">${animal.type}</div>
@@ -201,7 +207,7 @@ function createAnimalCard(animal) {
             </div>
         </div>
     `;
-    
+
     // Add click and keyboard event listeners
     const showDetails = () => showAnimalDetails(animal);
     cardDiv.addEventListener('click', showDetails);
@@ -211,8 +217,30 @@ function createAnimalCard(animal) {
             showDetails();
         }
     });
-    
+
+    const favoriteBtn = cardDiv.querySelector('.favorite-btn');
+    favoriteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleFavorite(animal.name, favoriteBtn);
+    });
+
     return cardDiv;
+}
+
+function toggleFavorite(name, button) {
+    if (favorites.has(name)) {
+        favorites.delete(name);
+        button.classList.remove('active');
+        button.setAttribute('aria-label', 'Add to favorites');
+    } else {
+        favorites.add(name);
+        button.classList.add('active');
+        button.setAttribute('aria-label', 'Remove from favorites');
+    }
+    localStorage.setItem('favorites', JSON.stringify([...favorites]));
+    if (favoritesOnly) {
+        filterAnimals();
+    }
 }
 
 function populateComparisonDropdowns(animals) {
@@ -250,6 +278,13 @@ function setupEventListeners() {
     document.getElementById("class-filter").addEventListener("change", filterAnimals);
     document.getElementById("type-filter").addEventListener("change", filterAnimals);
     document.getElementById("sort-by").addEventListener("change", filterAnimals);
+    const favoritesFilterBtn = document.getElementById("favorites-filter");
+    favoritesFilterBtn.addEventListener("click", () => {
+        favoritesOnly = !favoritesOnly;
+        favoritesFilterBtn.classList.toggle("active", favoritesOnly);
+        favoritesFilterBtn.setAttribute("aria-pressed", favoritesOnly);
+        filterAnimals();
+    });
     
     // View toggle buttons with proper ARIA attributes
     const gridViewBtn = document.getElementById("grid-view-btn");
@@ -338,6 +373,8 @@ function filterAnimals() {
         // Early returns for better performance
         if (selectedClass && animal.class !== selectedClass) return false;
         if (selectedType && animal.type !== selectedType) return false;
+        if (favoritesOnly && !favorites.has(animal.name)) return false;
+        if (favoritesOnly && !favorites.has(animal.name)) return false;
         
         // Search in multiple fields
         if (searchTerm) {
@@ -807,7 +844,8 @@ function filterAnimals() {
         // Early returns for better performance
         if (selectedClass && animal.class !== selectedClass) return false;
         if (selectedType && animal.type !== selectedType) return false;
-        
+        if (favoritesOnly && !favorites.has(animal.name)) return false;
+
         // Search in multiple fields
         if (searchTerm) {
             const searchFields = [
