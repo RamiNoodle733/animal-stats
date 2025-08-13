@@ -378,6 +378,17 @@ select:hover {
     color: gold;
 }
 
+/* Pop animation when favoriting */
+.favorite-btn.pop {
+    animation: star-pop 0.3s ease;
+}
+
+@keyframes star-pop {
+    0% { transform: scale(0.5); }
+    80% { transform: scale(1.4); }
+    100% { transform: scale(1); }
+}
+
 .animal-header h2 {
     font-size: 1.8rem;
     margin-bottom: 8px;

@@ -20,6 +20,7 @@ A cutting-edge web application that presents scientifically accurate animal stat
 ### 📊 Scientific Accuracy
 - **Research-Based Data**: All statistics derived from scientific studies
 - **Accurate Measurements**: Precise speed conversions (m/s), bite force (PSI), weights
+- **Ongoing Verification**: Key entries reviewed and corrected for accuracy
 - **Intelligence Ratings**: Based on cognitive research and brain-to-body ratios
 - **Real Abilities**: Documented special abilities and natural behaviors
 
@@ -30,6 +31,7 @@ A cutting-edge web application that presents scientifically accurate animal stat
 - **URL State Management**: Bookmarkable searches and filters
 - **Keyboard Navigation**: Full accessibility support
 - **Favorites**: Mark animals you love and quickly filter them
+- **Animated Interactions**: Favorite stars pop with satisfying feedback
 
 ### ♿ Accessibility & Performance
 - **WCAG 2.1 AA Compliant**: Comprehensive accessibility features
