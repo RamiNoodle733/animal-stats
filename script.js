@@ -139,6 +139,7 @@ function createAnimalCard(animal) {
   cardDiv.setAttribute("role", "gridcell");
   cardDiv.setAttribute("tabindex", "0");
   cardDiv.setAttribute("aria-label", `${animal.name} - Click for details`);
+
   const isFavorite = favorites.has(animal.name);
 
   // Add image, badges, and favorite button
@@ -202,13 +203,48 @@ function createAnimalCard(animal) {
       <div class="animal-special">
         <div class="special-title">Special Abilities:</div>
         <ul>
-          ${animal.special_abilities.map(ability => `<li>${ability}</li>`).join('')}
+          ${animal.special_abilities.map(a => `<li>${a}</li>`).join("")}
         </ul>
       </div>
     </div>
   `;
 
+  // Open details on click or keyboard
+  const showDetails = () => showAnimalDetails(animal);
+  cardDiv.addEventListener("click", showDetails);
+  cardDiv.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      showDetails();
+    }
+  });
+
+  // Favorite button
+  const favoriteBtn = cardDiv.querySelector(".favorite-btn");
+  favoriteBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleFavorite(animal.name, favoriteBtn);
+  });
+
   return cardDiv;
+}
+
+function toggleFavorite(name, button) {
+  if (favorites.has(name)) {
+    favorites.delete(name);
+    button.classList.remove("active");
+    button.setAttribute("aria-label", "Add to favorites");
+  } else {
+    favorites.add(name);
+    button.classList.add("active");
+    button.setAttribute("aria-label", "Remove from favorites");
+    button.classList.add("pop");
+    setTimeout(() => button.classList.remove("pop"), 300);
+  }
+  localStorage.setItem("favorites", JSON.stringify([...favorites]));
+  if (typeof favoritesOnly !== "undefined" && favoritesOnly) {
+    filterAnimals();
+  }
 }
 
 function toggleFavorite(name, button) {

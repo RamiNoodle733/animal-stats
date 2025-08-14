@@ -16,8 +16,8 @@ A cutting-edge web application that presents scientifically accurate animal stat
 - **Gradient Backgrounds**: Eye-catching gradients and modern visual effects
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
 - **Dark Mode Ready**: Professional color scheme with excellent contrast
- - **Fighting Game Aesthetic**: Dark, dramatic theme with glowing accents
- - **Iconic Animal Art**: Clean, background-free icons for every creature
+- **Fighting Game Aesthetic**: Dark, dramatic theme with glowing accents
+- **Iconic Animal Art**: Clean, background-free icons for every creature
 
 ### 📊 Scientific Accuracy
 - **Research-Based Data**: All statistics derived from scientific studies
@@ -71,7 +71,8 @@ animal-stats/
 ├── index.html          # Main HTML file with semantic structure
 ├── styles.css          # Modern CSS with animations and responsiveness
 ├── script.js           # Enhanced JavaScript with accessibility features
-├── animal_stats.json   # Scientific animal database (25+ animals)
+├── animal_stats.json   # Scientific animal database (27 animals)
+├── images/             # Background-free animal icons
 ├── favicon.svg         # Modern SVG favicon
 ├── README.md           # This file
 ├── LICENSE             # MIT License
