@@ -141,8 +141,7 @@ function createAnimalCard(animal) {
     cardDiv.setAttribute('aria-label', `${animal.name} - Click for details`);
     const isFavorite = favorites.has(animal.name);
 
-    // Add image, badges, and favorite button
-    // Images use background-free OpenMoji icons
+    // Add image, badges, and favorite button with background-free OpenMoji icons
     cardDiv.innerHTML = `
         <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-name="${animal.name}" aria-label="${isFavorite ? 'Remove from favorites' : 'Add to favorites'}">
             <i class="fas fa-star" aria-hidden="true"></i>
