@@ -133,98 +133,118 @@ function displayAnimalsInGrid(animals) {
 }
 
 function createAnimalCard(animal) {
-    const cardDiv = document.createElement("div");
-    cardDiv.className = "animal-card";
-    cardDiv.dataset.animalName = animal.name;
-    cardDiv.setAttribute('role', 'gridcell');
-    cardDiv.setAttribute('tabindex', '0');
-    cardDiv.setAttribute('aria-label', `${animal.name} - Click for details`);
-    const isFavorite = favorites.has(animal.name);
+  const cardDiv = document.createElement("div");
+  cardDiv.className = "animal-card";
+  cardDiv.dataset.animalName = animal.name;
+  cardDiv.setAttribute("role", "gridcell");
+  cardDiv.setAttribute("tabindex", "0");
+  cardDiv.setAttribute("aria-label", `${animal.name} - Click for details`);
 
-    // Add image, badges, and favorite button
-    cardDiv.innerHTML = `
-        <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-name="${animal.name}" aria-label="${isFavorite ? 'Remove from favorites' : 'Add to favorites'}">
-            <i class="fas fa-star" aria-hidden="true"></i>
-        </button>
-        <img src="${animal.image}" alt="${animal.name}" class="animal-image" loading="lazy">
-        <div class="animal-class-badge" aria-label="Animal class">${animal.class}</div>
-        <div class="animal-type-badge" aria-label="Animal type">${animal.type}</div>
-        <div class="animal-header">
-            <h2>${animal.name}</h2>
-            <h3>${animal.scientific_name}</h3>
+  const isFavorite = favorites.has(animal.name);
+
+  // Add image, badges, and favorite button
+  cardDiv.innerHTML = `
+    <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-name="${animal.name}" aria-label="${isFavorite ? 'Remove from favorites' : 'Add to favorites'}">
+      <i class="fas fa-star" aria-hidden="true"></i>
+    </button>
+    <img src="${animal.image}" alt="${animal.name}" class="animal-image" loading="lazy">
+    <div class="animal-class-badge" aria-label="Animal class">${animal.class}</div>
+    <div class="animal-type-badge" aria-label="Animal type">${animal.type}</div>
+    <div class="animal-header">
+      <h2>${animal.name}</h2>
+      <h3>${animal.scientific_name}</h3>
+    </div>
+    <div class="animal-content">
+      <div class="stat-bar">
+        <div class="stat-label">
+          <span>Attack</span>
+          <span>${animal.attack}</span>
         </div>
-        <div class="animal-content">
-            <div class="stat-bar">
-                <div class="stat-label">
-                    <span>Attack</span>
-                    <span>${animal.attack}</span>
-                </div>
-                <div class="stat-track" role="progressbar" aria-valuenow="${animal.attack}" aria-valuemin="0" aria-valuemax="100" aria-label="Attack rating">
-                    <div class="stat-fill attack-fill" style="width: ${animal.attack}%"></div>
-                </div>
-            </div>
-            <div class="stat-bar">
-                <div class="stat-label">
-                    <span>Defense</span>
-                    <span>${animal.defense}</span>
-                </div>
-                <div class="stat-track" role="progressbar" aria-valuenow="${animal.defense}" aria-valuemin="0" aria-valuemax="100" aria-label="Defense rating">
-                    <div class="stat-fill defense-fill" style="width: ${animal.defense}%"></div>
-                </div>
-            </div>
-            <div class="stat-bar">
-                <div class="stat-label">
-                    <span>Agility</span>
-                    <span>${animal.agility}</span>
-                </div>
-                <div class="stat-track" role="progressbar" aria-valuenow="${animal.agility}" aria-valuemin="0" aria-valuemax="100" aria-label="Agility rating">
-                    <div class="stat-fill agility-fill" style="width: ${animal.agility}%"></div>
-                </div>
-            </div>
-            <div class="stat-bar">
-                <div class="stat-label">
-                    <span>Intelligence</span>
-                    <span>${animal.intelligence}</span>
-                </div>
-                <div class="stat-track" role="progressbar" aria-valuenow="${animal.intelligence}" aria-valuemin="0" aria-valuemax="100" aria-label="Intelligence rating">
-                    <div class="stat-fill intelligence-fill" style="width: ${animal.intelligence}%"></div>
-                </div>
-            </div>
-            <div class="stat-bar">
-                <div class="stat-label">
-                    <span>Stamina</span>
-                    <span>${animal.stamina}</span>
-                </div>
-                <div class="stat-track" role="progressbar" aria-valuenow="${animal.stamina}" aria-valuemin="0" aria-valuemax="100" aria-label="Stamina rating">
-                    <div class="stat-fill stamina-fill" style="width: ${animal.stamina}%"></div>
-                </div>
-            </div>
-            <div class="animal-special">
-                <div class="special-title">Special Abilities:</div>
-                <ul>
-                    ${animal.special_abilities.map(ability => `<li>${ability}</li>`).join('')}
-                </ul>
-            </div>
+        <div class="stat-track" role="progressbar" aria-valuenow="${animal.attack}" aria-valuemin="0" aria-valuemax="100" aria-label="Attack rating">
+          <div class="stat-fill attack-fill" style="width: ${animal.attack}%"></div>
         </div>
-    `;
+      </div>
+      <div class="stat-bar">
+        <div class="stat-label">
+          <span>Defense</span>
+          <span>${animal.defense}</span>
+        </div>
+        <div class="stat-track" role="progressbar" aria-valuenow="${animal.defense}" aria-valuemin="0" aria-valuemax="100" aria-label="Defense rating">
+          <div class="stat-fill defense-fill" style="width: ${animal.defense}%"></div>
+        </div>
+      </div>
+      <div class="stat-bar">
+        <div class="stat-label">
+          <span>Agility</span>
+          <span>${animal.agility}</span>
+        </div>
+        <div class="stat-track" role="progressbar" aria-valuenow="${animal.agility}" aria-valuemin="0" aria-valuemax="100" aria-label="Agility rating">
+          <div class="stat-fill agility-fill" style="width: ${animal.agility}%"></div>
+        </div>
+      </div>
+      <div class="stat-bar">
+        <div class="stat-label">
+          <span>Intelligence</span>
+          <span>${animal.intelligence}</span>
+        </div>
+        <div class="stat-track" role="progressbar" aria-valuenow="${animal.intelligence}" aria-valuemin="0" aria-valuemax="100" aria-label="Intelligence rating">
+          <div class="stat-fill intelligence-fill" style="width: ${animal.intelligence}%"></div>
+        </div>
+      </div>
+      <div class="stat-bar">
+        <div class="stat-label">
+          <span>Stamina</span>
+          <span>${animal.stamina}</span>
+        </div>
+        <div class="stat-track" role="progressbar" aria-valuenow="${animal.stamina}" aria-valuemin="0" aria-valuemax="100" aria-label="Stamina rating">
+          <div class="stat-fill stamina-fill" style="width: ${animal.stamina}%"></div>
+        </div>
+      </div>
+      <div class="animal-special">
+        <div class="special-title">Special Abilities:</div>
+        <ul>
+          ${animal.special_abilities.map(a => `<li>${a}</li>`).join("")}
+        </ul>
+      </div>
+    </div>
+  `;
 
-    // Add click and keyboard event listeners
-    const showDetails = () => showAnimalDetails(animal);
-    cardDiv.addEventListener('click', showDetails);
-    cardDiv.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' || event.key === ' ') {
-            event.preventDefault();
-            showDetails();
-        }
-    });
+  // Open details on click or keyboard
+  const showDetails = () => showAnimalDetails(animal);
+  cardDiv.addEventListener("click", showDetails);
+  cardDiv.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      showDetails();
+    }
+  });
 
-    const favoriteBtn = cardDiv.querySelector('.favorite-btn');
-    favoriteBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        toggleFavorite(animal.name, favoriteBtn);
-    });
+  // Favorite button
+  const favoriteBtn = cardDiv.querySelector(".favorite-btn");
+  favoriteBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleFavorite(animal.name, favoriteBtn);
+  });
 
-    return cardDiv;
+  return cardDiv;
+}
+
+function toggleFavorite(name, button) {
+  if (favorites.has(name)) {
+    favorites.delete(name);
+    button.classList.remove("active");
+    button.setAttribute("aria-label", "Add to favorites");
+  } else {
+    favorites.add(name);
+    button.classList.add("active");
+    button.setAttribute("aria-label", "Remove from favorites");
+    button.classList.add("pop");
+    setTimeout(() => button.classList.remove("pop"), 300);
+  }
+  localStorage.setItem("favorites", JSON.stringify([...favorites]));
+  if (typeof favoritesOnly !== "undefined" && favoritesOnly) {
+    filterAnimals();
+  }
 }
 
 function toggleFavorite(name, button) {
