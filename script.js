@@ -148,7 +148,6 @@ function createAnimalCard(animal) {
       <i class="fas fa-star" aria-hidden="true"></i>
     </button>
     <img src="${animal.image}" alt="${animal.name}" class="animal-image" loading="lazy">
-    <div class="animal-class-badge" aria-label="Animal class">${animal.class}</div>
     <div class="animal-type-badge" aria-label="Animal type">${animal.type}</div>
     <div class="animal-header">
       <h2>${animal.name}</h2>
@@ -560,29 +559,9 @@ function displayComparison(animal1, animal2) {
     // Calculate stats
     const total1 = calculateTotalStats(animal1);
     const total2 = calculateTotalStats(animal2);
-    const winner = total1 > total2 ? animal1 : (total2 > total1 ? animal2 : null);
     
-    // Calculate category wins
-    let wins1 = 0;
-    let wins2 = 0;
-    if (animal1.attack > animal2.attack) wins1++; else if (animal2.attack > animal1.attack) wins2++;
-    if (animal1.defense > animal2.defense) wins1++; else if (animal2.defense > animal1.defense) wins2++;
-    if (animal1.agility > animal2.agility) wins1++; else if (animal2.agility > animal1.agility) wins2++;
-    if (animal1.intelligence > animal2.intelligence) wins1++; else if (animal2.intelligence > animal1.intelligence) wins2++;
-    if (animal1.stamina > animal2.stamina) wins1++; else if (animal2.stamina > animal1.stamina) wins2++;
-    if (animal1.special_attack > animal2.special_attack) wins1++; else if (animal2.special_attack > animal1.special_attack) wins2++;
-    
-    // Create enhanced comparison
+    // Create enhanced comparison without winner announcement
     comparisonContainer.innerHTML = `
-        ${winner ? `<div class="overall-winner">
-            <div class="winner-announcement">
-                <i class="fas fa-trophy"></i>
-                <h2>${winner.name} WINS!</h2>
-                <p>Overall Total: ${winner === animal1 ? total1 : total2} points</p>
-                <p class="winner-subtitle">Category Wins: ${winner === animal1 ? wins1 : wins2} out of 6</p>
-            </div>
-        </div>` : '<div class="overall-winner"><div class="winner-announcement"><i class="fas fa-handshake"></i><h2>IT\'S A TIE!</h2><p>Both animals are equally matched</p></div></div>'}
-        
         <div class="comparison-card">
             <img src="${animal1.image}" alt="${animal1.name}" class="animal-image">
             <div class="animal-header">
@@ -590,7 +569,6 @@ function displayComparison(animal1, animal2) {
                 <h3>${animal1.scientific_name}</h3>
             </div>
             <div class="animal-badges">
-                <span class="badge">${animal1.class}</span>
                 <span class="badge">${animal1.type}</span>
             </div>
             <div class="animal-content">
@@ -619,59 +597,59 @@ function displayComparison(animal1, animal2) {
             <h3 class="comparison-title">Battle Statistics</h3>
             
             <div class="comparison-row">
-                <div class="comparison-stat ${animal1.attack > animal2.attack ? 'winner' : animal1.attack === animal2.attack ? 'tie' : ''}">${animal1.attack}</div>
+                <div class="comparison-stat ${animal1.attack > animal2.attack ? 'higher' : animal1.attack === animal2.attack ? 'tie' : ''}">${animal1.attack}</div>
                 <div class="comparison-label">
                     <i class="fas fa-fire"></i> ATTACK
                 </div>
-                <div class="comparison-stat ${animal2.attack > animal1.attack ? 'winner' : animal1.attack === animal2.attack ? 'tie' : ''}">${animal2.attack}</div>
+                <div class="comparison-stat ${animal2.attack > animal1.attack ? 'higher' : animal1.attack === animal2.attack ? 'tie' : ''}">${animal2.attack}</div>
             </div>
             
             <div class="comparison-row">
-                <div class="comparison-stat ${animal1.defense > animal2.defense ? 'winner' : animal1.defense === animal2.defense ? 'tie' : ''}">${animal1.defense}</div>
+                <div class="comparison-stat ${animal1.defense > animal2.defense ? 'higher' : animal1.defense === animal2.defense ? 'tie' : ''}">${animal1.defense}</div>
                 <div class="comparison-label">
                     <i class="fas fa-shield-alt"></i> DEFENSE
                 </div>
-                <div class="comparison-stat ${animal2.defense > animal1.defense ? 'winner' : animal1.defense === animal2.defense ? 'tie' : ''}">${animal2.defense}</div>
+                <div class="comparison-stat ${animal2.defense > animal1.defense ? 'higher' : animal1.defense === animal2.defense ? 'tie' : ''}">${animal2.defense}</div>
             </div>
             
             <div class="comparison-row">
-                <div class="comparison-stat ${animal1.agility > animal2.agility ? 'winner' : animal1.agility === animal2.agility ? 'tie' : ''}">${animal1.agility}</div>
+                <div class="comparison-stat ${animal1.agility > animal2.agility ? 'higher' : animal1.agility === animal2.agility ? 'tie' : ''}">${animal1.agility}</div>
                 <div class="comparison-label">
                     <i class="fas fa-wind"></i> AGILITY
                 </div>
-                <div class="comparison-stat ${animal2.agility > animal1.agility ? 'winner' : animal1.agility === animal2.agility ? 'tie' : ''}">${animal2.agility}</div>
+                <div class="comparison-stat ${animal2.agility > animal1.agility ? 'higher' : animal1.agility === animal2.agility ? 'tie' : ''}">${animal2.agility}</div>
             </div>
             
             <div class="comparison-row">
-                <div class="comparison-stat ${animal1.intelligence > animal2.intelligence ? 'winner' : animal1.intelligence === animal2.intelligence ? 'tie' : ''}">${animal1.intelligence}</div>
+                <div class="comparison-stat ${animal1.intelligence > animal2.intelligence ? 'higher' : animal1.intelligence === animal2.intelligence ? 'tie' : ''}">${animal1.intelligence}</div>
                 <div class="comparison-label">
                     <i class="fas fa-brain"></i> INTELLIGENCE
                 </div>
-                <div class="comparison-stat ${animal2.intelligence > animal1.intelligence ? 'winner' : animal1.intelligence === animal2.intelligence ? 'tie' : ''}">${animal2.intelligence}</div>
+                <div class="comparison-stat ${animal2.intelligence > animal1.intelligence ? 'higher' : animal1.intelligence === animal2.intelligence ? 'tie' : ''}">${animal2.intelligence}</div>
             </div>
             
             <div class="comparison-row">
-                <div class="comparison-stat ${animal1.stamina > animal2.stamina ? 'winner' : animal1.stamina === animal2.stamina ? 'tie' : ''}">${animal1.stamina}</div>
+                <div class="comparison-stat ${animal1.stamina > animal2.stamina ? 'higher' : animal1.stamina === animal2.stamina ? 'tie' : ''}">${animal1.stamina}</div>
                 <div class="comparison-label">
                     <i class="fas fa-heart"></i> STAMINA
                 </div>
-                <div class="comparison-stat ${animal2.stamina > animal1.stamina ? 'winner' : animal1.stamina === animal2.stamina ? 'tie' : ''}">${animal2.stamina}</div>
+                <div class="comparison-stat ${animal2.stamina > animal1.stamina ? 'higher' : animal1.stamina === animal2.stamina ? 'tie' : ''}">${animal2.stamina}</div>
             </div>
             
             <div class="comparison-row">
-                <div class="comparison-stat ${animal1.special_attack > animal2.special_attack ? 'winner' : animal1.special_attack === animal2.special_attack ? 'tie' : ''}">${animal1.special_attack}</div>
+                <div class="comparison-stat ${animal1.special_attack > animal2.special_attack ? 'higher' : animal1.special_attack === animal2.special_attack ? 'tie' : ''}">${animal1.special_attack}</div>
                 <div class="comparison-label">
                     <i class="fas fa-bolt"></i> SPECIAL ATTACK
                 </div>
-                <div class="comparison-stat ${animal2.special_attack > animal1.special_attack ? 'winner' : animal1.special_attack === animal2.special_attack ? 'tie' : ''}">${animal2.special_attack}</div>
+                <div class="comparison-stat ${animal2.special_attack > animal1.special_attack ? 'higher' : animal1.special_attack === animal2.special_attack ? 'tie' : ''}">${animal2.special_attack}</div>
             </div>
             
             <div class="comparison-row total-row">
-                <div class="comparison-stat ${total1 > total2 ? 'winner' : total1 === total2 ? 'tie' : ''}">${total1}</div>
+                <div class="comparison-stat ${total1 > total2 ? 'higher' : total1 === total2 ? 'tie' : ''}">${total1}</div>
                 <div class="comparison-label">
                     <i class="fas fa-star"></i> TOTAL
                 </div>
-                <div class="comparison-stat ${total2 > total1 ? 'winner' : total1 === total2 ? 'tie' : ''}">${total2}</div>
+                <div class="comparison-stat ${total2 > total1 ? 'higher' : total1 === total2 ? 'tie' : ''}">${total2}</div>
             </div>
         </div>
         
@@ -682,7 +660,6 @@ function displayComparison(animal1, animal2) {
                 <h3>${animal2.scientific_name}</h3>
             </div>
             <div class="animal-badges">
-                <span class="badge">${animal2.class}</span>
                 <span class="badge">${animal2.type}</span>
             </div>
             <div class="animal-content">
@@ -712,6 +689,44 @@ function displayComparison(animal1, animal2) {
 function calculateTotalStats(animal) {
     return animal.attack + animal.defense + animal.agility + 
            animal.intelligence + animal.stamina + animal.special_attack;
+}
+
+function generateAnimalDescription(animal) {
+    // Generate a detailed description based on animal characteristics
+    const descriptions = {
+        "Cheetah": "The cheetah is renowned as the fastest land animal, capable of reaching speeds up to 70 mph in short bursts. Their slender, aerodynamic build and non-retractable claws provide exceptional traction during high-speed chases. Found primarily in African grasslands and savannas, cheetahs hunt during the day using their incredible eyesight to spot prey from great distances.",
+        "Peregrine Falcon": "The peregrine falcon holds the title of fastest animal on Earth, achieving speeds over 240 mph during its characteristic hunting dive, called a stoop. These remarkable birds of prey have adapted to various habitats worldwide, from mountain cliffs to urban skyscrapers. Their exceptional vision and aerial agility make them supreme hunters.",
+        "Saltwater Crocodile": "The saltwater crocodile is the largest living reptile, with males reaching up to 23 feet in length. These apex predators possess one of the strongest bite forces in the animal kingdom. Found in brackish and saltwater habitats across Southeast Asia and Northern Australia, they are patient ambush predators capable of taking down large prey.",
+        "African Elephant": "African elephants are the world's largest land animals, with remarkable intelligence and complex social structures. Their trunks contain over 40,000 muscles, providing incredible dexterity. These gentle giants play a crucial role in their ecosystems as keystone species, shaping the landscape and creating water holes that benefit countless other animals.",
+        "Great White Shark": "The great white shark is one of the ocean's most formidable predators, combining power, speed, and sophisticated hunting abilities. They can detect a single drop of blood in 25 gallons of water and sense electrical fields produced by other animals. Despite their fearsome reputation, they are vulnerable to overfishing and environmental changes.",
+        "Honey Badger": "Despite their small size, honey badgers are renowned for their fearlessness and tenacity. They have thick, loose skin that provides protection against bites and stings, and they're one of the few animals that actively hunt venomous snakes. Their intelligence and adaptability make them successful in various African and Asian habitats.",
+        "Grizzly Bear": "Grizzly bears are powerful omnivores with an incredible sense of smell, able to detect food from miles away. They can run up to 35 mph despite their massive size and are excellent swimmers. These solitary animals enter hibernation during winter months, during which pregnant females give birth to cubs.",
+        "Siberian Tiger": "The Siberian tiger is the largest cat species, adapted to survive in harsh, snowy environments. They are solitary hunters with exceptional strength, capable of taking down prey much larger than themselves. With only a few hundred remaining in the wild, they are critically endangered due to habitat loss and poaching.",
+        "Gray Wolf": "Gray wolves are highly intelligent pack animals with complex social hierarchies. Their cooperation in hunting allows them to take down prey much larger than any individual wolf. Wolves communicate through howls, body language, and scent marking, maintaining territories that can span hundreds of square miles.",
+        "Mountain Gorilla": "Mountain gorillas are gentle giants despite their immense strength, living in close-knit family groups led by a silverback male. They share 98% of their DNA with humans and display remarkable intelligence and emotional depth. Found only in the mountains of central Africa, they are critically endangered with fewer than 1,000 individuals remaining.",
+        "Polar Bear": "Polar bears are the largest land carnivores, perfectly adapted to Arctic life with thick fur and a layer of blubber for insulation. They are excellent swimmers, capable of swimming for days at a time in search of food. Climate change poses a severe threat to their survival as sea ice, crucial for hunting seals, continues to diminish.",
+        "Komodo Dragon": "The Komodo dragon is the world's largest living lizard, reaching lengths of 10 feet. Their saliva contains dangerous bacteria and venom that weakens prey. These ancient reptiles have excellent scent detection, able to locate carrion from miles away using their forked tongues.",
+        "American Bison": "American bison are North America's largest land mammal and a symbol of the Great Plains. Once numbering in the tens of millions, they were hunted nearly to extinction. These powerful grazers play a vital role in prairie ecosystems, and conservation efforts have helped their populations recover.",
+        "Hippopotamus": "Hippos are among Africa's most dangerous animals, responsible for more human fatalities than any other large animal on the continent. Despite spending most of their time in water, they can run surprisingly fast on land. Their massive jaws and tusks make them formidable when threatened.",
+        "King Cobra": "The king cobra is the world's longest venomous snake, reaching lengths up to 18 feet. Unlike other cobras, they primarily hunt other snakes. Female king cobras are the only snakes known to build nests for their eggs, which they guard fiercely until hatching.",
+        "Red Kangaroo": "Red kangaroos are the largest marsupials, adapted for life in Australia's arid interior. Their powerful hind legs allow them to leap up to 25 feet in a single bound and reach speeds of 35 mph. Males engage in boxing matches to establish dominance and mating rights.",
+        "Wolverine": "Wolverines are incredibly strong for their size, with powerful jaws capable of crushing frozen meat and bones. Their fierce reputation is well-earned, as they will defend their territory and food against animals much larger than themselves, including bears. They have remarkable endurance, traveling up to 15 miles per day in search of food.",
+        "Orca": "Orcas, or killer whales, are actually the largest members of the dolphin family and one of the ocean's apex predators. They live in sophisticated social groups with unique dialects and hunting techniques passed down through generations. Different populations specialize in hunting specific prey, from fish to seals to even great white sharks.",
+        "Harpy Eagle": "The harpy eagle is one of the world's most powerful birds of prey, capable of snatching monkeys and sloths from the rainforest canopy. Their talons are larger than a grizzly bear's claws, and their grip strength is powerful enough to crush bones. These magnificent birds are indicators of healthy rainforest ecosystems.",
+        "Poison Dart Frog": "Despite their tiny size, poison dart frogs pack some of the most potent toxins in nature. Indigenous peoples used their skin secretions to poison blow darts for hunting. Their brilliant colors serve as a warning to predators. Interestingly, captive-bred frogs raised on a different diet are not poisonous.",
+        "Fennec Fox": "The fennec fox is the smallest fox species, perfectly adapted to desert life with oversized ears that help dissipate heat and locate prey underground. They can survive without free water, getting moisture from their food. Their thick fur protects them from the cold desert nights and hot days.",
+        "Snow Leopard": "Snow leopards are elusive mountain predators, rarely seen in their remote Himalayan habitats. Their long, thick tail helps with balance on steep terrain and serves as a warm wrap in freezing temperatures. They can leap up to 50 feet in a single bound, making them extraordinary hunters in mountainous regions.",
+        "Electric Eel": "Despite their name, electric eels are actually a type of knifefish. They can generate electrical discharges up to 600 volts, which they use for hunting, navigation, and self-defense. They must surface to breathe air every 10 minutes, and this ability allows them to survive in oxygen-poor waters.",
+        "Giant Panda": "Giant pandas are beloved symbols of conservation, spending up to 14 hours a day eating bamboo to meet their energy needs. Despite belonging to the order Carnivora, their diet is 99% bamboo. They have a 'pseudo-thumb'—an enlarged wrist bone that helps them grip bamboo stalks. Successful breeding programs have helped them recover from the brink of extinction.",
+        "Narwhal": "Narwhals are often called the 'unicorns of the sea' due to their distinctive long tusk, which is actually an elongated tooth that can grow up to 10 feet long. These Arctic whales use echolocation to navigate through ice-covered waters. Their tusks contain millions of nerve endings and may help them detect changes in their environment.",
+        "Mantis Shrimp": "Mantis shrimp possess the most complex eyes in the animal kingdom, capable of seeing polarized and ultraviolet light. Their specialized club-like appendages can strike with the force of a bullet, generating temperatures nearly as hot as the sun's surface at the point of impact. They're one of nature's most extraordinary predators.",
+        "Great Horned Owl": "Great horned owls are powerful nocturnal hunters with exceptional hearing and nearly silent flight. Their distinctive 'horns' are actually feather tufts. They have a varied diet and are one of the few animals that regularly prey on skunks. Their grip strength is powerful enough to crush the spine of large prey.",
+        "Vampire Bat": "Vampire bats are the only mammals that feed exclusively on blood. They have heat sensors on their noses to detect blood vessels close to the skin. Contrary to popular belief, they rarely attack humans and usually feed on livestock. They display remarkable social behavior, sharing food with roostmates who haven't fed.",
+        "Bald Eagle": "The bald eagle is an iconic symbol of the United States, making a remarkable recovery from near-extinction due to DDT poisoning. These powerful raptors can spot prey from over a mile away and dive at speeds up to 100 mph. They mate for life and return to the same nest year after year, continuously adding to it.",
+        "Box Jellyfish": "Box jellyfish are among the most venomous creatures on Earth, with tentacles containing millions of microscopic stinging cells. Despite lacking a brain, they have 24 eyes and can actively hunt prey. Their venom can cause death in humans within minutes, making them one of the ocean's most dangerous inhabitants."
+    };
+    
+    return descriptions[animal.name] || `The ${animal.name} (${animal.scientific_name}) is a fascinating ${animal.type.toLowerCase()} found in ${animal.habitat}. Weighing approximately ${animal.weight_kg} kg and capable of speeds up to ${animal.speed_mps} m/s, this remarkable creature has adapted to thrive in its environment. With an average lifespan of ${animal.lifespan_years} years, the ${animal.name} exhibits unique traits including ${animal.unique_traits.join(' and ')}. These characteristics make it a remarkable example of nature's diversity.`;
 }
 
 function showAnimalDetails(animal) {
@@ -826,16 +841,22 @@ function showAnimalDetails(animal) {
                 </div>
                 
                 <div class="detail-section">
-                    <h3>Class & Type</h3>
+                    <h3>Type</h3>
                     <div class="detail-grid">
                         <div class="detail-item">
-                            <strong>Class</strong>
-                            ${animal.class}
-                        </div>
-                        <div class="detail-item">
-                            <strong>Type</strong>
+                            <strong>Classification</strong>
                             ${animal.type}
                         </div>
+                    </div>
+                </div>
+                
+                <div class="detail-description-section">
+                    <button class="description-toggle" onclick="this.parentElement.classList.toggle('expanded')">
+                        <i class="fas fa-book"></i> View Description
+                        <i class="fas fa-chevron-down toggle-icon"></i>
+                    </button>
+                    <div class="description-content">
+                        <p>${generateAnimalDescription(animal)}</p>
                     </div>
                 </div>
                 
