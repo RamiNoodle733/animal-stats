@@ -63,14 +63,14 @@ header::before {
     left: -2px;
     right: -2px;
     bottom: -2px;
-    background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+    background: linear-gradient(90deg, transparent 0%, rgba(0, 212, 255, 0.1) 50%, transparent 100%);
     z-index: -1;
-    animation: border-flow 3s linear infinite;
+    animation: border-glow 6s ease-in-out infinite;
 }
 
-@keyframes border-flow {
-    0% { transform: translateX(-100%) translateY(-100%) rotate(0deg); }
-    100% { transform: translateX(100%) translateY(100%) rotate(360deg); }
+@keyframes border-glow {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
 }
 
 h1 {
@@ -112,11 +112,22 @@ main {
     width: 100%;
     padding: 15px 25px;
     font-size: 1.1rem;
-    border: 2px solid rgba(0, 212, 255, 0.5);
-    clip-path: var(--clip-corner-small);
-    background: rgba(10, 14, 26, 0.8);
+    background: linear-gradient(180deg, #1a2639 0%, #0f1a2a 50%, #0a0e1a 100%);
     color: white;
-    box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.1);
+    border: 3px solid;
+    border-top-color: #2a3649;
+    border-left-color: #2a3649;
+    border-right-color: #05090f;
+    border-bottom-color: #05090f;
+    clip-path: polygon(
+        6px 0, calc(100% - 6px) 0, 
+        100% 6px, 100% calc(100% - 6px),
+        calc(100% - 6px) 100%, 6px 100%,
+        0 calc(100% - 6px), 0 6px
+    );
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.4),
+        inset 0 -1px 2px rgba(255, 255, 255, 0.05);
     margin-bottom: 20px;
     transition: var(--transition);
     outline: none;
@@ -124,8 +135,14 @@ main {
 
 #search-input:focus {
     outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.6), inset 0 0 20px rgba(0, 212, 255, 0.2);
+    border-top-color: #3a4659;
+    border-left-color: #3a4659;
+    border-right-color: var(--accent-color);
+    border-bottom-color: var(--accent-color);
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.4),
+        inset 0 -1px 2px rgba(255, 255, 255, 0.05),
+        0 0 20px rgba(0, 212, 255, 0.6);
     transform: translateY(-2px);
 }
 
@@ -144,11 +161,22 @@ select {
     flex: 1;
     padding: 12px 20px;
     font-size: 1rem;
-    border: 2px solid rgba(0, 212, 255, 0.5);
-    clip-path: var(--clip-corner-small);
-    background: rgba(10, 14, 26, 0.9);
+    background: linear-gradient(180deg, #2a3f5f 0%, #1a2f4f 50%, #0a1f3f 100%);
     color: #e0e0e0;
-    box-shadow: inset 0 0 10px rgba(0, 212, 255, 0.1);
+    border: 3px solid;
+    border-top-color: #4a5f7f;
+    border-left-color: #4a5f7f;
+    border-right-color: #0a0f1f;
+    border-bottom-color: #0a0f1f;
+    clip-path: polygon(
+        6px 0, calc(100% - 6px) 0, 
+        100% 6px, 100% calc(100% - 6px),
+        calc(100% - 6px) 100%, 6px 100%,
+        0 calc(100% - 6px), 0 6px
+    );
+    box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.1),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3);
     transition: var(--transition);
     cursor: pointer;
     min-width: 150px;
@@ -156,14 +184,22 @@ select {
 
 select:focus {
     outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5), inset 0 0 10px rgba(0, 212, 255, 0.2);
+    border-top-color: #5a6f8f;
+    border-left-color: #5a6f8f;
+    box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 0 15px rgba(0, 212, 255, 0.5);
     transform: translateY(-1px);
 }
 
 select:hover {
-    border-color: var(--accent-color);
-    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    border-top-color: #5a6f8f;
+    border-left-color: #5a6f8f;
+    box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(0, 212, 255, 0.3);
     transform: translateY(-1px);
 }
 
@@ -174,10 +210,21 @@ select option {
 
 .filter-controls button {
     padding: 12px;
-    border: 2px solid rgba(0, 212, 255, 0.5);
-    clip-path: var(--clip-corner-small);
-    background: rgba(10, 14, 26, 0.9);
-    box-shadow: inset 0 0 10px rgba(0, 212, 255, 0.1);
+    background: linear-gradient(180deg, #2a3f5f 0%, #1a2f4f 50%, #0a1f3f 100%);
+    border: 3px solid;
+    border-top-color: #4a5f7f;
+    border-left-color: #4a5f7f;
+    border-right-color: #0a0f1f;
+    border-bottom-color: #0a0f1f;
+    clip-path: polygon(
+        6px 0, calc(100% - 6px) 0, 
+        100% 6px, 100% calc(100% - 6px),
+        calc(100% - 6px) 100%, 6px 100%,
+        0 calc(100% - 6px), 0 6px
+    );
+    box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.1),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3);
     cursor: pointer;
     transition: var(--transition);
     color: #e0e0e0;
@@ -189,8 +236,12 @@ select option {
 .filter-controls button:hover,
 .filter-controls button.active {
     color: var(--accent-color);
-    border-color: var(--accent-color);
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+    border-top-color: #5a6f8f;
+    border-left-color: #5a6f8f;
+    box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 0 15px rgba(0, 212, 255, 0.5);
 }
 
 #favorites-filter.active i {
@@ -206,15 +257,27 @@ select option {
 
 .view-toggle button {
     padding: 12px 25px;
-    background: rgba(10, 14, 26, 0.9);
-    border: 2px solid rgba(0, 212, 255, 0.5);
-    clip-path: var(--clip-corner-small);
+    background: linear-gradient(180deg, #2a3f5f 0%, #1a2f4f 50%, #0a1f3f 100%);
+    border: 3px solid;
+    border-top-color: #4a5f7f;
+    border-left-color: #4a5f7f;
+    border-right-color: #0a0f1f;
+    border-bottom-color: #0a0f1f;
+    clip-path: polygon(
+        6px 0, calc(100% - 6px) 0, 
+        100% 6px, 100% calc(100% - 6px),
+        calc(100% - 6px) 100%, 6px 100%,
+        0 calc(100% - 6px), 0 6px
+    );
     margin: 0;
     cursor: pointer;
     font-weight: 600;
     font-size: 1rem;
     transition: var(--transition);
-    box-shadow: inset 0 0 10px rgba(0, 212, 255, 0.1);
+    box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.1),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(0, 212, 255, 0.2);
     position: relative;
     overflow: hidden;
     color: #e0e0e0;
@@ -227,7 +290,7 @@ select option {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
+    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
     transition: left 0.5s ease;
 }
 
@@ -237,21 +300,31 @@ select option {
 
 .view-toggle button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
-    border-color: var(--accent-color);
+    box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.15),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 0 15px rgba(0, 212, 255, 0.5);
+    border-top-color: #5a6f8f;
+    border-left-color: #5a6f8f;
 }
 
 .view-toggle button.active {
-    background: rgba(0, 212, 255, 0.2);
-    color: var(--accent-color);
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.6), inset 0 0 20px rgba(0, 212, 255, 0.2);
-    transform: translateY(-2px);
-    border-color: var(--accent-color);
+    background: linear-gradient(180deg, #00d4ff 0%, #0099cc 50%, #007799 100%);
+    color: #000;
+    border-top-color: #33ddff;
+    border-left-color: #33ddff;
+    border-right-color: #005566;
+    border-bottom-color: #005566;
+    box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.4),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(0, 212, 255, 0.8);
+    transform: translateY(0);
     font-weight: 700;
 }
 
 .view-toggle button.active:hover {
-    transform: translateY(-3px);
+    transform: translateY(-1px);
 }
 
 .view-toggle button.active:hover {
@@ -604,20 +677,44 @@ select option {
     padding: 15px 40px;
     font-size: 1.2rem;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-gold), #ff8c00);
+    background: linear-gradient(180deg, #ffd700 0%, #ff8c00 50%, #cc7000 100%);
     color: #000;
-    border: 2px solid var(--accent-gold);
-    clip-path: var(--clip-corner-small);
+    border: 3px solid #000;
+    border-top-color: #ffed4e;
+    border-left-color: #ffed4e;
+    border-right-color: #9a5a00;
+    border-bottom-color: #9a5a00;
+    clip-path: polygon(
+        8px 0, calc(100% - 8px) 0, 
+        100% 8px, 100% calc(100% - 8px),
+        calc(100% - 8px) 100%, 8px 100%,
+        0 calc(100% - 8px), 0 8px
+    );
     cursor: pointer;
-    box-shadow: 0 0 20px rgba(240, 196, 25, 0.6);
+    box-shadow: 
+        0 0 20px rgba(255, 215, 0, 0.5),
+        inset 0 2px 4px rgba(255, 255, 255, 0.5),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.3);
     transition: var(--transition);
     text-transform: uppercase;
     letter-spacing: 2px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .compare-button:hover {
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 0 30px rgba(240, 196, 25, 0.9);
+    transform: translateY(-2px);
+    box-shadow: 
+        0 0 30px rgba(255, 215, 0, 0.8),
+        inset 0 2px 4px rgba(255, 255, 255, 0.6),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.compare-button:active {
+    transform: translateY(0);
+    box-shadow: 
+        0 0 15px rgba(255, 215, 0, 0.4),
+        inset 0 -2px 4px rgba(255, 255, 255, 0.3),
+        inset 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .compare-button i {
