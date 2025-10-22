@@ -63,14 +63,29 @@ header::before {
     left: -2px;
     right: -2px;
     bottom: -2px;
-    background: linear-gradient(90deg, transparent 0%, rgba(0, 212, 255, 0.1) 50%, transparent 100%);
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(0, 212, 255, 0.2) 25%, 
+        rgba(0, 212, 255, 0.4) 50%, 
+        rgba(0, 212, 255, 0.2) 75%, 
+        transparent 100%);
     z-index: -1;
-    animation: border-glow 6s ease-in-out infinite;
+    animation: border-sweep 4s ease-in-out infinite;
 }
 
-@keyframes border-glow {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.6; }
+@keyframes border-sweep {
+    0% { 
+        opacity: 0.5;
+        transform: translateX(-100%);
+    }
+    50% {
+        opacity: 0.9;
+        transform: translateX(100%);
+    }
+    100% { 
+        opacity: 0.5;
+        transform: translateX(-100%);
+    }
 }
 
 h1 {
@@ -459,7 +474,7 @@ select option {
     width: 32px;
     height: 32px;
     border: none;
-    border-radius: 50%;
+    clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px));
     background: rgba(0, 0, 0, 0.4);
     color: #fff;
     display: flex;
@@ -544,7 +559,7 @@ select option {
 .stat-track {
     height: 10px;
     background: linear-gradient(90deg, #e2e8f0, #cbd5e0);
-    border-radius: 8px;
+    clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px));
     overflow: hidden;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
     position: relative;
@@ -552,7 +567,7 @@ select option {
 
 .stat-fill {
     height: 100%;
-    border-radius: 8px;
+    clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px));
     width: 0 !important;
     transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -599,7 +614,7 @@ select option {
     margin-top: 20px;
     background: linear-gradient(135deg, rgba(255, 167, 38, 0.1), rgba(255, 167, 38, 0.05));
     padding: 15px;
-    border-radius: 12px;
+    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
     border-left: 4px solid var(--accent-color);
     position: relative;
     overflow: hidden;
@@ -665,7 +680,7 @@ select option {
     gap: 20px;
     padding: 25px;
     background: rgba(41, 54, 73, 0.6);
-    border-radius: 20px;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
     box-shadow: var(--shadow-medium);
     backdrop-filter: blur(10px);
     border: 2px solid rgba(240, 196, 25, 0.2);
@@ -673,48 +688,52 @@ select option {
 
 .compare-button {
     display: block;
-    margin: 0 auto 40px;
-    padding: 15px 40px;
+    margin: 30px auto;
+    padding: 18px 50px;
     font-size: 1.2rem;
     font-weight: 700;
-    background: linear-gradient(180deg, #ffd700 0%, #ff8c00 50%, #cc7000 100%);
-    color: #000;
-    border: 3px solid #000;
-    border-top-color: #ffed4e;
-    border-left-color: #ffed4e;
-    border-right-color: #9a5a00;
-    border-bottom-color: #9a5a00;
+    background: linear-gradient(180deg, #2a4560 0%, #1a3550 50%, #0a2540 100%);
+    color: var(--accent-color);
+    border: 3px solid;
+    border-top-color: #3a5570;
+    border-left-color: #3a5570;
+    border-right-color: #0a1520;
+    border-bottom-color: #0a1520;
     clip-path: polygon(
-        8px 0, calc(100% - 8px) 0, 
-        100% 8px, 100% calc(100% - 8px),
-        calc(100% - 8px) 100%, 8px 100%,
-        0 calc(100% - 8px), 0 8px
+        10px 0, calc(100% - 10px) 0, 
+        100% 10px, 100% calc(100% - 10px),
+        calc(100% - 10px) 100%, 10px 100%,
+        0 calc(100% - 10px), 0 10px
     );
     cursor: pointer;
     box-shadow: 
-        0 0 20px rgba(255, 215, 0, 0.5),
-        inset 0 2px 4px rgba(255, 255, 255, 0.5),
-        inset 0 -2px 4px rgba(0, 0, 0, 0.3);
-    transition: var(--transition);
+        0 4px 15px rgba(0, 0, 0, 0.5),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.5);
+    transition: all 0.2s ease;
     text-transform: uppercase;
     letter-spacing: 2px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 0 8px rgba(0, 212, 255, 0.8);
 }
 
 .compare-button:hover {
     transform: translateY(-2px);
+    border-top-color: #4a6580;
+    border-left-color: #4a6580;
+    background: linear-gradient(180deg, #3a5570 0%, #2a4560 50%, #1a3550 100%);
     box-shadow: 
-        0 0 30px rgba(255, 215, 0, 0.8),
-        inset 0 2px 4px rgba(255, 255, 255, 0.6),
-        inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+        0 6px 20px rgba(0, 212, 255, 0.4),
+        inset 0 2px 4px rgba(255, 255, 255, 0.15),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.5);
+    color: #ffffff;
 }
 
 .compare-button:active {
     transform: translateY(0);
     box-shadow: 
-        0 0 15px rgba(255, 215, 0, 0.4),
-        inset 0 -2px 4px rgba(255, 255, 255, 0.3),
-        inset 0 2px 4px rgba(0, 0, 0, 0.4);
+        0 2px 8px rgba(0, 0, 0, 0.6),
+        inset 0 -2px 4px rgba(255, 255, 255, 0.05),
+        inset 0 2px 6px rgba(0, 0, 0, 0.6);
 }
 
 .compare-button i {
@@ -731,7 +750,7 @@ select option {
     padding: 15px 20px;
     font-size: 1.1rem;
     border: 2px solid rgba(240, 196, 25, 0.3);
-    border-radius: 15px;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
     background: rgba(41, 54, 73, 0.9);
     color: #e0e0e0;
     box-shadow: var(--shadow-light);
@@ -781,38 +800,6 @@ select option {
 @keyframes pulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.1); }
-}
-
-.compare-button {
-    display: block;
-    margin: 30px auto;
-    padding: 18px 40px;
-    font-size: 1.2rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-color), #ff8c00);
-    color: #1a1a1a;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    box-shadow: var(--shadow-heavy);
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    animation: pulse-glow 2s infinite;
-}
-
-.compare-button:hover {
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 15px 40px rgba(240, 196, 25, 0.5);
-}
-
-.compare-button:active {
-    transform: translateY(0) scale(0.98);
-}
-
-.compare-button i {
-    margin-right: 8px;
-    animation: bolt-flash 1.5s infinite;
 }
 
 @keyframes pulse-glow {
@@ -1070,7 +1057,7 @@ select option {
     z-index: 10;
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1105,7 +1092,7 @@ select option {
     width: 100%;
     max-height: 350px;
     object-fit: cover;
-    border-radius: 10px;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
@@ -1144,7 +1131,7 @@ select option {
 .detail-item {
     background-color: #f5f8ff;
     padding: 10px 15px;
-    border-radius: 8px;
+    clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px));
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
@@ -1157,14 +1144,14 @@ select option {
 .detail-special {
     background-color: rgba(255, 204, 0, 0.1);
     padding: 15px;
-    border-radius: 8px;
+    clip-path: polygon(0 0, calc(100% - 5px) 0, 100% 5px, 100% 100%, 5px 100%, 0 calc(100% - 5px));
     border-left: 3px solid var(--accent-color);
     margin-top: 15px;
 }
 
 .detail-description-section {
     margin-top: 20px;
-    border-radius: 10px;
+    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
     border: 2px solid rgba(240, 196, 25, 0.3);
     overflow: hidden;
     background: rgba(0, 0, 0, 0.2);
@@ -1241,7 +1228,7 @@ select option {
     width: 50px;
     height: 50px;
     border: 5px solid rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
     border-top-color: var(--accent-color);
     animation: spin 1s linear infinite;
     margin-bottom: 15px;
@@ -1255,7 +1242,7 @@ select option {
     left: 0;
     right: 0;
     bottom: 0;
-    border-radius: 50%;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
     border: 5px solid transparent;
     border-top-color: rgba(255, 167, 38, 0.7);
     animation: spin 1.5s linear infinite reverse;
@@ -1282,7 +1269,7 @@ select option {
     background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 20px;
+    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
     cursor: pointer;
     font-weight: 600;
     transition: all 0.3s ease;
@@ -1510,7 +1497,7 @@ body.dark-mode .comparison-message {
     .modal-content {
         width: 98%;
         margin: 2% auto;
-        border-radius: 15px;
+        clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
     }
     
     .animal-detail {
