@@ -136,13 +136,18 @@ h1 {
     background: var(--bg-dark);
     padding: 12px;
     flex: 1;
-    overflow: hidden;
+    overflow: auto;
     display: flex;
     flex-direction: column;
+    min-height: 0;
 }
 
 .active-stats-view {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: auto;
+    min-height: 0;
 }
 
 .inactive-stats-view {
@@ -175,10 +180,11 @@ h1 {
     padding: 15px;
     border: 2px solid var(--border-bright);
     box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.1);
-    height: 100%;
     overflow: auto;
     max-width: 1600px;
     margin: 0 auto;
+    flex: 1;
+    min-height: 0;
 }
 
 .stats-left-column {
@@ -244,8 +250,8 @@ h1 {
 
 .stat-bar-container {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
     margin-bottom: 15px;
 }
 
@@ -317,9 +323,9 @@ h1 {
     padding: 15px;
     background: rgba(0, 212, 255, 0.05);
     border: 2px solid var(--border-bright);
-    height: 100%;
     overflow: auto;
-    overflow: hidden;
+    flex: 1;
+    min-height: 0;
 }
 
 .compare-side {
