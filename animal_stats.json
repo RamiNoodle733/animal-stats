@@ -28,7 +28,7 @@
                                   "Lightning Sprint",
                                   "Precision Strike"
                               ],
-        "image":  "https://picsum.photos/seed/44/400/400"
+        "image":  "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/TheCheethcat.jpg/400px-TheCheethcat.jpg"
     },
     {
         "name":  "Peregrine Falcon",
@@ -60,7 +60,7 @@
                                   "Death Dive",
                                   "Aerial Mastery"
                               ],
-        "image":  "https://picsum.photos/seed/98/400/400"
+        "image":  "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Peregrine_Falcon_-_Williamson_County%2C_Texas%2C_USA.jpg/400px-Peregrine_Falcon_-_Williamson_County%2C_Texas%2C_USA.jpg"
     },
     {
         "name":  "Saltwater Crocodile",
@@ -93,7 +93,7 @@
                                   "Death Roll",
                                   "Stealth Ambush"
                               ],
-        "image":  "https://picsum.photos/seed/387/400/400"
+        "image":  "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Crocodylus-porosus-2.jpg/400px-Crocodylus-porosus-2.jpg"
     },
     {
         "name":  "Great White Shark",
@@ -126,7 +126,7 @@
                                   "Blood Frenzy",
                                   "Breach Attack"
                               ],
-        "image":  "https://picsum.photos/seed/919/400/400"
+        "image":  "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/White_shark.jpg/400px-White_shark.jpg"
     },
     {
         "name":  "African Elephant",
@@ -159,7 +159,7 @@
                                   "Stampede",
                                   "Matriarchal Wisdom"
                               ],
-        "image":  "https://picsum.photos/seed/639/400/400"
+        "image":  "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Elephant_FPMK_2018.jpg/400px-Elephant_FPMK_2018.jpg"
     },
     {
         "name":  "Chimpanzee",
@@ -192,7 +192,7 @@
                                   "Tool Mastery",
                                   "Strategic Thinking"
                               ],
-        "image":  "https://picsum.photos/seed/418/400/400"
+        "image":  "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Schimpanse_zoo_leipzig.jpg/400px-Schimpanse_zoo_leipzig.jpg"
     },
     {
         "name":  "Bottlenose Dolphin",
@@ -224,7 +224,7 @@
                                   "Sonar Navigation",
                                   "Pod Coordination"
                               ],
-        "image":  "https://picsum.photos/seed/937/400/400"
+        "image":  "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Tursiops_truncatus_01.jpg/400px-Tursiops_truncatus_01.jpg"
     },
     {
         "name":  "Octopus",
@@ -257,7 +257,7 @@
                                   "Camouflage",
                                   "Escape Artistry"
                               ],
-        "image":  "https://picsum.photos/seed/599/400/400"
+        "image":  "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Octopus3.jpg/400px-Octopus3.jpg"
     },
     {
         "name":  "Grizzly Bear",
@@ -291,7 +291,7 @@
                                   "Berserker Rage",
                                   "Scent Tracking"
                               ],
-        "image":  "https://picsum.photos/seed/231/400/400"
+        "image":  "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Ours_brun_parcanimalierpyrenees_1.jpg/400px-Ours_brun_parcanimalierpyrenees_1.jpg"
     },
     {
         "name":  "Siberian Tiger",
@@ -324,7 +324,7 @@
                                   "Stealth Hunt",
                                   "Powerful Pounce"
                               ],
-        "image":  "https://picsum.photos/seed/822/400/400"
+        "image":  "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siberischer_tiger_de_edit02.jpg/400px-Siberischer_tiger_de_edit02.jpg"
     },
     {
         "name":  "Gray Wolf",
