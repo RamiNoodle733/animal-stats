@@ -13,81 +13,101 @@
     <title>Animal Stats - Scientifically Accurate Wildlife Data</title>
     <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles_new.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
 </head>
-<body>    <header>
-        <h1>ANIMAL STATS</h1>
-        <div class="search-container">
-            <input type="text" id="search-input" placeholder="Search animals..." aria-label="Search animals by name or scientific name">
-            <div class="filter-controls">
-                <select id="class-filter" aria-label="Filter by animal class">
-                    <option value="">All Classes</option>
-                </select>
-                <select id="type-filter" aria-label="Filter by animal type">
-                    <option value="">All Types</option>
-                </select>
-                <select id="sort-by" aria-label="Sort animals by">
-                    <option value="name">Sort by Name</option>
-                    <option value="attack">Sort by Attack</option>
-                    <option value="defense">Sort by Defense</option>
-                    <option value="agility">Sort by Agility</option>
-                    <option value="intelligence">Sort by Intelligence</option>
-                    <option value="stamina">Sort by Stamina</option>
-                </select>
-                <button id="favorites-filter" aria-label="Show favorite animals" aria-pressed="false">
-                    <i class="fas fa-star" aria-hidden="true"></i>
-                </button>
+<body>
+    <!-- Fixed Top Section: Title + Search + Stats Display -->
+    <div class="fixed-top-section">
+        <header>
+            <h1>ANIMAL STATS</h1>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search animals..." aria-label="Search animals by name or scientific name">
+                <div class="filter-controls">
+                    <select id="class-filter" aria-label="Filter by animal class">
+                        <option value="">All Classes</option>
+                    </select>
+                    <select id="type-filter" aria-label="Filter by animal type">
+                        <option value="">All Types</option>
+                    </select>
+                    <select id="sort-by" aria-label="Sort animals by">
+                        <option value="name">Sort by Name</option>
+                        <option value="attack">Sort by Attack</option>
+                        <option value="defense">Sort by Defense</option>
+                        <option value="agility">Sort by Agility</option>
+                        <option value="intelligence">Sort by Intelligence</option>
+                        <option value="stamina">Sort by Stamina</option>
+                    </select>
+                    <button id="favorites-filter" aria-label="Show favorite animals" aria-pressed="false">
+                        <i class="fas fa-star" aria-hidden="true"></i>
+                    </button>
+                </div>
             </div>
-        </div>
-    </header>
-    
-    <main role="main">
-        <div class="view-toggle" role="tablist" aria-label="View mode selection">
-            <button id="grid-view-btn" class="active" role="tab" aria-selected="true" aria-controls="grid-view">
-                <i class="fas fa-th" aria-hidden="true"></i> Grid View
-            </button>
-            <button id="compare-view-btn" role="tab" aria-selected="false" aria-controls="compare-view">
-                <i class="fas fa-balance-scale" aria-hidden="true"></i> Compare
-            </button>
-        </div>
-          <div id="grid-view" class="active-view" role="tabpanel" aria-labelledby="grid-view-btn">
-            <div id="animal-grid" class="animal-grid" role="grid" aria-label="Animal cards grid"></div>
+        </header>
+        
+        <!-- Stats Display Area (Grid View) or Compare View -->
+        <div id="stats-display-area">
+            <div id="grid-stats-view" class="active-stats-view">
+                <div class="stats-placeholder">
+                    <i class="fas fa-paw"></i>
+                    <p>Click an animal below to view its stats</p>
+                </div>
+                <div id="selected-animal-stats" style="display: none;"></div>
+            </div>
+            
+            <div id="compare-stats-view" class="inactive-stats-view">
+                <div class="compare-display-container">
+                    <div id="compare-animal-1" class="compare-side">
+                        <div class="compare-placeholder">
+                            <i class="fas fa-paw"></i>
+                            <p>Select Animal 1</p>
+                        </div>
+                    </div>
+                    <div class="vs-divider">VS</div>
+                    <div id="compare-animal-2" class="compare-side">
+                        <div class="compare-placeholder">
+                            <i class="fas fa-paw"></i>
+                            <p>Select Animal 2</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         
-        <div id="compare-view" class="inactive-view" role="tabpanel" aria-labelledby="compare-view-btn">
-            <div class="compare-selection">
-                <div class="compare-dropdown">
-                    <select id="animal1-select" aria-label="Select first animal for comparison">
-                        <option value="">Select Animal 1</option>
-                    </select>
-                </div>
-                <div class="vs-badge" aria-hidden="true">VS</div>
-                <div class="compare-dropdown">
-                    <select id="animal2-select" aria-label="Select second animal for comparison">
-                        <option value="">Select Animal 2</option>
-                    </select>
-                </div>
+        <!-- VS Bar: Mode Toggle + Compare Selectors -->
+        <div class="fixed-vs-bar">
+            <div class="mode-toggle">
+                <button id="grid-view-btn" class="mode-btn active" data-mode="grid">
+                    <i class="fas fa-th"></i> Grid
+                </button>
+                <button id="compare-view-btn" class="mode-btn" data-mode="compare">
+                    <i class="fas fa-balance-scale"></i> Compare
+                </button>
             </div>
-            <button id="compare-button" class="compare-button" style="display: none;">
-                <i class="fas fa-bolt"></i> Compare Animals
-            </button>
-            <div id="comparison-container" class="comparison-container" role="region" aria-label="Animal comparison results"></div>
-        </div>
-    </main>
-    
-    <div id="animal-detail-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
-        <div class="modal-content">
-            <button class="close-button" aria-label="Close animal details">&times;</button>
-            <div id="animal-detail-content"></div>
+            
+            <div id="compare-selectors" class="compare-selectors" style="display: none;">
+                <select id="animal1-select" class="animal-selector">
+                    <option value="">Animal 1</option>
+                </select>
+                <span class="vs-text">VS</span>
+                <select id="animal2-select" class="animal-selector">
+                    <option value="">Animal 2</option>
+                </select>
+            </div>
         </div>
     </div>
-      <footer>
-        <p>© 2025 Animal Stats | Explore the world's most amazing creatures</p>
-    </footer>
     
-    <script src="script.js"></script>
+    <!-- Scrollable Bottom Section: Thin Horizontal Animal Cards -->
+    <main class="scrollable-grid-section">
+        <div id="animal-grid" class="horizontal-animal-grid"></div>
+    </main>
+    <!-- Scrollable Bottom Section: Thin Horizontal Animal Cards -->
+    <main class="scrollable-grid-section">
+        <div id="animal-grid" class="horizontal-animal-grid"></div>
+    </main>
+    
+    <script src="script_new.js"></script>
 </body>
 </html>
