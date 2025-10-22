@@ -342,10 +342,10 @@ select option {
 /* Animal Grid Styles */
 .animal-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 25px;
-    padding: 20px;
-    animation: gridFadeIn 0.8s ease-out;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    padding: 15px;
+    animation: gridFadeIn 0.6s ease-out;
 }
 
 @keyframes gridFadeIn {
@@ -415,38 +415,36 @@ select option {
 
 .animal-card .animal-image {
     width: 100%;
-    height: 200px;
-    object-fit: contain;
+    height: 140px;
+    object-fit: cover;
     background: rgba(0, 14, 26, 0.5);
-    border-bottom: 3px solid var(--accent-color);
+    border-bottom: 2px solid var(--accent-color);
     transition: var(--transition);
     position: relative;
-    filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
+    filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.4));
 }
 
 .animal-card:hover .animal-image {
-    transform: scale(1.05);
-    filter: brightness(1.1) saturate(1.2) drop-shadow(0 0 15px rgba(0, 212, 255, 0.7));
+    transform: scale(1.03);
+    filter: brightness(1.1) saturate(1.2) drop-shadow(0 0 12px rgba(0, 212, 255, 0.6));
 }
 
 .animal-header {
-    padding: 20px 25px 10px 25px;
+    padding: 10px 12px 5px 12px;
     position: relative;
     z-index: 2;
 }
 
 .animal-type-badge {
     position: absolute;
-    top: 10px;
-    left: 15px;
-    padding: 6px 14px;
-    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
-    font-size: 0.85rem;
+    top: 8px;
+    left: 10px;
+    padding: 4px 10px;
+    font-size: 0.7rem;
     font-weight: bold;
     color: white;
     background: linear-gradient(135deg, var(--accent-color), #0099cc);
-    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.4);
     transform: translateY(0);
     transition: var(--transition);
     z-index: 2;
@@ -454,18 +452,17 @@ select option {
 }
 
 .animal-card:hover .animal-type-badge {
-    transform: translateY(-3px);
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
+    transform: translateY(-2px);
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.6);
 }
 
 .favorite-btn {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 32px;
-    height: 32px;
+    top: 8px;
+    right: 8px;
+    width: 26px;
+    height: 26px;
     border: none;
-    clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px));
     background: rgba(0, 0, 0, 0.4);
     color: #fff;
     display: flex;
@@ -473,6 +470,7 @@ select option {
     justify-content: center;
     z-index: 3;
     transition: color 0.3s ease;
+    font-size: 0.9rem;
 }
 
 .favorite-btn.active,
@@ -492,8 +490,8 @@ select option {
 }
 
 .animal-header h2 {
-    font-size: 1.8rem;
-    margin-bottom: 8px;
+    font-size: 1.1rem;
+    margin-bottom: 3px;
     color: var(--primary-color);
     font-weight: 700;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -501,10 +499,10 @@ select option {
 }
 
 .animal-header h3 {
-    font-size: 1rem;
+    font-size: 0.75rem;
     color: #777;
     font-style: italic;
-    margin-bottom: 15px;
+    margin-bottom: 8px;
     font-weight: 400;
     opacity: 0.8;
     transition: opacity 0.3s ease;
@@ -519,21 +517,21 @@ select option {
 }
 
 .animal-content {
-    padding: 0 25px 25px 25px;
+    padding: 0 12px 12px 12px;
     position: relative;
     z-index: 2;
 }
 
 .stat-bar {
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     position: relative;
 }
 
 .stat-label {
     display: flex;
     justify-content: space-between;
-    font-size: 0.9rem;
-    margin-bottom: 6px;
+    font-size: 0.75rem;
+    margin-bottom: 4px;
     font-weight: 600;
 }
 
@@ -544,21 +542,24 @@ select option {
 
 .stat-label span:last-child {
     color: var(--accent-color);
-    font-size: 0.95rem;
+    font-size: 0.8rem;
 }
 
 .stat-track {
-    height: 10px;
+    height: 8px;
     background: linear-gradient(90deg, #e2e8f0, #cbd5e0);
-    clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px));
     overflow: hidden;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
     position: relative;
+    border: 1px solid;
+    border-top-color: rgba(200, 210, 220, 0.8);
+    border-left-color: rgba(200, 210, 220, 0.8);
+    border-right-color: rgba(150, 170, 190, 0.6);
+    border-bottom-color: rgba(150, 170, 190, 0.6);
 }
 
 .stat-fill {
     height: 100%;
-    clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 4px 100%, 0 calc(100% - 4px));
     width: 0 !important;
     transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -602,11 +603,10 @@ select option {
 }
 
 .animal-special {
-    margin-top: 20px;
+    margin-top: 10px;
     background: linear-gradient(135deg, rgba(255, 167, 38, 0.1), rgba(255, 167, 38, 0.05));
-    padding: 15px;
-    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 6px 100%, 0 calc(100% - 6px));
-    border-left: 4px solid var(--accent-color);
+    padding: 8px;
+    border-left: 3px solid var(--accent-color);
     position: relative;
     overflow: hidden;
 }
@@ -624,22 +624,22 @@ select option {
 
 .special-title {
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     color: var(--primary-color);
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 .animal-special ul {
     list-style-type: none;
-    padding-left: 5px;
+    padding-left: 3px;
 }
 
 .animal-special li {
-    font-size: 0.85rem;
-    margin-bottom: 3px;
+    font-size: 0.7rem;
+    margin-bottom: 2px;
     color: #555;
     position: relative;
-    padding-left: 20px;
+    padding-left: 15px;
     transition: all 0.3s ease;
 }
 
@@ -647,6 +647,7 @@ select option {
     content: '⚡';
     position: absolute;
     left: 0;
+    font-size: 0.65rem;
     color: var(--accent-color);
     font-size: 0.9rem;
     animation: sparkle 2s infinite;
@@ -1076,20 +1077,20 @@ select option {
 }
 
 .animal-detail-left {
-    flex: 0 0 350px;
-    padding: 20px;
-    padding-top: 60px;
+    flex: 0 0 280px;
+    padding: 15px;
+    padding-top: 50px;
 }
 
 .animal-detail-right {
-    flex: 1 1 500px;
-    padding: 20px;
-    padding-top: 60px;
+    flex: 1 1 450px;
+    padding: 15px;
+    padding-top: 50px;
 }
 
 .animal-detail-image {
     width: 100%;
-    max-height: 300px;
+    max-height: 220px;
     object-fit: cover;
     border: 3px solid;
     border-top-color: rgba(0, 212, 255, 0.4);
@@ -1102,41 +1103,41 @@ select option {
 }
 
 .detail-title {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: var(--primary-color);
-    margin-bottom: 3px;
+    margin-bottom: 2px;
 }
 
 .detail-subtitle {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     color: #666;
     font-style: italic;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .detail-section {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .detail-section h3 {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: var(--secondary-color);
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     border-bottom: 2px solid var(--accent-color);
-    padding-bottom: 3px;
+    padding-bottom: 2px;
     display: inline-block;
 }
 
 .detail-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 10px;
-    margin-bottom: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+    margin-bottom: 10px;
 }
 
 .detail-item {
     background-color: #f5f8ff;
-    padding: 8px 12px;
+    padding: 6px 10px;
     border: 2px solid;
     border-top-color: rgba(200, 220, 255, 0.8);
     border-left-color: rgba(200, 220, 255, 0.8);
@@ -1150,15 +1151,15 @@ select option {
 .detail-item strong {
     display: block;
     color: var(--primary-color);
-    font-size: 0.8rem;
-    margin-bottom: 2px;
+    font-size: 0.7rem;
+    margin-bottom: 1px;
 }
 
 .detail-special {
     background-color: rgba(0, 212, 255, 0.08);
-    padding: 15px 20px;
+    padding: 10px 15px;
     border-left: 4px solid var(--accent-color);
-    margin-top: 15px;
+    margin-top: 10px;
     border: 2px solid;
     border-top-color: rgba(0, 212, 255, 0.3);
     border-left-color: var(--accent-color);
@@ -1171,9 +1172,9 @@ select option {
 
 .detail-special .special-title {
     font-weight: bold;
-    font-size: 1rem;
+    font-size: 0.85rem;
     color: var(--accent-color);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
     text-transform: uppercase;
     letter-spacing: 1px;
 }
@@ -1185,12 +1186,12 @@ select option {
 }
 
 .detail-special li {
-    padding-left: 25px;
-    margin-bottom: 8px;
+    padding-left: 20px;
+    margin-bottom: 5px;
     position: relative;
     color: #2a3f5f;
-    font-size: 0.95rem;
-    line-height: 1.5;
+    font-size: 0.8rem;
+    line-height: 1.4;
 }
 
 .detail-special li::before {
@@ -1198,11 +1199,11 @@ select option {
     position: absolute;
     left: 0;
     color: var(--accent-color);
-    font-size: 1.1rem;
+    font-size: 0.9rem;
 }
 
 .detail-description-section {
-    margin-top: 15px;
+    margin-top: 10px;
     border: 2px solid;
     border-top-color: rgba(240, 196, 25, 0.4);
     border-left-color: rgba(240, 196, 25, 0.3);
@@ -1217,11 +1218,11 @@ select option {
 
 .description-toggle {
     width: 100%;
-    padding: 10px 15px;
+    padding: 8px 12px;
     background: rgba(240, 196, 25, 0.1);
     border: none;
     color: var(--accent-color);
-    font-size: 1rem;
+    font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
     display: flex;
