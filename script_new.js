@@ -3,6 +3,7 @@ let selectedAnimalIndex = null;
 let compareAnimal1Index = null;
 let compareAnimal2Index = null;
 let currentMode = 'grid'; // 'grid' or 'compare'
+let waitingForSelection = null; // null, 'animal1', or 'animal2'
 let currentFilters = {
     search: '',
     class: '',
@@ -27,9 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
 function initializeApp() {
     // Populate filters
     populateFilters();
-    
-    // Populate animal selectors for compare mode
-    populateAnimalSelectors();
     
     // Display animals in grid
     displayAnimalsInGrid();
@@ -64,25 +62,30 @@ function populateFilters() {
 }
 
 // ============================================
-// POPULATE ANIMAL SELECTORS FOR COMPARE
+// HANDLE ANIMAL CARD CLICK
 // ============================================
-function populateAnimalSelectors() {
-    const animal1Select = document.getElementById("animal1-select");
-    const animal2Select = document.getElementById("animal2-select");
-    
-    allAnimals.forEach((animal, index) => {
-        const option1 = document.createElement("option");
-        option1.value = index;
-        option1.textContent = animal.name;
-        animal1Select.appendChild(option1);
-        
-        const option2 = document.createElement("option");
-        option2.value = index;
-        option2.textContent = animal.name;
-        animal2Select.appendChild(option2);
-    });
+function handleAnimalCardClick(index) {
+    if (currentMode === 'grid') {
+        // Grid mode: Show stats
+        selectedAnimalIndex = index;
+        displayAnimalStats(index);
+        updateSelectedCards();
+    } else {
+        // Compare mode: Assign to waiting slot
+        if (waitingForSelection === 'animal1') {
+            compareAnimal1Index = index;
+            waitingForSelection = null;
+            updateCompareButtons();
+            updateCompareDisplay();
+        } else if (waitingForSelection === 'animal2') {
+            compareAnimal2Index = index;
+            waitingForSelection = null;
+            updateCompareButtons();
+            updateCompareDisplay();
+        }
+        updateSelectedCards();
+    }
 }
-
 // ============================================
 // DISPLAY ANIMALS IN GRID
 // ============================================
@@ -138,6 +141,28 @@ function createHorizontalCard(animal, index) {
     });
     
     return card;
+}
+
+// ============================================
+// UPDATE COMPARE BUTTONS
+// ============================================
+function updateCompareButtons() {
+    const btn1 = document.getElementById('select-animal-1-btn');
+    const btn2 = document.getElementById('select-animal-2-btn');
+    
+    // Update button 1
+    if (waitingForSelection === 'animal1') {
+        btn1.classList.add('active');
+    } else {
+        btn1.classList.remove('active');
+    }
+    
+    // Update button 2
+    if (waitingForSelection === 'animal2') {
+        btn2.classList.add('active');
+    } else {
+        btn2.classList.remove('active');
+    }
 }
 
 // ============================================
@@ -283,10 +308,10 @@ function updateCompareDisplay() {
 
 function renderCompareAnimal(animal) {
     return `
-        <img src="${animal.image}" alt="${animal.name}" style="width: 100%; height: 200px; object-fit: cover; margin-bottom: 15px; border: 2px solid var(--border-bright);"
-             onerror="this.src='https://via.placeholder.com/400x200?text=${animal.name}'">
-        <h2 style="font-size: 1.5rem; color: var(--accent-color); margin-bottom: 10px;">${animal.name}</h2>
-        <h3 style="font-size: 0.9rem; color: rgba(255,255,255,0.6); margin-bottom: 15px;">${animal.scientific_name}</h3>
+        <img src="${animal.image}" alt="${animal.name}" style="width: 100%; height: 140px; object-fit: cover; margin-bottom: 8px; border: 2px solid var(--border-bright);"
+             onerror="this.src='https://via.placeholder.com/400x140?text=${animal.name}'">
+        <h2 style="font-size: 1.1rem; color: var(--accent-color); margin-bottom: 5px;">${animal.name}</h2>
+        <h3 style="font-size: 0.7rem; color: rgba(255,255,255,0.6); margin-bottom: 8px;">${animal.scientific_name}</h3>
         
         <div class="stat-bar-container">
             ${createStatBar('Attack', animal.attack)}
@@ -297,7 +322,7 @@ function renderCompareAnimal(animal) {
             ${createStatBar('Special', animal.special_attack)}
         </div>
         
-        <div style="margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.3); border-left: 3px solid var(--accent-color);">
+        <div style="margin-top: 8px; padding: 6px; background: rgba(0,0,0,0.3); border-left: 2px solid var(--accent-color); font-size: 0.7rem;">
             <strong>Class:</strong> ${animal.class}<br>
             <strong>Weight:</strong> ${animal.weight_kg} kg<br>
             <strong>Speed:</strong> ${animal.speed_mps.toFixed(2)} m/s
@@ -341,7 +366,6 @@ function toggleViewMode(mode) {
     const compareBtn = document.getElementById("compare-view-btn");
     const gridStatsView = document.getElementById("grid-stats-view");
     const compareStatsView = document.getElementById("compare-stats-view");
-    const compareSelectors = document.getElementById("compare-selectors");
     
     if (mode === 'grid') {
         gridBtn.classList.add('active');
@@ -350,12 +374,13 @@ function toggleViewMode(mode) {
         gridStatsView.classList.remove('inactive-stats-view');
         compareStatsView.classList.add('inactive-stats-view');
         compareStatsView.classList.remove('active-stats-view');
-        compareSelectors.style.display = 'none';
         
         // Reset compare selections when switching to grid
         compareAnimal1Index = null;
         compareAnimal2Index = null;
+        waitingForSelection = null;
         updateSelectedCards();
+        updateCompareButtons();
     } else {
         gridBtn.classList.remove('active');
         compareBtn.classList.add('active');
@@ -363,10 +388,10 @@ function toggleViewMode(mode) {
         gridStatsView.classList.remove('active-stats-view');
         compareStatsView.classList.add('active-stats-view');
         compareStatsView.classList.remove('inactive-stats-view');
-        compareSelectors.style.display = 'flex';
         
         updateCompareDisplay();
         updateSelectedCards();
+        updateCompareButtons();
     }
 }
 
@@ -407,16 +432,14 @@ function setupEventListeners() {
         displayAnimalsInGrid();
     });
     
-    // Compare animal selectors
-    document.getElementById("animal1-select").addEventListener('change', (e) => {
-        compareAnimal1Index = e.target.value ? parseInt(e.target.value) : null;
-        updateCompareDisplay();
-        updateSelectedCards();
+    // Compare select buttons
+    document.getElementById("select-animal-1-btn").addEventListener('click', () => {
+        waitingForSelection = 'animal1';
+        updateCompareButtons();
     });
     
-    document.getElementById("animal2-select").addEventListener('change', (e) => {
-        compareAnimal2Index = e.target.value ? parseInt(e.target.value) : null;
-        updateCompareDisplay();
-        updateSelectedCards();
+    document.getElementById("select-animal-2-btn").addEventListener('click', () => {
+        waitingForSelection = 'animal2';
+        updateCompareButtons();
     });
 }

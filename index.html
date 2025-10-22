@@ -60,23 +60,23 @@
             <div id="compare-stats-view" class="inactive-stats-view">
                 <div class="compare-display-container">
                     <div id="compare-animal-1" class="compare-side">
-                        <div class="compare-placeholder">
-                            <i class="fas fa-paw"></i>
-                            <p>Select Animal 1</p>
-                        </div>
+                        <button class="compare-select-btn" id="select-animal-1-btn">
+                            <i class="fas fa-mouse-pointer"></i><br>
+                            Click to Select Animal 1
+                        </button>
                     </div>
                     <div class="vs-divider">VS</div>
                     <div id="compare-animal-2" class="compare-side">
-                        <div class="compare-placeholder">
-                            <i class="fas fa-paw"></i>
-                            <p>Select Animal 2</p>
-                        </div>
+                        <button class="compare-select-btn" id="select-animal-2-btn">
+                            <i class="fas fa-mouse-pointer"></i><br>
+                            Click to Select Animal 2
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- VS Bar: Mode Toggle + Compare Selectors -->
+        <!-- VS Bar: Mode Toggle (moved to bottom via CSS) -->
         <div class="fixed-vs-bar">
             <div class="mode-toggle">
                 <button id="grid-view-btn" class="mode-btn active" data-mode="grid">
@@ -85,16 +85,6 @@
                 <button id="compare-view-btn" class="mode-btn" data-mode="compare">
                     <i class="fas fa-balance-scale"></i> Compare
                 </button>
-            </div>
-            
-            <div id="compare-selectors" class="compare-selectors" style="display: none;">
-                <select id="animal1-select" class="animal-selector">
-                    <option value="">Animal 1</option>
-                </select>
-                <span class="vs-text">VS</span>
-                <select id="animal2-select" class="animal-selector">
-                    <option value="">Animal 2</option>
-                </select>
             </div>
         </div>
     </div>
