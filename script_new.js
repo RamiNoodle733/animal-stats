@@ -205,16 +205,20 @@ function handleAnimalCardClick(index) {
         displayAnimalStats(index);
         updateSelectedCards();
     } else {
-        // Compare mode: Set animal in comparison
-        if (compareAnimal1Index === null) {
+        // Compare mode: Assign to waiting selection
+        if (waitingForSelection === 'animal1') {
             compareAnimal1Index = index;
-            document.getElementById("animal1-select").value = index;
-        } else {
+            waitingForSelection = null;
+            updateCompareDisplay();
+            updateCompareButtons();
+            updateSelectedCards();
+        } else if (waitingForSelection === 'animal2') {
             compareAnimal2Index = index;
-            document.getElementById("animal2-select").value = index;
+            waitingForSelection = null;
+            updateCompareDisplay();
+            updateCompareButtons();
+            updateSelectedCards();
         }
-        updateCompareDisplay();
-        updateSelectedCards();
     }
 }
 
@@ -230,15 +234,17 @@ function displayAnimalStats(index) {
         placeholder.style.display = 'none';
     }
     
-    statsContainer.style.display = 'grid';
+    statsContainer.style.display = 'flex';
     statsContainer.innerHTML = `
-        <div>
+        <div class="stats-left-column">
             <img src="${animal.image}" alt="${animal.name}" class="stats-animal-image"
-                 onerror="this.src='https://via.placeholder.com/250x250?text=${animal.name}'">
+                 onerror="this.src='https://via.placeholder.com/200x200?text=${animal.name}'">
         </div>
-        <div class="stats-animal-info">
-            <h2>${animal.name}</h2>
-            <h3>${animal.scientific_name}</h3>
+        <div class="stats-right-column">
+            <div>
+                <h2>${animal.name}</h2>
+                <h3>${animal.scientific_name}</h3>
+            </div>
             
             <div class="stats-grid">
                 <div class="stat-item">
@@ -259,7 +265,7 @@ function displayAnimalStats(index) {
                 </div>
                 <div class="stat-item">
                     <div class="stat-label">Lifespan</div>
-                    <div class="stat-value">${animal.lifespan_years} years</div>
+                    <div class="stat-value">${animal.lifespan_years} yrs</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-label">Habitat</div>
@@ -276,18 +282,20 @@ function displayAnimalStats(index) {
                 ${createStatBar('Special', animal.special_attack)}
             </div>
             
-            <div class="stats-traits">
-                <h4>Special Abilities</h4>
-                <ul>
-                    ${animal.special_abilities.map(ability => `<li>${ability}</li>`).join('')}
-                </ul>
-            </div>
-            
-            <div class="stats-traits">
-                <h4>Unique Traits</h4>
-                <ul>
-                    ${animal.unique_traits.map(trait => `<li>${trait}</li>`).join('')}
-                </ul>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div class="stats-traits">
+                    <h4>Special Abilities</h4>
+                    <ul>
+                        ${animal.special_abilities.map(ability => `<li>${ability}</li>`).join('')}
+                    </ul>
+                </div>
+                
+                <div class="stats-traits">
+                    <h4>Unique Traits</h4>
+                    <ul>
+                        ${animal.unique_traits.map(trait => `<li>${trait}</li>`).join('')}
+                    </ul>
+                </div>
             </div>
         </div>
     `;
@@ -297,11 +305,13 @@ function createStatBar(label, value) {
     const percentage = Math.min(value, 100);
     return `
         <div class="stat-bar">
-            <span class="stat-bar-label">${label}</span>
+            <div class="stat-bar-label">
+                <span>${label}</span>
+                <span class="stat-bar-value">${value.toFixed(2)}</span>
+            </div>
             <div class="stat-bar-track">
                 <div class="stat-bar-fill" style="width: ${percentage}%"></div>
             </div>
-            <span class="stat-bar-value">${value.toFixed(2)}</span>
         </div>
     `;
 }
