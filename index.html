@@ -19,32 +19,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Fixed Top Section: Title + Search + Stats Display -->
+    <!-- Fixed Top Section: Title Only -->
     <div class="fixed-top-section">
-        <header>
+        <header class="title-only-header">
             <h1>ANIMAL STATS</h1>
-            <div class="search-container">
-                <input type="text" id="search-input" placeholder="Search animals..." aria-label="Search animals by name or scientific name">
-                <div class="filter-controls">
-                    <select id="class-filter" aria-label="Filter by animal class">
-                        <option value="">All Classes</option>
-                    </select>
-                    <select id="type-filter" aria-label="Filter by animal type">
-                        <option value="">All Types</option>
-                    </select>
-                    <select id="sort-by" aria-label="Sort animals by">
-                        <option value="name">Sort by Name</option>
-                        <option value="attack">Sort by Attack</option>
-                        <option value="defense">Sort by Defense</option>
-                        <option value="agility">Sort by Agility</option>
-                        <option value="intelligence">Sort by Intelligence</option>
-                        <option value="stamina">Sort by Stamina</option>
-                    </select>
-                    <button id="favorites-filter" aria-label="Show favorite animals" aria-pressed="false">
-                        <i class="fas fa-star" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </div>
         </header>
         
         <!-- Stats Display Area (Grid View) or Compare View -->
@@ -89,12 +67,30 @@
         </div>
     </div>
     
-    <!-- Scrollable Bottom Section: Thin Horizontal Animal Cards -->
+    <!-- Scrollable Bottom Section: Compact Controls + Animal Grid -->
     <main class="scrollable-grid-section">
-        <div id="animal-grid" class="horizontal-animal-grid"></div>
-    </main>
-    <!-- Scrollable Bottom Section: Thin Horizontal Animal Cards -->
-    <main class="scrollable-grid-section">
+        <!-- Compact Search and Filters -->
+        <div class="grid-controls">
+            <input type="text" id="search-input" placeholder="Search animals..." class="compact-search">
+            <select id="class-filter" class="compact-filter">
+                <option value="">All Classes</option>
+            </select>
+            <select id="type-filter" class="compact-filter">
+                <option value="">All Types</option>
+            </select>
+            <select id="sort-by" class="compact-filter">
+                <option value="name">Sort by Name</option>
+                <option value="attack">Sort by Attack</option>
+                <option value="defense">Sort by Defense</option>
+                <option value="agility">Sort by Agility</option>
+                <option value="intelligence">Sort by Intelligence</option>
+                <option value="stamina">Sort by Stamina</option>
+            </select>
+            <button id="favorites-filter" class="compact-favorites-btn" aria-label="Show favorites">
+                <i class="fas fa-star"></i>
+            </button>
+        </div>
+        
         <div id="animal-grid" class="horizontal-animal-grid"></div>
     </main>
     

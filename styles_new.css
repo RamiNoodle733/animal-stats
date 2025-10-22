@@ -40,84 +40,91 @@ body {
     background: #000;
     border-bottom: 2px solid var(--border-bright);
     box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
-    height: 35vh;
+    height: 80vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
 }
 
-header {
+.title-only-header {
     background: var(--bg-dark);
-    padding: 10px 15px;
+    padding: 15px;
     border-bottom: 2px solid var(--border-dim);
     flex-shrink: 0;
 }
 
 h1 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 3px;
+    font-size: 2.5rem;
+    letter-spacing: 5px;
     text-transform: uppercase;
     text-align: center;
-    margin-bottom: 10px;
+    margin: 0;
     background: linear-gradient(135deg, #00d4ff, #f0c419);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
-.search-container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-#search-input {
-    width: 100%;
-    padding: 8px 15px;
-    font-size: 0.9rem;
-    background: rgba(0, 212, 255, 0.1);
-    border: 2px solid var(--border-bright);
-    border-radius: 0;
-    color: var(--light-color);
-    margin-bottom: 8px;
-    transition: all 0.3s;
-}
-
-#search-input:focus {
-    outline: none;
-    box-shadow: var(--shadow-glow);
-    border-color: var(--accent-color);
-}
-
-.filter-controls {
+/* Compact Grid Controls - moved to grid section */
+.grid-controls {
     display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid var(--border-dim);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(10px);
 }
 
-.filter-controls select,
-.filter-controls button {
+.compact-search {
     flex: 1;
-    min-width: 100px;
-    padding: 6px 8px;
+    padding: 6px 12px;
     background: rgba(0, 212, 255, 0.1);
-    border: 2px solid var(--border-dim);
+    border: 1px solid var(--border-dim);
+    border-radius: 4px;
+    color: var(--light-color);
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.compact-search:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 8px rgba(0, 212, 255, 0.3);
+}
+
+.compact-filter {
+    padding: 5px 10px;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid var(--border-dim);
+    border-radius: 4px;
     color: var(--light-color);
     font-size: 0.75rem;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: all 0.3s ease;
 }
 
-.filter-controls select:hover,
-.filter-controls button:hover {
+.compact-filter:hover {
     border-color: var(--border-bright);
-    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
 }
 
-#favorites-filter {
-    flex: 0 0 auto;
-    width: 50px;
-    font-size: 1.2rem;
+.compact-favorites-btn {
+    padding: 5px 12px;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid var(--border-dim);
+    border-radius: 4px;
+    color: var(--light-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.compact-favorites-btn:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
 }
 
 /* Stats Display Area */
@@ -159,87 +166,87 @@ h1 {
 /* Selected Animal Stats Display */
 #selected-animal-stats {
     display: grid;
-    grid-template-columns: 180px 1fr;
-    gap: 15px;
+    grid-template-columns: 350px 1fr;
+    gap: 25px;
     background: rgba(0, 212, 255, 0.05);
-    padding: 12px;
+    padding: 20px;
     border: 2px solid var(--border-bright);
     box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.1);
     height: 100%;
-    overflow: hidden;
+    overflow: auto;
 }
 
 .stats-animal-image {
     width: 100%;
-    height: 180px;
+    height: 350px;
     object-fit: cover;
     border: 2px solid var(--border-bright);
 }
 
 .stats-animal-info h2 {
-    font-size: 1.3rem;
-    margin-bottom: 3px;
+    font-size: 2rem;
+    margin-bottom: 8px;
     color: var(--accent-color);
 }
 
 .stats-animal-info h3 {
-    font-size: 0.75rem;
+    font-size: 1rem;
     color: rgba(255, 255, 255, 0.6);
     font-style: italic;
-    margin-bottom: 8px;
+    margin-bottom: 15px;
 }
 
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 6px;
-    margin: 8px 0;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin: 15px 0;
 }
 
 .stat-item {
     background: rgba(0, 0, 0, 0.5);
-    padding: 4px 8px;
+    padding: 10px 12px;
     border-left: 3px solid var(--accent-color);
 }
 
 .stat-label {
-    font-size: 0.65rem;
+    font-size: 0.75rem;
     color: rgba(255, 255, 255, 0.7);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
 }
 
 .stat-value {
-    font-size: 1rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--accent-color);
 }
 
 .stat-bar-container {
-    margin: 6px 0;
+    margin: 15px 0;
 }
 
 .stat-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 4px;
+    margin-bottom: 10px;
 }
 
 .stat-bar-label {
-    font-size: 0.7rem;
+    font-size: 0.85rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    min-width: 80px;
+    min-width: 100px;
 }
 
 .stat-bar-track {
     flex: 1;
-    height: 6px;
+    height: 10px;
     background: rgba(0, 0, 0, 0.5);
     border: 1px solid var(--border-dim);
-    margin: 0 8px;
+    margin: 0 12px;
     position: relative;
 }
 
@@ -251,20 +258,20 @@ h1 {
 }
 
 .stat-bar-value {
-    font-size: 0.7rem;
+    font-size: 0.9rem;
     font-weight: 700;
-    min-width: 35px;
+    min-width: 45px;
     text-align: right;
 }
 
 .stats-traits {
-    margin-top: 8px;
+    margin-top: 15px;
 }
 
 .stats-traits h4 {
-    font-size: 0.8rem;
+    font-size: 1rem;
     color: var(--primary-color);
-    margin-bottom: 4px;
+    margin-bottom: 8px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -275,19 +282,19 @@ h1 {
 }
 
 .stats-traits li {
-    padding: 3px 6px;
+    padding: 8px 10px;
     background: rgba(0, 212, 255, 0.1);
-    margin-bottom: 3px;
+    margin-bottom: 6px;
     border-left: 2px solid var(--accent-color);
-    font-size: 0.7rem;
+    font-size: 0.85rem;
 }
 
 /* Compare Display */
 .compare-display-container {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    gap: 12px;
-    padding: 12px;
+    gap: 20px;
+    padding: 20px;
     background: rgba(0, 212, 255, 0.05);
     border: 2px solid var(--border-bright);
     height: 100%;
@@ -329,38 +336,62 @@ h1 {
 /* Click-to-select buttons in compare mode */
 .compare-select-btn {
     width: 100%;
-    padding: 40px 20px;
+    height: 100%;
+    min-height: 300px;
+    padding: 60px 30px;
     background: rgba(0, 212, 255, 0.1);
-    border: 3px dashed var(--border-bright);
+    border: 4px dashed var(--border-bright);
     color: var(--light-color);
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     font-weight: 700;
     cursor: pointer;
     transition: all 0.3s;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.compare-select-btn i {
+    font-size: 3rem;
+    opacity: 0.6;
 }
 
 .compare-select-btn:hover {
     background: rgba(0, 212, 255, 0.2);
     border-color: var(--primary-color);
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
 }
 
 .compare-select-btn.active {
-    background: rgba(240, 196, 25, 0.2);
+    background: rgba(240, 196, 25, 0.25);
     border-color: var(--primary-color);
     border-style: solid;
-    box-shadow: 0 0 25px rgba(240, 196, 25, 0.6);
+    color: var(--primary-color);
+    box-shadow: 0 0 40px rgba(240, 196, 25, 0.7);
     animation: pulse-select 1.5s ease-in-out infinite;
+}
+
+.compare-select-btn.active::after {
+    content: "👆 Click an animal below";
+    display: block;
+    font-size: 1rem;
+    margin-top: 15px;
+    font-weight: 500;
+    letter-spacing: 1px;
 }
 
 @keyframes pulse-select {
     0%, 100% { 
-        box-shadow: 0 0 25px rgba(240, 196, 25, 0.6);
+        box-shadow: 0 0 40px rgba(240, 196, 25, 0.7);
+        transform: scale(1);
     }
     50% {
-        box-shadow: 0 0 35px rgba(240, 196, 25, 0.8);
+        box-shadow: 0 0 50px rgba(240, 196, 25, 0.9);
+        transform: scale(1.02);
     }
 }
 
@@ -420,11 +451,10 @@ h1 {
    SCROLLABLE GRID SECTION: Thin Horizontal Cards
    ============================================ */
 .scrollable-grid-section {
-    padding: 15px;
-    padding-bottom: 70px;
+    height: 20vh;
     overflow-y: auto;
     background: #000;
-    flex: 1;
+    flex-shrink: 0;
 }
 
 .horizontal-animal-grid {
