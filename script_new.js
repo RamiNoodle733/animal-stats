@@ -4,6 +4,7 @@ let compareAnimal1Index = null;
 let compareAnimal2Index = null;
 let currentMode = 'grid'; // 'grid' or 'compare'
 let waitingForSelection = null; // null, 'animal1', or 'animal2'
+let showOnlyFavorites = false;
 let currentFilters = {
     search: '',
     class: '',
@@ -99,8 +100,9 @@ function displayAnimalsInGrid() {
                             animal.scientific_name.toLowerCase().includes(currentFilters.search.toLowerCase());
         const matchesClass = !currentFilters.class || animal.class === currentFilters.class;
         const matchesType = !currentFilters.type || animal.type === currentFilters.type;
+        const matchesFavorites = !showOnlyFavorites || animal.favorite;
         
-        return matchesSearch && matchesClass && matchesType;
+        return matchesSearch && matchesClass && matchesType && matchesFavorites;
     });
     
     // Sort animals
@@ -130,14 +132,29 @@ function createHorizontalCard(animal, index) {
         card.classList.add('selected');
     }
     
+    const isFavorite = animal.favorite || false;
+    
     card.innerHTML = `
         <img src="${animal.image}" alt="${animal.name}" class="horizontal-card-image" 
              onerror="this.src='https://via.placeholder.com/80x60?text=${animal.name}'">
         <div class="horizontal-card-name">${animal.name}</div>
+        <button class="card-favorite-btn ${isFavorite ? 'favorited' : ''}" data-index="${index}">
+            <i class="fas fa-star"></i>
+        </button>
     `;
     
-    card.addEventListener('click', () => {
-        handleAnimalCardClick(index);
+    card.addEventListener('click', (e) => {
+        // Don't trigger if clicking the favorite button
+        if (!e.target.closest('.card-favorite-btn')) {
+            handleAnimalCardClick(index);
+        }
+    });
+    
+    // Favorite button handler
+    const favBtn = card.querySelector('.card-favorite-btn');
+    favBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleFavorite(index);
     });
     
     return card;
@@ -150,19 +167,32 @@ function updateCompareButtons() {
     const btn1 = document.getElementById('select-animal-1-btn');
     const btn2 = document.getElementById('select-animal-2-btn');
     
-    // Update button 1
-    if (waitingForSelection === 'animal1') {
-        btn1.classList.add('active');
-    } else {
-        btn1.classList.remove('active');
+    if (btn1) {
+        // Update button 1
+        if (waitingForSelection === 'animal1') {
+            btn1.classList.add('active');
+        } else {
+            btn1.classList.remove('active');
+        }
     }
     
-    // Update button 2
-    if (waitingForSelection === 'animal2') {
-        btn2.classList.add('active');
-    } else {
-        btn2.classList.remove('active');
+    if (btn2) {
+        // Update button 2
+        if (waitingForSelection === 'animal2') {
+            btn2.classList.add('active');
+        } else {
+            btn2.classList.remove('active');
+        }
     }
+}
+
+// ============================================
+// TOGGLE FAVORITE
+// ============================================
+function toggleFavorite(index) {
+    allAnimals[index].favorite = !allAnimals[index].favorite;
+    displayAnimalsInGrid();
+    updateSelectedCards();
 }
 
 // ============================================
@@ -287,22 +317,32 @@ function updateCompareDisplay() {
         container1.innerHTML = renderCompareAnimal(allAnimals[compareAnimal1Index]);
     } else {
         container1.innerHTML = `
-            <div class="compare-placeholder">
-                <i class="fas fa-paw"></i>
-                <p>Select Animal 1</p>
-            </div>
+            <button class="compare-select-btn" id="select-animal-1-btn">
+                <i class="fas fa-mouse-pointer"></i><br>
+                Click to Select Animal 1
+            </button>
         `;
+        // Re-attach event listener after recreating button
+        document.getElementById("select-animal-1-btn").addEventListener('click', () => {
+            waitingForSelection = 'animal1';
+            updateCompareButtons();
+        });
     }
     
     if (compareAnimal2Index !== null) {
         container2.innerHTML = renderCompareAnimal(allAnimals[compareAnimal2Index]);
     } else {
         container2.innerHTML = `
-            <div class="compare-placeholder">
-                <i class="fas fa-paw"></i>
-                <p>Select Animal 2</p>
-            </div>
+            <button class="compare-select-btn" id="select-animal-2-btn">
+                <i class="fas fa-mouse-pointer"></i><br>
+                Click to Select Animal 2
+            </button>
         `;
+        // Re-attach event listener after recreating button
+        document.getElementById("select-animal-2-btn").addEventListener('click', () => {
+            waitingForSelection = 'animal2';
+            updateCompareButtons();
+        });
     }
 }
 
@@ -429,6 +469,18 @@ function setupEventListeners() {
     // Sort by
     document.getElementById("sort-by").addEventListener('change', (e) => {
         currentFilters.sort = e.target.value;
+        displayAnimalsInGrid();
+    });
+    
+    // Favorites filter toggle
+    document.getElementById("favorites-filter").addEventListener('click', () => {
+        showOnlyFavorites = !showOnlyFavorites;
+        const btn = document.getElementById("favorites-filter");
+        if (showOnlyFavorites) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
         displayAnimalsInGrid();
     });
     
