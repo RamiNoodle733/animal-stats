@@ -47,13 +47,19 @@ header {
     color: white;
     padding: 30px;
     text-align: center;
-    box-shadow: 0 0 30px rgba(0, 212, 255, 0.5), inset 0 0 50px rgba(0, 212, 255, 0.1);
+    box-shadow: 
+        0 4px 6px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(0, 212, 255, 0.3),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.5);
     position: relative;
     z-index: 10;
     overflow: hidden;
     margin-bottom: 30px;
-    clip-path: var(--clip-corner);
-    border: 2px solid rgba(0, 212, 255, 0.5);
+    border: 2px solid;
+    border-top-color: rgba(0, 212, 255, 0.6);
+    border-left-color: rgba(0, 212, 255, 0.5);
+    border-right-color: rgba(0, 100, 150, 0.4);
+    border-bottom-color: rgba(0, 80, 120, 0.5);
 }
 
 header::before {
@@ -65,26 +71,24 @@ header::before {
     bottom: -2px;
     background: linear-gradient(90deg, 
         transparent 0%, 
-        rgba(0, 212, 255, 0.2) 25%, 
-        rgba(0, 212, 255, 0.4) 50%, 
-        rgba(0, 212, 255, 0.2) 75%, 
+        rgba(0, 212, 255, 0.15) 50%, 
         transparent 100%);
     z-index: -1;
-    animation: border-sweep 4s ease-in-out infinite;
+    animation: border-sweep 12s ease-in-out infinite;
 }
 
 @keyframes border-sweep {
     0% { 
-        opacity: 0.5;
-        transform: translateX(-100%);
+        opacity: 0.3;
+        transform: translateX(-50%);
     }
     50% {
-        opacity: 0.9;
-        transform: translateX(100%);
+        opacity: 0.5;
+        transform: translateX(150%);
     }
     100% { 
-        opacity: 0.5;
-        transform: translateX(-100%);
+        opacity: 0.3;
+        transform: translateX(-50%);
     }
 }
 
@@ -134,15 +138,10 @@ main {
     border-left-color: #2a3649;
     border-right-color: #05090f;
     border-bottom-color: #05090f;
-    clip-path: polygon(
-        6px 0, calc(100% - 6px) 0, 
-        100% 6px, 100% calc(100% - 6px),
-        calc(100% - 6px) 100%, 6px 100%,
-        0 calc(100% - 6px), 0 6px
-    );
     box-shadow: 
         inset 0 2px 4px rgba(0, 0, 0, 0.4),
-        inset 0 -1px 2px rgba(255, 255, 255, 0.05);
+        inset 0 -1px 2px rgba(255, 255, 255, 0.05),
+        0 2px 4px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
     transition: var(--transition);
     outline: none;
@@ -157,8 +156,9 @@ main {
     box-shadow: 
         inset 0 2px 4px rgba(0, 0, 0, 0.4),
         inset 0 -1px 2px rgba(255, 255, 255, 0.05),
-        0 0 20px rgba(0, 212, 255, 0.6);
-    transform: translateY(-2px);
+        0 0 15px rgba(0, 212, 255, 0.4),
+        0 2px 6px rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
 }
 
 #search-input::placeholder {
@@ -183,15 +183,10 @@ select {
     border-left-color: #4a5f7f;
     border-right-color: #0a0f1f;
     border-bottom-color: #0a0f1f;
-    clip-path: polygon(
-        6px 0, calc(100% - 6px) 0, 
-        100% 6px, 100% calc(100% - 6px),
-        calc(100% - 6px) 100%, 6px 100%,
-        0 calc(100% - 6px), 0 6px
-    );
     box-shadow: 
         inset 0 1px 2px rgba(255, 255, 255, 0.1),
-        inset 0 -1px 2px rgba(0, 0, 0, 0.3);
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 2px 4px rgba(0, 0, 0, 0.2);
     transition: var(--transition);
     cursor: pointer;
     min-width: 150px;
@@ -204,7 +199,8 @@ select:focus {
     box-shadow: 
         inset 0 1px 2px rgba(255, 255, 255, 0.15),
         inset 0 -1px 2px rgba(0, 0, 0, 0.3),
-        0 0 15px rgba(0, 212, 255, 0.5);
+        0 0 12px rgba(0, 212, 255, 0.4),
+        0 2px 6px rgba(0, 0, 0, 0.3);
     transform: translateY(-1px);
 }
 
@@ -214,8 +210,7 @@ select:hover {
     box-shadow: 
         inset 0 1px 2px rgba(255, 255, 255, 0.15),
         inset 0 -1px 2px rgba(0, 0, 0, 0.3),
-        0 0 10px rgba(0, 212, 255, 0.3);
-    transform: translateY(-1px);
+        0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
 select option {
@@ -231,15 +226,10 @@ select option {
     border-left-color: #4a5f7f;
     border-right-color: #0a0f1f;
     border-bottom-color: #0a0f1f;
-    clip-path: polygon(
-        6px 0, calc(100% - 6px) 0, 
-        100% 6px, 100% calc(100% - 6px),
-        calc(100% - 6px) 100%, 6px 100%,
-        0 calc(100% - 6px), 0 6px
-    );
     box-shadow: 
         inset 0 1px 2px rgba(255, 255, 255, 0.1),
-        inset 0 -1px 2px rgba(0, 0, 0, 0.3);
+        inset 0 -1px 2px rgba(0, 0, 0, 0.3),
+        0 2px 4px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     transition: var(--transition);
     color: #e0e0e0;
@@ -256,7 +246,8 @@ select option {
     box-shadow: 
         inset 0 1px 2px rgba(255, 255, 255, 0.15),
         inset 0 -1px 2px rgba(0, 0, 0, 0.3),
-        0 0 15px rgba(0, 212, 255, 0.5);
+        0 0 12px rgba(0, 212, 255, 0.4),
+        0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 #favorites-filter.active i {
@@ -278,12 +269,6 @@ select option {
     border-left-color: #4a5f7f;
     border-right-color: #0a0f1f;
     border-bottom-color: #0a0f1f;
-    clip-path: polygon(
-        6px 0, calc(100% - 6px) 0, 
-        100% 6px, 100% calc(100% - 6px),
-        calc(100% - 6px) 100%, 6px 100%,
-        0 calc(100% - 6px), 0 6px
-    );
     margin: 0;
     cursor: pointer;
     font-weight: 600;
@@ -292,7 +277,7 @@ select option {
     box-shadow: 
         inset 0 1px 2px rgba(255, 255, 255, 0.1),
         inset 0 -1px 2px rgba(0, 0, 0, 0.3),
-        0 0 10px rgba(0, 212, 255, 0.2);
+        0 2px 4px rgba(0, 0, 0, 0.2);
     position: relative;
     overflow: hidden;
     color: #e0e0e0;
@@ -376,14 +361,20 @@ select option {
 
 .animal-card {
     background: rgba(10, 14, 26, 0.9);
-    clip-path: var(--clip-corner);
     overflow: visible;
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3), inset 0 0 30px rgba(0, 212, 255, 0.05);
+    box-shadow: 
+        0 4px 10px rgba(0, 0, 0, 0.4),
+        inset 0 1px 2px rgba(0, 212, 255, 0.2),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.5);
     transition: var(--transition);
     position: relative;
     cursor: pointer;
     animation: fadeInUp 0.6s ease-out;
-    border: 2px solid rgba(0, 212, 255, 0.5);
+    border: 2px solid;
+    border-top-color: rgba(0, 212, 255, 0.6);
+    border-left-color: rgba(0, 212, 255, 0.5);
+    border-right-color: rgba(0, 150, 200, 0.4);
+    border-bottom-color: rgba(0, 120, 180, 0.5);
     transform-origin: center center;
 }
 
@@ -680,10 +671,15 @@ select option {
     gap: 20px;
     padding: 25px;
     background: rgba(41, 54, 73, 0.6);
-    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
-    box-shadow: var(--shadow-medium);
+    box-shadow: 
+        0 4px 10px rgba(0, 0, 0, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
-    border: 2px solid rgba(240, 196, 25, 0.2);
+    border: 2px solid;
+    border-top-color: rgba(240, 196, 25, 0.3);
+    border-left-color: rgba(240, 196, 25, 0.3);
+    border-right-color: rgba(240, 196, 25, 0.1);
+    border-bottom-color: rgba(240, 196, 25, 0.1);
 }
 
 .compare-button {
@@ -699,15 +695,9 @@ select option {
     border-left-color: #3a5570;
     border-right-color: #0a1520;
     border-bottom-color: #0a1520;
-    clip-path: polygon(
-        10px 0, calc(100% - 10px) 0, 
-        100% 10px, 100% calc(100% - 10px),
-        calc(100% - 10px) 100%, 10px 100%,
-        0 calc(100% - 10px), 0 10px
-    );
     cursor: pointer;
     box-shadow: 
-        0 4px 15px rgba(0, 0, 0, 0.5),
+        0 4px 10px rgba(0, 0, 0, 0.4),
         inset 0 2px 4px rgba(255, 255, 255, 0.1),
         inset 0 -2px 4px rgba(0, 0, 0, 0.5);
     transition: all 0.2s ease;
@@ -722,16 +712,16 @@ select option {
     border-left-color: #4a6580;
     background: linear-gradient(180deg, #3a5570 0%, #2a4560 50%, #1a3550 100%);
     box-shadow: 
-        0 6px 20px rgba(0, 212, 255, 0.4),
+        0 6px 15px rgba(0, 212, 255, 0.3),
         inset 0 2px 4px rgba(255, 255, 255, 0.15),
         inset 0 -2px 4px rgba(0, 0, 0, 0.5);
     color: #ffffff;
 }
 
 .compare-button:active {
-    transform: translateY(0);
+    transform: translateY(1px);
     box-shadow: 
-        0 2px 8px rgba(0, 0, 0, 0.6),
+        0 2px 5px rgba(0, 0, 0, 0.5),
         inset 0 -2px 4px rgba(255, 255, 255, 0.05),
         inset 0 2px 6px rgba(0, 0, 0, 0.6);
 }

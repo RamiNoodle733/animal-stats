@@ -1,4 +1,4 @@
-[
+﻿[
     {
         "name":  "Cheetah",
         "scientific_name":  "Acinonyx jubatus",
@@ -28,7 +28,7 @@
                                   "Lightning Sprint",
                                   "Precision Strike"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Cheetah,animal"
+        "image":  "https://picsum.photos/seed/44/400/400"
     },
     {
         "name":  "Peregrine Falcon",
@@ -60,7 +60,7 @@
                                   "Death Dive",
                                   "Aerial Mastery"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Peregrine+Falcon,animal"
+        "image":  "https://picsum.photos/seed/98/400/400"
     },
     {
         "name":  "Saltwater Crocodile",
@@ -93,7 +93,7 @@
                                   "Death Roll",
                                   "Stealth Ambush"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Saltwater+Crocodile,animal"
+        "image":  "https://picsum.photos/seed/387/400/400"
     },
     {
         "name":  "Great White Shark",
@@ -126,7 +126,7 @@
                                   "Blood Frenzy",
                                   "Breach Attack"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Great+White+Shark,animal"
+        "image":  "https://picsum.photos/seed/919/400/400"
     },
     {
         "name":  "African Elephant",
@@ -159,7 +159,7 @@
                                   "Stampede",
                                   "Matriarchal Wisdom"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?African+Elephant,animal"
+        "image":  "https://picsum.photos/seed/639/400/400"
     },
     {
         "name":  "Chimpanzee",
@@ -192,7 +192,7 @@
                                   "Tool Mastery",
                                   "Strategic Thinking"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Chimpanzee,animal"
+        "image":  "https://picsum.photos/seed/418/400/400"
     },
     {
         "name":  "Bottlenose Dolphin",
@@ -224,7 +224,7 @@
                                   "Sonar Navigation",
                                   "Pod Coordination"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Bottlenose+Dolphin,animal"
+        "image":  "https://picsum.photos/seed/937/400/400"
     },
     {
         "name":  "Octopus",
@@ -257,7 +257,7 @@
                                   "Camouflage",
                                   "Escape Artistry"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Octopus,animal"
+        "image":  "https://picsum.photos/seed/599/400/400"
     },
     {
         "name":  "Grizzly Bear",
@@ -291,7 +291,7 @@
                                   "Berserker Rage",
                                   "Scent Tracking"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Grizzly+Bear,animal"
+        "image":  "https://picsum.photos/seed/231/400/400"
     },
     {
         "name":  "Siberian Tiger",
@@ -324,7 +324,7 @@
                                   "Stealth Hunt",
                                   "Powerful Pounce"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Siberian+Tiger,animal"
+        "image":  "https://picsum.photos/seed/822/400/400"
     },
     {
         "name":  "Gray Wolf",
@@ -357,7 +357,7 @@
                                   "Pack Tactics",
                                   "Endurance Hunt"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Gray+Wolf,animal"
+        "image":  "https://picsum.photos/seed/837/400/400"
     },
     {
         "name":  "Mountain Gorilla",
@@ -390,7 +390,7 @@
                                   "Intimidation Display",
                                   "Protective Rage"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Mountain+Gorilla,animal"
+        "image":  "https://picsum.photos/seed/903/400/400"
     },
     {
         "name":  "Polar Bear",
@@ -423,7 +423,7 @@
                                   "Ice Smash",
                                   "Arctic Endurance"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Polar+Bear,animal"
+        "image":  "https://picsum.photos/seed/188/400/400"
     },
     {
         "name":  "Honey Badger",
@@ -456,7 +456,7 @@
                                   "Fearless Assault",
                                   "Venom Resistance"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Honey+Badger,animal"
+        "image":  "https://picsum.photos/seed/728/400/400"
     },
     {
         "name":  "Bald Eagle",
@@ -489,7 +489,7 @@
                                   "Eagle Eye",
                                   "Talon Strike"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Bald+Eagle,animal"
+        "image":  "https://picsum.photos/seed/41/400/400"
     },
     {
         "name":  "Komodo Dragon",
@@ -522,7 +522,7 @@
                                   "Venom Bite",
                                   "Infection Spread"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Komodo+Dragon,animal"
+        "image":  "https://picsum.photos/seed/76/400/400"
     },
     {
         "name":  "Blue Whale",
@@ -554,7 +554,7 @@
                                   "Sonic Boom",
                                   "Tidal Force"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Blue+Whale,animal"
+        "image":  "https://picsum.photos/seed/497/400/400"
     },
     {
         "name":  "Mantis Shrimp",
@@ -587,7 +587,7 @@
                                   "Bullet Punch",
                                   "Rainbow Vision"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Mantis+Shrimp,animal"
+        "image":  "https://picsum.photos/seed/39/400/400"
     },
     {
         "name":  "Electric Eel",
@@ -619,7 +619,7 @@
                                   "Electric Shock",
                                   "Bioelectric Field"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Electric+Eel,animal"
+        "image":  "https://picsum.photos/seed/393/400/400"
     },
     {
         "name":  "Green Anaconda",
@@ -652,7 +652,7 @@
                                   "Death Coil",
                                   "Aquatic Stealth"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Green+Anaconda,animal"
+        "image":  "https://picsum.photos/seed/710/400/400"
     },
     {
         "name":  "Fennec Fox",
@@ -685,7 +685,7 @@
                                   "Sand Sprint",
                                   "Echo Hunt"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Fennec+Fox,animal"
+        "image":  "https://picsum.photos/seed/74/400/400"
     },
     {
         "name":  "Snow Leopard",
@@ -717,7 +717,7 @@
                                   "Cliff Pounce",
                                   "Snow Camouflage"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Snow+Leopard,animal"
+        "image":  "https://picsum.photos/seed/408/400/400"
     },
     {
         "name":  "Red Kangaroo",
@@ -749,7 +749,7 @@
                                   "Tail Balance",
                                   "Kickback"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Red+Kangaroo,animal"
+        "image":  "https://picsum.photos/seed/151/400/400"
     },
     {
         "name":  "Giant Panda",
@@ -780,7 +780,7 @@
                                   "Bamboo Barrage",
                                   "Gentle Push"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Giant+Panda,animal"
+        "image":  "https://picsum.photos/seed/627/400/400"
     },
     {
         "name":  "Narwhal",
@@ -812,7 +812,7 @@
                                   "Tusk Strike",
                                   "Echo Sense"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Narwhal,animal"
+        "image":  "https://picsum.photos/seed/73/400/400"
     },
     {
         "name":  "Great Horned Owl",
@@ -844,7 +844,7 @@
                                   "Silent Glide",
                                   "Night Vision"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Great+Horned+Owl,animal"
+        "image":  "https://picsum.photos/seed/235/400/400"
     },
     {
         "name":  "Vampire Bat",
@@ -875,6 +875,6 @@
                                   "Blood Drain",
                                   "Echo Flee"
                               ],
-        "image":  "https://source.unsplash.com/400x400/?Vampire+Bat,animal"
+        "image":  "https://picsum.photos/seed/199/400/400"
     }
 ]
