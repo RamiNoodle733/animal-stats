@@ -175,127 +175,146 @@ h1 {
 /* Selected Animal Stats Display */
 #selected-animal-stats {
     display: flex;
-    gap: 20px;
+    flex-direction: column;
     background: rgba(0, 212, 255, 0.05);
-    padding: 15px;
+    padding: 0;
     border: 2px solid var(--border-bright);
     box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.1);
-    overflow: auto;
-    max-width: 1600px;
+    overflow: hidden;
+    max-width: 900px;
     margin: 0 auto;
-    flex: 1;
-    min-height: 0;
-}
-
-.stats-left-column {
-    flex-shrink: 0;
-    width: 200px;
-}
-
-.stats-right-column {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    min-width: 0;
+    height: 100%;
 }
 
 .stats-animal-image {
     width: 100%;
-    height: 200px;
+    height: 35%;
     object-fit: cover;
-    border: 2px solid var(--border-bright);
-    margin-bottom: 10px;
+    border-bottom: 3px solid var(--border-bright);
+    flex-shrink: 0;
+}
+
+.stats-content-wrapper {
+    flex: 1;
+    padding: 15px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow-y: auto;
+}
+
+.stats-header {
+    text-align: center;
+    border-bottom: 2px solid var(--border-dim);
+    padding-bottom: 10px;
 }
 
 .stats-animal-info h2 {
-    font-size: 1.8rem;
-    margin-bottom: 5px;
+    font-size: 2rem;
+    margin: 0 0 5px 0;
     color: var(--accent-color);
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .stats-animal-info h3 {
     font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.6);
     font-style: italic;
-    margin-bottom: 10px;
+    margin: 0;
 }
 
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 15px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 10px;
+    border: 1px solid var(--border-dim);
 }
 
 .stat-item {
-    background: rgba(0, 0, 0, 0.5);
-    padding: 8px 10px;
-    border-left: 2px solid var(--accent-color);
+    background: rgba(0, 212, 255, 0.05);
+    padding: 6px 10px;
+    border-left: 3px solid var(--accent-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .stat-label {
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     color: rgba(255, 255, 255, 0.7);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-bottom: 3px;
 }
 
 .stat-value {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 700;
     color: var(--accent-color);
 }
 
+.stats-section-title {
+    font-size: 0.9rem;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0 0 8px 0;
+    padding-bottom: 5px;
+    border-bottom: 2px solid var(--border-dim);
+}
+
 .stat-bar-container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .stat-bar {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
 }
 
 .stat-bar-label {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     display: flex;
     justify-content: space-between;
+    color: var(--light-color);
 }
 
 .stat-bar-track {
-    height: 8px;
+    height: 10px;
     background: rgba(0, 0, 0, 0.5);
     border: 1px solid var(--border-dim);
     position: relative;
+    overflow: hidden;
 }
 
 .stat-bar-fill {
     height: 100%;
     background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
-    box-shadow: 0 0 8px rgba(0, 212, 255, 0.5);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
     transition: width 0.5s ease;
 }
 
 .stat-bar-value {
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     font-weight: 700;
+    color: var(--primary-color);
 }
 
 .stats-traits {
-    margin-top: 0;
+    margin: 0;
 }
 
 .stats-traits h4 {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: var(--primary-color);
-    margin-bottom: 5px;
+    margin: 0 0 6px 0;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
@@ -303,16 +322,18 @@ h1 {
 .stats-traits ul {
     list-style: none;
     padding: 0;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
     gap: 5px;
 }
 
 .stats-traits li {
-    padding: 5px 8px;
-    background: rgba(0, 212, 255, 0.1);
+    padding: 4px 8px;
+    background: rgba(0, 212, 255, 0.15);
     border-left: 2px solid var(--accent-color);
     font-size: 0.7rem;
+    flex: 0 0 auto;
 }
 
 /* Compare Display */
