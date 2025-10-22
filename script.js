@@ -161,7 +161,7 @@ function createAnimalCard(animal) {
           <span>${animal.attack}</span>
         </div>
         <div class="stat-track" role="progressbar" aria-valuenow="${animal.attack}" aria-valuemin="0" aria-valuemax="100" aria-label="Attack rating">
-          <div class="stat-fill attack-fill" style="width: ${animal.attack}%"></div>
+          <div class="stat-fill attack-fill" style="--stat-width: ${animal.attack}%"></div>
         </div>
       </div>
       <div class="stat-bar">
@@ -170,7 +170,7 @@ function createAnimalCard(animal) {
           <span>${animal.defense}</span>
         </div>
         <div class="stat-track" role="progressbar" aria-valuenow="${animal.defense}" aria-valuemin="0" aria-valuemax="100" aria-label="Defense rating">
-          <div class="stat-fill defense-fill" style="width: ${animal.defense}%"></div>
+          <div class="stat-fill defense-fill" style="--stat-width: ${animal.defense}%"></div>
         </div>
       </div>
       <div class="stat-bar">
@@ -179,7 +179,7 @@ function createAnimalCard(animal) {
           <span>${animal.agility}</span>
         </div>
         <div class="stat-track" role="progressbar" aria-valuenow="${animal.agility}" aria-valuemin="0" aria-valuemax="100" aria-label="Agility rating">
-          <div class="stat-fill agility-fill" style="width: ${animal.agility}%"></div>
+          <div class="stat-fill agility-fill" style="--stat-width: ${animal.agility}%"></div>
         </div>
       </div>
       <div class="stat-bar">
@@ -188,7 +188,7 @@ function createAnimalCard(animal) {
           <span>${animal.intelligence}</span>
         </div>
         <div class="stat-track" role="progressbar" aria-valuenow="${animal.intelligence}" aria-valuemin="0" aria-valuemax="100" aria-label="Intelligence rating">
-          <div class="stat-fill intelligence-fill" style="width: ${animal.intelligence}%"></div>
+          <div class="stat-fill intelligence-fill" style="--stat-width: ${animal.intelligence}%"></div>
         </div>
       </div>
       <div class="stat-bar">
@@ -197,7 +197,7 @@ function createAnimalCard(animal) {
           <span>${animal.stamina}</span>
         </div>
         <div class="stat-track" role="progressbar" aria-valuenow="${animal.stamina}" aria-valuemin="0" aria-valuemax="100" aria-label="Stamina rating">
-          <div class="stat-fill stamina-fill" style="width: ${animal.stamina}%"></div>
+          <div class="stat-fill stamina-fill" style="--stat-width: ${animal.stamina}%"></div>
         </div>
       </div>
       <div class="animal-special">
@@ -208,6 +208,14 @@ function createAnimalCard(animal) {
       </div>
     </div>
   `;
+  
+  // Animate stat bars after a short delay
+  setTimeout(() => {
+    const statFills = cardDiv.querySelectorAll('.stat-fill');
+    statFills.forEach(fill => {
+      fill.classList.add('animated');
+    });
+  }, 100);
 
   // Open details on click or keyboard
   const showDetails = () => showAnimalDetails(animal);
@@ -330,8 +338,12 @@ function setupEventListeners() {
     });
     
     // Comparison dropdowns
-    document.getElementById("animal1-select").addEventListener("change", updateComparison);
-    document.getElementById("animal2-select").addEventListener("change", updateComparison);
+    document.getElementById("animal1-select").addEventListener("change", checkCompareReady);
+    document.getElementById("animal2-select").addEventListener("change", checkCompareReady);
+    
+    // Compare button
+    const compareButton = document.getElementById("compare-button");
+    compareButton.addEventListener("click", performComparison);
     
     // Modal controls with keyboard support
     const modal = document.getElementById("animal-detail-modal");
@@ -353,28 +365,8 @@ function setupEventListeners() {
         }
     });
     
-    // Theme toggle with proper ARIA
-    const themeSwitch = document.getElementById("theme-switch");
-    themeSwitch.addEventListener("change", () => {
-        const isDark = themeSwitch.checked;
-        document.body.classList.toggle("dark-mode", isDark);
-        localStorage.setItem("darkMode", isDark);
-        
-        // Update ARIA label
-        themeSwitch.setAttribute('aria-label', 
-            isDark ? 'Switch to light mode' : 'Switch to dark mode'
-        );
-    });
-    
-    // Check for saved theme preference
-    const savedDarkMode = localStorage.getItem("darkMode") === "true";
-    if (savedDarkMode) {
-        themeSwitch.checked = true;
-        document.body.classList.add("dark-mode");
-        themeSwitch.setAttribute('aria-label', 'Switch to light mode');
-    } else {
-        themeSwitch.setAttribute('aria-label', 'Switch to dark mode');
-    }
+    // Force dark mode
+    document.body.classList.add("dark-mode");
     
     // Add focus management for better keyboard navigation
     document.addEventListener('focusin', (event) => {
@@ -531,7 +523,26 @@ function announceToScreenReader(message) {
     setTimeout(() => document.body.removeChild(announcement), 1000);
 }
 
-function updateComparison() {
+function checkCompareReady() {
+    const animal1Name = document.getElementById("animal1-select").value;
+    const animal2Name = document.getElementById("animal2-select").value;
+    const compareButton = document.getElementById("compare-button");
+    
+    if (animal1Name && animal2Name) {
+        compareButton.style.display = "block";
+        // Clear previous comparison
+        document.getElementById("comparison-container").innerHTML = `
+            <div class="comparison-message">Click "Compare Animals" to see detailed comparison</div>
+        `;
+    } else {
+        compareButton.style.display = "none";
+        document.getElementById("comparison-container").innerHTML = `
+            <div class="comparison-message">Select two animals to compare</div>
+        `;
+    }
+}
+
+function performComparison() {
     const animal1Name = document.getElementById("animal1-select").value;
     const animal2Name = document.getElementById("animal2-select").value;
     
@@ -540,78 +551,127 @@ function updateComparison() {
         const animal2 = allAnimals.find(animal => animal.name === animal2Name);
         
         displayComparison(animal1, animal2);
-    } else {
-        // Clear comparison area if one or both selections are empty
-        document.getElementById("comparison-container").innerHTML = `
-            <div class="comparison-message">Select two animals to compare</div>
-        `;
     }
 }
 
 function displayComparison(animal1, animal2) {
     const comparisonContainer = document.getElementById("comparison-container");
     
-    // Create comparison stats
+    // Calculate stats
+    const total1 = calculateTotalStats(animal1);
+    const total2 = calculateTotalStats(animal2);
+    const winner = total1 > total2 ? animal1 : (total2 > total1 ? animal2 : null);
+    
+    // Calculate category wins
+    let wins1 = 0;
+    let wins2 = 0;
+    if (animal1.attack > animal2.attack) wins1++; else if (animal2.attack > animal1.attack) wins2++;
+    if (animal1.defense > animal2.defense) wins1++; else if (animal2.defense > animal1.defense) wins2++;
+    if (animal1.agility > animal2.agility) wins1++; else if (animal2.agility > animal1.agility) wins2++;
+    if (animal1.intelligence > animal2.intelligence) wins1++; else if (animal2.intelligence > animal1.intelligence) wins2++;
+    if (animal1.stamina > animal2.stamina) wins1++; else if (animal2.stamina > animal1.stamina) wins2++;
+    if (animal1.special_attack > animal2.special_attack) wins1++; else if (animal2.special_attack > animal1.special_attack) wins2++;
+    
+    // Create enhanced comparison
     comparisonContainer.innerHTML = `
+        ${winner ? `<div class="overall-winner">
+            <div class="winner-announcement">
+                <i class="fas fa-trophy"></i>
+                <h2>${winner.name} WINS!</h2>
+                <p>Overall Total: ${winner === animal1 ? total1 : total2} points</p>
+                <p class="winner-subtitle">Category Wins: ${winner === animal1 ? wins1 : wins2} out of 6</p>
+            </div>
+        </div>` : '<div class="overall-winner"><div class="winner-announcement"><i class="fas fa-handshake"></i><h2>IT\'S A TIE!</h2><p>Both animals are equally matched</p></div></div>'}
+        
         <div class="comparison-card">
             <img src="${animal1.image}" alt="${animal1.name}" class="animal-image">
             <div class="animal-header">
                 <h2>${animal1.name}</h2>
                 <h3>${animal1.scientific_name}</h3>
             </div>
+            <div class="animal-badges">
+                <span class="badge">${animal1.class}</span>
+                <span class="badge">${animal1.type}</span>
+            </div>
             <div class="animal-content">
+                <div class="quick-stats">
+                    <div class="quick-stat"><strong>Size:</strong> ${animal1.size}</div>
+                    <div class="quick-stat"><strong>Weight:</strong> ${animal1.weight_kg} kg</div>
+                    <div class="quick-stat"><strong>Speed:</strong> ${animal1.speed_mps} m/s</div>
+                    <div class="quick-stat"><strong>Lifespan:</strong> ${animal1.lifespan_years} years</div>
+                </div>
                 <div class="animal-special">
                     <div class="special-title">Special Abilities:</div>
                     <ul>
                         ${animal1.special_abilities.map(ability => `<li>${ability}</li>`).join('')}
                     </ul>
                 </div>
+                <div class="animal-special">
+                    <div class="special-title">Unique Traits:</div>
+                    <ul>
+                        ${animal1.unique_traits.map(trait => `<li>${trait}</li>`).join('')}
+                    </ul>
+                </div>
             </div>
         </div>
         
         <div class="stat-comparison">
-            <h3 class="comparison-title">Statistics Comparison</h3>
+            <h3 class="comparison-title">Battle Statistics</h3>
             
             <div class="comparison-row">
-                <div class="comparison-stat ${animal1.attack > animal2.attack ? 'winner' : ''}">${animal1.attack}</div>
-                <div class="comparison-label">ATTACK</div>
-                <div class="comparison-stat ${animal2.attack > animal1.attack ? 'winner' : ''}">${animal2.attack}</div>
+                <div class="comparison-stat ${animal1.attack > animal2.attack ? 'winner' : animal1.attack === animal2.attack ? 'tie' : ''}">${animal1.attack}</div>
+                <div class="comparison-label">
+                    <i class="fas fa-fire"></i> ATTACK
+                </div>
+                <div class="comparison-stat ${animal2.attack > animal1.attack ? 'winner' : animal1.attack === animal2.attack ? 'tie' : ''}">${animal2.attack}</div>
             </div>
             
             <div class="comparison-row">
-                <div class="comparison-stat ${animal1.defense > animal2.defense ? 'winner' : ''}">${animal1.defense}</div>
-                <div class="comparison-label">DEFENSE</div>
-                <div class="comparison-stat ${animal2.defense > animal1.defense ? 'winner' : ''}">${animal2.defense}</div>
+                <div class="comparison-stat ${animal1.defense > animal2.defense ? 'winner' : animal1.defense === animal2.defense ? 'tie' : ''}">${animal1.defense}</div>
+                <div class="comparison-label">
+                    <i class="fas fa-shield-alt"></i> DEFENSE
+                </div>
+                <div class="comparison-stat ${animal2.defense > animal1.defense ? 'winner' : animal1.defense === animal2.defense ? 'tie' : ''}">${animal2.defense}</div>
             </div>
             
             <div class="comparison-row">
-                <div class="comparison-stat ${animal1.agility > animal2.agility ? 'winner' : ''}">${animal1.agility}</div>
-                <div class="comparison-label">AGILITY</div>
-                <div class="comparison-stat ${animal2.agility > animal1.agility ? 'winner' : ''}">${animal2.agility}</div>
+                <div class="comparison-stat ${animal1.agility > animal2.agility ? 'winner' : animal1.agility === animal2.agility ? 'tie' : ''}">${animal1.agility}</div>
+                <div class="comparison-label">
+                    <i class="fas fa-wind"></i> AGILITY
+                </div>
+                <div class="comparison-stat ${animal2.agility > animal1.agility ? 'winner' : animal1.agility === animal2.agility ? 'tie' : ''}">${animal2.agility}</div>
             </div>
             
             <div class="comparison-row">
-                <div class="comparison-stat ${animal1.intelligence > animal2.intelligence ? 'winner' : ''}">${animal1.intelligence}</div>
-                <div class="comparison-label">INTELLIGENCE</div>
-                <div class="comparison-stat ${animal2.intelligence > animal1.intelligence ? 'winner' : ''}">${animal2.intelligence}</div>
+                <div class="comparison-stat ${animal1.intelligence > animal2.intelligence ? 'winner' : animal1.intelligence === animal2.intelligence ? 'tie' : ''}">${animal1.intelligence}</div>
+                <div class="comparison-label">
+                    <i class="fas fa-brain"></i> INTELLIGENCE
+                </div>
+                <div class="comparison-stat ${animal2.intelligence > animal1.intelligence ? 'winner' : animal1.intelligence === animal2.intelligence ? 'tie' : ''}">${animal2.intelligence}</div>
             </div>
             
             <div class="comparison-row">
-                <div class="comparison-stat ${animal1.stamina > animal2.stamina ? 'winner' : ''}">${animal1.stamina}</div>
-                <div class="comparison-label">STAMINA</div>
-                <div class="comparison-stat ${animal2.stamina > animal1.stamina ? 'winner' : ''}">${animal2.stamina}</div>
+                <div class="comparison-stat ${animal1.stamina > animal2.stamina ? 'winner' : animal1.stamina === animal2.stamina ? 'tie' : ''}">${animal1.stamina}</div>
+                <div class="comparison-label">
+                    <i class="fas fa-heart"></i> STAMINA
+                </div>
+                <div class="comparison-stat ${animal2.stamina > animal1.stamina ? 'winner' : animal1.stamina === animal2.stamina ? 'tie' : ''}">${animal2.stamina}</div>
             </div>
             
             <div class="comparison-row">
-                <div class="comparison-stat ${animal1.special_attack > animal2.special_attack ? 'winner' : ''}">${animal1.special_attack}</div>
-                <div class="comparison-label">SPECIAL ATTACK</div>
-                <div class="comparison-stat ${animal2.special_attack > animal1.special_attack ? 'winner' : ''}">${animal2.special_attack}</div>
+                <div class="comparison-stat ${animal1.special_attack > animal2.special_attack ? 'winner' : animal1.special_attack === animal2.special_attack ? 'tie' : ''}">${animal1.special_attack}</div>
+                <div class="comparison-label">
+                    <i class="fas fa-bolt"></i> SPECIAL ATTACK
+                </div>
+                <div class="comparison-stat ${animal2.special_attack > animal1.special_attack ? 'winner' : animal1.special_attack === animal2.special_attack ? 'tie' : ''}">${animal2.special_attack}</div>
             </div>
             
-            <div class="comparison-row">
-                <div class="comparison-stat ${calculateTotalStats(animal1) > calculateTotalStats(animal2) ? 'winner' : ''}">${calculateTotalStats(animal1)}</div>
-                <div class="comparison-label">TOTAL</div>
-                <div class="comparison-stat ${calculateTotalStats(animal2) > calculateTotalStats(animal1) ? 'winner' : ''}">${calculateTotalStats(ananimal2)}</div>
+            <div class="comparison-row total-row">
+                <div class="comparison-stat ${total1 > total2 ? 'winner' : total1 === total2 ? 'tie' : ''}">${total1}</div>
+                <div class="comparison-label">
+                    <i class="fas fa-star"></i> TOTAL
+                </div>
+                <div class="comparison-stat ${total2 > total1 ? 'winner' : total1 === total2 ? 'tie' : ''}">${total2}</div>
             </div>
         </div>
         
@@ -621,11 +681,27 @@ function displayComparison(animal1, animal2) {
                 <h2>${animal2.name}</h2>
                 <h3>${animal2.scientific_name}</h3>
             </div>
+            <div class="animal-badges">
+                <span class="badge">${animal2.class}</span>
+                <span class="badge">${animal2.type}</span>
+            </div>
             <div class="animal-content">
+                <div class="quick-stats">
+                    <div class="quick-stat"><strong>Size:</strong> ${animal2.size}</div>
+                    <div class="quick-stat"><strong>Weight:</strong> ${animal2.weight_kg} kg</div>
+                    <div class="quick-stat"><strong>Speed:</strong> ${animal2.speed_mps} m/s</div>
+                    <div class="quick-stat"><strong>Lifespan:</strong> ${animal2.lifespan_years} years</div>
+                </div>
                 <div class="animal-special">
                     <div class="special-title">Special Abilities:</div>
                     <ul>
                         ${animal2.special_abilities.map(ability => `<li>${ability}</li>`).join('')}
+                    </ul>
+                </div>
+                <div class="animal-special">
+                    <div class="special-title">Unique Traits:</div>
+                    <ul>
+                        ${animal2.unique_traits.map(trait => `<li>${trait}</li>`).join('')}
                     </ul>
                 </div>
             </div>
@@ -699,7 +775,7 @@ function showAnimalDetails(animal) {
                             <span>${animal.attack}</span>
                         </div>
                         <div class="stat-track" role="progressbar" aria-valuenow="${animal.attack}" aria-valuemin="0" aria-valuemax="100" aria-label="Attack rating">
-                            <div class="stat-fill attack-fill" style="width: ${animal.attack}%"></div>
+                            <div class="stat-fill attack-fill" style="--stat-width: ${animal.attack}%"></div>
                         </div>
                     </div>
                     <div class="stat-bar">
@@ -708,7 +784,7 @@ function showAnimalDetails(animal) {
                             <span>${animal.defense}</span>
                         </div>
                         <div class="stat-track" role="progressbar" aria-valuenow="${animal.defense}" aria-valuemin="0" aria-valuemax="100" aria-label="Defense rating">
-                            <div class="stat-fill defense-fill" style="width: ${animal.defense}%"></div>
+                            <div class="stat-fill defense-fill" style="--stat-width: ${animal.defense}%"></div>
                         </div>
                     </div>
                     <div class="stat-bar">
@@ -717,7 +793,7 @@ function showAnimalDetails(animal) {
                             <span>${animal.agility}</span>
                         </div>
                         <div class="stat-track" role="progressbar" aria-valuenow="${animal.agility}" aria-valuemin="0" aria-valuemax="100" aria-label="Agility rating">
-                            <div class="stat-fill agility-fill" style="width: ${animal.agility}%"></div>
+                            <div class="stat-fill agility-fill" style="--stat-width: ${animal.agility}%"></div>
                         </div>
                     </div>
                     <div class="stat-bar">
@@ -726,7 +802,7 @@ function showAnimalDetails(animal) {
                             <span>${animal.intelligence}</span>
                         </div>
                         <div class="stat-track" role="progressbar" aria-valuenow="${animal.intelligence}" aria-valuemin="0" aria-valuemax="100" aria-label="Intelligence rating">
-                            <div class="stat-fill intelligence-fill" style="width: ${animal.intelligence}%"></div>
+                            <div class="stat-fill intelligence-fill" style="--stat-width: ${animal.intelligence}%"></div>
                         </div>
                     </div>
                     <div class="stat-bar">
@@ -735,7 +811,7 @@ function showAnimalDetails(animal) {
                             <span>${animal.stamina}</span>
                         </div>
                         <div class="stat-track" role="progressbar" aria-valuenow="${animal.stamina}" aria-valuemin="0" aria-valuemax="100" aria-label="Stamina rating">
-                            <div class="stat-fill stamina-fill" style="width: ${animal.stamina}%"></div>
+                            <div class="stat-fill stamina-fill" style="--stat-width: ${animal.stamina}%"></div>
                         </div>
                     </div>
                     <div class="stat-bar">
@@ -744,7 +820,7 @@ function showAnimalDetails(animal) {
                             <span>${animal.special_attack}</span>
                         </div>
                         <div class="stat-track" role="progressbar" aria-valuenow="${animal.special_attack}" aria-valuemin="0" aria-valuemax="100" aria-label="Special attack rating">
-                            <div class="stat-fill attack-fill" style="width: ${animal.special_attack}%"></div>
+                            <div class="stat-fill attack-fill" style="--stat-width: ${animal.special_attack}%"></div>
                         </div>
                     </div>
                 </div>
@@ -783,6 +859,14 @@ function showAnimalDetails(animal) {
     // Show modal
     modal.style.display = "block";
     modal.setAttribute('aria-hidden', 'false');
+    
+    // Animate stat bars after a short delay
+    setTimeout(() => {
+        const statFills = modal.querySelectorAll('.stat-fill');
+        statFills.forEach(fill => {
+            fill.classList.add('animated');
+        });
+    }, 100);
     
     // Focus management for accessibility
     const closeButton = modal.querySelector('.close-button');

@@ -20,14 +20,6 @@
 </head>
 <body>    <header>
         <h1>ANIMAL STATS</h1>
-        <div class="theme-toggle">
-            <input type="checkbox" id="theme-switch" class="theme-switch" aria-label="Toggle dark mode">
-            <label for="theme-switch" class="theme-label">
-                <i class="fas fa-sun" aria-hidden="true"></i>
-                <i class="fas fa-moon" aria-hidden="true"></i>
-                <span class="ball"></span>
-            </label>
-        </div>
         <div class="search-container">
             <input type="text" id="search-input" placeholder="Search animals..." aria-label="Search animals by name or scientific name">
             <div class="filter-controls">
@@ -79,6 +71,9 @@
                     </select>
                 </div>
             </div>
+            <button id="compare-button" class="compare-button" style="display: none;">
+                <i class="fas fa-bolt"></i> Compare Animals
+            </button>
             <div id="comparison-container" class="comparison-container" role="region" aria-label="Animal comparison results"></div>
         </div>
     </main>

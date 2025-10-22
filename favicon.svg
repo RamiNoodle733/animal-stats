@@ -1,54 +1,28 @@
-<!-- Modern Animal Stats Favicon -->
+<!-- Stats Chart Favicon - No Animals -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
   <defs>
-    <!-- Background gradient -->
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#667eea"/>
-      <stop offset="100%" stop-color="#764ba2"/>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0c419;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
     </linearGradient>
-    <!-- Animal silhouette gradient -->
-    <linearGradient id="animal" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#f093fb"/>
-      <stop offset="100%" stop-color="#f5576c"/>
-    </linearGradient>
-    <!-- Stats bars gradient -->
-    <linearGradient id="stats" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#4facfe"/>
-      <stop offset="100%" stop-color="#00f2fe"/>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a2639;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#293649;stop-opacity:1" />
     </linearGradient>
   </defs>
   
-  <!-- Background with rounded corners -->
-  <rect width="100" height="100" rx="18" fill="url(#bg)"/>
+  <!-- Background circle -->
+  <circle cx="50" cy="50" r="48" fill="url(#grad2)" stroke="url(#grad1)" stroke-width="4"/>
   
-  <!-- Animal silhouette (stylized big cat) -->
-  <g fill="url(#animal)">
-    <!-- Body -->
-    <ellipse cx="50" cy="45" rx="22" ry="12"/>
-    <!-- Head -->
-    <circle cx="50" cy="30" r="15"/>
-    <!-- Ears -->
-    <ellipse cx="42" cy="20" rx="4" ry="6"/>
-    <ellipse cx="58" cy="20" rx="4" ry="6"/>
-    <!-- Tail -->
-    <ellipse cx="72" cy="50" rx="8" ry="3" transform="rotate(45 72 50)"/>
-    <!-- Legs -->
-    <rect x="38" y="55" width="3" height="8" rx="1.5"/>
-    <rect x="47" y="55" width="3" height="8" rx="1.5"/>
-    <rect x="53" y="55" width="3" height="8" rx="1.5"/>
-    <rect x="62" y="55" width="3" height="8" rx="1.5"/>
-  </g>
+  <!-- Bar chart representing stats -->
+  <rect x="20" y="60" width="10" height="25" fill="url(#grad1)" rx="2"/>
+  <rect x="35" y="45" width="10" height="40" fill="url(#grad1)" rx="2"/>
+  <rect x="50" y="30" width="10" height="55" fill="url(#grad1)" rx="2"/>
+  <rect x="65" y="50" width="10" height="35" fill="url(#grad1)" rx="2"/>
   
-  <!-- Stats visualization bars -->
-  <g fill="url(#stats)" opacity="0.9">
-    <rect x="15" y="75" width="25" height="3" rx="1.5"/>
-    <rect x="15" y="82" width="35" height="3" rx="1.5"/>
-    <rect x="15" y="89" width="20" height="3" rx="1.5"/>
-    <rect x="60" y="75" width="25" height="3" rx="1.5"/>
-    <rect x="60" y="82" width="20" height="3" rx="1.5"/>
-    <rect x="60" y="89" width="25" height="3" rx="1.5"/>
-  </g>
+  <!-- Star accent -->
+  <path d="M 50 15 L 52 22 L 59 22 L 53 27 L 56 34 L 50 29 L 44 34 L 47 27 L 41 22 L 48 22 Z" fill="#f0c419"/>
   
-  <!-- Subtle highlight -->
-  <rect width="100" height="100" rx="18" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+  <!-- Subtle shine effect -->
+  <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
 </svg>

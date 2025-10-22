@@ -349,8 +349,8 @@ select:hover {
 
 .animal-type-badge {
     position: absolute;
-    top: -20px;
-    right: 25px;
+    top: 10px;
+    right: 15px;
     padding: 8px 16px;
     border-radius: 25px;
     font-size: 0.85rem;
@@ -360,12 +360,13 @@ select:hover {
     box-shadow: var(--shadow-light);
     transform: translateY(0);
     transition: all 0.3s ease;
+    z-index: 2;
 }
 
 .animal-class-badge {
     position: absolute;
-    top: -20px;
-    left: 25px;
+    top: 10px;
+    left: 15px;
     padding: 8px 16px;
     border-radius: 25px;
     font-size: 0.85rem;
@@ -375,6 +376,7 @@ select:hover {
     box-shadow: var(--shadow-light);
     transform: translateY(0);
     transition: all 0.3s ease;
+    z-index: 2;
 }
 
 .animal-card:hover .animal-type-badge,
@@ -484,10 +486,14 @@ select:hover {
 .stat-fill {
     height: 100%;
     border-radius: 8px;
+    width: 0 !important;
     transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: fillAnimation 1.5s ease-out;
     position: relative;
     overflow: hidden;
+}
+
+.stat-fill.animated {
+    width: var(--stat-width) !important;
 }
 
 .stat-fill::after {
@@ -504,11 +510,6 @@ select:hover {
 @keyframes shimmer {
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
-}
-
-@keyframes fillAnimation {
-    from { width: 0; opacity: 0.5; }
-    to { width: 100%; opacity: 1; }
 }
 
 .attack-fill { 
@@ -657,6 +658,48 @@ select:hover {
     50% { transform: scale(1.1); }
 }
 
+.compare-button {
+    display: block;
+    margin: 30px auto;
+    padding: 18px 40px;
+    font-size: 1.2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-color), #ff8c00);
+    color: #1a1a1a;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: var(--shadow-heavy);
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    animation: pulse-glow 2s infinite;
+}
+
+.compare-button:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 15px 40px rgba(240, 196, 25, 0.5);
+}
+
+.compare-button:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.compare-button i {
+    margin-right: 8px;
+    animation: bolt-flash 1.5s infinite;
+}
+
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 10px 30px rgba(240, 196, 25, 0.4); }
+    50% { box-shadow: 0 10px 40px rgba(240, 196, 25, 0.7); }
+}
+
+@keyframes bolt-flash {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
 .comparison-container {
     display: flex;
     flex-wrap: wrap;
@@ -665,22 +708,124 @@ select:hover {
     animation: fadeInUp 0.8s ease-out;
 }
 
+.comparison-message {
+    text-align: center;
+    padding: 60px 20px;
+    font-size: 1.3rem;
+    color: #999;
+    font-weight: 500;
+}
+
+.overall-winner {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.winner-announcement {
+    background: linear-gradient(135deg, rgba(240, 196, 25, 0.2), rgba(255, 140, 0, 0.2));
+    border: 3px solid var(--accent-color);
+    border-radius: 20px;
+    padding: 30px;
+    animation: winner-pulse 1s ease-out;
+}
+
+@keyframes winner-pulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.winner-announcement i {
+    font-size: 3rem;
+    color: var(--accent-color);
+    margin-bottom: 15px;
+    animation: trophy-bounce 1s infinite;
+}
+
+@keyframes trophy-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.winner-announcement h2 {
+    font-size: 2.5rem;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.winner-announcement p {
+    font-size: 1.2rem;
+    color: #e0e0e0;
+    margin: 5px 0;
+}
+
+.winner-subtitle {
+    font-size: 1rem !important;
+    opacity: 0.8;
+}
+
 .comparison-card {
     flex: 1 1 40%;
     min-width: 320px;
     max-width: 450px;
-    background: linear-gradient(145deg, #ffffff, #f8faff);
+    background: linear-gradient(145deg, #293649, #1a2639);
     border-radius: 20px;
     overflow: hidden;
     box-shadow: var(--shadow-heavy);
     transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(240, 196, 25, 0.3);
     backdrop-filter: blur(10px);
 }
 
 .comparison-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 25px 50px rgba(240, 196, 25, 0.3);
+    border-color: var(--accent-color);
+}
+
+.comparison-card .animal-badges {
+    display: flex;
+    gap: 10px;
+    padding: 10px 20px;
+    flex-wrap: wrap;
+}
+
+.comparison-card .badge {
+    background: linear-gradient(135deg, var(--accent-color), #ff8c00);
+    color: #1a1a1a;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.comparison-card .quick-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+.comparison-card .quick-stat {
+    font-size: 0.85rem;
+    color: #b0b0b0;
+}
+
+.comparison-card .quick-stat strong {
+    color: var(--accent-color);
 }
 
 .stat-comparison {
@@ -714,30 +859,67 @@ select:hover {
 .comparison-row {
     display: flex;
     margin-bottom: 15px;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.comparison-row:hover {
+    background: rgba(240, 196, 25, 0.1);
+}
+
+.total-row {
+    background: rgba(240, 196, 25, 0.15);
+    border: 2px solid rgba(240, 196, 25, 0.3);
+    font-size: 1.2rem;
+    font-weight: 900;
 }
 
 .comparison-stat {
     width: 40%;
     text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #999;
+    transition: all 0.3s ease;
 }
 
 .comparison-label {
     width: 20%;
     text-align: center;
     font-weight: bold;
+    font-size: 0.9rem;
     color: var(--primary-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.comparison-label i {
+    font-size: 1.2rem;
+    color: var(--accent-color);
 }
 
 .winner {
-    color: var(--success-color);
-    font-weight: bold;
+    color: var(--accent-color);
+    font-weight: 900;
     position: relative;
+    text-shadow: 0 0 10px rgba(240, 196, 25, 0.5);
+    transform: scale(1.1);
 }
 
 .winner::after {
-    content: '🏆';
+    content: '👑';
     margin-left: 8px;
     animation: bounce 1s infinite;
+}
+
+.tie {
+    color: #b0b0b0;
+    font-weight: 700;
 }
 
 @keyframes bounce {
@@ -989,111 +1171,110 @@ footer::before {
     animation: shimmer 3s infinite;
 }
 
-/* Dark Mode Styles */
-.dark-mode {
-    --primary-color: #1a2639;
-    --secondary-color: #3e4a61;
-    --dark-color: #0b1222;
-    --light-color: #293649;
+/* Dark Mode is always enabled */
+body.dark-mode {
+    --primary-color: #f0c419;
+    --secondary-color: #c0392b;
     color: #e0e0e0;
     background-color: #1a2639;
     background-image: url('https://www.transparenttextures.com/patterns/dark-dot.png');
 }
 
-.dark-mode .animal-card {
+body.dark-mode .animal-card {
     background: linear-gradient(145deg, #293649, #1a2639);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
-.dark-mode .animal-header h2 {
-    color: #e0e0e0;
+body.dark-mode .animal-header h2 {
+    color: #f0c419;
 }
 
-.dark-mode .animal-header h3 {
+body.dark-mode .animal-header h3 {
     color: #b0b0b0;
 }
 
-.dark-mode #search-input, 
-.dark-mode select {
+body.dark-mode #search-input, 
+body.dark-mode select {
     background-color: rgba(255, 255, 255, 0.1);
     color: #e0e0e0;
 }
 
-.dark-mode .view-toggle button {
+body.dark-mode .view-toggle button {
     background-color: #293649;
     color: #e0e0e0;
 }
 
-.dark-mode .view-toggle button.active {
+body.dark-mode .view-toggle button.active {
     background-color: var(--accent-color);
     color: var(--dark-color);
 }
 
-.dark-mode .modal-content {
-    background-color: #1a2639;
+body.dark-mode .modal-content {
+    background: linear-gradient(145deg, #293649, #1a2639);
+    color: #e0e0e0;
+    border: 2px solid rgba(240, 196, 25, 0.3);
+}
+
+body.dark-mode .detail-item {
+    background-color: rgba(0, 0, 0, 0.3);
     color: #e0e0e0;
 }
 
-.dark-mode .detail-item {
-    background-color: #293649;
+body.dark-mode .detail-item strong {
+    color: var(--accent-color);
 }
 
-.dark-mode .detail-title,
-.dark-mode .detail-section h3 {
+body.dark-mode .detail-title {
+    color: var(--accent-color);
+}
+
+body.dark-mode .detail-subtitle {
+    color: #b0b0b0;
+}
+
+body.dark-mode .detail-section h3 {
+    color: var(--accent-color);
+    border-bottom-color: var(--accent-color);
+}
+
+body.dark-mode .close-button {
     color: #e0e0e0;
+    background: rgba(0, 0, 0, 0.5);
 }
 
-.dark-mode .close-button {
+body.dark-mode .close-button:hover {
+    color: var(--accent-color);
+    background: rgba(0, 0, 0, 0.7);
+}
+
+body.dark-mode .detail-special {
+    background-color: rgba(240, 196, 25, 0.1);
+    border-left-color: var(--accent-color);
+}
+
+body.dark-mode .detail-special .special-title {
+    color: var(--accent-color);
+}
+
+body.dark-mode .detail-special li {
+    color: #b0b0b0;
+}
+
+body.dark-mode .animal-detail-image {
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(240, 196, 25, 0.2);
+}
+
+body.dark-mode .animal-special li {
+    color: #b0b0b0;
+}
+
+body.dark-mode .stat-label span {
+    color: #f0c419;
+}
+
+body.dark-mode .comparison-message {
     color: #e0e0e0;
-}
-
-/* Theme Toggle Switch */
-.theme-toggle {
-    position: absolute;
-    top: 15px;
-    right: 20px;
-}
-
-.theme-switch {
-    opacity: 0;
-    position: absolute;
-}
-
-.theme-label {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    width: 50px;
-    height: 26px;
-    background-color: #111;
-    border-radius: 100px;
-    position: relative;
-    padding: 5px;
-}
-
-.theme-label .fa-sun {
-    color: #f39c12;
-}
-
-.theme-label .fa-moon {
-    color: #f1c40f;
-}
-
-.theme-label .ball {
-    background-color: #fff;
-    border-radius: 50%;
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    height: 22px;
-    width: 22px;
-    transform: translateX(0px);
-    transition: transform 0.2s linear;
-}
-
-.theme-switch:checked + .theme-label .ball {
-    transform: translateX(24px);
 }
 
 /* Responsive Design */
