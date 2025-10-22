@@ -1,21 +1,24 @@
 :root {
     --primary-color: #f0c419;
     --secondary-color: #c0392b;
-    --accent-color: #f0c419;
+    --accent-color: #00d4ff;
+    --accent-gold: #f0c419;
     --dark-color: #0a0a0a;
     --light-color: #e0e0e0;
     --success-color: #48bb78;
     --warning-color: #ed8936;
     --danger-color: #f56565;
     --info-color: #4299e1;
-    --gradient-primary: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
-    --gradient-secondary: linear-gradient(135deg, #ff512f 0%, #dd2476 100%);
-    --gradient-accent: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
-    --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-medium: 0 10px 25px rgba(0, 0, 0, 0.15);
-    --shadow-heavy: 0 20px 40px rgba(0, 0, 0, 0.2);
-    --border-radius: 12px;
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --gradient-primary: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 100%);
+    --gradient-secondary: linear-gradient(135deg, #00d4ff 0%, #0099cc 100%);
+    --gradient-accent: linear-gradient(135deg, #f0c419 0%, #ff8c00 100%);
+    --shadow-light: 0 0 10px rgba(0, 212, 255, 0.3);
+    --shadow-medium: 0 0 20px rgba(0, 212, 255, 0.5);
+    --shadow-heavy: 0 0 30px rgba(0, 212, 255, 0.7);
+    --border-radius: 0px;
+    --transition: all 0.2s ease;
+    --clip-corner: polygon(0 0, calc(100% - 15px) 0, 100% 15px, 100% 100%, 15px 100%, 0 calc(100% - 15px));
+    --clip-corner-small: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
 }
 
 * {
@@ -28,7 +31,11 @@ body {
     font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: var(--light-color);
-    background: radial-gradient(circle at top, #1c1c1c, #000000);
+    background: #000000;
+    background-image: 
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 212, 255, 0.03) 2px, rgba(0, 212, 255, 0.03) 4px),
+        repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(0, 212, 255, 0.03) 2px, rgba(0, 212, 255, 0.03) 4px),
+        linear-gradient(180deg, #000000 0%, #0a0e1a 50%, #000000 100%);
     min-height: 100vh;
     overflow-x: hidden;
     zoom: 0.9;
@@ -36,27 +43,34 @@ body {
 }
 
 header {
-    background: var(--gradient-primary);
+    background: #0a0e1a;
     color: white;
-    padding: 40px 30px;
+    padding: 30px;
     text-align: center;
-    box-shadow: var(--shadow-heavy);
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.5), inset 0 0 50px rgba(0, 212, 255, 0.1);
     position: relative;
     z-index: 10;
     overflow: hidden;
     margin-bottom: 30px;
-    border-radius: 15px;
+    clip-path: var(--clip-corner);
+    border: 2px solid rgba(0, 212, 255, 0.5);
 }
 
 header::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23ffffff" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="%23ffffff" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="%23ffffff" opacity="0.1"/><circle cx="20" cy="70" r="0.5" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.2), transparent);
     z-index: -1;
+    animation: border-flow 3s linear infinite;
+}
+
+@keyframes border-flow {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(0deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(360deg); }
 }
 
 h1 {
@@ -98,25 +112,25 @@ main {
     width: 100%;
     padding: 15px 25px;
     font-size: 1.1rem;
-    border: 2px solid transparent;
-    border-radius: 30px;
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: var(--shadow-medium);
+    border: 2px solid rgba(0, 212, 255, 0.5);
+    clip-path: var(--clip-corner-small);
+    background: rgba(10, 14, 26, 0.8);
+    color: white;
+    box-shadow: inset 0 0 20px rgba(0, 212, 255, 0.1);
     margin-bottom: 20px;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
+    transition: var(--transition);
+    outline: none;
 }
 
 #search-input:focus {
     outline: none;
     border-color: var(--accent-color);
-    box-shadow: 0 8px 25px rgba(255, 167, 38, 0.3);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.6), inset 0 0 20px rgba(0, 212, 255, 0.2);
     transform: translateY(-2px);
 }
 
 #search-input::placeholder {
-    color: #999;
-    font-style: italic;
+    color: #6c8299;
 }
 
 .filter-controls {
@@ -130,12 +144,12 @@ select {
     flex: 1;
     padding: 12px 20px;
     font-size: 1rem;
-    border: 2px solid rgba(240, 196, 25, 0.3);
-    border-radius: 20px;
-    background: rgba(41, 54, 73, 0.9);
+    border: 2px solid rgba(0, 212, 255, 0.5);
+    clip-path: var(--clip-corner-small);
+    background: rgba(10, 14, 26, 0.9);
     color: #e0e0e0;
-    box-shadow: var(--shadow-light);
-    transition: all 0.3s ease;
+    box-shadow: inset 0 0 10px rgba(0, 212, 255, 0.1);
+    transition: var(--transition);
     cursor: pointer;
     min-width: 150px;
 }
@@ -143,30 +157,29 @@ select {
 select:focus {
     outline: none;
     border-color: var(--accent-color);
-    box-shadow: var(--shadow-medium);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5), inset 0 0 10px rgba(0, 212, 255, 0.2);
     transform: translateY(-1px);
-    background: rgba(41, 54, 73, 1);
 }
 
 select:hover {
-    background: rgba(41, 54, 73, 1);
     border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
     transform: translateY(-1px);
 }
 
 select option {
-    background: #1a2639;
+    background: #0a0e1a;
     color: #e0e0e0;
 }
 
 .filter-controls button {
     padding: 12px;
-    border: 2px solid rgba(240, 196, 25, 0.3);
-    border-radius: 20px;
-    background: rgba(41, 54, 73, 0.9);
-    box-shadow: var(--shadow-light);
+    border: 2px solid rgba(0, 212, 255, 0.5);
+    clip-path: var(--clip-corner-small);
+    background: rgba(10, 14, 26, 0.9);
+    box-shadow: inset 0 0 10px rgba(0, 212, 255, 0.1);
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: var(--transition);
     color: #e0e0e0;
     display: flex;
     align-items: center;
@@ -176,13 +189,12 @@ select option {
 .filter-controls button:hover,
 .filter-controls button.active {
     color: var(--accent-color);
-    background: rgba(41, 54, 73, 1);
     border-color: var(--accent-color);
-    box-shadow: var(--shadow-medium);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
 }
 
 #favorites-filter.active i {
-    color: gold;
+    color: var(--accent-gold);
 }
 
 .view-toggle {
@@ -194,15 +206,15 @@ select option {
 
 .view-toggle button {
     padding: 12px 25px;
-    background: rgba(41, 54, 73, 0.9);
-    border: 2px solid rgba(240, 196, 25, 0.3);
-    border-radius: 25px;
+    background: rgba(10, 14, 26, 0.9);
+    border: 2px solid rgba(0, 212, 255, 0.5);
+    clip-path: var(--clip-corner-small);
     margin: 0;
     cursor: pointer;
     font-weight: 600;
     font-size: 1rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: var(--shadow-light);
+    transition: var(--transition);
+    box-shadow: inset 0 0 10px rgba(0, 212, 255, 0.1);
     position: relative;
     overflow: hidden;
     color: #e0e0e0;
@@ -215,7 +227,7 @@ select option {
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(240, 196, 25, 0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
     transition: left 0.5s ease;
 }
 
@@ -225,18 +237,21 @@ select option {
 
 .view-toggle button:hover {
     transform: translateY(-2px);
-    box-shadow: var(--shadow-medium);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
     border-color: var(--accent-color);
-    background: rgba(41, 54, 73, 1);
 }
 
 .view-toggle button.active {
-    background: linear-gradient(135deg, #f0c419, #ff8c00);
-    color: #1a1a1a;
-    box-shadow: var(--shadow-heavy);
+    background: rgba(0, 212, 255, 0.2);
+    color: var(--accent-color);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.6), inset 0 0 20px rgba(0, 212, 255, 0.2);
     transform: translateY(-2px);
     border-color: var(--accent-color);
     font-weight: 700;
+}
+
+.view-toggle button.active:hover {
+    transform: translateY(-3px);
 }
 
 .view-toggle button.active:hover {
@@ -272,16 +287,15 @@ select option {
 }
 
 .animal-card {
-    background: linear-gradient(145deg, #1f1f1f 0%, #0d0d0d 100%);
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 0 15px rgba(0,0,0,0.6);
+    background: rgba(10, 14, 26, 0.9);
+    clip-path: var(--clip-corner);
+    overflow: visible;
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3), inset 0 0 30px rgba(0, 212, 255, 0.05);
     transition: var(--transition);
     position: relative;
     cursor: pointer;
     animation: fadeInUp 0.6s ease-out;
-    border: 1px solid rgba(240,196,25,0.3);
-    backdrop-filter: blur(10px);
+    border: 2px solid rgba(0, 212, 255, 0.5);
     transform-origin: center center;
 }
 
@@ -297,66 +311,44 @@ select option {
 }
 
 .animal-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: var(--shadow-heavy);
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.7), inset 0 0 40px rgba(0, 212, 255, 0.1);
     border-color: var(--accent-color);
 }
 
 .animal-card::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, transparent, rgba(0, 212, 255, 0.2), transparent);
     opacity: 0;
     transition: opacity 0.3s ease;
-    z-index: 1;
+    z-index: -1;
+    clip-path: var(--clip-corner);
 }
 
 .animal-card:hover::before {
     opacity: 1;
 }
 
-.animal-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 20px;
-    box-shadow: 0 0 15px var(--accent-color);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 0;
-}
-
-.animal-card:hover::after {
-    opacity: 0.6;
-    animation: card-glow 1.5s infinite alternate;
-}
-
-@keyframes card-glow {
-    from { box-shadow: 0 0 15px var(--accent-color); }
-    to { box-shadow: 0 0 30px var(--accent-color); }
-}
-
 .animal-card .animal-image {
     width: 100%;
     height: 200px;
     object-fit: contain;
-    background: radial-gradient(circle at center, rgba(255,255,255,0.05), rgba(255,255,255,0));
-    border-bottom: 4px solid var(--accent-color);
-    transition: all 0.3s ease;
+    background: rgba(0, 14, 26, 0.5);
+    border-bottom: 3px solid var(--accent-color);
+    transition: var(--transition);
     position: relative;
-    filter: drop-shadow(0 0 8px rgba(240,196,25,0.4));
+    filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.5));
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%);
 }
 
 .animal-card:hover .animal-image {
     transform: scale(1.05);
-    filter: brightness(1.1) saturate(1.2);
+    filter: brightness(1.1) saturate(1.2) drop-shadow(0 0 15px rgba(0, 212, 255, 0.7));
 }
 
 .animal-header {
@@ -369,21 +361,22 @@ select option {
     position: absolute;
     top: 10px;
     left: 15px;
-    padding: 8px 16px;
-    border-radius: 25px;
+    padding: 6px 14px;
+    clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);
     font-size: 0.85rem;
     font-weight: bold;
     color: white;
-    background: var(--gradient-secondary);
-    box-shadow: var(--shadow-light);
+    background: linear-gradient(135deg, var(--accent-color), #0099cc);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
     transform: translateY(0);
-    transition: all 0.3s ease;
+    transition: var(--transition);
     z-index: 2;
+    border: 1px solid rgba(0, 212, 255, 0.7);
 }
 
 .animal-card:hover .animal-type-badge {
     transform: translateY(-3px);
-    box-shadow: var(--shadow-medium);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.8);
 }
 
 .favorite-btn {
@@ -611,20 +604,20 @@ select option {
     padding: 15px 40px;
     font-size: 1.2rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #f0c419, #ff8c00);
-    color: #1a1a1a;
-    border: none;
-    border-radius: 30px;
+    background: linear-gradient(135deg, var(--accent-gold), #ff8c00);
+    color: #000;
+    border: 2px solid var(--accent-gold);
+    clip-path: var(--clip-corner-small);
     cursor: pointer;
-    box-shadow: var(--shadow-heavy);
-    transition: all 0.3s ease;
+    box-shadow: 0 0 20px rgba(240, 196, 25, 0.6);
+    transition: var(--transition);
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
 }
 
 .compare-button:hover {
     transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 15px 35px rgba(240, 196, 25, 0.5);
+    box-shadow: 0 0 30px rgba(240, 196, 25, 0.9);
 }
 
 .compare-button i {
@@ -737,67 +730,68 @@ select option {
 
 .comparison-container {
     display: grid;
-    grid-template-columns: 1fr 1.2fr 1fr;
-    gap: 40px;
+    grid-template-columns: 1fr 1.4fr 1fr;
+    gap: 15px;
     justify-content: center;
     animation: fadeInUp 0.8s ease-out;
-    max-width: 1400px;
+    max-width: 1600px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px 20px;
 }
 
 .comparison-message {
     text-align: center;
-    padding: 60px 20px;
-    font-size: 1.3rem;
+    padding: 40px 20px;
+    font-size: 1.1rem;
     color: #b0b0b0;
     font-weight: 500;
 }
 
 .comparison-card {
-    background: linear-gradient(145deg, #293649, #1a2639);
-    border-radius: 20px;
+    background: rgba(10, 14, 26, 0.9);
+    clip-path: var(--clip-corner);
     overflow: hidden;
-    box-shadow: var(--shadow-heavy);
-    transition: all 0.3s ease;
-    border: 2px solid rgba(240, 196, 25, 0.3);
-    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.4), inset 0 0 30px rgba(0, 212, 255, 0.05);
+    transition: var(--transition);
+    border: 2px solid rgba(0, 212, 255, 0.5);
 }
 
 .comparison-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 25px 50px rgba(240, 196, 25, 0.3);
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.7);
     border-color: var(--accent-color);
 }
 
 .comparison-card .animal-badges {
     display: flex;
-    gap: 10px;
-    padding: 10px 20px;
+    gap: 6px;
+    padding: 8px 12px;
     flex-wrap: wrap;
 }
 
 .comparison-card .badge {
-    background: linear-gradient(135deg, var(--accent-color), #ff8c00);
-    color: #1a1a1a;
-    padding: 5px 12px;
-    border-radius: 15px;
-    font-size: 0.8rem;
+    background: linear-gradient(135deg, var(--accent-gold), #ff8c00);
+    color: #000;
+    padding: 3px 8px;
+    clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 0 100%);
+    font-size: 0.7rem;
     font-weight: 600;
+    border: 1px solid rgba(240, 196, 25, 0.5);
 }
 
 .comparison-card .quick-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 15px;
-    padding: 15px;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
+    gap: 4px;
+    margin-bottom: 8px;
+    padding: 8px;
+    background: rgba(0, 14, 26, 0.5);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 6px), calc(100% - 6px) 100%, 0 100%);
+    border: 1px solid rgba(0, 212, 255, 0.2);
 }
 
 .comparison-card .quick-stat {
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     color: #b0b0b0;
 }
 
@@ -806,13 +800,13 @@ select option {
 }
 
 .stat-comparison {
-    padding: 30px;
-    background: rgba(41, 54, 73, 0.6);
-    border-radius: 20px;
-    box-shadow: var(--shadow-medium);
+    padding: 15px;
+    background: rgba(10, 14, 26, 0.8);
+    clip-path: var(--clip-corner);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.4), inset 0 0 30px rgba(0, 212, 255, 0.05);
     position: relative;
     overflow: hidden;
-    border: 2px solid rgba(240, 196, 25, 0.2);
+    border: 2px solid rgba(0, 212, 255, 0.5);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -821,46 +815,65 @@ select option {
 .stat-comparison::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, transparent, rgba(255, 167, 38, 0.05), transparent);
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 212, 255, 0.03) 2px,
+        rgba(0, 212, 255, 0.03) 4px
+    );
     pointer-events: none;
+    animation: scan 10s linear infinite;
+}
+
+@keyframes scan {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(50%); }
 }
 
 .comparison-title {
     text-align: center;
-    font-size: 1.4rem;
-    margin-bottom: 20px;
-    color: var(--primary-color);
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: var(--accent-color);
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 2px;
 }
 
 .comparison-row {
     display: flex;
-    margin-bottom: 15px;
+    margin-bottom: 6px;
     align-items: center;
-    padding: 10px;
-    border-radius: 10px;
-    background: rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
+    padding: 6px 8px;
+    clip-path: polygon(0 0, calc(100% - 4px) 0, 100% 4px, 100% 100%, 0 100%);
+    background: rgba(0, 14, 26, 0.5);
+    transition: var(--transition);
+    border: 1px solid rgba(0, 212, 255, 0.2);
 }
 
 .comparison-row:hover {
-    background: rgba(240, 196, 25, 0.1);
+    background: rgba(0, 212, 255, 0.1);
+    border-color: var(--accent-color);
 }
 
 .total-row {
-    background: rgba(240, 196, 25, 0.15);
-    border: 2px solid rgba(240, 196, 25, 0.3);
-    font-size: 1.2rem;
+    background: rgba(0, 212, 255, 0.15);
+    border: 2px solid var(--accent-color);
+    font-size: 1rem;
     font-weight: 900;
+    margin-top: 4px;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
 }
 
 .comparison-stat {
     width: 40%;
     text-align: center;
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #999;
     transition: all 0.3s ease;
@@ -870,24 +883,25 @@ select option {
     width: 20%;
     text-align: center;
     font-weight: bold;
-    font-size: 0.9rem;
-    color: var(--primary-color);
+    font-size: 0.75rem;
+    color: var(--accent-color);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 2px;
+    text-shadow: 0 0 5px rgba(0, 212, 255, 0.5);
 }
 
 .comparison-label i {
-    font-size: 1.2rem;
+    font-size: 0.9rem;
     color: var(--accent-color);
 }
 
 .winner, .higher {
-    color: var(--accent-color);
+    color: var(--accent-gold);
     font-weight: 900;
     position: relative;
-    text-shadow: 0 0 10px rgba(240, 196, 25, 0.5);
+    text-shadow: 0 0 10px rgba(240, 196, 25, 0.8);
     transform: scale(1.1);
 }
 
