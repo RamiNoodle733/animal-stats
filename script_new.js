@@ -308,10 +308,10 @@ function updateCompareDisplay() {
 
 function renderCompareAnimal(animal) {
     return `
-        <img src="${animal.image}" alt="${animal.name}" style="width: 100%; height: 300px; object-fit: cover; margin-bottom: 15px; border: 3px solid var(--border-bright);"
-             onerror="this.src='https://via.placeholder.com/400x300?text=${animal.name}'">
-        <h2 style="font-size: 1.8rem; color: var(--accent-color); margin-bottom: 8px;">${animal.name}</h2>
-        <h3 style="font-size: 1rem; color: rgba(255,255,255,0.6); margin-bottom: 15px;">${animal.scientific_name}</h3>
+        <img src="${animal.image}" alt="${animal.name}" style="width: 100%; height: 180px; object-fit: cover; margin-bottom: 10px; border: 2px solid var(--border-bright);"
+             onerror="this.src='https://via.placeholder.com/400x180?text=${animal.name}'">
+        <h2 style="font-size: 1.3rem; color: var(--accent-color); margin-bottom: 5px;">${animal.name}</h2>
+        <h3 style="font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-bottom: 10px;">${animal.scientific_name}</h3>
         
         <div class="stat-bar-container">
             ${createStatBar('Attack', animal.attack)}
@@ -322,7 +322,7 @@ function renderCompareAnimal(animal) {
             ${createStatBar('Special', animal.special_attack)}
         </div>
         
-        <div style="margin-top: 15px; padding: 12px; background: rgba(0,0,0,0.3); border-left: 3px solid var(--accent-color); font-size: 0.9rem;">
+        <div style="margin-top: 10px; padding: 8px; background: rgba(0,0,0,0.3); border-left: 2px solid var(--accent-color); font-size: 0.75rem;">
             <strong>Class:</strong> ${animal.class}<br>
             <strong>Weight:</strong> ${animal.weight_kg} kg<br>
             <strong>Speed:</strong> ${animal.speed_mps.toFixed(2)} m/s
