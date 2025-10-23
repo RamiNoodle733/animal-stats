@@ -234,94 +234,84 @@ function displayAnimalStats(index) {
         placeholder.style.display = 'none';
     }
     
+    // Calculate star rating (out of 5) based on average stats
+    const avgStat = (animal.attack + animal.defense + animal.agility + animal.intelligence + animal.stamina + animal.special_attack) / 6;
+    const starRating = Math.round((avgStat / 100) * 5);
+    const stars = '★'.repeat(starRating) + '☆'.repeat(5 - starRating);
+    
+    // Get first special ability for main description
+    const mainAbility = animal.special_abilities[0] || 'Unknown Ability';
+    const abilityDescription = `All ${animal.class} characters on Darkseid's team gain +300% HEALTH and DAMAGE.`;
+    
     statsContainer.style.display = 'grid';
     statsContainer.innerHTML = `
-        <div class="stats-left-column">
-            <img src="${animal.image}" alt="${animal.name}" class="stats-animal-image"
-                 onerror="this.src='https://via.placeholder.com/300x300?text=${animal.name}'">
-            <div class="stats-traits">
-                <h4>Special Abilities</h4>
-                <ul>
-                    ${animal.special_abilities.map(ability => `<li>⚡ ${ability}</li>`).join('')}
-                </ul>
+        <div class="game-card-container">
+            <div class="card-left">
+                <div class="card-rating">
+                    <span class="rating-number">${Math.round(avgStat)}/100</span>
+                    <span class="rating-stars">${stars}</span>
+                </div>
+                <div class="card-portrait-frame">
+                    <img src="${animal.image}" alt="${animal.name}" class="card-portrait"
+                         onerror="this.src='https://via.placeholder.com/300x300?text=${animal.name}'">
+                </div>
+                <div class="card-name-plate">
+                    <div class="card-name">${animal.name.toUpperCase()}</div>
+                </div>
+            </div>
+            
+            <div class="card-right">
+                <div class="stats-header">
+                    <div class="stats-title">STATS</div>
+                    <div class="stats-subtitle">POWER</div>
+                </div>
+                
+                <div class="stats-bars">
+                    ${createGameStatBar('POWER', animal.attack, '#4A90E2')}
+                    ${createGameStatBar('DEFENSE', animal.defense, '#9B59B6')}
+                    ${createGameStatBar('SPEED', animal.agility, '#2ECC71')}
+                    ${createGameStatBar('HEALTH', animal.stamina, '#E74C3C')}
+                </div>
+                
+                <div class="attacks-section">
+                    <div class="attacks-header">ATTACKS</div>
+                    <div class="attack-list">
+                        ${animal.special_abilities.map((ability, idx) => `
+                            <div class="attack-item">
+                                <div class="attack-icon">⚡</div>
+                                <div class="attack-name">${ability.toUpperCase()}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <div class="ability-highlight">
+                    <div class="ability-name">${mainAbility.toUpperCase()}</div>
+                </div>
             </div>
         </div>
-        <div class="stats-right-column">
-            <div>
-                <h2>${animal.name}</h2>
-                <h3>${animal.scientific_name}</h3>
-                
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-label">Class</div>
-                        <div class="stat-value">${animal.class}</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Type</div>
-                        <div class="stat-value">${animal.type}</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Habitat</div>
-                        <div class="stat-value">${animal.habitat.split(',')[0]}</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Weight</div>
-                        <div class="stat-value">${animal.weight_kg.toLocaleString()} kg</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Speed</div>
-                        <div class="stat-value">${animal.speed_mps.toFixed(1)} m/s</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Lifespan</div>
-                        <div class="stat-value">${animal.lifespan_years} yrs</div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="stat-bars-section">
-                <div class="stat-bars-title">⚔️ Combat Statistics</div>
-                <div class="stat-bar-container">
-                    ${createStatBar('Attack', animal.attack)}
-                    ${createStatBar('Defense', animal.defense)}
-                    ${createStatBar('Agility', animal.agility)}
-                    ${createStatBar('Intelligence', animal.intelligence)}
-                    ${createStatBar('Stamina', animal.stamina)}
-                    ${createStatBar('Special', animal.special_attack)}
-                </div>
-            </div>
-            
-            <div class="stats-traits">
-                <h4>🏆 Unique Traits</h4>
-                <ul>
-                    ${animal.unique_traits.map(trait => `<li>${trait}</li>`).join('')}
-                </ul>
-            </div>
+        
+        <div class="ability-description">
+            <div class="ability-desc-title">${mainAbility.toUpperCase()}</div>
+            <div class="ability-desc-text">${abilityDescription}</div>
         </div>
     `;
 }
 
-function createStatBar(label, value) {
+function createGameStatBar(label, value, color) {
     const percentage = Math.min(value, 100);
-    const icons = {
-        'Attack': '⚔️',
-        'Defense': '🛡️',
-        'Agility': '⚡',
-        'Intelligence': '🧠',
-        'Stamina': '💪',
-        'Special': '✨'
-    };
-    const icon = icons[label] || '';
+    const displayValue = Math.round(value);
     
     return `
-        <div class="stat-bar">
-            <div class="stat-bar-label">
-                <span>${icon} ${label}</span>
-                <span class="stat-bar-value">${value.toFixed(1)}</span>
+        <div class="game-stat-row">
+            <div class="game-stat-icon">
+                <div class="stat-icon-inner"></div>
             </div>
-            <div class="stat-bar-track">
-                <div class="stat-bar-fill" style="width: ${percentage}%"></div>
+            <div class="game-stat-label">${label}</div>
+            <div class="game-stat-bar-container">
+                <div class="game-stat-bar" style="width: ${percentage}%; background: linear-gradient(90deg, ${color}, ${color}dd);"></div>
             </div>
+            <div class="game-stat-value">${displayValue}</div>
         </div>
     `;
 }
