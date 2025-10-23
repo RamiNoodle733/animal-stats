@@ -19,80 +19,115 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Fixed Top Section: Title Only -->
-    <div class="fixed-top-section">
-        <header class="title-only-header">
-            <h1>ANIMAL STATS</h1>
-        </header>
+    <!-- Main Container -->
+    <div class="game-container">
         
-        <!-- Stats Display Area (Grid View) or Compare View -->
-        <div id="stats-display-area">
-            <div id="grid-stats-view" class="active-stats-view">
-                <div class="stats-placeholder">
-                    <i class="fas fa-paw"></i>
-                    <p>Click an animal below to view its stats</p>
-                </div>
-                <div id="selected-animal-stats" style="display: none;"></div>
+        <!-- STATS VIEW -->
+        <div id="stats-view" class="view active-view">
+            <!-- Top Header -->
+            <div class="game-header">
+                <h1>ANIMAL STATS</h1>
             </div>
             
-            <div id="compare-stats-view" class="inactive-stats-view">
-                <div class="compare-display-container">
-                    <div id="compare-animal-1" class="compare-side">
-                        <button class="compare-select-btn" id="select-animal-1-btn">
-                            <i class="fas fa-mouse-pointer"></i><br>
-                            Click to Select Animal 1
-                        </button>
+            <!-- Main Stats Display -->
+            <div class="stats-display-main">
+                <!-- Left Stats Column -->
+                <div class="left-stats-panel">
+                    <div id="left-stats-content" class="stats-placeholder-side">
+                        <i class="fas fa-paw"></i>
+                        <p>Select an animal</p>
                     </div>
-                    <div class="vs-divider">VS</div>
-                    <div id="compare-animal-2" class="compare-side">
-                        <button class="compare-select-btn" id="select-animal-2-btn">
-                            <i class="fas fa-mouse-pointer"></i><br>
-                            Click to Select Animal 2
-                        </button>
+                </div>
+                
+                <!-- Center Character Display -->
+                <div class="center-character-display">
+                    <div id="character-viewer" class="character-placeholder">
+                        <div class="character-silhouette">
+                            <i class="fas fa-question"></i>
+                        </div>
+                        <p>SELECT YOUR ANIMAL</p>
+                    </div>
+                </div>
+                
+                <!-- Right Stats Column -->
+                <div class="right-stats-panel">
+                    <div id="right-stats-content" class="stats-placeholder-side">
+                        <i class="fas fa-paw"></i>
+                        <p>Select an animal</p>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- VS Bar: Mode Toggle (moved to bottom via CSS) -->
-        <div class="fixed-vs-bar">
-            <div class="mode-toggle">
-                <button id="grid-view-btn" class="mode-btn active" data-mode="grid">
-                    <i class="fas fa-chart-bar"></i> Stats
-                </button>
-                <button id="compare-view-btn" class="mode-btn" data-mode="compare">
-                    <i class="fas fa-balance-scale"></i> Compare
-                </button>
+            
+            <!-- Bottom Character Grid -->
+            <div class="character-select-grid">
+                <div id="animal-grid-stats" class="animal-grid-container"></div>
             </div>
         </div>
-    </div>
-    
-    <!-- Scrollable Bottom Section: Compact Controls + Animal Grid -->
-    <main class="scrollable-grid-section">
-        <!-- Compact Search and Filters -->
-        <div class="grid-controls">
-            <input type="text" id="search-input" placeholder="Search animals..." class="compact-search">
-            <select id="class-filter" class="compact-filter">
-                <option value="">All Classes</option>
-            </select>
-            <select id="type-filter" class="compact-filter">
-                <option value="">All Types</option>
-            </select>
-            <select id="sort-by" class="compact-filter">
-                <option value="name">Sort by Name</option>
-                <option value="attack">Sort by Attack</option>
-                <option value="defense">Sort by Defense</option>
-                <option value="agility">Sort by Agility</option>
-                <option value="intelligence">Sort by Intelligence</option>
-                <option value="stamina">Sort by Stamina</option>
-            </select>
-            <button id="favorites-filter" class="compact-favorites-btn" aria-label="Show favorites">
-                <i class="fas fa-star"></i>
-            </button>
+        
+        <!-- COMPARE VIEW (FIGHT SCREEN) -->
+        <div id="compare-view" class="view">
+            <!-- Top Header -->
+            <div class="game-header fight-header">
+                <div class="player-indicator player-1-indicator">PLAYER 1</div>
+                <h1>CHARACTER SELECT</h1>
+                <div class="player-indicator player-2-indicator">PLAYER 2</div>
+            </div>
+            
+            <!-- Main Fight Display -->
+            <div class="fight-display-main">
+                <!-- Left Fighter -->
+                <div class="fighter-side left-fighter">
+                    <div id="fighter-1-display" class="fighter-placeholder">
+                        <div class="fighter-silhouette">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <button class="select-fighter-btn" id="select-fighter-1">
+                            SELECT FIGHTER 1
+                        </button>
+                    </div>
+                    <div class="fighter-name-plate" id="fighter-1-name">???</div>
+                </div>
+                
+                <!-- Center VS Display -->
+                <div class="vs-display">
+                    <div class="vs-text">VS</div>
+                    <button class="fight-button" id="start-fight-btn">
+                        <i class="fas fa-bolt"></i>
+                        START FIGHT
+                        <i class="fas fa-bolt"></i>
+                    </button>
+                </div>
+                
+                <!-- Right Fighter -->
+                <div class="fighter-side right-fighter">
+                    <div id="fighter-2-display" class="fighter-placeholder">
+                        <div class="fighter-silhouette">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <button class="select-fighter-btn" id="select-fighter-2">
+                            SELECT FIGHTER 2
+                        </button>
+                    </div>
+                    <div class="fighter-name-plate" id="fighter-2-name">???</div>
+                </div>
+            </div>
+            
+            <!-- Bottom Character Grid -->
+            <div class="character-select-grid">
+                <div id="animal-grid-compare" class="animal-grid-container"></div>
+            </div>
         </div>
         
-        <div id="animal-grid" class="horizontal-animal-grid"></div>
-    </main>
+        <!-- Mode Toggle Buttons (Bottom) -->
+        <div class="mode-toggle-bar">
+            <button id="stats-mode-btn" class="mode-toggle-btn active">
+                <i class="fas fa-chart-bar"></i> STATS
+            </button>
+            <button id="compare-mode-btn" class="mode-toggle-btn">
+                <i class="fas fa-fist-raised"></i> COMPARE
+            </button>
+        </div>
+    </div>
     
     <script src="script.js"></script>
 </body>
