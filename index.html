@@ -23,7 +23,13 @@
     <div class="game-screen">
         <!-- Header -->
         <header class="game-header">
+            <button class="mode-btn active" id="stats-mode-btn" data-mode="stats">
+                <i class="fas fa-chart-bar"></i> STATS
+            </button>
             <h1>ANIMAL STATS</h1>
+            <button class="mode-btn" id="compare-mode-btn" data-mode="compare">
+                <i class="fas fa-balance-scale"></i> COMPARE
+            </button>
         </header>
         
         <!-- Stats View (Character Select Style) -->
@@ -152,16 +158,6 @@
             </div>
             
             <div class="character-grid" id="character-grid"></div>
-        </div>
-        
-        <!-- Mode Toggle Bar -->
-        <div class="mode-toggle-bar">
-            <button class="mode-btn active" id="stats-mode-btn" data-mode="stats">
-                <i class="fas fa-chart-bar"></i> STATS
-            </button>
-            <button class="mode-btn" id="compare-mode-btn" data-mode="compare">
-                <i class="fas fa-balance-scale"></i> COMPARE
-            </button>
         </div>
     </div>
     

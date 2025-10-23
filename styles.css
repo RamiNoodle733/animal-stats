@@ -37,10 +37,14 @@ body {
 .game-header {
     background: linear-gradient(180deg, rgba(0, 212, 255, 0.2) 0%, transparent 100%);
     border-bottom: 3px solid var(--border-bright);
-    padding: 10px;
+    padding: 10px 20px;
     text-align: center;
     box-shadow: 0 4px 20px rgba(0, 212, 255, 0.5);
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
 }
 
 .game-header h1 {
@@ -52,6 +56,8 @@ body {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.8));
+    margin: 0;
+    flex: 1;
 }
 
 .view-container {
@@ -512,37 +518,25 @@ body {
     text-align: center;
 }
 
-.mode-toggle-bar {
-    position: fixed;
-    bottom: 210px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    gap: 0;
-    background: rgba(0, 0, 0, 0.9);
-    border: 3px solid var(--border-bright);
-    border-radius: 12px;
-    padding: 4px;
-    box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
-    z-index: 1000;
-}
-
 .mode-btn {
-    padding: 12px 40px;
+    padding: 10px 30px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     letter-spacing: 3px;
-    background: transparent;
-    border: none;
-    color: rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(0, 212, 255, 0.3);
+    color: rgba(255, 255, 255, 0.6);
     cursor: pointer;
     transition: all 0.3s ease;
     border-radius: 8px;
+    white-space: nowrap;
 }
 
 .mode-btn:hover {
     color: var(--text-light);
     background: rgba(0, 212, 255, 0.2);
+    border-color: var(--border-bright);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
 }
 
 .mode-btn.active {
@@ -550,6 +544,7 @@ body {
     color: #000;
     text-shadow: none;
     box-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+    border-color: var(--primary-color);
 }
 
 .mode-btn i {
@@ -600,5 +595,16 @@ body {
     .fight-screen {
         grid-template-columns: 1fr;
         grid-template-rows: auto auto auto;
+    }
+    
+    .game-header h1 {
+        font-size: 1.5rem;
+        letter-spacing: 4px;
+    }
+    
+    .mode-btn {
+        padding: 8px 20px;
+        font-size: 0.9rem;
+        letter-spacing: 2px;
     }
 }
