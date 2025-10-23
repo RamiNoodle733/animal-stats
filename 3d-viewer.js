@@ -10,6 +10,7 @@ class Animal3DViewer {
         this.renderer = null;
         this.controls = null;
         this.currentModel = null;
+        this.mixer = null;
         this.animationId = null;
         
         this.init();
@@ -85,35 +86,265 @@ class Animal3DViewer {
         this.scene.add(fillLight);
     }
     
+    loadGLTFModel(url, scale = 1.0, onSuccess = null, onError = null) {
+        // Clear existing model
+        this.clearModel();
+        
+        // Check if GLTFLoader exists
+        if (typeof THREE.GLTFLoader === 'undefined') {
+            console.error('GLTFLoader not available, falling back to primitive');
+            if (onError) onError();
+            return;
+        }
+        
+        const loader = new THREE.GLTFLoader();
+        
+        loader.load(
+            url,
+            (gltf) => {
+                this.currentModel = gltf.scene;
+                
+                // Apply scale
+                this.currentModel.scale.set(scale, scale, scale);
+                
+                // Enable shadows
+                this.currentModel.traverse((node) => {
+                    if (node.isMesh) {
+                        node.castShadow = true;
+                        node.receiveShadow = true;
+                        
+                        // Enhance materials
+                        if (node.material) {
+                            node.material.roughness = 0.7;
+                            node.material.metalness = 0.2;
+                            node.material.emissive = new THREE.Color(0x00d4ff);
+                            node.material.emissiveIntensity = 0.05;
+                        }
+                    }
+                });
+                
+                this.scene.add(this.currentModel);
+                this.centerAndScaleModel();
+                
+                // Play animations if available
+                if (gltf.animations && gltf.animations.length > 0) {
+                    this.mixer = new THREE.AnimationMixer(this.currentModel);
+                    const action = this.mixer.clipAction(gltf.animations[0]);
+                    action.play();
+                }
+                
+                if (onSuccess) onSuccess();
+            },
+            (progress) => {
+                // Optional: handle progress
+                const percentComplete = (progress.loaded / progress.total) * 100;
+                console.log(`Loading model: ${percentComplete.toFixed(2)}%`);
+            },
+            (error) => {
+                console.error('Error loading GLTF model:', error);
+                if (onError) onError();
+            }
+        );
+    }
+    
     loadPrimitiveModel(animalName, animalType) {
         // Clear existing model
         this.clearModel();
         
-        // Create primitive 3D shapes based on animal type
-        const geometry = this.getPrimitiveGeometry(animalType);
-        const material = new THREE.MeshStandardMaterial({
-            color: this.getAnimalColor(animalType),
-            roughness: 0.7,
-            metalness: 0.3,
-            emissive: 0x00d4ff,
-            emissiveIntensity: 0.1
+        // Create enhanced animal model
+        this.currentModel = this.createEnhancedAnimalModel(animalType);
+        
+        // Enable shadows for all meshes
+        this.currentModel.traverse((node) => {
+            if (node.isMesh) {
+                node.castShadow = true;
+                node.receiveShadow = true;
+            }
         });
         
-        const mesh = new THREE.Mesh(geometry, material);
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
-        
-        // Add to scene
-        this.currentModel = new THREE.Group();
-        this.currentModel.add(mesh);
-        
-        // Add some detail shapes
+        // Add detail shapes (eyes, glow)
         this.addDetailShapes(this.currentModel, animalType);
         
         this.scene.add(this.currentModel);
         
         // Center and scale the model
         this.centerAndScaleModel();
+    }
+    
+    createEnhancedAnimalModel(animalType) {
+        const type = animalType.toLowerCase();
+        const group = new THREE.Group();
+        
+        // Elephant - body + trunk + ears + tusks
+        if (type.includes('elephant')) {
+            const body = new THREE.Mesh(
+                new THREE.SphereGeometry(1, 32, 32),
+                this.createAnimalMaterial(0x888888)
+            );
+            body.scale.set(1.2, 1, 1.5);
+            
+            const head = new THREE.Mesh(
+                new THREE.SphereGeometry(0.6, 32, 32),
+                this.createAnimalMaterial(0x888888)
+            );
+            head.position.set(0, 0.4, 1.3);
+            
+            const trunk = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.15, 0.2, 1.2, 16),
+                this.createAnimalMaterial(0x888888)
+            );
+            trunk.position.set(0, -0.3, 1.8);
+            trunk.rotation.x = Math.PI / 6;
+            
+            group.add(body, head, trunk);
+            return group;
+        }
+        
+        // Crocodile/Alligator - long streamlined body
+        if (type.includes('crocodile') || type.includes('alligator')) {
+            const body = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.3, 0.4, 2.5, 16),
+                this.createAnimalMaterial(0x4A5F3A)
+            );
+            body.rotation.z = Math.PI / 2;
+            
+            const head = new THREE.Mesh(
+                new THREE.ConeGeometry(0.35, 0.8, 8),
+                this.createAnimalMaterial(0x4A5F3A)
+            );
+            head.position.set(1.7, 0, 0);
+            head.rotation.z = -Math.PI / 2;
+            
+            const tail = new THREE.Mesh(
+                new THREE.ConeGeometry(0.25, 1.2, 8),
+                this.createAnimalMaterial(0x4A5F3A)
+            );
+            tail.position.set(-1.7, 0, 0);
+            tail.rotation.z = Math.PI / 2;
+            
+            group.add(body, head, tail);
+            return group;
+        }
+        
+        // Shark - streamlined aquatic predator
+        if (type.includes('shark')) {
+            const body = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.4, 0.2, 2, 16),
+                this.createAnimalMaterial(0x4A6D8C)
+            );
+            body.rotation.z = Math.PI / 2;
+            
+            const head = new THREE.Mesh(
+                new THREE.ConeGeometry(0.4, 0.8, 8),
+                this.createAnimalMaterial(0x4A6D8C)
+            );
+            head.position.set(1.4, 0, 0);
+            head.rotation.z = -Math.PI / 2;
+            
+            const dorsalFin = new THREE.Mesh(
+                new THREE.ConeGeometry(0.3, 0.8, 4),
+                this.createAnimalMaterial(0x3A5D7C)
+            );
+            dorsalFin.position.set(-0.2, 0.7, 0);
+            
+            group.add(body, head, dorsalFin);
+            return group;
+        }
+        
+        // Bear/Lion/Tiger - quadrupedal predator
+        if (type.includes('bear') || type.includes('lion') || type.includes('tiger') || type.includes('leopard') || type.includes('jaguar') || type.includes('cougar')) {
+            const color = type.includes('bear') ? 0x5C4033 : 0xD4A574;
+            
+            const body = new THREE.Mesh(
+                new THREE.BoxGeometry(1.5, 0.8, 1),
+                this.createAnimalMaterial(color)
+            );
+            
+            const head = new THREE.Mesh(
+                new THREE.BoxGeometry(0.7, 0.7, 0.7),
+                this.createAnimalMaterial(color)
+            );
+            head.position.set(0, 0.2, 1);
+            
+            const ears = [
+                new THREE.Mesh(new THREE.ConeGeometry(0.15, 0.3, 8), this.createAnimalMaterial(color)),
+                new THREE.Mesh(new THREE.ConeGeometry(0.15, 0.3, 8), this.createAnimalMaterial(color))
+            ];
+            ears[0].position.set(-0.3, 0.5, 1.2);
+            ears[1].position.set(0.3, 0.5, 1.2);
+            
+            group.add(body, head, ...ears);
+            return group;
+        }
+        
+        // Bird/Eagle - flying predator
+        if (type.includes('bird') || type.includes('eagle') || type.includes('falcon') || type.includes('hawk')) {
+            const body = new THREE.Mesh(
+                new THREE.CapsuleGeometry(0.3, 1, 8, 16),
+                this.createAnimalMaterial(0x8B7355)
+            );
+            
+            const head = new THREE.Mesh(
+                new THREE.SphereGeometry(0.35, 16, 16),
+                this.createAnimalMaterial(0x9B8365)
+            );
+            head.position.set(0, 0.8, 0);
+            
+            const beak = new THREE.Mesh(
+                new THREE.ConeGeometry(0.1, 0.4, 8),
+                this.createAnimalMaterial(0xFFD700)
+            );
+            beak.position.set(0, 0.8, 0.3);
+            beak.rotation.x = Math.PI / 2;
+            
+            const wings = [
+                new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.1, 0.8), this.createAnimalMaterial(0x7B6345)),
+                new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.1, 0.8), this.createAnimalMaterial(0x7B6345))
+            ];
+            wings[0].position.set(-0.9, 0.2, 0);
+            wings[1].position.set(0.9, 0.2, 0);
+            wings[0].rotation.z = Math.PI / 6;
+            wings[1].rotation.z = -Math.PI / 6;
+            
+            group.add(body, head, beak, ...wings);
+            return group;
+        }
+        
+        // Snake - coiled serpent
+        if (type.includes('snake') || type.includes('cobra') || type.includes('python') || type.includes('anaconda')) {
+            const curve = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(0, 0, 0),
+                new THREE.Vector3(0.5, 0.2, 0.5),
+                new THREE.Vector3(0, 0.4, 1),
+                new THREE.Vector3(-0.5, 0.2, 1.5),
+                new THREE.Vector3(0, 0, 2)
+            ]);
+            
+            const geometry = new THREE.TubeGeometry(curve, 64, 0.2, 16, false);
+            const snake = new THREE.Mesh(
+                geometry,
+                this.createAnimalMaterial(0x3D5C2F)
+            );
+            
+            group.add(snake);
+            return group;
+        }
+        
+        // Default - use original primitive
+        const geometry = this.getPrimitiveGeometry(animalType);
+        const mesh = new THREE.Mesh(geometry, this.createAnimalMaterial(this.getAnimalColor(animalType)));
+        group.add(mesh);
+        return group;
+    }
+    
+    createAnimalMaterial(color) {
+        return new THREE.MeshStandardMaterial({
+            color: color,
+            roughness: 0.7,
+            metalness: 0.2,
+            emissive: 0x00d4ff,
+            emissiveIntensity: 0.08
+        });
     }
     
     getPrimitiveGeometry(animalType) {
@@ -234,6 +465,11 @@ class Animal3DViewer {
     animate() {
         this.animationId = requestAnimationFrame(() => this.animate());
         
+        // Update animations
+        if (this.mixer) {
+            this.mixer.update(0.016); // ~60fps
+        }
+        
         // Rotate model
         if (this.currentModel) {
             this.currentModel.rotation.y += 0.005;
@@ -304,9 +540,30 @@ function init3DViewers() {
 function load3DModel(viewer, animalName, animalClass) {
     if (!viewer) return;
     
-    // For now, use primitive models based on animal name/class
-    const modelType = animalName.toLowerCase();
-    viewer.loadPrimitiveModel(animalName, modelType);
+    // Check if we have a real 3D model in the database
+    const modelData = window.ANIMAL_3D_MODELS && window.ANIMAL_3D_MODELS[animalName];
+    
+    if (modelData && modelData.model_url && modelData.model_type === 'gltf') {
+        // Try to load GLTF model
+        const scale = modelData.scale || 1.0;
+        viewer.loadGLTFModel(
+            modelData.model_url,
+            scale,
+            () => {
+                console.log(`Successfully loaded 3D model for ${animalName}`);
+            },
+            () => {
+                // Fallback to primitive on error
+                console.log(`Failed to load 3D model for ${animalName}, using primitive`);
+                const modelType = animalName.toLowerCase();
+                viewer.loadPrimitiveModel(animalName, modelType);
+            }
+        );
+    } else {
+        // Use primitive models as fallback
+        const modelType = animalName.toLowerCase();
+        viewer.loadPrimitiveModel(animalName, modelType);
+    }
 }
 
 // Export for use in main script
