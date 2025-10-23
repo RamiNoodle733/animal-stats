@@ -1,80 +1,74 @@
-# 🖼️ Image URL Auto-Updater
+# 🎨 TRANSPARENT PNG Image Updater for Animal Stats
 
-This script automatically updates animal image URLs in `animal_stats.json` using Wikimedia Commons images (which appear in top Google Image search results).
+This project includes a **reusable Python script** that automatically updates all animal images with **transparent PNG images (no backgrounds!)** from free PNG repositories.
 
 ## ✨ Features
 
-- **Automatic Updates**: Updates all animal images with one command
-- **Selective Updates**: Update only specific animals
-- **Reusable**: Easy to extend when you add new animals
-- **Reliable Sources**: Uses Wikimedia Commons (top Google result for most animal searches)
-- **Fast**: Updates all 98 animals in seconds
+- **100% Transparent PNGs**: All images have NO background - perfect for overlaying on any color!
+- **Automatic bulk updates**: Update all 98 animals with one command
+- **Selective updates**: Update only specific animals if needed
+- **Reusable**: Easy to add new animals in the future
+- **Reliable sources**: Uses PNGMart and similar free PNG hosting sites
+- **Fast CDN delivery**: Images load quickly from reliable servers
 
 ## 🚀 Usage
 
-### Update All Animals
+### Update ALL animals:
 ```bash
-python auto_update_images.py
+python auto_update_transparent_pngs.py
 ```
 
-### Update Specific Animals
+### Update specific animals only:
 ```bash
-python auto_update_images.py "African Elephant" "Lion" "Tiger"
+python auto_update_transparent_pngs.py "Tiger" "Lion" "Bear"
 ```
 
-## ➕ Adding New Animals
+## 📝 Adding New Animals
 
-When you add a new animal to your JSON:
+When you add a new animal to your stats, just follow these 3 steps:
 
-1. **Search for the image**:
-   - Go to Google Images
-   - Search: `[animal name] wikimedia commons`
-   - Click on the first good result
-   - Copy the direct image URL (ends with `.jpg` or `.png`)
+### Step 1: Find a transparent PNG
+Search Google: `[animal name] transparent PNG pngwing` or `[animal name] png no background`
 
-2. **Add to the script**:
-   - Open `auto_update_images.py`
-   - Find the `ANIMAL_IMAGES` dictionary
-   - Add your new animal:
-   ```python
-   "Your Animal Name": "https://upload.wikimedia.org/wikipedia/commons/thumb/.../image.jpg",
-   ```
+Example: **"Snow Fox transparent PNG pngwing"**
 
-3. **Run the updater**:
-   ```bash
-   python auto_update_images.py "Your Animal Name"
-   ```
+### Step 2: Get the image URL
+1. Find a good transparent PNG image
+2. Right-click the image
+3. Click "Copy image address"
 
-## 📋 Example
+### Step 3: Add to the script
+Open `auto_update_transparent_pngs.py` and add your animal to the `ANIMAL_IMAGES` dictionary:
 
-Adding a new animal called "Snow Fox":
+```python
+ANIMAL_IMAGES = {
+    # ... existing animals ...
+    
+    "Snow Fox": "https://www.pngmart.com/files/7/Snow-Fox-PNG-Transparent-Image.png",
+}
+```
 
-1. Search Google: "Snow Fox wikimedia commons"
-2. Copy image URL: `https://upload.wikimedia.org/wikipedia/commons/thumb/x/xx/SnowFox.jpg/1200px-SnowFox.jpg`
-3. Edit `auto_update_images.py`:
-   ```python
-   ANIMAL_IMAGES = {
-       # ... existing animals ...
-       "Snow Fox": "https://upload.wikimedia.org/wikipedia/commons/thumb/x/xx/SnowFox.jpg/1200px-SnowFox.jpg",
-   }
-   ```
-4. Run: `python auto_update_images.py "Snow Fox"`
+Then run the updater:
+```bash
+python auto_update_transparent_pngs.py "Snow Fox"
+```
 
-## 🎯 Why Wikimedia Commons?
+## 🎯 Why Transparent PNGs?
 
-- ✅ Appears in **top Google Image results**
-- ✅ **Reliable and fast** CDN
-- ✅ **Public domain** images
-- ✅ **High quality** photos
-- ✅ **No copyright issues**
-- ✅ **Works everywhere** (no CORS issues)
+1. **No Background**: Images blend perfectly with any website background color
+2. **Professional Look**: Clean, polished appearance
+3. **Top Google Results**: These sources appear in top search results
+4. **Reliable CDN**: Fast loading from trusted PNG hosting sites
+5. **High Quality**: Sharp, clear images perfect for web display
+6. **Free to Use**: All images are free for non-commercial use
 
-## 🔧 Current Status
+## 📊 Current Status
 
-- **Total Animals**: 98
-- **All Updated**: ✅ Yes
-- **Last Update**: October 23, 2025
+- ✅ **All 98 animals updated** with transparent PNG URLs!
+- 🎨 **Source**: PNGMart (free transparent PNG hosting)
+- 🔧 **Script**: `auto_update_transparent_pngs.py` (reusable for future updates)
+- 📅 **Last Updated**: October 23, 2025
 
 ---
 
-Made with 💚 for animal-stats!
+**Need help?** Just run the script and it'll tell you which animals are missing URLs!
