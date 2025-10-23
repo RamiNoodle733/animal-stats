@@ -263,7 +263,6 @@ function displayAnimalStats(index) {
             <div class="card-right">
                 <div class="stats-header">
                     <div class="stats-title">STATS</div>
-                    <div class="stats-subtitle">POWER</div>
                 </div>
                 
                 <div class="stats-bars">

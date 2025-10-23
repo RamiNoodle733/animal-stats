@@ -42,7 +42,7 @@ body {
     border-bottom: 2px solid var(--border-bright);
     box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
     height: calc(100vh - 250px);
-    max-height: 500px;
+    max-height: 450px;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -137,9 +137,9 @@ h1 {
 /* Stats Display Area */
 #stats-display-area {
     background: var(--bg-dark);
-    padding: 12px;
+    padding: 8px;
     flex: 1;
-    overflow: auto;
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     min-height: 0;
@@ -179,84 +179,92 @@ h1 {
 #selected-animal-stats {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
     background: transparent;
-    padding: 15px;
+    padding: 0;
     max-width: 100%;
     margin: 0 auto;
     height: 100%;
-    overflow: auto;
+    overflow: hidden;
 }
 
 /* Game Card Container */
 .game-card-container {
     display: grid;
-    grid-template-columns: 280px 1fr;
+    grid-template-columns: 200px 1fr;
     gap: 0;
     background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
-    border: 4px solid #4a4a4a;
-    border-radius: 12px;
+    border: 3px solid #5a5a5a;
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 0, 0, 0.5);
     position: relative;
+    flex: 1;
+    min-height: 0;
 }
 
 /* LEFT SIDE - Character Portrait */
 .card-left {
     background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
-    padding: 12px;
+    padding: 8px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    border-right: 4px solid #4a4a4a;
+    gap: 6px;
+    border-right: 3px solid #4a4a4a;
     position: relative;
 }
 
 .card-rating {
     position: absolute;
-    top: 8px;
-    left: 8px;
-    right: 8px;
+    top: 6px;
+    left: 6px;
+    right: 6px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: rgba(0, 0, 0, 0.8);
-    padding: 4px 12px;
-    border-radius: 6px;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(20, 20, 20, 0.95));
+    padding: 3px 8px;
+    border-radius: 4px;
     border: 2px solid #5a5a5a;
     z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
 }
 
 .rating-number {
-    font-size: 1.1rem;
+    font-size: 0.85rem;
     font-weight: 900;
     color: #FFD700;
-    text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
-    letter-spacing: 1px;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.8), 0 0 3px rgba(0, 0, 0, 1);
+    letter-spacing: 0.5px;
 }
 
 .rating-stars {
-    font-size: 1rem;
+    font-size: 0.8rem;
     color: #FFD700;
-    text-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
-    letter-spacing: 2px;
+    text-shadow: 0 0 6px rgba(255, 215, 0, 0.6), 0 0 3px rgba(0, 0, 0, 1);
+    letter-spacing: 1px;
 }
 
 .card-portrait-frame {
     width: 100%;
-    height: 320px;
-    background: repeating-linear-gradient(
-        45deg,
-        #1a1a1a,
-        #1a1a1a 10px,
-        #2a2a2a 10px,
-        #2a2a2a 20px
-    );
-    border: 4px solid #5a5a5a;
-    border-radius: 8px;
+    flex: 1;
+    background: 
+        repeating-linear-gradient(
+            45deg,
+            #1a1a1a,
+            #1a1a1a 8px,
+            #252525 8px,
+            #252525 16px
+        ),
+        radial-gradient(circle at 50% 50%, #2a2a2a 0%, #1a1a1a 100%);
+    border: 3px solid #6a6a6a;
+    border-radius: 6px;
     overflow: hidden;
     position: relative;
-    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+    box-shadow: 
+        inset 0 0 30px rgba(0, 0, 0, 0.9),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1),
+        0 4px 12px rgba(0, 0, 0, 0.6);
 }
 
 .card-portrait {
@@ -264,217 +272,280 @@ h1 {
     height: 100%;
     object-fit: cover;
     display: block;
+    filter: contrast(1.1) brightness(1.05);
 }
 
 .card-name-plate {
     background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
-    border: 3px solid #5a5a5a;
-    border-radius: 6px;
-    padding: 10px;
+    border: 2px solid #6a6a6a;
+    border-radius: 4px;
+    padding: 6px 8px;
     text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.8),
+        inset 0 1px 2px rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.card-name-plate::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #5a5a5a, transparent);
 }
 
 .card-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
+    font-size: 1.3rem;
     font-weight: 900;
     color: #FFFFFF;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-    letter-spacing: 3px;
+    text-shadow: 
+        2px 2px 4px rgba(0, 0, 0, 0.9),
+        0 0 10px rgba(255, 255, 255, 0.2);
+    letter-spacing: 2px;
 }
 
 /* RIGHT SIDE - Stats Panel */
 .card-right {
-    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
-    padding: 16px;
+    background: 
+        linear-gradient(135deg, rgba(42, 42, 42, 0.95) 0%, rgba(26, 26, 26, 0.95) 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.1) 2px, rgba(0, 0, 0, 0.1) 4px);
+    padding: 10px 12px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px;
+    overflow: hidden;
 }
 
 .stats-header {
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding-bottom: 8px;
-    border-bottom: 3px solid #4a4a4a;
+    gap: 0;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #4a4a4a;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .stats-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     font-weight: 900;
     color: #FFFFFF;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-    letter-spacing: 2px;
-}
-
-.stats-subtitle {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    text-shadow: 
+        2px 2px 4px rgba(0, 0, 0, 0.9),
+        0 0 10px rgba(255, 255, 255, 0.2);
+    letter-spacing: 3px;
 }
 
 /* Stats Bars */
 .stats-bars {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 5px;
 }
 
 .game-stat-row {
     display: grid;
-    grid-template-columns: 30px 90px 1fr 45px;
+    grid-template-columns: 22px 70px 1fr 40px;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .game-stat-icon {
-    width: 24px;
-    height: 24px;
-    background: #3a3a3a;
-    border: 2px solid #5a5a5a;
-    border-radius: 4px;
+    width: 20px;
+    height: 20px;
+    background: 
+        linear-gradient(135deg, #4a4a4a 0%, #2a2a2a 100%);
+    border: 2px solid #6a6a6a;
+    border-radius: 3px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.2),
+        0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .stat-icon-inner {
-    width: 12px;
-    height: 12px;
-    background: radial-gradient(circle, #888 0%, #444 100%);
+    width: 10px;
+    height: 10px;
+    background: radial-gradient(circle, #999 0%, #555 100%);
     border-radius: 2px;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .game-stat-label {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 700;
     color: #FFFFFF;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 .game-stat-bar-container {
-    height: 20px;
-    background: #1a1a1a;
-    border: 2px solid #4a4a4a;
-    border-radius: 4px;
+    height: 16px;
+    background: 
+        linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+    border: 2px solid #3a3a3a;
+    border-radius: 3px;
     overflow: hidden;
     position: relative;
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.8),
+        0 1px 2px rgba(255, 255, 255, 0.1);
 }
 
 .game-stat-bar {
     height: 100%;
-    border-radius: 2px;
+    border-radius: 1px;
     position: relative;
-    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        inset 0 1px 3px rgba(255, 255, 255, 0.4),
+        inset 0 -1px 2px rgba(0, 0, 0, 0.4);
     transition: width 0.8s ease;
 }
 
+.game-stat-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent);
+    border-radius: 1px 1px 0 0;
+}
+
 .game-stat-value {
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     font-weight: 900;
     color: #FFFFFF;
     text-align: right;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+    text-shadow: 
+        1px 1px 2px rgba(0, 0, 0, 1),
+        0 0 4px rgba(0, 0, 0, 0.8);
 }
 
 /* Attacks Section */
 .attacks-section {
-    background: rgba(0, 0, 0, 0.4);
+    background: 
+        linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(10, 10, 10, 0.4));
     border: 2px solid #4a4a4a;
-    border-radius: 6px;
-    padding: 10px;
+    border-radius: 4px;
+    padding: 6px 8px;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.6);
 }
 
 .attacks-header {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
+    font-size: 0.95rem;
     font-weight: 900;
     color: #FFFFFF;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    text-shadow: 
+        1px 1px 3px rgba(0, 0, 0, 0.9),
+        0 0 8px rgba(255, 255, 255, 0.2);
     letter-spacing: 2px;
-    margin-bottom: 8px;
-    padding-bottom: 6px;
-    border-bottom: 2px solid #3a3a3a;
+    margin-bottom: 5px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #3a3a3a;
 }
 
 .attack-list {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 3px;
 }
 
 .attack-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 6px 10px;
-    border-radius: 4px;
-    border-left: 3px solid #666;
+    gap: 8px;
+    background: 
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+    padding: 4px 8px;
+    border-radius: 3px;
+    border-left: 2px solid #777;
+    box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.05);
 }
 
 .attack-icon {
-    font-size: 1.1rem;
+    font-size: 0.9rem;
     color: #FFD700;
-    text-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.8), 0 0 3px rgba(0, 0, 0, 1);
+    filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.6));
 }
 
 .attack-name {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-weight: 600;
     color: #FFFFFF;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
 }
 
 /* Ability Highlight */
 .ability-highlight {
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 140, 0, 0.2));
+    background: 
+        linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 140, 0, 0.15)),
+        repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255, 215, 0, 0.05) 2px, rgba(255, 215, 0, 0.05) 4px);
     border: 2px solid #FFD700;
-    border-radius: 6px;
-    padding: 10px;
+    border-radius: 4px;
+    padding: 6px 10px;
     text-align: center;
+    box-shadow: 
+        inset 0 1px 3px rgba(255, 215, 0, 0.4),
+        0 2px 8px rgba(255, 215, 0, 0.3);
 }
 
 .ability-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 900;
     color: #FFD700;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+    text-shadow: 
+        0 0 12px rgba(255, 215, 0, 0.9),
+        0 0 4px rgba(0, 0, 0, 1),
+        2px 2px 4px rgba(0, 0, 0, 0.8);
     letter-spacing: 2px;
 }
 
 /* Ability Description (Bottom Panel) */
 .ability-description {
-    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
-    border: 4px solid #4a4a4a;
-    border-radius: 12px;
-    padding: 16px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+    background: 
+        linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%),
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.2) 2px, rgba(0, 0, 0, 0.2) 4px);
+    border: 3px solid #4a4a4a;
+    border-radius: 8px;
+    padding: 10px 12px;
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.8),
+        inset 0 1px 2px rgba(255, 255, 255, 0.1);
 }
 
 .ability-desc-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
+    font-size: 1.1rem;
     font-weight: 900;
     color: #FFD700;
-    text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+    text-shadow: 
+        0 0 10px rgba(255, 215, 0, 0.8),
+        0 0 4px rgba(0, 0, 0, 1),
+        2px 2px 4px rgba(0, 0, 0, 0.8);
     letter-spacing: 2px;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 
 .ability-desc-text {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 400;
     color: #CCCCCC;
-    line-height: 1.5;
-    letter-spacing: 0.3px;
+    line-height: 1.4;
+    letter-spacing: 0.2px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
 }
 
 /* OLD STYLES REMOVED - Now using game card layout */
