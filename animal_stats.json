@@ -11,20 +11,31 @@
         "lifespan_years": 70,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["plants", "fruits", "bark"],
-        "attack": 82.50,
+        "diet": [
+            "plants",
+            "fruits",
+            "bark"
+        ],
+        "attack": 82.5,
         "defense": 88.75,
-        "agility": 28.50,
+        "agility": 28.5,
         "intelligence": 89.25,
-        "stamina": 76.80,
-        "special_attack": 85.00,
-        "size_score": 98.50,
+        "stamina": 76.8,
+        "special_attack": 85.0,
+        "size_score": 98.5,
         "bite_force_psi": 2175,
         "class": "Tank",
         "type": "Mammal",
-        "unique_traits": ["largest land animal", "exceptional memory", "complex social structure"],
-        "special_abilities": ["Trunk Strike", "Crushing Charge"],
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Elephant_FPMK_2018.jpg/400px-Elephant_FPMK_2018.jpg"
+        "unique_traits": [
+            "largest land animal",
+            "exceptional memory",
+            "complex social structure"
+        ],
+        "special_abilities": [
+            "Trunk Strike",
+            "Crushing Charge"
+        ],
+        "image": "https://pngimg.com/uploads/african_elephant/african_elephant_PNG.png"
     },
     {
         "name": "Saltwater Crocodile",
@@ -38,20 +49,31 @@
         "lifespan_years": 70,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["fish", "mammals", "birds"],
+        "diet": [
+            "fish",
+            "mammals",
+            "birds"
+        ],
         "attack": 96.75,
-        "defense": 92.50,
+        "defense": 92.5,
         "agility": 31.25,
-        "intelligence": 58.40,
-        "stamina": 83.60,
-        "special_attack": 98.50,
-        "size_score": 87.30,
+        "intelligence": 58.4,
+        "stamina": 83.6,
+        "special_attack": 98.5,
+        "size_score": 87.3,
         "bite_force_psi": 3700,
         "class": "Apex Predator",
         "type": "Reptile",
-        "unique_traits": ["strongest bite force", "death roll technique", "armored hide"],
-        "special_abilities": ["Death Roll", "Stealth Ambush"],
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Crocodylus-porosus-2.jpg/400px-Crocodylus-porosus-2.jpg"
+        "unique_traits": [
+            "strongest bite force",
+            "death roll technique",
+            "armored hide"
+        ],
+        "special_abilities": [
+            "Death Roll",
+            "Stealth Ambush"
+        ],
+        "image": "https://pngimg.com/uploads/saltwater_crocodile/saltwater_crocodile_PNG.png"
     },
     {
         "name": "Great White Shark",
@@ -65,20 +87,31 @@
         "lifespan_years": 70,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["fish", "seals", "dolphins"],
-        "attack": 94.80,
-        "defense": 79.50,
+        "diet": [
+            "fish",
+            "seals",
+            "dolphins"
+        ],
+        "attack": 94.8,
+        "defense": 79.5,
         "agility": 62.75,
-        "intelligence": 64.20,
-        "stamina": 88.40,
+        "intelligence": 64.2,
+        "stamina": 88.4,
         "special_attack": 96.25,
-        "size_score": 88.60,
+        "size_score": 88.6,
         "bite_force_psi": 4000,
         "class": "Apex Predator",
         "type": "Fish",
-        "unique_traits": ["electroreception", "multiple rows of teeth", "powerful swimmer"],
-        "special_abilities": ["Breach Attack", "Sensory Dominance"],
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/White_shark.jpg/400px-White_shark.jpg"
+        "unique_traits": [
+            "electroreception",
+            "multiple rows of teeth",
+            "powerful swimmer"
+        ],
+        "special_abilities": [
+            "Breach Attack",
+            "Sensory Dominance"
+        ],
+        "image": "https://pngimg.com/uploads/great_white_shark/great_white_shark_PNG.png"
     },
     {
         "name": "Grizzly Bear",
@@ -92,20 +125,32 @@
         "lifespan_years": 25,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["fish", "mammals", "berries", "insects"],
-        "attack": 88.50,
+        "diet": [
+            "fish",
+            "mammals",
+            "berries",
+            "insects"
+        ],
+        "attack": 88.5,
         "defense": 84.75,
-        "agility": 48.60,
-        "intelligence": 71.80,
-        "stamina": 74.20,
-        "special_attack": 86.40,
-        "size_score": 78.50,
+        "agility": 48.6,
+        "intelligence": 71.8,
+        "stamina": 74.2,
+        "special_attack": 86.4,
+        "size_score": 78.5,
         "bite_force_psi": 1160,
         "class": "Apex Predator",
         "type": "Mammal",
-        "unique_traits": ["powerful claws", "omnivorous diet", "excellent sense of smell"],
-        "special_abilities": ["Berserker Rage", "Bear Hug"],
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Ours_brun_parcanimalierpyrenees_1.jpg/400px-Ours_brun_parcanimalierpyrenees_1.jpg"
+        "unique_traits": [
+            "powerful claws",
+            "omnivorous diet",
+            "excellent sense of smell"
+        ],
+        "special_abilities": [
+            "Berserker Rage",
+            "Bear Hug"
+        ],
+        "image": "https://pngimg.com/uploads/grizzly_bear/grizzly_bear_PNG.png"
     },
     {
         "name": "Siberian Tiger",
@@ -119,20 +164,31 @@
         "lifespan_years": 18,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["deer", "wild boar", "elk"],
+        "diet": [
+            "deer",
+            "wild boar",
+            "elk"
+        ],
         "attack": 91.75,
-        "defense": 72.50,
-        "agility": 76.80,
-        "intelligence": 78.90,
-        "stamina": 71.30,
-        "special_attack": 89.60,
-        "size_score": 71.40,
+        "defense": 72.5,
+        "agility": 76.8,
+        "intelligence": 78.9,
+        "stamina": 71.3,
+        "special_attack": 89.6,
+        "size_score": 71.4,
         "bite_force_psi": 1050,
         "class": "Apex Predator",
         "type": "Mammal",
-        "unique_traits": ["largest tiger subspecies", "solitary hunter", "powerful leap"],
-        "special_abilities": ["Ambush Strike", "Throat Grip"],
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siberischer_tiger_de_edit02.jpg/400px-Siberischer_tiger_de_edit02.jpg"
+        "unique_traits": [
+            "largest tiger subspecies",
+            "solitary hunter",
+            "powerful leap"
+        ],
+        "special_abilities": [
+            "Ambush Strike",
+            "Throat Grip"
+        ],
+        "image": "https://pngimg.com/uploads/siberian_tiger/siberian_tiger_PNG.png"
     },
     {
         "name": "African Lion",
@@ -146,20 +202,31 @@
         "lifespan_years": 14,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["zebras", "wildebeest", "buffalo"],
+        "diet": [
+            "zebras",
+            "wildebeest",
+            "buffalo"
+        ],
         "attack": 89.25,
-        "defense": 71.80,
-        "agility": 74.50,
-        "intelligence": 76.30,
-        "stamina": 68.90,
+        "defense": 71.8,
+        "agility": 74.5,
+        "intelligence": 76.3,
+        "stamina": 68.9,
         "special_attack": 87.75,
-        "size_score": 66.20,
+        "size_score": 66.2,
         "bite_force_psi": 650,
         "class": "Apex Predator",
         "type": "Mammal",
-        "unique_traits": ["social pride structure", "cooperative hunting", "powerful roar"],
-        "special_abilities": ["Pride Tactics", "Mane Shield"],
-        "image": "https://picsum.photos/seed/lion/400/400"
+        "unique_traits": [
+            "social pride structure",
+            "cooperative hunting",
+            "powerful roar"
+        ],
+        "special_abilities": [
+            "Pride Tactics",
+            "Mane Shield"
+        ],
+        "image": "https://pngimg.com/uploads/african_lion/african_lion_PNG.png"
     },
     {
         "name": "Hippopotamus",
@@ -173,20 +240,29 @@
         "lifespan_years": 45,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass"],
-        "attack": 90.50,
+        "diet": [
+            "grass"
+        ],
+        "attack": 90.5,
         "defense": 89.75,
-        "agility": 26.40,
-        "intelligence": 62.50,
-        "stamina": 72.80,
-        "special_attack": 88.30,
-        "size_score": 92.50,
+        "agility": 26.4,
+        "intelligence": 62.5,
+        "stamina": 72.8,
+        "special_attack": 88.3,
+        "size_score": 92.5,
         "bite_force_psi": 1800,
         "class": "Tank",
         "type": "Mammal",
-        "unique_traits": ["extremely aggressive", "powerful bite", "semi-aquatic"],
-        "special_abilities": ["Jaw Crush", "Territorial Rage"],
-        "image": "https://picsum.photos/seed/hippo/400/400"
+        "unique_traits": [
+            "extremely aggressive",
+            "powerful bite",
+            "semi-aquatic"
+        ],
+        "special_abilities": [
+            "Jaw Crush",
+            "Territorial Rage"
+        ],
+        "image": "https://pngimg.com/uploads/hippopotamus/hippopotamus_PNG.png"
     },
     {
         "name": "Polar Bear",
@@ -200,20 +276,31 @@
         "lifespan_years": 25,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["seals", "walrus", "fish"],
+        "diet": [
+            "seals",
+            "walrus",
+            "fish"
+        ],
         "attack": 90.75,
-        "defense": 86.50,
-        "agility": 44.60,
-        "intelligence": 73.20,
-        "stamina": 79.40,
-        "special_attack": 88.80,
-        "size_score": 81.30,
+        "defense": 86.5,
+        "agility": 44.6,
+        "intelligence": 73.2,
+        "stamina": 79.4,
+        "special_attack": 88.8,
+        "size_score": 81.3,
         "bite_force_psi": 1200,
         "class": "Apex Predator",
         "type": "Mammal",
-        "unique_traits": ["largest bear species", "excellent swimmer", "thick blubber"],
-        "special_abilities": ["Ice Breaker", "Arctic Endurance"],
-        "image": "https://picsum.photos/seed/polarbear/400/400"
+        "unique_traits": [
+            "largest bear species",
+            "excellent swimmer",
+            "thick blubber"
+        ],
+        "special_abilities": [
+            "Ice Breaker",
+            "Arctic Endurance"
+        ],
+        "image": "https://pngimg.com/uploads/polar_bear/polar_bear_PNG.png"
     },
     {
         "name": "Orca",
@@ -227,20 +314,31 @@
         "lifespan_years": 60,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["fish", "seals", "whales"],
-        "attack": 95.50,
+        "diet": [
+            "fish",
+            "seals",
+            "whales"
+        ],
+        "attack": 95.5,
         "defense": 84.75,
-        "agility": 68.90,
-        "intelligence": 94.50,
-        "stamina": 91.20,
-        "special_attack": 93.80,
-        "size_score": 96.80,
+        "agility": 68.9,
+        "intelligence": 94.5,
+        "stamina": 91.2,
+        "special_attack": 93.8,
+        "size_score": 96.8,
         "bite_force_psi": 19000,
         "class": "Apex Predator",
         "type": "Mammal",
-        "unique_traits": ["apex ocean predator", "echolocation", "pod hunting"],
-        "special_abilities": ["Coordinated Strike", "Wave Maker"],
-        "image": "https://picsum.photos/seed/orca/400/400"
+        "unique_traits": [
+            "apex ocean predator",
+            "echolocation",
+            "pod hunting"
+        ],
+        "special_abilities": [
+            "Coordinated Strike",
+            "Wave Maker"
+        ],
+        "image": "https://pngimg.com/uploads/orca/orca_PNG.png"
     },
     {
         "name": "Cheetah",
@@ -254,20 +352,31 @@
         "lifespan_years": 12,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["gazelles", "impalas", "hares"],
-        "attack": 68.50,
-        "defense": 48.20,
+        "diet": [
+            "gazelles",
+            "impalas",
+            "hares"
+        ],
+        "attack": 68.5,
+        "defense": 48.2,
         "agility": 98.75,
-        "intelligence": 64.30,
-        "stamina": 52.40,
-        "special_attack": 73.60,
-        "size_score": 42.50,
+        "intelligence": 64.3,
+        "stamina": 52.4,
+        "special_attack": 73.6,
+        "size_score": 42.5,
         "bite_force_psi": 475,
         "class": "Speed Demon",
         "type": "Mammal",
-        "unique_traits": ["fastest land animal", "non-retractable claws", "lightweight build"],
-        "special_abilities": ["Lightning Sprint", "Precision Strike"],
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/TheCheethcat.jpg/400px-TheCheethcat.jpg"
+        "unique_traits": [
+            "fastest land animal",
+            "non-retractable claws",
+            "lightweight build"
+        ],
+        "special_abilities": [
+            "Lightning Sprint",
+            "Precision Strike"
+        ],
+        "image": "https://pngimg.com/uploads/cheetah/cheetah_PNG.png"
     },
     {
         "name": "Peregrine Falcon",
@@ -281,20 +390,30 @@
         "lifespan_years": 17,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["birds", "bats"],
-        "attack": 74.80,
-        "defense": 52.30,
-        "agility": 96.50,
-        "intelligence": 73.60,
-        "stamina": 68.90,
-        "special_attack": 100.00,
-        "size_score": 12.80,
+        "diet": [
+            "birds",
+            "bats"
+        ],
+        "attack": 74.8,
+        "defense": 52.3,
+        "agility": 96.5,
+        "intelligence": 73.6,
+        "stamina": 68.9,
+        "special_attack": 100.0,
+        "size_score": 12.8,
         "bite_force_psi": 74,
         "class": "Sky Demon",
         "type": "Bird",
-        "unique_traits": ["fastest animal on Earth", "diving stoop attack", "keen eyesight"],
-        "special_abilities": ["Death Dive", "Aerial Mastery"],
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Peregrine_Falcon_-_Williamson_County%2C_Texas%2C_USA.jpg/400px-Peregrine_Falcon_-_Williamson_County%2C_Texas%2C_USA.jpg"
+        "unique_traits": [
+            "fastest animal on Earth",
+            "diving stoop attack",
+            "keen eyesight"
+        ],
+        "special_abilities": [
+            "Death Dive",
+            "Aerial Mastery"
+        ],
+        "image": "https://pngimg.com/uploads/peregrine_falcon/peregrine_falcon_PNG.png"
     },
     {
         "name": "Komodo Dragon",
@@ -308,20 +427,31 @@
         "lifespan_years": 30,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["deer", "pigs", "water buffalo"],
-        "attack": 82.40,
-        "defense": 76.50,
-        "agility": 34.70,
-        "intelligence": 59.80,
-        "stamina": 67.30,
-        "special_attack": 91.50,
-        "size_score": 50.20,
+        "diet": [
+            "deer",
+            "pigs",
+            "water buffalo"
+        ],
+        "attack": 82.4,
+        "defense": 76.5,
+        "agility": 34.7,
+        "intelligence": 59.8,
+        "stamina": 67.3,
+        "special_attack": 91.5,
+        "size_score": 50.2,
         "bite_force_psi": 610,
         "class": "Venomous Hunter",
         "type": "Reptile",
-        "unique_traits": ["venomous bite", "bacterial saliva", "largest lizard"],
-        "special_abilities": ["Toxic Bite", "Patient Stalker"],
-        "image": "https://picsum.photos/seed/komodo/400/400"
+        "unique_traits": [
+            "venomous bite",
+            "bacterial saliva",
+            "largest lizard"
+        ],
+        "special_abilities": [
+            "Toxic Bite",
+            "Patient Stalker"
+        ],
+        "image": "https://pngimg.com/uploads/komodo_dragon/komodo_dragon_PNG.png"
     },
     {
         "name": "Gorilla",
@@ -335,20 +465,31 @@
         "lifespan_years": 40,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["plants", "fruits", "insects"],
+        "diet": [
+            "plants",
+            "fruits",
+            "insects"
+        ],
         "attack": 86.75,
-        "defense": 81.50,
-        "agility": 52.40,
-        "intelligence": 88.70,
-        "stamina": 74.60,
-        "special_attack": 84.30,
-        "size_score": 68.50,
+        "defense": 81.5,
+        "agility": 52.4,
+        "intelligence": 88.7,
+        "stamina": 74.6,
+        "special_attack": 84.3,
+        "size_score": 68.5,
         "bite_force_psi": 1300,
         "class": "Powerhouse",
         "type": "Mammal",
-        "unique_traits": ["incredible strength", "intelligent tool use", "protective family groups"],
-        "special_abilities": ["Gorilla Smash", "Intimidation Display"],
-        "image": "https://picsum.photos/seed/gorilla/400/400"
+        "unique_traits": [
+            "incredible strength",
+            "intelligent tool use",
+            "protective family groups"
+        ],
+        "special_abilities": [
+            "Gorilla Smash",
+            "Intimidation Display"
+        ],
+        "image": "https://pngimg.com/uploads/gorilla/gorilla_PNG.png"
     },
     {
         "name": "Anaconda",
@@ -362,20 +503,32 @@
         "lifespan_years": 10,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["mammals", "birds", "fish", "reptiles"],
-        "attack": 79.50,
-        "defense": 71.80,
-        "agility": 42.60,
-        "intelligence": 48.30,
-        "stamina": 86.40,
-        "special_attack": 87.90,
-        "size_score": 56.70,
+        "diet": [
+            "mammals",
+            "birds",
+            "fish",
+            "reptiles"
+        ],
+        "attack": 79.5,
+        "defense": 71.8,
+        "agility": 42.6,
+        "intelligence": 48.3,
+        "stamina": 86.4,
+        "special_attack": 87.9,
+        "size_score": 56.7,
         "bite_force_psi": 90,
         "class": "Constrictor",
         "type": "Reptile",
-        "unique_traits": ["largest snake by weight", "constriction kill", "semi-aquatic"],
-        "special_abilities": ["Death Coil", "Aquatic Stealth"],
-        "image": "https://picsum.photos/seed/anaconda/400/400"
+        "unique_traits": [
+            "largest snake by weight",
+            "constriction kill",
+            "semi-aquatic"
+        ],
+        "special_abilities": [
+            "Death Coil",
+            "Aquatic Stealth"
+        ],
+        "image": "https://pngimg.com/uploads/anaconda/anaconda_PNG.png"
     },
     {
         "name": "Leopard",
@@ -385,24 +538,35 @@
         "weight_kg": 65,
         "height_cm": 70,
         "length_cm": 180,
-        "speed_mps": 20.00,
+        "speed_mps": 20.0,
         "lifespan_years": 15,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["deer", "monkeys", "birds"],
-        "attack": 84.60,
-        "defense": 68.40,
-        "agility": 88.50,
-        "intelligence": 75.80,
-        "stamina": 73.20,
-        "special_attack": 82.70,
-        "size_score": 40.30,
+        "diet": [
+            "deer",
+            "monkeys",
+            "birds"
+        ],
+        "attack": 84.6,
+        "defense": 68.4,
+        "agility": 88.5,
+        "intelligence": 75.8,
+        "stamina": 73.2,
+        "special_attack": 82.7,
+        "size_score": 40.3,
         "bite_force_psi": 310,
         "class": "Ambush Predator",
         "type": "Mammal",
-        "unique_traits": ["excellent climber", "stores prey in trees", "adaptable hunter"],
-        "special_abilities": ["Tree Ambush", "Stealth Kill"],
-        "image": "https://picsum.photos/seed/leopard/400/400"
+        "unique_traits": [
+            "excellent climber",
+            "stores prey in trees",
+            "adaptable hunter"
+        ],
+        "special_abilities": [
+            "Tree Ambush",
+            "Stealth Kill"
+        ],
+        "image": "https://pngimg.com/uploads/leopard/leopard_PNG.png"
     },
     {
         "name": "Jaguar",
@@ -416,20 +580,31 @@
         "lifespan_years": 15,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["capybaras", "deer", "caimans"],
-        "attack": 87.80,
-        "defense": 72.50,
-        "agility": 81.40,
-        "intelligence": 76.90,
-        "stamina": 71.60,
-        "special_attack": 92.30,
-        "size_score": 49.80,
+        "diet": [
+            "capybaras",
+            "deer",
+            "caimans"
+        ],
+        "attack": 87.8,
+        "defense": 72.5,
+        "agility": 81.4,
+        "intelligence": 76.9,
+        "stamina": 71.6,
+        "special_attack": 92.3,
+        "size_score": 49.8,
         "bite_force_psi": 1500,
         "class": "Apex Predator",
         "type": "Mammal",
-        "unique_traits": ["strongest bite relative to size", "skull-crushing bite", "swims well"],
-        "special_abilities": ["Skull Crusher", "Water Hunter"],
-        "image": "https://picsum.photos/seed/jaguar/400/400"
+        "unique_traits": [
+            "strongest bite relative to size",
+            "skull-crushing bite",
+            "swims well"
+        ],
+        "special_abilities": [
+            "Skull Crusher",
+            "Water Hunter"
+        ],
+        "image": "https://pngimg.com/uploads/jaguar/jaguar_PNG.png"
     },
     {
         "name": "Honey Badger",
@@ -443,20 +618,31 @@
         "lifespan_years": 24,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["insects", "small mammals", "honey"],
-        "attack": 71.50,
-        "defense": 84.30,
-        "agility": 68.70,
-        "intelligence": 77.40,
-        "stamina": 91.80,
-        "special_attack": 76.20,
-        "size_score": 19.40,
+        "diet": [
+            "insects",
+            "small mammals",
+            "honey"
+        ],
+        "attack": 71.5,
+        "defense": 84.3,
+        "agility": 68.7,
+        "intelligence": 77.4,
+        "stamina": 91.8,
+        "special_attack": 76.2,
+        "size_score": 19.4,
         "bite_force_psi": 122,
         "class": "Berserker",
         "type": "Mammal",
-        "unique_traits": ["fearless aggression", "thick skin", "immune to many venoms"],
-        "special_abilities": ["Reckless Fury", "Pain Immunity"],
-        "image": "https://picsum.photos/seed/honeybadger/400/400"
+        "unique_traits": [
+            "fearless aggression",
+            "thick skin",
+            "immune to many venoms"
+        ],
+        "special_abilities": [
+            "Reckless Fury",
+            "Pain Immunity"
+        ],
+        "image": "https://pngimg.com/uploads/honey_badger/honey_badger_PNG.png"
     },
     {
         "name": "Wolverine",
@@ -470,20 +656,31 @@
         "lifespan_years": 13,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["caribou", "rodents", "carrion"],
-        "attack": 76.80,
-        "defense": 79.60,
-        "agility": 71.40,
-        "intelligence": 72.50,
-        "stamina": 88.90,
-        "special_attack": 78.40,
-        "size_score": 23.60,
+        "diet": [
+            "caribou",
+            "rodents",
+            "carrion"
+        ],
+        "attack": 76.8,
+        "defense": 79.6,
+        "agility": 71.4,
+        "intelligence": 72.5,
+        "stamina": 88.9,
+        "special_attack": 78.4,
+        "size_score": 23.6,
         "bite_force_psi": 224,
         "class": "Berserker",
         "type": "Mammal",
-        "unique_traits": ["fights above weight class", "powerful jaws", "stocky build"],
-        "special_abilities": ["Berserker Bite", "Tenacity"],
-        "image": "https://picsum.photos/seed/wolverine/400/400"
+        "unique_traits": [
+            "fights above weight class",
+            "powerful jaws",
+            "stocky build"
+        ],
+        "special_abilities": [
+            "Berserker Bite",
+            "Tenacity"
+        ],
+        "image": "https://pngimg.com/uploads/wolverine/wolverine_PNG.png"
     },
     {
         "name": "Cape Buffalo",
@@ -497,20 +694,29 @@
         "lifespan_years": 20,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass"],
-        "attack": 85.70,
-        "defense": 86.90,
-        "agility": 46.30,
-        "intelligence": 66.40,
-        "stamina": 81.50,
-        "special_attack": 84.20,
-        "size_score": 84.60,
+        "diet": [
+            "grass"
+        ],
+        "attack": 85.7,
+        "defense": 86.9,
+        "agility": 46.3,
+        "intelligence": 66.4,
+        "stamina": 81.5,
+        "special_attack": 84.2,
+        "size_score": 84.6,
         "bite_force_psi": 0,
         "class": "Tank",
         "type": "Mammal",
-        "unique_traits": ["dangerous when wounded", "powerful horns", "herd defense"],
-        "special_abilities": ["Horn Gore", "Stampede"],
-        "image": "https://picsum.photos/seed/buffalo/400/400"
+        "unique_traits": [
+            "dangerous when wounded",
+            "powerful horns",
+            "herd defense"
+        ],
+        "special_abilities": [
+            "Horn Gore",
+            "Stampede"
+        ],
+        "image": "https://pngimg.com/uploads/cape_buffalo/cape_buffalo_PNG.png"
     },
     {
         "name": "Bottlenose Dolphin",
@@ -524,20 +730,30 @@
         "lifespan_years": 45,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["fish", "squid"],
-        "attack": 64.50,
-        "defense": 58.70,
-        "agility": 83.40,
-        "intelligence": 92.80,
-        "stamina": 86.20,
-        "special_attack": 68.90,
-        "size_score": 59.20,
+        "diet": [
+            "fish",
+            "squid"
+        ],
+        "attack": 64.5,
+        "defense": 58.7,
+        "agility": 83.4,
+        "intelligence": 92.8,
+        "stamina": 86.2,
+        "special_attack": 68.9,
+        "size_score": 59.2,
         "bite_force_psi": 190,
         "class": "Intelligent Hunter",
         "type": "Mammal",
-        "unique_traits": ["echolocation", "complex communication", "cooperative hunting"],
-        "special_abilities": ["Sonic Stun", "Pack Tactics"],
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Tursiops_truncatus_01.jpg/400px-Tursiops_truncatus_01.jpg"
+        "unique_traits": [
+            "echolocation",
+            "complex communication",
+            "cooperative hunting"
+        ],
+        "special_abilities": [
+            "Sonic Stun",
+            "Pack Tactics"
+        ],
+        "image": "https://pngimg.com/uploads/bottlenose_dolphin/bottlenose_dolphin_PNG.png"
     },
     {
         "name": "Chimpanzee",
@@ -551,20 +767,31 @@
         "lifespan_years": 50,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["fruits", "insects", "small mammals"],
-        "attack": 78.90,
-        "defense": 62.50,
-        "agility": 82.70,
-        "intelligence": 95.60,
-        "stamina": 71.40,
-        "special_attack": 76.80,
-        "size_score": 38.20,
+        "diet": [
+            "fruits",
+            "insects",
+            "small mammals"
+        ],
+        "attack": 78.9,
+        "defense": 62.5,
+        "agility": 82.7,
+        "intelligence": 95.6,
+        "stamina": 71.4,
+        "special_attack": 76.8,
+        "size_score": 38.2,
         "bite_force_psi": 1300,
         "class": "Intelligent Fighter",
         "type": "Mammal",
-        "unique_traits": ["tool use", "complex society", "surprising strength"],
-        "special_abilities": ["Tool Weapon", "Group Coordination"],
-        "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Schimpanse_zoo_leipzig.jpg/400px-Schimpanse_zoo_leipzig.jpg"
+        "unique_traits": [
+            "tool use",
+            "complex society",
+            "surprising strength"
+        ],
+        "special_abilities": [
+            "Tool Weapon",
+            "Group Coordination"
+        ],
+        "image": "https://pngimg.com/uploads/chimpanzee/chimpanzee_PNG.png"
     },
     {
         "name": "Mantis Shrimp",
@@ -574,24 +801,35 @@
         "weight_kg": 0.09,
         "height_cm": 6,
         "length_cm": 18,
-        "speed_mps": 23.00,
+        "speed_mps": 23.0,
         "lifespan_years": 20,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["crabs", "mollusks", "fish"],
-        "attack": 95.80,
-        "defense": 68.50,
-        "agility": 89.60,
-        "intelligence": 61.30,
-        "stamina": 54.70,
-        "special_attack": 99.50,
-        "size_score": 7.20,
+        "diet": [
+            "crabs",
+            "mollusks",
+            "fish"
+        ],
+        "attack": 95.8,
+        "defense": 68.5,
+        "agility": 89.6,
+        "intelligence": 61.3,
+        "stamina": 54.7,
+        "special_attack": 99.5,
+        "size_score": 7.2,
         "bite_force_psi": 0,
         "class": "Glass Cannon",
         "type": "Crustacean",
-        "unique_traits": ["fastest punch in nature", "incredible vision", "cavitation bubbles"],
-        "special_abilities": ["Sonic Punch", "Visual Supremacy"],
-        "image": "https://picsum.photos/seed/mantisshrimp/400/400"
+        "unique_traits": [
+            "fastest punch in nature",
+            "incredible vision",
+            "cavitation bubbles"
+        ],
+        "special_abilities": [
+            "Sonic Punch",
+            "Visual Supremacy"
+        ],
+        "image": "https://pngimg.com/uploads/mantis_shrimp/mantis_shrimp_PNG.png"
     },
     {
         "name": "Cassowary",
@@ -605,20 +843,31 @@
         "lifespan_years": 40,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["fruits", "fungi", "insects"],
-        "attack": 86.40,
-        "defense": 74.80,
-        "agility": 72.50,
-        "intelligence": 58.90,
-        "stamina": 68.40,
-        "special_attack": 88.70,
-        "size_score": 43.20,
+        "diet": [
+            "fruits",
+            "fungi",
+            "insects"
+        ],
+        "attack": 86.4,
+        "defense": 74.8,
+        "agility": 72.5,
+        "intelligence": 58.9,
+        "stamina": 68.4,
+        "special_attack": 88.7,
+        "size_score": 43.2,
         "bite_force_psi": 0,
         "class": "Berserker",
         "type": "Bird",
-        "unique_traits": ["dagger-like claws", "most dangerous bird", "powerful kick"],
-        "special_abilities": ["Disemboweling Kick", "Charge Attack"],
-        "image": "https://picsum.photos/seed/cassowary/400/400"
+        "unique_traits": [
+            "dagger-like claws",
+            "most dangerous bird",
+            "powerful kick"
+        ],
+        "special_abilities": [
+            "Disemboweling Kick",
+            "Charge Attack"
+        ],
+        "image": "https://pngimg.com/uploads/cassowary/cassowary_PNG.png"
     },
     {
         "name": "King Cobra",
@@ -632,20 +881,30 @@
         "lifespan_years": 20,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["snakes", "lizards"],
-        "attack": 78.60,
-        "defense": 64.20,
-        "agility": 74.80,
-        "intelligence": 68.50,
-        "stamina": 71.30,
-        "special_attack": 94.50,
-        "size_score": 32.40,
+        "diet": [
+            "snakes",
+            "lizards"
+        ],
+        "attack": 78.6,
+        "defense": 64.2,
+        "agility": 74.8,
+        "intelligence": 68.5,
+        "stamina": 71.3,
+        "special_attack": 94.5,
+        "size_score": 32.4,
         "bite_force_psi": 0,
         "class": "Venomous Hunter",
         "type": "Reptile",
-        "unique_traits": ["longest venomous snake", "neurotoxic venom", "hood display"],
-        "special_abilities": ["Venom Strike", "Intimidation"],
-        "image": "https://picsum.photos/seed/kingcobra/400/400"
+        "unique_traits": [
+            "longest venomous snake",
+            "neurotoxic venom",
+            "hood display"
+        ],
+        "special_abilities": [
+            "Venom Strike",
+            "Intimidation"
+        ],
+        "image": "https://pngimg.com/uploads/king_cobra/king_cobra_PNG.png"
     },
     {
         "name": "Bald Eagle",
@@ -659,20 +918,31 @@
         "lifespan_years": 28,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["fish", "birds", "small mammals"],
-        "attack": 72.40,
-        "defense": 56.80,
-        "agility": 91.30,
-        "intelligence": 76.50,
-        "stamina": 74.90,
-        "special_attack": 78.60,
-        "size_score": 18.30,
+        "diet": [
+            "fish",
+            "birds",
+            "small mammals"
+        ],
+        "attack": 72.4,
+        "defense": 56.8,
+        "agility": 91.3,
+        "intelligence": 76.5,
+        "stamina": 74.9,
+        "special_attack": 78.6,
+        "size_score": 18.3,
         "bite_force_psi": 397,
         "class": "Sky Hunter",
         "type": "Bird",
-        "unique_traits": ["keen eyesight", "powerful talons", "opportunistic hunter"],
-        "special_abilities": ["Talon Grip", "Dive Strike"],
-        "image": "https://picsum.photos/seed/baldeagle/400/400"
+        "unique_traits": [
+            "keen eyesight",
+            "powerful talons",
+            "opportunistic hunter"
+        ],
+        "special_abilities": [
+            "Talon Grip",
+            "Dive Strike"
+        ],
+        "image": "https://pngimg.com/uploads/bald_eagle/bald_eagle_PNG.png"
     },
     {
         "name": "Harpy Eagle",
@@ -686,20 +956,31 @@
         "lifespan_years": 35,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["monkeys", "sloths", "birds"],
-        "attack": 81.70,
-        "defense": 68.40,
-        "agility": 87.50,
-        "intelligence": 78.90,
-        "stamina": 72.60,
-        "special_attack": 85.30,
-        "size_score": 22.40,
+        "diet": [
+            "monkeys",
+            "sloths",
+            "birds"
+        ],
+        "attack": 81.7,
+        "defense": 68.4,
+        "agility": 87.5,
+        "intelligence": 78.9,
+        "stamina": 72.6,
+        "special_attack": 85.3,
+        "size_score": 22.4,
         "bite_force_psi": 530,
         "class": "Sky Hunter",
         "type": "Bird",
-        "unique_traits": ["most powerful raptor", "massive talons", "canopy hunter"],
-        "special_abilities": ["Canopy Ambush", "Crushing Talons"],
-        "image": "https://picsum.photos/seed/harpyeagle/400/400"
+        "unique_traits": [
+            "most powerful raptor",
+            "massive talons",
+            "canopy hunter"
+        ],
+        "special_abilities": [
+            "Canopy Ambush",
+            "Crushing Talons"
+        ],
+        "image": "https://pngimg.com/uploads/harpy_eagle/harpy_eagle_PNG.png"
     },
     {
         "name": "Rhinoceros",
@@ -713,20 +994,30 @@
         "lifespan_years": 40,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["grass", "leaves"],
-        "attack": 87.90,
-        "defense": 94.50,
-        "agility": 34.60,
-        "intelligence": 54.30,
-        "stamina": 76.80,
-        "special_attack": 86.20,
-        "size_score": 90.40,
+        "diet": [
+            "grass",
+            "leaves"
+        ],
+        "attack": 87.9,
+        "defense": 94.5,
+        "agility": 34.6,
+        "intelligence": 54.3,
+        "stamina": 76.8,
+        "special_attack": 86.2,
+        "size_score": 90.4,
         "bite_force_psi": 0,
         "class": "Tank",
         "type": "Mammal",
-        "unique_traits": ["armored hide", "powerful horn", "poor eyesight"],
-        "special_abilities": ["Horn Impale", "Unstoppable Charge"],
-        "image": "https://picsum.photos/seed/rhino/400/400"
+        "unique_traits": [
+            "armored hide",
+            "powerful horn",
+            "poor eyesight"
+        ],
+        "special_abilities": [
+            "Horn Impale",
+            "Unstoppable Charge"
+        ],
+        "image": "https://pngimg.com/uploads/rhinoceros/rhinoceros_PNG.png"
     },
     {
         "name": "Moose",
@@ -740,20 +1031,30 @@
         "lifespan_years": 20,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["plants", "aquatic vegetation"],
-        "attack": 82.50,
-        "defense": 78.60,
-        "agility": 48.90,
-        "intelligence": 62.40,
-        "stamina": 81.70,
-        "special_attack": 80.30,
-        "size_score": 82.30,
+        "diet": [
+            "plants",
+            "aquatic vegetation"
+        ],
+        "attack": 82.5,
+        "defense": 78.6,
+        "agility": 48.9,
+        "intelligence": 62.4,
+        "stamina": 81.7,
+        "special_attack": 80.3,
+        "size_score": 82.3,
         "bite_force_psi": 0,
         "class": "Bruiser",
         "type": "Mammal",
-        "unique_traits": ["largest deer", "powerful antlers", "aggressive during rut"],
-        "special_abilities": ["Antler Bash", "Trampling Hooves"],
-        "image": "https://picsum.photos/seed/moose/400/400"
+        "unique_traits": [
+            "largest deer",
+            "powerful antlers",
+            "aggressive during rut"
+        ],
+        "special_abilities": [
+            "Antler Bash",
+            "Trampling Hooves"
+        ],
+        "image": "https://pngimg.com/uploads/moose/moose_PNG.png"
     },
     {
         "name": "Gray Wolf",
@@ -763,24 +1064,35 @@
         "weight_kg": 45,
         "height_cm": 85,
         "length_cm": 160,
-        "speed_mps": 20.00,
+        "speed_mps": 20.0,
         "lifespan_years": 13,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["deer", "elk", "moose"],
-        "attack": 76.80,
-        "defense": 64.50,
-        "agility": 78.40,
-        "intelligence": 84.60,
-        "stamina": 89.50,
-        "special_attack": 79.20,
-        "size_score": 35.70,
+        "diet": [
+            "deer",
+            "elk",
+            "moose"
+        ],
+        "attack": 76.8,
+        "defense": 64.5,
+        "agility": 78.4,
+        "intelligence": 84.6,
+        "stamina": 89.5,
+        "special_attack": 79.2,
+        "size_score": 35.7,
         "bite_force_psi": 406,
         "class": "Pack Hunter",
         "type": "Mammal",
-        "unique_traits": ["pack coordination", "exceptional stamina", "strategic hunting"],
-        "special_abilities": ["Pack Tactics", "Endurance Hunt"],
-        "image": "https://picsum.photos/seed/graywolf/400/400"
+        "unique_traits": [
+            "pack coordination",
+            "exceptional stamina",
+            "strategic hunting"
+        ],
+        "special_abilities": [
+            "Pack Tactics",
+            "Endurance Hunt"
+        ],
+        "image": "https://pngimg.com/uploads/gray_wolf/gray_wolf_PNG.png"
     },
     {
         "name": "Hyena",
@@ -794,20 +1106,30 @@
         "lifespan_years": 25,
         "isNocturnal": true,
         "isSocial": true,
-        "diet": ["mammals", "carrion"],
-        "attack": 81.40,
-        "defense": 72.60,
-        "agility": 71.30,
-        "intelligence": 79.50,
-        "stamina": 87.80,
-        "special_attack": 83.70,
-        "size_score": 44.80,
+        "diet": [
+            "mammals",
+            "carrion"
+        ],
+        "attack": 81.4,
+        "defense": 72.6,
+        "agility": 71.3,
+        "intelligence": 79.5,
+        "stamina": 87.8,
+        "special_attack": 83.7,
+        "size_score": 44.8,
         "bite_force_psi": 1100,
         "class": "Scavenger",
         "type": "Mammal",
-        "unique_traits": ["powerful bite", "matriarchal society", "bone-crushing jaws"],
-        "special_abilities": ["Bone Crusher", "Mob Tactics"],
-        "image": "https://picsum.photos/seed/hyena/400/400"
+        "unique_traits": [
+            "powerful bite",
+            "matriarchal society",
+            "bone-crushing jaws"
+        ],
+        "special_abilities": [
+            "Bone Crusher",
+            "Mob Tactics"
+        ],
+        "image": "https://pngimg.com/uploads/hyena/hyena_PNG.png"
     },
     {
         "name": "Cougar",
@@ -821,20 +1143,31 @@
         "lifespan_years": 13,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["deer", "elk", "small mammals"],
-        "attack": 82.70,
-        "defense": 66.80,
-        "agility": 86.50,
-        "intelligence": 74.30,
-        "stamina": 78.90,
-        "special_attack": 81.60,
-        "size_score": 45.20,
+        "diet": [
+            "deer",
+            "elk",
+            "small mammals"
+        ],
+        "attack": 82.7,
+        "defense": 66.8,
+        "agility": 86.5,
+        "intelligence": 74.3,
+        "stamina": 78.9,
+        "special_attack": 81.6,
+        "size_score": 45.2,
         "bite_force_psi": 350,
         "class": "Ambush Predator",
         "type": "Mammal",
-        "unique_traits": ["powerful jumper", "adaptable habitat", "solitary hunter"],
-        "special_abilities": ["Pounce Attack", "Mountain Agility"],
-        "image": "https://picsum.photos/seed/cougar/400/400"
+        "unique_traits": [
+            "powerful jumper",
+            "adaptable habitat",
+            "solitary hunter"
+        ],
+        "special_abilities": [
+            "Pounce Attack",
+            "Mountain Agility"
+        ],
+        "image": "https://pngimg.com/uploads/cougar/cougar_PNG.png"
     },
     {
         "name": "Lynx",
@@ -848,20 +1181,31 @@
         "lifespan_years": 17,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["hares", "rodents", "deer"],
-        "attack": 74.50,
-        "defense": 62.30,
-        "agility": 84.70,
-        "intelligence": 71.80,
-        "stamina": 73.40,
-        "special_attack": 76.90,
-        "size_score": 28.60,
+        "diet": [
+            "hares",
+            "rodents",
+            "deer"
+        ],
+        "attack": 74.5,
+        "defense": 62.3,
+        "agility": 84.7,
+        "intelligence": 71.8,
+        "stamina": 73.4,
+        "special_attack": 76.9,
+        "size_score": 28.6,
         "bite_force_psi": 284,
         "class": "Ambush Predator",
         "type": "Mammal",
-        "unique_traits": ["tufted ears", "excellent hearing", "snow adaptation"],
-        "special_abilities": ["Silent Stalk", "Winter Hunter"],
-        "image": "https://picsum.photos/seed/lynx/400/400"
+        "unique_traits": [
+            "tufted ears",
+            "excellent hearing",
+            "snow adaptation"
+        ],
+        "special_abilities": [
+            "Silent Stalk",
+            "Winter Hunter"
+        ],
+        "image": "https://pngimg.com/uploads/lynx/lynx_PNG.png"
     },
     {
         "name": "Snow Leopard",
@@ -875,20 +1219,31 @@
         "lifespan_years": 18,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["sheep", "ibex", "marmots"],
-        "attack": 79.60,
-        "defense": 68.70,
-        "agility": 92.30,
-        "intelligence": 73.50,
-        "stamina": 86.40,
-        "special_attack": 81.80,
-        "size_score": 37.40,
+        "diet": [
+            "sheep",
+            "ibex",
+            "marmots"
+        ],
+        "attack": 79.6,
+        "defense": 68.7,
+        "agility": 92.3,
+        "intelligence": 73.5,
+        "stamina": 86.4,
+        "special_attack": 81.8,
+        "size_score": 37.4,
         "bite_force_psi": 380,
         "class": "Mountain Hunter",
         "type": "Mammal",
-        "unique_traits": ["exceptional climber", "thick fur", "long tail for balance"],
-        "special_abilities": ["Mountain Leap", "Alpine Stalker"],
-        "image": "https://picsum.photos/seed/snowleopard/400/400"
+        "unique_traits": [
+            "exceptional climber",
+            "thick fur",
+            "long tail for balance"
+        ],
+        "special_abilities": [
+            "Mountain Leap",
+            "Alpine Stalker"
+        ],
+        "image": "https://pngimg.com/uploads/snow_leopard/snow_leopard_PNG.png"
     },
     {
         "name": "Walrus",
@@ -902,20 +1257,31 @@
         "lifespan_years": 40,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["clams", "mussels", "fish"],
-        "attack": 80.50,
-        "defense": 86.70,
-        "agility": 38.60,
-        "intelligence": 68.90,
-        "stamina": 74.50,
-        "special_attack": 84.30,
-        "size_score": 88.40,
+        "diet": [
+            "clams",
+            "mussels",
+            "fish"
+        ],
+        "attack": 80.5,
+        "defense": 86.7,
+        "agility": 38.6,
+        "intelligence": 68.9,
+        "stamina": 74.5,
+        "special_attack": 84.3,
+        "size_score": 88.4,
         "bite_force_psi": 0,
         "class": "Tank",
         "type": "Mammal",
-        "unique_traits": ["massive tusks", "thick blubber", "social hauling"],
-        "special_abilities": ["Tusk Gore", "Blubber Shield"],
-        "image": "https://picsum.photos/seed/walrus/400/400"
+        "unique_traits": [
+            "massive tusks",
+            "thick blubber",
+            "social hauling"
+        ],
+        "special_abilities": [
+            "Tusk Gore",
+            "Blubber Shield"
+        ],
+        "image": "https://pngimg.com/uploads/walrus/walrus_PNG.png"
     },
     {
         "name": "Box Jellyfish",
@@ -929,20 +1295,30 @@
         "lifespan_years": 1,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["fish", "shrimp"],
-        "attack": 56.30,
-        "defense": 12.40,
-        "agility": 62.80,
-        "intelligence": 18.50,
-        "stamina": 48.60,
-        "special_attack": 100.00,
-        "size_score": 14.20,
+        "diet": [
+            "fish",
+            "shrimp"
+        ],
+        "attack": 56.3,
+        "defense": 12.4,
+        "agility": 62.8,
+        "intelligence": 18.5,
+        "stamina": 48.6,
+        "special_attack": 100.0,
+        "size_score": 14.2,
         "bite_force_psi": 0,
         "class": "Venomous",
         "type": "Cnidarian",
-        "unique_traits": ["most venomous creature", "nearly transparent", "complex eyes"],
-        "special_abilities": ["Lethal Sting", "Invisibility"],
-        "image": "https://picsum.photos/seed/boxjellyfish/400/400"
+        "unique_traits": [
+            "most venomous creature",
+            "nearly transparent",
+            "complex eyes"
+        ],
+        "special_abilities": [
+            "Lethal Sting",
+            "Invisibility"
+        ],
+        "image": "https://pngimg.com/uploads/box_jellyfish/box_jellyfish_PNG.png"
     },
     {
         "name": "Blue Whale",
@@ -956,20 +1332,29 @@
         "lifespan_years": 90,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["krill"],
-        "attack": 78.60,
-        "defense": 95.80,
-        "agility": 42.30,
-        "intelligence": 82.40,
-        "stamina": 94.50,
-        "special_attack": 88.70,
-        "size_score": 100.00,
+        "diet": [
+            "krill"
+        ],
+        "attack": 78.6,
+        "defense": 95.8,
+        "agility": 42.3,
+        "intelligence": 82.4,
+        "stamina": 94.5,
+        "special_attack": 88.7,
+        "size_score": 100.0,
         "bite_force_psi": 0,
         "class": "Titan",
         "type": "Mammal",
-        "unique_traits": ["largest animal ever", "loudest animal", "massive heart"],
-        "special_abilities": ["Sonic Boom", "Tidal Force"],
-        "image": "https://picsum.photos/seed/bluewhale/400/400"
+        "unique_traits": [
+            "largest animal ever",
+            "loudest animal",
+            "massive heart"
+        ],
+        "special_abilities": [
+            "Sonic Boom",
+            "Tidal Force"
+        ],
+        "image": "https://pngimg.com/uploads/blue_whale/blue_whale_PNG.png"
     },
     {
         "name": "Electric Eel",
@@ -983,20 +1368,31 @@
         "lifespan_years": 15,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["fish", "amphibians", "birds"],
-        "attack": 72.50,
-        "defense": 58.60,
-        "agility": 54.70,
-        "intelligence": 52.30,
-        "stamina": 66.80,
-        "special_attack": 97.40,
-        "size_score": 26.50,
+        "diet": [
+            "fish",
+            "amphibians",
+            "birds"
+        ],
+        "attack": 72.5,
+        "defense": 58.6,
+        "agility": 54.7,
+        "intelligence": 52.3,
+        "stamina": 66.8,
+        "special_attack": 97.4,
+        "size_score": 26.5,
         "bite_force_psi": 0,
         "class": "Electric",
         "type": "Fish",
-        "unique_traits": ["generates 860 volts", "electroreception", "air breathing"],
-        "special_abilities": ["Electric Shock", "Stun Pulse"],
-        "image": "https://picsum.photos/seed/electriceel/400/400"
+        "unique_traits": [
+            "generates 860 volts",
+            "electroreception",
+            "air breathing"
+        ],
+        "special_abilities": [
+            "Electric Shock",
+            "Stun Pulse"
+        ],
+        "image": "https://pngimg.com/uploads/electric_eel/electric_eel_PNG.png"
     },
     {
         "name": "Octopus",
@@ -1010,20 +1406,31 @@
         "lifespan_years": 2,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["crabs", "mollusks", "fish"],
-        "attack": 68.40,
-        "defense": 54.70,
-        "agility": 88.90,
-        "intelligence": 91.50,
-        "stamina": 56.80,
-        "special_attack": 76.50,
-        "size_score": 18.70,
+        "diet": [
+            "crabs",
+            "mollusks",
+            "fish"
+        ],
+        "attack": 68.4,
+        "defense": 54.7,
+        "agility": 88.9,
+        "intelligence": 91.5,
+        "stamina": 56.8,
+        "special_attack": 76.5,
+        "size_score": 18.7,
         "bite_force_psi": 0,
         "class": "Intelligent Striker",
         "type": "Cephalopod",
-        "unique_traits": ["camouflage master", "problem-solving", "eight arms"],
-        "special_abilities": ["Ink Cloud", "Camouflage"],
-        "image": "https://picsum.photos/seed/octopus/400/400"
+        "unique_traits": [
+            "camouflage master",
+            "problem-solving",
+            "eight arms"
+        ],
+        "special_abilities": [
+            "Ink Cloud",
+            "Camouflage"
+        ],
+        "image": "https://pngimg.com/uploads/octopus/octopus_PNG.png"
     },
     {
         "name": "Bison",
@@ -1037,20 +1444,30 @@
         "lifespan_years": 20,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass", "sedges"],
-        "attack": 84.70,
-        "defense": 83.50,
-        "agility": 52.60,
-        "intelligence": 64.20,
-        "stamina": 82.40,
-        "special_attack": 83.80,
-        "size_score": 86.30,
+        "diet": [
+            "grass",
+            "sedges"
+        ],
+        "attack": 84.7,
+        "defense": 83.5,
+        "agility": 52.6,
+        "intelligence": 64.2,
+        "stamina": 82.4,
+        "special_attack": 83.8,
+        "size_score": 86.3,
         "bite_force_psi": 0,
         "class": "Tank",
         "type": "Mammal",
-        "unique_traits": ["massive head", "herd stampede", "thick skull"],
-        "special_abilities": ["Herd Charge", "Head Butt"],
-        "image": "https://picsum.photos/seed/bison/400/400"
+        "unique_traits": [
+            "massive head",
+            "herd stampede",
+            "thick skull"
+        ],
+        "special_abilities": [
+            "Herd Charge",
+            "Head Butt"
+        ],
+        "image": "https://pngimg.com/uploads/bison/bison_PNG.png"
     },
     {
         "name": "Wild Boar",
@@ -1064,20 +1481,31 @@
         "lifespan_years": 15,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["roots", "insects", "small animals"],
-        "attack": 76.50,
-        "defense": 72.80,
-        "agility": 64.30,
-        "intelligence": 68.90,
-        "stamina": 78.60,
-        "special_attack": 74.20,
-        "size_score": 48.50,
+        "diet": [
+            "roots",
+            "insects",
+            "small animals"
+        ],
+        "attack": 76.5,
+        "defense": 72.8,
+        "agility": 64.3,
+        "intelligence": 68.9,
+        "stamina": 78.6,
+        "special_attack": 74.2,
+        "size_score": 48.5,
         "bite_force_psi": 230,
         "class": "Bruiser",
         "type": "Mammal",
-        "unique_traits": ["aggressive when cornered", "sharp tusks", "thick hide"],
-        "special_abilities": ["Tusk Slash", "Charge"],
-        "image": "https://picsum.photos/seed/wildboar/400/400"
+        "unique_traits": [
+            "aggressive when cornered",
+            "sharp tusks",
+            "thick hide"
+        ],
+        "special_abilities": [
+            "Tusk Slash",
+            "Charge"
+        ],
+        "image": "https://pngimg.com/uploads/wild_boar/wild_boar_PNG.png"
     },
     {
         "name": "Alligator",
@@ -1091,20 +1519,31 @@
         "lifespan_years": 50,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["fish", "birds", "mammals"],
-        "attack": 88.50,
-        "defense": 86.40,
-        "agility": 36.70,
-        "intelligence": 56.80,
-        "stamina": 81.20,
-        "special_attack": 91.30,
-        "size_score": 73.60,
+        "diet": [
+            "fish",
+            "birds",
+            "mammals"
+        ],
+        "attack": 88.5,
+        "defense": 86.4,
+        "agility": 36.7,
+        "intelligence": 56.8,
+        "stamina": 81.2,
+        "special_attack": 91.3,
+        "size_score": 73.6,
         "bite_force_psi": 2125,
         "class": "Ambush Predator",
         "type": "Reptile",
-        "unique_traits": ["powerful bite", "armored body", "death roll"],
-        "special_abilities": ["Death Roll", "Underwater Ambush"],
-        "image": "https://picsum.photos/seed/alligator/400/400"
+        "unique_traits": [
+            "powerful bite",
+            "armored body",
+            "death roll"
+        ],
+        "special_abilities": [
+            "Death Roll",
+            "Underwater Ambush"
+        ],
+        "image": "https://pngimg.com/uploads/alligator/alligator_PNG.png"
     },
     {
         "name": "Python",
@@ -1118,20 +1557,30 @@
         "lifespan_years": 25,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["mammals", "birds"],
-        "attack": 76.80,
-        "defense": 69.50,
-        "agility": 48.60,
-        "intelligence": 52.40,
-        "stamina": 84.70,
-        "special_attack": 83.90,
-        "size_score": 48.20,
+        "diet": [
+            "mammals",
+            "birds"
+        ],
+        "attack": 76.8,
+        "defense": 69.5,
+        "agility": 48.6,
+        "intelligence": 52.4,
+        "stamina": 84.7,
+        "special_attack": 83.9,
+        "size_score": 48.2,
         "bite_force_psi": 200,
         "class": "Constrictor",
         "type": "Reptile",
-        "unique_traits": ["longest snake", "heat-sensing pits", "powerful constriction"],
-        "special_abilities": ["Constrict", "Thermal Vision"],
-        "image": "https://picsum.photos/seed/python/400/400"
+        "unique_traits": [
+            "longest snake",
+            "heat-sensing pits",
+            "powerful constriction"
+        ],
+        "special_abilities": [
+            "Constrict",
+            "Thermal Vision"
+        ],
+        "image": "https://pngimg.com/uploads/python/python_PNG.png"
     },
     {
         "name": "Secretary Bird",
@@ -1145,20 +1594,31 @@
         "lifespan_years": 15,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["snakes", "rodents", "insects"],
-        "attack": 78.90,
-        "defense": 64.50,
-        "agility": 76.80,
-        "intelligence": 69.70,
-        "stamina": 74.30,
-        "special_attack": 85.60,
-        "size_score": 21.30,
+        "diet": [
+            "snakes",
+            "rodents",
+            "insects"
+        ],
+        "attack": 78.9,
+        "defense": 64.5,
+        "agility": 76.8,
+        "intelligence": 69.7,
+        "stamina": 74.3,
+        "special_attack": 85.6,
+        "size_score": 21.3,
         "bite_force_psi": 195,
         "class": "Striker",
         "type": "Bird",
-        "unique_traits": ["stomps snakes to death", "powerful kicks", "terrestrial raptor"],
-        "special_abilities": ["Stomp Kill", "Serpent Hunter"],
-        "image": "https://picsum.photos/seed/secretarybird/400/400"
+        "unique_traits": [
+            "stomps snakes to death",
+            "powerful kicks",
+            "terrestrial raptor"
+        ],
+        "special_abilities": [
+            "Stomp Kill",
+            "Serpent Hunter"
+        ],
+        "image": "https://pngimg.com/uploads/secretary_bird/secretary_bird_PNG.png"
     },
     {
         "name": "Wolverine",
@@ -1172,20 +1632,31 @@
         "lifespan_years": 13,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["caribou", "rodents", "carrion"],
-        "attack": 76.80,
-        "defense": 79.60,
-        "agility": 71.40,
-        "intelligence": 72.50,
-        "stamina": 88.90,
-        "special_attack": 78.40,
-        "size_score": 23.60,
+        "diet": [
+            "caribou",
+            "rodents",
+            "carrion"
+        ],
+        "attack": 76.8,
+        "defense": 79.6,
+        "agility": 71.4,
+        "intelligence": 72.5,
+        "stamina": 88.9,
+        "special_attack": 78.4,
+        "size_score": 23.6,
         "bite_force_psi": 224,
         "class": "Berserker",
         "type": "Mammal",
-        "unique_traits": ["fights above weight class", "powerful jaws", "stocky build"],
-        "special_abilities": ["Berserker Bite", "Tenacity"],
-        "image": "https://picsum.photos/seed/wolverine2/400/400"
+        "unique_traits": [
+            "fights above weight class",
+            "powerful jaws",
+            "stocky build"
+        ],
+        "special_abilities": [
+            "Berserker Bite",
+            "Tenacity"
+        ],
+        "image": "https://pngimg.com/uploads/wolverine/wolverine_PNG.png"
     },
     {
         "name": "Sloth Bear",
@@ -1199,20 +1670,31 @@
         "lifespan_years": 25,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["termites", "ants", "fruits"],
-        "attack": 78.50,
-        "defense": 74.60,
-        "agility": 52.30,
-        "intelligence": 66.80,
-        "stamina": 72.40,
-        "special_attack": 76.90,
-        "size_score": 54.70,
+        "diet": [
+            "termites",
+            "ants",
+            "fruits"
+        ],
+        "attack": 78.5,
+        "defense": 74.6,
+        "agility": 52.3,
+        "intelligence": 66.8,
+        "stamina": 72.4,
+        "special_attack": 76.9,
+        "size_score": 54.7,
         "bite_force_psi": 900,
         "class": "Bruiser",
         "type": "Mammal",
-        "unique_traits": ["long claws", "aggressive", "specialized lips for insects"],
-        "special_abilities": ["Claw Swipe", "Ant Vacuum"],
-        "image": "https://picsum.photos/seed/slothbear/400/400"
+        "unique_traits": [
+            "long claws",
+            "aggressive",
+            "specialized lips for insects"
+        ],
+        "special_abilities": [
+            "Claw Swipe",
+            "Ant Vacuum"
+        ],
+        "image": "https://pngimg.com/uploads/sloth_bear/sloth_bear_PNG.png"
     },
     {
         "name": "Tasmanian Devil",
@@ -1226,20 +1708,30 @@
         "lifespan_years": 5,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["carrion", "small mammals"],
-        "attack": 72.40,
-        "defense": 68.90,
-        "agility": 64.50,
-        "intelligence": 58.70,
-        "stamina": 76.80,
-        "special_attack": 74.60,
-        "size_score": 16.80,
+        "diet": [
+            "carrion",
+            "small mammals"
+        ],
+        "attack": 72.4,
+        "defense": 68.9,
+        "agility": 64.5,
+        "intelligence": 58.7,
+        "stamina": 76.8,
+        "special_attack": 74.6,
+        "size_score": 16.8,
         "bite_force_psi": 418,
         "class": "Scavenger",
         "type": "Marsupial",
-        "unique_traits": ["strongest bite relative to size", "aggressive feeder", "bone-crushing jaws"],
-        "special_abilities": ["Bone Bite", "Ferocious Fury"],
-        "image": "https://picsum.photos/seed/tasmaniandevil/400/400"
+        "unique_traits": [
+            "strongest bite relative to size",
+            "aggressive feeder",
+            "bone-crushing jaws"
+        ],
+        "special_abilities": [
+            "Bone Bite",
+            "Ferocious Fury"
+        ],
+        "image": "https://pngimg.com/uploads/tasmanian_devil/tasmanian_devil_PNG.png"
     },
     {
         "name": "Shoebill",
@@ -1253,20 +1745,31 @@
         "lifespan_years": 35,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["fish", "frogs", "small crocodiles"],
-        "attack": 74.80,
-        "defense": 62.40,
-        "agility": 58.90,
-        "intelligence": 67.50,
-        "stamina": 64.30,
-        "special_attack": 81.70,
-        "size_score": 25.40,
+        "diet": [
+            "fish",
+            "frogs",
+            "small crocodiles"
+        ],
+        "attack": 74.8,
+        "defense": 62.4,
+        "agility": 58.9,
+        "intelligence": 67.5,
+        "stamina": 64.3,
+        "special_attack": 81.7,
+        "size_score": 25.4,
         "bite_force_psi": 450,
         "class": "Ambush Predator",
         "type": "Bird",
-        "unique_traits": ["massive bill", "patient hunter", "decapitates prey"],
-        "special_abilities": ["Bill Crush", "Patient Strike"],
-        "image": "https://picsum.photos/seed/shoebill/400/400"
+        "unique_traits": [
+            "massive bill",
+            "patient hunter",
+            "decapitates prey"
+        ],
+        "special_abilities": [
+            "Bill Crush",
+            "Patient Strike"
+        ],
+        "image": "https://pngimg.com/uploads/shoebill/shoebill_PNG.png"
     },
     {
         "name": "Kangaroo",
@@ -1280,20 +1783,30 @@
         "lifespan_years": 23,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass", "shrubs"],
-        "attack": 74.60,
-        "defense": 66.80,
-        "agility": 84.50,
-        "intelligence": 62.30,
-        "stamina": 86.70,
-        "special_attack": 78.40,
-        "size_score": 46.30,
+        "diet": [
+            "grass",
+            "shrubs"
+        ],
+        "attack": 74.6,
+        "defense": 66.8,
+        "agility": 84.5,
+        "intelligence": 62.3,
+        "stamina": 86.7,
+        "special_attack": 78.4,
+        "size_score": 46.3,
         "bite_force_psi": 0,
         "class": "Striker",
         "type": "Marsupial",
-        "unique_traits": ["powerful kick", "boxing behavior", "excellent jumper"],
-        "special_abilities": ["Kick Strike", "Bounding Escape"],
-        "image": "https://picsum.photos/seed/kangaroo/400/400"
+        "unique_traits": [
+            "powerful kick",
+            "boxing behavior",
+            "excellent jumper"
+        ],
+        "special_abilities": [
+            "Kick Strike",
+            "Bounding Escape"
+        ],
+        "image": "https://pngimg.com/uploads/kangaroo/kangaroo_PNG.png"
     },
     {
         "name": "Platypus",
@@ -1307,20 +1820,31 @@
         "lifespan_years": 17,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["insects", "worms", "shrimp"],
-        "attack": 58.60,
-        "defense": 48.70,
-        "agility": 72.40,
-        "intelligence": 68.90,
-        "stamina": 62.50,
-        "special_attack": 86.40,
-        "size_score": 10.30,
+        "diet": [
+            "insects",
+            "worms",
+            "shrimp"
+        ],
+        "attack": 58.6,
+        "defense": 48.7,
+        "agility": 72.4,
+        "intelligence": 68.9,
+        "stamina": 62.5,
+        "special_attack": 86.4,
+        "size_score": 10.3,
         "bite_force_psi": 0,
         "class": "Venomous",
         "type": "Mammal",
-        "unique_traits": ["venomous spur", "electroreception", "egg-laying mammal"],
-        "special_abilities": ["Venom Spur", "Electric Sense"],
-        "image": "https://picsum.photos/seed/platypus/400/400"
+        "unique_traits": [
+            "venomous spur",
+            "electroreception",
+            "egg-laying mammal"
+        ],
+        "special_abilities": [
+            "Venom Spur",
+            "Electric Sense"
+        ],
+        "image": "https://pngimg.com/uploads/platypus/platypus_PNG.png"
     },
     {
         "name": "Piranha",
@@ -1334,20 +1858,31 @@
         "lifespan_years": 10,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["fish", "meat", "carrion"],
-        "attack": 68.50,
-        "defense": 42.30,
-        "agility": 76.80,
-        "intelligence": 48.60,
-        "stamina": 58.90,
-        "special_attack": 74.20,
-        "size_score": 9.40,
+        "diet": [
+            "fish",
+            "meat",
+            "carrion"
+        ],
+        "attack": 68.5,
+        "defense": 42.3,
+        "agility": 76.8,
+        "intelligence": 48.6,
+        "stamina": 58.9,
+        "special_attack": 74.2,
+        "size_score": 9.4,
         "bite_force_psi": 72,
         "class": "Swarm Hunter",
         "type": "Fish",
-        "unique_traits": ["razor-sharp teeth", "feeding frenzy", "group coordination"],
-        "special_abilities": ["Feeding Frenzy", "Flesh Strip"],
-        "image": "https://picsum.photos/seed/piranha/400/400"
+        "unique_traits": [
+            "razor-sharp teeth",
+            "feeding frenzy",
+            "group coordination"
+        ],
+        "special_abilities": [
+            "Feeding Frenzy",
+            "Flesh Strip"
+        ],
+        "image": "https://pngimg.com/uploads/piranha/piranha_PNG.png"
     },
     {
         "name": "Porcupine",
@@ -1361,20 +1896,31 @@
         "lifespan_years": 15,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["roots", "bark", "fruits"],
-        "attack": 64.50,
-        "defense": 88.70,
-        "agility": 38.60,
-        "intelligence": 54.30,
-        "stamina": 52.40,
-        "special_attack": 82.50,
-        "size_score": 24.70,
+        "diet": [
+            "roots",
+            "bark",
+            "fruits"
+        ],
+        "attack": 64.5,
+        "defense": 88.7,
+        "agility": 38.6,
+        "intelligence": 54.3,
+        "stamina": 52.4,
+        "special_attack": 82.5,
+        "size_score": 24.7,
         "bite_force_psi": 0,
         "class": "Defender",
         "type": "Mammal",
-        "unique_traits": ["defensive quills", "backward attack", "warning rattle"],
-        "special_abilities": ["Quill Defense", "Reverse Charge"],
-        "image": "https://picsum.photos/seed/porcupine/400/400"
+        "unique_traits": [
+            "defensive quills",
+            "backward attack",
+            "warning rattle"
+        ],
+        "special_abilities": [
+            "Quill Defense",
+            "Reverse Charge"
+        ],
+        "image": "https://pngimg.com/uploads/porcupine/porcupine_PNG.png"
     },
     {
         "name": "Badger",
@@ -1388,20 +1934,31 @@
         "lifespan_years": 14,
         "isNocturnal": true,
         "isSocial": true,
-        "diet": ["worms", "insects", "small mammals"],
-        "attack": 68.90,
-        "defense": 76.40,
-        "agility": 62.50,
-        "intelligence": 69.80,
-        "stamina": 78.60,
-        "special_attack": 72.30,
-        "size_score": 22.40,
+        "diet": [
+            "worms",
+            "insects",
+            "small mammals"
+        ],
+        "attack": 68.9,
+        "defense": 76.4,
+        "agility": 62.5,
+        "intelligence": 69.8,
+        "stamina": 78.6,
+        "special_attack": 72.3,
+        "size_score": 22.4,
         "bite_force_psi": 108,
         "class": "Digger",
         "type": "Mammal",
-        "unique_traits": ["powerful digger", "thick skin", "strong jaws"],
-        "special_abilities": ["Claw Dig", "Defensive Stance"],
-        "image": "https://picsum.photos/seed/badger/400/400"
+        "unique_traits": [
+            "powerful digger",
+            "thick skin",
+            "strong jaws"
+        ],
+        "special_abilities": [
+            "Claw Dig",
+            "Defensive Stance"
+        ],
+        "image": "https://pngimg.com/uploads/badger/badger_PNG.png"
     },
     {
         "name": "Anteater",
@@ -1415,20 +1972,30 @@
         "lifespan_years": 14,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["ants", "termites"],
-        "attack": 72.80,
-        "defense": 68.50,
-        "agility": 42.60,
-        "intelligence": 54.70,
-        "stamina": 64.30,
-        "special_attack": 70.40,
-        "size_score": 34.20,
+        "diet": [
+            "ants",
+            "termites"
+        ],
+        "attack": 72.8,
+        "defense": 68.5,
+        "agility": 42.6,
+        "intelligence": 54.7,
+        "stamina": 64.3,
+        "special_attack": 70.4,
+        "size_score": 34.2,
         "bite_force_psi": 0,
         "class": "Specialist",
         "type": "Mammal",
-        "unique_traits": ["long claws", "sticky tongue", "strong forearms"],
-        "special_abilities": ["Claw Slash", "Bear Hug"],
-        "image": "https://picsum.photos/seed/anteater/400/400"
+        "unique_traits": [
+            "long claws",
+            "sticky tongue",
+            "strong forearms"
+        ],
+        "special_abilities": [
+            "Claw Slash",
+            "Bear Hug"
+        ],
+        "image": "https://pngimg.com/uploads/anteater/anteater_PNG.png"
     },
     {
         "name": "Pangolin",
@@ -1442,20 +2009,30 @@
         "lifespan_years": 13,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["ants", "termites"],
-        "attack": 42.30,
-        "defense": 92.60,
-        "agility": 38.50,
-        "intelligence": 48.60,
-        "stamina": 54.70,
-        "special_attack": 38.90,
-        "size_score": 18.40,
+        "diet": [
+            "ants",
+            "termites"
+        ],
+        "attack": 42.3,
+        "defense": 92.6,
+        "agility": 38.5,
+        "intelligence": 48.6,
+        "stamina": 54.7,
+        "special_attack": 38.9,
+        "size_score": 18.4,
         "bite_force_psi": 0,
         "class": "Defender",
         "type": "Mammal",
-        "unique_traits": ["armored scales", "rolls into ball", "most trafficked animal"],
-        "special_abilities": ["Scale Armor", "Defensive Ball"],
-        "image": "https://picsum.photos/seed/pangolin/400/400"
+        "unique_traits": [
+            "armored scales",
+            "rolls into ball",
+            "most trafficked animal"
+        ],
+        "special_abilities": [
+            "Scale Armor",
+            "Defensive Ball"
+        ],
+        "image": "https://pngimg.com/uploads/pangolin/pangolin_PNG.png"
     },
     {
         "name": "Armadillo",
@@ -1469,20 +2046,31 @@
         "lifespan_years": 12,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["insects", "grubs", "worms"],
-        "attack": 46.80,
-        "defense": 84.50,
-        "agility": 48.60,
-        "intelligence": 52.30,
-        "stamina": 62.40,
-        "special_attack": 44.70,
-        "size_score": 17.30,
+        "diet": [
+            "insects",
+            "grubs",
+            "worms"
+        ],
+        "attack": 46.8,
+        "defense": 84.5,
+        "agility": 48.6,
+        "intelligence": 52.3,
+        "stamina": 62.4,
+        "special_attack": 44.7,
+        "size_score": 17.3,
         "bite_force_psi": 0,
         "class": "Defender",
         "type": "Mammal",
-        "unique_traits": ["armored shell", "excellent digger", "jumps when startled"],
-        "special_abilities": ["Shell Defense", "Burrow Escape"],
-        "image": "https://picsum.photos/seed/armadillo/400/400"
+        "unique_traits": [
+            "armored shell",
+            "excellent digger",
+            "jumps when startled"
+        ],
+        "special_abilities": [
+            "Shell Defense",
+            "Burrow Escape"
+        ],
+        "image": "https://pngimg.com/uploads/armadillo/armadillo_PNG.png"
     },
     {
         "name": "Sloth",
@@ -1496,20 +2084,31 @@
         "lifespan_years": 30,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["leaves", "shoots", "fruits"],
-        "attack": 52.40,
-        "defense": 58.60,
-        "agility": 18.50,
-        "intelligence": 42.30,
-        "stamina": 38.90,
-        "special_attack": 64.70,
-        "size_score": 16.20,
+        "diet": [
+            "leaves",
+            "shoots",
+            "fruits"
+        ],
+        "attack": 52.4,
+        "defense": 58.6,
+        "agility": 18.5,
+        "intelligence": 42.3,
+        "stamina": 38.9,
+        "special_attack": 64.7,
+        "size_score": 16.2,
         "bite_force_psi": 0,
         "class": "Survivor",
         "type": "Mammal",
-        "unique_traits": ["slowest mammal", "algae camouflage", "low metabolism"],
-        "special_abilities": ["Stealth Blend", "Claw Defense"],
-        "image": "https://picsum.photos/seed/sloth/400/400"
+        "unique_traits": [
+            "slowest mammal",
+            "algae camouflage",
+            "low metabolism"
+        ],
+        "special_abilities": [
+            "Stealth Blend",
+            "Claw Defense"
+        ],
+        "image": "https://pngimg.com/uploads/sloth/sloth_PNG.png"
     },
     {
         "name": "Red Panda",
@@ -1523,20 +2122,31 @@
         "lifespan_years": 14,
         "isNocturnal": false,
         "isSocial": false,
-        "diet": ["bamboo", "fruits", "insects"],
-        "attack": 54.60,
-        "defense": 58.70,
-        "agility": 78.90,
-        "intelligence": 62.40,
-        "stamina": 64.50,
-        "special_attack": 52.80,
-        "size_score": 17.80,
+        "diet": [
+            "bamboo",
+            "fruits",
+            "insects"
+        ],
+        "attack": 54.6,
+        "defense": 58.7,
+        "agility": 78.9,
+        "intelligence": 62.4,
+        "stamina": 64.5,
+        "special_attack": 52.8,
+        "size_score": 17.8,
         "bite_force_psi": 0,
         "class": "Agile Climber",
         "type": "Mammal",
-        "unique_traits": ["excellent climber", "bamboo specialist", "false thumb"],
-        "special_abilities": ["Tree Escape", "Agile Dodge"],
-        "image": "https://picsum.photos/seed/redpanda/400/400"
+        "unique_traits": [
+            "excellent climber",
+            "bamboo specialist",
+            "false thumb"
+        ],
+        "special_abilities": [
+            "Tree Escape",
+            "Agile Dodge"
+        ],
+        "image": "https://pngimg.com/uploads/red_panda/red_panda_PNG.png"
     },
     {
         "name": "Meerkat",
@@ -1550,20 +2160,31 @@
         "lifespan_years": 12,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["insects", "lizards", "scorpions"],
-        "attack": 52.30,
-        "defense": 48.60,
-        "agility": 74.50,
-        "intelligence": 76.80,
-        "stamina": 68.40,
-        "special_attack": 58.70,
-        "size_score": 8.60,
+        "diet": [
+            "insects",
+            "lizards",
+            "scorpions"
+        ],
+        "attack": 52.3,
+        "defense": 48.6,
+        "agility": 74.5,
+        "intelligence": 76.8,
+        "stamina": 68.4,
+        "special_attack": 58.7,
+        "size_score": 8.6,
         "bite_force_psi": 0,
         "class": "Scout",
         "type": "Mammal",
-        "unique_traits": ["cooperative society", "sentinel behavior", "immune to venom"],
-        "special_abilities": ["Group Alert", "Venom Immunity"],
-        "image": "https://picsum.photos/seed/meerkat/400/400"
+        "unique_traits": [
+            "cooperative society",
+            "sentinel behavior",
+            "immune to venom"
+        ],
+        "special_abilities": [
+            "Group Alert",
+            "Venom Immunity"
+        ],
+        "image": "https://pngimg.com/uploads/meerkat/meerkat_PNG.png"
     },
     {
         "name": "Mongoose",
@@ -1577,20 +2198,31 @@
         "lifespan_years": 10,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["snakes", "insects", "rodents"],
-        "attack": 64.80,
-        "defense": 62.50,
-        "agility": 86.70,
-        "intelligence": 72.40,
-        "stamina": 74.60,
-        "special_attack": 78.90,
-        "size_score": 12.30,
+        "diet": [
+            "snakes",
+            "insects",
+            "rodents"
+        ],
+        "attack": 64.8,
+        "defense": 62.5,
+        "agility": 86.7,
+        "intelligence": 72.4,
+        "stamina": 74.6,
+        "special_attack": 78.9,
+        "size_score": 12.3,
         "bite_force_psi": 0,
         "class": "Serpent Killer",
         "type": "Mammal",
-        "unique_traits": ["snake hunter", "quick reflexes", "venom resistance"],
-        "special_abilities": ["Snake Dodge", "Venom Resist"],
-        "image": "https://picsum.photos/seed/mongoose/400/400"
+        "unique_traits": [
+            "snake hunter",
+            "quick reflexes",
+            "venom resistance"
+        ],
+        "special_abilities": [
+            "Snake Dodge",
+            "Venom Resist"
+        ],
+        "image": "https://pngimg.com/uploads/mongoose/mongoose_PNG.png"
     },
     {
         "name": "Raccoon",
@@ -1604,20 +2236,31 @@
         "lifespan_years": 5,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["fruits", "insects", "small animals"],
-        "attack": 58.60,
-        "defense": 54.70,
-        "agility": 76.80,
-        "intelligence": 84.50,
-        "stamina": 68.90,
-        "special_attack": 62.40,
-        "size_score": 19.60,
+        "diet": [
+            "fruits",
+            "insects",
+            "small animals"
+        ],
+        "attack": 58.6,
+        "defense": 54.7,
+        "agility": 76.8,
+        "intelligence": 84.5,
+        "stamina": 68.9,
+        "special_attack": 62.4,
+        "size_score": 19.6,
         "bite_force_psi": 162,
         "class": "Clever Scavenger",
         "type": "Mammal",
-        "unique_traits": ["dexterous hands", "problem-solving", "urban adaptation"],
-        "special_abilities": ["Tool Use", "Escape Artist"],
-        "image": "https://picsum.photos/seed/raccoon/400/400"
+        "unique_traits": [
+            "dexterous hands",
+            "problem-solving",
+            "urban adaptation"
+        ],
+        "special_abilities": [
+            "Tool Use",
+            "Escape Artist"
+        ],
+        "image": "https://pngimg.com/uploads/raccoon/raccoon_PNG.png"
     },
     {
         "name": "Opossum",
@@ -1631,20 +2274,31 @@
         "lifespan_years": 4,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["insects", "fruits", "carrion"],
-        "attack": 54.30,
-        "defense": 62.80,
-        "agility": 64.50,
-        "intelligence": 58.70,
-        "stamina": 62.40,
-        "special_attack": 68.90,
-        "size_score": 16.40,
+        "diet": [
+            "insects",
+            "fruits",
+            "carrion"
+        ],
+        "attack": 54.3,
+        "defense": 62.8,
+        "agility": 64.5,
+        "intelligence": 58.7,
+        "stamina": 62.4,
+        "special_attack": 68.9,
+        "size_score": 16.4,
         "bite_force_psi": 45,
         "class": "Survivor",
         "type": "Marsupial",
-        "unique_traits": ["plays dead", "immune to many venoms", "prehensile tail"],
-        "special_abilities": ["Play Dead", "Venom Immunity"],
-        "image": "https://picsum.photos/seed/opossum/400/400"
+        "unique_traits": [
+            "plays dead",
+            "immune to many venoms",
+            "prehensile tail"
+        ],
+        "special_abilities": [
+            "Play Dead",
+            "Venom Immunity"
+        ],
+        "image": "https://pngimg.com/uploads/opossum/opossum_PNG.png"
     },
     {
         "name": "Skunk",
@@ -1658,20 +2312,31 @@
         "lifespan_years": 7,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["insects", "grubs", "small mammals"],
-        "attack": 48.60,
-        "defense": 74.50,
-        "agility": 54.70,
-        "intelligence": 62.30,
-        "stamina": 58.90,
-        "special_attack": 94.80,
-        "size_score": 15.80,
+        "diet": [
+            "insects",
+            "grubs",
+            "small mammals"
+        ],
+        "attack": 48.6,
+        "defense": 74.5,
+        "agility": 54.7,
+        "intelligence": 62.3,
+        "stamina": 58.9,
+        "special_attack": 94.8,
+        "size_score": 15.8,
         "bite_force_psi": 0,
         "class": "Chemical Warfare",
         "type": "Mammal",
-        "unique_traits": ["spray defense", "warning coloration", "accurate aim"],
-        "special_abilities": ["Musk Spray", "Warning Display"],
-        "image": "https://picsum.photos/seed/skunk/400/400"
+        "unique_traits": [
+            "spray defense",
+            "warning coloration",
+            "accurate aim"
+        ],
+        "special_abilities": [
+            "Musk Spray",
+            "Warning Display"
+        ],
+        "image": "https://pngimg.com/uploads/skunk/skunk_PNG.png"
     },
     {
         "name": "Giraffe",
@@ -1685,20 +2350,30 @@
         "lifespan_years": 25,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["leaves", "fruits"],
-        "attack": 82.40,
-        "defense": 74.60,
-        "agility": 48.90,
-        "intelligence": 64.50,
-        "stamina": 72.80,
-        "special_attack": 84.70,
-        "size_score": 94.30,
+        "diet": [
+            "leaves",
+            "fruits"
+        ],
+        "attack": 82.4,
+        "defense": 74.6,
+        "agility": 48.9,
+        "intelligence": 64.5,
+        "stamina": 72.8,
+        "special_attack": 84.7,
+        "size_score": 94.3,
         "bite_force_psi": 0,
         "class": "Long Reach",
         "type": "Mammal",
-        "unique_traits": ["tallest animal", "powerful kick", "long neck for reach"],
-        "special_abilities": ["Knockout Kick", "Height Advantage"],
-        "image": "https://picsum.photos/seed/giraffe/400/400"
+        "unique_traits": [
+            "tallest animal",
+            "powerful kick",
+            "long neck for reach"
+        ],
+        "special_abilities": [
+            "Knockout Kick",
+            "Height Advantage"
+        ],
+        "image": "https://pngimg.com/uploads/giraffe/giraffe_PNG.png"
     },
     {
         "name": "Zebra",
@@ -1712,20 +2387,30 @@
         "lifespan_years": 25,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass", "shrubs"],
-        "attack": 72.50,
-        "defense": 68.40,
-        "agility": 74.80,
-        "intelligence": 62.30,
-        "stamina": 82.60,
-        "special_attack": 74.90,
-        "size_score": 58.70,
+        "diet": [
+            "grass",
+            "shrubs"
+        ],
+        "attack": 72.5,
+        "defense": 68.4,
+        "agility": 74.8,
+        "intelligence": 62.3,
+        "stamina": 82.6,
+        "special_attack": 74.9,
+        "size_score": 58.7,
         "bite_force_psi": 0,
         "class": "Runner",
         "type": "Mammal",
-        "unique_traits": ["powerful kick", "striped camouflage", "herd defense"],
-        "special_abilities": ["Back Kick", "Herd Confusion"],
-        "image": "https://picsum.photos/seed/zebra/400/400"
+        "unique_traits": [
+            "powerful kick",
+            "striped camouflage",
+            "herd defense"
+        ],
+        "special_abilities": [
+            "Back Kick",
+            "Herd Confusion"
+        ],
+        "image": "https://pngimg.com/uploads/zebra/zebra_PNG.png"
     },
     {
         "name": "Wildebeest",
@@ -1739,20 +2424,29 @@
         "lifespan_years": 20,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass"],
-        "attack": 74.60,
-        "defense": 72.80,
-        "agility": 68.50,
-        "intelligence": 58.90,
-        "stamina": 86.40,
-        "special_attack": 76.30,
-        "size_score": 54.30,
+        "diet": [
+            "grass"
+        ],
+        "attack": 74.6,
+        "defense": 72.8,
+        "agility": 68.5,
+        "intelligence": 58.9,
+        "stamina": 86.4,
+        "special_attack": 76.3,
+        "size_score": 54.3,
         "bite_force_psi": 0,
         "class": "Migrator",
         "type": "Mammal",
-        "unique_traits": ["mass migration", "curved horns", "endurance runner"],
-        "special_abilities": ["Stampede", "Head Butt"],
-        "image": "https://picsum.photos/seed/wildebeest/400/400"
+        "unique_traits": [
+            "mass migration",
+            "curved horns",
+            "endurance runner"
+        ],
+        "special_abilities": [
+            "Stampede",
+            "Head Butt"
+        ],
+        "image": "https://pngimg.com/uploads/wildebeest/wildebeest_PNG.png"
     },
     {
         "name": "Gazelle",
@@ -1766,20 +2460,30 @@
         "lifespan_years": 12,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass", "shoots"],
-        "attack": 52.40,
-        "defense": 48.60,
-        "agility": 94.50,
-        "intelligence": 64.30,
-        "stamina": 88.70,
-        "special_attack": 54.80,
-        "size_score": 29.40,
+        "diet": [
+            "grass",
+            "shoots"
+        ],
+        "attack": 52.4,
+        "defense": 48.6,
+        "agility": 94.5,
+        "intelligence": 64.3,
+        "stamina": 88.7,
+        "special_attack": 54.8,
+        "size_score": 29.4,
         "bite_force_psi": 0,
         "class": "Speed Demon",
         "type": "Mammal",
-        "unique_traits": ["incredible speed", "pronking behavior", "acute senses"],
-        "special_abilities": ["Evasive Dash", "Pronk Jump"],
-        "image": "https://picsum.photos/seed/gazelle/400/400"
+        "unique_traits": [
+            "incredible speed",
+            "pronking behavior",
+            "acute senses"
+        ],
+        "special_abilities": [
+            "Evasive Dash",
+            "Pronk Jump"
+        ],
+        "image": "https://pngimg.com/uploads/gazelle/gazelle_PNG.png"
     },
     {
         "name": "Impala",
@@ -1789,24 +2493,34 @@
         "weight_kg": 60,
         "height_cm": 90,
         "length_cm": 150,
-        "speed_mps": 25.00,
+        "speed_mps": 25.0,
         "lifespan_years": 15,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass", "leaves"],
-        "attack": 58.70,
-        "defense": 54.60,
-        "agility": 92.80,
-        "intelligence": 66.40,
-        "stamina": 84.50,
-        "special_attack": 62.30,
-        "size_score": 36.20,
+        "diet": [
+            "grass",
+            "leaves"
+        ],
+        "attack": 58.7,
+        "defense": 54.6,
+        "agility": 92.8,
+        "intelligence": 66.4,
+        "stamina": 84.5,
+        "special_attack": 62.3,
+        "size_score": 36.2,
         "bite_force_psi": 0,
         "class": "Jumper",
         "type": "Mammal",
-        "unique_traits": ["amazing jumper", "graceful leaper", "spiral horns"],
-        "special_abilities": ["High Jump", "Zigzag Escape"],
-        "image": "https://picsum.photos/seed/impala/400/400"
+        "unique_traits": [
+            "amazing jumper",
+            "graceful leaper",
+            "spiral horns"
+        ],
+        "special_abilities": [
+            "High Jump",
+            "Zigzag Escape"
+        ],
+        "image": "https://pngimg.com/uploads/impala/impala_PNG.png"
     },
     {
         "name": "Warthog",
@@ -1820,20 +2534,31 @@
         "lifespan_years": 15,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass", "roots", "berries"],
-        "attack": 72.40,
-        "defense": 68.90,
-        "agility": 62.50,
-        "intelligence": 64.70,
-        "stamina": 74.30,
-        "special_attack": 70.80,
-        "size_score": 42.60,
+        "diet": [
+            "grass",
+            "roots",
+            "berries"
+        ],
+        "attack": 72.4,
+        "defense": 68.9,
+        "agility": 62.5,
+        "intelligence": 64.7,
+        "stamina": 74.3,
+        "special_attack": 70.8,
+        "size_score": 42.6,
         "bite_force_psi": 0,
         "class": "Charger",
         "type": "Mammal",
-        "unique_traits": ["runs backwards into burrow", "sharp tusks", "fearless fighter"],
-        "special_abilities": ["Tusk Charge", "Burrow Retreat"],
-        "image": "https://picsum.photos/seed/warthog/400/400"
+        "unique_traits": [
+            "runs backwards into burrow",
+            "sharp tusks",
+            "fearless fighter"
+        ],
+        "special_abilities": [
+            "Tusk Charge",
+            "Burrow Retreat"
+        ],
+        "image": "https://pngimg.com/uploads/warthog/warthog_PNG.png"
     },
     {
         "name": "Ostrich",
@@ -1847,20 +2572,31 @@
         "lifespan_years": 40,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["plants", "seeds", "insects"],
-        "attack": 78.60,
-        "defense": 64.80,
-        "agility": 76.50,
-        "intelligence": 56.30,
-        "stamina": 86.70,
-        "special_attack": 82.40,
-        "size_score": 62.50,
+        "diet": [
+            "plants",
+            "seeds",
+            "insects"
+        ],
+        "attack": 78.6,
+        "defense": 64.8,
+        "agility": 76.5,
+        "intelligence": 56.3,
+        "stamina": 86.7,
+        "special_attack": 82.4,
+        "size_score": 62.5,
         "bite_force_psi": 0,
         "class": "Kicker",
         "type": "Bird",
-        "unique_traits": ["largest bird", "powerful legs", "fastest two-legged animal"],
-        "special_abilities": ["Lethal Kick", "Sprint Escape"],
-        "image": "https://picsum.photos/seed/ostrich/400/400"
+        "unique_traits": [
+            "largest bird",
+            "powerful legs",
+            "fastest two-legged animal"
+        ],
+        "special_abilities": [
+            "Lethal Kick",
+            "Sprint Escape"
+        ],
+        "image": "https://pngimg.com/uploads/ostrich/ostrich_PNG.png"
     },
     {
         "name": "Emu",
@@ -1874,20 +2610,31 @@
         "lifespan_years": 20,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["plants", "insects", "seeds"],
-        "attack": 72.50,
-        "defense": 62.80,
-        "agility": 74.60,
-        "intelligence": 58.40,
-        "stamina": 82.30,
-        "special_attack": 76.90,
-        "size_score": 48.20,
+        "diet": [
+            "plants",
+            "insects",
+            "seeds"
+        ],
+        "attack": 72.5,
+        "defense": 62.8,
+        "agility": 74.6,
+        "intelligence": 58.4,
+        "stamina": 82.3,
+        "special_attack": 76.9,
+        "size_score": 48.2,
         "bite_force_psi": 0,
         "class": "Runner",
         "type": "Bird",
-        "unique_traits": ["second largest bird", "strong legs", "curious nature"],
-        "special_abilities": ["Kick Strike", "Distance Runner"],
-        "image": "https://picsum.photos/seed/emu/400/400"
+        "unique_traits": [
+            "second largest bird",
+            "strong legs",
+            "curious nature"
+        ],
+        "special_abilities": [
+            "Kick Strike",
+            "Distance Runner"
+        ],
+        "image": "https://pngimg.com/uploads/emu/emu_PNG.png"
     },
     {
         "name": "Vulture",
@@ -1897,24 +2644,33 @@
         "weight_kg": 7,
         "height_cm": 100,
         "length_cm": 100,
-        "speed_mps": 20.00,
+        "speed_mps": 20.0,
         "lifespan_years": 30,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["carrion"],
-        "attack": 62.40,
-        "defense": 54.70,
-        "agility": 72.80,
-        "intelligence": 68.50,
-        "stamina": 91.30,
-        "special_attack": 58.60,
-        "size_score": 26.80,
+        "diet": [
+            "carrion"
+        ],
+        "attack": 62.4,
+        "defense": 54.7,
+        "agility": 72.8,
+        "intelligence": 68.5,
+        "stamina": 91.3,
+        "special_attack": 58.6,
+        "size_score": 26.8,
         "bite_force_psi": 0,
         "class": "Scavenger",
         "type": "Bird",
-        "unique_traits": ["strong stomach acid", "soaring flight", "group feeding"],
-        "special_abilities": ["Carrion Sense", "Thermal Soar"],
-        "image": "https://picsum.photos/seed/vulture/400/400"
+        "unique_traits": [
+            "strong stomach acid",
+            "soaring flight",
+            "group feeding"
+        ],
+        "special_abilities": [
+            "Carrion Sense",
+            "Thermal Soar"
+        ],
+        "image": "https://pngimg.com/uploads/vulture/vulture_PNG.png"
     },
     {
         "name": "Stork",
@@ -1928,20 +2684,31 @@
         "lifespan_years": 35,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["fish", "frogs", "insects"],
-        "attack": 64.50,
-        "defense": 52.30,
-        "agility": 68.70,
-        "intelligence": 64.80,
-        "stamina": 78.90,
-        "special_attack": 66.40,
-        "size_score": 22.70,
+        "diet": [
+            "fish",
+            "frogs",
+            "insects"
+        ],
+        "attack": 64.5,
+        "defense": 52.3,
+        "agility": 68.7,
+        "intelligence": 64.8,
+        "stamina": 78.9,
+        "special_attack": 66.4,
+        "size_score": 22.7,
         "bite_force_psi": 0,
         "class": "Wader",
         "type": "Bird",
-        "unique_traits": ["long migrations", "bill clattering", "opportunistic feeder"],
-        "special_abilities": ["Bill Strike", "Migration Stamina"],
-        "image": "https://picsum.photos/seed/stork/400/400"
+        "unique_traits": [
+            "long migrations",
+            "bill clattering",
+            "opportunistic feeder"
+        ],
+        "special_abilities": [
+            "Bill Strike",
+            "Migration Stamina"
+        ],
+        "image": "https://pngimg.com/uploads/stork/stork_PNG.png"
     },
     {
         "name": "Flamingo",
@@ -1955,20 +2722,30 @@
         "lifespan_years": 40,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["algae", "small crustaceans"],
-        "attack": 48.60,
-        "defense": 44.70,
-        "agility": 64.50,
-        "intelligence": 58.90,
-        "stamina": 74.30,
-        "special_attack": 42.80,
-        "size_score": 20.40,
+        "diet": [
+            "algae",
+            "small crustaceans"
+        ],
+        "attack": 48.6,
+        "defense": 44.7,
+        "agility": 64.5,
+        "intelligence": 58.9,
+        "stamina": 74.3,
+        "special_attack": 42.8,
+        "size_score": 20.4,
         "bite_force_psi": 0,
         "class": "Filter Feeder",
         "type": "Bird",
-        "unique_traits": ["filter feeding", "pink coloration", "synchronized dancing"],
-        "special_abilities": ["Group Defense", "Synchronized Movement"],
-        "image": "https://picsum.photos/seed/flamingo/400/400"
+        "unique_traits": [
+            "filter feeding",
+            "pink coloration",
+            "synchronized dancing"
+        ],
+        "special_abilities": [
+            "Group Defense",
+            "Synchronized Movement"
+        ],
+        "image": "https://pngimg.com/uploads/flamingo/flamingo_PNG.png"
     },
     {
         "name": "Pelican",
@@ -1982,20 +2759,29 @@
         "lifespan_years": 30,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["fish"],
-        "attack": 62.80,
-        "defense": 56.40,
-        "agility": 64.70,
-        "intelligence": 66.50,
-        "stamina": 82.40,
-        "special_attack": 68.90,
-        "size_score": 28.30,
+        "diet": [
+            "fish"
+        ],
+        "attack": 62.8,
+        "defense": 56.4,
+        "agility": 64.7,
+        "intelligence": 66.5,
+        "stamina": 82.4,
+        "special_attack": 68.9,
+        "size_score": 28.3,
         "bite_force_psi": 0,
         "class": "Fisher",
         "type": "Bird",
-        "unique_traits": ["large throat pouch", "plunge diving", "cooperative fishing"],
-        "special_abilities": ["Dive Bomb", "Scoop Net"],
-        "image": "https://picsum.photos/seed/pelican/400/400"
+        "unique_traits": [
+            "large throat pouch",
+            "plunge diving",
+            "cooperative fishing"
+        ],
+        "special_abilities": [
+            "Dive Bomb",
+            "Scoop Net"
+        ],
+        "image": "https://pngimg.com/uploads/pelican/pelican_PNG.png"
     },
     {
         "name": "Swan",
@@ -2009,20 +2795,30 @@
         "lifespan_years": 20,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["aquatic plants", "insects"],
-        "attack": 68.50,
-        "defense": 62.40,
-        "agility": 56.80,
-        "intelligence": 64.70,
-        "stamina": 76.90,
-        "special_attack": 72.30,
-        "size_score": 32.40,
+        "diet": [
+            "aquatic plants",
+            "insects"
+        ],
+        "attack": 68.5,
+        "defense": 62.4,
+        "agility": 56.8,
+        "intelligence": 64.7,
+        "stamina": 76.9,
+        "special_attack": 72.3,
+        "size_score": 32.4,
         "bite_force_psi": 0,
         "class": "Territorial",
         "type": "Bird",
-        "unique_traits": ["aggressive defense", "powerful wings", "graceful swimmer"],
-        "special_abilities": ["Wing Attack", "Territory Guard"],
-        "image": "https://picsum.photos/seed/swan/400/400"
+        "unique_traits": [
+            "aggressive defense",
+            "powerful wings",
+            "graceful swimmer"
+        ],
+        "special_abilities": [
+            "Wing Attack",
+            "Territory Guard"
+        ],
+        "image": "https://pngimg.com/uploads/swan/swan_PNG.png"
     },
     {
         "name": "Goose",
@@ -2036,20 +2832,31 @@
         "lifespan_years": 25,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass", "grains", "aquatic plants"],
-        "attack": 64.80,
-        "defense": 58.60,
-        "agility": 62.50,
-        "intelligence": 72.40,
-        "stamina": 82.70,
-        "special_attack": 68.90,
-        "size_score": 21.60,
+        "diet": [
+            "grass",
+            "grains",
+            "aquatic plants"
+        ],
+        "attack": 64.8,
+        "defense": 58.6,
+        "agility": 62.5,
+        "intelligence": 72.4,
+        "stamina": 82.7,
+        "special_attack": 68.9,
+        "size_score": 21.6,
         "bite_force_psi": 0,
         "class": "Aggressor",
         "type": "Bird",
-        "unique_traits": ["aggressive defender", "honking alarm", "strong bite"],
-        "special_abilities": ["Bite Attack", "Alarm Call"],
-        "image": "https://picsum.photos/seed/goose/400/400"
+        "unique_traits": [
+            "aggressive defender",
+            "honking alarm",
+            "strong bite"
+        ],
+        "special_abilities": [
+            "Bite Attack",
+            "Alarm Call"
+        ],
+        "image": "https://pngimg.com/uploads/goose/goose_PNG.png"
     },
     {
         "name": "Camel",
@@ -2063,20 +2870,30 @@
         "lifespan_years": 40,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["plants", "thorny vegetation"],
-        "attack": 74.60,
-        "defense": 72.80,
-        "agility": 48.60,
-        "intelligence": 68.50,
-        "stamina": 96.80,
-        "special_attack": 76.40,
-        "size_score": 76.40,
+        "diet": [
+            "plants",
+            "thorny vegetation"
+        ],
+        "attack": 74.6,
+        "defense": 72.8,
+        "agility": 48.6,
+        "intelligence": 68.5,
+        "stamina": 96.8,
+        "special_attack": 76.4,
+        "size_score": 76.4,
         "bite_force_psi": 0,
         "class": "Endurance",
         "type": "Mammal",
-        "unique_traits": ["water storage", "desert adaptation", "can bite and kick"],
-        "special_abilities": ["Desert Endurance", "Spit Attack"],
-        "image": "https://picsum.photos/seed/camel/400/400"
+        "unique_traits": [
+            "water storage",
+            "desert adaptation",
+            "can bite and kick"
+        ],
+        "special_abilities": [
+            "Desert Endurance",
+            "Spit Attack"
+        ],
+        "image": "https://pngimg.com/uploads/camel/camel_PNG.png"
     },
     {
         "name": "Llama",
@@ -2090,20 +2907,30 @@
         "lifespan_years": 25,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass", "plants"],
-        "attack": 66.50,
-        "defense": 64.80,
-        "agility": 58.70,
-        "intelligence": 72.30,
-        "stamina": 84.60,
-        "special_attack": 68.90,
-        "size_score": 52.30,
+        "diet": [
+            "grass",
+            "plants"
+        ],
+        "attack": 66.5,
+        "defense": 64.8,
+        "agility": 58.7,
+        "intelligence": 72.3,
+        "stamina": 84.6,
+        "special_attack": 68.9,
+        "size_score": 52.3,
         "bite_force_psi": 0,
         "class": "Defender",
         "type": "Mammal",
-        "unique_traits": ["spits when angry", "guard animal", "mountain adapted"],
-        "special_abilities": ["Spit Defense", "Kick Strike"],
-        "image": "https://picsum.photos/seed/llama/400/400"
+        "unique_traits": [
+            "spits when angry",
+            "guard animal",
+            "mountain adapted"
+        ],
+        "special_abilities": [
+            "Spit Defense",
+            "Kick Strike"
+        ],
+        "image": "https://pngimg.com/uploads/llama/llama_PNG.png"
     },
     {
         "name": "Alpaca",
@@ -2117,20 +2944,30 @@
         "lifespan_years": 20,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass", "hay"],
-        "attack": 54.60,
-        "defense": 56.80,
-        "agility": 64.50,
-        "intelligence": 68.70,
-        "stamina": 76.90,
-        "special_attack": 58.40,
-        "size_score": 38.60,
+        "diet": [
+            "grass",
+            "hay"
+        ],
+        "attack": 54.6,
+        "defense": 56.8,
+        "agility": 64.5,
+        "intelligence": 68.7,
+        "stamina": 76.9,
+        "special_attack": 58.4,
+        "size_score": 38.6,
         "bite_force_psi": 0,
         "class": "Herd Animal",
         "type": "Mammal",
-        "unique_traits": ["gentle nature", "soft fleece", "alert sentinel"],
-        "special_abilities": ["Alert Call", "Group Flee"],
-        "image": "https://picsum.photos/seed/alpaca/400/400"
+        "unique_traits": [
+            "gentle nature",
+            "soft fleece",
+            "alert sentinel"
+        ],
+        "special_abilities": [
+            "Alert Call",
+            "Group Flee"
+        ],
+        "image": "https://pngimg.com/uploads/alpaca/alpaca_PNG.png"
     },
     {
         "name": "Reindeer",
@@ -2144,20 +2981,31 @@
         "lifespan_years": 15,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["lichens", "plants", "grass"],
-        "attack": 68.70,
-        "defense": 66.50,
-        "agility": 72.80,
-        "intelligence": 62.40,
-        "stamina": 89.50,
-        "special_attack": 72.30,
-        "size_score": 56.80,
+        "diet": [
+            "lichens",
+            "plants",
+            "grass"
+        ],
+        "attack": 68.7,
+        "defense": 66.5,
+        "agility": 72.8,
+        "intelligence": 62.4,
+        "stamina": 89.5,
+        "special_attack": 72.3,
+        "size_score": 56.8,
         "bite_force_psi": 0,
         "class": "Migrator",
         "type": "Mammal",
-        "unique_traits": ["antlers on both sexes", "arctic adaptation", "long migrations"],
-        "special_abilities": ["Antler Defense", "Arctic Endurance"],
-        "image": "https://picsum.photos/seed/reindeer/400/400"
+        "unique_traits": [
+            "antlers on both sexes",
+            "arctic adaptation",
+            "long migrations"
+        ],
+        "special_abilities": [
+            "Antler Defense",
+            "Arctic Endurance"
+        ],
+        "image": "https://pngimg.com/uploads/reindeer/reindeer_PNG.png"
     },
     {
         "name": "Elk",
@@ -2171,20 +3019,31 @@
         "lifespan_years": 20,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass", "plants", "bark"],
-        "attack": 78.60,
-        "defense": 72.40,
-        "agility": 68.50,
-        "intelligence": 64.80,
-        "stamina": 82.70,
-        "special_attack": 80.30,
-        "size_score": 68.20,
+        "diet": [
+            "grass",
+            "plants",
+            "bark"
+        ],
+        "attack": 78.6,
+        "defense": 72.4,
+        "agility": 68.5,
+        "intelligence": 64.8,
+        "stamina": 82.7,
+        "special_attack": 80.3,
+        "size_score": 68.2,
         "bite_force_psi": 0,
         "class": "Bruiser",
         "type": "Mammal",
-        "unique_traits": ["large antlers", "bugling call", "aggressive during rut"],
-        "special_abilities": ["Antler Charge", "Bugling Intimidation"],
-        "image": "https://picsum.photos/seed/elk/400/400"
+        "unique_traits": [
+            "large antlers",
+            "bugling call",
+            "aggressive during rut"
+        ],
+        "special_abilities": [
+            "Antler Charge",
+            "Bugling Intimidation"
+        ],
+        "image": "https://pngimg.com/uploads/elk/elk_PNG.png"
     },
     {
         "name": "Bighorn Sheep",
@@ -2198,20 +3057,30 @@
         "lifespan_years": 15,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass", "plants"],
-        "attack": 76.50,
-        "defense": 74.80,
-        "agility": 86.40,
-        "intelligence": 62.30,
-        "stamina": 84.60,
-        "special_attack": 84.90,
-        "size_score": 48.70,
+        "diet": [
+            "grass",
+            "plants"
+        ],
+        "attack": 76.5,
+        "defense": 74.8,
+        "agility": 86.4,
+        "intelligence": 62.3,
+        "stamina": 84.6,
+        "special_attack": 84.9,
+        "size_score": 48.7,
         "bite_force_psi": 0,
         "class": "Climber",
         "type": "Mammal",
-        "unique_traits": ["ramming behavior", "excellent climber", "thick skull"],
-        "special_abilities": ["Head Ram", "Mountain Agility"],
-        "image": "https://picsum.photos/seed/bighornsheep/400/400"
+        "unique_traits": [
+            "ramming behavior",
+            "excellent climber",
+            "thick skull"
+        ],
+        "special_abilities": [
+            "Head Ram",
+            "Mountain Agility"
+        ],
+        "image": "https://pngimg.com/uploads/bighorn_sheep/bighorn_sheep_PNG.png"
     },
     {
         "name": "Mountain Goat",
@@ -2225,20 +3094,31 @@
         "lifespan_years": 18,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass", "plants", "lichens"],
-        "attack": 68.40,
-        "defense": 72.60,
-        "agility": 94.80,
-        "intelligence": 64.50,
-        "stamina": 88.70,
-        "special_attack": 72.80,
-        "size_score": 44.30,
+        "diet": [
+            "grass",
+            "plants",
+            "lichens"
+        ],
+        "attack": 68.4,
+        "defense": 72.6,
+        "agility": 94.8,
+        "intelligence": 64.5,
+        "stamina": 88.7,
+        "special_attack": 72.8,
+        "size_score": 44.3,
         "bite_force_psi": 0,
         "class": "Extreme Climber",
         "type": "Mammal",
-        "unique_traits": ["extreme climbing ability", "sure-footed", "sharp horns"],
-        "special_abilities": ["Cliff Master", "Horn Gore"],
-        "image": "https://picsum.photos/seed/mountaingoat/400/400"
+        "unique_traits": [
+            "extreme climbing ability",
+            "sure-footed",
+            "sharp horns"
+        ],
+        "special_abilities": [
+            "Cliff Master",
+            "Horn Gore"
+        ],
+        "image": "https://pngimg.com/uploads/mountain_goat/mountain_goat_PNG.png"
     },
     {
         "name": "Ibex",
@@ -2252,20 +3132,31 @@
         "lifespan_years": 17,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass", "herbs", "shrubs"],
-        "attack": 72.50,
-        "defense": 68.90,
-        "agility": 92.60,
-        "intelligence": 62.70,
-        "stamina": 86.40,
-        "special_attack": 76.80,
-        "size_score": 43.20,
+        "diet": [
+            "grass",
+            "herbs",
+            "shrubs"
+        ],
+        "attack": 72.5,
+        "defense": 68.9,
+        "agility": 92.6,
+        "intelligence": 62.7,
+        "stamina": 86.4,
+        "special_attack": 76.8,
+        "size_score": 43.2,
         "bite_force_psi": 0,
         "class": "Climber",
         "type": "Mammal",
-        "unique_traits": ["large curved horns", "incredible balance", "cliff dwelling"],
-        "special_abilities": ["Balance Master", "Head Butt"],
-        "image": "https://picsum.photos/seed/ibex/400/400"
+        "unique_traits": [
+            "large curved horns",
+            "incredible balance",
+            "cliff dwelling"
+        ],
+        "special_abilities": [
+            "Balance Master",
+            "Head Butt"
+        ],
+        "image": "https://pngimg.com/uploads/ibex/ibex_PNG.png"
     },
     {
         "name": "Yak",
@@ -2279,20 +3170,30 @@
         "lifespan_years": 25,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass", "herbs"],
-        "attack": 80.50,
-        "defense": 82.70,
-        "agility": 46.80,
-        "intelligence": 58.60,
-        "stamina": 92.40,
-        "special_attack": 78.90,
-        "size_score": 78.60,
+        "diet": [
+            "grass",
+            "herbs"
+        ],
+        "attack": 80.5,
+        "defense": 82.7,
+        "agility": 46.8,
+        "intelligence": 58.6,
+        "stamina": 92.4,
+        "special_attack": 78.9,
+        "size_score": 78.6,
         "bite_force_psi": 0,
         "class": "Mountain Tank",
         "type": "Mammal",
-        "unique_traits": ["high altitude adaptation", "thick fur", "strong horns"],
-        "special_abilities": ["Altitude Master", "Horn Charge"],
-        "image": "https://picsum.photos/seed/yak/400/400"
+        "unique_traits": [
+            "high altitude adaptation",
+            "thick fur",
+            "strong horns"
+        ],
+        "special_abilities": [
+            "Altitude Master",
+            "Horn Charge"
+        ],
+        "image": "https://pngimg.com/uploads/yak/yak_PNG.png"
     },
     {
         "name": "Musk Ox",
@@ -2306,20 +3207,31 @@
         "lifespan_years": 24,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["grass", "willows", "lichens"],
-        "attack": 78.60,
-        "defense": 86.50,
-        "agility": 42.30,
-        "intelligence": 62.80,
-        "stamina": 94.70,
-        "special_attack": 82.40,
-        "size_score": 72.40,
+        "diet": [
+            "grass",
+            "willows",
+            "lichens"
+        ],
+        "attack": 78.6,
+        "defense": 86.5,
+        "agility": 42.3,
+        "intelligence": 62.8,
+        "stamina": 94.7,
+        "special_attack": 82.4,
+        "size_score": 72.4,
         "bite_force_psi": 0,
         "class": "Tank",
         "type": "Mammal",
-        "unique_traits": ["defensive circle formation", "thick coat", "curved horns"],
-        "special_abilities": ["Shield Wall", "Arctic Survivor"],
-        "image": "https://picsum.photos/seed/muskox/400/400"
+        "unique_traits": [
+            "defensive circle formation",
+            "thick coat",
+            "curved horns"
+        ],
+        "special_abilities": [
+            "Shield Wall",
+            "Arctic Survivor"
+        ],
+        "image": "https://pngimg.com/uploads/musk_ox/musk_ox_PNG.png"
     },
     {
         "name": "Fennec Fox",
@@ -2333,20 +3245,31 @@
         "lifespan_years": 14,
         "isNocturnal": true,
         "isSocial": true,
-        "diet": ["insects", "rodents", "eggs"],
-        "attack": 48.60,
-        "defense": 42.80,
-        "agility": 82.70,
-        "intelligence": 74.50,
-        "stamina": 64.30,
-        "special_attack": 52.40,
-        "size_score": 9.80,
+        "diet": [
+            "insects",
+            "rodents",
+            "eggs"
+        ],
+        "attack": 48.6,
+        "defense": 42.8,
+        "agility": 82.7,
+        "intelligence": 74.5,
+        "stamina": 64.3,
+        "special_attack": 52.4,
+        "size_score": 9.8,
         "bite_force_psi": 0,
         "class": "Scout",
         "type": "Mammal",
-        "unique_traits": ["large ears for heat dissipation", "desert adaptation", "social structure"],
-        "special_abilities": ["Heat Sense", "Desert Survival"],
-        "image": "https://picsum.photos/seed/fennecfox/400/400"
+        "unique_traits": [
+            "large ears for heat dissipation",
+            "desert adaptation",
+            "social structure"
+        ],
+        "special_abilities": [
+            "Heat Sense",
+            "Desert Survival"
+        ],
+        "image": "https://pngimg.com/uploads/fennec_fox/fennec_fox_PNG.png"
     },
     {
         "name": "Arctic Fox",
@@ -2360,20 +3283,31 @@
         "lifespan_years": 7,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["lemmings", "fish", "birds"],
-        "attack": 54.70,
-        "defense": 58.60,
-        "agility": 76.80,
-        "intelligence": 72.40,
-        "stamina": 82.50,
-        "special_attack": 58.90,
-        "size_score": 13.40,
+        "diet": [
+            "lemmings",
+            "fish",
+            "birds"
+        ],
+        "attack": 54.7,
+        "defense": 58.6,
+        "agility": 76.8,
+        "intelligence": 72.4,
+        "stamina": 82.5,
+        "special_attack": 58.9,
+        "size_score": 13.4,
         "bite_force_psi": 0,
         "class": "Hunter",
         "type": "Mammal",
-        "unique_traits": ["seasonal coat change", "extreme cold adaptation", "food caching"],
-        "special_abilities": ["Camouflage", "Arctic Endurance"],
-        "image": "https://picsum.photos/seed/arcticfox/400/400"
+        "unique_traits": [
+            "seasonal coat change",
+            "extreme cold adaptation",
+            "food caching"
+        ],
+        "special_abilities": [
+            "Camouflage",
+            "Arctic Endurance"
+        ],
+        "image": "https://pngimg.com/uploads/arctic_fox/arctic_fox_PNG.png"
     },
     {
         "name": "Red Fox",
@@ -2387,20 +3321,32 @@
         "lifespan_years": 5,
         "isNocturnal": true,
         "isSocial": false,
-        "diet": ["rodents", "birds", "insects", "fruits"],
-        "attack": 62.40,
-        "defense": 54.70,
-        "agility": 82.60,
-        "intelligence": 81.50,
-        "stamina": 74.30,
-        "special_attack": 66.80,
-        "size_score": 20.30,
+        "diet": [
+            "rodents",
+            "birds",
+            "insects",
+            "fruits"
+        ],
+        "attack": 62.4,
+        "defense": 54.7,
+        "agility": 82.6,
+        "intelligence": 81.5,
+        "stamina": 74.3,
+        "special_attack": 66.8,
+        "size_score": 20.3,
         "bite_force_psi": 92,
         "class": "Clever Hunter",
         "type": "Mammal",
-        "unique_traits": ["adaptable", "clever problem solver", "pouncing technique"],
-        "special_abilities": ["Mouse Pounce", "Urban Adaptation"],
-        "image": "https://picsum.photos/seed/redfox/400/400"
+        "unique_traits": [
+            "adaptable",
+            "clever problem solver",
+            "pouncing technique"
+        ],
+        "special_abilities": [
+            "Mouse Pounce",
+            "Urban Adaptation"
+        ],
+        "image": "https://pngimg.com/uploads/red_fox/red_fox_PNG.png"
     },
     {
         "name": "Coyote",
@@ -2414,20 +3360,31 @@
         "lifespan_years": 14,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["rodents", "rabbits", "deer"],
-        "attack": 68.50,
-        "defense": 58.70,
-        "agility": 81.40,
-        "intelligence": 82.60,
-        "stamina": 88.90,
-        "special_attack": 72.30,
-        "size_score": 28.40,
+        "diet": [
+            "rodents",
+            "rabbits",
+            "deer"
+        ],
+        "attack": 68.5,
+        "defense": 58.7,
+        "agility": 81.4,
+        "intelligence": 82.6,
+        "stamina": 88.9,
+        "special_attack": 72.3,
+        "size_score": 28.4,
         "bite_force_psi": 153,
         "class": "Pack Hunter",
         "type": "Mammal",
-        "unique_traits": ["adaptable", "howling communication", "pack/solo hunting"],
-        "special_abilities": ["Pack Communication", "Adaptive Hunter"],
-        "image": "https://picsum.photos/seed/coyote/400/400"
+        "unique_traits": [
+            "adaptable",
+            "howling communication",
+            "pack/solo hunting"
+        ],
+        "special_abilities": [
+            "Pack Communication",
+            "Adaptive Hunter"
+        ],
+        "image": "https://pngimg.com/uploads/coyote/coyote_PNG.png"
     },
     {
         "name": "Dingo",
@@ -2441,20 +3398,31 @@
         "lifespan_years": 10,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["kangaroos", "rodents", "birds"],
-        "attack": 72.40,
-        "defense": 62.50,
-        "agility": 78.90,
-        "intelligence": 76.80,
-        "stamina": 86.40,
-        "special_attack": 74.60,
-        "size_score": 30.20,
+        "diet": [
+            "kangaroos",
+            "rodents",
+            "birds"
+        ],
+        "attack": 72.4,
+        "defense": 62.5,
+        "agility": 78.9,
+        "intelligence": 76.8,
+        "stamina": 86.4,
+        "special_attack": 74.6,
+        "size_score": 30.2,
         "bite_force_psi": 235,
         "class": "Pack Hunter",
         "type": "Mammal",
-        "unique_traits": ["apex predator in Australia", "pack coordination", "versatile hunter"],
-        "special_abilities": ["Pack Tactics", "Endurance Hunt"],
-        "image": "https://picsum.photos/seed/dingo/400/400"
+        "unique_traits": [
+            "apex predator in Australia",
+            "pack coordination",
+            "versatile hunter"
+        ],
+        "special_abilities": [
+            "Pack Tactics",
+            "Endurance Hunt"
+        ],
+        "image": "https://pngimg.com/uploads/dingo/dingo_PNG.png"
     },
     {
         "name": "Jackal",
@@ -2468,20 +3436,31 @@
         "lifespan_years": 12,
         "isNocturnal": true,
         "isSocial": true,
-        "diet": ["rodents", "birds", "carrion"],
-        "attack": 64.50,
-        "defense": 56.80,
-        "agility": 76.40,
-        "intelligence": 74.60,
-        "stamina": 82.70,
-        "special_attack": 68.90,
-        "size_score": 22.30,
+        "diet": [
+            "rodents",
+            "birds",
+            "carrion"
+        ],
+        "attack": 64.5,
+        "defense": 56.8,
+        "agility": 76.4,
+        "intelligence": 74.6,
+        "stamina": 82.7,
+        "special_attack": 68.9,
+        "size_score": 22.3,
         "bite_force_psi": 150,
         "class": "Opportunist",
         "type": "Mammal",
-        "unique_traits": ["opportunistic feeder", "pairs for life", "adaptable diet"],
-        "special_abilities": ["Scavenger", "Pair Bond"],
-        "image": "https://picsum.photos/seed/jackal/400/400"
+        "unique_traits": [
+            "opportunistic feeder",
+            "pairs for life",
+            "adaptable diet"
+        ],
+        "special_abilities": [
+            "Scavenger",
+            "Pair Bond"
+        ],
+        "image": "https://pngimg.com/uploads/jackal/jackal_PNG.png"
     },
     {
         "name": "Beaver",
@@ -2495,20 +3474,30 @@
         "lifespan_years": 24,
         "isNocturnal": true,
         "isSocial": true,
-        "diet": ["bark", "aquatic plants"],
-        "attack": 62.50,
-        "defense": 68.40,
-        "agility": 48.60,
-        "intelligence": 82.70,
-        "stamina": 74.50,
-        "special_attack": 66.80,
-        "size_score": 26.40,
+        "diet": [
+            "bark",
+            "aquatic plants"
+        ],
+        "attack": 62.5,
+        "defense": 68.4,
+        "agility": 48.6,
+        "intelligence": 82.7,
+        "stamina": 74.5,
+        "special_attack": 66.8,
+        "size_score": 26.4,
         "bite_force_psi": 180,
         "class": "Engineer",
         "type": "Mammal",
-        "unique_traits": ["builds dams", "ecosystem engineer", "powerful teeth"],
-        "special_abilities": ["Dam Builder", "Bite Defense"],
-        "image": "https://picsum.photos/seed/beaver/400/400"
+        "unique_traits": [
+            "builds dams",
+            "ecosystem engineer",
+            "powerful teeth"
+        ],
+        "special_abilities": [
+            "Dam Builder",
+            "Bite Defense"
+        ],
+        "image": "https://pngimg.com/uploads/beaver/beaver_PNG.png"
     },
     {
         "name": "Otter",
@@ -2522,20 +3511,31 @@
         "lifespan_years": 16,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["fish", "crustaceans", "amphibians"],
-        "attack": 64.70,
-        "defense": 58.60,
-        "agility": 88.50,
-        "intelligence": 84.60,
-        "stamina": 78.90,
-        "special_attack": 68.40,
-        "size_score": 24.30,
+        "diet": [
+            "fish",
+            "crustaceans",
+            "amphibians"
+        ],
+        "attack": 64.7,
+        "defense": 58.6,
+        "agility": 88.5,
+        "intelligence": 84.6,
+        "stamina": 78.9,
+        "special_attack": 68.4,
+        "size_score": 24.3,
         "bite_force_psi": 615,
         "class": "Playful Hunter",
         "type": "Mammal",
-        "unique_traits": ["tool use", "playful behavior", "excellent swimmer"],
-        "special_abilities": ["Tool Use", "Aquatic Agility"],
-        "image": "https://picsum.photos/seed/otter/400/400"
+        "unique_traits": [
+            "tool use",
+            "playful behavior",
+            "excellent swimmer"
+        ],
+        "special_abilities": [
+            "Tool Use",
+            "Aquatic Agility"
+        ],
+        "image": "https://pngimg.com/uploads/otter/otter_PNG.png"
     },
     {
         "name": "Sea Otter",
@@ -2549,20 +3549,31 @@
         "lifespan_years": 23,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["sea urchins", "crabs", "mollusks"],
-        "attack": 68.50,
-        "defense": 62.40,
-        "agility": 82.70,
-        "intelligence": 88.90,
-        "stamina": 74.60,
-        "special_attack": 72.80,
-        "size_score": 28.70,
+        "diet": [
+            "sea urchins",
+            "crabs",
+            "mollusks"
+        ],
+        "attack": 68.5,
+        "defense": 62.4,
+        "agility": 82.7,
+        "intelligence": 88.9,
+        "stamina": 74.6,
+        "special_attack": 72.8,
+        "size_score": 28.7,
         "bite_force_psi": 615,
         "class": "Tool Master",
         "type": "Mammal",
-        "unique_traits": ["uses rocks as tools", "floats on back", "dense fur"],
-        "special_abilities": ["Rock Tool", "Shell Breaker"],
-        "image": "https://picsum.photos/seed/seaotter/400/400"
+        "unique_traits": [
+            "uses rocks as tools",
+            "floats on back",
+            "dense fur"
+        ],
+        "special_abilities": [
+            "Rock Tool",
+            "Shell Breaker"
+        ],
+        "image": "https://pngimg.com/uploads/sea_otter/sea_otter_PNG.png"
     },
     {
         "name": "Seal",
@@ -2576,20 +3587,30 @@
         "lifespan_years": 30,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["fish", "squid"],
-        "attack": 62.80,
-        "defense": 68.50,
-        "agility": 74.60,
-        "intelligence": 72.40,
-        "stamina": 86.70,
-        "special_attack": 66.90,
-        "size_score": 42.30,
+        "diet": [
+            "fish",
+            "squid"
+        ],
+        "attack": 62.8,
+        "defense": 68.5,
+        "agility": 74.6,
+        "intelligence": 72.4,
+        "stamina": 86.7,
+        "special_attack": 66.9,
+        "size_score": 42.3,
         "bite_force_psi": 0,
         "class": "Swimmer",
         "type": "Mammal",
-        "unique_traits": ["streamlined body", "excellent diver", "social haul-outs"],
-        "special_abilities": ["Deep Dive", "Aquatic Speed"],
-        "image": "https://picsum.photos/seed/seal/400/400"
+        "unique_traits": [
+            "streamlined body",
+            "excellent diver",
+            "social haul-outs"
+        ],
+        "special_abilities": [
+            "Deep Dive",
+            "Aquatic Speed"
+        ],
+        "image": "https://pngimg.com/uploads/seal/seal_PNG.png"
     },
     {
         "name": "Sea Lion",
@@ -2603,20 +3624,30 @@
         "lifespan_years": 20,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["fish", "squid"],
-        "attack": 72.50,
-        "defense": 68.90,
-        "agility": 78.60,
-        "intelligence": 84.70,
-        "stamina": 88.40,
-        "special_attack": 74.80,
-        "size_score": 62.40,
+        "diet": [
+            "fish",
+            "squid"
+        ],
+        "attack": 72.5,
+        "defense": 68.9,
+        "agility": 78.6,
+        "intelligence": 84.7,
+        "stamina": 88.4,
+        "special_attack": 74.8,
+        "size_score": 62.4,
         "bite_force_psi": 0,
         "class": "Swimmer",
         "type": "Mammal",
-        "unique_traits": ["external ear flaps", "can walk on land", "playful and intelligent"],
-        "special_abilities": ["Aquatic Acrobatics", "Vocal Communication"],
-        "image": "https://picsum.photos/seed/sealion/400/400"
+        "unique_traits": [
+            "external ear flaps",
+            "can walk on land",
+            "playful and intelligent"
+        ],
+        "special_abilities": [
+            "Aquatic Acrobatics",
+            "Vocal Communication"
+        ],
+        "image": "https://pngimg.com/uploads/sea_lion/sea_lion_PNG.png"
     },
     {
         "name": "Manatee",
@@ -2630,19 +3661,29 @@
         "lifespan_years": 60,
         "isNocturnal": false,
         "isSocial": true,
-        "diet": ["seagrass", "algae"],
-        "attack": 46.80,
-        "defense": 72.50,
-        "agility": 38.60,
-        "intelligence": 68.70,
-        "stamina": 76.80,
-        "special_attack": 42.30,
-        "size_score": 74.60,
+        "diet": [
+            "seagrass",
+            "algae"
+        ],
+        "attack": 46.8,
+        "defense": 72.5,
+        "agility": 38.6,
+        "intelligence": 68.7,
+        "stamina": 76.8,
+        "special_attack": 42.3,
+        "size_score": 74.6,
         "bite_force_psi": 0,
         "class": "Gentle Giant",
         "type": "Mammal",
-        "unique_traits": ["gentle herbivore", "slow metabolism", "no natural predators"],
-        "special_abilities": ["Gentle Nature", "Slow Float"],
-        "image": "https://picsum.photos/seed/manatee/400/400"
+        "unique_traits": [
+            "gentle herbivore",
+            "slow metabolism",
+            "no natural predators"
+        ],
+        "special_abilities": [
+            "Gentle Nature",
+            "Slow Float"
+        ],
+        "image": "https://pngimg.com/uploads/manatee/manatee_PNG.png"
     }
 ]

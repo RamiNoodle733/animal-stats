@@ -1,45 +1,37 @@
 # Animal Stats
 
-**Modern Interactive Animal Statistics Webapp** 
+**Interactive Fighting Game-Style Animal Statistics Webapp** 
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://raminoodle733.github.io/animal-stats/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Accessibility](https://img.shields.io/badge/Accessibility-WCAG%202.1%20AA-green)](index.html)
+[![Animals](https://img.shields.io/badge/Animals-98+-orange)](animal_stats.json)
 
-A cutting-edge web application that presents scientifically accurate animal statistics in an engaging, game-style interface. Perfect for education, research, and wildlife enthusiasts.
+A cutting-edge web application that presents scientifically accurate animal statistics in an engaging fighting game-style interface. Compare stats, view animals in a character select screen, and pit them against each other in VS battles!
 
 
 ## ✨ Features
 
-### 🎮 Modern Game-Style Interface
-- **Beautiful Animal Cards**: Modern glass-morphism design with hover animations
-- **Gradient Backgrounds**: Eye-catching gradients and modern visual effects
+### 🎮 Fighting Game Interface
+- **Character Select Screen**: Stats view with centered character display and flanking stat panels
+- **VS Battle Mode**: Compare two fighters head-to-head with dramatic VS badge
+- **Transparent PNG Images**: All 98 animals feature clean, background-free images
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
-- **Dark Mode Ready**: Professional color scheme with excellent contrast
-- **Fighting Game Aesthetic**: Dark, dramatic theme with glowing accents
-- **Iconic Animal Art**: Clean, background-free icons for every creature
+- **Glowing Effects**: Cyan and gold accents with pulsing animations
+- **Scrollable Character Grid**: Quick access to all animals at the bottom
 
-### 📊 Scientific Accuracy
-- **Research-Based Data**: All statistics derived from scientific studies
-- **Accurate Measurements**: Precise speed conversions (m/s), bite force (PSI), weights
-- **Ongoing Verification**: Key entries reviewed and corrected for accuracy
-- **Intelligence Ratings**: Based on cognitive research and brain-to-body ratios
-- **Real Abilities**: Documented special abilities and natural behaviors
+### 📊 Comprehensive Stats
+- **98 Animals**: From African Elephants to Sea Otters
+- **Combat Stats**: Attack, Defense, Agility, Stamina, Intelligence, Special Attack
+- **Scientific Data**: Weight, speed, lifespan, bite force, and more
+- **Special Abilities**: Unique attacks and traits for each animal
+- **Class System**: Apex Predators, Tanks, Speed Demons, and more
 
-### 🔍 Advanced Features
-- **Smart Search**: Debounced search with real-time filtering
-- **Multi-Filter System**: Filter by class, type, habitat, and more
-- **Animal Comparison**: Side-by-side statistical comparisons
-- **URL State Management**: Bookmarkable searches and filters
-- **Keyboard Navigation**: Full accessibility support
-- **Favorites**: Mark animals you love and quickly filter them
-- **Animated Interactions**: Favorite stars pop with satisfying feedback
-
-### ♿ Accessibility & Performance
-- **WCAG 2.1 AA Compliant**: Comprehensive accessibility features
-- **Screen Reader Support**: ARIA labels and semantic HTML
-- **Keyboard Navigation**: Full keyboard accessibility
-- **Performance Optimized**: Efficient rendering & smooth animations
+### 🎯 Interactive Features
+- **Stats Mode**: View detailed stats for any animal with centered character display
+- **Compare Mode**: Select two fighters for head-to-head comparison
+- **Stat Visualization**: Gradient-filled bars with dynamic colors based on values
+- **Fight Button**: (Coming soon) Simulate battles between animals
+- **Smooth Animations**: Floating character models and pulsing effects
 
 ## 🚀 Quick Start
 
@@ -47,7 +39,62 @@ A cutting-edge web application that presents scientifically accurate animal stat
 Visit the [live demo](https://raminoodle733.github.io/animal-stats/) directly in your browser.
 
 ### Option 2: Local Setup
-```powershell
+```bash
+# Clone the repository
+git clone https://github.com/RamiNoodle733/animal-stats.git
+
+# Open in browser
+cd animal-stats
+# Open index.html in your browser
+```
+
+That's it! No build process or dependencies required.
+
+## 📁 Project Structure
+
+```
+animal-stats/
+├── index.html          # Main HTML structure
+├── styles.css          # Fighting game aesthetic styles
+├── script.js           # Interactive functionality
+├── animal_stats.json   # Complete animal database (98 animals)
+├── favicon.svg         # Site icon
+├── images/            # Empty (uses external transparent PNGs)
+├── README.md          # This file
+├── LICENSE            # MIT License
+└── DEPLOYMENT.md      # GitHub Pages deployment guide
+```
+
+## 🎨 Design Philosophy
+
+The interface is inspired by classic fighting games like Street Fighter and Mortal Kombat:
+- **Character select screen** layout for Stats view
+- **VS battle screen** for Compare mode
+- **Centered character models** with flanking stat panels
+- **Dramatic colors**: Cyan (#00d4ff) and orange (#ff6b00) with gold accents
+- **Glowing effects** and **pulsing animations**
+- **Bebas Neue** font for that fighting game feel
+
+## 🖼️ Image Sources
+
+All animal images use transparent PNG format from pngimg.com, ensuring:
+- ✅ No backgrounds (fully transparent)
+- ✅ High quality images
+- ✅ Consistent style across all animals
+- ✅ Fast loading times
+- ✅ Fallback to placeholder if image doesn't load
+
+## 🛠️ Technologies
+
+- **Pure HTML5/CSS3/JavaScript** - No frameworks, no dependencies
+- **Font Awesome 6.4.0** - Icons for stats
+- **Google Fonts** - Bebas Neue and Inter fonts
+- **JSON** - Animal data storage
+- **GitHub Pages** - Free hosting
+
+## 📊 Data Accuracy
+
+Stats are calculated from real-world data:
 # Clone the repository
 git clone https://github.com/raminoodle733/animal-stats.git
 

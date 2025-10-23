@@ -1,5 +1,0 @@
-python -m http.server
-
-http://localhost:8000
-
-python -m http.server 5000
