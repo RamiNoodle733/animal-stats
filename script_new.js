@@ -234,63 +234,61 @@ function displayAnimalStats(index) {
         placeholder.style.display = 'none';
     }
     
-    statsContainer.style.display = 'flex';
+    statsContainer.style.display = 'grid';
     statsContainer.innerHTML = `
-        <img src="${animal.image}" alt="${animal.name}" class="stats-animal-image"
-             onerror="this.src='https://via.placeholder.com/800x300?text=${animal.name}'">
-        
-        <div class="stats-content-wrapper">
-            <div class="stats-header">
-                <div class="stats-animal-info">
-                    <h2>${animal.name}</h2>
-                    <h3>${animal.scientific_name}</h3>
-                </div>
+        <div class="stats-left-column">
+            <img src="${animal.image}" alt="${animal.name}" class="stats-animal-image"
+                 onerror="this.src='https://via.placeholder.com/280x280?text=${animal.name}'">
+            <div class="stats-traits">
+                <h4>Special Abilities</h4>
+                <ul>
+                    ${animal.special_abilities.map(ability => `<li>${ability}</li>`).join('')}
+                </ul>
             </div>
-            
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <span class="stat-label">Class</span>
-                    <span class="stat-value">${animal.class}</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Type</span>
-                    <span class="stat-value">${animal.type}</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Weight</span>
-                    <span class="stat-value">${animal.weight_kg} kg</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Speed</span>
-                    <span class="stat-value">${animal.speed_mps.toFixed(2)} m/s</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Lifespan</span>
-                    <span class="stat-value">${animal.lifespan_years} yrs</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Habitat</span>
-                    <span class="stat-value">${animal.habitat}</span>
-                </div>
-            </div>
-            
+        </div>
+        <div class="stats-right-column">
             <div>
-                <h4 class="stats-section-title">Combat Stats</h4>
+                <h2>${animal.name}</h2>
+                <h3>${animal.scientific_name}</h3>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">Class</div>
+                        <div class="stat-value">${animal.class}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Type</div>
+                        <div class="stat-value">${animal.type}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Weight</div>
+                        <div class="stat-value">${animal.weight_kg} kg</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Speed</div>
+                        <div class="stat-value">${animal.speed_mps.toFixed(2)} m/s</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Lifespan</div>
+                        <div class="stat-value">${animal.lifespan_years} yrs</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Habitat</div>
+                        <div class="stat-value">${animal.habitat}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="stat-bars-section">
+                <div class="stat-bars-title">Combat Statistics</div>
                 <div class="stat-bar-container">
                     ${createStatBar('Attack', animal.attack)}
                     ${createStatBar('Defense', animal.defense)}
                     ${createStatBar('Agility', animal.agility)}
                     ${createStatBar('Intelligence', animal.intelligence)}
                     ${createStatBar('Stamina', animal.stamina)}
-                    ${createStatBar('Special Attack', animal.special_attack)}
+                    ${createStatBar('Special', animal.special_attack)}
                 </div>
-            </div>
-            
-            <div class="stats-traits">
-                <h4>Special Abilities</h4>
-                <ul>
-                    ${animal.special_abilities.map(ability => `<li>${ability}</li>`).join('')}
-                </ul>
             </div>
             
             <div class="stats-traits">
