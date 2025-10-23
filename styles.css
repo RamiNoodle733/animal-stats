@@ -43,8 +43,8 @@ body {
     flex-shrink: 0;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    justify-content: center;
+    gap: 40px;
 }
 
 .game-header h1 {
@@ -57,7 +57,6 @@ body {
     background-clip: text;
     filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.8));
     margin: 0;
-    flex: 1;
 }
 
 .view-container {
@@ -258,15 +257,6 @@ body {
     min-height: 0;
 }
 
-.fighter-label {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    letter-spacing: 4px;
-    color: var(--primary-color);
-    text-shadow: var(--text-glow);
-    flex-shrink: 0;
-}
-
 .fighter-display {
     width: 100%;
     max-width: 280px;
@@ -280,6 +270,24 @@ body {
     box-shadow: 0 0 30px rgba(0, 212, 255, 0.5), inset 0 0 30px rgba(0, 212, 255, 0.1);
     flex-shrink: 1;
     min-height: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.fighter-display:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.7), inset 0 0 40px rgba(0, 212, 255, 0.2);
+}
+
+.fighter-display.selecting {
+    border-color: var(--gold-color);
+    box-shadow: 0 0 50px rgba(255, 215, 0, 1), inset 0 0 30px rgba(255, 215, 0, 0.3);
+    animation: selectPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes selectPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
 }
 
 .fighter-placeholder {
@@ -396,7 +404,7 @@ body {
     background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 255, 0.1) 100%);
     border-top: 3px solid var(--border-bright);
     padding: 12px;
-    height: 200px;
+    height: 240px;
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -428,6 +436,7 @@ body {
     color: var(--text-light);
     font-size: 0.9rem;
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .search-box:focus,
@@ -443,36 +452,37 @@ body {
 
 .character-grid {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     overflow-x: auto;
     overflow-y: hidden;
-    padding: 8px;
+    padding: 10px;
     scrollbar-width: thin;
     scrollbar-color: var(--primary-color) rgba(0, 0, 0, 0.3);
 }
 
 .character-grid::-webkit-scrollbar {
-    height: 8px;
+    height: 12px;
 }
 
 .character-grid::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 6px;
 }
 
 .character-grid::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    border-radius: 6px;
+    border: 2px solid rgba(0, 0, 0, 0.5);
 }
 
 .character-grid::-webkit-scrollbar-thumb:hover {
-    background: var(--secondary-color);
+    background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
 }
 
 .character-card {
-    min-width: 110px;
-    width: 110px;
-    height: 110px;
+    min-width: 130px;
+    width: 130px;
+    height: 130px;
     background: rgba(0, 212, 255, 0.1);
     border: 3px solid rgba(0, 212, 255, 0.3);
     border-radius: 8px;
@@ -499,7 +509,7 @@ body {
 
 .character-card-image {
     width: 100%;
-    height: 80px;
+    height: 95px;
     object-fit: cover;
 }
 
@@ -509,7 +519,7 @@ body {
     align-items: center;
     justify-content: center;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     letter-spacing: 1px;
     color: var(--text-light);
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);

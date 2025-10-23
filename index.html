@@ -105,15 +105,14 @@
         <div id="compare-view" class="view-container">
             <div class="fight-screen">
                 <div class="fighter-section fighter-left">
-                    <div class="fighter-label">PLAYER 1</div>
                     <div class="fighter-display">
-                        <div class="fighter-placeholder" id="fighter-1-placeholder">
-                            <i class="fas fa-user-plus"></i>
-                            <p>SELECT<br>FIGHTER 1</p>
+                        <div class="fighter-placeholder" id="animal-1-placeholder">
+                            <i class="fas fa-paw"></i>
+                            <p>SELECT<br>ANIMAL 1</p>
                         </div>
-                        <img id="fighter-1-image" class="fighter-image" src="" alt="" style="display: none;">
+                        <img id="animal-1-image" class="fighter-image" src="" alt="" style="display: none;">
                     </div>
-                    <div class="fighter-name" id="fighter-1-name">???</div>
+                    <div class="fighter-name" id="animal-1-name">???</div>
                     <button class="view-stats-btn" id="view-stats-1">VIEW STATS</button>
                 </div>
                 
@@ -125,28 +124,24 @@
                 </div>
                 
                 <div class="fighter-section fighter-right">
-                    <div class="fighter-label">PLAYER 2</div>
                     <div class="fighter-display">
-                        <div class="fighter-placeholder" id="fighter-2-placeholder">
-                            <i class="fas fa-user-plus"></i>
-                            <p>SELECT<br>FIGHTER 2</p>
+                        <div class="fighter-placeholder" id="animal-2-placeholder">
+                            <i class="fas fa-paw"></i>
+                            <p>SELECT<br>ANIMAL 2</p>
                         </div>
-                        <img id="fighter-2-image" class="fighter-image" src="" alt="" style="display: none;">
+                        <img id="animal-2-image" class="fighter-image" src="" alt="" style="display: none;">
                     </div>
-                    <div class="fighter-name" id="fighter-2-name">???</div>
+                    <div class="fighter-name" id="animal-2-name">???</div>
                     <button class="view-stats-btn" id="view-stats-2">VIEW STATS</button>
                 </div>
             </div>
         </div>
         
-        <!-- Character Grid (Bottom) -->
+        <!-- Animal Grid (Bottom) -->
         <div class="character-grid-container">
             <div class="grid-controls">
                 <input type="text" id="search-input" placeholder="Search animals..." class="search-box">
                 <select id="class-filter" class="filter-select">
-                    <option value="">All Classes</option>
-                </select>
-                <select id="type-filter" class="filter-select">
                     <option value="">All Types</option>
                 </select>
                 <select id="sort-by" class="filter-select">
@@ -154,6 +149,9 @@
                     <option value="attack">Sort by Attack</option>
                     <option value="defense">Sort by Defense</option>
                     <option value="agility">Sort by Agility</option>
+                    <option value="stamina">Sort by Stamina</option>
+                    <option value="intelligence">Sort by Intelligence</option>
+                    <option value="special">Sort by Special</option>
                 </select>
             </div>
             
