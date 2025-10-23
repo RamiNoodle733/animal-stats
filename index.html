@@ -19,112 +19,148 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Main Container -->
-    <div class="game-container">
+    <!-- Main Game Screen -->
+    <div class="game-screen">
+        <!-- Header -->
+        <header class="game-header">
+            <h1>ANIMAL STATS</h1>
+        </header>
         
-        <!-- STATS VIEW -->
-        <div id="stats-view" class="view active-view">
-            <!-- Top Header -->
-            <div class="game-header">
-                <h1>ANIMAL STATS</h1>
-            </div>
-            
-            <!-- Main Stats Display -->
-            <div class="stats-display-main">
-                <!-- Left Stats Column -->
-                <div class="left-stats-panel">
-                    <div id="left-stats-content" class="stats-placeholder-side">
-                        <i class="fas fa-paw"></i>
-                        <p>Select an animal</p>
+        <!-- Stats View (Character Select Style) -->
+        <div id="stats-view" class="view-container active-view">
+            <div class="character-display-area">
+                <!-- Left Stats Panel -->
+                <div class="stats-panel stats-panel-left">
+                    <div class="stat-group">
+                        <div class="stat-row">
+                            <span class="stat-icon"><i class="fas fa-fist-raised"></i></span>
+                            <span class="stat-name">POWER</span>
+                            <div class="stat-bar-wrapper">
+                                <div class="stat-bar" id="stat-power-left">
+                                    <div class="stat-bar-fill"></div>
+                                </div>
+                            </div>
+                            <span class="stat-value" id="stat-power-value-left">--</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-icon"><i class="fas fa-shield-alt"></i></span>
+                            <span class="stat-name">DEFENSE</span>
+                            <div class="stat-bar-wrapper">
+                                <div class="stat-bar" id="stat-defense-left">
+                                    <div class="stat-bar-fill"></div>
+                                </div>
+                            </div>
+                            <span class="stat-value" id="stat-defense-value-left">--</span>
+                        </div>
                     </div>
                 </div>
                 
                 <!-- Center Character Display -->
-                <div class="center-character-display">
-                    <div id="character-viewer" class="character-placeholder">
-                        <div class="character-silhouette">
+                <div class="character-showcase">
+                    <div class="character-name-display" id="character-name">SELECT AN ANIMAL</div>
+                    <div class="character-model-container">
+                        <div class="character-silhouette" id="character-silhouette">
                             <i class="fas fa-question"></i>
                         </div>
-                        <p>SELECT YOUR ANIMAL</p>
+                        <img id="character-model" class="character-model" src="" alt="" style="display: none;">
                     </div>
+                    <div class="character-class-display" id="character-class">---</div>
                 </div>
                 
-                <!-- Right Stats Column -->
-                <div class="right-stats-panel">
-                    <div id="right-stats-content" class="stats-placeholder-side">
-                        <i class="fas fa-paw"></i>
-                        <p>Select an animal</p>
+                <!-- Right Stats Panel -->
+                <div class="stats-panel stats-panel-right">
+                    <div class="stat-group">
+                        <div class="stat-row">
+                            <span class="stat-value" id="stat-speed-value-right">--</span>
+                            <div class="stat-bar-wrapper">
+                                <div class="stat-bar" id="stat-speed-right">
+                                    <div class="stat-bar-fill"></div>
+                                </div>
+                            </div>
+                            <span class="stat-name">SPEED</span>
+                            <span class="stat-icon"><i class="fas fa-running"></i></span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-value" id="stat-health-value-right">--</span>
+                            <div class="stat-bar-wrapper">
+                                <div class="stat-bar" id="stat-health-right">
+                                    <div class="stat-bar-fill"></div>
+                                </div>
+                            </div>
+                            <span class="stat-name">HEALTH</span>
+                            <span class="stat-icon"><i class="fas fa-heart"></i></span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <!-- Bottom Character Grid -->
-            <div class="character-select-grid">
-                <div id="animal-grid-stats" class="animal-grid-container"></div>
             </div>
         </div>
         
-        <!-- COMPARE VIEW (FIGHT SCREEN) -->
-        <div id="compare-view" class="view">
-            <!-- Top Header -->
-            <div class="game-header fight-header">
-                <div class="player-indicator player-1-indicator">PLAYER 1</div>
-                <h1>CHARACTER SELECT</h1>
-                <div class="player-indicator player-2-indicator">PLAYER 2</div>
-            </div>
-            
-            <!-- Main Fight Display -->
-            <div class="fight-display-main">
-                <!-- Left Fighter -->
-                <div class="fighter-side left-fighter">
-                    <div id="fighter-1-display" class="fighter-placeholder">
-                        <div class="fighter-silhouette">
-                            <i class="fas fa-user"></i>
+        <!-- Compare View (Fight Screen Style) -->
+        <div id="compare-view" class="view-container">
+            <div class="fight-screen">
+                <div class="fighter-section fighter-left">
+                    <div class="fighter-label">PLAYER 1</div>
+                    <div class="fighter-display">
+                        <div class="fighter-placeholder" id="fighter-1-placeholder">
+                            <i class="fas fa-user-plus"></i>
+                            <p>SELECT<br>FIGHTER 1</p>
                         </div>
-                        <button class="select-fighter-btn" id="select-fighter-1">
-                            SELECT FIGHTER 1
-                        </button>
+                        <img id="fighter-1-image" class="fighter-image" src="" alt="" style="display: none;">
                     </div>
-                    <div class="fighter-name-plate" id="fighter-1-name">???</div>
+                    <div class="fighter-name" id="fighter-1-name">???</div>
+                    <button class="view-stats-btn" id="view-stats-1">VIEW STATS</button>
                 </div>
                 
-                <!-- Center VS Display -->
-                <div class="vs-display">
-                    <div class="vs-text">VS</div>
-                    <button class="fight-button" id="start-fight-btn">
-                        <i class="fas fa-bolt"></i>
-                        START FIGHT
-                        <i class="fas fa-bolt"></i>
+                <div class="fight-center">
+                    <div class="vs-badge">VS</div>
+                    <button class="fight-btn" id="fight-btn">
+                        <i class="fas fa-bolt"></i> FIGHT <i class="fas fa-bolt"></i>
                     </button>
                 </div>
                 
-                <!-- Right Fighter -->
-                <div class="fighter-side right-fighter">
-                    <div id="fighter-2-display" class="fighter-placeholder">
-                        <div class="fighter-silhouette">
-                            <i class="fas fa-user"></i>
+                <div class="fighter-section fighter-right">
+                    <div class="fighter-label">PLAYER 2</div>
+                    <div class="fighter-display">
+                        <div class="fighter-placeholder" id="fighter-2-placeholder">
+                            <i class="fas fa-user-plus"></i>
+                            <p>SELECT<br>FIGHTER 2</p>
                         </div>
-                        <button class="select-fighter-btn" id="select-fighter-2">
-                            SELECT FIGHTER 2
-                        </button>
+                        <img id="fighter-2-image" class="fighter-image" src="" alt="" style="display: none;">
                     </div>
-                    <div class="fighter-name-plate" id="fighter-2-name">???</div>
+                    <div class="fighter-name" id="fighter-2-name">???</div>
+                    <button class="view-stats-btn" id="view-stats-2">VIEW STATS</button>
                 </div>
-            </div>
-            
-            <!-- Bottom Character Grid -->
-            <div class="character-select-grid">
-                <div id="animal-grid-compare" class="animal-grid-container"></div>
             </div>
         </div>
         
-        <!-- Mode Toggle Buttons (Bottom) -->
+        <!-- Character Grid (Bottom) -->
+        <div class="character-grid-container">
+            <div class="grid-controls">
+                <input type="text" id="search-input" placeholder="Search animals..." class="search-box">
+                <select id="class-filter" class="filter-select">
+                    <option value="">All Classes</option>
+                </select>
+                <select id="type-filter" class="filter-select">
+                    <option value="">All Types</option>
+                </select>
+                <select id="sort-by" class="filter-select">
+                    <option value="name">Sort by Name</option>
+                    <option value="attack">Sort by Attack</option>
+                    <option value="defense">Sort by Defense</option>
+                    <option value="agility">Sort by Agility</option>
+                </select>
+            </div>
+            
+            <div class="character-grid" id="character-grid"></div>
+        </div>
+        
+        <!-- Mode Toggle Bar -->
         <div class="mode-toggle-bar">
-            <button id="stats-mode-btn" class="mode-toggle-btn active">
+            <button class="mode-btn active" id="stats-mode-btn" data-mode="stats">
                 <i class="fas fa-chart-bar"></i> STATS
             </button>
-            <button id="compare-mode-btn" class="mode-toggle-btn">
-                <i class="fas fa-fist-raised"></i> COMPARE
+            <button class="mode-btn" id="compare-mode-btn" data-mode="compare">
+                <i class="fas fa-balance-scale"></i> COMPARE
             </button>
         </div>
     </div>
