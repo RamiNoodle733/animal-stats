@@ -178,21 +178,47 @@ class Animal3DViewer {
         // Set initial rotation to face front-left
         group.rotation.y = -Math.PI / 6; // 30 degrees to the left
         
+        // Helper function to add eyes to models
+        const addEyes = (x, y, z, scale = 1, separation = 0.5) => {
+            const eyeGeometry = new THREE.SphereGeometry(0.06 * scale, 16, 16);
+            const eyeWhite = new THREE.SphereGeometry(0.08 * scale, 16, 16);
+            
+            // Left eye
+            const leftEyeWhite = new THREE.Mesh(eyeWhite, this.createAnimalMaterial(0xFFFFFF));
+            leftEyeWhite.position.set(x - separation * scale * 0.3, y, z);
+            const leftPupil = new THREE.Mesh(eyeGeometry, this.createAnimalMaterial(0x000000));
+            leftPupil.position.set(x - separation * scale * 0.3, y, z + 0.05 * scale);
+            group.add(leftEyeWhite, leftPupil);
+            
+            // Right eye
+            const rightEyeWhite = new THREE.Mesh(eyeWhite, this.createAnimalMaterial(0xFFFFFF));
+            rightEyeWhite.position.set(x + separation * scale * 0.3, y, z);
+            const rightPupil = new THREE.Mesh(eyeGeometry, this.createAnimalMaterial(0x000000));
+            rightPupil.position.set(x + separation * scale * 0.3, y, z + 0.05 * scale);
+            group.add(rightEyeWhite, rightPupil);
+        };
+        
         // ===== ELEPHANTS =====
         if (name.includes('elephant')) {
+            const color = 0x808080;
+            
             // Body (large oval)
             const body = new THREE.Mesh(
                 new THREE.SphereGeometry(1.2, 32, 32),
-                this.createAnimalMaterial(0x808080)
+                this.createAnimalMaterial(color)
             );
             body.scale.set(1.3, 1.1, 1.8);
+            body.position.y = 0.2;
             
             // Head (smaller sphere)
             const head = new THREE.Mesh(
                 new THREE.SphereGeometry(0.7, 32, 32),
-                this.createAnimalMaterial(0x787878)
+                this.createAnimalMaterial(color)
             );
-            head.position.set(0, 0.5, 1.7);
+            head.position.set(0, 0.7, 1.9);
+            
+            // Eyes
+            addEyes(0, 0.9, 2.3, 1.2, 0.8);
             
             // Trunk (curved cylinder)
             const trunkCurve = new THREE.CatmullRomCurve3([
@@ -321,6 +347,9 @@ class Animal3DViewer {
                 group.add(leg);
             });
             
+            // Eyes (on top of head)
+            addEyes(0, 0.3, 1.8, 1.2, 0.6);
+            
             group.add(body, head, snout, jaw, tail);
             return group;
         }
@@ -382,6 +411,9 @@ class Animal3DViewer {
             );
             lowerTail.position.set(-2, -0.3, 0);
             lowerTail.rotation.set(0, 0, Math.PI / 2.5);
+            
+            // Eyes (side-mounted)
+            addEyes(0, 0.3, 1.3, 0.8, 0.7);
             
             group.add(body, head, mouth, dorsalFin, leftPectoral, rightPectoral, upperTail, lowerTail);
             return group;
@@ -446,6 +478,9 @@ class Animal3DViewer {
                 hump.position.set(0, 0.8, 0.5);
                 group.add(hump);
             }
+            
+            // Eyes
+            addEyes(0, 0.6, 1.3, 1, 0.5);
             
             group.add(body, head, snout, leftEar, rightEar);
             return group;
@@ -540,6 +575,9 @@ class Animal3DViewer {
                 this.createAnimalMaterial(catColor)
             );
             
+            // Eyes
+            addEyes(0, 0.4, 1, 0.9, 0.6);
+            
             group.add(body, head, muzzle, leftEar, rightEar, tail);
             return group;
         }
@@ -615,6 +653,9 @@ class Animal3DViewer {
                 group.add(leftLeg, rightLeg);
             }
             
+            // Eyes
+            addEyes(0, 0.4, 0.85, 0.8, 0.35);
+            
             group.add(body, head, beak, leftWing, rightWing);
             return group;
         }
@@ -677,7 +718,208 @@ class Animal3DViewer {
                 this.createAnimalMaterial(0x707070)
             );
             
+            // Eyes
+            addEyes(0, 0.35, 1.1, 1, 0.4);
+            
             group.add(body, head, snout, leftEar, rightEar, tail);
+            return group;
+        }
+        
+        // ===== FOXES (Arctic, Fennec, Red, Coyote, Dingo, Jackal) =====
+        if (name.includes('fox') || name.includes('coyote') || name.includes('dingo') || name.includes('jackal')) {
+            let color = 0xC85028; // default red fox
+            let earSize = 0.25;
+            let bodySize = 0.5;
+            
+            if (name.includes('arctic')) {
+                color = 0xF0F0F0;
+            } else if (name.includes('fennec')) {
+                color = 0xE8D8C0;
+                earSize = 0.5; // huge ears
+                bodySize = 0.35; // smaller body
+            } else if (name.includes('red')) {
+                color = 0xC85028;
+            } else if (name.includes('coyote')) {
+                color = 0xA09080;
+                bodySize = 0.6;
+            } else if (name.includes('dingo')) {
+                color = 0xD8A860;
+                bodySize = 0.55;
+            } else if (name.includes('jackal')) {
+                color = 0xB09070;
+                bodySize = 0.48;
+            }
+            
+            // Body
+            const body = new THREE.Mesh(
+                new THREE.CapsuleGeometry(bodySize * 0.5, bodySize * 1.8, 16, 32),
+                this.createAnimalMaterial(color)
+            );
+            body.rotation.z = Math.PI / 2;
+            body.position.y = 0.3;
+            
+            // Head
+            const head = new THREE.Mesh(
+                new THREE.SphereGeometry(bodySize * 0.5, 32, 32),
+                this.createAnimalMaterial(color)
+            );
+            head.position.set(0, 0.3, bodySize * 1.2);
+            head.scale.set(1, 0.9, 1.1);
+            
+            // Pointed snout
+            const snout = new THREE.Mesh(
+                new THREE.ConeGeometry(bodySize * 0.3, bodySize * 0.6, 16),
+                this.createAnimalMaterial(color)
+            );
+            snout.position.set(0, 0.2, bodySize * 1.7);
+            snout.rotation.x = Math.PI / 2;
+            
+            // Nose
+            const nose = new THREE.Mesh(
+                new THREE.SphereGeometry(0.06, 16, 16),
+                this.createAnimalMaterial(0x000000)
+            );
+            nose.position.set(0, 0.2, bodySize * 2);
+            
+            // Large triangular ears
+            const earGeometry = new THREE.ConeGeometry(earSize * 0.4, earSize, 16);
+            const leftEar = new THREE.Mesh(earGeometry, this.createAnimalMaterial(color));
+            leftEar.position.set(-bodySize * 0.35, 0.6, bodySize * 1);
+            leftEar.rotation.z = -Math.PI / 6;
+            const rightEar = new THREE.Mesh(earGeometry, this.createAnimalMaterial(color));
+            rightEar.position.set(bodySize * 0.35, 0.6, bodySize * 1);
+            rightEar.rotation.z = Math.PI / 6;
+            
+            // Inner ear (pink/white)
+            const innerEarColor = name.includes('fennec') ? 0xFFD0D0 : 0xFFE0E0;
+            const leftInner = new THREE.Mesh(
+                new THREE.ConeGeometry(earSize * 0.25, earSize * 0.7, 16),
+                this.createAnimalMaterial(innerEarColor)
+            );
+            leftInner.position.copy(leftEar.position);
+            leftInner.rotation.copy(leftEar.rotation);
+            const rightInner = new THREE.Mesh(
+                new THREE.ConeGeometry(earSize * 0.25, earSize * 0.7, 16),
+                this.createAnimalMaterial(innerEarColor)
+            );
+            rightInner.position.copy(rightEar.position);
+            rightInner.rotation.copy(rightEar.rotation);
+            
+            // Eyes
+            addEyes(0, 0.4, bodySize * 1.5, bodySize * 1.5, 0.6);
+            
+            // Legs
+            const legGeometry = new THREE.CylinderGeometry(bodySize * 0.12, bodySize * 0.15, bodySize * 1.2, 12);
+            const legPositions = [
+                [-bodySize * 0.35, -bodySize * 0.3, bodySize * 0.6],
+                [bodySize * 0.35, -bodySize * 0.3, bodySize * 0.6],
+                [-bodySize * 0.35, -bodySize * 0.3, -bodySize * 0.4],
+                [bodySize * 0.35, -bodySize * 0.3, -bodySize * 0.4]
+            ];
+            legPositions.forEach(pos => {
+                const leg = new THREE.Mesh(legGeometry, this.createAnimalMaterial(color));
+                leg.position.set(...pos);
+                group.add(leg);
+            });
+            
+            // Bushy tail
+            const tailCurve = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(0, 0.2, -bodySize * 0.8),
+                new THREE.Vector3(0, 0.1, -bodySize * 1.3),
+                new THREE.Vector3(0, 0, -bodySize * 1.8)
+            ]);
+            const tail = new THREE.Mesh(
+                new THREE.TubeGeometry(tailCurve, 20, bodySize * 0.2, 12, false),
+                this.createAnimalMaterial(color)
+            );
+            
+            // White tail tip for foxes
+            if (name.includes('fox') && !name.includes('arctic')) {
+                const tailTip = new THREE.Mesh(
+                    new THREE.SphereGeometry(bodySize * 0.25, 16, 16),
+                    this.createAnimalMaterial(0xFFFFFF)
+                );
+                tailTip.position.set(0, 0, -bodySize * 1.8);
+                group.add(tailTip);
+            }
+            
+            group.add(body, head, snout, nose, leftEar, rightEar, leftInner, rightInner, tail);
+            return group;
+        }
+        
+        // ===== HYENA =====
+        if (name.includes('hyena')) {
+            const color = 0xA89878;
+            
+            // Body (stocky front, sloping back)
+            const body = new THREE.Mesh(
+                new THREE.SphereGeometry(0.6, 32, 32),
+                this.createAnimalMaterial(color)
+            );
+            body.scale.set(1.3, 1, 1.5);
+            body.position.set(0, 0.4, 0);
+            body.rotation.x = -Math.PI / 12;
+            
+            // Head (powerful)
+            const head = new THREE.Mesh(
+                new THREE.BoxGeometry(0.6, 0.5, 0.7),
+                this.createAnimalMaterial(color)
+            );
+            head.position.set(0, 0.5, 1.2);
+            
+            // Powerful jaw
+            const jaw = new THREE.Mesh(
+                new THREE.BoxGeometry(0.55, 0.3, 0.5),
+                this.createAnimalMaterial(color)
+            );
+            jaw.position.set(0, 0.2, 1.5);
+            
+            // Large rounded ears
+            const earGeometry = new THREE.SphereGeometry(0.2, 16, 16);
+            const leftEar = new THREE.Mesh(earGeometry, this.createAnimalMaterial(color));
+            leftEar.position.set(-0.3, 0.75, 1);
+            const rightEar = new THREE.Mesh(earGeometry, this.createAnimalMaterial(color));
+            rightEar.position.set(0.3, 0.75, 1);
+            
+            // Eyes
+            addEyes(0, 0.6, 1.4, 1, 0.5);
+            
+            // Spots
+            for (let i = 0; i < 8; i++) {
+                const spot = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.1, 8, 8),
+                    this.createAnimalMaterial(0x6A5A4A)
+                );
+                spot.position.set(
+                    (Math.random() - 0.5) * 1.2,
+                    0.3 + Math.random() * 0.4,
+                    (Math.random() - 0.5) * 1.2
+                );
+                group.add(spot);
+            }
+            
+            // Strong front legs
+            const frontLegGeom = new THREE.CylinderGeometry(0.15, 0.18, 0.9, 12);
+            const backLegGeom = new THREE.CylinderGeometry(0.14, 0.16, 0.7, 12);
+            
+            const frontLeft = new THREE.Mesh(frontLegGeom, this.createAnimalMaterial(color));
+            frontLeft.position.set(-0.4, -0.15, 0.6);
+            const frontRight = new THREE.Mesh(frontLegGeom, this.createAnimalMaterial(color));
+            frontRight.position.set(0.4, -0.15, 0.6);
+            const backLeft = new THREE.Mesh(backLegGeom, this.createAnimalMaterial(color));
+            backLeft.position.set(-0.4, -0.35, -0.5);
+            const backRight = new THREE.Mesh(backLegGeom, this.createAnimalMaterial(color));
+            backRight.position.set(0.4, -0.35, -0.5);
+            
+            // Short tail
+            const tail = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.08, 0.05, 0.6, 12),
+                this.createAnimalMaterial(color)
+            );
+            tail.position.set(0, 0.3, -1);
+            tail.rotation.x = Math.PI / 3;
+            
+            group.add(body, head, jaw, leftEar, rightEar, frontLeft, frontRight, backLeft, backRight, tail);
             return group;
         }
         
@@ -731,6 +973,9 @@ class Animal3DViewer {
                 scale.position.copy(pos);
                 group.add(scale);
             }
+            
+            // Eyes (small, on sides of head)
+            addEyes(0, -0.15, 3.75, 0.6, 0.5);
             
             group.add(body, head);
             return group;
@@ -798,6 +1043,9 @@ class Animal3DViewer {
                 group.add(eyePatch);
             }
             
+            // Eyes
+            addEyes(0, 0.3, 2.7, 1.2, 0.6);
+            
             group.add(body, head, dorsalFin, leftPectoral, rightPectoral, flukes);
             return group;
         }
@@ -847,6 +1095,9 @@ class Animal3DViewer {
             const rightLeg = new THREE.Mesh(legGeometry, this.createAnimalMaterial(primateColor));
             rightLeg.position.set(0.4, -1, 0);
             
+            // Eyes
+            addEyes(0, 1.25, 0.9, 1, 0.5);
+            
             group.add(body, head, face, leftArm, rightArm, leftLeg, rightLeg);
             return group;
         }
@@ -889,6 +1140,9 @@ class Animal3DViewer {
                 leg.position.set(...pos);
                 group.add(leg);
             });
+            
+            // Eyes (small, high on head)
+            addEyes(0, 0.75, 1.7, 1, 0.6);
             
             group.add(body, head, mouth, leftEar, rightEar);
             return group;
@@ -942,6 +1196,9 @@ class Animal3DViewer {
                 leg.position.set(...pos);
                 group.add(leg);
             });
+            
+            // Eyes
+            addEyes(0, 0.65, 2.1, 1.1, 0.5);
             
             group.add(body, head, leftEar, rightEar);
             return group;
@@ -1002,6 +1259,9 @@ class Animal3DViewer {
                 group.add(spot);
             }
             
+            // Eyes
+            addEyes(0, 3.25, 0.5, 0.6, 0.35);
+            
             group.add(body, neck, head, leftOssicone, rightOssicone);
             return group;
         }
@@ -1059,6 +1319,9 @@ class Animal3DViewer {
                 new THREE.TubeGeometry(tailCurve, 20, 0.25, 12, false),
                 this.createAnimalMaterial(0x4A4A3A)
             );
+            
+            // Eyes
+            addEyes(0, 0.15, 1.6, 0.8, 0.5);
             
             group.add(body, head, tongue, frontLeft, frontRight, backLeft, backRight, tail);
             return group;
@@ -1124,13 +1387,1747 @@ class Animal3DViewer {
                 this.createAnimalMaterial(0xA08070)
             );
             
+            // Eyes
+            addEyes(0, 1.9, 0.5, 0.8, 0.6);
+            
             group.add(body, head, leftEar, rightEar, leftArm, rightArm, leftLeg, rightLeg, leftFoot, rightFoot, tail);
             return group;
         }
         
+        // ===== ZEBRA =====
+        if (name.includes('zebra')) {
+            const baseColor = 0xF0F0F0;
+            
+            // Body
+            const body = new THREE.Mesh(
+                new THREE.CapsuleGeometry(0.5, 1.2, 16, 32),
+                this.createAnimalMaterial(baseColor)
+            );
+            body.rotation.z = Math.PI / 2;
+            body.position.y = 0.7;
+            
+            // Head/neck
+            const neck = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.2, 0.25, 0.8, 16),
+                this.createAnimalMaterial(baseColor)
+            );
+            neck.position.set(0, 1.2, 0.8);
+            neck.rotation.x = -Math.PI / 6;
+            
+            const head = new THREE.Mesh(
+                new THREE.BoxGeometry(0.35, 0.4, 0.5),
+                this.createAnimalMaterial(baseColor)
+            );
+            head.position.set(0, 1.5, 1.2);
+            
+            // Muzzle
+            const muzzle = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.15, 0.18, 0.3, 16),
+                this.createAnimalMaterial(baseColor)
+            );
+            muzzle.position.set(0, 1.4, 1.5);
+            muzzle.rotation.x = Math.PI / 2;
+            
+            // Ears
+            const earGeom = new THREE.ConeGeometry(0.12, 0.25, 12);
+            const leftEar = new THREE.Mesh(earGeom, this.createAnimalMaterial(baseColor));
+            leftEar.position.set(-0.15, 1.75, 1.1);
+            const rightEar = new THREE.Mesh(earGeom, this.createAnimalMaterial(baseColor));
+            rightEar.position.set(0.15, 1.75, 1.1);
+            
+            // Mane
+            for (let i = 0; i < 5; i++) {
+                const tuft = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.3, 0.15, 0.08),
+                    this.createAnimalMaterial(0x000000)
+                );
+                tuft.position.set(0, 1.3 + i * 0.1, 0.8 + i * 0.15);
+                tuft.rotation.x = Math.PI / 4;
+                group.add(tuft);
+            }
+            
+            // Eyes
+            addEyes(0, 1.55, 1.35, 0.8, 0.5);
+            
+            // Legs
+            const legGeom = new THREE.CylinderGeometry(0.08, 0.1, 1.2, 12);
+            const legPos = [[-0.3, 0.1, 0.5], [0.3, 0.1, 0.5], [-0.3, 0.1, -0.4], [0.3, 0.1, -0.4]];
+            legPos.forEach(pos => {
+                const leg = new THREE.Mesh(legGeom, this.createAnimalMaterial(baseColor));
+                leg.position.set(...pos);
+                group.add(leg);
+            });
+            
+            // Tail with tuft
+            const tail = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.04, 0.04, 0.8, 8),
+                this.createAnimalMaterial(baseColor)
+            );
+            tail.position.set(0, 0.7, -0.9);
+            tail.rotation.x = Math.PI / 4;
+            const tailTuft = new THREE.Mesh(
+                new THREE.SphereGeometry(0.12, 12, 12),
+                this.createAnimalMaterial(0x000000)
+            );
+            tailTuft.position.set(0, 0.3, -1.4);
+            
+            // Stripes
+            for (let i = 0; i < 12; i++) {
+                const stripe = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.12, 0.6, 0.7),
+                    this.createAnimalMaterial(0x000000)
+                );
+                stripe.position.set(0, 0.7, -0.5 + i * 0.15);
+                stripe.rotation.z = Math.PI / 2;
+                group.add(stripe);
+            }
+            
+            group.add(body, neck, head, muzzle, leftEar, rightEar, tail, tailTuft);
+            return group;
+        }
+        
+        // ===== DEER/ELK/MOOSE/REINDEER =====
+        if (name.includes('elk') || name.includes('moose') || name.includes('reindeer') || name.includes('deer')) {
+            let color = 0xA08050;
+            let antlerSize = 0.8;
+            let bodyScale = 1;
+            
+            if (name.includes('moose')) {
+                color = 0x5A4030;
+                antlerSize = 1.5;
+                bodyScale = 1.3;
+            } else if (name.includes('elk')) {
+                color = 0xB09060;
+                antlerSize = 1.2;
+                bodyScale = 1.2;
+            } else if (name.includes('reindeer')) {
+                color = 0x9A8A7A;
+                antlerSize = 1;
+            }
+            
+            // Body
+            const body = new THREE.Mesh(
+                new THREE.CapsuleGeometry(0.4 * bodyScale, 1 * bodyScale, 16, 32),
+                this.createAnimalMaterial(color)
+            );
+            body.rotation.z = Math.PI / 2;
+            body.position.y = 0.8 * bodyScale;
+            
+            // Neck
+            const neck = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.18 * bodyScale, 0.22 * bodyScale, 0.6 * bodyScale, 16),
+                this.createAnimalMaterial(color)
+            );
+            neck.position.set(0, 1.2 * bodyScale, 0.7 * bodyScale);
+            neck.rotation.x = -Math.PI / 5;
+            
+            // Head
+            const head = new THREE.Mesh(
+                new THREE.BoxGeometry(0.3 * bodyScale, 0.35 * bodyScale, 0.45 * bodyScale),
+                this.createAnimalMaterial(color)
+            );
+            head.position.set(0, 1.5 * bodyScale, 1.1 * bodyScale);
+            
+            // Snout
+            const snout = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.12 * bodyScale, 0.15 * bodyScale, 0.25 * bodyScale, 16),
+                this.createAnimalMaterial(color)
+            );
+            snout.position.set(0, 1.4 * bodyScale, 1.4 * bodyScale);
+            snout.rotation.x = Math.PI / 2;
+            
+            // Ears
+            const earGeom = new THREE.ConeGeometry(0.12 * bodyScale, 0.25 * bodyScale, 12);
+            const leftEar = new THREE.Mesh(earGeom, this.createAnimalMaterial(color));
+            leftEar.position.set(-0.15 * bodyScale, 1.75 * bodyScale, 1 * bodyScale);
+            const rightEar = new THREE.Mesh(earGeom, this.createAnimalMaterial(color));
+            rightEar.position.set(0.15 * bodyScale, 1.75 * bodyScale, 1 * bodyScale);
+            
+            // Eyes
+            addEyes(0, 1.55 * bodyScale, 1.3 * bodyScale, bodyScale * 0.8, 0.5);
+            
+            // Antlers (branching)
+            const antlerMaterial = this.createAnimalMaterial(0x8A7A6A);
+            const leftAntlerBase = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.05 * antlerSize, 0.08 * antlerSize, 0.6 * antlerSize, 8),
+                antlerMaterial
+            );
+            leftAntlerBase.position.set(-0.18 * bodyScale, 1.8 * bodyScale, 1 * bodyScale);
+            leftAntlerBase.rotation.z = -Math.PI / 8;
+            
+            const rightAntlerBase = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.05 * antlerSize, 0.08 * antlerSize, 0.6 * antlerSize, 8),
+                antlerMaterial
+            );
+            rightAntlerBase.position.set(0.18 * bodyScale, 1.8 * bodyScale, 1 * bodyScale);
+            rightAntlerBase.rotation.z = Math.PI / 8;
+            
+            // Antler branches
+            for (let i = 0; i < 3; i++) {
+                const branch = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.03 * antlerSize, 0.05 * antlerSize, 0.4 * antlerSize, 8),
+                    antlerMaterial
+                );
+                branch.position.set(-0.25 * bodyScale, 2 * bodyScale + i * 0.15 * antlerSize, 1 * bodyScale);
+                branch.rotation.set(Math.PI / 6, 0, -Math.PI / 4 - i * 0.2);
+                group.add(branch);
+                
+                const branch2 = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.03 * antlerSize, 0.05 * antlerSize, 0.4 * antlerSize, 8),
+                    antlerMaterial
+                );
+                branch2.position.set(0.25 * bodyScale, 2 * bodyScale + i * 0.15 * antlerSize, 1 * bodyScale);
+                branch2.rotation.set(Math.PI / 6, 0, Math.PI / 4 + i * 0.2);
+                group.add(branch2);
+            }
+            
+            // Legs
+            const legGeom = new THREE.CylinderGeometry(0.08 * bodyScale, 0.1 * bodyScale, 1.3 * bodyScale, 12);
+            const legPos = [
+                [-0.25 * bodyScale, 0.15 * bodyScale, 0.5 * bodyScale],
+                [0.25 * bodyScale, 0.15 * bodyScale, 0.5 * bodyScale],
+                [-0.25 * bodyScale, 0.15 * bodyScale, -0.3 * bodyScale],
+                [0.25 * bodyScale, 0.15 * bodyScale, -0.3 * bodyScale]
+            ];
+            legPos.forEach(pos => {
+                const leg = new THREE.Mesh(legGeom, this.createAnimalMaterial(color));
+                leg.position.set(...pos);
+                group.add(leg);
+            });
+            
+            // Short tail
+            const tail = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.05 * bodyScale, 0.03 * bodyScale, 0.3 * bodyScale, 8),
+                this.createAnimalMaterial(color)
+            );
+            tail.position.set(0, 0.9 * bodyScale, -0.8 * bodyScale);
+            tail.rotation.x = Math.PI / 3;
+            
+            group.add(body, neck, head, snout, leftEar, rightEar, leftAntlerBase, rightAntlerBase, tail);
+            return group;
+        }
+        
+        // ===== GAZELLE/IMPALA =====
+        if (name.includes('gazelle') || name.includes('impala')) {
+            const color = 0xC8A878;
+            
+            // Slender body
+            const body = new THREE.Mesh(
+                new THREE.CapsuleGeometry(0.3, 0.9, 16, 32),
+                this.createAnimalMaterial(color)
+            );
+            body.rotation.z = Math.PI / 2;
+            body.position.y = 0.7;
+            
+            // Graceful neck
+            const neck = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.12, 0.15, 0.5, 16),
+                this.createAnimalMaterial(color)
+            );
+            neck.position.set(0, 1.1, 0.6);
+            neck.rotation.x = -Math.PI / 6;
+            
+            // Small head
+            const head = new THREE.Mesh(
+                new THREE.BoxGeometry(0.25, 0.28, 0.35),
+                this.createAnimalMaterial(color)
+            );
+            head.position.set(0, 1.35, 0.9);
+            
+            // Delicate snout
+            const snout = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.08, 0.1, 0.2, 12),
+                this.createAnimalMaterial(color)
+            );
+            snout.position.set(0, 1.25, 1.15);
+            snout.rotation.x = Math.PI / 2;
+            
+            // Large ears
+            const earGeom = new THREE.ConeGeometry(0.1, 0.22, 12);
+            const leftEar = new THREE.Mesh(earGeom, this.createAnimalMaterial(color));
+            leftEar.position.set(-0.12, 1.55, 0.85);
+            const rightEar = new THREE.Mesh(earGeom, this.createAnimalMaterial(color));
+            rightEar.position.set(0.12, 1.55, 0.85);
+            
+            // Eyes
+            addEyes(0, 1.4, 1.05, 0.7, 0.45);
+            
+            // Curved horns
+            const hornCurveLeft = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(-0.12, 1.6, 0.85),
+                new THREE.Vector3(-0.15, 1.9, 0.85),
+                new THREE.Vector3(-0.12, 2.1, 0.9)
+            ]);
+            const hornLeft = new THREE.Mesh(
+                new THREE.TubeGeometry(hornCurveLeft, 10, 0.03, 8, false),
+                this.createAnimalMaterial(0x3A3A3A)
+            );
+            
+            const hornCurveRight = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(0.12, 1.6, 0.85),
+                new THREE.Vector3(0.15, 1.9, 0.85),
+                new THREE.Vector3(0.12, 2.1, 0.9)
+            ]);
+            const hornRight = new THREE.Mesh(
+                new THREE.TubeGeometry(hornCurveRight, 10, 0.03, 8, false),
+                this.createAnimalMaterial(0x3A3A3A)
+            );
+            
+            // Long slender legs
+            const legGeom = new THREE.CylinderGeometry(0.05, 0.07, 1.1, 12);
+            const legPos = [[-0.2, 0.15, 0.4], [0.2, 0.15, 0.4], [-0.2, 0.15, -0.3], [0.2, 0.15, -0.3]];
+            legPos.forEach(pos => {
+                const leg = new THREE.Mesh(legGeom, this.createAnimalMaterial(color));
+                leg.position.set(...pos);
+                group.add(leg);
+            });
+            
+            // Small tail with tuft
+            const tail = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.03, 0.02, 0.5, 8),
+                this.createAnimalMaterial(color)
+            );
+            tail.position.set(0, 0.7, -0.7);
+            tail.rotation.x = Math.PI / 4;
+            
+            const tailTuft = new THREE.Mesh(
+                new THREE.SphereGeometry(0.08, 12, 12),
+                this.createAnimalMaterial(0x2A2A2A)
+            );
+            tailTuft.position.set(0, 0.4, -1);
+            
+            group.add(body, neck, head, snout, leftEar, rightEar, hornLeft, hornRight, tail, tailTuft);
+            return group;
+        }
+        
+        // ===== BUFFALO/BISON/YAK/MUSK OX/WILDEBEEST =====
+        if (name.includes('buffalo') || name.includes('bison') || name.includes('yak') || name.includes('musk') || name.includes('wildebeest')) {
+            let color = 0x4A3A2A;
+            let humpSize = 0;
+            let bodyScale = 1.2;
+            let hornStyle = 'curved';
+            
+            if (name.includes('bison')) {
+                color = 0x5A4030;
+                humpSize = 0.6;
+                bodyScale = 1.4;
+            } else if (name.includes('buffalo')) {
+                color = 0x3A2A1A;
+                bodyScale = 1.3;
+                hornStyle = 'wide';
+            } else if (name.includes('yak')) {
+                color = 0x2A1A0A;
+                humpSize = 0.3;
+                bodyScale = 1.3;
+            } else if (name.includes('musk')) {
+                color = 0x4A3A2A;
+                bodyScale = 1.2;
+            } else if (name.includes('wildebeest')) {
+                color = 0x6A5A4A;
+                bodyScale = 1.1;
+                hornStyle = 'curved_up';
+            }
+            
+            // Massive body
+            const body = new THREE.Mesh(
+                new THREE.SphereGeometry(0.7 * bodyScale, 32, 32),
+                this.createAnimalMaterial(color)
+            );
+            body.scale.set(1.4, 1.1, 1.3);
+            body.position.y = 0.6 * bodyScale;
+            
+            // Shoulder hump (for bison/yak)
+            if (humpSize > 0) {
+                const hump = new THREE.Mesh(
+                    new THREE.SphereGeometry(humpSize * bodyScale, 16, 16),
+                    this.createAnimalMaterial(color)
+                );
+                hump.position.set(0, 1.2 * bodyScale, 0.3 * bodyScale);
+                group.add(hump);
+            }
+            
+            // Head
+            const head = new THREE.Mesh(
+                new THREE.BoxGeometry(0.5 * bodyScale, 0.5 * bodyScale, 0.6 * bodyScale),
+                this.createAnimalMaterial(color)
+            );
+            head.position.set(0, 0.7 * bodyScale, 1.2 * bodyScale);
+            
+            // Snout
+            const snout = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.2 * bodyScale, 0.25 * bodyScale, 0.3 * bodyScale, 16),
+                this.createAnimalMaterial(color)
+            );
+            snout.position.set(0, 0.6 * bodyScale, 1.6 * bodyScale);
+            snout.rotation.x = Math.PI / 2;
+            
+            // Ears
+            const earGeom = new THREE.ConeGeometry(0.12 * bodyScale, 0.22 * bodyScale, 12);
+            const leftEar = new THREE.Mesh(earGeom, this.createAnimalMaterial(color));
+            leftEar.position.set(-0.28 * bodyScale, 1 * bodyScale, 1.1 * bodyScale);
+            leftEar.rotation.z = -Math.PI / 6;
+            const rightEar = new THREE.Mesh(earGeom, this.createAnimalMaterial(color));
+            rightEar.position.set(0.28 * bodyScale, 1 * bodyScale, 1.1 * bodyScale);
+            rightEar.rotation.z = Math.PI / 6;
+            
+            // Eyes
+            addEyes(0, 0.8 * bodyScale, 1.5 * bodyScale, bodyScale, 0.6);
+            
+            // Horns
+            const hornMaterial = this.createAnimalMaterial(0x2A2A1A);
+            if (hornStyle === 'wide') {
+                // Wide curved horns (buffalo)
+                const hornCurveLeft = new THREE.CatmullRomCurve3([
+                    new THREE.Vector3(-0.3 * bodyScale, 1 * bodyScale, 1.1 * bodyScale),
+                    new THREE.Vector3(-0.6 * bodyScale, 1.1 * bodyScale, 1.1 * bodyScale),
+                    new THREE.Vector3(-0.8 * bodyScale, 1 * bodyScale, 1.2 * bodyScale)
+                ]);
+                const hornLeft = new THREE.Mesh(
+                    new THREE.TubeGeometry(hornCurveLeft, 15, 0.08 * bodyScale, 8, false),
+                    hornMaterial
+                );
+                group.add(hornLeft);
+                
+                const hornCurveRight = new THREE.CatmullRomCurve3([
+                    new THREE.Vector3(0.3 * bodyScale, 1 * bodyScale, 1.1 * bodyScale),
+                    new THREE.Vector3(0.6 * bodyScale, 1.1 * bodyScale, 1.1 * bodyScale),
+                    new THREE.Vector3(0.8 * bodyScale, 1 * bodyScale, 1.2 * bodyScale)
+                ]);
+                const hornRight = new THREE.Mesh(
+                    new THREE.TubeGeometry(hornCurveRight, 15, 0.08 * bodyScale, 8, false),
+                    hornMaterial
+                );
+                group.add(hornRight);
+            } else if (hornStyle === 'curved_up') {
+                // Upward curved horns (wildebeest)
+                const hornCurveLeft = new THREE.CatmullRomCurve3([
+                    new THREE.Vector3(-0.25 * bodyScale, 0.9 * bodyScale, 1.2 * bodyScale),
+                    new THREE.Vector3(-0.3 * bodyScale, 0.7 * bodyScale, 1.2 * bodyScale),
+                    new THREE.Vector3(-0.25 * bodyScale, 0.9 * bodyScale, 1.3 * bodyScale),
+                    new THREE.Vector3(-0.2 * bodyScale, 1.3 * bodyScale, 1.3 * bodyScale)
+                ]);
+                const hornLeft = new THREE.Mesh(
+                    new THREE.TubeGeometry(hornCurveLeft, 15, 0.05 * bodyScale, 8, false),
+                    hornMaterial
+                );
+                group.add(hornLeft);
+                
+                const hornCurveRight = new THREE.CatmullRomCurve3([
+                    new THREE.Vector3(0.25 * bodyScale, 0.9 * bodyScale, 1.2 * bodyScale),
+                    new THREE.Vector3(0.3 * bodyScale, 0.7 * bodyScale, 1.2 * bodyScale),
+                    new THREE.Vector3(0.25 * bodyScale, 0.9 * bodyScale, 1.3 * bodyScale),
+                    new THREE.Vector3(0.2 * bodyScale, 1.3 * bodyScale, 1.3 * bodyScale)
+                ]);
+                const hornRight = new THREE.Mesh(
+                    new THREE.TubeGeometry(hornCurveRight, 15, 0.05 * bodyScale, 8, false),
+                    hornMaterial
+                );
+                group.add(hornRight);
+            } else {
+                // Short curved horns (default)
+                const leftHorn = new THREE.Mesh(
+                    new THREE.ConeGeometry(0.06 * bodyScale, 0.4 * bodyScale, 8),
+                    hornMaterial
+                );
+                leftHorn.position.set(-0.25 * bodyScale, 1.1 * bodyScale, 1.1 * bodyScale);
+                leftHorn.rotation.z = -Math.PI / 6;
+                group.add(leftHorn);
+                
+                const rightHorn = new THREE.Mesh(
+                    new THREE.ConeGeometry(0.06 * bodyScale, 0.4 * bodyScale, 8),
+                    hornMaterial
+                );
+                rightHorn.position.set(0.25 * bodyScale, 1.1 * bodyScale, 1.1 * bodyScale);
+                rightHorn.rotation.z = Math.PI / 6;
+                group.add(rightHorn);
+            }
+            
+            // Beard (for bison/yak/wildebeest)
+            if (name.includes('bison') || name.includes('yak') || name.includes('wildebeest')) {
+                for (let i = 0; i < 5; i++) {
+                    const beardTuft = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.04 * bodyScale, 0.02 * bodyScale, 0.3 * bodyScale, 8),
+                        this.createAnimalMaterial(color)
+                    );
+                    beardTuft.position.set(
+                        (Math.random() - 0.5) * 0.3 * bodyScale,
+                        0.3 * bodyScale,
+                        1.5 * bodyScale
+                    );
+                    beardTuft.rotation.x = Math.PI / 6;
+                    group.add(beardTuft);
+                }
+            }
+            
+            // Strong legs
+            const legGeom = new THREE.CylinderGeometry(0.12 * bodyScale, 0.15 * bodyScale, 1.1 * bodyScale, 12);
+            const legPos = [
+                [-0.5 * bodyScale, -0.05 * bodyScale, 0.5 * bodyScale],
+                [0.5 * bodyScale, -0.05 * bodyScale, 0.5 * bodyScale],
+                [-0.5 * bodyScale, -0.05 * bodyScale, -0.4 * bodyScale],
+                [0.5 * bodyScale, -0.05 * bodyScale, -0.4 * bodyScale]
+            ];
+            legPos.forEach(pos => {
+                const leg = new THREE.Mesh(legGeom, this.createAnimalMaterial(color));
+                leg.position.set(...pos);
+                group.add(leg);
+            });
+            
+            // Tail with tuft
+            const tail = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.05 * bodyScale, 0.03 * bodyScale, 0.7 * bodyScale, 8),
+                this.createAnimalMaterial(color)
+            );
+            tail.position.set(0, 0.7 * bodyScale, -0.9 * bodyScale);
+            tail.rotation.x = Math.PI / 4;
+            
+            const tailTuft = new THREE.Mesh(
+                new THREE.SphereGeometry(0.12 * bodyScale, 12, 12),
+                this.createAnimalMaterial(color)
+            );
+            tailTuft.position.set(0, 0.3 * bodyScale, -1.3 * bodyScale);
+            
+            group.add(body, head, snout, leftEar, rightEar, tail, tailTuft);
+            return group;
+        }
+        
+        // ===== SHEEP/GOATS (Bighorn, Ibex, Mountain Goat) =====
+        if (name.includes('sheep') || name.includes('goat') || name.includes('ibex')) {
+            let color = 0xE8E8E8;
+            let hornType = 'curved';
+            let bodyScale = 1;
+            
+            if (name.includes('bighorn')) {
+                color = 0xA08870;
+                hornType = 'bighorn';
+                bodyScale = 1.1;
+            } else if (name.includes('ibex')) {
+                color = 0x8A7A6A;
+                hornType = 'long';
+                bodyScale = 0.9;
+            } else if (name.includes('mountain')) {
+                color = 0xF0F0F0;
+                hornType = 'short';
+                bodyScale = 1;
+            }
+            
+            // Fluffy body
+            const body = new THREE.Mesh(
+                new THREE.SphereGeometry(0.5 * bodyScale, 32, 32),
+                this.createAnimalMaterial(color)
+            );
+            body.scale.set(1.2, 1, 1.1);
+            body.position.y = 0.6 * bodyScale;
+            
+            // Head
+            const head = new THREE.Mesh(
+                new THREE.BoxGeometry(0.3 * bodyScale, 0.35 * bodyScale, 0.4 * bodyScale),
+                this.createAnimalMaterial(color)
+            );
+            head.position.set(0, 0.7 * bodyScale, 0.9 * bodyScale);
+            
+            // Snout
+            const snout = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.12 * bodyScale, 0.14 * bodyScale, 0.22 * bodyScale, 16),
+                this.createAnimalMaterial(color)
+            );
+            snout.position.set(0, 0.6 * bodyScale, 1.2 * bodyScale);
+            snout.rotation.x = Math.PI / 2;
+            
+            // Ears
+            const earGeom = new THREE.ConeGeometry(0.1 * bodyScale, 0.2 * bodyScale, 12);
+            const leftEar = new THREE.Mesh(earGeom, this.createAnimalMaterial(color));
+            leftEar.position.set(-0.15 * bodyScale, 0.95 * bodyScale, 0.85 * bodyScale);
+            const rightEar = new THREE.Mesh(earGeom, this.createAnimalMaterial(color));
+            rightEar.position.set(0.15 * bodyScale, 0.95 * bodyScale, 0.85 * bodyScale);
+            
+            // Eyes
+            addEyes(0, 0.75 * bodyScale, 1.05 * bodyScale, bodyScale * 0.8, 0.5);
+            
+            // Horns
+            const hornMaterial = this.createAnimalMaterial(0x4A4A3A);
+            if (hornType === 'bighorn') {
+                // Large curved ram horns
+                const hornCurveLeft = new THREE.CatmullRomCurve3([
+                    new THREE.Vector3(-0.18 * bodyScale, 0.9 * bodyScale, 0.85 * bodyScale),
+                    new THREE.Vector3(-0.4 * bodyScale, 0.8 * bodyScale, 0.9 * bodyScale),
+                    new THREE.Vector3(-0.5 * bodyScale, 0.6 * bodyScale, 1.1 * bodyScale),
+                    new THREE.Vector3(-0.4 * bodyScale, 0.5 * bodyScale, 1.3 * bodyScale)
+                ]);
+                const hornLeft = new THREE.Mesh(
+                    new THREE.TubeGeometry(hornCurveLeft, 20, 0.12 * bodyScale, 8, false),
+                    hornMaterial
+                );
+                group.add(hornLeft);
+                
+                const hornCurveRight = new THREE.CatmullRomCurve3([
+                    new THREE.Vector3(0.18 * bodyScale, 0.9 * bodyScale, 0.85 * bodyScale),
+                    new THREE.Vector3(0.4 * bodyScale, 0.8 * bodyScale, 0.9 * bodyScale),
+                    new THREE.Vector3(0.5 * bodyScale, 0.6 * bodyScale, 1.1 * bodyScale),
+                    new THREE.Vector3(0.4 * bodyScale, 0.5 * bodyScale, 1.3 * bodyScale)
+                ]);
+                const hornRight = new THREE.Mesh(
+                    new THREE.TubeGeometry(hornCurveRight, 20, 0.12 * bodyScale, 8, false),
+                    hornMaterial
+                );
+                group.add(hornRight);
+            } else if (hornType === 'long') {
+                // Long curved ibex horns
+                const hornCurveLeft = new THREE.CatmullRomCurve3([
+                    new THREE.Vector3(-0.15 * bodyScale, 0.9 * bodyScale, 0.85 * bodyScale),
+                    new THREE.Vector3(-0.2 * bodyScale, 1.3 * bodyScale, 0.85 * bodyScale),
+                    new THREE.Vector3(-0.18 * bodyScale, 1.7 * bodyScale, 0.9 * bodyScale)
+                ]);
+                const hornLeft = new THREE.Mesh(
+                    new THREE.TubeGeometry(hornCurveLeft, 20, 0.06 * bodyScale, 8, false),
+                    hornMaterial
+                );
+                group.add(hornLeft);
+                
+                const hornCurveRight = new THREE.CatmullRomCurve3([
+                    new THREE.Vector3(0.15 * bodyScale, 0.9 * bodyScale, 0.85 * bodyScale),
+                    new THREE.Vector3(0.2 * bodyScale, 1.3 * bodyScale, 0.85 * bodyScale),
+                    new THREE.Vector3(0.18 * bodyScale, 1.7 * bodyScale, 0.9 * bodyScale)
+                ]);
+                const hornRight = new THREE.Mesh(
+                    new THREE.TubeGeometry(hornCurveRight, 20, 0.06 * bodyScale, 8, false),
+                    hornMaterial
+                );
+                group.add(hornRight);
+            } else {
+                // Short horns
+                const leftHorn = new THREE.Mesh(
+                    new THREE.ConeGeometry(0.05 * bodyScale, 0.3 * bodyScale, 8),
+                    hornMaterial
+                );
+                leftHorn.position.set(-0.15 * bodyScale, 1 * bodyScale, 0.85 * bodyScale);
+                leftHorn.rotation.z = -Math.PI / 8;
+                group.add(leftHorn);
+                
+                const rightHorn = new THREE.Mesh(
+                    new THREE.ConeGeometry(0.05 * bodyScale, 0.3 * bodyScale, 8),
+                    hornMaterial
+                );
+                rightHorn.position.set(0.15 * bodyScale, 1 * bodyScale, 0.85 * bodyScale);
+                rightHorn.rotation.z = Math.PI / 8;
+                group.add(rightHorn);
+            }
+            
+            // Legs
+            const legGeom = new THREE.CylinderGeometry(0.07 * bodyScale, 0.09 * bodyScale, 0.9 * bodyScale, 12);
+            const legPos = [
+                [-0.3 * bodyScale, 0.15 * bodyScale, 0.4 * bodyScale],
+                [0.3 * bodyScale, 0.15 * bodyScale, 0.4 * bodyScale],
+                [-0.3 * bodyScale, 0.15 * bodyScale, -0.3 * bodyScale],
+                [0.3 * bodyScale, 0.15 * bodyScale, -0.3 * bodyScale]
+            ];
+            legPos.forEach(pos => {
+                const leg = new THREE.Mesh(legGeom, this.createAnimalMaterial(color));
+                leg.position.set(...pos);
+                group.add(leg);
+            });
+            
+            // Small tail
+            const tail = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.04 * bodyScale, 0.02 * bodyScale, 0.2 * bodyScale, 8),
+                this.createAnimalMaterial(color)
+            );
+            tail.position.set(0, 0.7 * bodyScale, -0.7 * bodyScale);
+            tail.rotation.x = Math.PI / 3;
+            
+            group.add(body, head, snout, leftEar, rightEar, tail);
+            return group;
+        }
+        
+        // ===== CAMEL/LLAMA/ALPACA =====
+        if (name.includes('camel') || name.includes('llama') || name.includes('alpaca')) {
+            let color = 0xC8A878;
+            let neckLength = 1.2;
+            let hasHump = false;
+            let bodyScale = 1;
+            
+            if (name.includes('camel')) {
+                color = 0xB89868;
+                hasHump = true;
+                bodyScale = 1.3;
+                neckLength = 1;
+            } else if (name.includes('llama')) {
+                color = 0xE8D8C8;
+                neckLength = 1.5;
+                bodyScale = 1.1;
+            } else if (name.includes('alpaca')) {
+                color = 0xD8C8B8;
+                neckLength = 1.3;
+                bodyScale = 0.9;
+            }
+            
+            // Body
+            const body = new THREE.Mesh(
+                new THREE.CapsuleGeometry(0.4 * bodyScale, 1 * bodyScale, 16, 32),
+                this.createAnimalMaterial(color)
+            );
+            body.rotation.z = Math.PI / 2;
+            body.position.y = 0.8 * bodyScale;
+            
+            // Hump(s) for camel
+            if (hasHump) {
+                const hump = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.35 * bodyScale, 16, 16),
+                    this.createAnimalMaterial(color)
+                );
+                hump.position.set(0, 1.3 * bodyScale, 0);
+                group.add(hump);
+            }
+            
+            // Long neck
+            const neck = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.15 * bodyScale, 0.2 * bodyScale, neckLength * bodyScale, 16),
+                this.createAnimalMaterial(color)
+            );
+            neck.position.set(0, 1.2 * bodyScale, 0.7 * bodyScale);
+            neck.rotation.x = -Math.PI / 6;
+            
+            // Head
+            const head = new THREE.Mesh(
+                new THREE.BoxGeometry(0.25 * bodyScale, 0.3 * bodyScale, 0.4 * bodyScale),
+                this.createAnimalMaterial(color)
+            );
+            head.position.set(0, 1.2 * bodyScale + neckLength * bodyScale * 0.7, 1.1 * bodyScale);
+            
+            // Snout
+            const snout = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.1 * bodyScale, 0.12 * bodyScale, 0.25 * bodyScale, 16),
+                this.createAnimalMaterial(color)
+            );
+            snout.position.set(0, 1.2 * bodyScale + neckLength * bodyScale * 0.7 - 0.1 * bodyScale, 1.4 * bodyScale);
+            snout.rotation.x = Math.PI / 2;
+            
+            // Large ears
+            const earGeom = new THREE.ConeGeometry(0.12 * bodyScale, 0.3 * bodyScale, 12);
+            const leftEar = new THREE.Mesh(earGeom, this.createAnimalMaterial(color));
+            leftEar.position.set(-0.15 * bodyScale, 1.2 * bodyScale + neckLength * bodyScale * 0.7 + 0.25 * bodyScale, 1 * bodyScale);
+            const rightEar = new THREE.Mesh(earGeom, this.createAnimalMaterial(color));
+            rightEar.position.set(0.15 * bodyScale, 1.2 * bodyScale + neckLength * bodyScale * 0.7 + 0.25 * bodyScale, 1 * bodyScale);
+            
+            // Eyes
+            addEyes(0, 1.2 * bodyScale + neckLength * bodyScale * 0.7, 1.25 * bodyScale, bodyScale * 0.8, 0.5);
+            
+            // Long legs
+            const legGeom = new THREE.CylinderGeometry(0.08 * bodyScale, 0.1 * bodyScale, 1.3 * bodyScale, 12);
+            const legPos = [
+                [-0.25 * bodyScale, 0.15 * bodyScale, 0.5 * bodyScale],
+                [0.25 * bodyScale, 0.15 * bodyScale, 0.5 * bodyScale],
+                [-0.25 * bodyScale, 0.15 * bodyScale, -0.3 * bodyScale],
+                [0.25 * bodyScale, 0.15 * bodyScale, -0.3 * bodyScale]
+            ];
+            legPos.forEach(pos => {
+                const leg = new THREE.Mesh(legGeom, this.createAnimalMaterial(color));
+                leg.position.set(...pos);
+                group.add(leg);
+            });
+            
+            // Tail
+            const tail = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.04 * bodyScale, 0.02 * bodyScale, 0.6 * bodyScale, 8),
+                this.createAnimalMaterial(color)
+            );
+            tail.position.set(0, 0.9 * bodyScale, -0.8 * bodyScale);
+            tail.rotation.x = Math.PI / 4;
+            
+            group.add(body, neck, head, snout, leftEar, rightEar, tail);
+            return group;
+        }
+        
+        // ===== WARTHOG/WILD BOAR =====
+        if (name.includes('warthog') || name.includes('boar')) {
+            const color = name.includes('warthog') ? 0x8A7A6A : 0x4A3A2A;
+            const bodyScale = name.includes('warthog') ? 1 : 1.1;
+            
+            // Stocky body
+            const body = new THREE.Mesh(
+                new THREE.CapsuleGeometry(0.4 * bodyScale, 1 * bodyScale, 16, 32),
+                this.createAnimalMaterial(color)
+            );
+            body.rotation.z = Math.PI / 2;
+            body.position.y = 0.5 * bodyScale;
+            
+            // Large head
+            const head = new THREE.Mesh(
+                new THREE.BoxGeometry(0.5 * bodyScale, 0.45 * bodyScale, 0.6 * bodyScale),
+                this.createAnimalMaterial(color)
+            );
+            head.position.set(0, 0.5 * bodyScale, 1 * bodyScale);
+            
+            // Long snout
+            const snout = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.15 * bodyScale, 0.18 * bodyScale, 0.5 * bodyScale, 16),
+                this.createAnimalMaterial(color)
+            );
+            snout.position.set(0, 0.4 * bodyScale, 1.5 * bodyScale);
+            snout.rotation.x = Math.PI / 2;
+            
+            // Tusks
+            const tuskGeom = new THREE.ConeGeometry(0.04 * bodyScale, 0.35 * bodyScale, 8);
+            const leftTusk = new THREE.Mesh(tuskGeom, this.createAnimalMaterial(0xFFFFF0));
+            leftTusk.position.set(-0.12 * bodyScale, 0.4 * bodyScale, 1.7 * bodyScale);
+            leftTusk.rotation.set(Math.PI / 6, 0, -Math.PI / 8);
+            const rightTusk = new THREE.Mesh(tuskGeom, this.createAnimalMaterial(0xFFFFF0));
+            rightTusk.position.set(0.12 * bodyScale, 0.4 * bodyScale, 1.7 * bodyScale);
+            rightTusk.rotation.set(Math.PI / 6, 0, Math.PI / 8);
+            
+            // Warts (for warthog)
+            if (name.includes('warthog')) {
+                for (let i = 0; i < 4; i++) {
+                    const wart = new THREE.Mesh(
+                        new THREE.SphereGeometry(0.06 * bodyScale, 8, 8),
+                        this.createAnimalMaterial(0xA08870)
+                    );
+                    wart.position.set(
+                        (i % 2 === 0 ? -0.15 : 0.15) * bodyScale,
+                        0.5 * bodyScale + (i < 2 ? 0.1 : -0.1) * bodyScale,
+                        1.2 * bodyScale
+                    );
+                    group.add(wart);
+                }
+            }
+            
+            // Ears
+            const earGeom = new THREE.ConeGeometry(0.12 * bodyScale, 0.25 * bodyScale, 12);
+            const leftEar = new THREE.Mesh(earGeom, this.createAnimalMaterial(color));
+            leftEar.position.set(-0.25 * bodyScale, 0.75 * bodyScale, 0.9 * bodyScale);
+            const rightEar = new THREE.Mesh(earGeom, this.createAnimalMaterial(color));
+            rightEar.position.set(0.25 * bodyScale, 0.75 * bodyScale, 0.9 * bodyScale);
+            
+            // Eyes
+            addEyes(0, 0.6 * bodyScale, 1.3 * bodyScale, bodyScale * 0.8, 0.5);
+            
+            // Bristly mane (for boar)
+            if (name.includes('boar')) {
+                for (let i = 0; i < 6; i++) {
+                    const bristle = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.02 * bodyScale, 0.01 * bodyScale, 0.15 * bodyScale, 8),
+                        this.createAnimalMaterial(0x2A2A2A)
+                    );
+                    bristle.position.set(0, 0.7 * bodyScale, 0.7 * bodyScale - i * 0.15 * bodyScale);
+                    bristle.rotation.x = -Math.PI / 6;
+                    group.add(bristle);
+                }
+            }
+            
+            // Short legs
+            const legGeom = new THREE.CylinderGeometry(0.08 * bodyScale, 0.1 * bodyScale, 0.7 * bodyScale, 12);
+            const legPos = [
+                [-0.25 * bodyScale, -0.15 * bodyScale, 0.5 * bodyScale],
+                [0.25 * bodyScale, -0.15 * bodyScale, 0.5 * bodyScale],
+                [-0.25 * bodyScale, -0.15 * bodyScale, -0.3 * bodyScale],
+                [0.25 * bodyScale, -0.15 * bodyScale, -0.3 * bodyScale]
+            ];
+            legPos.forEach(pos => {
+                const leg = new THREE.Mesh(legGeom, this.createAnimalMaterial(color));
+                leg.position.set(...pos);
+                group.add(leg);
+            });
+            
+            // Thin tail
+            const tail = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.03 * bodyScale, 0.02 * bodyScale, 0.5 * bodyScale, 8),
+                this.createAnimalMaterial(color)
+            );
+            tail.position.set(0, 0.7 * bodyScale, -0.8 * bodyScale);
+            tail.rotation.x = Math.PI / 3;
+            
+            group.add(body, head, snout, leftTusk, rightTusk, leftEar, rightEar, tail);
+            return group;
+        }
+        
+        // ===== SMALL MAMMALS (Raccoon, Red Panda, Badger, Honey Badger, Wolverine, Skunk, Otter, Sea Otter, Beaver, Meerkat, Mongoose, Opossum, Sloth, Pangolin, Porcupine, Armadillo, Anteater, Platypus, Tasmanian Devil) =====
+        if (name.includes('raccoon') || name.includes('panda') || name.includes('badger') || name.includes('wolverine') || 
+            name.includes('skunk') || name.includes('otter') || name.includes('beaver') || name.includes('meerkat') ||
+            name.includes('mongoose') || name.includes('opossum') || name.includes('sloth') || name.includes('pangolin') ||
+            name.includes('porcupine') || name.includes('armadillo') || name.includes('anteater') || name.includes('platypus') ||
+            name.includes('tasmanian') || name.includes('devil')) {
+            
+            let color = 0x808080;
+            let bodyScale = 0.5;
+            let tailStyle = 'bushy';
+            let specialFeature = 'none';
+            
+            // Determine species-specific attributes
+            if (name.includes('raccoon')) {
+                color = 0x6A6A6A;
+                bodyScale = 0.5;
+                tailStyle = 'ringed';
+            } else if (name.includes('red') && name.includes('panda')) {
+                color = 0xC84020;
+                bodyScale = 0.55;
+                tailStyle = 'ringed';
+            } else if (name.includes('honey') && name.includes('badger')) {
+                color = 0x2A2A2A;
+                bodyScale = 0.45;
+                specialFeature = 'stripe';
+            } else if (name.includes('badger') && !name.includes('honey')) {
+                color = 0x4A4A4A;
+                bodyScale = 0.5;
+                specialFeature = 'stripe';
+            } else if (name.includes('wolverine')) {
+                color = 0x3A2A1A;
+                bodyScale = 0.6;
+                tailStyle = 'bushy';
+            } else if (name.includes('skunk')) {
+                color = 0x1A1A1A;
+                bodyScale = 0.4;
+                specialFeature = 'stripe';
+                tailStyle = 'bushy';
+            } else if (name.includes('sea') && name.includes('otter')) {
+                color = 0x5A4A3A;
+                bodyScale = 0.7;
+                tailStyle = 'thick';
+            } else if (name.includes('otter')) {
+                color = 0x6A5A4A;
+                bodyScale = 0.5;
+                tailStyle = 'thick';
+            } else if (name.includes('beaver')) {
+                color = 0x5A4A3A;
+                bodyScale = 0.6;
+                tailStyle = 'flat';
+            } else if (name.includes('meerkat')) {
+                color = 0xB8A888;
+                bodyScale = 0.35;
+                specialFeature = 'upright';
+            } else if (name.includes('mongoose')) {
+                color = 0x9A8A7A;
+                bodyScale = 0.4;
+                tailStyle = 'thin';
+            } else if (name.includes('opossum')) {
+                color = 0xC8C8C8;
+                bodyScale = 0.45;
+                tailStyle = 'rat';
+            } else if (name.includes('sloth')) {
+                color = 0x8A8A7A;
+                bodyScale = 0.5;
+                specialFeature = 'hanging';
+            } else if (name.includes('pangolin')) {
+                color = 0x8A7A6A;
+                bodyScale = 0.5;
+                specialFeature = 'scales';
+            } else if (name.includes('porcupine')) {
+                color = 0x5A5A5A;
+                bodyScale = 0.5;
+                specialFeature = 'quills';
+            } else if (name.includes('armadillo')) {
+                color = 0x7A6A5A;
+                bodyScale = 0.45;
+                specialFeature = 'armor';
+            } else if (name.includes('anteater')) {
+                color = 0xA09080;
+                bodyScale = 0.7;
+                specialFeature = 'snout';
+            } else if (name.includes('platypus')) {
+                color = 0x6A5A4A;
+                bodyScale = 0.4;
+                specialFeature = 'bill';
+            } else if (name.includes('tasmanian') || name.includes('devil')) {
+                color = 0x2A2A2A;
+                bodyScale = 0.5;
+                specialFeature = 'jaw';
+            }
+            
+            // Body
+            const body = new THREE.Mesh(
+                new THREE.CapsuleGeometry(0.25 * bodyScale, 0.6 * bodyScale, 16, 32),
+                this.createAnimalMaterial(color)
+            );
+            
+            if (specialFeature === 'upright') {
+                body.position.y = 0.5 * bodyScale;
+            } else {
+                body.rotation.z = Math.PI / 2;
+                body.position.y = 0.3 * bodyScale;
+            }
+            
+            // Head
+            let head;
+            if (specialFeature === 'bill') {
+                head = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.18 * bodyScale, 16, 16),
+                    this.createAnimalMaterial(color)
+                );
+            } else if (specialFeature === 'snout') {
+                head = new THREE.Mesh(
+                    new THREE.ConeGeometry(0.15 * bodyScale, 0.5 * bodyScale, 16),
+                    this.createAnimalMaterial(color)
+                );
+                head.rotation.x = Math.PI / 2;
+            } else {
+                head = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.2 * bodyScale, 32, 32),
+                    this.createAnimalMaterial(color)
+                );
+            }
+            
+            if (specialFeature === 'upright') {
+                head.position.set(0, 0.9 * bodyScale, 0.15 * bodyScale);
+            } else {
+                head.position.set(0, 0.3 * bodyScale, 0.5 * bodyScale);
+            }
+            
+            // Special features
+            if (specialFeature === 'bill') {
+                const bill = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.25 * bodyScale, 0.08 * bodyScale, 0.15 * bodyScale),
+                    this.createAnimalMaterial(0x3A3A2A)
+                );
+                bill.position.set(0, 0.28 * bodyScale, 0.7 * bodyScale);
+                group.add(bill);
+            } else if (specialFeature === 'stripe') {
+                const stripe = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.15 * bodyScale, 0.3 * bodyScale, 0.8 * bodyScale),
+                    this.createAnimalMaterial(0xFFFFFF)
+                );
+                if (specialFeature === 'upright') {
+                    stripe.position.set(0, 0.5 * bodyScale, 0);
+                } else {
+                    stripe.position.set(0, 0.45 * bodyScale, 0);
+                    stripe.rotation.z = Math.PI / 2;
+                }
+                group.add(stripe);
+            } else if (specialFeature === 'scales') {
+                for (let i = 0; i < 15; i++) {
+                    const scale = new THREE.Mesh(
+                        new THREE.ConeGeometry(0.08 * bodyScale, 0.12 * bodyScale, 6),
+                        this.createAnimalMaterial(0x6A5A4A)
+                    );
+                    scale.position.set(0, 0.35 * bodyScale, -0.2 * bodyScale + i * 0.05 * bodyScale);
+                    scale.rotation.x = -Math.PI / 2;
+                    group.add(scale);
+                }
+            } else if (specialFeature === 'quills') {
+                for (let i = 0; i < 20; i++) {
+                    const quill = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.01 * bodyScale, 0.015 * bodyScale, 0.25 * bodyScale, 8),
+                        this.createAnimalMaterial(i % 2 === 0 ? 0xFFFFFF : 0x2A2A2A)
+                    );
+                    const angle = (i / 20) * Math.PI;
+                    quill.position.set(
+                        Math.sin(angle) * 0.15 * bodyScale,
+                        0.4 * bodyScale + Math.cos(angle) * 0.1 * bodyScale,
+                        (Math.random() - 0.5) * 0.4 * bodyScale
+                    );
+                    quill.rotation.z = angle - Math.PI / 2;
+                    group.add(quill);
+                }
+            } else if (specialFeature === 'armor') {
+                for (let i = 0; i < 5; i++) {
+                    const band = new THREE.Mesh(
+                        new THREE.TorusGeometry(0.25 * bodyScale, 0.04 * bodyScale, 8, 16),
+                        this.createAnimalMaterial(0x5A4A3A)
+                    );
+                    band.position.set(0, 0.3 * bodyScale, -0.2 * bodyScale + i * 0.12 * bodyScale);
+                    band.rotation.x = Math.PI / 2;
+                    group.add(band);
+                }
+            }
+            
+            // Ears (most have ears)
+            if (!name.includes('sloth') && !name.includes('pangolin') && !name.includes('armadillo')) {
+                const earSize = name.includes('meerkat') ? 0.15 : 0.12;
+                const earGeom = new THREE.SphereGeometry(earSize * bodyScale, 12, 12);
+                const earColor = name.includes('raccoon') ? 0x8A8A8A : color;
+                
+                const leftEar = new THREE.Mesh(earGeom, this.createAnimalMaterial(earColor));
+                const rightEar = new THREE.Mesh(earGeom, this.createAnimalMaterial(earColor));
+                
+                if (specialFeature === 'upright') {
+                    leftEar.position.set(-0.15 * bodyScale, 1.05 * bodyScale, 0.1 * bodyScale);
+                    rightEar.position.set(0.15 * bodyScale, 1.05 * bodyScale, 0.1 * bodyScale);
+                } else {
+                    leftEar.position.set(-0.15 * bodyScale, 0.42 * bodyScale, 0.55 * bodyScale);
+                    rightEar.position.set(0.15 * bodyScale, 0.42 * bodyScale, 0.55 * bodyScale);
+                }
+                group.add(leftEar, rightEar);
+            }
+            
+            // Eyes
+            if (specialFeature === 'upright') {
+                addEyes(0, 0.95 * bodyScale, 0.25 * bodyScale, bodyScale * 0.8, 0.4);
+            } else {
+                addEyes(0, 0.35 * bodyScale, 0.65 * bodyScale, bodyScale * 0.8, 0.4);
+            }
+            
+            // Legs
+            const legGeom = new THREE.CylinderGeometry(0.05 * bodyScale, 0.06 * bodyScale, 0.4 * bodyScale, 12);
+            let legPos;
+            if (specialFeature === 'upright') {
+                legPos = [[-0.12 * bodyScale, 0.1 * bodyScale, 0], [0.12 * bodyScale, 0.1 * bodyScale, 0]];
+                // Arms
+                const armGeom = new THREE.CylinderGeometry(0.04 * bodyScale, 0.05 * bodyScale, 0.3 * bodyScale, 12);
+                const leftArm = new THREE.Mesh(armGeom, this.createAnimalMaterial(color));
+                leftArm.position.set(-0.2 * bodyScale, 0.5 * bodyScale, 0);
+                leftArm.rotation.z = Math.PI / 4;
+                const rightArm = new THREE.Mesh(armGeom, this.createAnimalMaterial(color));
+                rightArm.position.set(0.2 * bodyScale, 0.5 * bodyScale, 0);
+                rightArm.rotation.z = -Math.PI / 4;
+                group.add(leftArm, rightArm);
+            } else {
+                legPos = [
+                    [-0.15 * bodyScale, 0, 0.25 * bodyScale],
+                    [0.15 * bodyScale, 0, 0.25 * bodyScale],
+                    [-0.15 * bodyScale, 0, -0.15 * bodyScale],
+                    [0.15 * bodyScale, 0, -0.15 * bodyScale]
+                ];
+            }
+            legPos.forEach(pos => {
+                const leg = new THREE.Mesh(legGeom, this.createAnimalMaterial(color));
+                leg.position.set(...pos);
+                group.add(leg);
+            });
+            
+            // Tail
+            if (tailStyle === 'ringed') {
+                const tailCurve = new THREE.CatmullRomCurve3([
+                    new THREE.Vector3(0, 0.3 * bodyScale, -0.4 * bodyScale),
+                    new THREE.Vector3(0, 0.25 * bodyScale, -0.7 * bodyScale),
+                    new THREE.Vector3(0, 0.2 * bodyScale, -1 * bodyScale)
+                ]);
+                const tail = new THREE.Mesh(
+                    new THREE.TubeGeometry(tailCurve, 20, 0.08 * bodyScale, 12, false),
+                    this.createAnimalMaterial(color)
+                );
+                group.add(tail);
+                
+                // Rings
+                for (let i = 0; i < 5; i++) {
+                    const ring = new THREE.Mesh(
+                        new THREE.TorusGeometry(0.08 * bodyScale, 0.02 * bodyScale, 8, 12),
+                        this.createAnimalMaterial(i % 2 === 0 ? 0x2A2A2A : 0xE8E8E8)
+                    );
+                    const t = i / 5;
+                    const pos = tailCurve.getPoint(t);
+                    ring.position.copy(pos);
+                    ring.rotation.x = Math.PI / 2;
+                    group.add(ring);
+                }
+            } else if (tailStyle === 'bushy') {
+                const tailCurve = new THREE.CatmullRomCurve3([
+                    new THREE.Vector3(0, 0.3 * bodyScale, -0.4 * bodyScale),
+                    new THREE.Vector3(0, 0.3 * bodyScale, -0.8 * bodyScale),
+                    new THREE.Vector3(0, 0.35 * bodyScale, -1.1 * bodyScale)
+                ]);
+                const tail = new THREE.Mesh(
+                    new THREE.TubeGeometry(tailCurve, 20, 0.12 * bodyScale, 12, false),
+                    this.createAnimalMaterial(color)
+                );
+                group.add(tail);
+            } else if (tailStyle === 'flat') {
+                const tail = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.35 * bodyScale, 0.08 * bodyScale, 0.5 * bodyScale),
+                    this.createAnimalMaterial(color)
+                );
+                tail.position.set(0, 0.2 * bodyScale, -0.7 * bodyScale);
+                tail.rotation.x = -Math.PI / 6;
+                group.add(tail);
+            } else if (tailStyle === 'rat') {
+                const tail = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.02 * bodyScale, 0.01 * bodyScale, 0.6 * bodyScale, 8),
+                    this.createAnimalMaterial(0xF0D0D0)
+                );
+                tail.position.set(0, 0.2 * bodyScale, -0.7 * bodyScale);
+                tail.rotation.x = Math.PI / 4;
+                group.add(tail);
+            } else if (tailStyle === 'thick') {
+                const tail = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.08 * bodyScale, 0.05 * bodyScale, 0.5 * bodyScale, 12),
+                    this.createAnimalMaterial(color)
+                );
+                tail.position.set(0, 0.25 * bodyScale, -0.7 * bodyScale);
+                tail.rotation.x = Math.PI / 6;
+                group.add(tail);
+            }
+            
+            group.add(body, head);
+            return group;
+        }
+        
+        // ===== LARGE FLIGHTLESS BIRDS (Ostrich, Emu, Cassowary) =====
+        if ((name.includes('ostrich') || name.includes('emu') || name.includes('cassowary')) && !name.includes('eagle')) {
+            let color = 0x2A2A2A;
+            let neckLength = 1.5;
+            let bodyScale = 1;
+            let hasCasque = false;
+            
+            if (name.includes('ostrich')) {
+                color = 0x3A3A3A;
+                neckLength = 2;
+                bodyScale = 1.3;
+            } else if (name.includes('emu')) {
+                color = 0x4A4A3A;
+                neckLength = 1.5;
+                bodyScale = 1.1;
+            } else if (name.includes('cassowary')) {
+                color = 0x1A1A2A;
+                neckLength = 1.3;
+                bodyScale = 1.2;
+                hasCasque = true;
+            }
+            
+            // Body (round, fluffy)
+            const body = new THREE.Mesh(
+                new THREE.SphereGeometry(0.6 * bodyScale, 32, 32),
+                this.createAnimalMaterial(color)
+            );
+            body.scale.set(1, 1.2, 1.1);
+            body.position.y = 1 * bodyScale;
+            
+            // Long neck
+            const neck = new THREE.Mesh(
+                new THREE.CylinderGeometry(0.12 * bodyScale, 0.15 * bodyScale, neckLength * bodyScale, 16),
+                this.createAnimalMaterial(name.includes('cassowary') ? 0x4A6ACA : color)
+            );
+            neck.position.set(0, 1.4 * bodyScale + neckLength * 0.3, 0);
+            neck.rotation.x = -Math.PI / 10;
+            
+            // Small head
+            const head = new THREE.Mesh(
+                new THREE.SphereGeometry(0.18 * bodyScale, 16, 16),
+                this.createAnimalMaterial(name.includes('cassowary') ? 0x4A6ACA : color)
+            );
+            head.position.set(0, 1.4 * bodyScale + neckLength * 0.8, 0.15 * bodyScale);
+            
+            // Beak
+            const beak = new THREE.Mesh(
+                new THREE.ConeGeometry(0.06 * bodyScale, 0.25 * bodyScale, 12),
+                this.createAnimalMaterial(0x8A8A6A)
+            );
+            beak.position.set(0, 1.4 * bodyScale + neckLength * 0.8, 0.35 * bodyScale);
+            beak.rotation.x = Math.PI / 2;
+            
+            // Casque (for cassowary)
+            if (hasCasque) {
+                const casque = new THREE.Mesh(
+                    new THREE.ConeGeometry(0.12 * bodyScale, 0.4 * bodyScale, 8),
+                    this.createAnimalMaterial(0x6A4A2A)
+                );
+                casque.position.set(0, 1.6 * bodyScale + neckLength * 0.8, 0.1 * bodyScale);
+                group.add(casque);
+                
+                // Wattles (red neck flaps)
+                const wattle = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.08 * bodyScale, 8, 8),
+                    this.createAnimalMaterial(0xCA2A2A)
+                );
+                wattle.position.set(0, 1.3 * bodyScale + neckLength * 0.6, 0.12 * bodyScale);
+                group.add(wattle);
+            }
+            
+            // Eyes
+            addEyes(0, 1.45 * bodyScale + neckLength * 0.8, 0.25 * bodyScale, bodyScale * 0.6, 0.3);
+            
+            // Wings (vestigial, small)
+            const wingGeom = new THREE.BoxGeometry(0.15 * bodyScale, 0.6 * bodyScale, 0.4 * bodyScale);
+            const leftWing = new THREE.Mesh(wingGeom, this.createAnimalMaterial(color));
+            leftWing.position.set(-0.5 * bodyScale, 1.1 * bodyScale, 0);
+            leftWing.rotation.z = -Math.PI / 6;
+            const rightWing = new THREE.Mesh(wingGeom, this.createAnimalMaterial(color));
+            rightWing.position.set(0.5 * bodyScale, 1.1 * bodyScale, 0);
+            rightWing.rotation.z = Math.PI / 6;
+            
+            // Powerful legs
+            const legGeom = new THREE.CylinderGeometry(0.12 * bodyScale, 0.15 * bodyScale, 1.5 * bodyScale, 12);
+            const leftLeg = new THREE.Mesh(legGeom, this.createAnimalMaterial(0xA89878));
+            leftLeg.position.set(-0.25 * bodyScale, 0.25 * bodyScale, 0);
+            const rightLeg = new THREE.Mesh(legGeom, this.createAnimalMaterial(0xA89878));
+            rightLeg.position.set(0.25 * bodyScale, 0.25 * bodyScale, 0);
+            
+            // Large feet
+            const footGeom = new THREE.BoxGeometry(0.25 * bodyScale, 0.1 * bodyScale, 0.35 * bodyScale);
+            const leftFoot = new THREE.Mesh(footGeom, this.createAnimalMaterial(0x8A7A68));
+            leftFoot.position.set(-0.25 * bodyScale, -0.5 * bodyScale, 0.1 * bodyScale);
+            const rightFoot = new THREE.Mesh(footGeom, this.createAnimalMaterial(0x8A7A68));
+            rightFoot.position.set(0.25 * bodyScale, -0.5 * bodyScale, 0.1 * bodyScale);
+            
+            // Talons (dangerous for cassowary)
+            if (hasCasque) {
+                const talon = new THREE.Mesh(
+                    new THREE.ConeGeometry(0.04 * bodyScale, 0.15 * bodyScale, 8),
+                    this.createAnimalMaterial(0x2A2A2A)
+                );
+                talon.position.set(-0.25 * bodyScale, -0.55 * bodyScale, 0.25 * bodyScale);
+                talon.rotation.x = Math.PI / 6;
+                group.add(talon);
+                
+                const talon2 = new THREE.Mesh(
+                    new THREE.ConeGeometry(0.04 * bodyScale, 0.15 * bodyScale, 8),
+                    this.createAnimalMaterial(0x2A2A2A)
+                );
+                talon2.position.set(0.25 * bodyScale, -0.55 * bodyScale, 0.25 * bodyScale);
+                talon2.rotation.x = Math.PI / 6;
+                group.add(talon2);
+            }
+            
+            // Small tail feathers
+            for (let i = 0; i < 5; i++) {
+                const feather = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.08 * bodyScale, 0.25 * bodyScale, 0.05 * bodyScale),
+                    this.createAnimalMaterial(color)
+                );
+                feather.position.set((i - 2) * 0.08 * bodyScale, 0.9 * bodyScale, -0.6 * bodyScale);
+                feather.rotation.x = Math.PI / 4;
+                group.add(feather);
+            }
+            
+            group.add(body, neck, head, beak, leftWing, rightWing, leftLeg, rightLeg, leftFoot, rightFoot);
+            return group;
+        }
+        
+        // ===== WATERBIRDS (Flamingo, Goose, Swan, Stork, Pelican) =====
+        if (name.includes('flamingo') || name.includes('goose') || name.includes('swan') || 
+            name.includes('stork') || name.includes('pelican')) {
+            let color = 0xF0F0F0;
+            let neckLength = 0.8;
+            let legLength = 0.8;
+            let bodyScale = 0.8;
+            let beakStyle = 'normal';
+            
+            if (name.includes('flamingo')) {
+                color = 0xFFB0C0;
+                neckLength = 1.2;
+                legLength = 1.5;
+                bodyScale = 0.7;
+                beakStyle = 'curved';
+            } else if (name.includes('goose')) {
+                color = 0xF0F0F0;
+                neckLength = 0.8;
+                legLength = 0.6;
+                bodyScale = 0.8;
+            } else if (name.includes('swan')) {
+                color = 0xFFFFFF;
+                neckLength = 1.3;
+                legLength = 0.7;
+                bodyScale = 0.9;
+            } else if (name.includes('stork')) {
+                color = 0xF0F0F0;
+                neckLength = 1;
+                legLength = 1.3;
+                bodyScale = 0.8;
+            } else if (name.includes('pelican')) {
+                color = 0xF0E8D8;
+                neckLength = 0.7;
+                legLength = 0.7;
+                bodyScale = 0.9;
+                beakStyle = 'pouch';
+            }
+            
+            // Body
+            const body = new THREE.Mesh(
+                new THREE.SphereGeometry(0.4 * bodyScale, 32, 32),
+                this.createAnimalMaterial(color)
+            );
+            body.scale.set(1.3, 1, 1.1);
+            body.position.y = 0.5 * bodyScale + legLength;
+            
+            // Curved neck
+            const neckCurve = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(0, 0.7 * bodyScale + legLength, 0.5 * bodyScale),
+                new THREE.Vector3(0, 0.9 * bodyScale + legLength, 0.7 * bodyScale),
+                new THREE.Vector3(0, 0.9 * bodyScale + legLength + neckLength * 0.5, 0.8 * bodyScale),
+                new THREE.Vector3(0, 0.7 * bodyScale + legLength + neckLength, 0.9 * bodyScale)
+            ]);
+            const neck = new THREE.Mesh(
+                new THREE.TubeGeometry(neckCurve, 25, 0.08 * bodyScale, 12, false),
+                this.createAnimalMaterial(color)
+            );
+            
+            // Head
+            const head = new THREE.Mesh(
+                new THREE.SphereGeometry(0.15 * bodyScale, 16, 16),
+                this.createAnimalMaterial(color)
+            );
+            head.position.set(0, 0.7 * bodyScale + legLength + neckLength, 1 * bodyScale);
+            head.scale.set(1, 0.9, 1.1);
+            
+            // Beak
+            let beak;
+            if (beakStyle === 'curved') {
+                beak = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.03 * bodyScale, 0.05 * bodyScale, 0.3 * bodyScale, 12),
+                    this.createAnimalMaterial(0x2A2A2A)
+                );
+                beak.position.set(0, 0.6 * bodyScale + legLength + neckLength, 1.2 * bodyScale);
+                beak.rotation.x = Math.PI / 3;
+            } else if (beakStyle === 'pouch') {
+                beak = new THREE.Mesh(
+                    new THREE.ConeGeometry(0.12 * bodyScale, 0.5 * bodyScale, 12),
+                    this.createAnimalMaterial(0xD8C060)
+                );
+                beak.position.set(0, 0.65 * bodyScale + legLength + neckLength, 1.3 * bodyScale);
+                beak.rotation.x = Math.PI / 2;
+                
+                // Pouch
+                const pouch = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.15 * bodyScale, 12, 12),
+                    this.createAnimalMaterial(0xE8D070)
+                );
+                pouch.position.set(0, 0.5 * bodyScale + legLength + neckLength, 1.3 * bodyScale);
+                pouch.scale.set(1, 1.5, 1);
+                group.add(pouch);
+            } else {
+                beak = new THREE.Mesh(
+                    new THREE.ConeGeometry(0.05 * bodyScale, 0.25 * bodyScale, 12),
+                    this.createAnimalMaterial(0xE8A040)
+                );
+                beak.position.set(0, 0.7 * bodyScale + legLength + neckLength, 1.25 * bodyScale);
+                beak.rotation.x = Math.PI / 2;
+            }
+            
+            // Eyes
+            addEyes(0, 0.75 * bodyScale + legLength + neckLength, 1.12 * bodyScale, bodyScale * 0.6, 0.3);
+            
+            // Wings (folded)
+            const wingGeom = new THREE.BoxGeometry(0.2 * bodyScale, 0.6 * bodyScale, 0.5 * bodyScale);
+            const leftWing = new THREE.Mesh(wingGeom, this.createAnimalMaterial(color));
+            leftWing.position.set(-0.45 * bodyScale, 0.6 * bodyScale + legLength, 0);
+            leftWing.rotation.z = -Math.PI / 8;
+            const rightWing = new THREE.Mesh(wingGeom, this.createAnimalMaterial(color));
+            rightWing.position.set(0.45 * bodyScale, 0.6 * bodyScale + legLength, 0);
+            rightWing.rotation.z = Math.PI / 8;
+            
+            // Long legs
+            const legGeom = new THREE.CylinderGeometry(0.04 * bodyScale, 0.05 * bodyScale, legLength * bodyScale, 12);
+            const leftLeg = new THREE.Mesh(legGeom, this.createAnimalMaterial(name.includes('flamingo') ? 0xFFB0C0 : 0xE8A060));
+            leftLeg.position.set(-0.15 * bodyScale, legLength * 0.5, 0);
+            const rightLeg = new THREE.Mesh(legGeom, this.createAnimalMaterial(name.includes('flamingo') ? 0xFFB0C0 : 0xE8A060));
+            rightLeg.position.set(0.15 * bodyScale, legLength * 0.5, 0);
+            
+            // Webbed feet
+            const footGeom = new THREE.BoxGeometry(0.18 * bodyScale, 0.05 * bodyScale, 0.22 * bodyScale);
+            const leftFoot = new THREE.Mesh(footGeom, this.createAnimalMaterial(name.includes('flamingo') ? 0xFFB0C0 : 0xE8A060));
+            leftFoot.position.set(-0.15 * bodyScale, 0.02 * bodyScale, 0.05 * bodyScale);
+            const rightFoot = new THREE.Mesh(footGeom, this.createAnimalMaterial(name.includes('flamingo') ? 0xFFB0C0 : 0xE8A060));
+            rightFoot.position.set(0.15 * bodyScale, 0.02 * bodyScale, 0.05 * bodyScale);
+            
+            // Tail feathers
+            for (let i = 0; i < 5; i++) {
+                const feather = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.06 * bodyScale, 0.2 * bodyScale, 0.04 * bodyScale),
+                    this.createAnimalMaterial(color)
+                );
+                feather.position.set((i - 2) * 0.06 * bodyScale, 0.5 * bodyScale + legLength, -0.5 * bodyScale);
+                feather.rotation.x = Math.PI / 6;
+                group.add(feather);
+            }
+            
+            group.add(body, neck, head, beak, leftWing, rightWing, leftLeg, rightLeg, leftFoot, rightFoot);
+            return group;
+        }
+        
+        // ===== MARINE ANIMALS (Seal, Sea Lion, Walrus, Manatee, Octopus, Jellyfish, Electric Eel, Mantis Shrimp, Piranha) =====
+        if ((name.includes('seal') || name.includes('walrus') || name.includes('manatee') || 
+             name.includes('octopus') || name.includes('jellyfish') || name.includes('eel') ||
+             name.includes('shrimp') || name.includes('piranha')) && !name.includes('leopard')) {
+            
+            let bodyType = 'seal';
+            let color = 0x5A5A5A;
+            let bodyScale = 1;
+            
+            if (name.includes('walrus')) {
+                bodyType = 'walrus';
+                color = 0x8A7A6A;
+                bodyScale = 1.4;
+            } else if (name.includes('sea') && name.includes('lion')) {
+                bodyType = 'sea_lion';
+                color = 0x6A5A4A;
+                bodyScale = 1.2;
+            } else if (name.includes('seal')) {
+                bodyType = 'seal';
+                color = 0x5A5A5A;
+                bodyScale = 1;
+            } else if (name.includes('manatee')) {
+                bodyType = 'manatee';
+                color = 0x7A7A6A;
+                bodyScale = 1.3;
+            } else if (name.includes('octopus')) {
+                bodyType = 'octopus';
+                color = 0xA85A8A;
+                bodyScale = 0.8;
+            } else if (name.includes('jellyfish')) {
+                bodyType = 'jellyfish';
+                color = 0x8AC8FF;
+                bodyScale = 0.6;
+            } else if (name.includes('eel')) {
+                bodyType = 'eel';
+                color = 0x4A4A3A;
+                bodyScale = 1.2;
+            } else if (name.includes('shrimp')) {
+                bodyType = 'shrimp';
+                color = 0x60C870;
+                bodyScale = 0.4;
+            } else if (name.includes('piranha')) {
+                bodyType = 'piranha';
+                color = 0x8A6A5A;
+                bodyScale = 0.5;
+            }
+            
+            if (bodyType === 'seal' || bodyType === 'sea_lion' || bodyType === 'walrus') {
+                // Streamlined body
+                const body = new THREE.Mesh(
+                    new THREE.CapsuleGeometry(0.4 * bodyScale, 1.2 * bodyScale, 16, 32),
+                    this.createAnimalMaterial(color)
+                );
+                body.rotation.z = Math.PI / 2;
+                body.position.y = 0.3 * bodyScale;
+                
+                // Head
+                const head = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.35 * bodyScale, 32, 32),
+                    this.createAnimalMaterial(color)
+                );
+                head.position.set(0, 0.3 * bodyScale, 0.9 * bodyScale);
+                head.scale.set(1, 0.9, 1.1);
+                
+                // Snout
+                const snout = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.15 * bodyScale, 0.18 * bodyScale, 0.25 * bodyScale, 16),
+                    this.createAnimalMaterial(color)
+                );
+                snout.position.set(0, 0.25 * bodyScale, 1.2 * bodyScale);
+                snout.rotation.x = Math.PI / 2;
+                
+                // Whiskers
+                for (let i = 0; i < 6; i++) {
+                    const whisker = new THREE.Mesh(
+                        new THREE.CylinderGeometry(0.01 * bodyScale, 0.005 * bodyScale, 0.3 * bodyScale, 6),
+                        this.createAnimalMaterial(0xFFFFFF)
+                    );
+                    const side = i % 2 === 0 ? -1 : 1;
+                    whisker.position.set(side * 0.2 * bodyScale, 0.25 * bodyScale, 1.25 * bodyScale);
+                    whisker.rotation.set(0, 0, side * Math.PI / 4);
+                    whisker.rotation.y = (i / 2) * 0.3;
+                    group.add(whisker);
+                }
+                
+                // Eyes
+                addEyes(0, 0.4 * bodyScale, 1.15 * bodyScale, bodyScale * 0.8, 0.4);
+                
+                // Tusks (for walrus)
+                if (bodyType === 'walrus') {
+                    const tuskGeom = new THREE.ConeGeometry(0.06 * bodyScale, 0.8 * bodyScale, 8);
+                    const leftTusk = new THREE.Mesh(tuskGeom, this.createAnimalMaterial(0xFFFFF0));
+                    leftTusk.position.set(-0.12 * bodyScale, 0.1 * bodyScale, 1.35 * bodyScale);
+                    leftTusk.rotation.x = Math.PI / 2;
+                    leftTusk.rotation.z = -Math.PI / 12;
+                    const rightTusk = new THREE.Mesh(tuskGeom, this.createAnimalMaterial(0xFFFFF0));
+                    rightTusk.position.set(0.12 * bodyScale, 0.1 * bodyScale, 1.35 * bodyScale);
+                    rightTusk.rotation.x = Math.PI / 2;
+                    rightTusk.rotation.z = Math.PI / 12;
+                    group.add(leftTusk, rightTusk);
+                }
+                
+                // Flippers
+                const flipperGeom = new THREE.BoxGeometry(0.5 * bodyScale, 0.1 * bodyScale, 0.25 * bodyScale);
+                const leftFlipper = new THREE.Mesh(flipperGeom, this.createAnimalMaterial(color));
+                leftFlipper.position.set(-0.4 * bodyScale, 0.15 * bodyScale, 0.3 * bodyScale);
+                leftFlipper.rotation.set(0, -Math.PI / 6, -Math.PI / 6);
+                const rightFlipper = new THREE.Mesh(flipperGeom, this.createAnimalMaterial(color));
+                rightFlipper.position.set(0.4 * bodyScale, 0.15 * bodyScale, 0.3 * bodyScale);
+                rightFlipper.rotation.set(0, Math.PI / 6, Math.PI / 6);
+                
+                // Back flippers
+                const backFlipperGeom = new THREE.BoxGeometry(0.4 * bodyScale, 0.08 * bodyScale, 0.15 * bodyScale);
+                const backFlippers = new THREE.Mesh(backFlipperGeom, this.createAnimalMaterial(color));
+                backFlippers.position.set(0, 0.2 * bodyScale, -0.8 * bodyScale);
+                
+                group.add(body, head, snout, leftFlipper, rightFlipper, backFlippers);
+                return group;
+            } else if (bodyType === 'manatee') {
+                // Round body
+                const body = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.7 * bodyScale, 32, 32),
+                    this.createAnimalMaterial(color)
+                );
+                body.scale.set(1.5, 1, 1.2);
+                body.position.y = 0.4 * bodyScale;
+                
+                // Head
+                const head = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.5 * bodyScale, 32, 32),
+                    this.createAnimalMaterial(color)
+                );
+                head.position.set(0, 0.3 * bodyScale, 1.3 * bodyScale);
+                head.scale.set(1, 0.9, 1);
+                
+                // Snout
+                const snout = new THREE.Mesh(
+                    new THREE.CylinderGeometry(0.2 * bodyScale, 0.25 * bodyScale, 0.3 * bodyScale, 16),
+                    this.createAnimalMaterial(color)
+                );
+                snout.position.set(0, 0.2 * bodyScale, 1.7 * bodyScale);
+                snout.rotation.x = Math.PI / 2;
+                
+                // Eyes
+                addEyes(0, 0.45 * bodyScale, 1.6 * bodyScale, bodyScale * 0.8, 0.6);
+                
+                // Flippers
+                const flipperGeom = new THREE.BoxGeometry(0.6 * bodyScale, 0.12 * bodyScale, 0.3 * bodyScale);
+                const leftFlipper = new THREE.Mesh(flipperGeom, this.createAnimalMaterial(color));
+                leftFlipper.position.set(-0.9 * bodyScale, 0.2 * bodyScale, 0.5 * bodyScale);
+                leftFlipper.rotation.z = -Math.PI / 6;
+                const rightFlipper = new THREE.Mesh(flipperGeom, this.createAnimalMaterial(color));
+                rightFlipper.position.set(0.9 * bodyScale, 0.2 * bodyScale, 0.5 * bodyScale);
+                rightFlipper.rotation.z = Math.PI / 6;
+                
+                // Tail
+                const tail = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.8 * bodyScale, 0.1 * bodyScale, 0.4 * bodyScale),
+                    this.createAnimalMaterial(color)
+                );
+                tail.position.set(0, 0.3 * bodyScale, -1.2 * bodyScale);
+                
+                group.add(body, head, snout, leftFlipper, rightFlipper, tail);
+                return group;
+            } else if (bodyType === 'octopus') {
+                // Head/mantle
+                const head = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.5 * bodyScale, 32, 32),
+                    this.createAnimalMaterial(color)
+                );
+                head.position.y = 0.5 * bodyScale;
+                head.scale.set(1, 1.3, 1);
+                
+                // Eyes (large)
+                addEyes(0, 0.6 * bodyScale, 0.45 * bodyScale, bodyScale * 1.2, 0.5);
+                
+                // 8 tentacles
+                for (let i = 0; i < 8; i++) {
+                    const angle = (i / 8) * Math.PI * 2;
+                    const curve = new THREE.CatmullRomCurve3([
+                        new THREE.Vector3(0, 0.2 * bodyScale, 0),
+                        new THREE.Vector3(Math.sin(angle) * 0.3 * bodyScale, 0, Math.cos(angle) * 0.3 * bodyScale),
+                        new THREE.Vector3(Math.sin(angle) * 0.6 * bodyScale, -0.3 * bodyScale, Math.cos(angle) * 0.6 * bodyScale),
+                        new THREE.Vector3(Math.sin(angle) * 0.8 * bodyScale, -0.5 * bodyScale, Math.cos(angle) * 0.8 * bodyScale)
+                    ]);
+                    const tentacle = new THREE.Mesh(
+                        new THREE.TubeGeometry(curve, 20, 0.08 * bodyScale * (1 - i * 0.01), 12, false),
+                        this.createAnimalMaterial(color)
+                    );
+                    group.add(tentacle);
+                    
+                    // Suckers
+                    for (let j = 0; j < 5; j++) {
+                        const t = j / 5;
+                        const pos = curve.getPoint(t);
+                        const sucker = new THREE.Mesh(
+                            new THREE.SphereGeometry(0.03 * bodyScale, 8, 8),
+                            this.createAnimalMaterial(0xFFD0FF)
+                        );
+                        sucker.position.copy(pos);
+                        group.add(sucker);
+                    }
+                }
+                
+                group.add(head);
+                return group;
+            } else if (bodyType === 'jellyfish') {
+                // Bell (dome)
+                const bell = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.5 * bodyScale, 32, 32),
+                    new THREE.MeshStandardMaterial({
+                        color: color,
+                        transparent: true,
+                        opacity: 0.6,
+                        emissive: color,
+                        emissiveIntensity: 0.3
+                    })
+                );
+                bell.scale.set(1, 0.7, 1);
+                bell.position.y = 0.5 * bodyScale;
+                
+                // Tentacles (many, flowing)
+                for (let i = 0; i < 20; i++) {
+                    const angle = (i / 20) * Math.PI * 2;
+                    const length = 0.8 + Math.random() * 0.4;
+                    const curve = new THREE.CatmullRomCurve3([
+                        new THREE.Vector3(0, 0.2 * bodyScale, 0),
+                        new THREE.Vector3(Math.sin(angle) * 0.3 * bodyScale, 0, Math.cos(angle) * 0.3 * bodyScale),
+                        new THREE.Vector3(Math.sin(angle) * 0.35 * bodyScale, -length * 0.5 * bodyScale, Math.cos(angle) * 0.35 * bodyScale),
+                        new THREE.Vector3(Math.sin(angle + 0.2) * 0.3 * bodyScale, -length * bodyScale, Math.cos(angle + 0.2) * 0.3 * bodyScale)
+                    ]);
+                    const tentacle = new THREE.Mesh(
+                        new THREE.TubeGeometry(curve, 15, 0.01 * bodyScale, 8, false),
+                        new THREE.MeshStandardMaterial({
+                            color: color,
+                            transparent: true,
+                            opacity: 0.7,
+                            emissive: color,
+                            emissiveIntensity: 0.2
+                        })
+                    );
+                    group.add(tentacle);
+                }
+                
+                group.add(bell);
+                return group;
+            } else if (bodyType === 'piranha') {
+                // Fish body
+                const body = new THREE.Mesh(
+                    new THREE.SphereGeometry(0.3 * bodyScale, 32, 32),
+                    this.createAnimalMaterial(color)
+                );
+                body.scale.set(1.2, 1, 1.5);
+                body.position.y = 0.3 * bodyScale;
+                
+                // Head with jaw
+                const jaw = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.25 * bodyScale, 0.15 * bodyScale, 0.2 * bodyScale),
+                    this.createAnimalMaterial(color)
+                );
+                jaw.position.set(0, 0.2 * bodyScale, 0.5 * bodyScale);
+                
+                // Sharp teeth
+                for (let i = 0; i < 8; i++) {
+                    const tooth = new THREE.Mesh(
+                        new THREE.ConeGeometry(0.02 * bodyScale, 0.05 * bodyScale, 6),
+                        this.createAnimalMaterial(0xFFFFFF)
+                    );
+                    tooth.position.set((i - 3.5) * 0.04 * bodyScale, 0.25 * bodyScale, 0.58 * bodyScale);
+                    tooth.rotation.x = Math.PI;
+                    group.add(tooth);
+                }
+                
+                // Eyes
+                addEyes(0, 0.38 * bodyScale, 0.48 * bodyScale, bodyScale * 0.6, 0.35);
+                
+                // Dorsal fin
+                const dorsalFin = new THREE.Mesh(
+                    new THREE.ConeGeometry(0.15 * bodyScale, 0.25 * bodyScale, 4),
+                    this.createAnimalMaterial(color)
+                );
+                dorsalFin.position.set(0, 0.5 * bodyScale, 0);
+                dorsalFin.rotation.z = Math.PI;
+                
+                // Tail fin
+                const tailFin = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.05 * bodyScale, 0.3 * bodyScale, 0.25 * bodyScale),
+                    this.createAnimalMaterial(color)
+                );
+                tailFin.position.set(0, 0.3 * bodyScale, -0.5 * bodyScale);
+                
+                group.add(body, jaw, dorsalFin, tailFin);
+                return group;
+            }
+            
+            // Default for other marine animals
+            const body = new THREE.Mesh(
+                new THREE.SphereGeometry(0.5 * bodyScale, 32, 32),
+                this.createAnimalMaterial(color)
+            );
+            body.position.y = 0.3 * bodyScale;
+            group.add(body);
+            return group;
+        }
+        
         // Default - use original primitive
-        const geometry = this.getPrimitiveGeometry(animalType);
-        const mesh = new THREE.Mesh(geometry, this.createAnimalMaterial(this.getAnimalColor(animalType)));
+        const geometry = this.getPrimitiveGeometry(name);
+        const mesh = new THREE.Mesh(geometry, this.createAnimalMaterial(this.getAnimalColor(name)));
         group.add(mesh);
         return group;
     }
