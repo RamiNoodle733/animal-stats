@@ -181,18 +181,6 @@ body {
     justify-content: center;
 }
 
-#character-3d-viewer {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-
-#character-3d-viewer canvas {
-    display: block;
-    width: 100% !important;
-    height: 100% !important;
-}
-
 .character-silhouette {
     width: 100%;
     height: 100%;
@@ -269,20 +257,6 @@ body {
     align-items: center;
     justify-content: center;
     box-shadow: 0 0 30px rgba(0, 212, 255, 0.5), inset 0 0 30px rgba(0, 212, 255, 0.1);
-}
-
-#fighter-1-3d-viewer,
-#fighter-2-3d-viewer {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-
-#fighter-1-3d-viewer canvas,
-#fighter-2-3d-viewer canvas {
-    display: block;
-    width: 100% !important;
-    height: 100% !important;
 }
 
 .fighter-placeholder {

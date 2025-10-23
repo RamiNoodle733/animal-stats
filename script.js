@@ -14,12 +14,6 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(data => {
             allAnimals = data;
             initializeApp();
-            // Initialize 3D viewers after a short delay
-            setTimeout(() => {
-                if (typeof init3DViewers === 'function') {
-                    init3DViewers();
-                }
-            }, 100);
         })
         .catch(error => {
             console.error("Error loading animal stats:", error);
@@ -119,21 +113,10 @@ function displayCharacterStats(animal) {
         nameDisplay.textContent = animal.name.toUpperCase();
     }
     
-    // Update character model - Initialize 3D viewer if not exists
+    // Update character model
     const modelContainer = document.querySelector('.character-model-container');
     if (modelContainer) {
-        // Check if 3D viewer exists
-        if (!window.characterViewer) {
-            modelContainer.innerHTML = '<div id="character-3d-viewer"></div>';
-            if (typeof Animal3DViewer !== 'undefined') {
-                window.characterViewer = new Animal3DViewer('character-3d-viewer');
-            }
-        }
-        
-        // Load 3D model
-        if (window.characterViewer && typeof load3DModel === 'function') {
-            load3DModel(window.characterViewer, animal.name, animal.class);
-        }
+        modelContainer.innerHTML = '<img src="' + animal.image + '" alt="' + animal.name + '" class="character-model" onerror="this.src=\'https://via.placeholder.com/500x500?text=' + animal.name + '\'">';
     }
     
     // Update character class
@@ -195,21 +178,7 @@ function displayFighter(animal, side) {
     const fighterName = document.querySelector(sectionSelector + ' .fighter-name');
     
     if (fighterDisplay) {
-        const viewerId = side === 'left' ? 'fighter-1-3d-viewer' : 'fighter-2-3d-viewer';
-        const viewerName = side === 'left' ? 'fighter1Viewer' : 'fighter2Viewer';
-        
-        // Initialize 3D viewer if not exists
-        if (!window[viewerName]) {
-            fighterDisplay.innerHTML = '<div id="' + viewerId + '"></div>';
-            if (typeof Animal3DViewer !== 'undefined') {
-                window[viewerName] = new Animal3DViewer(viewerId);
-            }
-        }
-        
-        // Load 3D model
-        if (window[viewerName] && typeof load3DModel === 'function') {
-            load3DModel(window[viewerName], animal.name, animal.class);
-        }
+        fighterDisplay.innerHTML = '<img src="' + animal.image + '" alt="' + animal.name + '" class="fighter-image" onerror="this.src=\'https://via.placeholder.com/350x350?text=' + animal.name + '\'">';
     }
     
     if (fighterName) {
