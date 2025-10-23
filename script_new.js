@@ -238,11 +238,11 @@ function displayAnimalStats(index) {
     statsContainer.innerHTML = `
         <div class="stats-left-column">
             <img src="${animal.image}" alt="${animal.name}" class="stats-animal-image"
-                 onerror="this.src='https://via.placeholder.com/280x280?text=${animal.name}'">
+                 onerror="this.src='https://via.placeholder.com/300x300?text=${animal.name}'">
             <div class="stats-traits">
                 <h4>Special Abilities</h4>
                 <ul>
-                    ${animal.special_abilities.map(ability => `<li>${ability}</li>`).join('')}
+                    ${animal.special_abilities.map(ability => `<li>⚡ ${ability}</li>`).join('')}
                 </ul>
             </div>
         </div>
@@ -261,26 +261,26 @@ function displayAnimalStats(index) {
                         <div class="stat-value">${animal.type}</div>
                     </div>
                     <div class="stat-item">
+                        <div class="stat-label">Habitat</div>
+                        <div class="stat-value">${animal.habitat.split(',')[0]}</div>
+                    </div>
+                    <div class="stat-item">
                         <div class="stat-label">Weight</div>
-                        <div class="stat-value">${animal.weight_kg} kg</div>
+                        <div class="stat-value">${animal.weight_kg.toLocaleString()} kg</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-label">Speed</div>
-                        <div class="stat-value">${animal.speed_mps.toFixed(2)} m/s</div>
+                        <div class="stat-value">${animal.speed_mps.toFixed(1)} m/s</div>
                     </div>
                     <div class="stat-item">
                         <div class="stat-label">Lifespan</div>
                         <div class="stat-value">${animal.lifespan_years} yrs</div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-label">Habitat</div>
-                        <div class="stat-value">${animal.habitat}</div>
-                    </div>
                 </div>
             </div>
             
             <div class="stat-bars-section">
-                <div class="stat-bars-title">Combat Statistics</div>
+                <div class="stat-bars-title">⚔️ Combat Statistics</div>
                 <div class="stat-bar-container">
                     ${createStatBar('Attack', animal.attack)}
                     ${createStatBar('Defense', animal.defense)}
@@ -292,7 +292,7 @@ function displayAnimalStats(index) {
             </div>
             
             <div class="stats-traits">
-                <h4>Unique Traits</h4>
+                <h4>🏆 Unique Traits</h4>
                 <ul>
                     ${animal.unique_traits.map(trait => `<li>${trait}</li>`).join('')}
                 </ul>
@@ -303,11 +303,21 @@ function displayAnimalStats(index) {
 
 function createStatBar(label, value) {
     const percentage = Math.min(value, 100);
+    const icons = {
+        'Attack': '⚔️',
+        'Defense': '🛡️',
+        'Agility': '⚡',
+        'Intelligence': '🧠',
+        'Stamina': '💪',
+        'Special': '✨'
+    };
+    const icon = icons[label] || '';
+    
     return `
         <div class="stat-bar">
             <div class="stat-bar-label">
-                <span>${label}</span>
-                <span class="stat-bar-value">${value.toFixed(2)}</span>
+                <span>${icon} ${label}</span>
+                <span class="stat-bar-value">${value.toFixed(1)}</span>
             </div>
             <div class="stat-bar-track">
                 <div class="stat-bar-fill" style="width: ${percentage}%"></div>
@@ -358,10 +368,10 @@ function updateCompareDisplay() {
 
 function renderCompareAnimal(animal) {
     return `
-        <img src="${animal.image}" alt="${animal.name}" style="width: 100%; height: 180px; object-fit: cover; margin-bottom: 10px; border: 2px solid var(--border-bright);"
-             onerror="this.src='https://via.placeholder.com/400x180?text=${animal.name}'">
-        <h2 style="font-size: 1.3rem; color: var(--accent-color); margin-bottom: 5px;">${animal.name}</h2>
-        <h3 style="font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-bottom: 10px;">${animal.scientific_name}</h3>
+        <img src="${animal.image}" alt="${animal.name}" style="width: 100%; height: 200px; object-fit: cover; margin-bottom: 15px; border: 3px solid var(--border-bright); box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);"
+             onerror="this.src='https://via.placeholder.com/400x200?text=${animal.name}'">
+        <h2 style="font-size: 1.5rem; color: var(--accent-color); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 2px;">${animal.name}</h2>
+        <h3 style="font-size: 0.85rem; color: rgba(255,255,255,0.6); margin-bottom: 15px; font-style: italic;">${animal.scientific_name}</h3>
         
         <div class="stat-bar-container">
             ${createStatBar('Attack', animal.attack)}
@@ -372,10 +382,10 @@ function renderCompareAnimal(animal) {
             ${createStatBar('Special', animal.special_attack)}
         </div>
         
-        <div style="margin-top: 10px; padding: 8px; background: rgba(0,0,0,0.3); border-left: 2px solid var(--accent-color); font-size: 0.75rem;">
-            <strong>Class:</strong> ${animal.class}<br>
-            <strong>Weight:</strong> ${animal.weight_kg} kg<br>
-            <strong>Speed:</strong> ${animal.speed_mps.toFixed(2)} m/s
+        <div style="margin-top: 15px; padding: 12px; background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 0, 0, 0.4)); border-left: 4px solid var(--accent-color); font-size: 0.8rem; border: 2px solid rgba(0, 212, 255, 0.3);">
+            <div style="margin-bottom: 8px;"><strong>🏷️ Class:</strong> ${animal.class}</div>
+            <div style="margin-bottom: 8px;"><strong>⚖️ Weight:</strong> ${animal.weight_kg.toLocaleString()} kg</div>
+            <div><strong>💨 Speed:</strong> ${animal.speed_mps.toFixed(1)} m/s</div>
         </div>
     `;
 }
