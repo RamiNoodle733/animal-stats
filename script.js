@@ -53,14 +53,36 @@ function setupEventListeners() {
     // Expand details button
     const expandBtn = document.getElementById('expand-details-btn');
     const detailsPanel = document.getElementById('details-panel');
+    const gridContainer = document.querySelector('.character-grid-container');
+    
     expandBtn?.addEventListener('click', () => {
         detailsPanel.classList.toggle('expanded');
         expandBtn.classList.toggle('expanded');
         
         if (expandBtn.classList.contains('expanded')) {
             expandBtn.innerHTML = '<i class="fas fa-chevron-up"></i> LESS DETAILS';
+            // Auto-hide grid when details expand
+            gridContainer?.classList.add('hidden');
+            const toggleBtn = document.getElementById('toggle-grid-btn');
+            if (toggleBtn) {
+                toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> SHOW ANIMALS';
+                toggleBtn.classList.add('hidden');
+            }
         } else {
             expandBtn.innerHTML = '<i class="fas fa-chevron-down"></i> MORE DETAILS';
+        }
+    });
+    
+    // Toggle grid button
+    const toggleGridBtn = document.getElementById('toggle-grid-btn');
+    toggleGridBtn?.addEventListener('click', () => {
+        gridContainer?.classList.toggle('hidden');
+        toggleGridBtn.classList.toggle('hidden');
+        
+        if (toggleGridBtn.classList.contains('hidden')) {
+            toggleGridBtn.innerHTML = '<i class="fas fa-chevron-up"></i> SHOW ANIMALS';
+        } else {
+            toggleGridBtn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE ANIMALS';
         }
     });
     
@@ -310,6 +332,10 @@ function displayCharacterStats(animal) {
 }
 
 function updateDetailedStats(animal) {
+    // Classification
+    document.getElementById('detail-type').textContent = animal.type || '---';
+    document.getElementById('detail-scientific').textContent = animal.scientific_name || '---';
+    
     // Description (placeholder for now - will be added to JSON later)
     const description = document.getElementById('animal-description');
     if (description) {

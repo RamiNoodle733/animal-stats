@@ -52,7 +52,6 @@
                         </div>
                         <img id="character-model" class="character-model" src="" alt="" style="display: none;">
                     </div>
-                    <div class="character-class-display" id="character-class">---</div>
                     
                     <!-- Compact info badges -->
                     <div class="character-mini-info" id="character-mini-info"></div>
@@ -68,6 +67,10 @@
             
             <!-- Compact Bottom Info Bar -->
             <div class="bottom-info-bar">
+                <button class="toggle-grid-btn" id="toggle-grid-btn">
+                    <i class="fas fa-chevron-down"></i> HIDE ANIMALS
+                </button>
+                <div class="info-separator">•</div>
                 <div class="info-item-inline">
                     <i class="fas fa-bolt"></i>
                     <span class="info-label">ABILITIES:</span>
@@ -90,33 +93,35 @@
                 <div class="details-grid">
                     <div class="details-column">
                         <div class="detail-section">
-                            <h3><i class="fas fa-info-circle"></i> DESCRIPTION</h3>
-                            <p id="animal-description">Select an animal to view description</p>
+                            <h3><i class="fas fa-paw"></i> CLASSIFICATION</h3>
+                            <div class="detail-item"><strong>Type:</strong> <span id="detail-type">---</span></div>
+                            <div class="detail-item"><strong>Scientific:</strong> <span id="detail-scientific">---</span></div>
+                            <div class="detail-item"><strong>Size Category:</strong> <span id="detail-size">---</span></div>
                         </div>
                         <div class="detail-section">
                             <h3><i class="fas fa-map-marked-alt"></i> HABITAT & DIET</h3>
                             <div class="detail-item"><strong>Habitat:</strong> <span id="detail-habitat">---</span></div>
                             <div class="detail-item"><strong>Diet:</strong> <span id="detail-diet">---</span></div>
+                            <div class="detail-item"><strong>Nocturnal:</strong> <span id="detail-nocturnal">---</span></div>
+                            <div class="detail-item"><strong>Social:</strong> <span id="detail-social">---</span></div>
                         </div>
                     </div>
                     <div class="details-column">
-                        <div class="detail-section">
-                            <h3><i class="fas fa-ruler-combined"></i> PHYSICAL STATS</h3>
+                        <div class="detail-section full-height">
+                            <h3><i class="fas fa-ruler-combined"></i> PHYSICAL MEASUREMENTS</h3>
                             <div class="detail-item"><strong>Weight:</strong> <span id="detail-weight">---</span></div>
                             <div class="detail-item"><strong>Height:</strong> <span id="detail-height">---</span></div>
                             <div class="detail-item"><strong>Length:</strong> <span id="detail-length">---</span></div>
                             <div class="detail-item"><strong>Speed:</strong> <span id="detail-speed">---</span></div>
                             <div class="detail-item"><strong>Lifespan:</strong> <span id="detail-lifespan">---</span></div>
                             <div class="detail-item"><strong>Bite Force:</strong> <span id="detail-bite">---</span></div>
+                            <div class="detail-item"><strong>Size Score:</strong> <span id="detail-size-score">---</span></div>
                         </div>
                     </div>
                     <div class="details-column">
-                        <div class="detail-section">
-                            <h3><i class="fas fa-chart-line"></i> ADDITIONAL STATS</h3>
-                            <div class="detail-item"><strong>Size Category:</strong> <span id="detail-size">---</span></div>
-                            <div class="detail-item"><strong>Nocturnal:</strong> <span id="detail-nocturnal">---</span></div>
-                            <div class="detail-item"><strong>Social:</strong> <span id="detail-social">---</span></div>
-                            <div class="detail-item"><strong>Size Score:</strong> <span id="detail-size-score">---</span></div>
+                        <div class="detail-section full-height">
+                            <h3><i class="fas fa-info-circle"></i> DESCRIPTION</h3>
+                            <p id="animal-description">Select an animal to view description</p>
                         </div>
                     </div>
                 </div>
