@@ -40,44 +40,22 @@
                     <div class="stat-group" id="left-stats">
                         <!-- Stats populated by JavaScript -->
                     </div>
-                    
-                    <!-- Physical Info Section -->
-                    <div class="info-section">
-                        <div class="info-section-title"><i class="fas fa-ruler-combined"></i> PHYSICAL INFO</div>
-                        <div class="info-list" id="physical-info">
-                            <div class="info-item"><i class="fas fa-weight-hanging"></i> <span>Weight: --</span></div>
-                            <div class="info-item"><i class="fas fa-arrows-alt-v"></i> <span>Height: --</span></div>
-                            <div class="info-item"><i class="fas fa-arrows-alt-h"></i> <span>Length: --</span></div>
-                            <div class="info-item"><i class="fas fa-tachometer-alt"></i> <span>Speed: --</span></div>
-                            <div class="info-item"><i class="fas fa-hourglass-half"></i> <span>Lifespan: --</span></div>
-                        </div>
-                    </div>
                 </div>
                 
                 <!-- Center Character Display -->
                 <div class="character-showcase">
-                    <div class="character-header">
-                        <div class="character-name-display" id="character-name">SELECT AN ANIMAL</div>
-                        <div class="character-scientific-name" id="character-scientific">---</div>
-                    </div>
+                    <div class="character-name-display" id="character-name">SELECT AN ANIMAL</div>
+                    <div class="character-scientific-name" id="character-scientific">---</div>
                     <div class="character-model-container">
                         <div class="character-silhouette" id="character-silhouette">
                             <i class="fas fa-question"></i>
                         </div>
                         <img id="character-model" class="character-model" src="" alt="" style="display: none;">
                     </div>
-                    <div class="character-footer">
-                        <div class="character-class-display" id="character-class">---</div>
-                        <div class="character-badges" id="character-badges"></div>
-                    </div>
+                    <div class="character-class-display" id="character-class">---</div>
                     
-                    <!-- Habitat & Diet Info -->
-                    <div class="info-section center-info">
-                        <div class="info-row">
-                            <div class="info-tag"><i class="fas fa-map-marker-alt"></i> <span id="habitat-info">---</span></div>
-                            <div class="info-tag"><i class="fas fa-utensils"></i> <span id="diet-info">---</span></div>
-                        </div>
-                    </div>
+                    <!-- Compact info badges -->
+                    <div class="character-mini-info" id="character-mini-info"></div>
                 </div>
                 
                 <!-- Right Stats Panel -->
@@ -85,22 +63,21 @@
                     <div class="stat-group" id="right-stats">
                         <!-- Stats populated by JavaScript -->
                     </div>
-                    
-                    <!-- Special Abilities Section -->
-                    <div class="info-section">
-                        <div class="info-section-title"><i class="fas fa-bolt"></i> SPECIAL ABILITIES</div>
-                        <div class="abilities-list" id="special-abilities">
-                            <div class="ability-item">Select an animal</div>
-                        </div>
-                    </div>
                 </div>
             </div>
             
-            <!-- Bottom Info Panel -->
-            <div class="bottom-info-panel">
-                <div class="unique-traits-section">
-                    <div class="traits-title"><i class="fas fa-star"></i> UNIQUE TRAITS</div>
-                    <div class="traits-list" id="unique-traits">Select an animal to view traits</div>
+            <!-- Compact Bottom Info Bar -->
+            <div class="bottom-info-bar">
+                <div class="info-item-inline">
+                    <i class="fas fa-bolt"></i>
+                    <span class="info-label">ABILITIES:</span>
+                    <span id="abilities-inline">Select an animal</span>
+                </div>
+                <div class="info-separator">•</div>
+                <div class="info-item-inline">
+                    <i class="fas fa-star"></i>
+                    <span class="info-label">TRAITS:</span>
+                    <span id="traits-inline">Select an animal</span>
                 </div>
             </div>
         </div>

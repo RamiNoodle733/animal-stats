@@ -259,65 +259,30 @@ function displayCharacterStats(animal) {
         classDisplay.textContent = animal.type;
     }
     
-    // Update badges
-    const badgesContainer = document.querySelector('.character-badges');
-    if (badgesContainer) {
-        let badges = '';
-        if (animal.isNocturnal) {
-            badges += '<span class="badge"><i class="fas fa-moon"></i> Nocturnal</span>';
-        }
-        if (animal.isSocial) {
-            badges += '<span class="badge"><i class="fas fa-users"></i> Social</span>';
-        }
-        badges += '<span class="badge"><i class="fas fa-expand"></i> ' + animal.size + '</span>';
-        badgesContainer.innerHTML = badges;
+    // Update mini info (subtle, below type)
+    const miniInfo = document.getElementById('character-mini-info');
+    if (miniInfo) {
+        let info = [];
+        if (animal.weight_kg) info.push(animal.weight_kg + ' kg');
+        if (animal.lifespan_years) info.push(animal.lifespan_years + ' yrs');
+        if (animal.bite_force_psi) info.push(animal.bite_force_psi + ' PSI');
+        miniInfo.innerHTML = info.map(i => '<span>' + i + '</span>').join('');
     }
     
-    // Update habitat and diet
-    const habitatInfo = document.getElementById('habitat-info');
-    if (habitatInfo) {
-        habitatInfo.textContent = animal.habitat;
+    // Update abilities inline (bottom bar)
+    const abilitiesInline = document.getElementById('abilities-inline');
+    if (abilitiesInline && animal.special_abilities && animal.special_abilities.length > 0) {
+        abilitiesInline.textContent = animal.special_abilities.join(', ');
+    } else if (abilitiesInline) {
+        abilitiesInline.textContent = 'None';
     }
     
-    const dietInfo = document.getElementById('diet-info');
-    if (dietInfo) {
-        dietInfo.textContent = Array.isArray(animal.diet) ? animal.diet.join(', ') : animal.diet;
-    }
-    
-    // Update physical info
-    const physicalInfo = document.getElementById('physical-info');
-    if (physicalInfo) {
-        physicalInfo.innerHTML = 
-            '<div class="info-item"><i class="fas fa-weight-hanging"></i> <span>Weight: ' + animal.weight_kg + ' kg</span></div>' +
-            '<div class="info-item"><i class="fas fa-arrows-alt-v"></i> <span>Height: ' + animal.height_cm + ' cm</span></div>' +
-            '<div class="info-item"><i class="fas fa-arrows-alt-h"></i> <span>Length: ' + animal.length_cm + ' cm</span></div>' +
-            '<div class="info-item"><i class="fas fa-tachometer-alt"></i> <span>Speed: ' + animal.speed_mps.toFixed(1) + ' m/s</span></div>' +
-            '<div class="info-item"><i class="fas fa-hourglass-half"></i> <span>Lifespan: ' + animal.lifespan_years + ' years</span></div>' +
-            (animal.bite_force_psi ? '<div class="info-item"><i class="fas fa-teeth"></i> <span>Bite Force: ' + animal.bite_force_psi + ' PSI</span></div>' : '');
-    }
-    
-    // Update special abilities
-    const abilitiesContainer = document.getElementById('special-abilities');
-    if (abilitiesContainer && animal.special_abilities && animal.special_abilities.length > 0) {
-        let abilitiesHTML = '';
-        animal.special_abilities.forEach(ability => {
-            abilitiesHTML += '<div class="ability-item"><i class="fas fa-star"></i> ' + ability + '</div>';
-        });
-        abilitiesContainer.innerHTML = abilitiesHTML;
-    } else if (abilitiesContainer) {
-        abilitiesContainer.innerHTML = '<div class="ability-item">No special abilities</div>';
-    }
-    
-    // Update unique traits
-    const traitsContainer = document.getElementById('unique-traits');
-    if (traitsContainer && animal.unique_traits && animal.unique_traits.length > 0) {
-        let traitsHTML = '';
-        animal.unique_traits.forEach(trait => {
-            traitsHTML += '<span class="trait-tag"><i class="fas fa-certificate"></i> ' + trait + '</span>';
-        });
-        traitsContainer.innerHTML = traitsHTML;
-    } else if (traitsContainer) {
-        traitsContainer.textContent = 'No unique traits listed';
+    // Update traits inline (bottom bar)
+    const traitsInline = document.getElementById('traits-inline');
+    if (traitsInline && animal.unique_traits && animal.unique_traits.length > 0) {
+        traitsInline.textContent = animal.unique_traits.join(', ');
+    } else if (traitsInline) {
+        traitsInline.textContent = 'None';
     }
     
     // Update left stats panel
