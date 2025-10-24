@@ -35,29 +35,16 @@
         <!-- Stats View (Character Select Style) -->
         <div id="stats-view" class="view-container active-view">
             <div class="character-display-area">
-                <!-- Left Stats Panel -->
-                <div class="stats-panel stats-panel-left">
-                    <div class="stat-group">
-                        <div class="stat-row">
-                            <span class="stat-icon"><i class="fas fa-fist-raised"></i></span>
-                            <span class="stat-name">POWER</span>
-                            <div class="stat-bar-wrapper">
-                                <div class="stat-bar" id="stat-power-left">
-                                    <div class="stat-bar-fill"></div>
-                                </div>
-                            </div>
-                            <span class="stat-value" id="stat-power-value-left">--</span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-icon"><i class="fas fa-shield-alt"></i></span>
-                            <span class="stat-name">DEFENSE</span>
-                            <div class="stat-bar-wrapper">
-                                <div class="stat-bar" id="stat-defense-left">
-                                    <div class="stat-bar-fill"></div>
-                                </div>
-                            </div>
-                            <span class="stat-value" id="stat-defense-value-left">--</span>
-                        </div>
+                <!-- Left Section: Stats + Attacks -->
+                <div class="stats-section stats-section-left">
+                    <div class="stats-header">STATS</div>
+                    <div class="stat-group" id="left-stats-group">
+                        <!-- Stats will be populated here -->
+                    </div>
+                    
+                    <div class="attacks-header">ATTACKS</div>
+                    <div class="attacks-list" id="attacks-list">
+                        <!-- Attacks will be populated here -->
                     </div>
                 </div>
                 
@@ -71,31 +58,24 @@
                         <img id="character-model" class="character-model" src="" alt="" style="display: none;">
                     </div>
                     <div class="character-class-display" id="character-class">---</div>
+                    
+                    <!-- Special Ability Description -->
+                    <div class="ability-description" id="ability-description" style="display: none;">
+                        <div class="ability-name" id="ability-name"></div>
+                        <div class="ability-text" id="ability-text"></div>
+                    </div>
                 </div>
                 
                 <!-- Right Stats Panel -->
-                <div class="stats-panel stats-panel-right">
-                    <div class="stat-group">
-                        <div class="stat-row">
-                            <span class="stat-value" id="stat-speed-value-right">--</span>
-                            <div class="stat-bar-wrapper">
-                                <div class="stat-bar" id="stat-speed-right">
-                                    <div class="stat-bar-fill"></div>
-                                </div>
-                            </div>
-                            <span class="stat-name">SPEED</span>
-                            <span class="stat-icon"><i class="fas fa-running"></i></span>
-                        </div>
-                        <div class="stat-row">
-                            <span class="stat-value" id="stat-health-value-right">--</span>
-                            <div class="stat-bar-wrapper">
-                                <div class="stat-bar" id="stat-health-right">
-                                    <div class="stat-bar-fill"></div>
-                                </div>
-                            </div>
-                            <span class="stat-name">HEALTH</span>
-                            <span class="stat-icon"><i class="fas fa-heart"></i></span>
-                        </div>
+                <div class="stats-section stats-section-right">
+                    <div class="stats-header">STATS</div>
+                    <div class="stat-group" id="right-stats-group">
+                        <!-- Stats will be populated here -->
+                    </div>
+                    
+                    <div class="traits-header">TRAITS</div>
+                    <div class="traits-list" id="traits-list">
+                        <!-- Traits will be populated here -->
                     </div>
                 </div>
             </div>
