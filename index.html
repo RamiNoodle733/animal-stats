@@ -35,48 +35,72 @@
         <!-- Stats View (Character Select Style) -->
         <div id="stats-view" class="view-container active-view">
             <div class="character-display-area">
-                <!-- Left Section: Stats + Attacks -->
-                <div class="stats-section stats-section-left">
-                    <div class="stats-header">STATS</div>
-                    <div class="stat-group" id="left-stats-group">
-                        <!-- Stats will be populated here -->
+                <!-- Left Stats Panel -->
+                <div class="stats-panel stats-panel-left">
+                    <div class="stat-group" id="left-stats">
+                        <!-- Stats populated by JavaScript -->
                     </div>
                     
-                    <div class="attacks-header">ATTACKS</div>
-                    <div class="attacks-list" id="attacks-list">
-                        <!-- Attacks will be populated here -->
+                    <!-- Physical Info Section -->
+                    <div class="info-section">
+                        <div class="info-section-title"><i class="fas fa-ruler-combined"></i> PHYSICAL INFO</div>
+                        <div class="info-list" id="physical-info">
+                            <div class="info-item"><i class="fas fa-weight-hanging"></i> <span>Weight: --</span></div>
+                            <div class="info-item"><i class="fas fa-arrows-alt-v"></i> <span>Height: --</span></div>
+                            <div class="info-item"><i class="fas fa-arrows-alt-h"></i> <span>Length: --</span></div>
+                            <div class="info-item"><i class="fas fa-tachometer-alt"></i> <span>Speed: --</span></div>
+                            <div class="info-item"><i class="fas fa-hourglass-half"></i> <span>Lifespan: --</span></div>
+                        </div>
                     </div>
                 </div>
                 
                 <!-- Center Character Display -->
                 <div class="character-showcase">
-                    <div class="character-name-display" id="character-name">SELECT AN ANIMAL</div>
+                    <div class="character-header">
+                        <div class="character-name-display" id="character-name">SELECT AN ANIMAL</div>
+                        <div class="character-scientific-name" id="character-scientific">---</div>
+                    </div>
                     <div class="character-model-container">
                         <div class="character-silhouette" id="character-silhouette">
                             <i class="fas fa-question"></i>
                         </div>
                         <img id="character-model" class="character-model" src="" alt="" style="display: none;">
                     </div>
-                    <div class="character-class-display" id="character-class">---</div>
+                    <div class="character-footer">
+                        <div class="character-class-display" id="character-class">---</div>
+                        <div class="character-badges" id="character-badges"></div>
+                    </div>
                     
-                    <!-- Special Ability Description -->
-                    <div class="ability-description" id="ability-description" style="display: none;">
-                        <div class="ability-name" id="ability-name"></div>
-                        <div class="ability-text" id="ability-text"></div>
+                    <!-- Habitat & Diet Info -->
+                    <div class="info-section center-info">
+                        <div class="info-row">
+                            <div class="info-tag"><i class="fas fa-map-marker-alt"></i> <span id="habitat-info">---</span></div>
+                            <div class="info-tag"><i class="fas fa-utensils"></i> <span id="diet-info">---</span></div>
+                        </div>
                     </div>
                 </div>
                 
                 <!-- Right Stats Panel -->
-                <div class="stats-section stats-section-right">
-                    <div class="stats-header">STATS</div>
-                    <div class="stat-group" id="right-stats-group">
-                        <!-- Stats will be populated here -->
+                <div class="stats-panel stats-panel-right">
+                    <div class="stat-group" id="right-stats">
+                        <!-- Stats populated by JavaScript -->
                     </div>
                     
-                    <div class="traits-header">TRAITS</div>
-                    <div class="traits-list" id="traits-list">
-                        <!-- Traits will be populated here -->
+                    <!-- Special Abilities Section -->
+                    <div class="info-section">
+                        <div class="info-section-title"><i class="fas fa-bolt"></i> SPECIAL ABILITIES</div>
+                        <div class="abilities-list" id="special-abilities">
+                            <div class="ability-item">Select an animal</div>
+                        </div>
                     </div>
+                </div>
+            </div>
+            
+            <!-- Bottom Info Panel -->
+            <div class="bottom-info-panel">
+                <div class="unique-traits-section">
+                    <div class="traits-title"><i class="fas fa-star"></i> UNIQUE TRAITS</div>
+                    <div class="traits-list" id="unique-traits">Select an animal to view traits</div>
                 </div>
             </div>
         </div>

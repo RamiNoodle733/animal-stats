@@ -215,16 +215,23 @@ function updateSelectedCards() {
 }
 
 function displayInitialStats() {
-    // Show placeholder message
-    const leftPanel = document.getElementById('left-stats-group');
-    const rightPanel = document.getElementById('right-stats-group');
-    const attacksList = document.getElementById('attacks-list');
-    const traitsList = document.getElementById('traits-list');
+    // Show placeholder stats on initial load
+    const leftPanel = document.getElementById('left-stats');
+    const rightPanel = document.getElementById('right-stats');
     
-    if (leftPanel) leftPanel.innerHTML = '<p style="text-align: center; opacity: 0.5; padding: 20px;">Select an animal to view stats</p>';
-    if (rightPanel) rightPanel.innerHTML = '<p style="text-align: center; opacity: 0.5; padding: 20px;">Select an animal to view stats</p>';
-    if (attacksList) attacksList.innerHTML = '<p style="text-align: center; opacity: 0.5; padding: 15px; font-size: 0.9rem;">No animal selected</p>';
-    if (traitsList) traitsList.innerHTML = '<p style="text-align: center; opacity: 0.5; padding: 15px; font-size: 0.9rem;">No animal selected</p>';
+    if (leftPanel) {
+        leftPanel.innerHTML = 
+            createStatRow('fa-fist-raised', 'ATTACK', 0, false, '#ff6b00') +
+            createStatRow('fa-shield-alt', 'DEFENSE', 0, false, '#00d4ff') +
+            createStatRow('fa-wind', 'AGILITY', 0, false, '#00ff88');
+    }
+    
+    if (rightPanel) {
+        rightPanel.innerHTML = 
+            createStatRow('fa-heart', 'STAMINA', 0, true, '#ff3366') +
+            createStatRow('fa-brain', 'INTELLIGENCE', 0, true, '#9966ff') +
+            createStatRow('fa-bolt', 'SPECIAL', 0, true, '#ffcc00');
+    }
 }
 
 function displayCharacterStats(animal) {
@@ -234,16 +241,83 @@ function displayCharacterStats(animal) {
         nameDisplay.textContent = animal.name.toUpperCase();
     }
     
+    // Update scientific name
+    const scientificDisplay = document.querySelector('.character-scientific-name');
+    if (scientificDisplay) {
+        scientificDisplay.textContent = animal.scientific_name;
+    }
+    
     // Update character model
     const modelContainer = document.querySelector('.character-model-container');
     if (modelContainer) {
         modelContainer.innerHTML = '<img src="' + animal.image + '" alt="' + animal.name + '" class="character-model" onerror="this.src=\'https://via.placeholder.com/500x500?text=' + animal.name + '\'">';
     }
     
-    // Update character class/type
+    // Update character type
     const classDisplay = document.querySelector('.character-class-display');
     if (classDisplay) {
-        classDisplay.textContent = animal.type.toUpperCase();
+        classDisplay.textContent = animal.type;
+    }
+    
+    // Update badges
+    const badgesContainer = document.querySelector('.character-badges');
+    if (badgesContainer) {
+        let badges = '';
+        if (animal.isNocturnal) {
+            badges += '<span class="badge"><i class="fas fa-moon"></i> Nocturnal</span>';
+        }
+        if (animal.isSocial) {
+            badges += '<span class="badge"><i class="fas fa-users"></i> Social</span>';
+        }
+        badges += '<span class="badge"><i class="fas fa-expand"></i> ' + animal.size + '</span>';
+        badgesContainer.innerHTML = badges;
+    }
+    
+    // Update habitat and diet
+    const habitatInfo = document.getElementById('habitat-info');
+    if (habitatInfo) {
+        habitatInfo.textContent = animal.habitat;
+    }
+    
+    const dietInfo = document.getElementById('diet-info');
+    if (dietInfo) {
+        dietInfo.textContent = Array.isArray(animal.diet) ? animal.diet.join(', ') : animal.diet;
+    }
+    
+    // Update physical info
+    const physicalInfo = document.getElementById('physical-info');
+    if (physicalInfo) {
+        physicalInfo.innerHTML = 
+            '<div class="info-item"><i class="fas fa-weight-hanging"></i> <span>Weight: ' + animal.weight_kg + ' kg</span></div>' +
+            '<div class="info-item"><i class="fas fa-arrows-alt-v"></i> <span>Height: ' + animal.height_cm + ' cm</span></div>' +
+            '<div class="info-item"><i class="fas fa-arrows-alt-h"></i> <span>Length: ' + animal.length_cm + ' cm</span></div>' +
+            '<div class="info-item"><i class="fas fa-tachometer-alt"></i> <span>Speed: ' + animal.speed_mps.toFixed(1) + ' m/s</span></div>' +
+            '<div class="info-item"><i class="fas fa-hourglass-half"></i> <span>Lifespan: ' + animal.lifespan_years + ' years</span></div>' +
+            (animal.bite_force_psi ? '<div class="info-item"><i class="fas fa-teeth"></i> <span>Bite Force: ' + animal.bite_force_psi + ' PSI</span></div>' : '');
+    }
+    
+    // Update special abilities
+    const abilitiesContainer = document.getElementById('special-abilities');
+    if (abilitiesContainer && animal.special_abilities && animal.special_abilities.length > 0) {
+        let abilitiesHTML = '';
+        animal.special_abilities.forEach(ability => {
+            abilitiesHTML += '<div class="ability-item"><i class="fas fa-star"></i> ' + ability + '</div>';
+        });
+        abilitiesContainer.innerHTML = abilitiesHTML;
+    } else if (abilitiesContainer) {
+        abilitiesContainer.innerHTML = '<div class="ability-item">No special abilities</div>';
+    }
+    
+    // Update unique traits
+    const traitsContainer = document.getElementById('unique-traits');
+    if (traitsContainer && animal.unique_traits && animal.unique_traits.length > 0) {
+        let traitsHTML = '';
+        animal.unique_traits.forEach(trait => {
+            traitsHTML += '<span class="trait-tag"><i class="fas fa-certificate"></i> ' + trait + '</span>';
+        });
+        traitsContainer.innerHTML = traitsHTML;
+    } else if (traitsContainer) {
+        traitsContainer.textContent = 'No unique traits listed';
     }
     
     // Update left stats panel
@@ -251,155 +325,44 @@ function displayCharacterStats(animal) {
     
     // Update right stats panel
     displaySideStats('right', animal);
-    
-    // Update attacks list
-    displayAttacks(animal);
-    
-    // Update traits list
-    displayTraits(animal);
-    
-    // Update ability description
-    displayAbilityDescription(animal);
 }
 
 function displaySideStats(side, animal) {
-    const panel = document.getElementById(side + '-stats-group');
+    const panelId = side === 'left' ? 'left-stats' : 'right-stats';
+    const panel = document.getElementById(panelId);
     if (!panel) return;
     
     if (side === 'left') {
         panel.innerHTML = 
-            createStatRow('fa-fist-raised', 'ATTACK', animal.attack, false) +
-            createStatRow('fa-shield-alt', 'DEFENSE', animal.defense, false) +
-            createStatRow('fa-wind', 'AGILITY', animal.agility, false);
+            createStatRow('fa-fist-raised', 'ATTACK', animal.attack, false, '#ff6b00') +
+            createStatRow('fa-shield-alt', 'DEFENSE', animal.defense, false, '#00d4ff') +
+            createStatRow('fa-wind', 'AGILITY', animal.agility, false, '#00ff88');
     } else {
         panel.innerHTML = 
-            createStatRow('fa-heart', 'STAMINA', animal.stamina, true) +
-            createStatRow('fa-brain', 'INTELLIGENCE', animal.intelligence, true) +
-            createStatRow('fa-bolt', 'SPECIAL', animal.special_attack, true);
+            createStatRow('fa-heart', 'STAMINA', animal.stamina, true, '#ff3366') +
+            createStatRow('fa-brain', 'INTELLIGENCE', animal.intelligence, true, '#9966ff') +
+            createStatRow('fa-bolt', 'SPECIAL', animal.special_attack, true, '#ffcc00');
     }
 }
 
-function createStatRow(icon, label, value, isRight) {
+function createStatRow(icon, label, value, isRight, color) {
     const percentage = Math.min(value, 100);
-    const barColor = getStatColor(value);
     
     if (isRight) {
         return '<div class="stat-row">' +
-            '<div class="stat-value">' + Math.round(value) + '</div>' +
-            '<div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" style="width: ' + percentage + '%; background: linear-gradient(90deg, ' + barColor + ', #ff6b00);"></div></div></div>' +
+            '<div class="stat-value">' + value + '</div>' +
+            '<div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" style="width: ' + percentage + '%; background: ' + color + ';"></div></div></div>' +
+            '<div class="stat-name">' + label + '</div>' +
             '<div class="stat-icon"><i class="fas ' + icon + '"></i></div>' +
             '</div>';
     } else {
         return '<div class="stat-row">' +
             '<div class="stat-icon"><i class="fas ' + icon + '"></i></div>' +
-            '<div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" style="width: ' + percentage + '%; background: linear-gradient(90deg, ' + barColor + ', #ff6b00);"></div></div></div>' +
-            '<div class="stat-value">' + Math.round(value) + '</div>' +
+            '<div class="stat-name">' + label + '</div>' +
+            '<div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" style="width: ' + percentage + '%; background: ' + color + ';"></div></div></div>' +
+            '<div class="stat-value">' + value + '</div>' +
             '</div>';
     }
-}
-
-function getStatColor(value) {
-    if (value >= 80) return '#00ff88';
-    if (value >= 60) return '#00d4ff';
-    if (value >= 40) return '#ffd700';
-    return '#ff6b00';
-}
-
-function displayAttacks(animal) {
-    const attacksList = document.getElementById('attacks-list');
-    if (!attacksList) return;
-    
-    if (!animal.special_abilities || animal.special_abilities.length === 0) {
-        attacksList.innerHTML = '<p style="text-align: center; opacity: 0.5; padding: 10px; font-size: 0.85rem;">No special attacks</p>';
-        return;
-    }
-    
-    const attackIcons = ['fa-fire-alt', 'fa-bolt', 'fa-skull-crossbones', 'fa-meteor', 'fa-fist-raised'];
-    
-    attacksList.innerHTML = animal.special_abilities.map((ability, index) => {
-        const icon = attackIcons[index % attackIcons.length];
-        return '<div class="attack-item">' +
-            '<div class="attack-icon"><i class="fas ' + icon + '"></i></div>' +
-            '<div class="attack-name">' + ability.toUpperCase() + '</div>' +
-            '</div>';
-    }).join('');
-}
-
-function displayTraits(animal) {
-    const traitsList = document.getElementById('traits-list');
-    if (!traitsList) return;
-    
-    if (!animal.unique_traits || animal.unique_traits.length === 0) {
-        traitsList.innerHTML = '<p style="text-align: center; opacity: 0.5; padding: 10px; font-size: 0.85rem;">No unique traits</p>';
-        return;
-    }
-    
-    const traitIcons = ['fa-star', 'fa-crown', 'fa-gem', 'fa-certificate', 'fa-award'];
-    
-    traitsList.innerHTML = animal.unique_traits.slice(0, 5).map((trait, index) => {
-        const icon = traitIcons[index % traitIcons.length];
-        return '<div class="trait-item">' +
-            '<div class="trait-icon"><i class="fas ' + icon + '"></i></div>' +
-            '<div class="trait-name">' + capitalizeWords(trait) + '</div>' +
-            '</div>';
-    }).join('');
-}
-
-function displayAbilityDescription(animal) {
-    const abilityDesc = document.getElementById('ability-description');
-    const abilityName = document.getElementById('ability-name');
-    const abilityText = document.getElementById('ability-text');
-    
-    if (!abilityDesc || !abilityName || !abilityText) return;
-    
-    // Create a description based on animal's stats and abilities
-    if (animal.special_abilities && animal.special_abilities.length > 0) {
-        const mainAbility = animal.special_abilities[0];
-        let description = generateAbilityDescription(animal);
-        
-        abilityName.textContent = mainAbility.toUpperCase();
-        abilityText.textContent = description;
-        abilityDesc.style.display = 'block';
-    } else {
-        abilityDesc.style.display = 'none';
-    }
-}
-
-function generateAbilityDescription(animal) {
-    // Generate dynamic descriptions based on animal traits
-    const descriptions = [];
-    
-    if (animal.bite_force_psi && animal.bite_force_psi > 1000) {
-        descriptions.push('Devastating bite force of ' + animal.bite_force_psi + ' PSI.');
-    }
-    
-    if (animal.attack > 80) {
-        descriptions.push('Exceptional offensive capabilities.');
-    }
-    
-    if (animal.defense > 80) {
-        descriptions.push('Superior defensive armor.');
-    }
-    
-    if (animal.intelligence > 80) {
-        descriptions.push('Highly intelligent and strategic.');
-    }
-    
-    if (animal.speed_mps > 20) {
-        descriptions.push('Incredible speed at ' + animal.speed_mps + ' m/s.');
-    }
-    
-    if (descriptions.length === 0) {
-        return 'A unique creature with specialized abilities adapted to its environment.';
-    }
-    
-    return descriptions.join(' ');
-}
-
-function capitalizeWords(str) {
-    return str.split(' ').map(word => 
-        word.charAt(0).toUpperCase() + word.slice(1)
-    ).join(' ');
 }
 
 function displayFighter(animal, side) {
