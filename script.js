@@ -50,6 +50,20 @@ function setupEventListeners() {
     const sortBy = document.getElementById('sort-by');
     sortBy.addEventListener('change', filterAndRender);
     
+    // Expand details button
+    const expandBtn = document.getElementById('expand-details-btn');
+    const detailsPanel = document.getElementById('details-panel');
+    expandBtn?.addEventListener('click', () => {
+        detailsPanel.classList.toggle('expanded');
+        expandBtn.classList.toggle('expanded');
+        
+        if (expandBtn.classList.contains('expanded')) {
+            expandBtn.innerHTML = '<i class="fas fa-chevron-up"></i> LESS DETAILS';
+        } else {
+            expandBtn.innerHTML = '<i class="fas fa-chevron-down"></i> MORE DETAILS';
+        }
+    });
+    
     // Fight button
     const fightBtn = document.getElementById('fight-btn');
     if (fightBtn) {
@@ -285,11 +299,40 @@ function displayCharacterStats(animal) {
         traitsInline.textContent = 'None';
     }
     
+    // Update detailed stats panel
+    updateDetailedStats(animal);
+    
     // Update left stats panel
     displaySideStats('left', animal);
     
     // Update right stats panel
     displaySideStats('right', animal);
+}
+
+function updateDetailedStats(animal) {
+    // Description (placeholder for now - will be added to JSON later)
+    const description = document.getElementById('animal-description');
+    if (description) {
+        description.textContent = animal.description || 'No description available yet. This will be added soon!';
+    }
+    
+    // Habitat & Diet
+    document.getElementById('detail-habitat').textContent = animal.habitat || '---';
+    document.getElementById('detail-diet').textContent = Array.isArray(animal.diet) ? animal.diet.join(', ') : (animal.diet || '---');
+    
+    // Physical Stats
+    document.getElementById('detail-weight').textContent = animal.weight_kg ? animal.weight_kg + ' kg' : '---';
+    document.getElementById('detail-height').textContent = animal.height_cm ? animal.height_cm + ' cm' : '---';
+    document.getElementById('detail-length').textContent = animal.length_cm ? animal.length_cm + ' cm' : '---';
+    document.getElementById('detail-speed').textContent = animal.speed_mps ? animal.speed_mps.toFixed(1) + ' m/s (' + (animal.speed_mps * 3.6).toFixed(1) + ' km/h)' : '---';
+    document.getElementById('detail-lifespan').textContent = animal.lifespan_years ? animal.lifespan_years + ' years' : '---';
+    document.getElementById('detail-bite').textContent = animal.bite_force_psi ? animal.bite_force_psi + ' PSI' : '---';
+    
+    // Additional Stats
+    document.getElementById('detail-size').textContent = animal.size || '---';
+    document.getElementById('detail-nocturnal').textContent = animal.isNocturnal ? 'Yes 🌙' : 'No ☀️';
+    document.getElementById('detail-social').textContent = animal.isSocial ? 'Yes 👥' : 'No (Solitary)';
+    document.getElementById('detail-size-score').textContent = animal.size_score ? animal.size_score.toFixed(1) + ' / 100' : '---';
 }
 
 function displaySideStats(side, animal) {
