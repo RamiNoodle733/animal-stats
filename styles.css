@@ -91,6 +91,13 @@ body {
     grid-template-columns: 0 1fr 0;
 }
 
+.character-display-area.compact-mode .character-showcase {
+    grid-column: 2;
+    justify-self: center;
+    width: 100%;
+    max-width: 800px;
+}
+
 .character-display-area.compact-mode .stats-panel {
     position: fixed;
     top: 70px;
@@ -310,12 +317,6 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.bottom-info-bar.hide-info .info-item-inline,
-.bottom-info-bar.hide-info .info-separator {
-    display: none;
 }
 
 .info-item-inline i {
@@ -347,7 +348,9 @@ body {
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
+    min-width: 140px;
 }
 
 .expand-details-btn:hover {
@@ -396,7 +399,7 @@ body {
 
 .details-panel {
     position: absolute;
-    bottom: 0;
+    bottom: 50px;
     left: 0;
     right: 0;
     max-height: 0;

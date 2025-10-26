@@ -56,13 +56,11 @@ function setupEventListeners() {
     const gridContainer = document.querySelector('.character-grid-container');
     const toggleGridBtn = document.getElementById('toggle-grid-btn');
     const displayArea = document.querySelector('.character-display-area');
-    const bottomInfoBar = document.querySelector('.bottom-info-bar');
     
     expandBtn?.addEventListener('click', () => {
         detailsPanel.classList.toggle('expanded');
         expandBtn.classList.toggle('expanded');
         displayArea?.classList.toggle('compact-mode');
-        bottomInfoBar?.classList.toggle('hide-info');
         
         if (expandBtn.classList.contains('expanded')) {
             expandBtn.innerHTML = '<i class="fas fa-chevron-up"></i> LESS DETAILS';
@@ -74,8 +72,9 @@ function setupEventListeners() {
             }
         } else {
             expandBtn.innerHTML = '<i class="fas fa-chevron-down"></i> MORE DETAILS';
-            // Show the grid and toggle button again when details collapse
+            // Auto-show grid when details collapse
             gridContainer?.classList.remove('hidden');
+            // Show the toggle button again when details collapse
             if (toggleGridBtn) {
                 toggleGridBtn.style.display = 'flex';
                 toggleGridBtn.classList.remove('hidden');
