@@ -756,9 +756,9 @@ body {
 }
 
 .character-card.selected-fighter1 {
-    border-color: #00d4ff;
-    box-shadow: 0 0 30px rgba(0, 212, 255, 0.8);
-    background: rgba(0, 212, 255, 0.2);
+    border-color: #00ffff;
+    box-shadow: 0 0 40px rgba(0, 255, 255, 1), 0 0 20px rgba(0, 255, 255, 0.6);
+    background: rgba(0, 255, 255, 0.25);
 }
 
 .character-card.selected-fighter2 {
