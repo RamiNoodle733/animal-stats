@@ -481,22 +481,24 @@ body {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     gap: 20px;
-    padding: 20px;
+    padding: 10px 20px;
     align-items: center;
     min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
 }
 
 .fighter-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     min-height: 0;
 }
 
 .fighter-display {
     width: 100%;
-    max-width: 280px;
+    max-width: 250px;
     aspect-ratio: 1;
     background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
     border: 4px solid var(--border-bright);
@@ -751,6 +753,18 @@ body {
     border-color: var(--gold-color);
     box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
     background: rgba(255, 215, 0, 0.2);
+}
+
+.character-card.selected-fighter1 {
+    border-color: #00d4ff;
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.8);
+    background: rgba(0, 212, 255, 0.2);
+}
+
+.character-card.selected-fighter2 {
+    border-color: #ff6b00;
+    box-shadow: 0 0 30px rgba(255, 107, 0, 0.8);
+    background: rgba(255, 107, 0, 0.2);
 }
 
 .character-card-image {

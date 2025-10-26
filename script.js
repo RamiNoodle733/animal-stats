@@ -194,10 +194,23 @@ function switchView(view) {
     document.getElementById('stats-mode-btn').classList.toggle('active', view === 'stats');
     document.getElementById('compare-mode-btn').classList.toggle('active', view === 'compare');
     
-    // Reset selection state when switching to compare view
+    const gridContainer = document.querySelector('.character-grid-container');
+    const toggleGridBtn = document.getElementById('toggle-grid-btn');
+    
+    // Always show menu in compare view
     if (view === 'compare') {
         selectingSlot = null;
         updateSelectionState();
+        // Force show grid in compare mode
+        gridContainer?.classList.remove('hidden');
+        if (toggleGridBtn) {
+            toggleGridBtn.style.display = 'none'; // Hide toggle button in compare mode
+        }
+    } else {
+        // Show toggle button in stats mode
+        if (toggleGridBtn) {
+            toggleGridBtn.style.display = 'flex';
+        }
     }
 }
 
@@ -247,14 +260,18 @@ function handleCardClick(animal) {
 function updateSelectedCards() {
     const cards = document.querySelectorAll('.character-card');
     cards.forEach((card) => {
-        card.classList.remove('selected');
+        card.classList.remove('selected', 'selected-fighter1', 'selected-fighter2');
         const animalName = card.querySelector('.character-card-name').textContent;
         
         if (currentView === 'stats' && selectedAnimal && animalName === selectedAnimal.name) {
             card.classList.add('selected');
         } else if (currentView === 'compare') {
-            if (fighter1 && animalName === fighter1.name) card.classList.add('selected');
-            if (fighter2 && animalName === fighter2.name) card.classList.add('selected');
+            if (fighter1 && animalName === fighter1.name) {
+                card.classList.add('selected-fighter1');
+            }
+            if (fighter2 && animalName === fighter2.name) {
+                card.classList.add('selected-fighter2');
+            }
         }
     });
 }
