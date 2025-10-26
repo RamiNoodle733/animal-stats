@@ -481,11 +481,12 @@ body {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     gap: 20px;
-    padding: 10px 20px;
+    padding: 10px 20px 20px 20px;
     align-items: center;
     min-height: 0;
     max-height: 100%;
     overflow: hidden;
+    padding-bottom: 260px;
 }
 
 .fighter-section {
