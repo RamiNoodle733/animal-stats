@@ -518,10 +518,42 @@ body {
     box-shadow: 0 0 40px rgba(0, 212, 255, 0.7), inset 0 0 40px rgba(0, 212, 255, 0.2);
 }
 
+.fighter-left .fighter-display {
+    background: radial-gradient(ellipse at center, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+    border-color: #00ff88;
+    box-shadow: 0 0 30px rgba(0, 255, 136, 0.5), inset 0 0 30px rgba(0, 255, 136, 0.1);
+}
+
+.fighter-left .fighter-display:hover {
+    border-color: #00ff88;
+    box-shadow: 0 0 40px rgba(0, 255, 136, 0.7), inset 0 0 40px rgba(0, 255, 136, 0.2);
+}
+
+.fighter-right .fighter-display {
+    background: radial-gradient(ellipse at center, rgba(255, 0, 153, 0.1) 0%, transparent 70%);
+    border-color: #ff0099;
+    box-shadow: 0 0 30px rgba(255, 0, 153, 0.5), inset 0 0 30px rgba(255, 0, 153, 0.1);
+}
+
+.fighter-right .fighter-display:hover {
+    border-color: #ff0099;
+    box-shadow: 0 0 40px rgba(255, 0, 153, 0.7), inset 0 0 40px rgba(255, 0, 153, 0.2);
+}
+
 .fighter-display.selecting {
     border-color: var(--gold-color);
     box-shadow: 0 0 50px rgba(255, 215, 0, 1), inset 0 0 30px rgba(255, 215, 0, 0.3);
     animation: selectPulse 1.5s ease-in-out infinite;
+}
+
+.fighter-left .fighter-display.selecting {
+    border-color: #00ff88;
+    box-shadow: 0 0 50px rgba(0, 255, 136, 1), inset 0 0 30px rgba(0, 255, 136, 0.3);
+}
+
+.fighter-right .fighter-display.selecting {
+    border-color: #ff0099;
+    box-shadow: 0 0 50px rgba(255, 0, 153, 1), inset 0 0 30px rgba(255, 0, 153, 0.3);
 }
 
 @keyframes selectPulse {
