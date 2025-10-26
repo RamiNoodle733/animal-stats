@@ -212,6 +212,9 @@ function switchView(view) {
             toggleGridBtn.style.display = 'flex';
         }
     }
+    
+    // Update card highlights based on current view
+    updateSelectedCards();
 }
 
 function updateSelectionState() {
