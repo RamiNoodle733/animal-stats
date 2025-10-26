@@ -54,6 +54,7 @@ function setupEventListeners() {
     const expandBtn = document.getElementById('expand-details-btn');
     const detailsPanel = document.getElementById('details-panel');
     const gridContainer = document.querySelector('.character-grid-container');
+    const toggleGridBtn = document.getElementById('toggle-grid-btn');
     
     expandBtn?.addEventListener('click', () => {
         detailsPanel.classList.toggle('expanded');
@@ -63,18 +64,20 @@ function setupEventListeners() {
             expandBtn.innerHTML = '<i class="fas fa-chevron-up"></i> LESS DETAILS';
             // Auto-hide grid when details expand
             gridContainer?.classList.add('hidden');
-            const toggleBtn = document.getElementById('toggle-grid-btn');
-            if (toggleBtn) {
-                toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> SHOW ANIMALS';
-                toggleBtn.classList.add('hidden');
+            // Hide the toggle button completely when details are expanded
+            if (toggleGridBtn) {
+                toggleGridBtn.style.display = 'none';
             }
         } else {
             expandBtn.innerHTML = '<i class="fas fa-chevron-down"></i> MORE DETAILS';
+            // Show the toggle button again when details collapse
+            if (toggleGridBtn) {
+                toggleGridBtn.style.display = 'flex';
+            }
         }
     });
     
     // Toggle grid button
-    const toggleGridBtn = document.getElementById('toggle-grid-btn');
     toggleGridBtn?.addEventListener('click', () => {
         gridContainer?.classList.toggle('hidden');
         toggleGridBtn.classList.toggle('hidden');

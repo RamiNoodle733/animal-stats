@@ -69,6 +69,7 @@ body {
 .view-container.active-view {
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
 .character-display-area {
@@ -261,6 +262,8 @@ body {
     font-size: 0.85rem;
     color: var(--text-light);
     flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
 }
 
 .info-item-inline {
@@ -346,11 +349,17 @@ body {
 }
 
 .details-panel {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     max-height: 0;
     overflow: hidden;
-    background: rgba(0, 14, 26, 0.95);
+    background: rgba(0, 14, 26, 0.98);
     border-top: 2px solid rgba(0, 212, 255, 0.3);
     transition: max-height 0.4s ease-out;
+    z-index: 10;
+    box-shadow: 0 -8px 30px rgba(0, 212, 255, 0.4);
 }
 
 .details-panel.expanded {
