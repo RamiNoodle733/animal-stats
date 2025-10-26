@@ -88,6 +88,7 @@ body {
 
 .character-display-area.compact-mode {
     padding-bottom: 60px;
+    grid-template-columns: 0 1fr 0;
 }
 
 .character-display-area.compact-mode .stats-panel {
@@ -309,6 +310,12 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.bottom-info-bar.hide-info .info-item-inline,
+.bottom-info-bar.hide-info .info-separator {
+    display: none;
 }
 
 .info-item-inline i {

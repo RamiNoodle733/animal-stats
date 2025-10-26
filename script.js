@@ -56,11 +56,13 @@ function setupEventListeners() {
     const gridContainer = document.querySelector('.character-grid-container');
     const toggleGridBtn = document.getElementById('toggle-grid-btn');
     const displayArea = document.querySelector('.character-display-area');
+    const bottomInfoBar = document.querySelector('.bottom-info-bar');
     
     expandBtn?.addEventListener('click', () => {
         detailsPanel.classList.toggle('expanded');
         expandBtn.classList.toggle('expanded');
         displayArea?.classList.toggle('compact-mode');
+        bottomInfoBar?.classList.toggle('hide-info');
         
         if (expandBtn.classList.contains('expanded')) {
             expandBtn.innerHTML = '<i class="fas fa-chevron-up"></i> LESS DETAILS';
@@ -72,9 +74,12 @@ function setupEventListeners() {
             }
         } else {
             expandBtn.innerHTML = '<i class="fas fa-chevron-down"></i> MORE DETAILS';
-            // Show the toggle button again when details collapse
+            // Show the grid and toggle button again when details collapse
+            gridContainer?.classList.remove('hidden');
             if (toggleGridBtn) {
                 toggleGridBtn.style.display = 'flex';
+                toggleGridBtn.classList.remove('hidden');
+                toggleGridBtn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE MENU';
             }
         }
     });
@@ -85,9 +90,9 @@ function setupEventListeners() {
         toggleGridBtn.classList.toggle('hidden');
         
         if (toggleGridBtn.classList.contains('hidden')) {
-            toggleGridBtn.innerHTML = '<i class="fas fa-chevron-up"></i> SHOW ANIMALS';
+            toggleGridBtn.innerHTML = '<i class="fas fa-chevron-up"></i> SHOW MENU';
         } else {
-            toggleGridBtn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE ANIMALS';
+            toggleGridBtn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE MENU';
         }
     });
     
