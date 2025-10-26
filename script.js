@@ -55,10 +55,12 @@ function setupEventListeners() {
     const detailsPanel = document.getElementById('details-panel');
     const gridContainer = document.querySelector('.character-grid-container');
     const toggleGridBtn = document.getElementById('toggle-grid-btn');
+    const displayArea = document.querySelector('.character-display-area');
     
     expandBtn?.addEventListener('click', () => {
         detailsPanel.classList.toggle('expanded');
         expandBtn.classList.toggle('expanded');
+        displayArea?.classList.toggle('compact-mode');
         
         if (expandBtn.classList.contains('expanded')) {
             expandBtn.innerHTML = '<i class="fas fa-chevron-up"></i> LESS DETAILS';
