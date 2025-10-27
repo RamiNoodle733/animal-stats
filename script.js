@@ -105,22 +105,42 @@ function setupEventListeners() {
         });
     }
     
-    // View stats buttons
-    document.getElementById('view-stats-1')?.addEventListener('click', () => {
+    // View stats buttons - Show stats in compare view
+    document.getElementById('view-stats-1')?.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent triggering fighter display click
         if (fighter1) {
-            switchView('stats');
-            selectedAnimal = fighter1;
-            displayCharacterStats(fighter1);
-            updateSelectedCards();
+            const statsPanel = document.getElementById('compare-stats-1');
+            const isVisible = statsPanel.style.display === 'block';
+            statsPanel.style.display = isVisible ? 'none' : 'block';
+            
+            if (!isVisible) {
+                // Populate stats
+                document.getElementById('compare-attack-1').textContent = fighter1.attack.toFixed(1);
+                document.getElementById('compare-defense-1').textContent = fighter1.defense.toFixed(1);
+                document.getElementById('compare-agility-1').textContent = fighter1.agility.toFixed(1);
+                document.getElementById('compare-stamina-1').textContent = fighter1.stamina.toFixed(1);
+                document.getElementById('compare-intelligence-1').textContent = fighter1.intelligence.toFixed(1);
+                document.getElementById('compare-special-1').textContent = fighter1.special_attack.toFixed(1);
+            }
         }
     });
     
-    document.getElementById('view-stats-2')?.addEventListener('click', () => {
+    document.getElementById('view-stats-2')?.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent triggering fighter display click
         if (fighter2) {
-            switchView('stats');
-            selectedAnimal = fighter2;
-            displayCharacterStats(fighter2);
-            updateSelectedCards();
+            const statsPanel = document.getElementById('compare-stats-2');
+            const isVisible = statsPanel.style.display === 'block';
+            statsPanel.style.display = isVisible ? 'none' : 'block';
+            
+            if (!isVisible) {
+                // Populate stats
+                document.getElementById('compare-attack-2').textContent = fighter2.attack.toFixed(1);
+                document.getElementById('compare-defense-2').textContent = fighter2.defense.toFixed(1);
+                document.getElementById('compare-agility-2').textContent = fighter2.agility.toFixed(1);
+                document.getElementById('compare-stamina-2').textContent = fighter2.stamina.toFixed(1);
+                document.getElementById('compare-intelligence-2').textContent = fighter2.intelligence.toFixed(1);
+                document.getElementById('compare-special-2').textContent = fighter2.special_attack.toFixed(1);
+            }
         }
     });
     
