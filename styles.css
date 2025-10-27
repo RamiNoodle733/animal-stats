@@ -584,6 +584,13 @@ body {
     max-height: 100%;
     object-fit: contain;
     filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.6));
+    position: relative;
+    z-index: 1;
+}
+
+.fighter-placeholder {
+    position: relative;
+    z-index: 1;
 }
 
 .fighter-info-overlay {
@@ -598,6 +605,12 @@ body {
     align-items: center;
     gap: 8px;
     border-radius: 0 0 8px 8px;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.fighter-info-overlay * {
+    pointer-events: auto;
 }
 
 .fighter-name {

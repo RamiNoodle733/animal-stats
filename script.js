@@ -452,11 +452,25 @@ function displayFighter(animal, side) {
     const sectionSelector = side === 'left' ? '.fighter-left' : '.fighter-right';
     const fighterDisplay = document.querySelector(sectionSelector + ' .fighter-display');
     const fighterName = document.querySelector(sectionSelector + ' .fighter-name');
+    const placeholder = document.querySelector(sectionSelector + ' .fighter-placeholder');
+    const fighterImage = document.querySelector(sectionSelector + ' .fighter-image');
     
-    if (fighterDisplay) {
-        fighterDisplay.innerHTML = '<img src="' + animal.image + '" alt="' + animal.name + '" class="fighter-image" onerror="this.src=\'https://via.placeholder.com/350x350?text=' + animal.name + '\'">';
+    // Hide placeholder
+    if (placeholder) {
+        placeholder.style.display = 'none';
     }
     
+    // Show/update image
+    if (fighterImage) {
+        fighterImage.src = animal.image;
+        fighterImage.alt = animal.name;
+        fighterImage.style.display = 'block';
+        fighterImage.onerror = function() {
+            this.src = 'https://via.placeholder.com/350x350?text=' + animal.name;
+        };
+    }
+    
+    // Update name
     if (fighterName) {
         fighterName.textContent = animal.name.toUpperCase();
     }
