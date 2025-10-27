@@ -480,11 +480,10 @@ body {
     flex: 1;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
-    gap: 30px;
-    padding: 20px;
+    align-items: center;
+    gap: 40px;
+    padding: 20px 20px 260px 20px;
     min-height: 0;
-    max-height: 100%;
     overflow: hidden;
 }
 
@@ -492,14 +491,13 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
-    flex: 0 1 auto;
+    gap: 10px;
+    flex: 0 0 auto;
 }
 
 .fighter-display {
-    width: 100%;
-    max-width: 240px;
-    aspect-ratio: 1;
+    width: 300px;
+    height: 300px;
     background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
     border: 4px solid var(--border-bright);
     border-radius: 12px;
@@ -589,17 +587,18 @@ body {
 
 .fighter-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     letter-spacing: 4px;
     color: var(--text-light);
     text-shadow: var(--text-glow);
     flex-shrink: 0;
+    margin: 5px 0;
 }
 
 .view-stats-btn {
-    padding: 10px 25px;
+    padding: 8px 20px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
+    font-size: 0.9rem;
     letter-spacing: 2px;
     background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(0, 212, 255, 0.1));
     border: 2px solid var(--border-bright);
@@ -621,13 +620,13 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 15px;
+    gap: 20px;
     flex: 0 0 auto;
 }
 
 .vs-badge {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 3rem;
+    font-size: 3.5rem;
     letter-spacing: 8px;
     color: var(--secondary-color);
     text-shadow: 0 0 30px rgba(255, 107, 0, 1), 0 0 60px rgba(255, 107, 0, 0.6);
