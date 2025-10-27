@@ -477,13 +477,12 @@ body {
 }
 
 .fight-screen {
-    flex: 1;
+    height: calc(100vh - 70px - 240px);
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 40px;
-    padding: 20px 20px 260px 20px;
-    min-height: 0;
+    padding: 20px;
     overflow: hidden;
 }
 
@@ -491,13 +490,14 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     flex: 0 0 auto;
+    max-height: 100%;
 }
 
 .fighter-display {
-    width: 300px;
-    height: 300px;
+    width: 280px;
+    height: 280px;
     background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
     border: 4px solid var(--border-bright);
     border-radius: 12px;
