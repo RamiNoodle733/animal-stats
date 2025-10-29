@@ -488,11 +488,15 @@ body {
 
 .fighter-section {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 12px;
+    gap: 15px;
     flex: 0 0 auto;
     max-height: 100%;
+}
+
+.fighter-left {
+    flex-direction: row-reverse;
 }
 
 .fighter-display {
@@ -644,14 +648,15 @@ body {
 }
 
 .compare-stats-panel {
-    width: 100%;
-    max-width: 280px;
+    width: 200px;
     background: rgba(0, 14, 26, 0.95);
     border: 2px solid rgba(0, 212, 255, 0.3);
     border-radius: 8px;
     padding: 12px;
-    margin-top: 10px;
     backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .compare-stat-row {
