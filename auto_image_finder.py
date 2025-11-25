@@ -50,7 +50,9 @@ def search_google_images_scrape(query):
         import re
         
         # Google Images search URL
-        url = f"https://www.google.com/search?q={query}&tbm=isch"
+        # tbm=isch: image search
+        # tbs=ic:trans: transparent images only
+        url = f"https://www.google.com/search?q={query}&tbm=isch&tbs=ic:trans"
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
         }

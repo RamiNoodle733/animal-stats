@@ -14,7 +14,8 @@ def method_1_serpapi_style(query):
         import requests
         
         # Add "transparent" and "no background" to query for better results
-        transparent_query = query.replace(' animal png', ' transparent png no background')
+        # Keep "animal" in the query to avoid superhero issues (e.g. Wolverine)
+        transparent_query = query.replace(' animal png', ' animal transparent png no background')
         encoded_query = urllib.parse.quote(transparent_query)
         url = f"https://www.google.com/search?q={encoded_query}&tbm=isch&hl=en&tbs=ic:trans"  # ic:trans = transparent images filter
         
@@ -106,7 +107,8 @@ def method_2_duckduckgo(query):
         url = "https://duckduckgo.com/"
         
         # Add "transparent" to query
-        transparent_query = query.replace(' animal png', ' transparent png')
+        # Keep "animal" in the query to avoid superhero issues
+        transparent_query = query.replace(' animal png', ' animal transparent png')
         
         # Get the vqd token first
         params = {"q": transparent_query}
@@ -182,8 +184,8 @@ def method_4_direct_png_sites(query):
     
     sites = [
         f"https://pngimg.com/image/{animal_name.lower().replace(' ', '_')}",
-        f"https://www.pngwing.com/en/search?q={urllib.parse.quote(animal_name)}",
-        f"https://www.pngegg.com/en/search?q={urllib.parse.quote(animal_name)}",
+        f"https://www.pngwing.com/en/search?q={urllib.parse.quote(animal_name + ' animal')}",
+        f"https://www.pngegg.com/en/search?q={urllib.parse.quote(animal_name + ' animal')}",
         f"https://pngtree.com/so/{urllib.parse.quote(animal_name.lower())}"
     ]
     
@@ -225,7 +227,7 @@ def method_5_imgur_search(query):
         import requests
         
         animal_name = query.replace(' animal png', '').strip()
-        url = f"https://imgur.com/search?q={urllib.parse.quote(animal_name + ' transparent')}"
+        url = f"https://imgur.com/search?q={urllib.parse.quote(animal_name + ' animal transparent')}"
         
         headers = {'User-Agent': 'Mozilla/5.0'}
         response = requests.get(url, headers=headers, timeout=10)
