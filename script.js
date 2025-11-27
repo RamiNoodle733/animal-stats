@@ -1,492 +1,628 @@
-﻿// ============================================
-// FIGHTING GAME UI - Animal Stats  
-// ============================================
+/**
+ * Animal Stats - Expert Optimized Script
+ * Handles application logic, state management, and UI rendering.
+ * 
+ * @version 2.0.0
+ */
 
-let allAnimals = [];
-let filteredAnimals = [];
-let currentView = 'stats';
-let selectedAnimal = null;
-let fighter1 = null;
-let fighter2 = null;
-let selectingSlot = null; // 'animal1' or 'animal2'
+'use strict';
 
-document.addEventListener("DOMContentLoaded", () => {
-    fetch('animal_stats.json')
-        .then(response => response.json())
-        .then(data => {
-            allAnimals = data;
-            filteredAnimals = [...allAnimals];
-            initializeApp();
-        })
-        .catch(error => {
-            console.error("Error loading animal stats:", error);
-            alert("Failed to load animal data. Please refresh the page.");
-        });
-});
-
-function initializeApp() {
-    populateFilters();
-    renderCharacterGrid();
-    setupEventListeners();
-    switchView('stats');
-    displayInitialStats();
-}
-
-function setupEventListeners() {
-    document.getElementById('stats-mode-btn').addEventListener('click', () => switchView('stats'));
-    document.getElementById('compare-mode-btn').addEventListener('click', () => switchView('compare'));
-    
-    // Search functionality
-    const searchInput = document.getElementById('search-input');
-    searchInput.addEventListener('input', (e) => {
-        filterAndRender();
-    });
-    
-    // Class filter
-    const classFilter = document.getElementById('class-filter');
-    classFilter.addEventListener('change', filterAndRender);
-    
-    // Sort functionality
-    const sortBy = document.getElementById('sort-by');
-    sortBy.addEventListener('change', filterAndRender);
-    
-    // Expand details button
-    const expandBtn = document.getElementById('expand-details-btn');
-    const detailsPanel = document.getElementById('details-panel');
-    const gridContainer = document.querySelector('.character-grid-container');
-    const toggleGridBtn = document.getElementById('toggle-grid-btn');
-    const displayArea = document.querySelector('.character-display-area');
-    
-    expandBtn?.addEventListener('click', () => {
-        detailsPanel.classList.toggle('expanded');
-        expandBtn.classList.toggle('expanded');
-        displayArea?.classList.toggle('compact-mode');
-        
-        if (expandBtn.classList.contains('expanded')) {
-            expandBtn.innerHTML = '<i class="fas fa-chevron-up"></i> LESS DETAILS';
-            // Auto-hide grid when details expand
-            gridContainer?.classList.add('hidden');
-            // Hide the toggle button completely when details are expanded
-            if (toggleGridBtn) {
-                toggleGridBtn.style.display = 'none';
+class AnimalStatsApp {
+    constructor() {
+        // Application State
+        this.state = {
+            animals: [],
+            filteredAnimals: [],
+            view: 'stats', // 'stats' | 'compare'
+            selectedAnimal: null,
+            compare: {
+                left: null,
+                right: null,
+                selectingSide: null // 'left' | 'right' | null
+            },
+            isGridVisible: true,
+            isDetailsExpanded: false,
+            filters: {
+                search: '',
+                class: 'all',
+                sort: 'name'
             }
-        } else {
-            expandBtn.innerHTML = '<i class="fas fa-chevron-down"></i> MORE DETAILS';
-            // Auto-show grid when details collapse
-            gridContainer?.classList.remove('hidden');
-            // Show the toggle button again when details collapse
-            if (toggleGridBtn) {
-                toggleGridBtn.style.display = 'flex';
-                toggleGridBtn.classList.remove('hidden');
-                toggleGridBtn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE MENU';
-            }
-        }
-    });
-    
-    // Toggle grid button
-    toggleGridBtn?.addEventListener('click', () => {
-        gridContainer?.classList.toggle('hidden');
-        toggleGridBtn.classList.toggle('hidden');
-        
-        if (toggleGridBtn.classList.contains('hidden')) {
-            toggleGridBtn.innerHTML = '<i class="fas fa-chevron-up"></i> SHOW MENU';
-        } else {
-            toggleGridBtn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE MENU';
-        }
-    });
-    
-    // Fight button
-    const fightBtn = document.getElementById('fight-btn');
-    if (fightBtn) {
-        fightBtn.addEventListener('click', () => {
-            if (fighter1 && fighter2) {
-                alert('Fight functionality coming soon! ' + fighter1.name + ' VS ' + fighter2.name + '!');
-            }
-        });
-    }
-    
-    // View stats buttons - Show stats in compare view
-    document.getElementById('view-stats-1')?.addEventListener('click', (e) => {
-        e.stopPropagation(); // Prevent triggering fighter display click
-        if (fighter1) {
-            const statsPanel = document.getElementById('compare-stats-1');
-            const isVisible = statsPanel.style.display === 'block';
-            statsPanel.style.display = isVisible ? 'none' : 'block';
-            
-            if (!isVisible) {
-                // Populate stats
-                document.getElementById('compare-attack-1').textContent = fighter1.attack.toFixed(1);
-                document.getElementById('compare-defense-1').textContent = fighter1.defense.toFixed(1);
-                document.getElementById('compare-agility-1').textContent = fighter1.agility.toFixed(1);
-                document.getElementById('compare-stamina-1').textContent = fighter1.stamina.toFixed(1);
-                document.getElementById('compare-intelligence-1').textContent = fighter1.intelligence.toFixed(1);
-                document.getElementById('compare-special-1').textContent = fighter1.special_attack.toFixed(1);
-            }
-        }
-    });
-    
-    document.getElementById('view-stats-2')?.addEventListener('click', (e) => {
-        e.stopPropagation(); // Prevent triggering fighter display click
-        if (fighter2) {
-            const statsPanel = document.getElementById('compare-stats-2');
-            const isVisible = statsPanel.style.display === 'block';
-            statsPanel.style.display = isVisible ? 'none' : 'block';
-            
-            if (!isVisible) {
-                // Populate stats
-                document.getElementById('compare-attack-2').textContent = fighter2.attack.toFixed(1);
-                document.getElementById('compare-defense-2').textContent = fighter2.defense.toFixed(1);
-                document.getElementById('compare-agility-2').textContent = fighter2.agility.toFixed(1);
-                document.getElementById('compare-stamina-2').textContent = fighter2.stamina.toFixed(1);
-                document.getElementById('compare-intelligence-2').textContent = fighter2.intelligence.toFixed(1);
-                document.getElementById('compare-special-2').textContent = fighter2.special_attack.toFixed(1);
-            }
-        }
-    });
-    
-    // Animal box selection in compare mode
-    const fighter1Display = document.querySelector('.fighter-left .fighter-display');
-    const fighter2Display = document.querySelector('.fighter-right .fighter-display');
-    
-    fighter1Display?.addEventListener('click', () => {
-        if (currentView === 'compare') {
-            selectingSlot = 'animal1';
-            updateSelectionState();
-        }
-    });
-    
-    fighter2Display?.addEventListener('click', () => {
-        if (currentView === 'compare') {
-            selectingSlot = 'animal2';
-            updateSelectionState();
-        }
-    });
-}
-
-function populateFilters() {
-    // Populate class filter
-    const classFilter = document.getElementById('class-filter');
-    const types = [...new Set(allAnimals.map(a => a.type))].sort();
-    types.forEach(type => {
-        const option = document.createElement('option');
-        option.value = type;
-        option.textContent = type;
-        classFilter.appendChild(option);
-    });
-}
-
-function filterAndRender() {
-    const searchTerm = document.getElementById('search-input').value.toLowerCase();
-    const classFilter = document.getElementById('class-filter').value;
-    const sortBy = document.getElementById('sort-by').value;
-    
-    // Filter
-    filteredAnimals = allAnimals.filter(animal => {
-        const matchesSearch = animal.name.toLowerCase().includes(searchTerm);
-        const matchesClass = !classFilter || animal.type === classFilter;
-        return matchesSearch && matchesClass;
-    });
-    
-    // Sort
-    if (sortBy === 'name') {
-        filteredAnimals.sort((a, b) => a.name.localeCompare(b.name));
-    } else if (sortBy === 'attack') {
-        filteredAnimals.sort((a, b) => b.attack - a.attack);
-    } else if (sortBy === 'defense') {
-        filteredAnimals.sort((a, b) => b.defense - a.defense);
-    } else if (sortBy === 'agility') {
-        filteredAnimals.sort((a, b) => b.agility - a.agility);
-    } else if (sortBy === 'stamina') {
-        filteredAnimals.sort((a, b) => b.stamina - a.stamina);
-    } else if (sortBy === 'intelligence') {
-        filteredAnimals.sort((a, b) => b.intelligence - a.intelligence);
-    } else if (sortBy === 'special') {
-        filteredAnimals.sort((a, b) => b.special_attack - a.special_attack);
-    }
-    
-    renderCharacterGrid();
-}
-
-function switchView(view) {
-    currentView = view;
-    document.getElementById('stats-view').classList.toggle('active-view', view === 'stats');
-    document.getElementById('compare-view').classList.toggle('active-view', view === 'compare');
-    document.getElementById('stats-mode-btn').classList.toggle('active', view === 'stats');
-    document.getElementById('compare-mode-btn').classList.toggle('active', view === 'compare');
-    
-    const gridContainer = document.querySelector('.character-grid-container');
-    const toggleGridBtn = document.getElementById('toggle-grid-btn');
-    
-    // Always show menu in compare view
-    if (view === 'compare') {
-        selectingSlot = null;
-        updateSelectionState();
-        // Force show grid in compare mode
-        gridContainer?.classList.remove('hidden');
-        if (toggleGridBtn) {
-            toggleGridBtn.style.display = 'none'; // Hide toggle button in compare mode
-        }
-    } else {
-        // Show toggle button in stats mode
-        if (toggleGridBtn) {
-            toggleGridBtn.style.display = 'flex';
-        }
-    }
-    
-    // Update card highlights based on current view
-    updateSelectedCards();
-}
-
-function updateSelectionState() {
-    const fighter1Display = document.querySelector('.fighter-left .fighter-display');
-    const fighter2Display = document.querySelector('.fighter-right .fighter-display');
-    
-    fighter1Display?.classList.toggle('selecting', selectingSlot === 'animal1');
-    fighter2Display?.classList.toggle('selecting', selectingSlot === 'animal2');
-}
-
-function renderCharacterGrid() {
-    const grid = document.getElementById('character-grid');
-    grid.innerHTML = '';
-    filteredAnimals.forEach((animal) => {
-        const card = document.createElement('div');
-        card.className = 'character-card';
-        card.innerHTML = '<img src="' + animal.image + '" alt="' + animal.name + '" class="character-card-image" onerror="this.src=\'https://via.placeholder.com/110x80?text=' + animal.name + '\'"><div class="character-card-name">' + animal.name + '</div>';
-        card.addEventListener('click', () => handleCardClick(animal));
-        grid.appendChild(card);
-    });
-    updateSelectedCards();
-}
-
-function handleCardClick(animal) {
-    if (currentView === 'stats') {
-        selectedAnimal = animal;
-        displayCharacterStats(animal);
-        updateSelectedCards();
-    } else if (currentView === 'compare') {
-        // Only allow selection if a slot is selected
-        if (selectingSlot === 'animal1') {
-            fighter1 = animal;
-            displayFighter(animal, 'left');
-            selectingSlot = null; // Clear selection state
-        } else if (selectingSlot === 'animal2') {
-            fighter2 = animal;
-            displayFighter(animal, 'right');
-            selectingSlot = null; // Clear selection state
-        }
-        updateSelectionState();
-        updateFightButton();
-        updateSelectedCards();
-    }
-}
-
-function updateSelectedCards() {
-    const cards = document.querySelectorAll('.character-card');
-    cards.forEach((card) => {
-        card.classList.remove('selected', 'selected-fighter1', 'selected-fighter2');
-        const animalName = card.querySelector('.character-card-name').textContent;
-        
-        if (currentView === 'stats' && selectedAnimal && animalName === selectedAnimal.name) {
-            card.classList.add('selected');
-        } else if (currentView === 'compare') {
-            if (fighter1 && animalName === fighter1.name) {
-                card.classList.add('selected-fighter1');
-            }
-            if (fighter2 && animalName === fighter2.name) {
-                card.classList.add('selected-fighter2');
-            }
-        }
-    });
-}
-
-function displayInitialStats() {
-    // Show placeholder stats on initial load
-    const leftPanel = document.getElementById('left-stats');
-    const rightPanel = document.getElementById('right-stats');
-    
-    if (leftPanel) {
-        leftPanel.innerHTML = 
-            createStatRow('fa-fist-raised', 'ATTACK', 0, false, '#ff6b00') +
-            createStatRow('fa-shield-alt', 'DEFENSE', 0, false, '#00d4ff') +
-            createStatRow('fa-wind', 'AGILITY', 0, false, '#00ff88');
-    }
-    
-    if (rightPanel) {
-        rightPanel.innerHTML = 
-            createStatRow('fa-heart', 'STAMINA', 0, true, '#ff3366') +
-            createStatRow('fa-brain', 'INTELLIGENCE', 0, true, '#9966ff') +
-            createStatRow('fa-bolt', 'SPECIAL', 0, true, '#ffcc00');
-    }
-}
-
-function displayCharacterStats(animal) {
-    // Update character name
-    const nameDisplay = document.querySelector('.character-name-display');
-    if (nameDisplay) {
-        nameDisplay.textContent = animal.name.toUpperCase();
-    }
-    
-    // Update scientific name
-    const scientificDisplay = document.querySelector('.character-scientific-name');
-    if (scientificDisplay) {
-        scientificDisplay.textContent = animal.scientific_name;
-    }
-    
-    // Update character model
-    const modelContainer = document.querySelector('.character-model-container');
-    if (modelContainer) {
-        modelContainer.innerHTML = '<img src="' + animal.image + '" alt="' + animal.name + '" class="character-model" onerror="this.src=\'https://via.placeholder.com/500x500?text=' + animal.name + '\'">';
-    }
-    
-    // Update character type
-    const classDisplay = document.querySelector('.character-class-display');
-    if (classDisplay) {
-        classDisplay.textContent = animal.type;
-    }
-    
-    // Update mini info (subtle, below type)
-    const miniInfo = document.getElementById('character-mini-info');
-    if (miniInfo) {
-        let info = [];
-        if (animal.weight_kg) info.push(animal.weight_kg + ' kg');
-        if (animal.lifespan_years) info.push(animal.lifespan_years + ' yrs');
-        if (animal.bite_force_psi) info.push(animal.bite_force_psi + ' PSI');
-        miniInfo.innerHTML = info.map(i => '<span>' + i + '</span>').join('');
-    }
-    
-    // Update abilities inline (bottom bar)
-    const abilitiesInline = document.getElementById('abilities-inline');
-    if (abilitiesInline && animal.special_abilities && animal.special_abilities.length > 0) {
-        abilitiesInline.textContent = animal.special_abilities.join(', ');
-    } else if (abilitiesInline) {
-        abilitiesInline.textContent = 'None';
-    }
-    
-    // Update traits inline (bottom bar)
-    const traitsInline = document.getElementById('traits-inline');
-    if (traitsInline && animal.unique_traits && animal.unique_traits.length > 0) {
-        traitsInline.textContent = animal.unique_traits.join(', ');
-    } else if (traitsInline) {
-        traitsInline.textContent = 'None';
-    }
-    
-    // Update detailed stats panel
-    updateDetailedStats(animal);
-    
-    // Update left stats panel
-    displaySideStats('left', animal);
-    
-    // Update right stats panel
-    displaySideStats('right', animal);
-}
-
-function updateDetailedStats(animal) {
-    // Classification
-    document.getElementById('detail-type').textContent = animal.type || '---';
-    document.getElementById('detail-scientific').textContent = animal.scientific_name || '---';
-    
-    // Description (placeholder for now - will be added to JSON later)
-    const description = document.getElementById('animal-description');
-    if (description) {
-        description.textContent = animal.description || 'No description available yet. This will be added soon!';
-    }
-    
-    // Habitat & Diet
-    document.getElementById('detail-habitat').textContent = animal.habitat || '---';
-    document.getElementById('detail-diet').textContent = Array.isArray(animal.diet) ? animal.diet.join(', ') : (animal.diet || '---');
-    
-    // Physical Stats
-    document.getElementById('detail-weight').textContent = animal.weight_kg ? animal.weight_kg + ' kg' : '---';
-    document.getElementById('detail-height').textContent = animal.height_cm ? animal.height_cm + ' cm' : '---';
-    document.getElementById('detail-length').textContent = animal.length_cm ? animal.length_cm + ' cm' : '---';
-    document.getElementById('detail-speed').textContent = animal.speed_mps ? animal.speed_mps.toFixed(1) + ' m/s (' + (animal.speed_mps * 3.6).toFixed(1) + ' km/h)' : '---';
-    document.getElementById('detail-lifespan').textContent = animal.lifespan_years ? animal.lifespan_years + ' years' : '---';
-    document.getElementById('detail-bite').textContent = animal.bite_force_psi ? animal.bite_force_psi + ' PSI' : '---';
-    
-    // Additional Stats
-    document.getElementById('detail-size').textContent = animal.size || '---';
-    document.getElementById('detail-nocturnal').textContent = animal.isNocturnal ? 'Yes 🌙' : 'No ☀️';
-    document.getElementById('detail-social').textContent = animal.isSocial ? 'Yes 👥' : 'No (Solitary)';
-    document.getElementById('detail-size-score').textContent = animal.size_score ? animal.size_score.toFixed(1) + ' / 100' : '---';
-}
-
-function displaySideStats(side, animal) {
-    const panelId = side === 'left' ? 'left-stats' : 'right-stats';
-    const panel = document.getElementById(panelId);
-    if (!panel) return;
-    
-    if (side === 'left') {
-        panel.innerHTML = 
-            createStatRow('fa-fist-raised', 'ATTACK', animal.attack, false, '#ff6b00') +
-            createStatRow('fa-shield-alt', 'DEFENSE', animal.defense, false, '#00d4ff') +
-            createStatRow('fa-wind', 'AGILITY', animal.agility, false, '#00ff88');
-    } else {
-        panel.innerHTML = 
-            createStatRow('fa-heart', 'STAMINA', animal.stamina, true, '#ff3366') +
-            createStatRow('fa-brain', 'INTELLIGENCE', animal.intelligence, true, '#9966ff') +
-            createStatRow('fa-bolt', 'SPECIAL', animal.special_attack, true, '#ffcc00');
-    }
-}
-
-function createStatRow(icon, label, value, isRight, color) {
-    const percentage = Math.min(value, 100);
-    
-    if (isRight) {
-        return '<div class="stat-row">' +
-            '<div class="stat-value">' + value + '</div>' +
-            '<div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" style="width: ' + percentage + '%; background: ' + color + ';"></div></div></div>' +
-            '<div class="stat-name">' + label + '</div>' +
-            '<div class="stat-icon"><i class="fas ' + icon + '"></i></div>' +
-            '</div>';
-    } else {
-        return '<div class="stat-row">' +
-            '<div class="stat-icon"><i class="fas ' + icon + '"></i></div>' +
-            '<div class="stat-name">' + label + '</div>' +
-            '<div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" style="width: ' + percentage + '%; background: ' + color + ';"></div></div></div>' +
-            '<div class="stat-value">' + value + '</div>' +
-            '</div>';
-    }
-}
-
-function displayFighter(animal, side) {
-    const sectionSelector = side === 'left' ? '.fighter-left' : '.fighter-right';
-    const fighterDisplay = document.querySelector(sectionSelector + ' .fighter-display');
-    const fighterName = document.querySelector(sectionSelector + ' .fighter-name');
-    const placeholder = document.querySelector(sectionSelector + ' .fighter-placeholder');
-    const fighterImage = document.querySelector(sectionSelector + ' .fighter-image');
-    
-    // Hide placeholder
-    if (placeholder) {
-        placeholder.style.display = 'none';
-    }
-    
-    // Show/update image
-    if (fighterImage) {
-        fighterImage.src = animal.image;
-        fighterImage.alt = animal.name;
-        fighterImage.style.display = 'block';
-        fighterImage.onerror = function() {
-            this.src = 'https://via.placeholder.com/350x350?text=' + animal.name;
         };
+
+        // DOM Elements Cache
+        this.dom = {
+            // Views
+            statsView: document.getElementById('stats-view'),
+            compareView: document.getElementById('compare-view'),
+            
+            // Grid
+            gridContainer: document.getElementById('character-grid'),
+            gridWrapper: document.querySelector('.character-grid-container'),
+            searchInput: document.getElementById('search-input'),
+            classFilter: document.getElementById('class-filter'),
+            sortBy: document.getElementById('sort-by'),
+            toggleGridBtn: document.getElementById('toggle-grid-btn'),
+            
+            // Stats View Elements
+            charName: document.getElementById('character-name'),
+            charScientific: document.getElementById('character-scientific'),
+            charImage: document.getElementById('character-model'),
+            charSilhouette: document.getElementById('character-silhouette'),
+            miniInfo: document.getElementById('character-mini-info'),
+            
+            statBars: {
+                attack: document.getElementById('stat-attack-bar'),
+                defense: document.getElementById('stat-defense-bar'),
+                agility: document.getElementById('stat-agility-bar'),
+                stamina: document.getElementById('stat-stamina-bar'),
+                intelligence: document.getElementById('stat-intelligence-bar'),
+                special: document.getElementById('stat-special-bar')
+            },
+            statValues: {
+                attack: document.getElementById('stat-attack-val'),
+                defense: document.getElementById('stat-defense-val'),
+                agility: document.getElementById('stat-agility-val'),
+                stamina: document.getElementById('stat-stamina-val'),
+                intelligence: document.getElementById('stat-intelligence-val'),
+                special: document.getElementById('stat-special-val')
+            },
+            
+            info: {
+                abilities: document.getElementById('abilities-inline'),
+                traits: document.getElementById('traits-inline')
+            },
+            
+            detailsPanel: document.getElementById('details-panel'),
+            expandDetailsBtn: document.getElementById('expand-details-btn'),
+            detailText: {
+                type: document.getElementById('detail-type'),
+                scientific: document.getElementById('detail-scientific'),
+                size: document.getElementById('detail-size'),
+                habitat: document.getElementById('detail-habitat'),
+                diet: document.getElementById('detail-diet'),
+                nocturnal: document.getElementById('detail-nocturnal'),
+                social: document.getElementById('detail-social'),
+                weight: document.getElementById('detail-weight'),
+                height: document.getElementById('detail-height'),
+                length: document.getElementById('detail-length'),
+                speed: document.getElementById('detail-speed'),
+                lifespan: document.getElementById('detail-lifespan'),
+                bite: document.getElementById('detail-bite'),
+                sizeScore: document.getElementById('detail-size-score'),
+                description: document.getElementById('animal-description')
+            },
+            
+            // Compare View Elements
+            fighter1: {
+                display: document.querySelector('.fighter-left .fighter-display'),
+                img: document.getElementById('animal-1-image'),
+                name: document.getElementById('animal-1-name'),
+                placeholder: document.getElementById('animal-1-placeholder'),
+                statsPanel: document.getElementById('compare-stats-1'),
+                viewStatsBtn: document.getElementById('view-stats-1'),
+                stats: {
+                    attack: document.getElementById('compare-attack-1'),
+                    defense: document.getElementById('compare-defense-1'),
+                    agility: document.getElementById('compare-agility-1'),
+                    stamina: document.getElementById('compare-stamina-1'),
+                    intelligence: document.getElementById('compare-intelligence-1'),
+                    special: document.getElementById('compare-special-1')
+                }
+            },
+            fighter2: {
+                display: document.querySelector('.fighter-right .fighter-display'),
+                img: document.getElementById('animal-2-image'),
+                name: document.getElementById('animal-2-name'),
+                placeholder: document.getElementById('animal-2-placeholder'),
+                statsPanel: document.getElementById('compare-stats-2'),
+                viewStatsBtn: document.getElementById('view-stats-2'),
+                stats: {
+                    attack: document.getElementById('compare-attack-2'),
+                    defense: document.getElementById('compare-defense-2'),
+                    agility: document.getElementById('compare-agility-2'),
+                    stamina: document.getElementById('compare-stamina-2'),
+                    intelligence: document.getElementById('compare-intelligence-2'),
+                    special: document.getElementById('compare-special-2')
+                }
+            },
+            fightBtn: document.getElementById('fight-btn'),
+            
+            // Navigation
+            navBtns: {
+                stats: document.getElementById('stats-mode-btn'),
+                compare: document.getElementById('compare-mode-btn')
+            }
+        };
+
+        // Bind methods
+        this.init = this.init.bind(this);
+        this.handleSearch = this.handleSearch.bind(this);
+        this.handleFilter = this.handleFilter.bind(this);
+        this.handleSort = this.handleSort.bind(this);
+        this.handleGridClick = this.handleGridClick.bind(this);
+        this.toggleDetails = this.toggleDetails.bind(this);
+        this.toggleGrid = this.toggleGrid.bind(this);
+        this.switchView = this.switchView.bind(this);
+        this.selectFighter = this.selectFighter.bind(this);
+        this.startFight = this.startFight.bind(this);
     }
-    
-    // Update name
-    if (fighterName) {
-        fighterName.textContent = animal.name.toUpperCase();
+
+    /**
+     * Initialize the application
+     */
+    async init() {
+        try {
+            await this.fetchData();
+            this.populateClassFilter();
+            this.setupEventListeners();
+            
+            // Initial Render
+            this.renderGrid();
+            
+            // Select first animal by default if available
+            if (this.state.animals.length > 0) {
+                this.selectAnimal(this.state.animals[0]);
+            }
+            
+            console.log('Animal Stats App Initialized');
+        } catch (error) {
+            console.error('Initialization failed:', error);
+            alert('Failed to load animal data. Please try refreshing the page.');
+        }
+    }
+
+    /**
+     * Fetch animal data from JSON
+     */
+    async fetchData() {
+        const response = await fetch('animal_stats.json');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        this.state.animals = data;
+        this.state.filteredAnimals = [...data];
+    }
+
+    /**
+     * Populate the class filter dropdown
+     */
+    populateClassFilter() {
+        const types = [...new Set(this.state.animals.map(a => a.type))].sort();
+        types.forEach(type => {
+            const option = document.createElement('option');
+            option.value = type;
+            option.textContent = type;
+            this.dom.classFilter.appendChild(option);
+        });
+    }
+
+    /**
+     * Set up all event listeners
+     */
+    setupEventListeners() {
+        // Search & Filter
+        this.dom.searchInput.addEventListener('input', this.handleSearch);
+        this.dom.classFilter.addEventListener('change', this.handleFilter);
+        this.dom.sortBy.addEventListener('change', this.handleSort);
+        
+        // Grid Interaction (Event Delegation)
+        this.dom.gridContainer.addEventListener('click', this.handleGridClick);
+        
+        // UI Toggles
+        if (this.dom.expandDetailsBtn) {
+            this.dom.expandDetailsBtn.addEventListener('click', this.toggleDetails);
+        }
+        if (this.dom.toggleGridBtn) {
+            this.dom.toggleGridBtn.addEventListener('click', this.toggleGrid);
+        }
+        
+        // Navigation
+        this.dom.navBtns.stats.addEventListener('click', () => this.switchView('stats'));
+        this.dom.navBtns.compare.addEventListener('click', () => this.switchView('compare'));
+        
+        // Compare View Interactions
+        this.dom.fighter1.display.addEventListener('click', () => this.setSelectingSide('left'));
+        this.dom.fighter2.display.addEventListener('click', () => this.setSelectingSide('right'));
+        
+        // View Stats Buttons in Compare Mode
+        this.dom.fighter1.viewStatsBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.toggleFighterStats('left');
+        });
+        this.dom.fighter2.viewStatsBtn?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.toggleFighterStats('right');
+        });
+
+        this.dom.fightBtn.addEventListener('click', this.startFight);
+        
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (this.state.isDetailsExpanded) this.toggleDetails();
+                if (this.state.compare.selectingSide) this.setSelectingSide(null);
+            }
+        });
+    }
+
+    /**
+     * Handle search input
+     */
+    handleSearch(e) {
+        this.state.filters.search = e.target.value.toLowerCase();
+        this.applyFilters();
+    }
+
+    /**
+     * Handle category filter
+     */
+    handleFilter(e) {
+        this.state.filters.class = e.target.value;
+        this.applyFilters();
+    }
+
+    /**
+     * Handle sort
+     */
+    handleSort(e) {
+        this.state.filters.sort = e.target.value;
+        this.applyFilters();
+    }
+
+    /**
+     * Apply all filters and sort
+     */
+    applyFilters() {
+        const { search, class: classFilter, sort } = this.state.filters;
+        
+        // Filter
+        this.state.filteredAnimals = this.state.animals.filter(animal => {
+            const matchesSearch = animal.name.toLowerCase().includes(search);
+            const matchesClass = classFilter === 'all' || animal.type === classFilter;
+            return matchesSearch ; matchesClass;
+        });
+
+        // Sort
+        this.state.filteredAnimals.sort((a, b) => {
+            if (sort === 'name') return a.name.localeCompare(b.name);
+            
+            // Map sort keys to data keys
+            const keyMap = {
+                'attack': 'attack',
+                'defense': 'defense',
+                'agility': 'agility',
+                'stamina': 'stamina',
+                'intelligence': 'intelligence',
+                'special': 'special_attack'
+            };
+            
+            const key = keyMap[sort];
+            if (key) return b[key] - a[key];
+            return 0;
+        });
+
+        this.renderGrid();
+    }
+
+    /**
+     * Render the character grid
+     */
+    renderGrid() {
+        this.dom.gridContainer.innerHTML = '';
+        
+        if (this.state.filteredAnimals.length === 0) {
+            this.dom.gridContainer.innerHTML = '<div class="no-results">No animals found</div>';
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+        
+        this.state.filteredAnimals.forEach(animal => {
+            const card = document.createElement('div');
+            card.className = 'character-card';
+            card.dataset.id = animal.id || animal.name; // Fallback to name if ID missing
+            
+            // Add selection classes
+            if (this.state.view === 'stats' ; this.state.selectedAnimal?.name === animal.name) {
+                card.classList.add('selected');
+            } else if (this.state.view === 'compare') {
+                if (this.state.compare.left?.name === animal.name) card.classList.add('selected-fighter1');
+                if (this.state.compare.right?.name === animal.name) card.classList.add('selected-fighter2');
+            }
+
+            card.innerHTML = `
+                <img src="${animal.image}" alt="${animal.name}" class="character-card-image" loading="lazy" onerror="this.src='https://via.placeholder.com/110x80?text=?'">
+                <div class="character-card-name">${animal.name}</div>
+            `;
+            
+            fragment.appendChild(card);
+        });
+        
+        this.dom.gridContainer.appendChild(fragment);
+    }
+
+    /**
+     * Handle clicks on the grid
+     */
+    handleGridClick(e) {
+        const card = e.target.closest('.character-card');
+        if (!card) return;
+        
+        const name = card.querySelector('.character-card-name').textContent;
+        const animal = this.state.animals.find(a => a.name === name);
+        
+        if (animal) {
+            if (this.state.view === 'stats') {
+                this.selectAnimal(animal);
+            } else {
+                this.selectFighter(animal);
+            }
+        }
+    }
+
+    /**
+     * Select an animal in Stats view
+     */
+    selectAnimal(animal) {
+        this.state.selectedAnimal = animal;
+        this.updateStatsView(animal);
+        this.renderGrid(); // Re-render to update selection highlight
+    }
+
+    /**
+     * Update the Stats View UI
+     */
+    updateStatsView(animal) {
+        // Basic Info
+        this.dom.charName.textContent = animal.name.toUpperCase();
+        this.dom.charScientific.textContent = animal.scientific_name || 'Unknown Species';
+        
+        // Image
+        this.dom.charSilhouette.style.display = 'none';
+        this.dom.charImage.style.display = 'block';
+        this.dom.charImage.src = animal.image;
+        this.dom.charImage.onerror = () => { 
+            this.dom.charImage.style.display = 'none';
+            this.dom.charSilhouette.style.display = 'flex';
+        };
+
+        // Stats Bars
+        const statsMap = {
+            attack: animal.attack,
+            defense: animal.defense,
+            agility: animal.agility,
+            stamina: animal.stamina,
+            intelligence: animal.intelligence,
+            special: animal.special_attack
+        };
+
+        Object.keys(this.dom.statBars).forEach(stat => {
+            const value = statsMap[stat] || 0;
+            if (this.dom.statBars[stat]) this.dom.statBars[stat].style.width = `${Math.min(value, 100)}%`;
+            if (this.dom.statValues[stat]) this.dom.statValues[stat].textContent = value;
+        });
+
+        // Mini Info
+        let info = [];
+        if (animal.weight_kg) info.push(`${animal.weight_kg} kg`);
+        if (animal.lifespan_years) info.push(`${animal.lifespan_years} yrs`);
+        if (animal.bite_force_psi) info.push(`${animal.bite_force_psi} PSI`);
+        this.dom.miniInfo.innerHTML = info.map(i => `<span>${i}</span>`).join('');
+
+        // Info Bar
+        this.dom.info.abilities.textContent = animal.special_abilities?.join(', ') || 'None';
+        this.dom.info.traits.textContent = animal.unique_traits?.join(', ') || 'None';
+
+        // Details Panel
+        const d = this.dom.detailText;
+        d.type.textContent = animal.type || '---';
+        d.scientific.textContent = animal.scientific_name || '---';
+        d.size.textContent = animal.size || '---';
+        d.habitat.textContent = animal.habitat || '---';
+        d.diet.textContent = Array.isArray(animal.diet) ? animal.diet.join(', ') : (animal.diet || '---');
+        d.nocturnal.textContent = animal.isNocturnal ? 'Yes ' : 'No ';
+        d.social.textContent = animal.isSocial ? 'Yes ' : 'No (Solitary)';
+        d.weight.textContent = animal.weight_kg ? `${animal.weight_kg} kg` : '---';
+        d.height.textContent = animal.height_cm ? `${animal.height_cm} cm` : '---';
+        d.length.textContent = animal.length_cm ? `${animal.length_cm} cm` : '---';
+        d.speed.textContent = animal.speed_mps ? `${animal.speed_mps.toFixed(1)} m/s (${(animal.speed_mps * 3.6).toFixed(1)} km/h)` : '---';
+        d.lifespan.textContent = animal.lifespan_years ? `${animal.lifespan_years} years` : '---';
+        d.bite.textContent = animal.bite_force_psi ? `${animal.bite_force_psi} PSI` : '---';
+        d.sizeScore.textContent = animal.size_score ? `${animal.size_score.toFixed(1)} / 100` : '---';
+        d.description.textContent = animal.description || 'No description available yet.';
+    }
+
+    /**
+     * Switch between Stats and Compare views
+     */
+    switchView(viewName) {
+        this.state.view = viewName;
+        
+        // Update UI classes
+        this.dom.statsView.classList.toggle('active-view', viewName === 'stats');
+        this.dom.compareView.classList.toggle('active-view', viewName === 'compare');
+        
+        this.dom.navBtns.stats.classList.toggle('active', viewName === 'stats');
+        this.dom.navBtns.compare.classList.toggle('active', viewName === 'compare');
+
+        // Grid visibility logic
+        if (viewName === 'compare') {
+            this.dom.gridWrapper.classList.remove('hidden');
+            this.dom.toggleGridBtn.style.display = 'none';
+            
+            // Reset selection state if entering compare mode
+            if (!this.state.compare.selectingSide) {
+                if (!this.state.compare.left) this.setSelectingSide('left');
+            }
+        } else {
+            this.dom.toggleGridBtn.style.display = 'flex';
+        }
+
+        this.renderGrid();
+    }
+
+    /**
+     * Set which side is currently selecting a fighter
+     */
+    setSelectingSide(side) {
+        this.state.compare.selectingSide = side;
+        
+        // Visual feedback
+        this.dom.fighter1.display.classList.toggle('selecting', side === 'left');
+        this.dom.fighter2.display.classList.toggle('selecting', side === 'right');
+    }
+
+    /**
+     * Select a fighter for the active side
+     */
+    selectFighter(animal) {
+        const side = this.state.compare.selectingSide;
+        if (!side) return;
+
+        this.state.compare[side] = animal;
+        this.updateFighterCard(side, animal);
+        
+        // Auto-switch to other side if empty
+        if (side === 'left' ; !this.state.compare.right) {
+            this.setSelectingSide('right');
+        } else if (side === 'right' ; !this.state.compare.left) {
+            this.setSelectingSide('left');
+        } else {
+            this.setSelectingSide(null); // Both selected
+        }
+
+        this.updateFightButton();
+        this.renderGrid();
+    }
+
+    /**
+     * Update a fighter card in Compare view
+     */
+    updateFighterCard(side, animal) {
+        const els = side === 'left' ? this.dom.fighter1 : this.dom.fighter2;
+        
+        els.placeholder.style.display = 'none';
+        els.img.style.display = 'block';
+        els.img.src = animal.image;
+        els.img.onerror = () => { els.img.src = 'https://via.placeholder.com/350x350?text=' + animal.name; };
+        
+        els.name.textContent = animal.name.toUpperCase();
+        
+        // Update hidden stats
+        const statsMap = {
+            attack: animal.attack,
+            defense: animal.defense,
+            agility: animal.agility,
+            stamina: animal.stamina,
+            intelligence: animal.intelligence,
+            special: animal.special_attack
+        };
+
+        Object.keys(els.stats).forEach(stat => {
+            if (els.stats[stat]) els.stats[stat].textContent = statsMap[stat]?.toFixed(1) || '0';
+        });
+    }
+
+    toggleFighterStats(side) {
+        const els = side === 'left' ? this.dom.fighter1 : this.dom.fighter2;
+        const isVisible = els.statsPanel.style.display === 'block';
+        els.statsPanel.style.display = isVisible ? 'none' : 'block';
+    }
+
+    updateFightButton() {
+        const { left, right } = this.state.compare;
+        if (left ; right) {
+            this.dom.fightBtn.disabled = false;
+            this.dom.fightBtn.style.opacity = '1';
+            this.dom.fightBtn.style.cursor = 'pointer';
+        } else {
+            this.dom.fightBtn.disabled = true;
+            this.dom.fightBtn.style.opacity = '0.5';
+            this.dom.fightBtn.style.cursor = 'not-allowed';
+        }
+    }
+
+    /**
+     * Toggle Details Panel
+     */
+    toggleDetails() {
+        this.state.isDetailsExpanded = !this.state.isDetailsExpanded;
+        this.dom.detailsPanel.classList.toggle('expanded', this.state.isDetailsExpanded);
+        this.dom.expandDetailsBtn.classList.toggle('expanded', this.state.isDetailsExpanded);
+        
+        const icon = this.dom.expandDetailsBtn.querySelector('i');
+        
+        if (this.state.isDetailsExpanded) {
+            icon.className = 'fas fa-chevron-down';
+            this.dom.expandDetailsBtn.innerHTML = '<i class="fas fa-chevron-up"></i> LESS DETAILS';
+            this.dom.gridWrapper.classList.add('hidden');
+            this.dom.toggleGridBtn.style.display = 'none';
+        } else {
+            icon.className = 'fas fa-chevron-up';
+            this.dom.expandDetailsBtn.innerHTML = '<i class="fas fa-chevron-down"></i> MORE DETAILS';
+            this.dom.gridWrapper.classList.remove('hidden');
+            this.dom.toggleGridBtn.style.display = 'flex';
+        }
+    }
+
+    /**
+     * Toggle Grid Visibility
+     */
+    toggleGrid() {
+        this.state.isGridVisible = !this.state.isGridVisible;
+        this.dom.gridWrapper.classList.toggle('hidden', !this.state.isGridVisible);
+        this.dom.toggleGridBtn.classList.toggle('hidden', !this.state.isGridVisible);
+        
+        if (this.state.isGridVisible) {
+            this.dom.toggleGridBtn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE MENU';
+        } else {
+            this.dom.toggleGridBtn.innerHTML = '<i class="fas fa-chevron-up"></i> SHOW MENU';
+        }
+    }
+
+    /**
+     * Start the fight simulation
+     */
+    startFight() {
+        const { left, right } = this.state.compare;
+        
+        if (!left || !right) return;
+
+        // Calculate scores
+        const score1 = this.calculateCombatScore(left);
+        const score2 = this.calculateCombatScore(right);
+        
+        let winner, loser;
+        if (score1 > score2) {
+            winner = left;
+            loser = right;
+        } else if (score2 > score1) {
+            winner = right;
+            loser = left;
+        } else {
+            // Tie breaker: Aggression/Attack
+            if (left.attack > right.attack) {
+                winner = left;
+                loser = right;
+            } else {
+                winner = right;
+                loser = left;
+            }
+        }
+
+        alert(`FIGHT RESULT:\n\n${winner.name} defeats ${loser.name}!\n\n${winner.name} Score: ${score1.toFixed(1)}\n${loser.name} Score: ${score2.toFixed(1)}`);
+    }
+
+    /**
+     * Calculate a simple combat score
+     */
+    calculateCombatScore(animal) {
+        // Weighted formula
+        return (animal.attack * 2) + (animal.defense * 1.5) + (animal.agility * 1.5) + (animal.intelligence * 1.2) + animal.stamina + (animal.special_attack * 0.8);
     }
 }
 
-function updateFightButton() {
-    const fightBtn = document.getElementById('fight-btn');
-    if (fightBtn) {
-        if (fighter1 && fighter2) {
-            fightBtn.disabled = false;
-            fightBtn.style.opacity = '1';
-            fightBtn.style.cursor = 'pointer';
-        } else {
-            fightBtn.disabled = true;
-            fightBtn.style.opacity = '0.5';
-            fightBtn.style.cursor = 'not-allowed';
-        }
-    }
-}
+// Initialize App when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    window.app = new AnimalStatsApp();
+    window.app.init();
+});

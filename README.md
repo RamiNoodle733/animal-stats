@@ -4,7 +4,7 @@
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://raminoodle733.github.io/animal-stats/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Animals](https://img.shields.io/badge/Animals-98+-orange)](animal_stats.json)
+[![Animals](https://img.shields.io/badge/Animals-123+-orange)](animal_stats.json)
 
 A cutting-edge web application that presents scientifically accurate animal statistics in an engaging fighting game-style interface. Compare stats, view animals in a character select screen, and pit them against each other in VS battles!
 
@@ -14,13 +14,13 @@ A cutting-edge web application that presents scientifically accurate animal stat
 ### 🎮 Fighting Game Interface
 - **Character Select Screen**: Stats view with centered character display and flanking stat panels
 - **VS Battle Mode**: Compare two fighters head-to-head with dramatic VS badge
-- **Transparent PNG Images**: All 98 animals feature clean, background-free images
+- **Transparent PNG Images**: All 123 animals feature clean, background-free images
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
 - **Glowing Effects**: Cyan and gold accents with pulsing animations
 - **Scrollable Character Grid**: Quick access to all animals at the bottom
 
 ### 📊 Comprehensive Stats
-- **98 Animals**: From African Elephants to Sea Otters
+- **123 Animals**: From African Elephants to Sea Otters
 - **Combat Stats**: Attack, Defense, Agility, Stamina, Intelligence, Special Attack
 - **Scientific Data**: Weight, speed, lifespan, bite force, and more
 - **Special Abilities**: Unique attacks and traits for each animal
@@ -30,7 +30,7 @@ A cutting-edge web application that presents scientifically accurate animal stat
 - **Stats Mode**: View detailed stats for any animal with centered character display
 - **Compare Mode**: Select two fighters for head-to-head comparison
 - **Stat Visualization**: Gradient-filled bars with dynamic colors based on values
-- **Fight Button**: (Coming soon) Simulate battles between animals
+- **Fight Simulation**: Simulate battles between animals with calculated outcomes
 - **Smooth Animations**: Floating character models and pulsing effects
 
 ## 🚀 Quick Start

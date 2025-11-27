@@ -38,7 +38,24 @@
                 <!-- Left Stats Panel -->
                 <div class="stats-panel stats-panel-left">
                     <div class="stat-group" id="left-stats">
-                        <!-- Stats populated by JavaScript -->
+                        <div class="stat-row">
+                            <div class="stat-icon"><i class="fas fa-fist-raised"></i></div>
+                            <div class="stat-name">ATTACK</div>
+                            <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-attack-bar" style="width: 0%; background: #ff6b00;"></div></div></div>
+                            <div class="stat-value" id="stat-attack-val">0</div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-icon"><i class="fas fa-shield-alt"></i></div>
+                            <div class="stat-name">DEFENSE</div>
+                            <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-defense-bar" style="width: 0%; background: #00d4ff;"></div></div></div>
+                            <div class="stat-value" id="stat-defense-val">0</div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-icon"><i class="fas fa-wind"></i></div>
+                            <div class="stat-name">AGILITY</div>
+                            <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-agility-bar" style="width: 0%; background: #00ff88;"></div></div></div>
+                            <div class="stat-value" id="stat-agility-val">0</div>
+                        </div>
                     </div>
                 </div>
                 
@@ -60,7 +77,24 @@
                 <!-- Right Stats Panel -->
                 <div class="stats-panel stats-panel-right">
                     <div class="stat-group" id="right-stats">
-                        <!-- Stats populated by JavaScript -->
+                        <div class="stat-row">
+                            <div class="stat-value" id="stat-stamina-val">0</div>
+                            <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-stamina-bar" style="width: 0%; background: #ff3366;"></div></div></div>
+                            <div class="stat-name">STAMINA</div>
+                            <div class="stat-icon"><i class="fas fa-heart"></i></div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-value" id="stat-intelligence-val">0</div>
+                            <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-intelligence-bar" style="width: 0%; background: #9966ff;"></div></div></div>
+                            <div class="stat-name">INTELLIGENCE</div>
+                            <div class="stat-icon"><i class="fas fa-brain"></i></div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-value" id="stat-special-val">0</div>
+                            <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-special-bar" style="width: 0%; background: #ffcc00;"></div></div></div>
+                            <div class="stat-name">SPECIAL</div>
+                            <div class="stat-icon"><i class="fas fa-bolt"></i></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -256,6 +290,6 @@
         </div>
     </div>
     
-    <script src="script.js"></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
