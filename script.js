@@ -278,7 +278,7 @@ class AnimalStatsApp {
         this.state.filteredAnimals = this.state.animals.filter(animal => {
             const matchesSearch = animal.name.toLowerCase().includes(search);
             const matchesClass = classFilter === 'all' || animal.type === classFilter;
-            return matchesSearch ; matchesClass;
+            return matchesSearch && matchesClass;
         });
 
         // Sort
@@ -322,7 +322,7 @@ class AnimalStatsApp {
             card.dataset.id = animal.id || animal.name; // Fallback to name if ID missing
             
             // Add selection classes
-            if (this.state.view === 'stats' ; this.state.selectedAnimal?.name === animal.name) {
+            if (this.state.view === 'stats' && this.state.selectedAnimal?.name === animal.name) {
                 card.classList.add('selected');
             } else if (this.state.view === 'compare') {
                 if (this.state.compare.left?.name === animal.name) card.classList.add('selected-fighter1');
@@ -482,9 +482,9 @@ class AnimalStatsApp {
         this.updateFighterCard(side, animal);
         
         // Auto-switch to other side if empty
-        if (side === 'left' ; !this.state.compare.right) {
+        if (side === 'left' && !this.state.compare.right) {
             this.setSelectingSide('right');
-        } else if (side === 'right' ; !this.state.compare.left) {
+        } else if (side === 'right' && !this.state.compare.left) {
             this.setSelectingSide('left');
         } else {
             this.setSelectingSide(null); // Both selected
@@ -530,7 +530,7 @@ class AnimalStatsApp {
 
     updateFightButton() {
         const { left, right } = this.state.compare;
-        if (left ; right) {
+        if (left && right) {
             this.dom.fightBtn.disabled = false;
             this.dom.fightBtn.style.opacity = '1';
             this.dom.fightBtn.style.cursor = 'pointer';
