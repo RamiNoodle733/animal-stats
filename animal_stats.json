@@ -4626,5 +4626,3575 @@
       "Fruit Toss"
     ],
     "image": "https://png.pngtree.com/png-clipart/20231007/ourmid/pngtree-keel-billed-toucan-transparent-background-png-image_10196216.png"
+  },
+  {
+    "name": "Ring-tailed Lemur",
+    "scientific_name": "Lemur catta",
+    "class": "Scout",
+    "type": "Mammal",
+    "attack": 40,
+    "defense": 35,
+    "agility": 85,
+    "stamina": 65,
+    "intelligence": 60,
+    "special_attack": 45,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://www.vhv.rs/dpng/d/511-5114750_lemur-png-transparent-ring-tailed-lemur-png-download.png"
+  },
+  {
+    "name": "Baboon",
+    "scientific_name": "Papio",
+    "class": "Fighter",
+    "type": "Mammal",
+    "attack": 65,
+    "defense": 55,
+    "agility": 60,
+    "stamina": 75,
+    "intelligence": 70,
+    "special_attack": 60,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://assets.stickpng.com/images/5af949026554160a79bea0f4.png"
+  },
+  {
+    "name": "Gibbon",
+    "scientific_name": "Hylobatidae",
+    "class": "Scout",
+    "type": "Mammal",
+    "attack": 45,
+    "defense": 40,
+    "agility": 95,
+    "stamina": 70,
+    "intelligence": 75,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20231005/ourmid/pngtree-hoolock-gibbon-transparent-background-png-image_10193781.png"
+  },
+  {
+    "name": "Spider Monkey",
+    "scientific_name": "Ateles",
+    "class": "Scout",
+    "type": "Mammal",
+    "attack": 40,
+    "defense": 35,
+    "agility": 90,
+    "stamina": 60,
+    "intelligence": 70,
+    "special_attack": 45,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://pngimg.com/d/monkey_PNG18725.png"
+  },
+  {
+    "name": "Howler Monkey",
+    "scientific_name": "Alouatta",
+    "class": "Bard",
+    "type": "Mammal",
+    "attack": 50,
+    "defense": 45,
+    "agility": 65,
+    "stamina": 60,
+    "intelligence": 65,
+    "special_attack": 75,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20250601/ourmid/pngtree-monkey-isolated-on-a-transparent-background-png-image_16442751.png"
+  },
+  {
+    "name": "Capuchin Monkey",
+    "scientific_name": "Cebinae",
+    "class": "Rogue",
+    "type": "Mammal",
+    "attack": 35,
+    "defense": 30,
+    "agility": 80,
+    "stamina": 55,
+    "intelligence": 85,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/previews/048/947/305/non_2x/capuchin-monkey-on-a-transparent-background-png.png"
+  },
+  {
+    "name": "Proboscis Monkey",
+    "scientific_name": "Nasalis larvatus",
+    "class": "Civilian",
+    "type": "Mammal",
+    "attack": 40,
+    "defense": 40,
+    "agility": 50,
+    "stamina": 50,
+    "intelligence": 60,
+    "special_attack": 30,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20250118/original/pngtree-proboscis-monkey-wildlife-vector-art-png-image_19781684.png"
+  },
+  {
+    "name": "Japanese Macaque",
+    "scientific_name": "Macaca fuscata",
+    "class": "Survivor",
+    "type": "Mammal",
+    "attack": 50,
+    "defense": 50,
+    "agility": 60,
+    "stamina": 70,
+    "intelligence": 75,
+    "special_attack": 40,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20250606/ourmid/pngtree-seated-japanese-macaque-png-image_16462905.png"
+  },
+  {
+    "name": "Serval",
+    "scientific_name": "Leptailurus serval",
+    "class": "Assassin",
+    "type": "Mammal",
+    "attack": 60,
+    "defense": 40,
+    "agility": 90,
+    "stamina": 65,
+    "intelligence": 60,
+    "special_attack": 70,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20250520/original/pngtree-vintage-serval-wild-cat-clipart-png-image_21044988.png"
+  },
+  {
+    "name": "Ocelot",
+    "scientific_name": "Leopardus pardalis",
+    "class": "Rogue",
+    "type": "Mammal",
+    "attack": 55,
+    "defense": 45,
+    "agility": 80,
+    "stamina": 60,
+    "intelligence": 65,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20241102/original/pngtree-cute-ocelot-isolated-on-white-background-png-image_16606654.png"
+  },
+  {
+    "name": "Bobcat",
+    "scientific_name": "Lynx rufus",
+    "class": "Fighter",
+    "type": "Mammal",
+    "attack": 65,
+    "defense": 50,
+    "agility": 75,
+    "stamina": 65,
+    "intelligence": 60,
+    "special_attack": 55,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20241110/original/pngtree-view-of-wild-bobcat-transparent-background-png-image_16827981.png"
+  },
+  {
+    "name": "Black Panther",
+    "scientific_name": "Panthera pardus",
+    "class": "Assassin",
+    "type": "Mammal",
+    "attack": 85,
+    "defense": 70,
+    "agility": 85,
+    "stamina": 80,
+    "intelligence": 75,
+    "special_attack": 80,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20231007/ourmid/pngtree-black-panther-in-ferocious-display-on-a-clear-transparent-background-png-image_10195947.png"
+  },
+  {
+    "name": "African Wild Dog",
+    "scientific_name": "Lycaon pictus",
+    "class": "Hunter",
+    "type": "Mammal",
+    "attack": 70,
+    "defense": 50,
+    "agility": 75,
+    "stamina": 95,
+    "intelligence": 80,
+    "special_attack": 65,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/previews/068/743/693/non_2x/african-wild-dog-lycaon-pictus-isolated-on-transparent-background-endangered-painted-wolf-png.png"
+  },
+  {
+    "name": "Maned Wolf",
+    "scientific_name": "Chrysocyon brachyurus",
+    "class": "Scout",
+    "type": "Mammal",
+    "attack": 60,
+    "defense": 45,
+    "agility": 70,
+    "stamina": 75,
+    "intelligence": 60,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://www.vhv.rs/dpng/d/477-4778323_transparent-wolf-png-maned-wolf-no-background-png.png"
+  },
+  {
+    "name": "Arctic Wolf",
+    "scientific_name": "Canis lupus arctos",
+    "class": "Hunter",
+    "type": "Mammal",
+    "attack": 75,
+    "defense": 65,
+    "agility": 70,
+    "stamina": 90,
+    "intelligence": 80,
+    "special_attack": 60,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20240520/original/pngtree-an-arctic-wolf-transparent-background-png-image_15139629.png"
+  },
+  {
+    "name": "Dhole",
+    "scientific_name": "Cuon alpinus",
+    "class": "Fighter",
+    "type": "Mammal",
+    "attack": 65,
+    "defense": 50,
+    "agility": 75,
+    "stamina": 85,
+    "intelligence": 70,
+    "special_attack": 55,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20250204/ourmid/pngtree-dhole-also-known-as-the-asiatic-wild-dog-png-image_15384095.png"
+  },
+  {
+    "name": "Sun Bear",
+    "scientific_name": "Helarctos malayanus",
+    "class": "Fighter",
+    "type": "Mammal",
+    "attack": 70,
+    "defense": 65,
+    "agility": 50,
+    "stamina": 70,
+    "intelligence": 60,
+    "special_attack": 55,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20240104/ourmid/pngtree-malayan-sunbear-isolated-isolated-png-image_10889116.png"
+  },
+  {
+    "name": "Spectacled Bear",
+    "scientific_name": "Tremarctos ornatus",
+    "class": "Tank",
+    "type": "Mammal",
+    "attack": 75,
+    "defense": 70,
+    "agility": 45,
+    "stamina": 75,
+    "intelligence": 65,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20240221/ourmid/pngtree-spectacled-bear-spectacled-bear-zoo-austria-png-image_11760603.png"
+  },
+  {
+    "name": "Black Bear",
+    "scientific_name": "Ursus americanus",
+    "class": "Tank",
+    "type": "Mammal",
+    "attack": 80,
+    "defense": 75,
+    "agility": 55,
+    "stamina": 80,
+    "intelligence": 70,
+    "special_attack": 60,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20240203/ourmid/pngtree-black-bear-cub-isolated-3d-rendering-png-image_11533156.png"
+  },
+  {
+    "name": "Ferret",
+    "scientific_name": "Mustela putorius furo",
+    "class": "Rogue",
+    "type": "Mammal",
+    "attack": 45,
+    "defense": 30,
+    "agility": 80,
+    "stamina": 60,
+    "intelligence": 65,
+    "special_attack": 40,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://pngimg.com/uploads/ferret/ferret_PNG17112.png"
+  },
+  {
+    "name": "Stoat",
+    "scientific_name": "Mustela erminea",
+    "class": "Assassin",
+    "type": "Mammal",
+    "attack": 55,
+    "defense": 30,
+    "agility": 90,
+    "stamina": 70,
+    "intelligence": 60,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20230808/ourmid/pngtree-weasel-clipart-cute-cartoon-style-weasel-animal-vector-illustration-png-image_6827636.png"
+  },
+  {
+    "name": "Kudu",
+    "scientific_name": "Tragelaphus",
+    "class": "Scout",
+    "type": "Mammal",
+    "attack": 50,
+    "defense": 45,
+    "agility": 75,
+    "stamina": 70,
+    "intelligence": 50,
+    "special_attack": 40,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20240418/original/pngtree-greater-kudu-animal-character-png-image_14877772.png"
+  },
+  {
+    "name": "Oryx",
+    "scientific_name": "Oryx gazella",
+    "class": "Fighter",
+    "type": "Mammal",
+    "attack": 65,
+    "defense": 60,
+    "agility": 65,
+    "stamina": 80,
+    "intelligence": 50,
+    "special_attack": 55,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20250210/ourmid/pngtree-arabian-oryx-in-format-with-transparent-background-1-png-image_15436437.png"
+  },
+  {
+    "name": "Sable Antelope",
+    "scientific_name": "Hippotragus niger",
+    "class": "Fighter",
+    "type": "Mammal",
+    "attack": 70,
+    "defense": 65,
+    "agility": 60,
+    "stamina": 75,
+    "intelligence": 50,
+    "special_attack": 60,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20250528/original/pngtree-black-sable-antelope-with-horns-png-image_21085899.png"
+  },
+  {
+    "name": "Pronghorn",
+    "scientific_name": "Antilocapra americana",
+    "class": "Speedster",
+    "type": "Mammal",
+    "attack": 40,
+    "defense": 35,
+    "agility": 98,
+    "stamina": 85,
+    "intelligence": 50,
+    "special_attack": 45,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20250529/ourmid/pngtree-antelope-isolated-on-a-transparent-background-png-image_16406723.png"
+  },
+  {
+    "name": "Bongo",
+    "scientific_name": "Tragelaphus eurycerus",
+    "class": "Stealth",
+    "type": "Mammal",
+    "attack": 50,
+    "defense": 45,
+    "agility": 65,
+    "stamina": 60,
+    "intelligence": 50,
+    "special_attack": 55,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20241106/original/pngtree-transparent-bongo-cat-png-image_16691817.png"
+  },
+  {
+    "name": "Black Rhinoceros",
+    "scientific_name": "Diceros bicornis",
+    "class": "Tank",
+    "type": "Mammal",
+    "attack": 85,
+    "defense": 90,
+    "agility": 40,
+    "stamina": 80,
+    "intelligence": 45,
+    "special_attack": 75,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20240529/ourmid/pngtree-black-rhino-on-a-white-background-vector-png-image_6970767.png"
+  },
+  {
+    "name": "Wild Horse",
+    "scientific_name": "Equus ferus",
+    "class": "Runner",
+    "type": "Mammal",
+    "attack": 55,
+    "defense": 50,
+    "agility": 80,
+    "stamina": 90,
+    "intelligence": 60,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://www.nicepng.com/png/full/85-852292_running-horse-no-background-transparent-png-image-web.png"
+  },
+  {
+    "name": "Donkey",
+    "scientific_name": "Equus africanus asinus",
+    "class": "Worker",
+    "type": "Mammal",
+    "attack": 45,
+    "defense": 50,
+    "agility": 50,
+    "stamina": 95,
+    "intelligence": 55,
+    "special_attack": 40,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20250101/ourmid/pngtree-donkey-isolated-on-white-headstrong-farm-animal-with-domestic-mammal-look-png-image_14874365.png"
+  },
+  {
+    "name": "Bactrian Camel",
+    "scientific_name": "Camelus bactrianus",
+    "class": "Survivor",
+    "type": "Mammal",
+    "attack": 55,
+    "defense": 60,
+    "agility": 45,
+    "stamina": 100,
+    "intelligence": 55,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://assets.stickpng.com/images/580b57fbd9996e24bc43bb87.png"
+  },
+  {
+    "name": "Guanaco",
+    "scientific_name": "Lama guanicoe",
+    "class": "Survivor",
+    "type": "Mammal",
+    "attack": 45,
+    "defense": 40,
+    "agility": 65,
+    "stamina": 80,
+    "intelligence": 50,
+    "special_attack": 45,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/thumbnails/062/810/553/small/fluffy-guanaco-standing-profile-cut-out-transparent-png.png"
+  },
+  {
+    "name": "Koala",
+    "scientific_name": "Phascolarctos cinereus",
+    "class": "Civilian",
+    "type": "Mammal",
+    "attack": 30,
+    "defense": 40,
+    "agility": 20,
+    "stamina": 30,
+    "intelligence": 35,
+    "special_attack": 25,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://pngimg.com/d/koala_PNG114262.png"
+  },
+  {
+    "name": "Wombat",
+    "scientific_name": "Vombatidae",
+    "class": "Tank",
+    "type": "Mammal",
+    "attack": 50,
+    "defense": 75,
+    "agility": 40,
+    "stamina": 60,
+    "intelligence": 45,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/previews/053/648/166/non_2x/a-brown-and-white-wombat-on-a-transparent-background-png.png"
+  },
+  {
+    "name": "Sugar Glider",
+    "scientific_name": "Petaurus breviceps",
+    "class": "Glider",
+    "type": "Mammal",
+    "attack": 25,
+    "defense": 20,
+    "agility": 85,
+    "stamina": 40,
+    "intelligence": 55,
+    "special_attack": 60,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20231018/ourmid/pngtree-sugar-glider-on-white-background-animal-png-image_10243535.png"
+  },
+  {
+    "name": "Wallaby",
+    "scientific_name": "Macropodidae",
+    "class": "Jumper",
+    "type": "Mammal",
+    "attack": 45,
+    "defense": 40,
+    "agility": 75,
+    "stamina": 60,
+    "intelligence": 45,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://www.pngmart.com/files/12/Kangaroo-Wallaby-PNG-Transparent-Image.png"
+  },
+  {
+    "name": "Quoll",
+    "scientific_name": "Dasyurus",
+    "class": "Hunter",
+    "type": "Mammal",
+    "attack": 55,
+    "defense": 40,
+    "agility": 70,
+    "stamina": 60,
+    "intelligence": 50,
+    "special_attack": 45,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20220608/ourmid/pngtree-cute-wild-rodent-vector-quoll-png-image_4906281.png"
+  },
+  {
+    "name": "Hedgehog",
+    "scientific_name": "Erinaceinae",
+    "class": "Defender",
+    "type": "Mammal",
+    "attack": 30,
+    "defense": 80,
+    "agility": 35,
+    "stamina": 45,
+    "intelligence": 40,
+    "special_attack": 65,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/previews/048/720/340/non_2x/hedgehog-animal-isolated-on-transparent-background-free-png.png"
+  },
+  {
+    "name": "Flying Squirrel",
+    "scientific_name": "Pteromyini",
+    "class": "Glider",
+    "type": "Mammal",
+    "attack": 25,
+    "defense": 20,
+    "agility": 90,
+    "stamina": 40,
+    "intelligence": 50,
+    "special_attack": 55,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20231114/ourmid/pngtree-sugarglider-flying-squirrel-png-image_10584524.png"
+  },
+  {
+    "name": "Naked Mole Rat",
+    "scientific_name": "Heterocephalus glaber",
+    "class": "Survivor",
+    "type": "Mammal",
+    "attack": 30,
+    "defense": 30,
+    "agility": 30,
+    "stamina": 90,
+    "intelligence": 50,
+    "special_attack": 60,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20220706/ourmid/pngtree-cartoon-naked-mole-rat-smiling-png-image_5763603.png"
+  },
+  {
+    "name": "Great Horned Owl",
+    "scientific_name": "Bubo virginianus",
+    "class": "Hunter",
+    "type": "Bird",
+    "attack": 70,
+    "defense": 40,
+    "agility": 75,
+    "stamina": 60,
+    "intelligence": 80,
+    "special_attack": 70,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20240722/original/pngtree-great-horned-owl-on-transparent-background-png-image_15609436.png"
+  },
+  {
+    "name": "Barn Owl",
+    "scientific_name": "Tyto alba",
+    "class": "Hunter",
+    "type": "Bird",
+    "attack": 60,
+    "defense": 35,
+    "agility": 70,
+    "stamina": 55,
+    "intelligence": 75,
+    "special_attack": 65,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/previews/043/988/968/non_2x/close-up-portrait-of-a-barn-owl-against-transparent-background-png.png"
+  },
+  {
+    "name": "Red-tailed Hawk",
+    "scientific_name": "Buteo jamaicensis",
+    "class": "Hunter",
+    "type": "Bird",
+    "attack": 65,
+    "defense": 40,
+    "agility": 80,
+    "stamina": 65,
+    "intelligence": 70,
+    "special_attack": 60,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20230914/original/pngtree-red-tailed-hawk-vector-png-image_12163349.png"
+  },
+  {
+    "name": "Golden Eagle",
+    "scientific_name": "Aquila chrysaetos",
+    "class": "Hunter",
+    "type": "Bird",
+    "attack": 80,
+    "defense": 50,
+    "agility": 85,
+    "stamina": 75,
+    "intelligence": 75,
+    "special_attack": 70,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/previews/047/554/734/non_2x/golden-eagle-isolated-on-transparent-background-free-png.png"
+  },
+  {
+    "name": "Osprey",
+    "scientific_name": "Pandion haliaetus",
+    "class": "Fisher",
+    "type": "Bird",
+    "attack": 65,
+    "defense": 40,
+    "agility": 80,
+    "stamina": 60,
+    "intelligence": 70,
+    "special_attack": 65,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20250319/ourmid/pngtree-realistic-osprey-perched-with-detailed-feathers-on-white-background-png-image_15767297.png"
+  },
+  {
+    "name": "Condor",
+    "scientific_name": "Gymnogyps californianus",
+    "class": "Scavenger",
+    "type": "Bird",
+    "attack": 55,
+    "defense": 60,
+    "agility": 65,
+    "stamina": 95,
+    "intelligence": 65,
+    "special_attack": 55,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/thumbnails/052/264/639/small_2x/front-view-andean-condor-is-spreading-its-wings-and-flying-isolated-on-a-transparent-background-png.png"
+  },
+  {
+    "name": "Albatross",
+    "scientific_name": "Diomedeidae",
+    "class": "Traveler",
+    "type": "Bird",
+    "attack": 45,
+    "defense": 40,
+    "agility": 70,
+    "stamina": 100,
+    "intelligence": 60,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20240607/ourmid/pngtree-albatross-isolated-on-transparent-background-png-image_12622698.png"
+  },
+  {
+    "name": "Puffin",
+    "scientific_name": "Fratercula",
+    "class": "Fisher",
+    "type": "Bird",
+    "attack": 35,
+    "defense": 30,
+    "agility": 65,
+    "stamina": 50,
+    "intelligence": 55,
+    "special_attack": 45,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://assets.stickpng.com/images/5bc05ef6dbc29e02dd827868.png"
+  },
+  {
+    "name": "Macaw",
+    "scientific_name": "Ara",
+    "class": "Bard",
+    "type": "Bird",
+    "attack": 40,
+    "defense": 35,
+    "agility": 60,
+    "stamina": 50,
+    "intelligence": 85,
+    "special_attack": 55,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://assets.stickpng.com/images/580b57fbd9996e24bc43bb6f.png"
+  },
+  {
+    "name": "Cockatoo",
+    "scientific_name": "Cacatuidae",
+    "class": "Bard",
+    "type": "Bird",
+    "attack": 45,
+    "defense": 40,
+    "agility": 55,
+    "stamina": 50,
+    "intelligence": 80,
+    "special_attack": 60,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20231110/original/pngtree-cockatoo-full-body-png-image_13524811.png"
+  },
+  {
+    "name": "Hummingbird",
+    "scientific_name": "Trochilidae",
+    "class": "Speedster",
+    "type": "Bird",
+    "attack": 20,
+    "defense": 10,
+    "agility": 100,
+    "stamina": 30,
+    "intelligence": 50,
+    "special_attack": 70,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20230903/ourmid/pngtree-hummingbird-colibri-png-image_9953519.png"
+  },
+  {
+    "name": "Peacock",
+    "scientific_name": "Pavo cristatus",
+    "class": "Bard",
+    "type": "Bird",
+    "attack": 40,
+    "defense": 35,
+    "agility": 45,
+    "stamina": 40,
+    "intelligence": 45,
+    "special_attack": 80,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20231006/original/pngtree-elegant-peacock-bird---transparent-background-png-image_13280249.png"
+  },
+  {
+    "name": "Kiwi",
+    "scientific_name": "Apteryx",
+    "class": "Scout",
+    "type": "Bird",
+    "attack": 30,
+    "defense": 30,
+    "agility": 40,
+    "stamina": 50,
+    "intelligence": 45,
+    "special_attack": 40,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://pngimg.com/d/kiwi_bird_PNG10.png"
+  },
+  {
+    "name": "Kookaburra",
+    "scientific_name": "Dacelo",
+    "class": "Bard",
+    "type": "Bird",
+    "attack": 40,
+    "defense": 30,
+    "agility": 60,
+    "stamina": 50,
+    "intelligence": 55,
+    "special_attack": 55,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20240509/ourmid/pngtree-a-laughing-kookaburra-up-close-against-a-dark-green-png-image_12387079.png"
+  },
+  {
+    "name": "Magpie",
+    "scientific_name": "Pica pica",
+    "class": "Thief",
+    "type": "Bird",
+    "attack": 35,
+    "defense": 30,
+    "agility": 70,
+    "stamina": 55,
+    "intelligence": 90,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/previews/054/572/793/non_2x/black-and-white-magpie-perched-attentively-isolated-on-transparent-background-free-png.png"
+  },
+  {
+    "name": "Raven",
+    "scientific_name": "Corvus corax",
+    "class": "Mage",
+    "type": "Bird",
+    "attack": 45,
+    "defense": 35,
+    "agility": 65,
+    "stamina": 60,
+    "intelligence": 95,
+    "special_attack": 60,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/previews/060/054/534/non_2x/inspired-coastal-a-raven-common-raven-no-background-with-transparent-background-flawless-free-png.png"
+  },
+  {
+    "name": "Crow",
+    "scientific_name": "Corvus brachyrhynchos",
+    "class": "Scout",
+    "type": "Bird",
+    "attack": 40,
+    "defense": 30,
+    "agility": 60,
+    "stamina": 55,
+    "intelligence": 90,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://assets.stickpng.com/images/580b57fbd9996e24bc43bb4d.png"
+  },
+  {
+    "name": "Green Anaconda",
+    "scientific_name": "Eunectes murinus",
+    "class": "Grappler",
+    "type": "Reptile",
+    "attack": 85,
+    "defense": 70,
+    "agility": 40,
+    "stamina": 80,
+    "intelligence": 50,
+    "special_attack": 75,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/previews/059/466/540/non_2x/illustration-of-a-coiled-green-anaconda-with-spots-and-tongue-protruding-on-a-plain-background-transparent-background-free-png.png"
+  },
+  {
+    "name": "Reticulated Python",
+    "scientific_name": "Malayopython reticulatus",
+    "class": "Grappler",
+    "type": "Reptile",
+    "attack": 80,
+    "defense": 65,
+    "agility": 45,
+    "stamina": 75,
+    "intelligence": 50,
+    "special_attack": 70,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20250620/original/pngtree-reticulated-python-isolated-on-a-transparent-background-png-image_21193785.png"
+  },
+  {
+    "name": "Boa Constrictor",
+    "scientific_name": "Boa constrictor",
+    "class": "Grappler",
+    "type": "Reptile",
+    "attack": 75,
+    "defense": 60,
+    "agility": 40,
+    "stamina": 70,
+    "intelligence": 45,
+    "special_attack": 65,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20241011/original/pngtree-beautiful-boa-constrictor-snake-on-transparent-background-png-image_16272415.png"
+  },
+  {
+    "name": "Gaboon Viper",
+    "scientific_name": "Bitis gabonica",
+    "class": "Assassin",
+    "type": "Reptile",
+    "attack": 90,
+    "defense": 50,
+    "agility": 55,
+    "stamina": 40,
+    "intelligence": 45,
+    "special_attack": 85,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20250415/original/pngtree-high-quality-3d-gaboon-viper-snake-model-with-transparent-background-png-image_20683578.png"
+  },
+  {
+    "name": "Rattlesnake",
+    "scientific_name": "Crotalus",
+    "class": "Assassin",
+    "type": "Reptile",
+    "attack": 85,
+    "defense": 45,
+    "agility": 60,
+    "stamina": 50,
+    "intelligence": 50,
+    "special_attack": 80,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20231101/ourmid/pngtree-portrait-of-a-rattlesnake-animal-png-image_10387215.png"
+  },
+  {
+    "name": "Gila Monster",
+    "scientific_name": "Heloderma suspectum",
+    "class": "Tank",
+    "type": "Reptile",
+    "attack": 70,
+    "defense": 75,
+    "agility": 30,
+    "stamina": 60,
+    "intelligence": 45,
+    "special_attack": 75,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20230912/original/pngtree-gila-monster-looking-picture-image_13031491.png"
+  },
+  {
+    "name": "Monitor Lizard",
+    "scientific_name": "Varanus",
+    "class": "Fighter",
+    "type": "Reptile",
+    "attack": 75,
+    "defense": 65,
+    "agility": 65,
+    "stamina": 70,
+    "intelligence": 60,
+    "special_attack": 60,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/previews/050/246/382/non_2x/monitor-lizard-illustration-on-transparent-background-free-png.png"
+  },
+  {
+    "name": "Iguana",
+    "scientific_name": "Iguana iguana",
+    "class": "Civilian",
+    "type": "Reptile",
+    "attack": 45,
+    "defense": 50,
+    "agility": 55,
+    "stamina": 60,
+    "intelligence": 45,
+    "special_attack": 40,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20250622/ourmid/pngtree-green-iguana-isolated-on-transparent-background-png-image_16570506.png"
+  },
+  {
+    "name": "Chameleon",
+    "scientific_name": "Chamaeleonidae",
+    "class": "Stealth",
+    "type": "Reptile",
+    "attack": 35,
+    "defense": 40,
+    "agility": 45,
+    "stamina": 40,
+    "intelligence": 55,
+    "special_attack": 90,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20230506/original/pngtree-isolated-colorfull-chameleon-stand-on-branch-transparent-png-image_9145544.png"
+  },
+  {
+    "name": "Gecko",
+    "scientific_name": "Gekkonidae",
+    "class": "Climber",
+    "type": "Reptile",
+    "attack": 30,
+    "defense": 30,
+    "agility": 70,
+    "stamina": 45,
+    "intelligence": 45,
+    "special_attack": 60,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20250611/ourmid/pngtree-leopard-gecko-isolated-on-a-transparent-background-png-image_16518730.png"
+  },
+  {
+    "name": "Snapping Turtle",
+    "scientific_name": "Chelydra serpentina",
+    "class": "Tank",
+    "type": "Reptile",
+    "attack": 75,
+    "defense": 90,
+    "agility": 20,
+    "stamina": 60,
+    "intelligence": 40,
+    "special_attack": 65,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20250619/ourmid/pngtree-snapping-turtle-isolated-on-a-transparent-background-png-image_16549683.png"
+  },
+  {
+    "name": "Leatherback Sea Turtle",
+    "scientific_name": "Dermochelys coriacea",
+    "class": "Tank",
+    "type": "Reptile",
+    "attack": 60,
+    "defense": 85,
+    "agility": 50,
+    "stamina": 95,
+    "intelligence": 55,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20250618/ourmid/pngtree-leatherback-sea-turtle-isolated-on-a-transparent-background-png-image_16546811.png"
+  },
+  {
+    "name": "Bullfrog",
+    "scientific_name": "Lithobates catesbeianus",
+    "class": "Jumper",
+    "type": "Amphibian",
+    "attack": 40,
+    "defense": 35,
+    "agility": 65,
+    "stamina": 50,
+    "intelligence": 35,
+    "special_attack": 45,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20240901/original/pngtree-bullfrog-sitting-png-image_15906776.png"
+  },
+  {
+    "name": "Red-Eyed Tree Frog",
+    "scientific_name": "Agalychnis callidryas",
+    "class": "Climber",
+    "type": "Amphibian",
+    "attack": 25,
+    "defense": 20,
+    "agility": 75,
+    "stamina": 40,
+    "intelligence": 40,
+    "special_attack": 55,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20231017/original/pngtree-red-eyed-tree-frog-png-image_13339584.png"
+  },
+  {
+    "name": "Salamander",
+    "scientific_name": "Caudata",
+    "class": "Survivor",
+    "type": "Amphibian",
+    "attack": 30,
+    "defense": 30,
+    "agility": 40,
+    "stamina": 50,
+    "intelligence": 35,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/previews/060/068/721/non_2x/intense-beautiful-a-salamander-no-background-with-transparent-background-masterfully-captured-free-png.png"
+  },
+  {
+    "name": "Hellbender",
+    "scientific_name": "Cryptobranchus alleganiensis",
+    "class": "Tank",
+    "type": "Amphibian",
+    "attack": 45,
+    "defense": 50,
+    "agility": 30,
+    "stamina": 60,
+    "intelligence": 35,
+    "special_attack": 40,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20250614/ourmid/pngtree-japanese-giant-salamander-isolated-on-a-transparent-background-png-image_16536523.png"
+  },
+  {
+    "name": "Manta Ray",
+    "scientific_name": "Mobula birostris",
+    "class": "Glider",
+    "type": "Fish",
+    "attack": 50,
+    "defense": 60,
+    "agility": 75,
+    "stamina": 80,
+    "intelligence": 65,
+    "special_attack": 55,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20250714/original/pngtree-manta-ray-isolated-on-a-transparent-background-png-image_21296254.png"
+  },
+  {
+    "name": "Stingray",
+    "scientific_name": "Myliobatoidei",
+    "class": "Stealth",
+    "type": "Fish",
+    "attack": 65,
+    "defense": 55,
+    "agility": 60,
+    "stamina": 60,
+    "intelligence": 50,
+    "special_attack": 70,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/previews/024/064/362/non_2x/stingray-fish-isolated-on-a-transparent-background-free-png.png"
+  },
+  {
+    "name": "Sawfish",
+    "scientific_name": "Pristidae",
+    "class": "Fighter",
+    "type": "Fish",
+    "attack": 75,
+    "defense": 65,
+    "agility": 55,
+    "stamina": 70,
+    "intelligence": 45,
+    "special_attack": 60,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20250321/ourmid/pngtree-sawfish-fish-isolated-on-transparent-background-png-image_15814118.png"
+  },
+  {
+    "name": "Barracuda",
+    "scientific_name": "Sphyraena",
+    "class": "Hunter",
+    "type": "Fish",
+    "attack": 80,
+    "defense": 45,
+    "agility": 90,
+    "stamina": 65,
+    "intelligence": 50,
+    "special_attack": 60,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20250628/original/pngtree-barracuda-isolated-on-a-transparent-background-png-image_21240516.png"
+  },
+  {
+    "name": "Marlin",
+    "scientific_name": "Istiophoridae",
+    "class": "Speedster",
+    "type": "Fish",
+    "attack": 85,
+    "defense": 50,
+    "agility": 95,
+    "stamina": 75,
+    "intelligence": 50,
+    "special_attack": 65,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20240923/original/pngtree-beautiful-blue-marlin-on-transparent-background-png-image_16075083.png"
+  },
+  {
+    "name": "Sailfish",
+    "scientific_name": "Istiophorus",
+    "class": "Speedster",
+    "type": "Fish",
+    "attack": 80,
+    "defense": 45,
+    "agility": 100,
+    "stamina": 70,
+    "intelligence": 50,
+    "special_attack": 60,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20250515/original/pngtree-blue-and-white-sailfish-png-image_20978677.png"
+  },
+  {
+    "name": "Tuna",
+    "scientific_name": "Thunnini",
+    "class": "Speedster",
+    "type": "Fish",
+    "attack": 60,
+    "defense": 55,
+    "agility": 90,
+    "stamina": 95,
+    "intelligence": 45,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20231017/ourmid/pngtree-bluefin-tuna-fish-png-image_10202750.png"
+  },
+  {
+    "name": "Anglerfish",
+    "scientific_name": "Lophiiformes",
+    "class": "Lure",
+    "type": "Fish",
+    "attack": 75,
+    "defense": 40,
+    "agility": 30,
+    "stamina": 50,
+    "intelligence": 35,
+    "special_attack": 85,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/previews/030/723/796/non_2x/angler-fish-isolated-on-a-transparent-background-free-png.png"
+  },
+  {
+    "name": "Lionfish",
+    "scientific_name": "Pterois",
+    "class": "Toxic",
+    "type": "Fish",
+    "attack": 65,
+    "defense": 60,
+    "agility": 40,
+    "stamina": 50,
+    "intelligence": 40,
+    "special_attack": 90,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/previews/042/840/741/non_2x/lion-fish-on-transparent-background-png.png"
+  },
+  {
+    "name": "Moray Eel",
+    "scientific_name": "Muraenidae",
+    "class": "Fighter",
+    "type": "Fish",
+    "attack": 75,
+    "defense": 60,
+    "agility": 50,
+    "stamina": 60,
+    "intelligence": 45,
+    "special_attack": 65,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20250704/original/pngtree-green-moray-eel-isolated-on-a-transparent-background-png-image_21220581.png"
+  },
+  {
+    "name": "Giant Squid",
+    "scientific_name": "Architeuthis dux",
+    "class": "Grappler",
+    "type": "Invertebrate",
+    "attack": 85,
+    "defense": 50,
+    "agility": 60,
+    "stamina": 70,
+    "intelligence": 75,
+    "special_attack": 80,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20230814/original/pngtree-white-background-wordcard-design-featuring-a-giant-squid-vector-picture-image_10677754.png"
+  },
+  {
+    "name": "Colossal Squid",
+    "scientific_name": "Mesonychoteuthis hamiltoni",
+    "class": "Grappler",
+    "type": "Invertebrate",
+    "attack": 90,
+    "defense": 55,
+    "agility": 55,
+    "stamina": 75,
+    "intelligence": 70,
+    "special_attack": 85,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20220609/ourmid/pngtree-white-background-wordcard-design-featuring-a-giant-squid-vector-png-image_37153242.png"
+  },
+  {
+    "name": "Cuttlefish",
+    "scientific_name": "Sepiida",
+    "class": "Mage",
+    "type": "Invertebrate",
+    "attack": 50,
+    "defense": 45,
+    "agility": 65,
+    "stamina": 50,
+    "intelligence": 85,
+    "special_attack": 95,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20240913/ourmid/pngtree-cuttlefish-side-view-transparent-background-png-image_13823624.png"
+  },
+  {
+    "name": "Nautilus",
+    "scientific_name": "Nautilidae",
+    "class": "Tank",
+    "type": "Invertebrate",
+    "attack": 40,
+    "defense": 80,
+    "agility": 30,
+    "stamina": 60,
+    "intelligence": 40,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20231015/ourmid/pngtree-nautilus-cartoon-shell-png-image_10164548.png"
+  },
+  {
+    "name": "Coconut Crab",
+    "scientific_name": "Birgus latro",
+    "class": "Tank",
+    "type": "Invertebrate",
+    "attack": 80,
+    "defense": 85,
+    "agility": 30,
+    "stamina": 70,
+    "intelligence": 45,
+    "special_attack": 60,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20241002/original/pngtree-crab-playing-with-coconut-png-image_16159600.png"
+  },
+  {
+    "name": "King Crab",
+    "scientific_name": "Paralithodes camtschaticus",
+    "class": "Tank",
+    "type": "Invertebrate",
+    "attack": 70,
+    "defense": 80,
+    "agility": 25,
+    "stamina": 65,
+    "intelligence": 40,
+    "special_attack": 55,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20240729/ourmid/pngtree-alaskan-king-crab-png-image_13272819.png"
+  },
+  {
+    "name": "Lobster",
+    "scientific_name": "Nephropidae",
+    "class": "Tank",
+    "type": "Invertebrate",
+    "attack": 65,
+    "defense": 85,
+    "agility": 35,
+    "stamina": 60,
+    "intelligence": 40,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://pngimg.com/d/lobster_PNG14234.png"
+  },
+  {
+    "name": "Praying Mantis",
+    "scientific_name": "Mantodea",
+    "class": "Fighter",
+    "type": "Insect",
+    "attack": 80,
+    "defense": 50,
+    "agility": 75,
+    "stamina": 60,
+    "intelligence": 55,
+    "special_attack": 70,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/previews/024/249/345/non_2x/praying-mantis-isolated-on-a-transparent-background-free-png.png"
+  },
+  {
+    "name": "Hercules Beetle",
+    "scientific_name": "Dynastes hercules",
+    "class": "Tank",
+    "type": "Insect",
+    "attack": 75,
+    "defense": 90,
+    "agility": 30,
+    "stamina": 70,
+    "intelligence": 35,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20250520/original/pngtree-png-hercules-beetle-vintage-insect-illustration-by-george-edwards-png-image_21035889.png"
+  },
+  {
+    "name": "Stag Beetle",
+    "scientific_name": "Lucanidae",
+    "class": "Fighter",
+    "type": "Insect",
+    "attack": 70,
+    "defense": 85,
+    "agility": 35,
+    "stamina": 65,
+    "intelligence": 35,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20250128/original/pngtree-stag-beetle-png-image_20342640.png"
+  },
+  {
+    "name": "Bullet Ant",
+    "scientific_name": "Paraponera clavata",
+    "class": "Soldier",
+    "type": "Insect",
+    "attack": 85,
+    "defense": 45,
+    "agility": 60,
+    "stamina": 80,
+    "intelligence": 50,
+    "special_attack": 90,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/thumbnails/050/760/407/small/macro-photography-of-a-black-ant-on-a-transparent-background-png.png"
+  },
+  {
+    "name": "Army Ant",
+    "scientific_name": "Dorylus",
+    "class": "Swarm",
+    "type": "Insect",
+    "attack": 60,
+    "defense": 40,
+    "agility": 50,
+    "stamina": 90,
+    "intelligence": 60,
+    "special_attack": 70,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20240731/original/pngtree-3d-army-ant-isolated-on-solid-transparent-background-ai-generative-png-image_15670375.png"
+  },
+  {
+    "name": "Monarch Butterfly",
+    "scientific_name": "Danaus plexippus",
+    "class": "Civilian",
+    "type": "Insect",
+    "attack": 10,
+    "defense": 10,
+    "agility": 60,
+    "stamina": 80,
+    "intelligence": 30,
+    "special_attack": 40,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20240819/original/pngtree-monarch-butterfly-transparent-png-image_15804597.png"
+  },
+  {
+    "name": "Dragonfly",
+    "scientific_name": "Anisoptera",
+    "class": "Ace",
+    "type": "Insect",
+    "attack": 65,
+    "defense": 30,
+    "agility": 100,
+    "stamina": 60,
+    "intelligence": 55,
+    "special_attack": 50,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-vector/20240129/ourmid/pngtree-dragonfly-png-with-ai-generated-png-image_11564530.png"
+  },
+  {
+    "name": "Hornet",
+    "scientific_name": "Vespa",
+    "class": "Soldier",
+    "type": "Insect",
+    "attack": 75,
+    "defense": 40,
+    "agility": 80,
+    "stamina": 65,
+    "intelligence": 55,
+    "special_attack": 85,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20240520/original/pngtree-an-asian-giant-hornet-on-transparent-background-png-image_15139707.png"
+  },
+  {
+    "name": "Tarantula Hawk",
+    "scientific_name": "Pepsis",
+    "class": "Slayer",
+    "type": "Insect",
+    "attack": 90,
+    "defense": 50,
+    "agility": 75,
+    "stamina": 70,
+    "intelligence": 45,
+    "special_attack": 95,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://assets.stickpng.com/images/65378ef8514828170c5c5aa8.png"
+  },
+  {
+    "name": "Black Widow",
+    "scientific_name": "Latrodectus",
+    "class": "Assassin",
+    "type": "Arachnid",
+    "attack": 85,
+    "defense": 30,
+    "agility": 60,
+    "stamina": 50,
+    "intelligence": 55,
+    "special_attack": 95,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://png.pngtree.com/png-clipart/20241117/original/pngtree-black-widow-spider-clipart-illustration-high-quality-graphic-png-image_17160500.png"
+  },
+  {
+    "name": "Huntsman Spider",
+    "scientific_name": "Sparassidae",
+    "class": "Speedster",
+    "type": "Arachnid",
+    "attack": 65,
+    "defense": 35,
+    "agility": 90,
+    "stamina": 60,
+    "intelligence": 50,
+    "special_attack": 60,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://static.vecteezy.com/system/resources/thumbnails/049/667/702/small/a-huntsman-spider-with-transparent-background-showing-its-eight-legs-and-three-eyes-on-a-black-background-png.png"
+  },
+  {
+    "name": "Deathstalker Scorpion",
+    "scientific_name": "Leiurus quinquestriatus",
+    "class": "Assassin",
+    "type": "Arachnid",
+    "attack": 80,
+    "defense": 60,
+    "agility": 65,
+    "stamina": 70,
+    "intelligence": 40,
+    "special_attack": 95,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://www.nicepng.com/png/full/26-261547_poisonous-scorpion-png-transparent-image-deathstalker-scorpion.png"
+  },
+  {
+    "name": "Camel Spider",
+    "scientific_name": "Solifugae",
+    "class": "Berserker",
+    "type": "Arachnid",
+    "attack": 70,
+    "defense": 45,
+    "agility": 85,
+    "stamina": 65,
+    "intelligence": 35,
+    "special_attack": 60,
+    "habitat": "Varied",
+    "size": "Medium",
+    "weight_kg": 50,
+    "height_cm": 50,
+    "length_cm": 100,
+    "speed_mps": 10,
+    "lifespan_years": 15,
+    "isNocturnal": false,
+    "isSocial": true,
+    "diet": [
+      "Varied"
+    ],
+    "bite_force_psi": 100,
+    "size_score": 50,
+    "unique_traits": [
+      "Distinctive appearance",
+      "Adapted to environment"
+    ],
+    "special_abilities": [
+      "Survival Instinct",
+      "Quick Reflexes"
+    ],
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Transparent_Background_Dromedary_Camel.png/250px-Transparent_Background_Dromedary_Camel.png"
   }
 ]
