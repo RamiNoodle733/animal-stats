@@ -485,6 +485,37 @@ class AnimalStatsApp {
         this.dom.info.abilities.textContent = animal.special_abilities?.join(', ') || 'None';
         this.dom.info.traits.textContent = animal.unique_traits?.join(', ') || 'None';
 
+        // Fight Profile Badge
+        const profileBadge = document.getElementById('fight-profile-badge');
+        if (profileBadge) {
+            profileBadge.textContent = animal.fight_profile ? `[ ${animal.fight_profile.toUpperCase()} ]` : '';
+        }
+
+        // Battle Profile (Substats)
+        const battleGrid = document.getElementById('battle-profile-grid');
+        if (battleGrid && animal.substats) {
+            const labels = {
+                raw_power: 'Raw Power', natural_weapons: 'Weapons',
+                armor: 'Armor', resilience: 'Resilience',
+                speed_stat: 'Speed', maneuverability: 'Agility',
+                endurance: 'Endurance', recovery: 'Recovery',
+                tactics: 'Tactics', senses: 'Senses',
+                ferocity: 'Ferocity', unique_abilities: 'Abilities'
+            };
+            
+            battleGrid.innerHTML = Object.entries(animal.substats).map(([key, val]) => `
+                <div class="battle-stat-item">
+                    <span class="battle-stat-label">${labels[key] || key}</span>
+                    <div class="battle-stat-value">${val}</div>
+                    <div class="battle-stat-bar-bg">
+                        <div class="battle-stat-bar-fill" style="width: ${val}%"></div>
+                    </div>
+                </div>
+            `).join('');
+        } else if (battleGrid) {
+            battleGrid.innerHTML = '<div style="grid-column: span 2; text-align: center; color: #666;">No battle profile data</div>';
+        }
+
         // Details Panel
         const d = this.dom.detailText;
         d.type.textContent = animal.type || '---';

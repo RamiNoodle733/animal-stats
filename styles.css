@@ -955,6 +955,54 @@ body {
     margin-right: 8px;
 }
 
+.fight-profile-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    color: var(--gold-color);
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+    text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+}
+
+.battle-profile-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.battle-stat-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px;
+    border-radius: 4px;
+}
+
+.battle-stat-label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    display: block;
+    margin-bottom: 2px;
+}
+
+.battle-stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: var(--text-light);
+}
+
+.battle-stat-bar-bg {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    margin-top: 4px;
+    border-radius: 2px;
+}
+
+.battle-stat-bar-fill {
+    height: 100%;
+    background: var(--primary-color);
+    border-radius: 2px;
+}
+
 @media (max-width: 1400px) {
     .character-display-area {
         gap: 10px;
