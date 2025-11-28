@@ -76,8 +76,8 @@ body {
     flex: 1;
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
-    gap: 15px;
-    padding: 10px;
+    gap: 10px;
+    padding: 5px;
     align-items: center;
     min-height: 0;
     max-height: 100%;
@@ -217,7 +217,8 @@ body {
 }
 
 .stats-panel-right .stat-value {
-    justify-content: flex-start;
+    justify-content: flex-end;
+    flex-direction: row-reverse;
 }
 
 .character-showcase {
@@ -253,7 +254,7 @@ body {
 .character-model-container {
     position: relative;
     width: 100%;
-    max-width: 400px;
+    max-width: 350px;
     aspect-ratio: 1;
     display: flex;
     align-items: center;
@@ -1302,7 +1303,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    margin-bottom: 8px;
+    margin-bottom: 5px;
 }
 
 .substat-container {
