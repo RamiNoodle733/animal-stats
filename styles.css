@@ -802,6 +802,36 @@ body {
     background: var(--dark-bg);
 }
 
+.filter-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.radar-chart-container {
+    width: 300px;
+    height: 300px;
+    position: relative;
+    margin: 10px 0;
+}
+
+.stat-tier-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+    color: #000;
+    font-weight: bold;
+    text-shadow: none;
+}
+
+.tier-s { background: #ffd700; box-shadow: 0 0 10px #ffd700; }
+.tier-a { background: #ff4d4d; box-shadow: 0 0 8px #ff4d4d; }
+.tier-b { background: #4d94ff; }
+.tier-c { background: #00ff88; }
+.tier-d { background: #b3b3b3; }
+
 .character-grid {
     display: flex;
     gap: 10px;
@@ -1105,10 +1135,19 @@ body {
         flex-direction: row;
         gap: 15px;
         margin: 10px 0;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
-    .vs-badge { font-size: 2.5rem; }
-    .fight-btn { padding: 10px 30px; font-size: 1.4rem; }
+    .radar-chart-container {
+        width: 100%;
+        max-width: 250px;
+        height: 250px;
+        order: 2;
+    }
+
+    .vs-badge { font-size: 2.5rem; order: 1; }
+    .fight-btn { padding: 10px 30px; font-size: 1.4rem; order: 3; }
 
     /* --- GRID & DETAILS --- */
     .character-grid-container {

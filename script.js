@@ -25,6 +25,8 @@ class AnimalStatsApp {
             filters: {
                 search: '',
                 class: 'all',
+                diet: 'all',
+                biome: 'all',
                 sort: 'name'
             }
         };
@@ -40,8 +42,11 @@ class AnimalStatsApp {
             gridWrapper: document.querySelector('.character-grid-container'),
             searchInput: document.getElementById('search-input'),
             classFilter: document.getElementById('class-filter'),
+            dietFilter: document.getElementById('diet-filter'),
+            biomeFilter: document.getElementById('biome-filter'),
             sortBy: document.getElementById('sort-by'),
             toggleGridBtn: document.getElementById('toggle-grid-btn'),
+            radarCanvas: document.getElementById('comparison-radar'),
             
             // Stats View Elements
             charName: document.getElementById('character-name'),
@@ -215,6 +220,8 @@ class AnimalStatsApp {
         // Search & Filter
         this.dom.searchInput.addEventListener('input', this.handleSearch);
         this.dom.classFilter.addEventListener('change', this.handleFilter);
+        this.dom.dietFilter.addEventListener('change', this.handleFilter);
+        this.dom.biomeFilter.addEventListener('change', this.handleFilter);
         this.dom.sortBy.addEventListener('change', this.handleSort);
         
         // Grid Interaction (Event Delegation)
@@ -260,7 +267,7 @@ class AnimalStatsApp {
     /**
      * Handle search input
      */
-    handleSearch(e) {
+    handleSearch = (e) => {
         this.state.filters.search = e.target.value.toLowerCase();
         this.applyFilters();
     }
@@ -268,36 +275,72 @@ class AnimalStatsApp {
     /**
      * Handle category filter
      */
-    handleFilter(e) {
-        this.state.filters.class = e.target.value;
+    handleFilter = (e) => {
+        // Check which filter triggered the event
+        if (e.target.id === 'class-filter') this.state.filters.class = e.target.value;
+        if (e.target.id === 'diet-filter') this.state.filters.diet = e.target.value;
+        if (e.target.id === 'biome-filter') this.state.filters.biome = e.target.value;
         this.applyFilters();
     }
 
     /**
      * Handle sort
      */
-    handleSort(e) {
+    handleSort = (e) => {
         this.state.filters.sort = e.target.value;
         this.applyFilters();
+    }
+
+    /**
+     * Helper to determine diet type
+     */
+    getDietType(animal) {
+        const diet = animal.diet.map(d => d.toLowerCase());
+        const hasMeat = diet.some(d => ['meat', 'fish', 'insects', 'small animals', 'prey', 'carrion'].some(k => d.includes(k)));
+        const hasPlants = diet.some(d => ['plants', 'fruits', 'grass', 'leaves', 'bark', 'roots', 'berries'].some(k => d.includes(k)));
+        
+        if (hasMeat && hasPlants) return 'Omnivore';
+        if (hasMeat) return 'Carnivore';
+        return 'Herbivore'; // Default
     }
 
     /**
      * Apply all filters and sort
      */
     applyFilters() {
-        const { search, class: classFilter, sort } = this.state.filters;
+        const { search, class: classFilter, diet: dietFilter, biome: biomeFilter, sort } = this.state.filters;
         
         // Filter
         this.state.filteredAnimals = this.state.animals.filter(animal => {
             const matchesSearch = animal.name.toLowerCase().includes(search);
             const matchesClass = classFilter === 'all' || animal.type === classFilter;
-            return matchesSearch && matchesClass;
+            
+            // Diet Filter
+            let matchesDiet = true;
+            if (dietFilter !== 'all') {
+                const animalDiet = this.getDietType(animal);
+                matchesDiet = animalDiet === dietFilter;
+            }
+
+            // Biome Filter
+            let matchesBiome = true;
+            if (biomeFilter !== 'all') {
+                matchesBiome = animal.habitat.toLowerCase().includes(biomeFilter.toLowerCase());
+            }
+
+            return matchesSearch && matchesClass && matchesDiet && matchesBiome;
         });
 
         // Sort
         this.state.filteredAnimals.sort((a, b) => {
             if (sort === 'name') return a.name.localeCompare(b.name);
             
+            if (sort === 'total') {
+                const totalA = a.attack + a.defense + a.agility + a.stamina + a.intelligence + a.special_attack;
+                const totalB = b.attack + b.defense + b.agility + b.stamina + b.intelligence + b.special_attack;
+                return totalB - totalA;
+            }
+
             // Map sort keys to data keys
             const keyMap = {
                 'attack': 'attack',
@@ -382,6 +425,17 @@ class AnimalStatsApp {
     }
 
     /**
+     * Calculate Tier based on stat value
+     */
+    calculateTier(value) {
+        if (value >= 90) return 'S';
+        if (value >= 80) return 'A';
+        if (value >= 65) return 'B';
+        if (value >= 50) return 'C';
+        return 'D';
+    }
+
+    /**
      * Update the Stats View UI
      */
     updateStatsView(animal) {
@@ -410,8 +464,14 @@ class AnimalStatsApp {
 
         Object.keys(this.dom.statBars).forEach(stat => {
             const value = statsMap[stat] || 0;
+            const tier = this.calculateTier(value);
+            
             if (this.dom.statBars[stat]) this.dom.statBars[stat].style.width = `${Math.min(value, 100)}%`;
-            if (this.dom.statValues[stat]) this.dom.statValues[stat].textContent = value;
+            
+            if (this.dom.statValues[stat]) {
+                // Add Tier Badge
+                this.dom.statValues[stat].innerHTML = `${value} <span class="stat-tier-badge tier-${tier.toLowerCase()}">${tier}</span>`;
+            }
         });
 
         // Mini Info
@@ -493,6 +553,7 @@ class AnimalStatsApp {
 
         this.state.compare[side] = animal;
         this.updateFighterCard(side, animal);
+        this.updateRadarChart(); // Update chart whenever a fighter changes
         
         // Auto-switch to other side if empty
         if (side === 'left' && !this.state.compare.right) {
@@ -505,6 +566,89 @@ class AnimalStatsApp {
 
         this.updateFightButton();
         this.renderGrid();
+    }
+
+    /**
+     * Update Radar Chart
+     */
+    updateRadarChart() {
+        const left = this.state.compare.left;
+        const right = this.state.compare.right;
+        
+        if (!this.dom.radarCanvas) return;
+
+        // Destroy existing chart if it exists
+        if (this.radarChart) {
+            this.radarChart.destroy();
+        }
+
+        // If no animals selected, don't render
+        if (!left && !right) return;
+
+        const ctx = this.dom.radarCanvas.getContext('2d');
+        
+        const data = {
+            labels: ['Attack', 'Defense', 'Agility', 'Stamina', 'Intel', 'Special'],
+            datasets: []
+        };
+
+        if (left) {
+            data.datasets.push({
+                label: left.name,
+                data: [left.attack, left.defense, left.agility, left.stamina, left.intelligence, left.special_attack],
+                fill: true,
+                backgroundColor: 'rgba(0, 255, 136, 0.2)',
+                borderColor: '#00ff88',
+                pointBackgroundColor: '#00ff88',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#00ff88'
+            });
+        }
+
+        if (right) {
+            data.datasets.push({
+                label: right.name,
+                data: [right.attack, right.defense, right.agility, right.stamina, right.intelligence, right.special_attack],
+                fill: true,
+                backgroundColor: 'rgba(255, 0, 153, 0.2)',
+                borderColor: '#ff0099',
+                pointBackgroundColor: '#ff0099',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#ff0099'
+            });
+        }
+
+        this.radarChart = new Chart(ctx, {
+            type: 'radar',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                elements: {
+                    line: { borderWidth: 2 }
+                },
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(255, 255, 255, 0.2)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.2)' },
+                        pointLabels: {
+                            color: '#fff',
+                            font: { family: 'Bebas Neue', size: 12 }
+                        },
+                        ticks: { display: false, backdropColor: 'transparent' },
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: { color: '#fff', font: { family: 'Inter' } }
+                    }
+                }
+            }
+        });
     }
 
     /**

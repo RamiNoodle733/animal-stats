@@ -17,6 +17,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <!-- Main Game Screen -->
@@ -214,6 +215,9 @@
                 
                 <div class="fight-center">
                     <div class="vs-badge">VS</div>
+                    <div class="radar-chart-container">
+                        <canvas id="comparison-radar"></canvas>
+                    </div>
                     <button class="fight-btn" id="fight-btn">
                         <i class="fas fa-bolt"></i> FIGHT <i class="fas fa-bolt"></i>
                     </button>
@@ -272,9 +276,27 @@
         <div class="character-grid-container">
             <div class="grid-controls">
                 <input type="text" id="search-input" placeholder="Search animals..." class="search-box">
-                <select id="class-filter" class="filter-select">
-                    <option value="all">All Types</option>
-                </select>
+                <div class="filter-group">
+                    <select id="class-filter" class="filter-select">
+                        <option value="all">All Classes</option>
+                    </select>
+                    <select id="diet-filter" class="filter-select">
+                        <option value="all">All Diets</option>
+                        <option value="Carnivore">Carnivore</option>
+                        <option value="Herbivore">Herbivore</option>
+                        <option value="Omnivore">Omnivore</option>
+                    </select>
+                    <select id="biome-filter" class="filter-select">
+                        <option value="all">All Biomes</option>
+                        <option value="Savanna">Savanna</option>
+                        <option value="Forest">Forest</option>
+                        <option value="Ocean">Ocean</option>
+                        <option value="Desert">Desert</option>
+                        <option value="Jungle">Jungle</option>
+                        <option value="Arctic">Arctic</option>
+                        <option value="River">River</option>
+                    </select>
+                </div>
                 <select id="sort-by" class="filter-select">
                     <option value="name">Sort by Name</option>
                     <option value="attack">Sort by Attack</option>
@@ -283,6 +305,7 @@
                     <option value="stamina">Sort by Stamina</option>
                     <option value="intelligence">Sort by Intelligence</option>
                     <option value="special">Sort by Special</option>
+                    <option value="total">Sort by Total Stats</option>
                 </select>
             </div>
             
