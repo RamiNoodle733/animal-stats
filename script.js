@@ -485,14 +485,8 @@ class AnimalStatsApp {
         this.dom.info.abilities.textContent = animal.special_abilities?.join(', ') || 'None';
         this.dom.info.traits.textContent = animal.unique_traits?.join(', ') || 'None';
 
-        // Fight Profile Badge
-        const profileBadge = document.getElementById('fight-profile-badge');
-        if (profileBadge) {
-            profileBadge.textContent = animal.fight_profile ? `[ ${animal.fight_profile.toUpperCase()} ]` : '';
-        }
-
-        // Battle Profile (Substats)
-        const battleGrid = document.getElementById('battle-profile-grid');
+        // Battle Profile (Substats) - Main Screen
+        const battleGrid = document.getElementById('main-battle-profile');
         if (battleGrid && animal.substats) {
             const labels = {
                 raw_power: 'Raw Power', natural_weapons: 'Weapons',
@@ -503,17 +497,37 @@ class AnimalStatsApp {
                 ferocity: 'Ferocity', unique_abilities: 'Abilities'
             };
             
-            battleGrid.innerHTML = Object.entries(animal.substats).map(([key, val]) => `
-                <div class="battle-stat-item">
-                    <span class="battle-stat-label">${labels[key] || key}</span>
-                    <div class="battle-stat-value">${val}</div>
-                    <div class="battle-stat-bar-bg">
-                        <div class="battle-stat-bar-fill" style="width: ${val}%"></div>
+            // Group by main stat for better layout
+            const groups = [
+                { name: 'ATTACK', s1: 'raw_power', s2: 'natural_weapons', color: '#ff6b00' },
+                { name: 'DEFENSE', s1: 'armor', s2: 'resilience', color: '#00d4ff' },
+                { name: 'AGILITY', s1: 'speed_stat', s2: 'maneuverability', color: '#00ff88' },
+                { name: 'STAMINA', s1: 'endurance', s2: 'recovery', color: '#ff3366' },
+                { name: 'INTEL', s1: 'tactics', s2: 'senses', color: '#9966ff' },
+                { name: 'SPECIAL', s1: 'ferocity', s2: 'unique_abilities', color: '#ffcc00' }
+            ];
+
+            battleGrid.innerHTML = groups.map(g => `
+                <div class="battle-group">
+                    <div class="battle-group-title" style="color: ${g.color}">${g.name}</div>
+                    <div class="battle-substat">
+                        <div class="substat-row">
+                            <span>${labels[g.s1]}</span>
+                            <span class="substat-val">${animal.substats[g.s1]}</span>
+                        </div>
+                        <div class="substat-bar-bg"><div class="substat-bar-fill" style="width: ${animal.substats[g.s1]}%; background: ${g.color}"></div></div>
+                    </div>
+                    <div class="battle-substat">
+                        <div class="substat-row">
+                            <span>${labels[g.s2]}</span>
+                            <span class="substat-val">${animal.substats[g.s2]}</span>
+                        </div>
+                        <div class="substat-bar-bg"><div class="substat-bar-fill" style="width: ${animal.substats[g.s2]}%; background: ${g.color}"></div></div>
                     </div>
                 </div>
             `).join('');
         } else if (battleGrid) {
-            battleGrid.innerHTML = '<div style="grid-column: span 2; text-align: center; color: #666;">No battle profile data</div>';
+            battleGrid.innerHTML = '<div style="text-align: center; color: #666;">No battle profile data</div>';
         }
 
         // Details Panel
