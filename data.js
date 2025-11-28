@@ -866,7 +866,7 @@ window.animalData = [
       "Reckless Fury",
       "Pain Immunity"
     ],
-    "image": "https://assets.stickpng.com/images/5c2e2b86a97bc40295eb8356.png",
+    "image": "https://www.pngmart.com/files/22/Honey-Badger-PNG-Clipart.png",
     "substats": {
       "raw_power": 35,
       "natural_weapons": 64,
@@ -1019,7 +1019,7 @@ window.animalData = [
       "Sonic Stun",
       "Pack Tactics"
     ],
-    "image": "https://static.vecteezy.com/system/resources/previews/059/979/876/non_2x/alluring-exceptional-a-leaping-bottlenose-dolphin-no-background-with-transparent-background-free-png.png",
+    "image": "https://www.pngmart.com/files/3/Dolphin-PNG-Transparent-Image.png",
     "substats": {
       "raw_power": 60,
       "natural_weapons": 63,
@@ -1691,7 +1691,7 @@ window.animalData = [
       "Mountain Leap",
       "Alpine Stalker"
     ],
-    "image": "https://assets.stickpng.com/images/580b57fbd9996e24bc43bc83.png",
+    "image": "https://www.pngmart.com/files/22/Snow-Leopard-PNG-Isolated-HD.png",
     "substats": {
       "raw_power": 50,
       "natural_weapons": 73,
@@ -1999,7 +1999,7 @@ window.animalData = [
       "Herd Charge",
       "Head Butt"
     ],
-    "image": "https://assets.stickpng.com/images/5a6f100aab538104d4a30e6d.png",
+    "image": "https://www.pngmart.com/files/7/Bison-Transparent-Background.png",
     "substats": {
       "raw_power": 52,
       "natural_weapons": 75,
@@ -2051,7 +2051,7 @@ window.animalData = [
       "Tusk Slash",
       "Charge"
     ],
-    "image": "https://png.pngtree.com/png-clipart/20230806/original/pngtree-cute-wild-boar-cartoon-savanna-wildlife-animal-vector-picture-image_9865864.png",
+    "image": "https://www.pngmart.com/files/1/Wild-Boar-PNG-File.png",
     "substats": {
       "raw_power": 53,
       "natural_weapons": 86,
@@ -2516,7 +2516,7 @@ window.animalData = [
       "Venom Spur",
       "Electric Sense"
     ],
-    "image": "https://assets.stickpng.com/thumbs/5c4cb66d426969027569a287.png",
+    "image": "https://www.pngmart.com/files/22/Platypus-PNG-Isolated-HD.png",
     "substats": {
       "raw_power": 8,
       "natural_weapons": 46,
@@ -2568,7 +2568,7 @@ window.animalData = [
       "Feeding Frenzy",
       "Flesh Strip"
     ],
-    "image": "https://assets.stickpng.com/images/5baf5596554c7f08176ec069.png",
+    "image": "https://www.pngmart.com/files/5/Piranha-PNG-Transparent-Image.png",
     "substats": {
       "raw_power": 20,
       "natural_weapons": 57,
@@ -2826,7 +2826,7 @@ window.animalData = [
       "Shell Defense",
       "Burrow Escape"
     ],
-    "image": "https://assets.stickpng.com/images/5c7f956c72f5d9028c17ecb1.png",
+    "image": "https://www.pngmart.com/files/22/Armadillo-PNG-Isolated-HD.png",
     "substats": {
       "raw_power": 15,
       "natural_weapons": 38,
@@ -3803,7 +3803,7 @@ window.animalData = [
       "Dive Bomb",
       "Scoop Net"
     ],
-    "image": "https://assets.stickpng.com/images/59f871173cec115efb36234f.png",
+    "image": "https://www.pngmart.com/files/4/Pelican-PNG-Transparent-Image.png",
     "substats": {
       "raw_power": 16,
       "natural_weapons": 50,
@@ -4369,7 +4369,7 @@ window.animalData = [
       "Altitude Master",
       "Horn Charge"
     ],
-    "image": "https://assets.stickpng.com/images/5e99c00ac5844500043c6e66.png",
+    "image": "https://www.pngmart.com/files/23/Yak-PNG-Isolated-Photo.png",
     "substats": {
       "raw_power": 49,
       "natural_weapons": 86,
@@ -4421,7 +4421,7 @@ window.animalData = [
       "Shield Wall",
       "Arctic Survivor"
     ],
-    "image": "https://assets.stickpng.com/images/5c822a2372f5d9028c17ed86.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Musk_ox_at_Dovrefjell.png/1200px-Musk_ox_at_Dovrefjell.png",
     "substats": {
       "raw_power": 46,
       "natural_weapons": 84,
@@ -4785,7 +4785,7 @@ window.animalData = [
       "Dam Builder",
       "Bite Defense"
     ],
-    "image": "https://assets.stickpng.com/images/584436aca6515b1e0ad75b61.png",
+    "image": "https://www.pngmart.com/files/16/Beaver-PNG-Transparent-Image.png",
     "substats": {
       "raw_power": 42,
       "natural_weapons": 58,
@@ -5921,7 +5921,7 @@ window.animalData = [
       "Sonic Blast",
       "Bubble Ring"
     ],
-    "image": "https://png.pngtree.com/png-clipart/20250731/original/pngtree-happy-white-beluga-whales-in-kawaii-style-with-pastel-colors-png-image_21515211.png",
+    "image": "https://www.pngmart.com/files/22/Beluga-Whale-PNG-Clipart.png",
     "substats": {
       "raw_power": 72,
       "natural_weapons": 52,
@@ -6178,7 +6178,7 @@ window.animalData = [
       "Cute Smile",
       "Selfie"
     ],
-    "image": "https://assets.stickpng.com/images/5c9b3ec073ce21029beb8d79.png",
+    "image": "https://www.pngmart.com/files/22/Quokka-PNG-Isolated-HD.png",
     "substats": {
       "raw_power": 25,
       "natural_weapons": 14,
@@ -6230,7 +6230,7 @@ window.animalData = [
       "Venom Injection",
       "Coil Grip"
     ],
-    "image": "https://assets.stickpng.com/images/5b3f4a762932ea028798795d.png",
+    "image": "https://www.pngmart.com/files/22/Centipede-PNG-Isolated-HD.png",
     "substats": {
       "raw_power": 13,
       "natural_weapons": 60,
@@ -6382,7 +6382,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://www.vhv.rs/dpng/d/511-5114750_lemur-png-transparent-ring-tailed-lemur-png-download.png",
+    "image": "https://www.pngmart.com/files/22/Lemur-PNG-Isolated-HD.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 42,
@@ -6431,7 +6431,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://assets.stickpng.com/images/5af949026554160a79bea0f4.png",
+    "image": "https://www.pngmart.com/files/22/Baboon-PNG-Isolated-HD.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 60,
@@ -7019,7 +7019,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://www.vhv.rs/dpng/d/477-4778323_transparent-wolf-png-maned-wolf-no-background-png.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Chrysocyon_brachyurus_-_Maned_wolf_-_01.jpg/1200px-Chrysocyon_brachyurus_-_Maned_wolf_-_01.jpg",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 56,
@@ -7362,7 +7362,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://png.pngtree.com/png-vector/20230808/ourmid/pngtree-weasel-clipart-cute-cartoon-style-weasel-animal-vector-illustration-png-image_6827636.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Mustela_erminea_2.jpg/800px-Mustela_erminea_2.jpg",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 52,
@@ -7656,7 +7656,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://png.pngtree.com/png-vector/20240529/ourmid/pngtree-black-rhino-on-a-white-background-vector-png-image_6970767.png",
+    "image": "https://www.pngmart.com/files/22/Black-Rhino-PNG-Isolated-Pic.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 75,
@@ -7803,7 +7803,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://assets.stickpng.com/images/580b57fbd9996e24bc43bb87.png",
+    "image": "https://www.pngmart.com/files/22/Bactrian-Camel-PNG-Isolated-HD.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 52,
@@ -8097,7 +8097,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://png.pngtree.com/png-vector/20220608/ourmid/pngtree-cute-wild-rodent-vector-quoll-png-image_4906281.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Eastern_Quoll.jpg/1200px-Eastern_Quoll.jpg",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 52,
@@ -8636,7 +8636,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://assets.stickpng.com/images/5bc05ef6dbc29e02dd827868.png",
+    "image": "https://www.pngmart.com/files/4/Puffin-PNG-Transparent-Image.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 38,
@@ -8685,7 +8685,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://assets.stickpng.com/images/580b57fbd9996e24bc43bb6f.png",
+    "image": "https://www.pngmart.com/files/3/Macaw-PNG-File.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 42,
@@ -9077,7 +9077,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://assets.stickpng.com/images/580b57fbd9996e24bc43bb4d.png",
+    "image": "https://www.pngmart.com/files/3/Crow-PNG-Transparent-Image.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 42,
@@ -11135,7 +11135,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://assets.stickpng.com/images/65378ef8514828170c5c5aa8.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Pepsis_grossa.jpg/1200px-Pepsis_grossa.jpg",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 79,
@@ -11331,7 +11331,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Transparent_Background_Dromedary_Camel.png/250px-Transparent_Background_Dromedary_Camel.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Solifugae_-_Camel_Spider.jpg/1200px-Solifugae_-_Camel_Spider.jpg",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 64,
@@ -11383,7 +11383,7 @@ window.animalData = [
       "Ancient Terror",
       "Whale Hunter"
     ],
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Megalodon_scale.svg/1200px-Megalodon_scale.svg.png",
+    "image": "https://www.pngmart.com/files/22/Megalodon-PNG-Transparent-Image.png",
     "substats": {
       "raw_power": 100,
       "natural_weapons": 100,
