@@ -2,7 +2,7 @@
 
 **Interactive Fighting Game-Style Animal Statistics Webapp** 
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://raminoodle733.github.io/animal-stats/)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://raminoodle733.github.io/animal-battle-stats/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Animals](https://img.shields.io/badge/Animals-123+-orange)](animal_stats.json)
 
