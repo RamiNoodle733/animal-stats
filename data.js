@@ -1019,7 +1019,7 @@ window.animalData = [
       "Sonic Stun",
       "Pack Tactics"
     ],
-    "image": "https://static.vecteezy.com/system/resources/previews/059/979/876/non_2x/alluring-exceptional-a-leaping-bottlenose-dolphin-no-background-with-transparent-background-free-png.png",
+    "image": "https://png.pngtree.com/png-vector/20240531/ourmid/pngtree-playful-cartoon-blue-atlantic-bottlenose-dolphin-png-image_12579985.png",
     "substats": {
       "raw_power": 60,
       "natural_weapons": 63,
@@ -1691,7 +1691,7 @@ window.animalData = [
       "Mountain Leap",
       "Alpine Stalker"
     ],
-    "image": "https://assets.stickpng.com/images/580b57fbd9996e24bc43bc83.png",
+    "image": "https://png.pngtree.com/png-clipart/20231008/original/pngtree-snow-leopard-transparent-background-png-image_13290636.png",
     "substats": {
       "raw_power": 50,
       "natural_weapons": 73,
@@ -2051,7 +2051,7 @@ window.animalData = [
       "Tusk Slash",
       "Charge"
     ],
-    "image": "https://static.vecteezy.com/system/resources/thumbnails/036/495/305/small/ai-generated-wild-boar-isolated-on-a-transparent-background-free-png.png",
+    "image": "https://pngimg.com/d/boar_PNG2.png",
     "substats": {
       "raw_power": 53,
       "natural_weapons": 86,
@@ -2516,7 +2516,7 @@ window.animalData = [
       "Venom Spur",
       "Electric Sense"
     ],
-    "image": "https://assets.stickpng.com/thumbs/5c4cb66d426969027569a287.png",
+    "image": "https://purepng.com/public/uploads/large/platypus-on-the-ground-gw2.png",
     "substats": {
       "raw_power": 8,
       "natural_weapons": 46,
@@ -2826,7 +2826,7 @@ window.animalData = [
       "Shell Defense",
       "Burrow Escape"
     ],
-    "image": "https://assets.stickpng.com/images/5c7f956c72f5d9028c17ecb1.png",
+    "image": "https://stickypng.com/wp-content/uploads/2023/07/5c7f956c72f5d9028c17ecb1.png",
     "substats": {
       "raw_power": 15,
       "natural_weapons": 38,
@@ -3803,7 +3803,7 @@ window.animalData = [
       "Dive Bomb",
       "Scoop Net"
     ],
-    "image": "https://assets.stickpng.com/images/59f871173cec115efb36234f.png",
+    "image": "https://static.vecteezy.com/system/resources/thumbnails/068/620/176/small/pelican-open-mouth-isolated-transparency-background-large-bird-long-beak-standing-wildlife-detailed-feather-texture-expressive-nature-animal-side-view-png.png",
     "substats": {
       "raw_power": 16,
       "natural_weapons": 50,
@@ -4785,7 +4785,7 @@ window.animalData = [
       "Dam Builder",
       "Bite Defense"
     ],
-    "image": "https://assets.stickpng.com/images/584436aca6515b1e0ad75b61.png",
+    "image": "https://png.pngtree.com/png-vector/20240809/ourmid/pngtree-the-industrious-life-of-beavers-amazing-facts-about-png-image_13420997.png",
     "substats": {
       "raw_power": 42,
       "natural_weapons": 58,
@@ -5921,7 +5921,7 @@ window.animalData = [
       "Sonic Blast",
       "Bubble Ring"
     ],
-    "image": "https://static.vecteezy.com/system/resources/thumbnails/049/388/399/small/beluga-whale-isolated-on-transparent-background-png.png",
+    "image": "https://png.pngtree.com/png-vector/20240205/ourmid/pngtree-beluga-whale-sealife-png-image_11621534.png",
     "substats": {
       "raw_power": 72,
       "natural_weapons": 52,
@@ -6178,7 +6178,7 @@ window.animalData = [
       "Cute Smile",
       "Selfie"
     ],
-    "image": "https://assets.stickpng.com/images/5c9b3ec073ce21029beb8d79.png",
+    "image": "https://png.pngtree.com/png-vector/20250506/ourmid/pngtree-cute-quokka-standing-on-hind-legs-with-friendly-expression-png-image_16165978.png",
     "substats": {
       "raw_power": 25,
       "natural_weapons": 14,
@@ -6230,7 +6230,7 @@ window.animalData = [
       "Venom Injection",
       "Coil Grip"
     ],
-    "image": "https://assets.stickpng.com/images/5b3f4a762932ea028798795d.png",
+    "image": "https://pngimg.com/d/centipede_PNG2.png",
     "substats": {
       "raw_power": 13,
       "natural_weapons": 60,
@@ -6382,7 +6382,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://png.pngtree.com/png-clipart/20250521/original/pngtree-ringtailed-lemur-png-image_21049937.png",
+    "image": "https://static.vecteezy.com/system/resources/previews/046/437/488/non_2x/ring-tailed-lemur-side-view-isolated-on-transparent-background-free-png.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 42,
@@ -6431,7 +6431,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://assets.stickpng.com/images/5af949026554160a79bea0f4.png",
+    "image": "https://assets.stickpng.com/images/5af948f56554160a79bea0f3.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 60,
@@ -7362,7 +7362,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://png.pngtree.com/element_our/20190522/ourmid/pngtree-cartoon-weasel-image_1072618.jpg",
+    "image": "https://static.vecteezy.com/system/resources/previews/071/094/211/non_2x/watercolor-stoat-animal-illustration-on-transparent-background-free-png.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 52,
@@ -7656,7 +7656,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://png.pngtree.com/png-vector/20240529/ourmid/pngtree-black-rhino-on-a-white-background-vector-png-image_6970767.png",
+    "image": "https://www.nicepng.com/png/full/278-2781004_rhinoceros-png-clip-art-black-rhinoceros-for-the.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 75,
@@ -7803,7 +7803,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://assets.stickpng.com/images/580b57fbd9996e24bc43bb87.png",
+    "image": "https://parspng.com/wp-content/uploads/2024/02/camelpng.parspng.com-5.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 52,
@@ -8097,7 +8097,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://png.pngtree.com/png-vector/20220608/ourmid/pngtree-cute-wild-rodent-vector-quoll-png-image_4906281.png",
+    "image": "https://cdn.pixabay.com/photo/2022/12/14/21/47/quoll-7656363_1280.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 52,
@@ -8636,7 +8636,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://assets.stickpng.com/images/5bc05ef6dbc29e02dd827868.png",
+    "image": "https://assets.stickpng.com/images/5bc05f27dbc29e02dd82786c.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 38,
@@ -8685,7 +8685,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://assets.stickpng.com/images/580b57fbd9996e24bc43bb6f.png",
+    "image": "https://png.pngtree.com/png-clipart/20230429/ourmid/pngtree-isolated-scarlet-macaw-parrot-flying-on-transparent-png-image_6745591.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 42,
@@ -9077,7 +9077,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://assets.stickpng.com/images/580b57fbd9996e24bc43bb4d.png",
+    "image": "https://pngimg.com/d/crow_PNG3094.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 42,
@@ -11135,7 +11135,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://assets.stickpng.com/images/65378ef8514828170c5c5aa8.png",
+    "image": "https://texas.bugoutservice.com/wp-content/uploads/tarantula-hawk-on-white.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 79,
@@ -11331,7 +11331,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/Transparent_Background_Dromedary_Camel.png/250px-Transparent_Background_Dromedary_Camel.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/7/78/Ammotrecha_itzaana_4414721993.png",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 64,
