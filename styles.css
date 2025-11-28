@@ -37,7 +37,7 @@ body {
 .game-header {
     background: linear-gradient(180deg, rgba(0, 212, 255, 0.2) 0%, transparent 100%);
     border-bottom: 3px solid var(--border-bright);
-    padding: 10px 20px;
+    padding: 5px 20px;
     text-align: center;
     box-shadow: 0 4px 20px rgba(0, 212, 255, 0.5);
     flex-shrink: 0;
@@ -77,7 +77,7 @@ body {
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     gap: 15px;
-    padding: 15px;
+    padding: 10px;
     align-items: center;
     min-height: 0;
     max-height: 100%;
@@ -134,25 +134,25 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 25px;
+    gap: 10px;
     padding: 0 10px;
 }
 
 .stat-group {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
 }
 
 .stat-row {
     display: grid;
-    grid-template-columns: 35px 80px 1fr 50px;
+    grid-template-columns: 35px 80px 1fr 75px;
     align-items: center;
     gap: 10px;
 }
 
 .stats-panel-right .stat-row {
-    grid-template-columns: 50px 1fr 80px 35px;
+    grid-template-columns: 75px 1fr 80px 35px;
 }
 
 .stat-icon {
@@ -209,7 +209,15 @@ body {
     font-size: 1.5rem;
     color: var(--gold-color);
     text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.9);
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.stats-panel-right .stat-value {
+    justify-content: flex-start;
 }
 
 .character-showcase {
@@ -245,7 +253,7 @@ body {
 .character-model-container {
     position: relative;
     width: 100%;
-    max-width: 500px;
+    max-width: 400px;
     aspect-ratio: 1;
     display: flex;
     align-items: center;
@@ -820,7 +828,7 @@ body {
     font-size: 0.9rem;
     padding: 2px 6px;
     border-radius: 4px;
-    margin-left: 8px;
+    margin-left: 0;
     color: #000;
     font-weight: bold;
     text-shadow: none;
@@ -1293,8 +1301,8 @@ body {
 .stat-group-container {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    margin-bottom: 15px;
+    gap: 4px;
+    margin-bottom: 8px;
 }
 
 .substat-container {
