@@ -22,16 +22,17 @@ body {
         repeating-linear-gradient(0deg, transparent 0px, rgba(0, 212, 255, 0.03) 1px, transparent 2px),
         repeating-linear-gradient(90deg, transparent 0px, rgba(0, 212, 255, 0.03) 1px, transparent 2px);
     color: var(--text-light);
-    overflow: hidden;
-    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 100vh;
     width: 100vw;
 }
 
 .game-screen {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    width: 100vw;
+    min-height: 100vh;
+    width: 100%;
 }
 
 .game-header {
@@ -62,7 +63,6 @@ body {
 .view-container {
     display: none;
     flex: 1;
-    overflow: hidden;
     min-height: 0;
 }
 
@@ -80,7 +80,6 @@ body {
     padding: 5px;
     align-items: center;
     min-height: 0;
-    max-height: 100%;
     position: relative;
     z-index: 5;
     transition: all 0.4s ease;
