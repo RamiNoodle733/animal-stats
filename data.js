@@ -866,7 +866,7 @@ window.animalData = [
       "Reckless Fury",
       "Pain Immunity"
     ],
-    "image": "https://www.pngmart.com/files/22/Honey-Badger-PNG-Clipart.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/4/42/Honey_Badger.jpg",
     "substats": {
       "raw_power": 35,
       "natural_weapons": 64,
@@ -1019,7 +1019,7 @@ window.animalData = [
       "Sonic Stun",
       "Pack Tactics"
     ],
-    "image": "https://www.pngmart.com/files/3/Dolphin-PNG-Transparent-Image.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Bottlenose_Dolphin.jpg",
     "substats": {
       "raw_power": 60,
       "natural_weapons": 63,
@@ -1691,7 +1691,7 @@ window.animalData = [
       "Mountain Leap",
       "Alpine Stalker"
     ],
-    "image": "https://www.pngmart.com/files/22/Snow-Leopard-PNG-Isolated-HD.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Curious_Snow_leopard.jpg",
     "substats": {
       "raw_power": 50,
       "natural_weapons": 73,
@@ -1999,7 +1999,7 @@ window.animalData = [
       "Herd Charge",
       "Head Butt"
     ],
-    "image": "https://www.pngmart.com/files/7/Bison-Transparent-Background.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Waldbison_Bison_bison_athabascae_Tierpark_Hellabrunn-13.jpg",
     "substats": {
       "raw_power": 52,
       "natural_weapons": 75,
@@ -2051,7 +2051,7 @@ window.animalData = [
       "Tusk Slash",
       "Charge"
     ],
-    "image": "https://www.pngmart.com/files/1/Wild-Boar-PNG-File.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/7/78/Wild_Boar_frontal.jpg",
     "substats": {
       "raw_power": 53,
       "natural_weapons": 86,
@@ -2516,7 +2516,7 @@ window.animalData = [
       "Venom Spur",
       "Electric Sense"
     ],
-    "image": "https://www.pngmart.com/files/22/Platypus-PNG-Isolated-HD.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/6/61/Platypus_%28Ornithorhynchus_anatinus%29._First_Description_1799.jpg",
     "substats": {
       "raw_power": 8,
       "natural_weapons": 46,
@@ -2568,7 +2568,7 @@ window.animalData = [
       "Feeding Frenzy",
       "Flesh Strip"
     ],
-    "image": "https://www.pngmart.com/files/5/Piranha-PNG-Transparent-Image.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/c/cd/Gregory_Moine_-_Red_bellied_Piranha_%28by%29.jpg",
     "substats": {
       "raw_power": 20,
       "natural_weapons": 57,
@@ -2826,7 +2826,7 @@ window.animalData = [
       "Shell Defense",
       "Burrow Escape"
     ],
-    "image": "https://www.pngmart.com/files/22/Armadillo-PNG-Isolated-HD.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Nine-banded_Armadillo.jpg",
     "substats": {
       "raw_power": 15,
       "natural_weapons": 38,
@@ -3803,7 +3803,7 @@ window.animalData = [
       "Dive Bomb",
       "Scoop Net"
     ],
-    "image": "https://www.pngmart.com/files/4/Pelican-PNG-Transparent-Image.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/0/06/Brown_pelican_in_flight_%28Bodega_Bay%29.jpg",
     "substats": {
       "raw_power": 16,
       "natural_weapons": 50,
@@ -4369,7 +4369,7 @@ window.animalData = [
       "Altitude Master",
       "Horn Charge"
     ],
-    "image": "https://www.pngmart.com/files/23/Yak-PNG-Isolated-Photo.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/7/76/Sarlyk_Yak2.jpg",
     "substats": {
       "raw_power": 49,
       "natural_weapons": 86,
@@ -4421,7 +4421,7 @@ window.animalData = [
       "Shield Wall",
       "Arctic Survivor"
     ],
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Musk_ox_at_Dovrefjell.png/1200px-Musk_ox_at_Dovrefjell.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Muskox_%28Ovibos_moschatus%29_male_Dovrefjell_4.jpg",
     "substats": {
       "raw_power": 46,
       "natural_weapons": 84,
@@ -4785,7 +4785,7 @@ window.animalData = [
       "Dam Builder",
       "Bite Defense"
     ],
-    "image": "https://www.pngmart.com/files/16/Beaver-PNG-Transparent-Image.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6b/American_Beaver.jpg",
     "substats": {
       "raw_power": 42,
       "natural_weapons": 58,
@@ -5921,7 +5921,7 @@ window.animalData = [
       "Sonic Blast",
       "Bubble Ring"
     ],
-    "image": "https://www.pngmart.com/files/22/Beluga-Whale-PNG-Clipart.png",
+    "image": "https://commons.wikimedia.org/wiki/File:Oceanogr%25C3%25A0fic_29102004.jpg",
     "substats": {
       "raw_power": 72,
       "natural_weapons": 52,
@@ -6178,7 +6178,7 @@ window.animalData = [
       "Cute Smile",
       "Selfie"
     ],
-    "image": "https://www.pngmart.com/files/22/Quokka-PNG-Isolated-HD.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Quokka_at_rottnest.jpg",
     "substats": {
       "raw_power": 25,
       "natural_weapons": 14,
@@ -6230,7 +6230,7 @@ window.animalData = [
       "Venom Injection",
       "Coil Grip"
     ],
-    "image": "https://www.pngmart.com/files/22/Centipede-PNG-Isolated-HD.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/8/8b/Scolopendra_gigantea.jpg",
     "substats": {
       "raw_power": 13,
       "natural_weapons": 60,
@@ -6382,7 +6382,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://www.pngmart.com/files/22/Lemur-PNG-Isolated-HD.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/4/4d/Ring-tailed_lemur_portrait_2.jpg",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 42,
@@ -6431,7 +6431,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://www.pngmart.com/files/22/Baboon-PNG-Isolated-HD.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/3/35/Olive_baboon_Ngorongoro.jpg",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 60,
@@ -7019,7 +7019,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Chrysocyon_brachyurus_-_Maned_wolf_-_01.jpg/1200px-Chrysocyon_brachyurus_-_Maned_wolf_-_01.jpg",
+    "image": "https://commons.wikimedia.org/wiki/File:Lobo_Guar%25C3%25A1_andando.jpg",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 56,
@@ -7362,7 +7362,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Mustela_erminea_2.jpg/800px-Mustela_erminea_2.jpg",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Mustela_erminea.jpg",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 52,
@@ -7656,7 +7656,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://www.pngmart.com/files/22/Black-Rhino-PNG-Isolated-Pic.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Black_rhino.jpg",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 75,
@@ -7803,7 +7803,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://www.pngmart.com/files/22/Bactrian-Camel-PNG-Isolated-HD.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/f/f5/The_Bactrian_Camel_of_Nubra_Valley.jpg",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 52,
@@ -8097,7 +8097,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Eastern_Quoll.jpg/1200px-Eastern_Quoll.jpg",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Eastern_quoll_%28Dasyurus_viverrinus%29_fawn_morph_Esk_Valley.jpg",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 52,
@@ -8636,7 +8636,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://www.pngmart.com/files/4/Puffin-PNG-Transparent-Image.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Puffin_%28Fratercula_arctica%29.jpg",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 38,
@@ -8685,7 +8685,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://www.pngmart.com/files/3/Macaw-PNG-File.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Blue-and-Yellow-Macaw.jpg",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 42,
@@ -9077,7 +9077,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://www.pngmart.com/files/3/Crow-PNG-Transparent-Image.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Corvus-brachyrhynchos-001.jpg",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 42,
@@ -11135,7 +11135,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Pepsis_grossa.jpg/1200px-Pepsis_grossa.jpg",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/3/34/Tarantula_hawk_wasp_3.jpg",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 79,
@@ -11331,7 +11331,7 @@ window.animalData = [
       "Survival Instinct",
       "Quick Reflexes"
     ],
-    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Solifugae_-_Camel_Spider.jpg/1200px-Solifugae_-_Camel_Spider.jpg",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/5/58/Solifugae_-camel_spider-siamak_sabet_%282%29.jpg",
     "substats": {
       "raw_power": 45,
       "natural_weapons": 64,
@@ -11383,7 +11383,7 @@ window.animalData = [
       "Ancient Terror",
       "Whale Hunter"
     ],
-    "image": "https://www.pngmart.com/files/22/Megalodon-PNG-Transparent-Image.png",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/9/9e/VMNH_megalodon.jpg",
     "substats": {
       "raw_power": 100,
       "natural_weapons": 100,
