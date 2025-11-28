@@ -1288,3 +1288,91 @@ body {
     }
 }
 
+
+/* --- NEW SUBSTAT STYLES --- */
+.stat-group-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+.substat-container {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 45px; /* Align with bar start */
+    padding-right: 50px; /* Align with bar end */
+}
+
+.substat-container.right-align {
+    padding-left: 50px;
+    padding-right: 45px;
+}
+
+.substat-row {
+    display: grid;
+    grid-template-columns: 70px 1fr 30px;
+    align-items: center;
+    gap: 8px;
+}
+
+.substat-container.right-align .substat-row {
+    grid-template-columns: 30px 1fr 70px;
+}
+
+.substat-label {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.substat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.9rem;
+    color: #fff;
+    text-align: center;
+}
+
+.substat-bar-bg {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.substat-bar-fill {
+    height: 100%;
+    border-radius: 2px;
+}
+
+/* Hide the old battle profile grid since we moved it */
+.main-battle-profile {
+    display: none !important;
+}
+
+/* Adjust mobile layout for new substats */
+@media (max-width: 1024px) {
+    .substat-container {
+        padding-left: 0;
+        padding-right: 0;
+        margin-top: -5px;
+        margin-bottom: 10px;
+    }
+    
+    .substat-container.right-align {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    
+    .substat-row {
+        grid-template-columns: 60px 1fr 30px;
+    }
+    
+    .substat-container.right-align .substat-row {
+        grid-template-columns: 30px 1fr 60px;
+    }
+}
+

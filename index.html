@@ -39,23 +39,70 @@
                 <!-- Left Stats Panel -->
                 <div class="stats-panel stats-panel-left">
                     <div class="stat-group" id="left-stats">
-                        <div class="stat-row">
-                            <div class="stat-icon"><i class="fas fa-fist-raised"></i></div>
-                            <div class="stat-name">ATTACK</div>
-                            <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-attack-bar" style="width: 0%; background: #ff6b00;"></div></div></div>
-                            <div class="stat-value" id="stat-attack-val">0</div>
+                        <!-- ATTACK GROUP -->
+                        <div class="stat-group-container">
+                            <div class="stat-row">
+                                <div class="stat-icon"><i class="fas fa-fist-raised"></i></div>
+                                <div class="stat-name">ATTACK</div>
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-attack-bar" style="width: 0%; background: #ff6b00;"></div></div></div>
+                                <div class="stat-value" id="stat-attack-val">0</div>
+                            </div>
+                            <div class="substat-container">
+                                <div class="substat-row">
+                                    <span class="substat-label">Raw Power</span>
+                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-raw-power-bar" style="width: 0%; background: #ff6b00;"></div></div>
+                                    <span class="substat-value" id="sub-raw-power-val">0</span>
+                                </div>
+                                <div class="substat-row">
+                                    <span class="substat-label">Weapons</span>
+                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-natural-weapons-bar" style="width: 0%; background: #ff6b00;"></div></div>
+                                    <span class="substat-value" id="sub-natural-weapons-val">0</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="stat-row">
-                            <div class="stat-icon"><i class="fas fa-shield-alt"></i></div>
-                            <div class="stat-name">DEFENSE</div>
-                            <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-defense-bar" style="width: 0%; background: #00d4ff;"></div></div></div>
-                            <div class="stat-value" id="stat-defense-val">0</div>
+
+                        <!-- DEFENSE GROUP -->
+                        <div class="stat-group-container">
+                            <div class="stat-row">
+                                <div class="stat-icon"><i class="fas fa-shield-alt"></i></div>
+                                <div class="stat-name">DEFENSE</div>
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-defense-bar" style="width: 0%; background: #00d4ff;"></div></div></div>
+                                <div class="stat-value" id="stat-defense-val">0</div>
+                            </div>
+                            <div class="substat-container">
+                                <div class="substat-row">
+                                    <span class="substat-label">Armor</span>
+                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-armor-bar" style="width: 0%; background: #00d4ff;"></div></div>
+                                    <span class="substat-value" id="sub-armor-val">0</span>
+                                </div>
+                                <div class="substat-row">
+                                    <span class="substat-label">Resilience</span>
+                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-resilience-bar" style="width: 0%; background: #00d4ff;"></div></div>
+                                    <span class="substat-value" id="sub-resilience-val">0</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="stat-row">
-                            <div class="stat-icon"><i class="fas fa-wind"></i></div>
-                            <div class="stat-name">AGILITY</div>
-                            <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-agility-bar" style="width: 0%; background: #00ff88;"></div></div></div>
-                            <div class="stat-value" id="stat-agility-val">0</div>
+
+                        <!-- AGILITY GROUP -->
+                        <div class="stat-group-container">
+                            <div class="stat-row">
+                                <div class="stat-icon"><i class="fas fa-wind"></i></div>
+                                <div class="stat-name">AGILITY</div>
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-agility-bar" style="width: 0%; background: #00ff88;"></div></div></div>
+                                <div class="stat-value" id="stat-agility-val">0</div>
+                            </div>
+                            <div class="substat-container">
+                                <div class="substat-row">
+                                    <span class="substat-label">Speed</span>
+                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-speed-stat-bar" style="width: 0%; background: #00ff88;"></div></div>
+                                    <span class="substat-value" id="sub-speed-stat-val">0</span>
+                                </div>
+                                <div class="substat-row">
+                                    <span class="substat-label">Agility</span>
+                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-maneuverability-bar" style="width: 0%; background: #00ff88;"></div></div>
+                                    <span class="substat-value" id="sub-maneuverability-val">0</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -71,11 +118,6 @@
                         <img id="character-model" class="character-model" src="" alt="" style="display: none;">
                     </div>
                     
-                    <!-- Battle Profile (Substats) -->
-                    <div class="main-battle-profile" id="main-battle-profile">
-                        <!-- Populated by JS -->
-                    </div>
-
                     <!-- Compact info badges -->
                     <div class="character-mini-info" id="character-mini-info"></div>
                 </div>
@@ -83,23 +125,70 @@
                 <!-- Right Stats Panel -->
                 <div class="stats-panel stats-panel-right">
                     <div class="stat-group" id="right-stats">
-                        <div class="stat-row">
-                            <div class="stat-value" id="stat-stamina-val">0</div>
-                            <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-stamina-bar" style="width: 0%; background: #ff3366;"></div></div></div>
-                            <div class="stat-name">STAMINA</div>
-                            <div class="stat-icon"><i class="fas fa-heart"></i></div>
+                        <!-- STAMINA GROUP -->
+                        <div class="stat-group-container">
+                            <div class="stat-row">
+                                <div class="stat-value" id="stat-stamina-val">0</div>
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-stamina-bar" style="width: 0%; background: #ff3366;"></div></div></div>
+                                <div class="stat-name">STAMINA</div>
+                                <div class="stat-icon"><i class="fas fa-heart"></i></div>
+                            </div>
+                            <div class="substat-container right-align">
+                                <div class="substat-row">
+                                    <span class="substat-value" id="sub-endurance-val">0</span>
+                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-endurance-bar" style="width: 0%; background: #ff3366;"></div></div>
+                                    <span class="substat-label">Endurance</span>
+                                </div>
+                                <div class="substat-row">
+                                    <span class="substat-value" id="sub-recovery-val">0</span>
+                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-recovery-bar" style="width: 0%; background: #ff3366;"></div></div>
+                                    <span class="substat-label">Recovery</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="stat-row">
-                            <div class="stat-value" id="stat-intelligence-val">0</div>
-                            <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-intelligence-bar" style="width: 0%; background: #9966ff;"></div></div></div>
-                            <div class="stat-name">INTELLIGENCE</div>
-                            <div class="stat-icon"><i class="fas fa-brain"></i></div>
+
+                        <!-- INTEL GROUP -->
+                        <div class="stat-group-container">
+                            <div class="stat-row">
+                                <div class="stat-value" id="stat-intelligence-val">0</div>
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-intelligence-bar" style="width: 0%; background: #9966ff;"></div></div></div>
+                                <div class="stat-name">INTELLIGENCE</div>
+                                <div class="stat-icon"><i class="fas fa-brain"></i></div>
+                            </div>
+                            <div class="substat-container right-align">
+                                <div class="substat-row">
+                                    <span class="substat-value" id="sub-tactics-val">0</span>
+                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-tactics-bar" style="width: 0%; background: #9966ff;"></div></div>
+                                    <span class="substat-label">Tactics</span>
+                                </div>
+                                <div class="substat-row">
+                                    <span class="substat-value" id="sub-senses-val">0</span>
+                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-senses-bar" style="width: 0%; background: #9966ff;"></div></div>
+                                    <span class="substat-label">Senses</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="stat-row">
-                            <div class="stat-value" id="stat-special-val">0</div>
-                            <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-special-bar" style="width: 0%; background: #ffcc00;"></div></div></div>
-                            <div class="stat-name">SPECIAL</div>
-                            <div class="stat-icon"><i class="fas fa-bolt"></i></div>
+
+                        <!-- SPECIAL GROUP -->
+                        <div class="stat-group-container">
+                            <div class="stat-row">
+                                <div class="stat-value" id="stat-special-val">0</div>
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-special-bar" style="width: 0%; background: #ffcc00;"></div></div></div>
+                                <div class="stat-name">SPECIAL</div>
+                                <div class="stat-icon"><i class="fas fa-bolt"></i></div>
+                            </div>
+                            <div class="substat-container right-align">
+                                <div class="substat-row">
+                                    <span class="substat-value" id="sub-ferocity-val">0</span>
+                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-ferocity-bar" style="width: 0%; background: #ffcc00;"></div></div>
+                                    <span class="substat-label">Ferocity</span>
+                                </div>
+                                <div class="substat-row">
+                                    <span class="substat-value" id="sub-unique_abilities-val">0</span>
+                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-unique_abilities-bar" style="width: 0%; background: #ffcc00;"></div></div>
+                                    <span class="substat-label">Abilities</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

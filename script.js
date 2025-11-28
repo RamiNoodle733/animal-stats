@@ -485,49 +485,28 @@ class AnimalStatsApp {
         this.dom.info.abilities.textContent = animal.special_abilities?.join(', ') || 'None';
         this.dom.info.traits.textContent = animal.unique_traits?.join(', ') || 'None';
 
-        // Battle Profile (Substats) - Main Screen
-        const battleGrid = document.getElementById('main-battle-profile');
-        if (battleGrid && animal.substats) {
-            const labels = {
-                raw_power: 'Raw Power', natural_weapons: 'Weapons',
-                armor: 'Armor', resilience: 'Resilience',
-                speed_stat: 'Speed', maneuverability: 'Agility',
-                endurance: 'Endurance', recovery: 'Recovery',
-                tactics: 'Tactics', senses: 'Senses',
-                ferocity: 'Ferocity', unique_abilities: 'Abilities'
+        // Update Substats in Side Panels
+        if (animal.substats) {
+            const setSub = (id, val) => {
+                const elVal = document.getElementById(`${id}-val`);
+                const elBar = document.getElementById(`${id}-bar`);
+                if (elVal) elVal.textContent = val;
+                if (elBar) elBar.style.width = `${Math.min(val, 100)}%`;
             };
-            
-            // Group by main stat for better layout
-            const groups = [
-                { name: 'ATTACK', s1: 'raw_power', s2: 'natural_weapons', color: '#ff6b00' },
-                { name: 'DEFENSE', s1: 'armor', s2: 'resilience', color: '#00d4ff' },
-                { name: 'AGILITY', s1: 'speed_stat', s2: 'maneuverability', color: '#00ff88' },
-                { name: 'STAMINA', s1: 'endurance', s2: 'recovery', color: '#ff3366' },
-                { name: 'INTEL', s1: 'tactics', s2: 'senses', color: '#9966ff' },
-                { name: 'SPECIAL', s1: 'ferocity', s2: 'unique_abilities', color: '#ffcc00' }
-            ];
 
-            battleGrid.innerHTML = groups.map(g => `
-                <div class="battle-group">
-                    <div class="battle-group-title" style="color: ${g.color}">${g.name}</div>
-                    <div class="battle-substat">
-                        <div class="substat-row">
-                            <span>${labels[g.s1]}</span>
-                            <span class="substat-val">${animal.substats[g.s1]}</span>
-                        </div>
-                        <div class="substat-bar-bg"><div class="substat-bar-fill" style="width: ${animal.substats[g.s1]}%; background: ${g.color}"></div></div>
-                    </div>
-                    <div class="battle-substat">
-                        <div class="substat-row">
-                            <span>${labels[g.s2]}</span>
-                            <span class="substat-val">${animal.substats[g.s2]}</span>
-                        </div>
-                        <div class="substat-bar-bg"><div class="substat-bar-fill" style="width: ${animal.substats[g.s2]}%; background: ${g.color}"></div></div>
-                    </div>
-                </div>
-            `).join('');
-        } else if (battleGrid) {
-            battleGrid.innerHTML = '<div style="text-align: center; color: #666;">No battle profile data</div>';
+            setSub('sub-raw-power', animal.substats.raw_power);
+            setSub('sub-natural-weapons', animal.substats.natural_weapons);
+            setSub('sub-armor', animal.substats.armor);
+            setSub('sub-resilience', animal.substats.resilience);
+            setSub('sub-speed-stat', animal.substats.speed_stat);
+            setSub('sub-maneuverability', animal.substats.maneuverability);
+            
+            setSub('sub-endurance', animal.substats.endurance);
+            setSub('sub-recovery', animal.substats.recovery);
+            setSub('sub-tactics', animal.substats.tactics);
+            setSub('sub-senses', animal.substats.senses);
+            setSub('sub-ferocity', animal.substats.ferocity);
+            setSub('sub-unique_abilities', animal.substats.unique_abilities);
         }
 
         // Details Panel
