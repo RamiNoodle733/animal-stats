@@ -254,7 +254,7 @@ body {
 .character-model-container {
     position: relative;
     width: 100%;
-    max-width: 350px;
+    max-width: 320px;
     aspect-ratio: 1;
     display: flex;
     align-items: center;
@@ -486,13 +486,13 @@ body {
 }
 
 .fight-screen {
-    height: calc(100vh - 70px - 240px);
+    min-height: 500px;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 40px;
     padding: 20px;
-    overflow: hidden;
+    flex-wrap: wrap;
 }
 
 .fighter-section {
@@ -1031,9 +1031,9 @@ body {
 @media (max-width: 1024px) {
     /* --- GLOBAL LAYOUT RESET --- */
     .game-screen {
-        height: 100vh; /* Fallback */
-        height: 100dvh; /* Dynamic viewport height for mobile browsers */
-        overflow: hidden;
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto;
     }
 
     /* --- HEADER --- */
@@ -1302,8 +1302,8 @@ body {
 .stat-group-container {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    margin-bottom: 5px;
+    gap: 2px;
+    margin-bottom: 4px;
 }
 
 .substat-container {
