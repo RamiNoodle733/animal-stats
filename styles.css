@@ -490,9 +490,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 40px;
+    gap: 20px;
     padding: 20px;
-    flex-wrap: wrap;
+    overflow-x: auto;
 }
 
 .fighter-section {
@@ -518,7 +518,7 @@ body {
     align-items: center;
     justify-content: center;
     box-shadow: 0 0 30px rgba(0, 212, 255, 0.5), inset 0 0 30px rgba(0, 212, 255, 0.1);
-    flex-shrink: 0;
+    flex-shrink: 1;
     min-height: 0;
     cursor: pointer;
     transition: all 0.3s ease;
