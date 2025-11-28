@@ -175,11 +175,24 @@ class AnimalStatsApp {
      * Fetch animal data from JSON
      */
     async fetchData() {
-        const response = await fetch('animal_stats.json');
-        if (!response.ok) throw new Error('Network response was not ok');
-        const data = await response.json();
-        this.state.animals = data;
-        this.state.filteredAnimals = [...data];
+        // Check for global data first (fixes local file CORS issues)
+        if (window.animalData) {
+            this.state.animals = window.animalData;
+            this.state.filteredAnimals = [...window.animalData];
+            return;
+        }
+
+        // Fallback to fetch
+        try {
+            const response = await fetch('animal_stats.json');
+            if (!response.ok) throw new Error('Network response was not ok');
+            const data = await response.json();
+            this.state.animals = data;
+            this.state.filteredAnimals = [...data];
+        } catch (error) {
+            console.error('Error loading data:', error);
+            throw error;
+        }
     }
 
     /**

@@ -1,4 +1,4 @@
-[
+window.animalData = [
   {
     "name": "African Elephant",
     "scientific_name": "Loxodonta africana",
@@ -4627,4 +4627,4 @@
     ],
     "image": "https://png.pngtree.com/png-clipart/20231007/ourmid/pngtree-keel-billed-toucan-transparent-background-png-image_10196216.png"
   }
-]
+];
