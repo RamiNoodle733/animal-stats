@@ -949,113 +949,99 @@ body {
 }
 
 @media (max-width: 1024px) {
-    .character-display-area {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto 1fr auto;
+    /* --- GLOBAL LAYOUT RESET --- */
+    .game-screen {
+        height: 100vh; /* Fallback */
+        height: 100dvh; /* Dynamic viewport height for mobile browsers */
+        overflow: hidden;
     }
-    
-    .stats-panel-left {
-        order: 1;
-    }
-    
-    .character-showcase {
-        order: 2;
-    }
-    
-    .stats-panel-right {
-        order: 3;
-    }
-    
-    .fight-screen {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto;
-    }
-    
-    .game-header h1 {
-        font-size: 1.5rem;
-        letter-spacing: 4px;
-    }
-    
-    .mode-btn {
-        padding: 8px 20px;
-        font-size: 0.9rem;
-        letter-spacing: 2px;
-    }
-    
-    .details-grid {
-        grid-template-columns: 1fr;
-    }
-}
 
-/* --- MOBILE OPTIMIZATIONS (Phones) --- */
-@media (max-width: 768px) {
-    /* Header Adjustments */
+    /* --- HEADER --- */
     .game-header {
         padding: 10px;
-        gap: 15px;
+        gap: 10px;
         flex-wrap: wrap;
+        justify-content: center;
     }
 
     .game-header h1 {
         font-size: 1.5rem;
         width: 100%;
-        order: -1; /* Title on top */
+        order: -1;
         margin-bottom: 5px;
+        letter-spacing: 3px;
     }
 
     .mode-btn {
-        padding: 8px 16px;
-        font-size: 0.9rem;
-        flex: 1; /* Buttons share width */
+        padding: 8px 12px;
+        font-size: 0.85rem;
+        flex: 1;
+        min-width: 100px;
     }
 
-    /* Stats View Layout */
+    /* --- STATS VIEW (STACKED) --- */
     .character-display-area {
-        display: flex;
-        flex-direction: column;
+        display: flex !important; /* Force Flexbox */
+        flex-direction: column !important;
         padding: 10px;
-        overflow-y: auto; /* Allow scrolling within the area */
-        gap: 15px;
+        overflow-y: auto;
+        gap: 20px;
+        height: auto;
+        flex: 1;
     }
 
+    /* Order: Image/Name -> Left Stats -> Right Stats */
     .character-showcase {
-        order: 1; /* Character first */
+        order: 1;
         width: 100%;
-        min-height: auto;
+        flex: 0 0 auto;
+        margin-bottom: 10px;
+    }
+
+    .stats-panel-left {
+        order: 2;
+        width: 100%;
         flex: 0 0 auto;
     }
 
+    .stats-panel-right {
+        order: 3;
+        width: 100%;
+        flex: 0 0 auto;
+    }
+
+    /* Character Image & Name */
     .character-model-container {
-        max-width: 220px; /* Smaller image on phone */
-        margin: 10px 0;
+        max-width: 200px; /* Limit image size */
+        margin: 0 auto 10px;
     }
 
     .character-name-display {
-        font-size: 1.8rem;
+        font-size: 1.5rem; /* Smaller font */
+        line-height: 1.2;
+        margin-bottom: 5px;
     }
 
-    /* Stats Panels */
+    .character-scientific-name {
+        font-size: 0.8rem;
+    }
+
+    /* Stats Bars */
     .stats-panel {
-        width: 100%;
-        padding: 0;
-        gap: 10px;
-    }
-
-    .stats-panel-left { order: 2; }
-    .stats-panel-right { order: 3; }
-
-    .stat-group {
-        gap: 8px;
+        padding: 0 5px;
     }
 
     .stat-row {
-        grid-template-columns: 30px 70px 1fr 40px; /* Tighter columns */
+        /* Stack label and bar if needed, or keep row but tighter */
+        display: grid;
+        grid-template-columns: 30px 60px 1fr 35px;
         gap: 8px;
+        margin-bottom: 8px;
     }
     
-    /* Fix right panel grid to match left for consistency on mobile */
+    /* Ensure right panel matches left panel structure */
     .stats-panel-right .stat-row {
-        grid-template-columns: 30px 70px 1fr 40px;
+        grid-template-columns: 30px 60px 1fr 35px;
     }
     
     /* Reorder right panel items to match left (Icon | Name | Bar | Value) */
@@ -1064,108 +1050,88 @@ body {
     .stats-panel-right .stat-row .stat-bar-wrapper { order: 3; }
     .stats-panel-right .stat-row .stat-value { order: 4; }
 
-    /* Bottom Info Bar */
+    .stat-name { font-size: 0.9rem; }
+    .stat-value { font-size: 1.1rem; }
+
+    /* --- BOTTOM INFO BAR --- */
     .bottom-info-bar {
+        flex-wrap: wrap;
+        gap: 8px;
         padding: 8px;
-        gap: 10px;
-        justify-content: space-between;
+        justify-content: center;
     }
 
-    .info-separator { display: none; } /* Hide dots on mobile */
-    
+    .info-separator { display: none; }
+
     .info-item-inline {
-        font-size: 0.75rem;
-        width: 48%; /* 2 items per row */
+        width: 100%;
         justify-content: center;
+        font-size: 0.8rem;
+        background: rgba(0, 212, 255, 0.05);
+        padding: 4px;
+        border-radius: 4px;
     }
 
     .expand-details-btn, .toggle-grid-btn {
         width: 100%;
-        margin-top: 5px;
+        padding: 8px;
     }
 
-    /* Compare View (Fight Screen) */
+    /* --- COMPARE VIEW (STACKED) --- */
     .fight-screen {
-        flex-direction: column;
+        display: flex !important;
+        flex-direction: column !important;
         height: auto;
         overflow-y: auto;
-        padding: 10px;
-        gap: 15px;
+        padding: 20px 10px;
+        gap: 20px;
+        flex: 1;
     }
 
     .fighter-section {
         width: 100%;
         justify-content: center;
+        flex: 0 0 auto;
     }
-    
-    .fighter-left { flex-direction: row; } /* Reset reverse direction */
+
+    .fighter-left { flex-direction: row; } /* Reset reverse */
 
     .fighter-display {
-        width: 140px;
-        height: 140px;
+        width: 160px;
+        height: 160px;
     }
-
-    .fighter-placeholder i { font-size: 2rem; }
-    .fighter-placeholder p { font-size: 0.9rem; }
 
     .fight-center {
         flex-direction: row;
-        width: 100%;
-        justify-content: center;
         gap: 15px;
+        margin: 10px 0;
     }
 
-    .vs-badge { font-size: 2rem; }
-    
-    .fight-btn {
-        padding: 8px 20px;
-        font-size: 1.2rem;
-    }
+    .vs-badge { font-size: 2.5rem; }
+    .fight-btn { padding: 10px 30px; font-size: 1.4rem; }
 
-    /* Grid Controls */
+    /* --- GRID & DETAILS --- */
     .character-grid-container {
         height: auto;
-        max-height: 35vh; /* Limit height on mobile */
+        max-height: 30vh;
     }
 
-    .grid-controls {
-        flex-direction: column;
-        gap: 8px;
+    .details-grid {
+        grid-template-columns: 1fr;
     }
 
-    .search-box, .filter-select {
-        width: 100%;
-    }
-
-    .character-card {
-        min-width: 100px;
-        width: 100px;
-        height: 100px;
-    }
-    
-    .character-card-image {
-        height: 70px;
-    }
-    
-    .character-card-name {
-        font-size: 0.7rem;
-    }
-
-    /* Mobile Details Panel - Full Overlay */
     .details-panel {
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
         z-index: 100;
-        border-top: 2px solid var(--primary-color);
         background: rgba(5, 8, 16, 0.98);
-        padding-bottom: 20px; /* Safe area */
+        border-top: 2px solid var(--primary-color);
     }
-
+    
     .details-panel.expanded {
-        max-height: 85vh;
+        max-height: 80vh;
         overflow-y: auto;
-        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.8);
     }
 }
