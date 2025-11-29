@@ -22,8 +22,7 @@ body {
         repeating-linear-gradient(0deg, transparent 0px, rgba(0, 212, 255, 0.03) 1px, transparent 2px),
         repeating-linear-gradient(90deg, transparent 0px, rgba(0, 212, 255, 0.03) 1px, transparent 2px);
     color: var(--text-light);
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden; /* Prevent body scroll to keep app-like feel */
     height: 100vh;
     width: 100vw;
 }
@@ -33,6 +32,7 @@ body {
     flex-direction: column;
     height: 100%;
     width: 100%;
+    overflow: hidden;
 }
 
 .game-header {
@@ -46,6 +46,7 @@ body {
     align-items: center;
     justify-content: center;
     gap: 40px;
+    z-index: 50;
 }
 
 .game-header h1 {
@@ -64,6 +65,8 @@ body {
     display: none;
     flex: 1;
     min-height: 0;
+    overflow-y: auto; /* Allow scrolling within views */
+    overflow-x: hidden;
 }
 
 .view-container.active-view {
@@ -1390,36 +1393,97 @@ body {
 
 /* --- MOBILE PHONE OPTIMIZATIONS (Compact Compare Screen) --- */
 @media (max-width: 768px) {
+    /* 1. Fix Search/Filter Bar Height */
+    .character-grid-container {
+        height: 180px; /* Reduce height */
+        padding: 8px;
+    }
+
+    .grid-controls {
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .search-box {
+        width: 100%; /* Full width search */
+        padding: 6px;
+        font-size: 0.85rem;
+    }
+
+    .filter-group {
+        width: 100%;
+        display: flex;
+        gap: 5px;
+    }
+
+    .filter-select {
+        flex: 1; /* Distribute space evenly */
+        width: auto;
+        padding: 6px;
+        font-size: 0.8rem;
+        min-width: 0; /* Allow shrinking */
+    }
+    
+    #sort-by {
+        display: none; /* Hide sort on mobile to save space, or move to filter group */
+    }
+
+    /* 2. Fix Stats Vertical Space */
+    .character-display-area.compact-mode {
+        padding-bottom: 10px; /* Reduce padding */
+    }
+
+    .stat-row {
+        margin-bottom: 4px; /* Tighter rows */
+        gap: 5px;
+    }
+
+    .stat-bar {
+        height: 12px; /* Thinner bars */
+    }
+
+    .stat-icon {
+        font-size: 1.2rem;
+    }
+
+    .character-model-container {
+        max-width: 150px; /* Smaller image */
+        margin-bottom: 5px;
+    }
+
+    .character-name-display {
+        font-size: 1.5rem;
+    }
+
+    /* 3. Fix Compare Screen Layout */
     .fight-screen {
         display: grid !important;
-        grid-template-columns: 1fr auto 1fr;
+        grid-template-columns: 1fr 1fr;
         grid-template-rows: auto auto auto;
         grid-template-areas:
-            "p1 vs p2"
-            "chart chart chart"
-            "btn btn btn";
+            "p1 p2"
+            "chart chart"
+            "btn btn";
         gap: 10px;
         padding: 10px;
         align-content: start;
-        justify-items: center;
         height: auto;
         overflow-y: auto;
-        padding-bottom: 60px; /* Ensure space for bottom elements */
+        padding-bottom: 20px;
     }
 
-    /* Remove the flex behavior from the wrapper to let grid control placement */
     .fight-center {
         display: contents !important;
     }
 
-    /* Assign Grid Areas */
     .fighter-left { 
         grid-area: p1; 
         width: 100%;
         justify-content: center;
         margin: 0;
-        flex-direction: column !important; /* Stack image and button */
+        flex-direction: column !important;
         gap: 5px;
+        position: relative;
     }
     
     .fighter-right { 
@@ -1427,61 +1491,111 @@ body {
         width: 100%;
         justify-content: center;
         margin: 0;
-        flex-direction: column !important; /* Stack image and button */
+        flex-direction: column !important;
         gap: 5px;
+        position: relative;
     }
 
+    /* VS Badge - Positioned Absolute in the middle top */
     .vs-badge {
-        grid-area: vs;
+        position: absolute;
+        top: 60px; /* Adjust based on fighter image height */
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 20;
         font-size: 2rem;
+        text-shadow: 0 0 10px rgba(0,0,0,0.8);
+        pointer-events: none;
         margin: 0;
-        align-self: center;
-        order: unset; /* Reset flex order */
     }
 
     .radar-chart-container {
         grid-area: chart;
         width: 100%;
-        max-width: 280px;
-        height: 200px;
-        margin: 5px 0;
+        max-width: 220px;
+        height: 220px;
+        margin: 0 auto;
         order: unset;
     }
 
     .fight-btn {
         grid-area: btn;
         width: 100%;
-        max-width: 250px;
-        padding: 12px;
+        max-width: 200px;
+        padding: 10px;
         font-size: 1.5rem;
-        margin-top: 5px;
+        margin: 0 auto;
         order: unset;
     }
 
-    /* Resize Fighter Displays for Mobile */
+    /* Larger Fighter Displays */
     .fighter-display {
-        width: 100px;
-        height: 100px;
+        width: 100%; /* Fill grid cell */
+        max-width: 140px;
+        height: 140px;
         border-width: 2px;
     }
 
     .fighter-placeholder i {
-        font-size: 2rem;
+        font-size: 2.5rem;
     }
 
-    .fighter-placeholder p {
-        font-size: 0.8rem;
-        letter-spacing: 1px;
-    }
-    
     .view-stats-btn {
         padding: 4px 8px;
         font-size: 0.7rem;
+        width: 100%;
     }
 
-    /* Hide the stats panel in this compact view to prevent scrolling */
+    /* 4. Fix Compare Stats Visibility (Popup) */
     .compare-stats-panel {
-        display: none !important; 
+        display: none; /* Hidden by default, toggled by JS */
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        max-width: 300px;
+        z-index: 1000;
+        background: rgba(10, 14, 26, 0.98);
+        border: 2px solid var(--primary-color);
+        box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        padding: 15px;
+    }
+    
+    /* Add a backdrop when stats are open (optional, but good for UI) */
+    .compare-stats-panel::before {
+        content: 'TAP TO CLOSE';
+        display: block;
+        text-align: center;
+        font-size: 0.7rem;
+        color: rgba(255,255,255,0.5);
+        margin-bottom: 10px;
+    }
+}
+
+/* --- LAPTOP/DESKTOP FIXES --- */
+@media (min-width: 1025px) {
+    .fight-screen {
+        height: 100%;
+        max-height: calc(100vh - 240px - 60px); /* Subtract grid and header height */
+        overflow-y: auto;
+        align-items: center;
+        padding-bottom: 20px;
+    }
+
+    .vs-badge {
+        margin-top: 0; /* Reset margin */
+        margin-bottom: 10px;
+    }
+
+    .radar-chart-container {
+        width: 250px; /* Slightly smaller for laptops */
+        height: 250px;
+    }
+
+    .fighter-display {
+        width: 240px; /* Slightly smaller */
+        height: 240px;
     }
 }
 
