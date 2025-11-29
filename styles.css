@@ -1604,18 +1604,49 @@ body {
 /* Compare Controls Bar */
 .compare-controls-bar {
     justify-content: space-between;
-    padding: 10px 20px;
+    padding: 8px 20px; /* Match standard bar padding */
+    height: auto;
+    min-height: 50px; /* Ensure consistent height */
+    align-items: center;
 }
 
 .compare-controls-bar .fight-btn {
-    padding: 8px 30px;
-    font-size: 1.4rem;
+    padding: 6px 24px; /* Smaller padding to fit in bar */
+    font-size: 1.2rem; /* Smaller font */
     margin: 0;
-    box-shadow: 0 0 20px rgba(255, 107, 0, 0.4);
+    box-shadow: 0 0 15px rgba(255, 107, 0, 0.4);
+    border-width: 2px; /* Thinner border */
 }
 
 .compare-controls-bar .fight-btn:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 30px rgba(255, 107, 0, 0.8);
+    box-shadow: 0 0 25px rgba(255, 107, 0, 0.8);
+}
+
+/* Ensure Compare Screen fits vertically */
+@media (min-width: 1025px) {
+    .fight-screen {
+        /* Calculate height: 100vh - Header(60px) - Grid(240px) - ControlBar(50px) */
+        max-height: calc(100vh - 60px - 240px - 50px);
+        padding: 10px;
+        gap: 10px;
+        justify-content: center;
+        overflow: hidden; /* Prevent scroll if possible */
+    }
+
+    .radar-chart-container {
+        width: 260px; /* Slightly smaller to ensure fit */
+        height: 260px;
+        margin: 5px 0;
+    }
+
+    .fighter-display {
+        width: 240px; /* Slightly smaller to ensure fit */
+        height: 240px;
+    }
+    
+    .fighter-placeholder i {
+        font-size: 3rem;
+    }
 }
 
