@@ -136,7 +136,10 @@ class AnimalStatsApp {
             navBtns: {
                 stats: document.getElementById('stats-mode-btn'),
                 compare: document.getElementById('compare-mode-btn')
-            }
+            },
+            
+            // New Compare Controls
+            compareToggleGridBtn: document.getElementById('compare-toggle-grid-btn')
         };
 
         // Bind methods
@@ -233,6 +236,9 @@ class AnimalStatsApp {
         }
         if (this.dom.toggleGridBtn) {
             this.dom.toggleGridBtn.addEventListener('click', this.toggleGrid);
+        }
+        if (this.dom.compareToggleGridBtn) {
+            this.dom.compareToggleGridBtn.addEventListener('click', this.toggleGrid);
         }
         
         // Navigation
@@ -554,6 +560,17 @@ class AnimalStatsApp {
             this.dom.toggleGridBtn.style.display = 'flex';
         }
 
+        // Ensure grid state is synced
+        this.state.isGridVisible = true;
+        this.dom.gridWrapper.classList.remove('hidden');
+        
+        // Update buttons text
+        const updateBtn = (btn) => {
+            if (btn) btn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE MENU';
+        };
+        updateBtn(this.dom.toggleGridBtn);
+        updateBtn(this.dom.compareToggleGridBtn);
+
         this.renderGrid();
     }
 
@@ -753,11 +770,18 @@ class AnimalStatsApp {
         this.dom.gridWrapper.classList.toggle('hidden', !this.state.isGridVisible);
         this.dom.toggleGridBtn.classList.toggle('hidden', !this.state.isGridVisible);
         
-        if (this.state.isGridVisible) {
-            this.dom.toggleGridBtn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE MENU';
-        } else {
-            this.dom.toggleGridBtn.innerHTML = '<i class="fas fa-chevron-up"></i> SHOW MENU';
-        }
+        // Update both buttons if they exist
+        const updateBtn = (btn) => {
+            if (!btn) return;
+            if (this.state.isGridVisible) {
+                btn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE MENU';
+            } else {
+                btn.innerHTML = '<i class="fas fa-chevron-up"></i> SHOW MENU';
+            }
+        };
+
+        updateBtn(this.dom.toggleGridBtn);
+        updateBtn(this.dom.compareToggleGridBtn);
     }
 
     /**

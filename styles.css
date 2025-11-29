@@ -1582,33 +1582,40 @@ body {
         align-items: center;
         justify-content: center; /* Center content vertically */
         padding-bottom: 20px;
-        gap: 10px; /* Reduce gap */
+        gap: 20px; /* Restore gap */
     }
 
     .fight-center {
-        gap: 10px; /* Reduce gap between VS, Chart, Button */
-    }
-
-    .vs-badge {
-        margin-top: 0;
-        margin-bottom: 0;
-        font-size: 2.5rem; /* Smaller VS text */
+        gap: 20px; /* Restore gap */
     }
 
     .radar-chart-container {
-        width: 220px; /* Smaller chart to fit */
-        height: 220px;
-        margin: 5px 0;
+        width: 300px; /* Restore size */
+        height: 300px;
+        margin: 10px 0;
     }
 
     .fighter-display {
-        width: 220px; /* Smaller fighter boxes */
-        height: 220px;
+        width: 280px; /* Restore size */
+        height: 280px;
     }
+}
 
-    .fight-btn {
-        padding: 10px 30px; /* Smaller button padding */
-        font-size: 1.5rem;
-    }
+/* Compare Controls Bar */
+.compare-controls-bar {
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+.compare-controls-bar .fight-btn {
+    padding: 8px 30px;
+    font-size: 1.4rem;
+    margin: 0;
+    box-shadow: 0 0 20px rgba(255, 107, 0, 0.4);
+}
+
+.compare-controls-bar .fight-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(255, 107, 0, 0.8);
 }
 
