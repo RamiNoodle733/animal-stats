@@ -1580,22 +1580,35 @@ body {
         max-height: calc(100vh - 240px - 60px); /* Subtract grid and header height */
         overflow-y: auto;
         align-items: center;
+        justify-content: center; /* Center content vertically */
         padding-bottom: 20px;
+        gap: 10px; /* Reduce gap */
+    }
+
+    .fight-center {
+        gap: 10px; /* Reduce gap between VS, Chart, Button */
     }
 
     .vs-badge {
-        margin-top: 0; /* Reset margin */
-        margin-bottom: 10px;
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 2.5rem; /* Smaller VS text */
     }
 
     .radar-chart-container {
-        width: 250px; /* Slightly smaller for laptops */
-        height: 250px;
+        width: 220px; /* Smaller chart to fit */
+        height: 220px;
+        margin: 5px 0;
     }
 
     .fighter-display {
-        width: 240px; /* Slightly smaller */
-        height: 240px;
+        width: 220px; /* Smaller fighter boxes */
+        height: 220px;
+    }
+
+    .fight-btn {
+        padding: 10px 30px; /* Smaller button padding */
+        font-size: 1.5rem;
     }
 }
 
