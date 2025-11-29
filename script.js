@@ -94,7 +94,12 @@ class AnimalStatsApp {
                 lifespan: document.getElementById('detail-lifespan'),
                 bite: document.getElementById('detail-bite'),
                 sizeScore: document.getElementById('detail-size-score'),
-                description: document.getElementById('animal-description')
+                description: document.getElementById('animal-description'),
+                // Battle Profile
+                combatStyle: document.getElementById('detail-combat-style'),
+                range: document.getElementById('detail-range'),
+                strengths: document.getElementById('detail-strengths'),
+                weaknesses: document.getElementById('detail-weaknesses')
             },
             
             // Compare View Elements
@@ -500,6 +505,7 @@ class AnimalStatsApp {
                 if (elBar) elBar.style.width = `${Math.min(val, 100)}%`;
             };
 
+            // Map JSON keys to HTML IDs
             setSub('sub-raw-power', animal.substats.raw_power);
             setSub('sub-natural-weapons', animal.substats.natural_weapons);
             setSub('sub-armor', animal.substats.armor);
@@ -532,6 +538,19 @@ class AnimalStatsApp {
         d.bite.textContent = animal.bite_force_psi ? `${animal.bite_force_psi} PSI` : '---';
         d.sizeScore.textContent = animal.size_score ? `${animal.size_score.toFixed(1)} / 100` : '---';
         d.description.textContent = animal.description || 'No description available yet.';
+
+        // Battle Profile
+        if (animal.battle_profile) {
+            d.combatStyle.textContent = animal.battle_profile.combat_style || '---';
+            d.range.textContent = animal.battle_profile.preferred_range || '---';
+            d.strengths.textContent = Array.isArray(animal.battle_profile.strengths) ? animal.battle_profile.strengths.join(', ') : '---';
+            d.weaknesses.textContent = Array.isArray(animal.battle_profile.weaknesses) ? animal.battle_profile.weaknesses.join(', ') : '---';
+        } else {
+            d.combatStyle.textContent = '---';
+            d.range.textContent = '---';
+            d.strengths.textContent = '---';
+            d.weaknesses.textContent = '---';
+        }
     }
 
     /**
