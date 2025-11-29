@@ -1388,3 +1388,100 @@ body {
     }
 }
 
+/* --- MOBILE PHONE OPTIMIZATIONS (Compact Compare Screen) --- */
+@media (max-width: 768px) {
+    .fight-screen {
+        display: grid !important;
+        grid-template-columns: 1fr auto 1fr;
+        grid-template-rows: auto auto auto;
+        grid-template-areas:
+            "p1 vs p2"
+            "chart chart chart"
+            "btn btn btn";
+        gap: 10px;
+        padding: 10px;
+        align-content: start;
+        justify-items: center;
+        height: auto;
+        overflow-y: auto;
+        padding-bottom: 60px; /* Ensure space for bottom elements */
+    }
+
+    /* Remove the flex behavior from the wrapper to let grid control placement */
+    .fight-center {
+        display: contents !important;
+    }
+
+    /* Assign Grid Areas */
+    .fighter-left { 
+        grid-area: p1; 
+        width: 100%;
+        justify-content: center;
+        margin: 0;
+        flex-direction: column !important; /* Stack image and button */
+        gap: 5px;
+    }
+    
+    .fighter-right { 
+        grid-area: p2; 
+        width: 100%;
+        justify-content: center;
+        margin: 0;
+        flex-direction: column !important; /* Stack image and button */
+        gap: 5px;
+    }
+
+    .vs-badge {
+        grid-area: vs;
+        font-size: 2rem;
+        margin: 0;
+        align-self: center;
+        order: unset; /* Reset flex order */
+    }
+
+    .radar-chart-container {
+        grid-area: chart;
+        width: 100%;
+        max-width: 280px;
+        height: 200px;
+        margin: 5px 0;
+        order: unset;
+    }
+
+    .fight-btn {
+        grid-area: btn;
+        width: 100%;
+        max-width: 250px;
+        padding: 12px;
+        font-size: 1.5rem;
+        margin-top: 5px;
+        order: unset;
+    }
+
+    /* Resize Fighter Displays for Mobile */
+    .fighter-display {
+        width: 100px;
+        height: 100px;
+        border-width: 2px;
+    }
+
+    .fighter-placeholder i {
+        font-size: 2rem;
+    }
+
+    .fighter-placeholder p {
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+    }
+    
+    .view-stats-btn {
+        padding: 4px 8px;
+        font-size: 0.7rem;
+    }
+
+    /* Hide the stats panel in this compact view to prevent scrolling */
+    .compare-stats-panel {
+        display: none !important; 
+    }
+}
+
