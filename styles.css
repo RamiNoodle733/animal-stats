@@ -486,13 +486,14 @@ body {
 }
 
 .fight-screen {
-    min-height: 500px;
+    min-height: 0; /* Removed fixed min-height to prevent overflow */
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 20px;
     padding: 20px;
     overflow-x: auto;
+    flex: 1; /* Allow it to fill available space */
 }
 
 .fighter-section {
@@ -714,6 +715,7 @@ body {
     text-shadow: 0 0 30px rgba(255, 107, 0, 1), 0 0 60px rgba(255, 107, 0, 0.6);
     animation: pulse 2s ease-in-out infinite;
     flex-shrink: 0;
+    margin-top: 20px; /* Add margin to prevent it from being too high */
 }
 
 @keyframes pulse {
@@ -1166,6 +1168,7 @@ body {
         padding: 20px 10px;
         gap: 20px;
         flex: 1;
+        min-height: 0; /* Ensure it doesn't force height */
     }
 
     .fighter-section {
