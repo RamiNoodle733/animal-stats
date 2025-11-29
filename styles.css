@@ -663,7 +663,7 @@ body {
     border-radius: 8px;
     padding: 12px;
     backdrop-filter: blur(10px);
-    display: flex;
+    display: none; /* Hidden by default, shown via JS */
     flex-direction: column;
     gap: 8px;
 }
@@ -1172,13 +1172,20 @@ body {
         width: 100%;
         justify-content: center;
         flex: 0 0 auto;
+        flex-direction: column; /* Stack image and stats on mobile */
+        gap: 10px;
     }
 
-    .fighter-left { flex-direction: row; } /* Reset reverse */
+    .fighter-left { flex-direction: column; } /* Reset reverse and stack */
 
     .fighter-display {
         width: 160px;
         height: 160px;
+    }
+    
+    .compare-stats-panel {
+        width: 100%;
+        max-width: 280px; /* Match fighter display width roughly */
     }
 
     .fight-center {

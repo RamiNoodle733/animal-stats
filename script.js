@@ -104,7 +104,6 @@ class AnimalStatsApp {
                 name: document.getElementById('animal-1-name'),
                 placeholder: document.getElementById('animal-1-placeholder'),
                 statsPanel: document.getElementById('compare-stats-1'),
-                viewStatsBtn: document.getElementById('view-stats-1'),
                 stats: {
                     attack: document.getElementById('compare-attack-1'),
                     defense: document.getElementById('compare-defense-1'),
@@ -120,7 +119,6 @@ class AnimalStatsApp {
                 name: document.getElementById('animal-2-name'),
                 placeholder: document.getElementById('animal-2-placeholder'),
                 statsPanel: document.getElementById('compare-stats-2'),
-                viewStatsBtn: document.getElementById('view-stats-2'),
                 stats: {
                     attack: document.getElementById('compare-attack-2'),
                     defense: document.getElementById('compare-defense-2'),
@@ -243,16 +241,6 @@ class AnimalStatsApp {
         this.dom.fighter1.display.addEventListener('click', () => this.setSelectingSide('left'));
         this.dom.fighter2.display.addEventListener('click', () => this.setSelectingSide('right'));
         
-        // View Stats Buttons in Compare Mode
-        this.dom.fighter1.viewStatsBtn?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.toggleFighterStats('left');
-        });
-        this.dom.fighter2.viewStatsBtn?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            this.toggleFighterStats('right');
-        });
-
         this.dom.fightBtn.addEventListener('click', this.startFight);
         
         // Keyboard Navigation
@@ -688,6 +676,9 @@ class AnimalStatsApp {
         
         els.name.textContent = animal.name.toUpperCase();
         
+        // Show stats panel
+        els.statsPanel.style.display = 'flex';
+        
         // Update hidden stats
         const statsMap = {
             attack: animal.attack,
@@ -701,12 +692,6 @@ class AnimalStatsApp {
         Object.keys(els.stats).forEach(stat => {
             if (els.stats[stat]) els.stats[stat].textContent = statsMap[stat]?.toFixed(1) || '0';
         });
-    }
-
-    toggleFighterStats(side) {
-        const els = side === 'left' ? this.dom.fighter1 : this.dom.fighter2;
-        const isVisible = els.statsPanel.style.display === 'block';
-        els.statsPanel.style.display = isVisible ? 'none' : 'block';
     }
 
     updateFightButton() {
