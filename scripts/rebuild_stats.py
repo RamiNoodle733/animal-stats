@@ -19,6 +19,47 @@ SIZE_BASE = {
     "Colossal": 98.0,
 }
 
+SIZE_ORDER = ["Tiny", "Small", "Medium", "Large", "Extra Large", "Colossal"]
+SIZE_ORDER_INDEX = {label: idx for idx, label in enumerate(SIZE_ORDER)}
+
+SIZE_SUBSTAT_ADJUSTMENTS = {
+    "Tiny": {"armor": -35, "resilience": -25, "raw_power": -28, "endurance": -18, "recovery": -8},
+    "Small": {"armor": -20, "resilience": -12, "raw_power": -15, "endurance": -8},
+    "Medium": {},
+    "Large": {"armor": 6, "resilience": 6, "raw_power": 5},
+    "Extra Large": {"armor": 12, "resilience": 10, "raw_power": 8, "recovery": 4},
+    "Colossal": {"armor": 18, "resilience": 14, "raw_power": 12, "recovery": 6},
+}
+
+SIZE_MAIN_CAPS = {
+    "Tiny": {"defense": 52.0, "stamina": 58.0, "attack": 55.0},
+    "Small": {"defense": 65.0, "stamina": 68.0},
+}
+
+SIZE_MAIN_FLOORS = {
+    "Large": {"defense": 60.0},
+    "Extra Large": {"defense": 70.0, "stamina": 72.0},
+    "Colossal": {"defense": 80.0, "stamina": 82.0},
+}
+
+SIZE_WEIGHT_BREAKS = [
+    ("Tiny", 0.5),
+    ("Small", 15.0),
+    ("Medium", 200.0),
+    ("Large", 800.0),
+    ("Extra Large", 3000.0),
+    ("Colossal", float("inf")),
+]
+
+SIZE_LENGTH_BREAKS = [
+    ("Tiny", 40.0),
+    ("Small", 150.0),
+    ("Medium", 400.0),
+    ("Large", 800.0),
+    ("Extra Large", 1500.0),
+    ("Colossal", float("inf")),
+]
+
 TYPE_ALIAS = {
     "Marsupial": "Mammal",
     "Arthropod": "Invertebrate",
@@ -150,6 +191,20 @@ def determine_diet(diet_list: List[str]) -> str:
     return "Omnivore"
 
 
+def label_from_breaks(value: float, table: List[Tuple[str, float]]) -> str:
+    for label, threshold in table:
+        if value < threshold:
+            return label
+    return table[-1][0]
+
+
+def infer_size_from_metrics(weight: float, length: float) -> str:
+    weight_label = label_from_breaks(weight, SIZE_WEIGHT_BREAKS)
+    length_label = label_from_breaks(length, SIZE_LENGTH_BREAKS)
+    rank = min(SIZE_ORDER_INDEX.get(weight_label, 2), SIZE_ORDER_INDEX.get(length_label, 2))
+    return SIZE_ORDER[rank]
+
+
 def build_text_blob(animal: Dict) -> str:
     battle = animal.get("battle_profile") or {}
     parts: List[str] = []
@@ -167,6 +222,20 @@ class HeuristicStatEngine:
     def __init__(self, animals: List[Dict]):
         self.animals = animals
         self.ranges = self._build_ranges()
+
+    def _resolve_size_label(self, declared: str, weight: float, length: float) -> str:
+        declared_rank = SIZE_ORDER_INDEX.get(declared, SIZE_ORDER_INDEX["Medium"])
+        inferred_label = infer_size_from_metrics(weight, length)
+        inferred_rank = SIZE_ORDER_INDEX.get(inferred_label, declared_rank)
+        final_rank = min(declared_rank, inferred_rank)
+        return SIZE_ORDER[final_rank]
+
+    @staticmethod
+    def _apply_size_caps(stats: Dict[str, float], size_label: str) -> None:
+        for stat, limit in SIZE_MAIN_CAPS.get(size_label, {}).items():
+            stats[stat] = min(stats[stat], limit)
+        for stat, floor in SIZE_MAIN_FLOORS.get(size_label, {}).items():
+            stats[stat] = max(stats[stat], floor)
 
     def _build_ranges(self) -> Dict[str, Tuple[float, float]]:
         def collect(key: str, default_min: float, default_max: float) -> Tuple[float, float]:
@@ -207,8 +276,7 @@ class HeuristicStatEngine:
         battle = animal.get("battle_profile") or {}
         raw_type = animal.get("type", "Unknown")
         normalized_type = TYPE_ALIAS.get(raw_type, raw_type)
-        size_label = animal.get("size", "Medium")
-        size_bonus = SIZE_BASE.get(size_label, 45.0)
+        declared_size = animal.get("size", "Medium")
 
         weight = max(float(animal.get("weight_kg") or self.ranges["weight"][0]), self.ranges["weight"][0])
         length = max(float(animal.get("length_cm") or self.ranges["length"][0]), self.ranges["length"][0])
@@ -216,6 +284,9 @@ class HeuristicStatEngine:
         speed = max(float(animal.get("speed_mps") or self.ranges["speed"][0]), self.ranges["speed"][0])
         bite = max(float(animal.get("bite_force_psi") or 0.0), 0.0)
         lifespan = max(float(animal.get("lifespan_years") or self.ranges["lifespan"][0]), self.ranges["lifespan"][0])
+
+        size_label = self._resolve_size_label(declared_size, weight, length)
+        size_bonus = SIZE_BASE.get(size_label, 45.0)
 
         habitat = (animal.get("habitat") or "").lower()
         is_aquatic = any(keyword in habitat for keyword in ("ocean", "sea", "river", "lake", "swamp", "reef", "coast", "wetland", "marsh"))
@@ -227,6 +298,7 @@ class HeuristicStatEngine:
             "type": normalized_type,
             "size_label": size_label,
             "size_bonus": size_bonus,
+            "size_rank": SIZE_ORDER_INDEX.get(size_label, 2),
             "mass_score": log_scale(weight, *self.ranges["weight"]),
             "length_score": linear_scale(length, *self.ranges["length"]),
             "height_score": linear_scale(height, *self.ranges["height"]),
@@ -278,8 +350,6 @@ class HeuristicStatEngine:
             0.2 * ctx["lifespan_score"] +
             0.1 * ctx["size_bonus"]
         )
-        if ctx["size_label"] in ("Tiny", "Small"):
-            armor -= 10
         if ctx["is_aquatic"]:
             armor += 4
 
@@ -391,6 +461,8 @@ class HeuristicStatEngine:
             "unique_abilities": unique_abilities,
         }
 
+        self._apply_adjustments(substats, SIZE_SUBSTAT_ADJUSTMENTS.get(ctx["size_label"], {}))
+
         self._apply_adjustments(substats, TYPE_TRAITS.get(ctx["type"], {}))
         self._apply_adjustments(substats, DIET_BONUS.get(diet, {}))
         for keyword, bonus in STYLE_KEYWORD_BONUSES:
@@ -416,52 +488,18 @@ class HeuristicStatEngine:
                 target[stat] += delta
 
     def _compute_main_stats(self, ctx: Dict, substats: Dict[str, float]) -> Dict[str, float]:
-        attack = clamp(
-            0.35 * substats["raw_power"] +
-            0.35 * substats["natural_weapons"] +
-            0.15 * ctx["bite_score"] +
-            0.15 * substats["ferocity"]
-        )
-
-        defense = clamp(
-            0.45 * substats["armor"] +
-            0.35 * substats["resilience"] +
-            0.2 * ctx["size_bonus"]
-        )
-
-        agility = clamp(
-            0.5 * substats["speed_stat"] +
-            0.3 * substats["maneuverability"] +
-            0.2 * ctx["mass_inverse"]
-        )
-
-        stamina = clamp(
-            0.45 * substats["endurance"] +
-            0.35 * substats["recovery"] +
-            0.2 * substats["resilience"]
-        )
-
-        intelligence = clamp(
-            0.6 * substats["tactics"] +
-            0.25 * substats["senses"] +
-            0.15 * (50 + 0.5 * ctx["lifespan_score"])
-        )
-
-        special_attack = clamp(
-            0.4 * substats["unique_abilities"] +
-            0.2 * substats["ferocity"] +
-            0.2 * substats["natural_weapons"] +
-            0.2 * substats["tactics"]
-        )
-
-        return {
-            "attack": round(attack, 1),
-            "defense": round(defense, 1),
-            "agility": round(agility, 1),
-            "stamina": round(stamina, 1),
-            "intelligence": round(intelligence, 1),
-            "special_attack": round(special_attack, 1),
+        stats = {
+            "attack": 0.35 * substats["raw_power"] + 0.35 * substats["natural_weapons"] + 0.15 * ctx["bite_score"] + 0.15 * substats["ferocity"],
+            "defense": 0.45 * substats["armor"] + 0.35 * substats["resilience"] + 0.2 * ctx["size_bonus"],
+            "agility": 0.5 * substats["speed_stat"] + 0.3 * substats["maneuverability"] + 0.2 * ctx["mass_inverse"],
+            "stamina": 0.45 * substats["endurance"] + 0.35 * substats["recovery"] + 0.2 * substats["resilience"],
+            "intelligence": 0.6 * substats["tactics"] + 0.25 * substats["senses"] + 0.15 * (50 + 0.5 * ctx["lifespan_score"]),
+            "special_attack": 0.4 * substats["unique_abilities"] + 0.2 * substats["ferocity"] + 0.2 * substats["natural_weapons"] + 0.2 * substats["tactics"],
         }
+
+        self._apply_size_caps(stats, ctx["size_label"])
+
+        return {key: round(clamp(value), 1) for key, value in stats.items()}
 
     def _compute_size_score(self, ctx: Dict) -> float:
         score = 0.6 * ctx["mass_score"] + 0.2 * ctx["length_score"] + 0.2 * ctx["height_score"]
