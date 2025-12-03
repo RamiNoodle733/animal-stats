@@ -2,7 +2,7 @@ window.animalData = [
   {
     "name": "African Elephant",
     "agility": 25.2,
-    "attack": 38.6,
+    "attack": 94.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Open Savanna",
@@ -21,7 +21,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:40.907Z",
-    "defense": 93.6,
+    "defense": 96.4,
     "description": "The largest land animal on Earth, possessing immense raw strength and high intelligence. Their thick skin and massive size make them nearly invulnerable to most predators.",
     "diet": [
       "plants",
@@ -71,14 +71,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 95
     },
-    "stats": {
-      "attack": 94.8
-    }
+    "stats": {}
   },
   {
     "name": "African Lion",
     "agility": 40.9,
-    "attack": 52.1,
+    "attack": 80.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Open Savanna",
@@ -97,7 +95,7 @@ window.animalData = [
     "bite_force_psi": 650,
     "class": "Bruiser",
     "createdAt": "2025-12-02T23:27:40.971Z",
-    "defense": 54.1,
+    "defense": 64.2,
     "description": "The King of Beasts, known for its majestic mane and social pride structure. Males are built for fighting rivals, while females are expert cooperative hunters.",
     "diet": [
       "zebras",
@@ -147,14 +145,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 80
     },
-    "stats": {
-      "attack": 80.8
-    }
+    "stats": {}
   },
   {
     "name": "African Wild Dog",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 60.4,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -171,7 +167,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Hunter",
     "createdAt": "2025-12-02T23:27:41.018Z",
-    "defense": 27.8,
+    "defense": 58.6,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -218,14 +214,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 60
     },
-    "stats": {
-      "attack": 60.4
-    }
+    "stats": {}
   },
   {
     "name": "Albatross",
     "agility": 51.4,
-    "attack": 27.3,
+    "attack": 9.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -242,7 +236,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Traveler",
     "createdAt": "2025-12-02T23:27:41.060Z",
-    "defense": 21.4,
+    "defense": 5.2,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -289,14 +283,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 9.9
-    }
+    "stats": {}
   },
   {
     "name": "Alligator",
     "agility": 38,
-    "attack": 66.2,
+    "attack": 86.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Swamps",
@@ -314,7 +306,7 @@ window.animalData = [
     "bite_force_psi": 2125,
     "class": "Ambush Predator",
     "createdAt": "2025-12-02T23:27:41.103Z",
-    "defense": 83.2,
+    "defense": 92.3,
     "description": "A Large creature found in Swamps, rivers, lakes.",
     "diet": [
       "fish",
@@ -364,14 +356,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 85
     },
-    "stats": {
-      "attack": 86.2
-    }
+    "stats": {}
   },
   {
     "name": "Alpaca",
     "agility": 34.5,
-    "attack": 16.7,
+    "attack": 19.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Mountains",
@@ -389,7 +379,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Herd Animal",
     "createdAt": "2025-12-02T23:27:41.143Z",
-    "defense": 31.9,
+    "defense": 20.5,
     "description": "A Small creature found in Mountains, grasslands.",
     "diet": [
       "grass",
@@ -438,14 +428,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 19.3
-    }
+    "stats": {}
   },
   {
     "name": "Anaconda",
     "agility": 28.8,
-    "attack": 52.2,
+    "attack": 78.4,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Swamp",
@@ -464,7 +452,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Grappler",
     "createdAt": "2025-12-02T23:27:41.195Z",
-    "defense": 69.2,
+    "defense": 37.9,
     "description": "The heaviest snake in the world, a master of constriction. It coils around prey, suffocating them with immense pressure.",
     "diet": [
       "mammals",
@@ -515,14 +503,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 75
     },
-    "stats": {
-      "attack": 78.4
-    }
+    "stats": {}
   },
   {
     "name": "Anglerfish",
     "agility": 38.7,
-    "attack": 26.3,
+    "attack": 39.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -539,7 +525,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Lure",
     "createdAt": "2025-12-02T23:27:41.248Z",
-    "defense": 26.4,
+    "defense": 28.4,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -586,14 +572,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 39.8
-    }
+    "stats": {}
   },
   {
     "name": "Anteater",
     "agility": 33.7,
-    "attack": 30.3,
+    "attack": 18.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Grasslands",
@@ -611,7 +595,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Specialist",
     "createdAt": "2025-12-02T23:27:41.300Z",
-    "defense": 46.6,
+    "defense": 0.55,
     "description": "A Medium creature found in Grasslands, forests.",
     "diet": [
       "ants",
@@ -660,14 +644,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 18.9
-    }
+    "stats": {}
   },
   {
     "name": "Arctic Fox",
     "agility": 42.9,
-    "attack": 16.9,
+    "attack": 72.6,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Arctic tundra",
@@ -685,7 +667,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Hunter",
     "createdAt": "2025-12-02T23:27:41.344Z",
-    "defense": 5.8,
+    "defense": 52.7,
     "description": "A Tiny creature found in Arctic tundra.",
     "diet": [
       "lemmings",
@@ -735,14 +717,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 72.6
-    }
+    "stats": {}
   },
   {
     "name": "Arctic Wolf",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 59.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -759,7 +739,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Hunter",
     "createdAt": "2025-12-02T23:27:41.405Z",
-    "defense": 27.8,
+    "defense": 58.1,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -806,14 +786,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 60
     },
-    "stats": {
-      "attack": 59.8
-    }
+    "stats": {}
   },
   {
     "name": "Armadillo",
     "agility": 37.2,
-    "attack": 23.7,
+    "attack": 9.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Forests",
@@ -831,7 +809,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Defender",
     "createdAt": "2025-12-02T23:27:41.459Z",
-    "defense": 28.2,
+    "defense": 83.7,
     "description": "A Small creature found in Forests, grasslands.",
     "diet": [
       "insects",
@@ -881,14 +859,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 9.7
-    }
+    "stats": {}
   },
   {
     "name": "Army Ant",
     "agility": 42.1,
-    "attack": 21,
+    "attack": 0.25,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -905,7 +881,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Swarm",
     "createdAt": "2025-12-02T23:27:41.513Z",
-    "defense": 22.8,
+    "defense": 0.5,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -952,14 +928,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 5
     },
-    "stats": {
-      "attack": 0.25
-    }
+    "stats": {}
   },
   {
     "name": "Axolotl",
     "agility": 38.9,
-    "attack": 11.5,
+    "attack": 0.55,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Lakes of Mexico City",
@@ -977,7 +951,7 @@ window.animalData = [
     "bite_force_psi": 20,
     "class": "Support",
     "createdAt": "2025-12-02T23:27:41.561Z",
-    "defense": 3.7,
+    "defense": 0.07,
     "description": "A Tiny creature found in Lakes of Mexico City.",
     "diet": [
       "worms",
@@ -1027,14 +1001,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 10
     },
-    "stats": {
-      "attack": 0.55
-    }
+    "stats": {}
   },
   {
     "name": "Baboon",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 54.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -1051,7 +1023,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Fighter",
     "createdAt": "2025-12-02T23:27:41.610Z",
-    "defense": 27.8,
+    "defense": 52.2,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -1098,14 +1070,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 54.7
-    }
+    "stats": {}
   },
   {
     "name": "Bactrian Camel",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 72.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -1122,7 +1092,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Survivor",
     "createdAt": "2025-12-02T23:27:41.654Z",
-    "defense": 27.8,
+    "defense": 73.6,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -1169,14 +1139,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 72.1
-    }
+    "stats": {}
   },
   {
     "name": "Badger",
     "agility": 36.5,
-    "attack": 35.5,
+    "attack": 9.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Forests",
@@ -1194,7 +1162,7 @@ window.animalData = [
     "bite_force_psi": 108,
     "class": "Digger",
     "createdAt": "2025-12-02T23:27:41.721Z",
-    "defense": 32.2,
+    "defense": 42.8,
     "description": "A Small creature found in Forests, grasslands.",
     "diet": [
       "worms",
@@ -1244,14 +1212,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 9.5
-    }
+    "stats": {}
   },
   {
     "name": "Bald Eagle",
     "agility": 72.1,
-    "attack": 42.5,
+    "attack": 54.2,
     "battle_profile": {
       "preferred_range": "Long range",
       "primary_environment": "Sky",
@@ -1270,7 +1236,7 @@ window.animalData = [
     "bite_force_psi": 400,
     "class": "Sky Hunter",
     "createdAt": "2025-12-02T23:27:41.772Z",
-    "defense": 19.8,
+    "defense": 20.2,
     "description": "A powerful raptor with a white head and tail. It uses massive talons to snatch fish and small mammals from the water or land.",
     "diet": [
       "fish",
@@ -1320,14 +1286,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 54.2
-    }
+    "stats": {}
   },
   {
     "name": "Barn Owl",
     "agility": 51.4,
-    "attack": 27.3,
+    "attack": 53.6,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -1344,7 +1308,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Hunter",
     "createdAt": "2025-12-02T23:27:41.823Z",
-    "defense": 21.4,
+    "defense": 19.9,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -1391,14 +1355,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 53.6
-    }
+    "stats": {}
   },
   {
     "name": "Barracuda",
     "agility": 38.7,
-    "attack": 26.3,
+    "attack": 39.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -1415,7 +1377,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Hunter",
     "createdAt": "2025-12-02T23:27:41.872Z",
-    "defense": 26.4,
+    "defense": 27.9,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -1462,14 +1424,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 39.3
-    }
+    "stats": {}
   },
   {
     "name": "Beaver",
     "agility": 33.9,
-    "attack": 24.4,
+    "attack": 29.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Rivers",
@@ -1487,7 +1447,7 @@ window.animalData = [
     "bite_force_psi": 180,
     "class": "Engineer",
     "createdAt": "2025-12-02T23:27:41.919Z",
-    "defense": 31.7,
+    "defense": 4.9,
     "description": "A Small creature found in Rivers, lakes, streams.",
     "diet": [
       "bark",
@@ -1536,14 +1496,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 30
     },
-    "stats": {
-      "attack": 29.8
-    }
+    "stats": {}
   },
   {
     "name": "Beluga Whale",
     "agility": 26.4,
-    "attack": 56.9,
+    "attack": 38.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Arctic and sub-Arctic waters",
@@ -1561,7 +1519,7 @@ window.animalData = [
     "bite_force_psi": 200,
     "class": "Support",
     "createdAt": "2025-12-02T23:27:41.961Z",
-    "defense": 73.2,
+    "defense": 83.1,
     "description": "A Large creature found in Arctic and sub-Arctic waters.",
     "diet": [
       "fish",
@@ -1610,14 +1568,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 38.7
-    }
+    "stats": {}
   },
   {
     "name": "Bighorn Sheep",
     "agility": 34.9,
-    "attack": 26.8,
+    "attack": 18.4,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Mountains",
@@ -1635,7 +1591,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Climber",
     "createdAt": "2025-12-02T23:27:42.022Z",
-    "defense": 53,
+    "defense": 19.6,
     "description": "A Medium creature found in Mountains, cliffs.",
     "diet": [
       "grass",
@@ -1684,14 +1640,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 18.4
-    }
+    "stats": {}
   },
   {
     "name": "Bison",
     "agility": 30.9,
-    "attack": 30.3,
+    "attack": 71.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Prairie",
@@ -1710,7 +1664,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:42.064Z",
-    "defense": 68.5,
+    "defense": 82.5,
     "description": "The largest land mammal in North America. Massive heads and shoulder humps power their devastating charges.",
     "diet": [
       "grass",
@@ -1759,14 +1713,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 71.7
-    }
+    "stats": {}
   },
   {
     "name": "Black Bear",
     "agility": 30.7,
-    "attack": 27.3,
+    "attack": 77.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -1783,7 +1735,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:42.108Z",
-    "defense": 36.7,
+    "defense": 77.8,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -1830,14 +1782,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 75
     },
-    "stats": {
-      "attack": 77.8
-    }
+    "stats": {}
   },
   {
     "name": "Black Mamba",
     "agility": 35.9,
-    "attack": 31.6,
+    "attack": 62.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Savannas of Africa",
@@ -1855,7 +1805,7 @@ window.animalData = [
     "bite_force_psi": 50,
     "class": "Assassin",
     "createdAt": "2025-12-02T23:27:42.150Z",
-    "defense": 22.3,
+    "defense": 37.4,
     "description": "A Small creature found in Savannas of Africa.",
     "diet": [
       "mammals",
@@ -1904,14 +1854,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 65
     },
-    "stats": {
-      "attack": 62.8
-    }
+    "stats": {}
   },
   {
     "name": "Black Panther",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 71.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -1928,7 +1876,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Assassin",
     "createdAt": "2025-12-02T23:27:42.193Z",
-    "defense": 27.8,
+    "defense": 63.7,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -1975,14 +1923,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 71.2
-    }
+    "stats": {}
   },
   {
     "name": "Black Rhinoceros",
     "agility": 30.7,
-    "attack": 27.3,
+    "attack": 91.4,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -1999,7 +1945,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:42.239Z",
-    "defense": 36.7,
+    "defense": 91.8,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -2046,14 +1992,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 91
     },
-    "stats": {
-      "attack": 91.4
-    }
+    "stats": {}
   },
   {
     "name": "Black Widow",
     "agility": 37.3,
-    "attack": 28,
+    "attack": 17.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -2070,7 +2014,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Assassin",
     "createdAt": "2025-12-02T23:27:42.282Z",
-    "defense": 24.6,
+    "defense": 19.3,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -2117,14 +2061,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 17.9
-    }
+    "stats": {}
   },
   {
     "name": "Blue Whale",
     "agility": 32.4,
-    "attack": 61.8,
+    "attack": 38.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Deep Ocean",
@@ -2143,7 +2085,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Titan",
     "createdAt": "2025-12-02T23:27:42.328Z",
-    "defense": 99.6,
+    "defense": 87.4,
     "description": "The largest animal to ever exist. While peaceful filter feeders, their sheer bulk makes them virtually immune to predation as adults.",
     "diet": [
       "krill"
@@ -2191,14 +2133,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 38.2
-    }
+    "stats": {}
   },
   {
     "name": "Boa Constrictor",
     "agility": 32.6,
-    "attack": 29,
+    "attack": 77.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -2215,7 +2155,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Grappler",
     "createdAt": "2025-12-02T23:27:42.371Z",
-    "defense": 34.7,
+    "defense": 36.9,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -2262,14 +2202,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 75
     },
-    "stats": {
-      "attack": 77.2
-    }
+    "stats": {}
   },
   {
     "name": "Bobcat",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 70.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -2286,7 +2224,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Fighter",
     "createdAt": "2025-12-02T23:27:42.411Z",
-    "defense": 27.8,
+    "defense": 51.7,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -2333,14 +2271,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 70.8
-    }
+    "stats": {}
   },
   {
     "name": "Bongo",
     "agility": 36.7,
-    "attack": 27.3,
+    "attack": 9.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -2357,7 +2293,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Stealth",
     "createdAt": "2025-12-02T23:27:42.453Z",
-    "defense": 27.8,
+    "defense": 19,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -2404,14 +2340,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 9.3
-    }
+    "stats": {}
   },
   {
     "name": "Bottlenose Dolphin",
     "agility": 41.7,
-    "attack": 49.8,
+    "attack": 37.6,
     "battle_profile": {
       "preferred_range": "Mid range",
       "primary_environment": "Coastal Ocean",
@@ -2430,7 +2364,7 @@ window.animalData = [
     "bite_force_psi": 200,
     "class": "Skirmisher",
     "createdAt": "2025-12-02T23:27:42.495Z",
-    "defense": 60.2,
+    "defense": 73.1,
     "description": "Highly intelligent marine mammals that use complex teamwork and echolocation. They can kill sharks by ramming their soft underbellies.",
     "diet": [
       "fish",
@@ -2479,14 +2413,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 37.6
-    }
+    "stats": {}
   },
   {
     "name": "Box Jellyfish",
     "agility": 39.6,
-    "attack": 18.3,
+    "attack": 29.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Ocean",
@@ -2505,7 +2437,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Passive Killer",
     "createdAt": "2025-12-02T23:28:16.259Z",
-    "defense": 4.4,
+    "defense": 27.4,
     "description": "One of the most venomous creatures on Earth. Its tentacles are covered in millions of explosive cells that deliver instant pain and death.",
     "diet": [
       "fish",
@@ -2554,14 +2486,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 30
     },
-    "stats": {
-      "attack": 29.2
-    }
+    "stats": {}
   },
   {
     "name": "Bull Shark",
     "agility": 37.1,
-    "attack": 57.1,
+    "attack": 85.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Coastal waters and rivers",
@@ -2579,7 +2509,7 @@ window.animalData = [
     "bite_force_psi": 1350,
     "class": "Fighter",
     "createdAt": "2025-12-02T23:27:42.549Z",
-    "defense": 50.8,
+    "defense": 26.9,
     "description": "A Large creature found in Coastal waters and rivers.",
     "diet": [
       "fish",
@@ -2629,14 +2559,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 85
     },
-    "stats": {
-      "attack": 85.7
-    }
+    "stats": {}
   },
   {
     "name": "Bullet Ant",
     "agility": 42.1,
-    "attack": 21,
+    "attack": 0.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -2653,7 +2581,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Soldier",
     "createdAt": "2025-12-02T23:27:42.595Z",
-    "defense": 22.8,
+    "defense": 0.45,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -2700,14 +2628,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 5
     },
-    "stats": {
-      "attack": 0.2
-    }
+    "stats": {}
   },
   {
     "name": "Bullfrog",
     "agility": 36.1,
-    "attack": 26.3,
+    "attack": 0.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -2724,7 +2650,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Jumper",
     "createdAt": "2025-12-02T23:27:42.636Z",
-    "defense": 24.1,
+    "defense": 0.06,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -2771,14 +2697,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 10
     },
-    "stats": {
-      "attack": 0.5
-    }
+    "stats": {}
   },
   {
     "name": "Camel",
     "agility": 36.8,
-    "attack": 29.7,
+    "attack": 70.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Deserts",
@@ -2796,7 +2720,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Endurance",
     "createdAt": "2025-12-02T23:27:42.679Z",
-    "defense": 62.4,
+    "defense": 72.6,
     "description": "A Large creature found in Deserts.",
     "diet": [
       "plants",
@@ -2845,14 +2769,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 70.3
-    }
+    "stats": {}
   },
   {
     "name": "Camel Spider",
     "agility": 37.3,
-    "attack": 34.6,
+    "attack": 22,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -2869,7 +2791,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Berserker",
     "createdAt": "2025-12-02T23:27:42.719Z",
-    "defense": 24.6,
+    "defense": 72.1,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -2916,14 +2838,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 25
     },
-    "stats": {
-      "attack": 22
-    }
+    "stats": {}
   },
   {
     "name": "Cape Buffalo",
     "agility": 30.3,
-    "attack": 36.2,
+    "attack": 87.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Grassland",
@@ -2942,7 +2862,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:42.761Z",
-    "defense": 67.6,
+    "defense": 86.8,
     "description": "Known as 'The Black Death', these bovines are extremely aggressive and vengeful. Their fused horns form a bulletproof shield.",
     "diet": [
       "grass"
@@ -2990,14 +2910,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 88
     },
-    "stats": {
-      "attack": 87.3
-    }
+    "stats": {}
   },
   {
     "name": "Capuchin Monkey",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 53.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -3014,7 +2932,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Rogue",
     "createdAt": "2025-12-02T23:27:42.802Z",
-    "defense": 27.8,
+    "defense": 51.2,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -3061,14 +2979,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 53.1
-    }
+    "stats": {}
   },
   {
     "name": "Capybara",
     "agility": 38.8,
-    "attack": 29.3,
+    "attack": 28.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "South American wetlands",
@@ -3086,7 +3002,7 @@ window.animalData = [
     "bite_force_psi": 300,
     "class": "Support",
     "createdAt": "2025-12-02T23:27:42.844Z",
-    "defense": 30.3,
+    "defense": 4.6,
     "description": "A Medium creature found in South American wetlands.",
     "diet": [
       "grass",
@@ -3135,14 +3051,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 30
     },
-    "stats": {
-      "attack": 28.7
-    }
+    "stats": {}
   },
   {
     "name": "Caracal",
     "agility": 45,
-    "attack": 40.5,
+    "attack": 69.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Africa",
@@ -3160,7 +3074,7 @@ window.animalData = [
     "bite_force_psi": 350,
     "class": "Assassin",
     "createdAt": "2025-12-02T23:27:42.887Z",
-    "defense": 23.4,
+    "defense": 50.7,
     "description": "A Medium creature found in Africa, Middle East, Central Asia.",
     "diet": [
       "birds",
@@ -3210,14 +3124,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 69.9
-    }
+    "stats": {}
   },
   {
     "name": "Cassowary",
     "agility": 55.2,
-    "attack": 31.8,
+    "attack": 9.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Rainforest",
@@ -3236,7 +3148,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Striker",
     "createdAt": "2025-12-02T23:27:42.933Z",
-    "defense": 47.9,
+    "defense": 30.5,
     "description": "Often called the world's most dangerous bird. It has a dagger-like claw on its foot capable of disemboweling predators.",
     "diet": [
       "fruits",
@@ -3286,14 +3198,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 9.1
-    }
+    "stats": {}
   },
   {
     "name": "Chameleon",
     "agility": 33.8,
-    "attack": 26.9,
+    "attack": 8.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -3310,7 +3220,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Stealth",
     "createdAt": "2025-12-02T23:27:42.978Z",
-    "defense": 32.6,
+    "defense": 42.3,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -3357,14 +3267,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 8.9
-    }
+    "stats": {}
   },
   {
     "name": "Cheetah",
     "agility": 53.1,
-    "attack": 39.4,
+    "attack": 69.4,
     "battle_profile": {
       "preferred_range": "Mid range",
       "primary_environment": "Open Savanna",
@@ -3383,7 +3291,7 @@ window.animalData = [
     "bite_force_psi": 475,
     "class": "Skirmisher",
     "createdAt": "2025-12-02T23:27:43.021Z",
-    "defense": 27.8,
+    "defense": 63.2,
     "description": "The fastest land animal, built purely for speed. It sacrifices strength and defense for the ability to run down any prey.",
     "diet": [
       "gazelles",
@@ -3433,14 +3341,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 69.4
-    }
+    "stats": {}
   },
   {
     "name": "Chimpanzee",
     "agility": 41.5,
-    "attack": 39.9,
+    "attack": 52.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Forest",
@@ -3459,7 +3365,7 @@ window.animalData = [
     "bite_force_psi": 1300,
     "class": "Skirmisher",
     "createdAt": "2025-12-02T23:27:43.070Z",
-    "defense": 33.9,
+    "defense": 50.2,
     "description": "Our closest relatives, capable of extreme violence and coordinated warfare. They are fast, strong for their size, and use tools.",
     "diet": [
       "fruits",
@@ -3509,14 +3415,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 52.5
-    }
+    "stats": {}
   },
   {
     "name": "Clouded Leopard",
     "agility": 38,
-    "attack": 44.7,
+    "attack": 68.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Forests of Southeast Asia",
@@ -3534,7 +3438,7 @@ window.animalData = [
     "bite_force_psi": 1000,
     "class": "Assassin",
     "createdAt": "2025-12-02T23:27:43.112Z",
-    "defense": 25,
+    "defense": 62.7,
     "description": "A Medium creature found in Forests of Southeast Asia.",
     "diet": [
       "monkeys",
@@ -3584,14 +3488,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 68.9
-    }
+    "stats": {}
   },
   {
     "name": "Cockatoo",
     "agility": 51.4,
-    "attack": 27.3,
+    "attack": 8.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -3608,7 +3510,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Bard",
     "createdAt": "2025-12-02T23:27:43.158Z",
-    "defense": 21.4,
+    "defense": 2.5,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -3655,14 +3557,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 8.7
-    }
+    "stats": {}
   },
   {
     "name": "Coconut Crab",
     "agility": 32.5,
-    "attack": 26.3,
+    "attack": 8.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -3679,7 +3579,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Tank",
     "createdAt": "2025-12-02T23:28:16.950Z",
-    "defense": 32.6,
+    "defense": 18.7,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -3726,14 +3626,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 8.5
-    }
+    "stats": {}
   },
   {
     "name": "Colossal Squid",
     "agility": 37.3,
-    "attack": 28.4,
+    "attack": 59.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -3750,7 +3648,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Grappler",
     "createdAt": "2025-12-02T23:28:16.996Z",
-    "defense": 25.8,
+    "defense": 18.4,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -3797,14 +3695,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 60
     },
-    "stats": {
-      "attack": 59.3
-    }
+    "stats": {}
   },
   {
     "name": "Condor",
     "agility": 51.4,
-    "attack": 27.3,
+    "attack": 52,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -3821,7 +3717,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Scavenger",
     "createdAt": "2025-12-02T23:27:43.202Z",
-    "defense": 21.4,
+    "defense": 18.1,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -3868,14 +3764,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 52
-    }
+    "stats": {}
   },
   {
     "name": "Cougar",
     "agility": 48.1,
-    "attack": 51.2,
+    "attack": 68.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Mountain",
@@ -3894,7 +3788,7 @@ window.animalData = [
     "bite_force_psi": 350,
     "class": "Ambush Predator",
     "createdAt": "2025-12-02T23:27:43.244Z",
-    "defense": 47.5,
+    "defense": 62.2,
     "description": "Also known as the mountain lion, it has the largest range of any land mammal in the Americas. It is a powerful jumper and silent stalker.",
     "diet": [
       "deer",
@@ -3944,14 +3838,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 68.5
-    }
+    "stats": {}
   },
   {
     "name": "Coyote",
     "agility": 43.4,
-    "attack": 29.4,
+    "attack": 58.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Grasslands",
@@ -3969,7 +3861,7 @@ window.animalData = [
     "bite_force_psi": 153,
     "class": "Pack Hunter",
     "createdAt": "2025-12-02T23:27:43.285Z",
-    "defense": 25.3,
+    "defense": 57.6,
     "description": "A Small creature found in Grasslands, forests, deserts.",
     "diet": [
       "rodents",
@@ -4019,14 +3911,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 60
     },
-    "stats": {
-      "attack": 58.7
-    }
+    "stats": {}
   },
   {
     "name": "Crow",
     "agility": 51.4,
-    "attack": 27.3,
+    "attack": 8.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -4043,7 +3933,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Scout",
     "createdAt": "2025-12-02T23:27:43.341Z",
-    "defense": 21.4,
+    "defense": 2.3,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -4090,14 +3980,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 8.3
-    }
+    "stats": {}
   },
   {
     "name": "Cuttlefish",
     "agility": 37.3,
-    "attack": 26.3,
+    "attack": 37.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -4114,7 +4002,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Mage",
     "createdAt": "2025-12-02T23:28:17.218Z",
-    "defense": 23.7,
+    "defense": 26.4,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -4161,14 +4049,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 37.1
-    }
+    "stats": {}
   },
   {
     "name": "Deathstalker Scorpion",
     "agility": 37.3,
-    "attack": 28,
+    "attack": 17.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -4185,7 +4071,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Assassin",
     "createdAt": "2025-12-02T23:27:43.391Z",
-    "defense": 24.6,
+    "defense": 0.4,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -4232,14 +4118,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 17.5
-    }
+    "stats": {}
   },
   {
     "name": "Dhole",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 58.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -4256,7 +4140,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Fighter",
     "createdAt": "2025-12-02T23:27:43.436Z",
-    "defense": 27.8,
+    "defense": 57.1,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -4303,14 +4187,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 60
     },
-    "stats": {
-      "attack": 58.2
-    }
+    "stats": {}
   },
   {
     "name": "Dingo",
     "agility": 42,
-    "attack": 38.9,
+    "attack": 57.6,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Deserts",
@@ -4328,7 +4210,7 @@ window.animalData = [
     "bite_force_psi": 235,
     "class": "Pack Hunter",
     "createdAt": "2025-12-02T23:27:43.481Z",
-    "defense": 24.4,
+    "defense": 56.6,
     "description": "A Small creature found in Deserts, forests, grasslands.",
     "diet": [
       "kangaroos",
@@ -4378,14 +4260,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 60
     },
-    "stats": {
-      "attack": 57.6
-    }
+    "stats": {}
   },
   {
     "name": "Donkey",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 17,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -4402,7 +4282,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Worker",
     "createdAt": "2025-12-02T23:27:43.529Z",
-    "defense": 27.8,
+    "defense": 17.8,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -4449,14 +4329,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 17
-    }
+    "stats": {}
   },
   {
     "name": "Dragonfly",
     "agility": 42.1,
-    "attack": 21,
+    "attack": 8.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -4473,7 +4351,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Ace",
     "createdAt": "2025-12-02T23:27:43.573Z",
-    "defense": 22.8,
+    "defense": 41.8,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -4520,14 +4398,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 8.1
-    }
+    "stats": {}
   },
   {
     "name": "Electric Eel",
     "agility": 37.9,
-    "attack": 36.1,
+    "attack": 36.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Murky River",
@@ -4546,7 +4422,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Electric",
     "createdAt": "2025-12-02T23:27:43.619Z",
-    "defense": 45.5,
+    "defense": 25.9,
     "description": "Not a true eel, but a knifefish capable of generating 860 volts of electricity. It can stun prey or deter predators from a distance.",
     "diet": [
       "fish",
@@ -4596,14 +4472,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 36.5
-    }
+    "stats": {}
   },
   {
     "name": "Elk",
     "agility": 38.1,
-    "attack": 38.8,
+    "attack": 28.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Forests",
@@ -4621,7 +4495,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Bruiser",
     "createdAt": "2025-12-02T23:27:43.664Z",
-    "defense": 58.8,
+    "defense": 71.6,
     "description": "A Large creature found in Forests, mountains.",
     "diet": [
       "grass",
@@ -4671,14 +4545,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 30
     },
-    "stats": {
-      "attack": 28.1
-    }
+    "stats": {}
   },
   {
     "name": "Emperor Penguin",
     "agility": 41.1,
-    "attack": 33.2,
+    "attack": 16.6,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Antarctica",
@@ -4696,7 +4568,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:43.706Z",
-    "defense": 34.4,
+    "defense": 2.1,
     "description": "A Medium creature found in Antarctica.",
     "diet": [
       "fish",
@@ -4746,14 +4618,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 16.6
-    }
+    "stats": {}
   },
   {
     "name": "Emperor Scorpion",
     "agility": 35.9,
-    "attack": 23,
+    "attack": 16.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Rainforests of West Africa",
@@ -4771,7 +4641,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:43.752Z",
-    "defense": 5,
+    "defense": 0.37,
     "description": "A Tiny creature found in Rainforests of West Africa.",
     "diet": [
       "insects",
@@ -4820,14 +4690,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 16.1
-    }
+    "stats": {}
   },
   {
     "name": "Emu",
     "agility": 62.7,
-    "attack": 29.2,
+    "attack": 15.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Grasslands",
@@ -4845,7 +4713,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Runner",
     "createdAt": "2025-12-02T23:27:43.793Z",
-    "defense": 46.1,
+    "defense": 30,
     "description": "A Large creature found in Grasslands, forests.",
     "diet": [
       "plants",
@@ -4895,14 +4763,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 15.7
-    }
+    "stats": {}
   },
   {
     "name": "Fennec Fox",
     "agility": 41.7,
-    "attack": 15.9,
+    "attack": 68,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Deserts",
@@ -4920,7 +4786,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Scout",
     "createdAt": "2025-12-02T23:27:43.835Z",
-    "defense": 7,
+    "defense": 49.7,
     "description": "A Tiny creature found in Deserts.",
     "diet": [
       "insects",
@@ -4970,14 +4836,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 68
-    }
+    "stats": {}
   },
   {
     "name": "Ferret",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 7.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -4994,7 +4858,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Rogue",
     "createdAt": "2025-12-02T23:27:43.878Z",
-    "defense": 27.8,
+    "defense": 41.3,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -5041,14 +4905,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 7.9
-    }
+    "stats": {}
   },
   {
     "name": "Flamingo",
     "agility": 65.1,
-    "attack": 13.3,
+    "attack": 15.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Lakes",
@@ -5066,7 +4928,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Filter Feeder",
     "createdAt": "2025-12-02T23:27:43.921Z",
-    "defense": 26,
+    "defense": 4.3,
     "description": "A Medium creature found in Lakes, lagoons.",
     "diet": [
       "algae",
@@ -5115,14 +4977,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 15.2
-    }
+    "stats": {}
   },
   {
     "name": "Flying Squirrel",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 7.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -5139,7 +4999,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Glider",
     "createdAt": "2025-12-02T23:27:43.964Z",
-    "defense": 27.8,
+    "defense": 0.34,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -5186,14 +5046,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 7.7
-    }
+    "stats": {}
   },
   {
     "name": "Gaboon Viper",
     "agility": 32.6,
-    "attack": 26.9,
+    "attack": 62.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -5210,7 +5068,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Assassin",
     "createdAt": "2025-12-02T23:27:44.005Z",
-    "defense": 32.6,
+    "defense": 36.4,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -5257,14 +5115,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 65
     },
-    "stats": {
-      "attack": 62.2
-    }
+    "stats": {}
   },
   {
     "name": "Galapagos Tortoise",
     "agility": 11.9,
-    "attack": 36.1,
+    "attack": 0.45,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Galapagos Islands",
@@ -5282,7 +5138,7 @@ window.animalData = [
     "bite_force_psi": 200,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:44.047Z",
-    "defense": 87,
+    "defense": 86.2,
     "description": "A Large creature found in Galapagos Islands.",
     "diet": [
       "cactus",
@@ -5332,14 +5188,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 10
     },
-    "stats": {
-      "attack": 0.45
-    }
+    "stats": {}
   },
   {
     "name": "Gazelle",
     "agility": 54.5,
-    "attack": 17.2,
+    "attack": 27.6,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Savannas",
@@ -5357,7 +5211,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Speed Demon",
     "createdAt": "2025-12-02T23:27:44.088Z",
-    "defense": 27.3,
+    "defense": 35.9,
     "description": "A Small creature found in Savannas, grasslands.",
     "diet": [
       "grass",
@@ -5406,14 +5260,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 30
     },
-    "stats": {
-      "attack": 27.6
-    }
+    "stats": {}
   },
   {
     "name": "Gecko",
     "agility": 32.6,
-    "attack": 26.9,
+    "attack": 7.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -5430,7 +5282,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Climber",
     "createdAt": "2025-12-02T23:27:44.132Z",
-    "defense": 32.6,
+    "defense": 40.8,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -5477,14 +5329,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 7.5
-    }
+    "stats": {}
   },
   {
     "name": "Giant Centipede",
     "agility": 41,
-    "attack": 20.3,
+    "attack": 21.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "South American forests",
@@ -5502,7 +5352,7 @@ window.animalData = [
     "bite_force_psi": 50,
     "class": "Assassin",
     "createdAt": "2025-12-02T23:28:18.044Z",
-    "defense": 1.6,
+    "defense": 0.31,
     "description": "A Tiny creature found in South American forests.",
     "diet": [
       "insects",
@@ -5552,14 +5402,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 25
     },
-    "stats": {
-      "attack": 21.5
-    }
+    "stats": {}
   },
   {
     "name": "Giant Squid",
     "agility": 37.3,
-    "attack": 28.4,
+    "attack": 51.4,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -5576,7 +5424,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Grappler",
     "createdAt": "2025-12-02T23:28:18.087Z",
-    "defense": 25.8,
+    "defense": 0.28,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -5623,14 +5471,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 51.4
-    }
+    "stats": {}
   },
   {
     "name": "Gibbon",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 50.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -5647,7 +5493,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Scout",
     "createdAt": "2025-12-02T23:27:44.177Z",
-    "defense": 27.8,
+    "defense": 49.2,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -5694,14 +5540,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 50.9
-    }
+    "stats": {}
   },
   {
     "name": "Gila Monster",
     "agility": 27.8,
-    "attack": 26.9,
+    "attack": 27,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -5718,7 +5562,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:44.219Z",
-    "defense": 41.5,
+    "defense": 40.3,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -5765,14 +5609,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 30
     },
-    "stats": {
-      "attack": 27
-    }
+    "stats": {}
   },
   {
     "name": "Giraffe",
     "agility": 39.2,
-    "attack": 36.4,
+    "attack": 7.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Savannas",
@@ -5790,7 +5632,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Long Reach",
     "createdAt": "2025-12-02T23:27:44.259Z",
-    "defense": 81.2,
+    "defense": 71.1,
     "description": "A Colossal creature found in Savannas, woodlands.",
     "diet": [
       "leaves",
@@ -5839,14 +5681,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 7.3
-    }
+    "stats": {}
   },
   {
     "name": "Golden Eagle",
     "agility": 51.4,
-    "attack": 27.3,
+    "attack": 50.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -5863,7 +5703,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Hunter",
     "createdAt": "2025-12-02T23:27:44.300Z",
-    "defense": 21.4,
+    "defense": 17.5,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -5910,14 +5750,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 50.3
-    }
+    "stats": {}
   },
   {
     "name": "Goliath Birdeater",
     "agility": 38.4,
-    "attack": 20.8,
+    "attack": 20.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Rainforests of South America",
@@ -5935,7 +5773,7 @@ window.animalData = [
     "bite_force_psi": 50,
     "class": "Assassin",
     "createdAt": "2025-12-02T23:27:44.343Z",
-    "defense": 4.2,
+    "defense": 17.2,
     "description": "A Tiny creature found in Rainforests of South America.",
     "diet": [
       "insects",
@@ -5985,14 +5823,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 25
     },
-    "stats": {
-      "attack": 20.9
-    }
+    "stats": {}
   },
   {
     "name": "Goose",
     "agility": 64,
-    "attack": 16.5,
+    "attack": 14.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Wetlands",
@@ -6010,7 +5846,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Aggressor",
     "createdAt": "2025-12-02T23:27:44.390Z",
-    "defense": 23.4,
+    "defense": 4,
     "description": "A Small creature found in Wetlands, grasslands.",
     "diet": [
       "grass",
@@ -6060,14 +5896,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 14.8
-    }
+    "stats": {}
   },
   {
     "name": "Gorilla",
     "agility": 35,
-    "attack": 54,
+    "attack": 81.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Jungle",
@@ -6086,7 +5920,7 @@ window.animalData = [
     "bite_force_psi": 1300,
     "class": "Bruiser",
     "createdAt": "2025-12-02T23:27:44.432Z",
-    "defense": 59.6,
+    "defense": 48.7,
     "description": "A gentle giant until provoked, possessing immense upper body strength. Gorillas fight with crushing blows and powerful bites.",
     "diet": [
       "plants",
@@ -6136,14 +5970,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 82
     },
-    "stats": {
-      "attack": 81.5
-    }
+    "stats": {}
   },
   {
     "name": "Gray Wolf",
     "agility": 40,
-    "attack": 44.1,
+    "attack": 57.1,
     "battle_profile": {
       "preferred_range": "Mid range",
       "primary_environment": "Forest",
@@ -6162,7 +5994,7 @@ window.animalData = [
     "bite_force_psi": 400,
     "class": "Pack Hunter",
     "createdAt": "2025-12-02T23:27:44.473Z",
-    "defense": 48.5,
+    "defense": 56.1,
     "description": "The ultimate endurance hunter. Wolves use complex pack tactics to wear down prey much larger than themselves over long distances.",
     "diet": [
       "deer",
@@ -6212,14 +6044,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 60
     },
-    "stats": {
-      "attack": 57.1
-    }
+    "stats": {}
   },
   {
     "name": "Great Horned Owl",
     "agility": 51.4,
-    "attack": 27.3,
+    "attack": 49.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -6236,7 +6066,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Hunter",
     "createdAt": "2025-12-02T23:27:44.519Z",
-    "defense": 21.4,
+    "defense": 16.9,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -6283,14 +6113,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 49.8
-    }
+    "stats": {}
   },
   {
     "name": "Great White Shark",
     "agility": 47,
-    "attack": 73.1,
+    "attack": 93.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Open Ocean",
@@ -6309,7 +6137,7 @@ window.animalData = [
     "bite_force_psi": 4000,
     "class": "Ambush Predator",
     "createdAt": "2025-12-02T23:28:18.538Z",
-    "defense": 75.3,
+    "defense": 25.4,
     "description": "The ultimate ocean predator, equipped with rows of serrated teeth and electromagnetic senses. It strikes from below with devastating force.",
     "diet": [
       "fish",
@@ -6359,14 +6187,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 94
     },
-    "stats": {
-      "attack": 93.5
-    }
+    "stats": {}
   },
   {
     "name": "Green Anaconda",
     "agility": 32.6,
-    "attack": 29,
+    "attack": 76.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -6383,7 +6209,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Grappler",
     "createdAt": "2025-12-02T23:27:44.565Z",
-    "defense": 34.7,
+    "defense": 35.4,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -6430,14 +6256,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 75
     },
-    "stats": {
-      "attack": 76.7
-    }
+    "stats": {}
   },
   {
     "name": "Grizzly Bear",
     "agility": 35.5,
-    "attack": 66.2,
+    "attack": 82.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Forest",
@@ -6456,7 +6280,7 @@ window.animalData = [
     "bite_force_psi": 1160,
     "class": "Bruiser",
     "createdAt": "2025-12-02T23:27:44.608Z",
-    "defense": 56.1,
+    "defense": 79.4,
     "description": "A massive omnivore with bone-crushing jaws and paws that can kill a moose in a single swipe. Extremely durable and aggressive when provoked.",
     "diet": [
       "fish",
@@ -6507,14 +6331,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 83
     },
-    "stats": {
-      "attack": 82.7
-    }
+    "stats": {}
   },
   {
     "name": "Guanaco",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 7.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -6531,7 +6353,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Survivor",
     "createdAt": "2025-12-02T23:27:44.649Z",
-    "defense": 27.8,
+    "defense": 16.6,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -6578,14 +6400,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 7.1
-    }
+    "stats": {}
   },
   {
     "name": "Hammerhead Shark",
     "agility": 40.5,
-    "attack": 62.9,
+    "attack": 79.6,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Warm coastlines",
@@ -6603,7 +6423,7 @@ window.animalData = [
     "bite_force_psi": 600,
     "class": "Fighter",
     "createdAt": "2025-12-02T23:27:44.691Z",
-    "defense": 70.2,
+    "defense": 29.5,
     "description": "A Large creature found in Warm coastlines.",
     "diet": [
       "fish",
@@ -6653,14 +6473,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 80
     },
-    "stats": {
-      "attack": 79.6
-    }
+    "stats": {}
   },
   {
     "name": "Harpy Eagle",
     "agility": 62.9,
-    "attack": 44,
+    "attack": 49.2,
     "battle_profile": {
       "preferred_range": "Mid range",
       "primary_environment": "Canopy",
@@ -6679,7 +6497,7 @@ window.animalData = [
     "bite_force_psi": 530,
     "class": "Sky Hunter",
     "createdAt": "2025-12-02T23:27:44.733Z",
-    "defense": 20.7,
+    "defense": 16.3,
     "description": "The most powerful eagle in the Americas, with talons larger than a grizzly bear's claws. It hunts monkeys and sloths in the canopy.",
     "diet": [
       "monkeys",
@@ -6729,14 +6547,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 49.2
-    }
+    "stats": {}
   },
   {
     "name": "Hedgehog",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 48.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -6753,7 +6569,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Defender",
     "createdAt": "2025-12-02T23:27:44.779Z",
-    "defense": 27.8,
+    "defense": 70.6,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -6800,14 +6616,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 48.7
-    }
+    "stats": {}
   },
   {
     "name": "Hellbender",
     "agility": 31.3,
-    "attack": 26.3,
+    "attack": 6.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -6824,7 +6638,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:44.820Z",
-    "defense": 33,
+    "defense": 0.05,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -6871,14 +6685,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 6.9
-    }
+    "stats": {}
   },
   {
     "name": "Hercules Beetle",
     "agility": 37.3,
-    "attack": 21,
+    "attack": 14.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -6895,7 +6707,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:44.865Z",
-    "defense": 31.7,
+    "defense": 0.25,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -6942,14 +6754,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 14.3
-    }
+    "stats": {}
   },
   {
     "name": "Hippopotamus",
     "agility": 27.8,
-    "attack": 62.9,
+    "attack": 90.6,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "River",
@@ -6968,7 +6778,7 @@ window.animalData = [
     "bite_force_psi": 1800,
     "class": "Tank",
     "createdAt": "2025-12-02T23:28:18.932Z",
-    "defense": 92.5,
+    "defense": 89.5,
     "description": "One of the most aggressive animals on Earth. Despite being herbivorous, their massive jaws and tusks can snap a crocodile in half.",
     "diet": [
       "grass"
@@ -7016,14 +6826,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 90
     },
-    "stats": {
-      "attack": 90.6
-    }
+    "stats": {}
   },
   {
     "name": "Honey Badger",
     "agility": 36.7,
-    "attack": 45.9,
+    "attack": 6.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Scrubland",
@@ -7042,7 +6850,7 @@ window.animalData = [
     "bite_force_psi": 200,
     "class": "Berserker",
     "createdAt": "2025-12-02T23:27:44.913Z",
-    "defense": 32.7,
+    "defense": 70.1,
     "description": "Notorious for its fearlessness and loose, thick skin. It will attack animals ten times its size and is immune to many venoms.",
     "diet": [
       "insects",
@@ -7092,14 +6900,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 6.7
-    }
+    "stats": {}
   },
   {
     "name": "Hornet",
     "agility": 42.1,
-    "attack": 21,
+    "attack": 13.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -7116,7 +6922,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Soldier",
     "createdAt": "2025-12-02T23:27:44.956Z",
-    "defense": 22.8,
+    "defense": 0.22,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -7163,14 +6969,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 13.9
-    }
+    "stats": {}
   },
   {
     "name": "Howler Monkey",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 48.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -7187,7 +6991,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Bard",
     "createdAt": "2025-12-02T23:27:45.012Z",
-    "defense": 27.8,
+    "defense": 48.2,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -7234,14 +7038,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 48.1
-    }
+    "stats": {}
   },
   {
     "name": "Hummingbird",
     "agility": 58.6,
-    "attack": 27.3,
+    "attack": 6.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -7258,7 +7060,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Speedster",
     "createdAt": "2025-12-02T23:27:45.055Z",
-    "defense": 21.4,
+    "defense": 1.9,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -7305,14 +7107,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 6.5
-    }
+    "stats": {}
   },
   {
     "name": "Huntsman Spider",
     "agility": 44.5,
-    "attack": 28,
+    "attack": 13.4,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -7329,7 +7129,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Speedster",
     "createdAt": "2025-12-02T23:27:45.098Z",
-    "defense": 24.6,
+    "defense": 0.2,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -7376,14 +7176,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 13.4
-    }
+    "stats": {}
   },
   {
     "name": "Hyena",
     "agility": 39.9,
-    "attack": 56.8,
+    "attack": 56.5,
     "battle_profile": {
       "preferred_range": "Mid range",
       "primary_environment": "Savanna",
@@ -7402,7 +7200,7 @@ window.animalData = [
     "bite_force_psi": 1100,
     "class": "Pack Hunter",
     "createdAt": "2025-12-02T23:27:45.141Z",
-    "defense": 51.2,
+    "defense": 55.6,
     "description": "Often misunderstood as scavengers, spotted hyenas are highly successful hunters with jaws that can crush bone.",
     "diet": [
       "mammals",
@@ -7451,14 +7249,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 60
     },
-    "stats": {
-      "attack": 56.5
-    }
+    "stats": {}
   },
   {
     "name": "Ibex",
     "agility": 34.8,
-    "attack": 30.7,
+    "attack": 6.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Mountains",
@@ -7476,7 +7272,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Climber",
     "createdAt": "2025-12-02T23:27:45.190Z",
-    "defense": 52.7,
+    "defense": 16,
     "description": "A Medium creature found in Mountains, cliffs.",
     "diet": [
       "grass",
@@ -7526,14 +7322,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 6.3
-    }
+    "stats": {}
   },
   {
     "name": "Iguana",
     "agility": 32.6,
-    "attack": 26.9,
+    "attack": 6.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -7550,7 +7344,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Civilian",
     "createdAt": "2025-12-02T23:27:45.230Z",
-    "defense": 32.6,
+    "defense": 39.8,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -7597,14 +7391,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 6.1
-    }
+    "stats": {}
   },
   {
     "name": "Impala",
     "agility": 44.5,
-    "attack": 22.9,
+    "attack": 26.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Savannas",
@@ -7622,7 +7414,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Jumper",
     "createdAt": "2025-12-02T23:27:45.272Z",
-    "defense": 30.4,
+    "defense": 34.9,
     "description": "A Small creature found in Savannas, woodlands.",
     "diet": [
       "grass",
@@ -7671,14 +7463,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 30
     },
-    "stats": {
-      "attack": 26.5
-    }
+    "stats": {}
   },
   {
     "name": "Jackal",
     "agility": 43.3,
-    "attack": 35.2,
+    "attack": 55.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Grasslands",
@@ -7696,7 +7486,7 @@ window.animalData = [
     "bite_force_psi": 150,
     "class": "Opportunist",
     "createdAt": "2025-12-02T23:27:45.311Z",
-    "defense": 23.5,
+    "defense": 15.7,
     "description": "A Small creature found in Grasslands, deserts.",
     "diet": [
       "rodents",
@@ -7746,14 +7536,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 60
     },
-    "stats": {
-      "attack": 55.9
-    }
+    "stats": {}
   },
   {
     "name": "Jaguar",
     "agility": 46.1,
-    "attack": 55,
+    "attack": 83.4,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Jungle",
@@ -7772,7 +7560,7 @@ window.animalData = [
     "bite_force_psi": 1500,
     "class": "Bruiser",
     "createdAt": "2025-12-02T23:27:45.358Z",
-    "defense": 60.6,
+    "defense": 61.7,
     "description": "The tank of the big cat world, with the strongest bite relative to size. It kills by piercing the skull or shell of its prey.",
     "diet": [
       "capybaras",
@@ -7822,14 +7610,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 84
     },
-    "stats": {
-      "attack": 83.4
-    }
+    "stats": {}
   },
   {
     "name": "Japanese Macaque",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 47.6,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -7846,7 +7632,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Survivor",
     "createdAt": "2025-12-02T23:27:45.399Z",
-    "defense": 27.8,
+    "defense": 47.7,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -7893,14 +7679,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 47.6
-    }
+    "stats": {}
   },
   {
     "name": "Kangaroo",
     "agility": 41.9,
-    "attack": 26.9,
+    "attack": 5.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Grasslands",
@@ -7918,7 +7702,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Striker",
     "createdAt": "2025-12-02T23:28:19.487Z",
-    "defense": 55.5,
+    "defense": 15.4,
     "description": "A Medium creature found in Grasslands, deserts.",
     "diet": [
       "grass",
@@ -7967,14 +7751,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 5.9
-    }
+    "stats": {}
   },
   {
     "name": "King Cobra",
     "agility": 33,
-    "attack": 23.2,
+    "attack": 61.7,
     "battle_profile": {
       "preferred_range": "Mid range",
       "primary_environment": "Forest Floor",
@@ -7993,7 +7775,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Venomous Hunter",
     "createdAt": "2025-12-02T23:27:45.448Z",
-    "defense": 27.9,
+    "defense": 34.4,
     "description": "The longest venomous snake in the world. It feeds primarily on other snakes and delivers a massive dose of neurotoxin.",
     "diet": [
       "snakes",
@@ -8042,14 +7824,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 65
     },
-    "stats": {
-      "attack": 61.7
-    }
+    "stats": {}
   },
   {
     "name": "King Crab",
     "agility": 32.5,
-    "attack": 26.3,
+    "attack": 5.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -8066,7 +7846,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Tank",
     "createdAt": "2025-12-02T23:28:19.580Z",
-    "defense": 32.6,
+    "defense": 15.1,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -8113,14 +7893,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 5.7
-    }
+    "stats": {}
   },
   {
     "name": "Kiwi",
     "agility": 51.4,
-    "attack": 27.3,
+    "attack": 5.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -8137,7 +7915,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Scout",
     "createdAt": "2025-12-02T23:27:45.493Z",
-    "defense": 21.4,
+    "defense": 1.7,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -8184,14 +7962,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 5.5
-    }
+    "stats": {}
   },
   {
     "name": "Koala",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 5.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -8208,7 +7984,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Civilian",
     "createdAt": "2025-12-02T23:27:45.535Z",
-    "defense": 27.8,
+    "defense": 14.8,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -8255,14 +8031,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 5.3
-    }
+    "stats": {}
   },
   {
     "name": "Komodo Dragon",
     "agility": 27.4,
-    "attack": 51,
+    "attack": 5.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Island Scrub",
@@ -8281,7 +8055,7 @@ window.animalData = [
     "bite_force_psi": 600,
     "class": "Venomous Hunter",
     "createdAt": "2025-12-02T23:27:45.575Z",
-    "defense": 63.4,
+    "defense": 77.2,
     "description": "The largest living lizard, a patient hunter with a venomous bite. It tracks wounded prey for miles until they succumb.",
     "diet": [
       "deer",
@@ -8331,14 +8105,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 5.1
-    }
+    "stats": {}
   },
   {
     "name": "Kookaburra",
     "agility": 51.4,
-    "attack": 27.3,
+    "attack": 4.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -8355,7 +8127,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Bard",
     "createdAt": "2025-12-02T23:27:45.618Z",
-    "defense": 21.4,
+    "defense": 1.5,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -8402,14 +8174,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 4.9
-    }
+    "stats": {}
   },
   {
     "name": "Kudu",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 4.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -8426,7 +8196,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Scout",
     "createdAt": "2025-12-02T23:27:45.661Z",
-    "defense": 27.8,
+    "defense": 33.9,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -8473,14 +8243,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 4.7
-    }
+    "stats": {}
   },
   {
     "name": "Leatherback Sea Turtle",
     "agility": 27.8,
-    "attack": 26.9,
+    "attack": 0.4,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -8497,7 +8265,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:45.703Z",
-    "defense": 41.5,
+    "defense": 85.6,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -8544,14 +8312,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 10
     },
-    "stats": {
-      "attack": 0.4
-    }
+    "stats": {}
   },
   {
     "name": "Leopard",
     "agility": 45.7,
-    "attack": 41.3,
+    "attack": 67.6,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Tree Canopy/Ground",
@@ -8570,7 +8336,7 @@ window.animalData = [
     "bite_force_psi": 310,
     "class": "Ambush Predator",
     "createdAt": "2025-12-02T23:27:45.745Z",
-    "defense": 27.5,
+    "defense": 61.2,
     "description": "The most adaptable big cat, capable of hauling heavy prey up trees. They are masters of stealth and ambush.",
     "diet": [
       "deer",
@@ -8620,14 +8386,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 67.6
-    }
+    "stats": {}
   },
   {
     "name": "Lionfish",
     "agility": 38.7,
-    "attack": 26.3,
+    "attack": 67.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -8644,7 +8408,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Toxic",
     "createdAt": "2025-12-02T23:27:45.787Z",
-    "defense": 26.4,
+    "defense": 60.7,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -8691,14 +8455,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 67.1
-    }
+    "stats": {}
   },
   {
     "name": "Llama",
     "agility": 35.7,
-    "attack": 26.8,
+    "attack": 13,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Mountains",
@@ -8716,7 +8478,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Defender",
     "createdAt": "2025-12-02T23:27:45.829Z",
-    "defense": 56.9,
+    "defense": 14.5,
     "description": "A Medium creature found in Mountains, grasslands.",
     "diet": [
       "grass",
@@ -8765,14 +8527,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 13
-    }
+    "stats": {}
   },
   {
     "name": "Lobster",
     "agility": 32.5,
-    "attack": 26.3,
+    "attack": 4.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -8789,7 +8549,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Tank",
     "createdAt": "2025-12-02T23:28:20.005Z",
-    "defense": 32.6,
+    "defense": 14.2,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -8836,14 +8596,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 4.5
-    }
+    "stats": {}
   },
   {
     "name": "Lynx",
     "agility": 49.9,
-    "attack": 31,
+    "attack": 66.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Snow Forest",
@@ -8862,7 +8620,7 @@ window.animalData = [
     "bite_force_psi": 200,
     "class": "Ambush Predator",
     "createdAt": "2025-12-02T23:27:45.872Z",
-    "defense": 27,
+    "defense": 47.2,
     "description": "A medium-sized cat with distinctive ear tufts and large paws that act as snowshoes. It is a specialist hunter of hares.",
     "diet": [
       "hares",
@@ -8912,14 +8670,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 66.7
-    }
+    "stats": {}
   },
   {
     "name": "Macaw",
     "agility": 51.4,
-    "attack": 27.3,
+    "attack": 4.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -8936,7 +8692,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Bard",
     "createdAt": "2025-12-02T23:27:45.920Z",
-    "defense": 21.4,
+    "defense": 1.3,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -8983,14 +8739,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 4.3
-    }
+    "stats": {}
   },
   {
     "name": "Magpie",
     "agility": 51.4,
-    "attack": 27.3,
+    "attack": 4.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -9007,7 +8761,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Thief",
     "createdAt": "2025-12-02T23:27:45.962Z",
-    "defense": 21.4,
+    "defense": 1.1,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -9054,14 +8808,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 4.1
-    }
+    "stats": {}
   },
   {
     "name": "Manatee",
     "agility": 34.9,
-    "attack": 34,
+    "attack": 3.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Coastal waters",
@@ -9079,7 +8831,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Gentle Giant",
     "createdAt": "2025-12-02T23:27:46.003Z",
-    "defense": 76.6,
+    "defense": 69.6,
     "description": "A Large creature found in Coastal waters, rivers.",
     "diet": [
       "seagrass",
@@ -9128,14 +8880,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 3.9
-    }
+    "stats": {}
   },
   {
     "name": "Mandrill",
     "agility": 37.3,
-    "attack": 33.5,
+    "attack": 3.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Rainforests of equatorial Africa",
@@ -9153,7 +8903,7 @@ window.animalData = [
     "bite_force_psi": 400,
     "class": "Fighter",
     "createdAt": "2025-12-02T23:27:46.045Z",
-    "defense": 29,
+    "defense": 46.7,
     "description": "A Medium creature found in Rainforests of equatorial Africa.",
     "diet": [
       "fruit",
@@ -9203,14 +8953,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 3.7
-    }
+    "stats": {}
   },
   {
     "name": "Maned Wolf",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 55.4,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -9227,7 +8975,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Scout",
     "createdAt": "2025-12-02T23:27:46.087Z",
-    "defense": 27.8,
+    "defense": 55.1,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -9274,14 +9022,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 60
     },
-    "stats": {
-      "attack": 55.4
-    }
+    "stats": {}
   },
   {
     "name": "Manta Ray",
     "agility": 38.7,
-    "attack": 26.3,
+    "attack": 35.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -9298,7 +9044,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Glider",
     "createdAt": "2025-12-02T23:27:46.131Z",
-    "defense": 26.4,
+    "defense": 0.18,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -9345,14 +9091,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 35.9
-    }
+    "stats": {}
   },
   {
     "name": "Mantis Shrimp",
     "agility": 59,
-    "attack": 19.2,
+    "attack": 20.4,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Reef",
@@ -9371,7 +9115,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Glass Cannon",
     "createdAt": "2025-12-02T23:27:46.173Z",
-    "defense": 5.8,
+    "defense": 0.16,
     "description": "A colorful crustacean with the fastest punch in the animal kingdom. Its strike boils the water and can crack aquarium glass.",
     "diet": [
       "crabs",
@@ -9421,14 +9165,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 25
     },
-    "stats": {
-      "attack": 20.4
-    }
+    "stats": {}
   },
   {
     "name": "Marlin",
     "agility": 45.9,
-    "attack": 26.3,
+    "attack": 35.4,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -9445,7 +9187,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Speedster",
     "createdAt": "2025-12-02T23:27:46.214Z",
-    "defense": 26.4,
+    "defense": 24.9,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -9492,14 +9234,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 35.4
-    }
+    "stats": {}
   },
   {
     "name": "Meerkat",
     "agility": 39.9,
-    "attack": 17.9,
+    "attack": 3.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Deserts",
@@ -9517,7 +9257,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Scout",
     "createdAt": "2025-12-02T23:27:46.257Z",
-    "defense": 6.3,
+    "defense": 13.9,
     "description": "A Tiny creature found in Deserts, grasslands.",
     "diet": [
       "insects",
@@ -9567,14 +9307,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 3.5
-    }
+    "stats": {}
   },
   {
     "name": "Megalodon",
     "agility": 34.4,
-    "attack": 94.8,
+    "attack": 98.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Ancient Oceans",
@@ -9592,7 +9330,7 @@ window.animalData = [
     "bite_force_psi": 40000,
     "class": "Titan",
     "createdAt": "2025-12-02T23:27:46.300Z",
-    "defense": 99.6,
+    "defense": 99.2,
     "description": "A Colossal creature found in Ancient Oceans.",
     "diet": [
       "Whales",
@@ -9642,14 +9380,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 100
     },
-    "stats": {
-      "attack": 98.7
-    }
+    "stats": {}
   },
   {
     "name": "Monarch Butterfly",
     "agility": 42.1,
-    "attack": 21,
+    "attack": 3.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -9666,7 +9402,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Civilian",
     "createdAt": "2025-12-02T23:27:46.346Z",
-    "defense": 22.8,
+    "defense": 0.14,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -9713,14 +9449,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 3.3
-    }
+    "stats": {}
   },
   {
     "name": "Mongoose",
     "agility": 40.7,
-    "attack": 19.8,
+    "attack": 12.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Forests",
@@ -9738,7 +9472,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Serpent Killer",
     "createdAt": "2025-12-02T23:27:46.388Z",
-    "defense": 6.5,
+    "defense": 39.3,
     "description": "A Tiny creature found in Forests, grasslands.",
     "diet": [
       "snakes",
@@ -9788,14 +9522,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 12.5
-    }
+    "stats": {}
   },
   {
     "name": "Monitor Lizard",
     "agility": 32.6,
-    "attack": 26.9,
+    "attack": 3.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -9812,7 +9544,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Fighter",
     "createdAt": "2025-12-02T23:27:46.443Z",
-    "defense": 32.6,
+    "defense": 38.8,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -9859,14 +9591,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 3.1
-    }
+    "stats": {}
   },
   {
     "name": "Moose",
     "agility": 35.7,
-    "attack": 39.4,
+    "attack": 66.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Forest/Swamp",
@@ -9885,7 +9615,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Bruiser",
     "createdAt": "2025-12-02T23:27:46.487Z",
-    "defense": 59.6,
+    "defense": 69.1,
     "description": "The largest species of deer, towering over most predators. Males grow massive antlers for fighting rivals and defending against wolves.",
     "diet": [
       "plants",
@@ -9934,14 +9664,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 66.2
-    }
+    "stats": {}
   },
   {
     "name": "Moray Eel",
     "agility": 38.7,
-    "attack": 26.3,
+    "attack": 34.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -9958,7 +9686,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Fighter",
     "createdAt": "2025-12-02T23:27:46.529Z",
-    "defense": 26.4,
+    "defense": 24.4,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -10005,14 +9733,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 34.8
-    }
+    "stats": {}
   },
   {
     "name": "Mountain Goat",
     "agility": 34.5,
-    "attack": 30.7,
+    "attack": 12.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Mountains",
@@ -10030,7 +9756,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Extreme Climber",
     "createdAt": "2025-12-02T23:27:46.578Z",
-    "defense": 53.1,
+    "defense": 13.6,
     "description": "A Medium creature found in Mountains, cliffs.",
     "diet": [
       "grass",
@@ -10080,14 +9806,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 12.1
-    }
+    "stats": {}
   },
   {
     "name": "Musk Ox",
     "agility": 28.3,
-    "attack": 33,
+    "attack": 65.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Arctic tundra",
@@ -10105,7 +9829,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:46.623Z",
-    "defense": 66.8,
+    "defense": 68.6,
     "description": "A Large creature found in Arctic tundra.",
     "diet": [
       "grass",
@@ -10155,14 +9879,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 65.8
-    }
+    "stats": {}
   },
   {
     "name": "Naked Mole Rat",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 2.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -10179,7 +9901,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Survivor",
     "createdAt": "2025-12-02T23:27:46.669Z",
-    "defense": 27.8,
+    "defense": 3.7,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -10226,14 +9948,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 2.9
-    }
+    "stats": {}
   },
   {
     "name": "Narwhal",
     "agility": 22.3,
-    "attack": 49.4,
+    "attack": 2.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Arctic waters",
@@ -10251,7 +9971,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Specialist",
     "createdAt": "2025-12-02T23:27:46.715Z",
-    "defense": 72.8,
+    "defense": 68.1,
     "description": "A Large creature found in Arctic waters.",
     "diet": [
       "fish",
@@ -10301,14 +10021,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 2.7
-    }
+    "stats": {}
   },
   {
     "name": "Nautilus",
     "agility": 32.5,
-    "attack": 26.3,
+    "attack": 2.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -10325,7 +10043,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Tank",
     "createdAt": "2025-12-02T23:28:20.912Z",
-    "defense": 32.6,
+    "defense": 13.3,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -10372,14 +10090,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 2.5
-    }
+    "stats": {}
   },
   {
     "name": "Ocelot",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 2.4,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -10396,7 +10112,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Rogue",
     "createdAt": "2025-12-02T23:27:46.761Z",
-    "defense": 27.8,
+    "defense": 46.2,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -10443,14 +10159,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 2.4
-    }
+    "stats": {}
   },
   {
     "name": "Octopus",
     "agility": 48.4,
-    "attack": 23.8,
+    "attack": 2.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Reef",
@@ -10469,7 +10183,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Trickster",
     "createdAt": "2025-12-02T23:28:20.999Z",
-    "defense": 11.3,
+    "defense": 13,
     "description": "The most intelligent invertebrate. It can solve puzzles, change color and texture instantly, and squeeze through tiny gaps.",
     "diet": [
       "crabs",
@@ -10519,14 +10233,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 2.3
-    }
+    "stats": {}
   },
   {
     "name": "Okapi",
     "agility": 37.5,
-    "attack": 39.2,
+    "attack": 2.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Rainforests of DR Congo",
@@ -10544,7 +10256,7 @@ window.animalData = [
     "bite_force_psi": 200,
     "class": "Scout",
     "createdAt": "2025-12-02T23:27:46.807Z",
-    "defense": 56.8,
+    "defense": 12.7,
     "description": "A Large creature found in Rainforests of DR Congo.",
     "diet": [
       "leaves",
@@ -10594,14 +10306,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 2.2
-    }
+    "stats": {}
   },
   {
     "name": "Opossum",
     "agility": 37.5,
-    "attack": 23.7,
+    "attack": 2.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Forests",
@@ -10619,7 +10329,7 @@ window.animalData = [
     "bite_force_psi": 45,
     "class": "Survivor",
     "createdAt": "2025-12-02T23:28:21.103Z",
-    "defense": 15.5,
+    "defense": 12.4,
     "description": "A Small creature found in Forests, urban areas.",
     "diet": [
       "insects",
@@ -10669,14 +10379,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 2.1
-    }
+    "stats": {}
   },
   {
     "name": "Orangutan",
     "agility": 31.9,
-    "attack": 35.9,
+    "attack": 47,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Rainforests of Borneo and Sumatra",
@@ -10694,7 +10402,7 @@ window.animalData = [
     "bite_force_psi": 575,
     "class": "Specialist",
     "createdAt": "2025-12-02T23:27:46.849Z",
-    "defense": 33.7,
+    "defense": 45.7,
     "description": "A Large creature found in Rainforests of Borneo and Sumatra.",
     "diet": [
       "fruit",
@@ -10744,14 +10452,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 47
-    }
+    "stats": {}
   },
   {
     "name": "Orca",
     "agility": 35.9,
-    "attack": 85.9,
+    "attack": 96.3,
     "battle_profile": {
       "preferred_range": "Mid range",
       "primary_environment": "Open Ocean",
@@ -10770,7 +10476,7 @@ window.animalData = [
     "bite_force_psi": 19000,
     "class": "Controller",
     "createdAt": "2025-12-02T23:28:21.193Z",
-    "defense": 91.1,
+    "defense": 12.1,
     "description": "The apex predator of the ocean, combining immense size with pack intelligence. Orcas hunt everything from fish to blue whales.",
     "diet": [
       "fish",
@@ -10820,14 +10526,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 96
     },
-    "stats": {
-      "attack": 96.3
-    }
+    "stats": {}
   },
   {
     "name": "Oryx",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -10844,7 +10548,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Fighter",
     "createdAt": "2025-12-02T23:27:46.893Z",
-    "defense": 27.8,
+    "defense": 33.4,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -10891,14 +10595,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 2
-    }
+    "stats": {}
   },
   {
     "name": "Osprey",
     "agility": 51.4,
-    "attack": 27.3,
+    "attack": 46.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -10915,7 +10617,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Fisher",
     "createdAt": "2025-12-02T23:27:46.935Z",
-    "defense": 21.4,
+    "defense": 11.8,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -10962,14 +10664,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 46.5
-    }
+    "stats": {}
   },
   {
     "name": "Ostrich",
     "agility": 59.6,
-    "attack": 31.6,
+    "attack": 11.6,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Savannas",
@@ -10987,7 +10687,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Kicker",
     "createdAt": "2025-12-02T23:27:46.976Z",
-    "defense": 52.9,
+    "defense": 29,
     "description": "A Large creature found in Savannas, deserts.",
     "diet": [
       "plants",
@@ -11037,14 +10737,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 11.6
-    }
+    "stats": {}
   },
   {
     "name": "Otter",
     "agility": 43.9,
-    "attack": 41.3,
+    "attack": 25.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Rivers",
@@ -11062,7 +10760,7 @@ window.animalData = [
     "bite_force_psi": 615,
     "class": "Playful Hunter",
     "createdAt": "2025-12-02T23:27:47.021Z",
-    "defense": 26.8,
+    "defense": 54.6,
     "description": "A Small creature found in Rivers, coasts.",
     "diet": [
       "fish",
@@ -11112,14 +10810,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 30
     },
-    "stats": {
-      "attack": 25.9
-    }
+    "stats": {}
   },
   {
     "name": "Pangolin",
     "agility": 32.7,
-    "attack": 15.5,
+    "attack": 1.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Forests",
@@ -11137,7 +10833,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Defender",
     "createdAt": "2025-12-02T23:27:47.064Z",
-    "defense": 28.9,
+    "defense": 81.9,
     "description": "A Small creature found in Forests, grasslands.",
     "diet": [
       "ants",
@@ -11186,14 +10882,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 1.9
-    }
+    "stats": {}
   },
   {
     "name": "Peacock",
     "agility": 51.4,
-    "attack": 27.3,
+    "attack": 1.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -11210,7 +10904,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Bard",
     "createdAt": "2025-12-02T23:27:47.107Z",
-    "defense": 21.4,
+    "defense": 11.5,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -11257,14 +10951,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 1.8
-    }
+    "stats": {}
   },
   {
     "name": "Pelican",
     "agility": 65.3,
-    "attack": 25.3,
+    "attack": 45.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Coasts",
@@ -11282,7 +10974,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Fisher",
     "createdAt": "2025-12-02T23:27:47.151Z",
-    "defense": 24.6,
+    "defense": 3.4,
     "description": "A Medium creature found in Coasts, lakes, rivers.",
     "diet": [
       "fish"
@@ -11330,14 +11022,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 45.9
-    }
+    "stats": {}
   },
   {
     "name": "Peregrine Falcon",
     "agility": 91.9,
-    "attack": 36.6,
+    "attack": 45.4,
     "battle_profile": {
       "preferred_range": "Long range",
       "primary_environment": "Sky",
@@ -11356,7 +11046,7 @@ window.animalData = [
     "bite_force_psi": 50,
     "class": "Glass Cannon",
     "createdAt": "2025-12-02T23:27:47.192Z",
-    "defense": 11.3,
+    "defense": 11.2,
     "description": "The fastest animal on the planet during its hunting stoop. It strikes birds in mid-air with the force of a bullet.",
     "diet": [
       "birds",
@@ -11405,14 +11095,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 45.4
-    }
+    "stats": {}
   },
   {
     "name": "Piranha",
     "agility": 49.5,
-    "attack": 20,
+    "attack": 34.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Rivers",
@@ -11430,7 +11118,7 @@ window.animalData = [
     "bite_force_psi": 72,
     "class": "Swarm Hunter",
     "createdAt": "2025-12-02T23:27:47.231Z",
-    "defense": 5,
+    "defense": 23.9,
     "description": "A Tiny creature found in Rivers, floodplains.",
     "diet": [
       "fish",
@@ -11480,14 +11168,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 34.3
-    }
+    "stats": {}
   },
   {
     "name": "Platypus",
     "agility": 40.2,
-    "attack": 23.2,
+    "attack": 25.4,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Rivers",
@@ -11505,7 +11191,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Venomous",
     "createdAt": "2025-12-02T23:27:47.273Z",
-    "defense": 6.6,
+    "defense": 10.9,
     "description": "A Tiny creature found in Rivers, streams.",
     "diet": [
       "insects",
@@ -11555,14 +11241,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 30
     },
-    "stats": {
-      "attack": 25.4
-    }
+    "stats": {}
   },
   {
     "name": "Poison Dart Frog",
     "agility": 43.2,
-    "attack": 10.5,
+    "attack": 0.15,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Rainforests of Central/South America",
@@ -11580,7 +11264,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Specialist",
     "createdAt": "2025-12-02T23:27:47.316Z",
-    "defense": 1.6,
+    "defense": 0.04,
     "description": "A Tiny creature found in Rainforests of Central/South America.",
     "diet": [
       "ants",
@@ -11629,14 +11313,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 5
     },
-    "stats": {
-      "attack": 0.15
-    }
+    "stats": {}
   },
   {
     "name": "Polar Bear",
     "agility": 37,
-    "attack": 62.4,
+    "attack": 85.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Arctic Tundra",
@@ -11655,7 +11337,7 @@ window.animalData = [
     "bite_force_psi": 1200,
     "class": "Bruiser",
     "createdAt": "2025-12-02T23:27:47.359Z",
-    "defense": 61.2,
+    "defense": 81.3,
     "description": "The largest land carnivore, perfectly adapted to the frozen north. They are tireless swimmers and powerful hunters of seals.",
     "diet": [
       "seals",
@@ -11705,14 +11387,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 85
     },
-    "stats": {
-      "attack": 85.1
-    }
+    "stats": {}
   },
   {
     "name": "Porcupine",
     "agility": 31.4,
-    "attack": 13.7,
+    "attack": 19.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Forests",
@@ -11730,7 +11410,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Defender",
     "createdAt": "2025-12-02T23:27:47.404Z",
-    "defense": 26,
+    "defense": 76.6,
     "description": "A Small creature found in Forests, grasslands.",
     "diet": [
       "roots",
@@ -11780,14 +11460,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 25
     },
-    "stats": {
-      "attack": 19.8
-    }
+    "stats": {}
   },
   {
     "name": "Praying Mantis",
     "agility": 42.1,
-    "attack": 21,
+    "attack": 33.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -11804,7 +11482,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Fighter",
     "createdAt": "2025-12-02T23:27:47.452Z",
-    "defense": 22.8,
+    "defense": 0.12,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -11851,14 +11529,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 33.7
-    }
+    "stats": {}
   },
   {
     "name": "Proboscis Monkey",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 44.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -11875,7 +11551,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Civilian",
     "createdAt": "2025-12-02T23:27:47.494Z",
-    "defense": 27.8,
+    "defense": 45.2,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -11922,14 +11598,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 44.8
-    }
+    "stats": {}
   },
   {
     "name": "Pronghorn",
     "agility": 42.7,
-    "attack": 27.3,
+    "attack": 24.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -11946,7 +11620,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Speedster",
     "createdAt": "2025-12-02T23:27:47.535Z",
-    "defense": 27.8,
+    "defense": 32.9,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -11993,14 +11667,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 30
     },
-    "stats": {
-      "attack": 24.8
-    }
+    "stats": {}
   },
   {
     "name": "Pufferfish",
     "agility": 33,
-    "attack": 32.6,
+    "attack": 33.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Tropical oceans",
@@ -12018,7 +11690,7 @@ window.animalData = [
     "bite_force_psi": 300,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:47.577Z",
-    "defense": 32.2,
+    "defense": 23.4,
     "description": "A Small creature found in Tropical oceans.",
     "diet": [
       "invertebrates",
@@ -12067,14 +11739,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 33.2
-    }
+    "stats": {}
   },
   {
     "name": "Puffin",
     "agility": 51.4,
-    "attack": 27.3,
+    "attack": 44.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -12091,7 +11761,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Fisher",
     "createdAt": "2025-12-02T23:27:47.630Z",
-    "defense": 21.4,
+    "defense": 0.95,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -12138,14 +11808,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 44.3
-    }
+    "stats": {}
   },
   {
     "name": "Python",
     "agility": 23.3,
-    "attack": 47.5,
+    "attack": 76.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Rainforests",
@@ -12163,7 +11831,7 @@ window.animalData = [
     "bite_force_psi": 200,
     "class": "Constrictor",
     "createdAt": "2025-12-02T23:27:47.674Z",
-    "defense": 54.4,
+    "defense": 32.4,
     "description": "A Large creature found in Rainforests, grasslands.",
     "diet": [
       "mammals",
@@ -12212,14 +11880,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 75
     },
-    "stats": {
-      "attack": 76.1
-    }
+    "stats": {}
   },
   {
     "name": "Quokka",
     "agility": 39.2,
-    "attack": 16.8,
+    "attack": 1.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Islands of Western Australia",
@@ -12237,7 +11903,7 @@ window.animalData = [
     "bite_force_psi": 50,
     "class": "Support",
     "createdAt": "2025-12-02T23:27:47.715Z",
-    "defense": 22.5,
+    "defense": 10.6,
     "description": "A Small creature found in Islands of Western Australia.",
     "diet": [
       "plants",
@@ -12286,14 +11952,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 1.7
-    }
+    "stats": {}
   },
   {
     "name": "Quoll",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 1.6,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -12310,7 +11974,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Hunter",
     "createdAt": "2025-12-02T23:27:47.758Z",
-    "defense": 27.8,
+    "defense": 10.3,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -12357,14 +12021,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 1.6
-    }
+    "stats": {}
   },
   {
     "name": "Raccoon",
     "agility": 36.7,
-    "attack": 26.6,
+    "attack": 1.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Forests",
@@ -12382,7 +12044,7 @@ window.animalData = [
     "bite_force_psi": 162,
     "class": "Clever Scavenger",
     "createdAt": "2025-12-02T23:27:47.801Z",
-    "defense": 17.5,
+    "defense": 10,
     "description": "A Small creature found in Forests, urban areas.",
     "diet": [
       "fruits",
@@ -12432,14 +12094,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 1.5
-    }
+    "stats": {}
   },
   {
     "name": "Rattlesnake",
     "agility": 32.6,
-    "attack": 26.9,
+    "attack": 61.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -12456,7 +12116,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Assassin",
     "createdAt": "2025-12-02T23:27:47.843Z",
-    "defense": 32.6,
+    "defense": 31.9,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -12503,14 +12163,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 65
     },
-    "stats": {
-      "attack": 61.1
-    }
+    "stats": {}
   },
   {
     "name": "Raven",
     "agility": 51.4,
-    "attack": 27.3,
+    "attack": 1.45,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -12527,7 +12185,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Mage",
     "createdAt": "2025-12-02T23:27:47.885Z",
-    "defense": 21.4,
+    "defense": 0.8,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -12574,14 +12232,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 1.45
-    }
+    "stats": {}
   },
   {
     "name": "Red Fox",
     "agility": 42.6,
-    "attack": 24.5,
+    "attack": 65.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Forests",
@@ -12599,7 +12255,7 @@ window.animalData = [
     "bite_force_psi": 92,
     "class": "Clever Hunter",
     "createdAt": "2025-12-02T23:27:47.935Z",
-    "defense": 17.2,
+    "defense": 44.7,
     "description": "A Small creature found in Forests, grasslands, urban.",
     "diet": [
       "rodents",
@@ -12650,14 +12306,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 65.3
-    }
+    "stats": {}
   },
   {
     "name": "Red Panda",
     "agility": 37.2,
-    "attack": 16.2,
+    "attack": 1.4,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Mountain forests",
@@ -12675,7 +12329,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Agile Climber",
     "createdAt": "2025-12-02T23:27:47.981Z",
-    "defense": 21.4,
+    "defense": 9.7,
     "description": "A Small creature found in Mountain forests.",
     "diet": [
       "bamboo",
@@ -12725,14 +12379,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 1.4
-    }
+    "stats": {}
   },
   {
     "name": "Red-Eyed Tree Frog",
     "agility": 36.1,
-    "attack": 26.3,
+    "attack": 0.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -12749,7 +12401,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Climber",
     "createdAt": "2025-12-02T23:27:48.022Z",
-    "defense": 24.1,
+    "defense": 0.03,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -12796,14 +12448,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 5
     },
-    "stats": {
-      "attack": 0.1
-    }
+    "stats": {}
   },
   {
     "name": "Red-tailed Hawk",
     "agility": 51.4,
-    "attack": 27.3,
+    "attack": 43.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -12820,7 +12470,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Hunter",
     "createdAt": "2025-12-02T23:27:48.066Z",
-    "defense": 21.4,
+    "defense": 9.4,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -12867,14 +12517,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 43.7
-    }
+    "stats": {}
   },
   {
     "name": "Reindeer",
     "agility": 36.7,
-    "attack": 32.1,
+    "attack": 24.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Tundra",
@@ -12892,7 +12540,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Migrator",
     "createdAt": "2025-12-02T23:27:48.110Z",
-    "defense": 54.3,
+    "defense": 31.4,
     "description": "A Medium creature found in Tundra, boreal forests.",
     "diet": [
       "lichens",
@@ -12942,14 +12590,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 30
     },
-    "stats": {
-      "attack": 24.2
-    }
+    "stats": {}
   },
   {
     "name": "Reticulated Python",
     "agility": 32.6,
-    "attack": 29,
+    "attack": 75.6,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -12966,7 +12612,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Grappler",
     "createdAt": "2025-12-02T23:27:48.164Z",
-    "defense": 34.7,
+    "defense": 31,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -13013,14 +12659,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 75
     },
-    "stats": {
-      "attack": 75.6
-    }
+    "stats": {}
   },
   {
     "name": "Rhinoceros",
     "agility": 28.7,
-    "attack": 35.6,
+    "attack": 89.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Savanna",
@@ -13039,7 +12683,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Tank",
     "createdAt": "2025-12-02T23:28:22.563Z",
-    "defense": 78.1,
+    "defense": 91.2,
     "description": "A prehistoric-looking tank with thick skin and a deadly horn. Rhinos are nearsighted but will charge anything that smells like a threat.",
     "diet": [
       "grass",
@@ -13088,14 +12732,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 90
     },
-    "stats": {
-      "attack": 89.8
-    }
+    "stats": {}
   },
   {
     "name": "Ring-tailed Lemur",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 43.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -13112,7 +12754,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Scout",
     "createdAt": "2025-12-02T23:27:48.212Z",
-    "defense": 27.8,
+    "defense": 44.2,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -13159,14 +12801,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 43.2
-    }
+    "stats": {}
   },
   {
     "name": "Sable Antelope",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 23.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -13183,7 +12823,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Fighter",
     "createdAt": "2025-12-02T23:27:48.261Z",
-    "defense": 27.8,
+    "defense": 0.1,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -13230,14 +12870,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 30
     },
-    "stats": {
-      "attack": 23.7
-    }
+    "stats": {}
   },
   {
     "name": "Sailfish",
     "agility": 45.9,
-    "attack": 26.3,
+    "attack": 32.6,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -13254,7 +12892,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Speedster",
     "createdAt": "2025-12-02T23:27:48.301Z",
-    "defense": 26.4,
+    "defense": 22.9,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -13301,14 +12939,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 32.6
-    }
+    "stats": {}
   },
   {
     "name": "Salamander",
     "agility": 36.1,
-    "attack": 26.3,
+    "attack": 0.35,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -13325,7 +12961,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Survivor",
     "createdAt": "2025-12-02T23:27:48.342Z",
-    "defense": 24.1,
+    "defense": 0.02,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -13372,14 +13008,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 10
     },
-    "stats": {
-      "attack": 0.35
-    }
+    "stats": {}
   },
   {
     "name": "Saltwater Crocodile",
     "agility": 36.4,
-    "attack": 70.4,
+    "attack": 94.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Shallow Water",
@@ -13398,7 +13032,7 @@ window.animalData = [
     "bite_force_psi": 3700,
     "class": "Ambush Predator",
     "createdAt": "2025-12-02T23:28:22.806Z",
-    "defense": 86.9,
+    "defense": 95.7,
     "description": "The largest living reptile, an ambush predator with the strongest bite force of any animal today. It dominates the water's edge, dragging prey to a watery grave.",
     "diet": [
       "fish",
@@ -13448,14 +13082,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 95
     },
-    "stats": {
-      "attack": 94.2
-    }
+    "stats": {}
   },
   {
     "name": "Sawfish",
     "agility": 38.7,
-    "attack": 26.3,
+    "attack": 32.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -13472,7 +13104,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Fighter",
     "createdAt": "2025-12-02T23:27:48.388Z",
-    "defense": 26.4,
+    "defense": 22.4,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -13519,14 +13151,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 32.1
-    }
+    "stats": {}
   },
   {
     "name": "Sea Lion",
     "agility": 37.3,
-    "attack": 39,
+    "attack": 64.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Coastal waters",
@@ -13544,7 +13174,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Swimmer",
     "createdAt": "2025-12-02T23:27:48.430Z",
-    "defense": 56.9,
+    "defense": 54.1,
     "description": "A Large creature found in Coastal waters.",
     "diet": [
       "fish",
@@ -13593,14 +13223,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 64.9
-    }
+    "stats": {}
   },
   {
     "name": "Sea Otter",
     "agility": 40.7,
-    "attack": 35.4,
+    "attack": 23.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Coastal waters",
@@ -13618,7 +13246,7 @@ window.animalData = [
     "bite_force_psi": 615,
     "class": "Tool Master",
     "createdAt": "2025-12-02T23:27:48.472Z",
-    "defense": 38.2,
+    "defense": 53.6,
     "description": "A Small creature found in Coastal waters.",
     "diet": [
       "sea urchins",
@@ -13668,14 +13296,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 30
     },
-    "stats": {
-      "attack": 23.1
-    }
+    "stats": {}
   },
   {
     "name": "Seal",
     "agility": 38.8,
-    "attack": 37,
+    "attack": 1.35,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Coastal waters",
@@ -13693,7 +13319,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Swimmer",
     "createdAt": "2025-12-02T23:27:48.519Z",
-    "defense": 57.2,
+    "defense": 53.2,
     "description": "A Medium creature found in Coastal waters, ice.",
     "diet": [
       "fish",
@@ -13742,14 +13368,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 1.35
-    }
+    "stats": {}
   },
   {
     "name": "Secretary Bird",
     "agility": 58.5,
-    "attack": 34.7,
+    "attack": 1.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Savannas",
@@ -13767,7 +13391,7 @@ window.animalData = [
     "bite_force_psi": 195,
     "class": "Striker",
     "createdAt": "2025-12-02T23:27:48.563Z",
-    "defense": 16.7,
+    "defense": 9.1,
     "description": "A Medium creature found in Savannas, grasslands.",
     "diet": [
       "snakes",
@@ -13817,14 +13441,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 1.3
-    }
+    "stats": {}
   },
   {
     "name": "Serval",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 1.25,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -13841,7 +13463,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Assassin",
     "createdAt": "2025-12-02T23:27:48.608Z",
-    "defense": 27.8,
+    "defense": 43.7,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -13888,14 +13510,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 1.25
-    }
+    "stats": {}
   },
   {
     "name": "Shoebill",
     "agility": 62.8,
-    "attack": 38.4,
+    "attack": 1.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Swamps",
@@ -13913,7 +13533,7 @@ window.animalData = [
     "bite_force_psi": 450,
     "class": "Ambush Predator",
     "createdAt": "2025-12-02T23:27:48.658Z",
-    "defense": 23.7,
+    "defense": 8.8,
     "description": "A Medium creature found in Swamps, marshes.",
     "diet": [
       "fish",
@@ -13963,14 +13583,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 1.2
-    }
+    "stats": {}
   },
   {
     "name": "Siberian Tiger",
     "agility": 46.6,
-    "attack": 54,
+    "attack": 84.6,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Dense Forest",
@@ -13989,7 +13607,7 @@ window.animalData = [
     "bite_force_psi": 1050,
     "class": "Ambush Predator",
     "createdAt": "2025-12-02T23:27:48.703Z",
-    "defense": 51.9,
+    "defense": 60.2,
     "description": "The largest of all big cats, a solitary hunter built for power and stealth. It can take down prey much larger than itself.",
     "diet": [
       "deer",
@@ -14039,14 +13657,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 85
     },
-    "stats": {
-      "attack": 84.6
-    }
+    "stats": {}
   },
   {
     "name": "Skunk",
     "agility": 33.7,
-    "attack": 22.6,
+    "attack": 1.15,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Forests",
@@ -14064,7 +13680,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Chemical Warfare",
     "createdAt": "2025-12-02T23:27:48.743Z",
-    "defense": 18,
+    "defense": 8.5,
     "description": "A Small creature found in Forests, grasslands, urban.",
     "diet": [
       "insects",
@@ -14114,14 +13730,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 1.15
-    }
+    "stats": {}
   },
   {
     "name": "Sloth",
     "agility": 27.8,
-    "attack": 12.9,
+    "attack": 1.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Rainforests",
@@ -14139,7 +13753,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Survivor",
     "createdAt": "2025-12-02T23:27:48.785Z",
-    "defense": 26.5,
+    "defense": 8.2,
     "description": "A Small creature found in Rainforests.",
     "diet": [
       "leaves",
@@ -14189,14 +13803,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 1.1
-    }
+    "stats": {}
   },
   {
     "name": "Sloth Bear",
     "agility": 31.4,
-    "attack": 51.8,
+    "attack": 75,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Forests",
@@ -14214,7 +13826,7 @@ window.animalData = [
     "bite_force_psi": 900,
     "class": "Bruiser",
     "createdAt": "2025-12-02T23:27:48.839Z",
-    "defense": 55.4,
+    "defense": 74.3,
     "description": "A Medium creature found in Forests, grasslands.",
     "diet": [
       "termites",
@@ -14264,14 +13876,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 75
     },
-    "stats": {
-      "attack": 75
-    }
+    "stats": {}
   },
   {
     "name": "Snapping Turtle",
     "agility": 27.8,
-    "attack": 26.9,
+    "attack": 0.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -14288,7 +13898,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:48.888Z",
-    "defense": 41.5,
+    "defense": 7.9,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -14335,14 +13945,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 10
     },
-    "stats": {
-      "attack": 0.3
-    }
+    "stats": {}
   },
   {
     "name": "Snow Leopard",
     "agility": 47.5,
-    "attack": 33.5,
+    "attack": 64.4,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "High Altitude",
@@ -14361,7 +13969,7 @@ window.animalData = [
     "bite_force_psi": 300,
     "class": "Ambush Predator",
     "createdAt": "2025-12-02T23:27:48.931Z",
-    "defense": 26.6,
+    "defense": 59.7,
     "description": "The ghost of the mountains, perfectly camouflaged against rocky slopes. Its long tail provides balance for incredible leaps.",
     "diet": [
       "sheep",
@@ -14411,14 +14019,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 64.4
-    }
+    "stats": {}
   },
   {
     "name": "Snowy Owl",
     "agility": 66.5,
-    "attack": 39.5,
+    "attack": 42.6,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Arctic tundra",
@@ -14436,7 +14042,7 @@ window.animalData = [
     "bite_force_psi": 500,
     "class": "Scout",
     "createdAt": "2025-12-02T23:27:48.978Z",
-    "defense": 12.7,
+    "defense": 7.6,
     "description": "A Small creature found in Arctic tundra.",
     "diet": [
       "lemmings",
@@ -14486,14 +14092,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 42.6
-    }
+    "stats": {}
   },
   {
     "name": "Spectacled Bear",
     "agility": 30.7,
-    "attack": 27.3,
+    "attack": 74.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -14510,7 +14114,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:49.018Z",
-    "defense": 36.7,
+    "defense": 76,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -14557,14 +14161,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 75
     },
-    "stats": {
-      "attack": 74.5
-    }
+    "stats": {}
   },
   {
     "name": "Spider Monkey",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 42.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -14581,7 +14183,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Scout",
     "createdAt": "2025-12-02T23:27:49.062Z",
-    "defense": 27.8,
+    "defense": 43.3,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -14628,14 +14230,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 42.1
-    }
+    "stats": {}
   },
   {
     "name": "Stag Beetle",
     "agility": 42.1,
-    "attack": 21,
+    "attack": 11.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -14652,7 +14252,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Fighter",
     "createdAt": "2025-12-02T23:27:49.102Z",
-    "defense": 22.8,
+    "defense": 0.09,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -14699,14 +14299,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 11.2
-    }
+    "stats": {}
   },
   {
     "name": "Stingray",
     "agility": 39.9,
-    "attack": 26.3,
+    "attack": 31.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -14723,7 +14321,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Stealth",
     "createdAt": "2025-12-02T23:27:49.144Z",
-    "defense": 26.4,
+    "defense": 21.9,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -14770,14 +14368,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 31.5
-    }
+    "stats": {}
   },
   {
     "name": "Stoat",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 1.05,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -14794,7 +14390,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Assassin",
     "createdAt": "2025-12-02T23:27:49.188Z",
-    "defense": 27.8,
+    "defense": 38.4,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -14841,14 +14437,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 1.05
-    }
+    "stats": {}
   },
   {
     "name": "Stork",
     "agility": 66.2,
-    "attack": 24.5,
+    "attack": 1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Wetlands",
@@ -14866,7 +14460,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Wader",
     "createdAt": "2025-12-02T23:27:49.242Z",
-    "defense": 23.8,
+    "defense": 3.1,
     "description": "A Medium creature found in Wetlands, grasslands.",
     "diet": [
       "fish",
@@ -14916,14 +14510,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 1
-    }
+    "stats": {}
   },
   {
     "name": "Sugar Glider",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 0.95,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -14940,7 +14532,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Glider",
     "createdAt": "2025-12-02T23:27:49.290Z",
-    "defense": 27.8,
+    "defense": 7.3,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -14987,14 +14579,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 0.95
-    }
+    "stats": {}
   },
   {
     "name": "Sun Bear",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 73.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -15011,7 +14601,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Fighter",
     "createdAt": "2025-12-02T23:27:49.339Z",
-    "defense": 27.8,
+    "defense": 7,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -15058,14 +14648,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 75
     },
-    "stats": {
-      "attack": 73.9
-    }
+    "stats": {}
   },
   {
     "name": "Swan",
     "agility": 62.7,
-    "attack": 19.9,
+    "attack": 10.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Lakes",
@@ -15083,7 +14671,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Territorial",
     "createdAt": "2025-12-02T23:27:49.384Z",
-    "defense": 24.2,
+    "defense": 2.8,
     "description": "A Medium creature found in Lakes, rivers, wetlands.",
     "diet": [
       "aquatic plants",
@@ -15132,14 +14720,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 10.7
-    }
+    "stats": {}
   },
   {
     "name": "Swordfish",
     "agility": 48.3,
-    "attack": 46.9,
+    "attack": 30.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Tropical and temperate oceans",
@@ -15157,7 +14743,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Assassin",
     "createdAt": "2025-12-02T23:27:49.428Z",
-    "defense": 63.8,
+    "defense": 21.4,
     "description": "A Large creature found in Tropical and temperate oceans.",
     "diet": [
       "fish",
@@ -15206,14 +14792,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 30.9
-    }
+    "stats": {}
   },
   {
     "name": "Tapir",
     "agility": 26.4,
-    "attack": 40,
+    "attack": 0.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Jungles of South America and Asia",
@@ -15231,7 +14815,7 @@ window.animalData = [
     "bite_force_psi": 300,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:49.471Z",
-    "defense": 72.2,
+    "defense": 67.6,
     "description": "A Large creature found in Jungles of South America and Asia.",
     "diet": [
       "leaves",
@@ -15280,14 +14864,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 0.9
-    }
+    "stats": {}
   },
   {
     "name": "Tarantula Hawk",
     "agility": 42.1,
-    "attack": 22.5,
+    "attack": 41.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -15304,7 +14886,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Slayer",
     "createdAt": "2025-12-02T23:27:49.514Z",
-    "defense": 22.8,
+    "defense": 6.7,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -15351,14 +14933,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 41.5
-    }
+    "stats": {}
   },
   {
     "name": "Tasmanian Devil",
     "agility": 36.6,
-    "attack": 40.1,
+    "attack": 0.85,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Forests",
@@ -15376,7 +14956,7 @@ window.animalData = [
     "bite_force_psi": 418,
     "class": "Scavenger",
     "createdAt": "2025-12-02T23:28:23.969Z",
-    "defense": 17.8,
+    "defense": 6.4,
     "description": "A Small creature found in Forests, scrublands.",
     "diet": [
       "carrion",
@@ -15425,14 +15005,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 0.85
-    }
+    "stats": {}
   },
   {
     "name": "Tiger Shark",
     "agility": 29.3,
-    "attack": 64.1,
+    "attack": 84.1,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Tropical and temperate waters",
@@ -15450,7 +15028,7 @@ window.animalData = [
     "bite_force_psi": 1250,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:49.567Z",
-    "defense": 78.6,
+    "defense": 59.2,
     "description": "A Large creature found in Tropical and temperate waters.",
     "diet": [
       "anything",
@@ -15500,14 +15078,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 85
     },
-    "stats": {
-      "attack": 84.1
-    }
+    "stats": {}
   },
   {
     "name": "Toucan",
     "agility": 60.9,
-    "attack": 18.6,
+    "attack": 0.8,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Tropical forests",
@@ -15525,7 +15101,7 @@ window.animalData = [
     "bite_force_psi": 50,
     "class": "Scout",
     "createdAt": "2025-12-02T23:27:49.616Z",
-    "defense": 14.2,
+    "defense": 0.65,
     "description": "A Small creature found in Tropical forests.",
     "diet": [
       "fruit",
@@ -15575,14 +15151,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 0.8
-    }
+    "stats": {}
   },
   {
     "name": "Tuna",
     "agility": 45.9,
-    "attack": 26.3,
+    "attack": 30.4,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -15599,7 +15173,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Speedster",
     "createdAt": "2025-12-02T23:27:49.656Z",
-    "defense": 26.4,
+    "defense": 21,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -15646,14 +15220,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 40
     },
-    "stats": {
-      "attack": 30.4
-    }
+    "stats": {}
   },
   {
     "name": "Vulture",
     "agility": 62.4,
-    "attack": 26.9,
+    "attack": 41,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Savannas",
@@ -15671,7 +15243,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Scavenger",
     "createdAt": "2025-12-02T23:27:49.697Z",
-    "defense": 21.6,
+    "defense": 6.1,
     "description": "A Medium creature found in Savannas, mountains.",
     "diet": [
       "carrion"
@@ -15719,14 +15291,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 41
-    }
+    "stats": {}
   },
   {
     "name": "Wallaby",
     "agility": 35.5,
-    "attack": 27.3,
+    "attack": 0.75,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -15743,7 +15313,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Jumper",
     "createdAt": "2025-12-02T23:27:49.739Z",
-    "defense": 27.8,
+    "defense": 5.8,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -15790,14 +15360,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 0.75
-    }
+    "stats": {}
   },
   {
     "name": "Walrus",
     "agility": 29,
-    "attack": 47.8,
+    "attack": 0.7,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Ice Floe",
@@ -15816,7 +15384,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Tank",
     "createdAt": "2025-12-02T23:28:24.242Z",
-    "defense": 81.6,
+    "defense": 80.7,
     "description": "A massive marine mammal with long tusks used for hauling out onto ice and fighting. Their thick skin is nearly impervious to cold and claws.",
     "diet": [
       "clams",
@@ -15866,14 +15434,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 0.7
-    }
+    "stats": {}
   },
   {
     "name": "Warthog",
     "agility": 37.6,
-    "attack": 23.7,
+    "attack": 40.4,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Savannas",
@@ -15891,7 +15457,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Charger",
     "createdAt": "2025-12-02T23:27:49.791Z",
-    "defense": 30.6,
+    "defense": 67.1,
     "description": "A Small creature found in Savannas, grasslands.",
     "diet": [
       "grass",
@@ -15941,14 +15507,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 50
     },
-    "stats": {
-      "attack": 40.4
-    }
+    "stats": {}
   },
   {
     "name": "Wild Boar",
     "agility": 37.3,
-    "attack": 42.7,
+    "attack": 73.2,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Forests",
@@ -15966,7 +15530,7 @@ window.animalData = [
     "bite_force_psi": 230,
     "class": "Bruiser",
     "createdAt": "2025-12-02T23:27:49.837Z",
-    "defense": 31.8,
+    "defense": 66.6,
     "description": "A Small creature found in Forests, grasslands.",
     "diet": [
       "roots",
@@ -16016,14 +15580,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 75
     },
-    "stats": {
-      "attack": 73.2
-    }
+    "stats": {}
   },
   {
     "name": "Wild Horse",
     "agility": 42.5,
-    "attack": 27.3,
+    "attack": 10.3,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -16040,7 +15602,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Runner",
     "createdAt": "2025-12-02T23:27:49.889Z",
-    "defense": 27.8,
+    "defense": 66.1,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -16087,14 +15649,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 20
     },
-    "stats": {
-      "attack": 10.3
-    }
+    "stats": {}
   },
   {
     "name": "Wildebeest",
     "agility": 40.8,
-    "attack": 33.6,
+    "attack": 63.9,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Savannas",
@@ -16112,7 +15672,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Migrator",
     "createdAt": "2025-12-02T23:27:49.933Z",
-    "defense": 56.2,
+    "defense": 0.08,
     "description": "A Medium creature found in Savannas, grasslands.",
     "diet": [
       "grass"
@@ -16160,14 +15720,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 63.9
-    }
+    "stats": {}
   },
   {
     "name": "Wolverine",
     "agility": 39.7,
-    "attack": 45.4,
+    "attack": 0.65,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Snow Forest",
@@ -16186,7 +15744,7 @@ window.animalData = [
     "bite_force_psi": 300,
     "class": "Berserker",
     "createdAt": "2025-12-02T23:27:49.986Z",
-    "defense": 24.2,
+    "defense": 65.6,
     "description": "A stocky and muscular carnivore, known for its ferocity and strength out of proportion to its size. It can crush frozen bones.",
     "diet": [
       "caribou",
@@ -16236,14 +15794,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 0.65
-    }
+    "stats": {}
   },
   {
     "name": "Wombat",
     "agility": 30.7,
-    "attack": 27.3,
+    "attack": 22.6,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Varied",
@@ -16260,7 +15816,7 @@ window.animalData = [
     "bite_force_psi": 100,
     "class": "Tank",
     "createdAt": "2025-12-02T23:27:50.030Z",
-    "defense": 36.7,
+    "defense": 5.5,
     "description": "A Medium creature found in Varied.",
     "diet": [
       "Varied"
@@ -16307,14 +15863,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 30
     },
-    "stats": {
-      "attack": 22.6
-    }
+    "stats": {}
   },
   {
     "name": "Yak",
     "agility": 28.1,
-    "attack": 33.8,
+    "attack": 63.5,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Himalayan mountains",
@@ -16332,7 +15886,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Mountain Tank",
     "createdAt": "2025-12-02T23:27:50.073Z",
-    "defense": 68.7,
+    "defense": 65.1,
     "description": "A Large creature found in Himalayan mountains.",
     "diet": [
       "grass",
@@ -16381,14 +15935,12 @@ window.animalData = [
     "calculatedStats": {
       "attack": 70
     },
-    "stats": {
-      "attack": 63.5
-    }
+    "stats": {}
   },
   {
     "name": "Zebra",
     "agility": 45.9,
-    "attack": 29,
+    "attack": 0.6,
     "battle_profile": {
       "preferred_range": "Close",
       "primary_environment": "Savannas",
@@ -16406,7 +15958,7 @@ window.animalData = [
     "bite_force_psi": 0,
     "class": "Runner",
     "createdAt": "2025-12-02T23:27:50.118Z",
-    "defense": 57.9,
+    "defense": 64.7,
     "description": "A Medium creature found in Savannas, grasslands.",
     "diet": [
       "grass",
@@ -16455,8 +16007,6 @@ window.animalData = [
     "calculatedStats": {
       "attack": 15
     },
-    "stats": {
-      "attack": 0.6
-    }
+    "stats": {}
   }
 ];
