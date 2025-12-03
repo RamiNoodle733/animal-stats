@@ -25,6 +25,11 @@ body {
     overflow: hidden; /* Prevent body scroll to keep app-like feel */
     height: 100vh;
     width: 100vw;
+    /* Safe area support for notches and home bars */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
 }
 
 .game-screen {
@@ -1052,12 +1057,12 @@ body {
 
     /* --- HEADER - Compact Single Row --- */
     .game-header {
-        padding: 8px 10px;
+        padding: 10px 10px 8px;
         gap: 15px;
         flex-wrap: nowrap;
         justify-content: center;
         flex-shrink: 0;
-        min-height: 50px;
+        min-height: 45px;
     }
 
     .game-header h1 {
@@ -1077,10 +1082,10 @@ body {
     /* --- STATS VIEW - Side by Side Like Desktop --- */
     .character-display-area {
         display: grid !important;
-        grid-template-columns: 1fr minmax(120px, 160px) 1fr;
+        grid-template-columns: 1fr minmax(100px, 140px) 1fr;
         grid-template-rows: 1fr;
         padding: 5px;
-        gap: 5px;
+        gap: 3px;
         flex: 1;
         min-height: 0;
         overflow: hidden;
@@ -1103,57 +1108,59 @@ body {
         grid-column: 1;
         grid-row: 1;
         overflow-y: auto;
+        overflow-x: hidden;
         max-height: 100%;
-        padding: 5px 3px;
+        padding: 5px 2px;
     }
 
     .stats-panel-right {
         grid-column: 3;
         grid-row: 1;
         overflow-y: auto;
+        overflow-x: hidden;
         max-height: 100%;
-        padding: 5px 3px;
+        padding: 5px 2px;
     }
 
     /* Character Display */
     .character-model-container {
-        max-width: 130px;
+        max-width: 120px;
         width: 100%;
         margin: 0 auto;
         flex-shrink: 1;
     }
 
     .character-name-display {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         line-height: 1.1;
         margin-bottom: 2px;
         letter-spacing: 2px;
     }
 
     .character-scientific-name {
-        font-size: 0.6rem;
+        font-size: 0.55rem;
         margin-bottom: 3px;
     }
     
     .character-mini-info {
         justify-content: center;
         gap: 4px;
-        font-size: 0.6rem;
+        font-size: 0.55rem;
         margin-top: 3px;
     }
     
     .character-mini-info span {
-        padding: 2px 5px;
+        padding: 2px 4px;
     }
 
     /* Stats - Compact Vertical Layout */
     .stats-panel {
         padding: 0;
-        gap: 3px;
+        gap: 2px;
     }
     
     .stat-group {
-        gap: 3px;
+        gap: 2px;
     }
 
     .stat-row {
@@ -1173,7 +1180,7 @@ body {
     }
     
     .stat-name {
-        font-size: 0.65rem;
+        font-size: 0.6rem;
         letter-spacing: 1px;
         text-align: center;
         order: 1;
@@ -1185,11 +1192,11 @@ body {
     }
     
     .stat-bar {
-        height: 10px;
+        height: 8px;
     }
     
     .stat-value {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         justify-content: center !important;
         flex-direction: row !important;
         gap: 3px;
@@ -1197,7 +1204,7 @@ body {
     }
     
     .stat-tier-badge {
-        font-size: 0.55rem;
+        font-size: 0.5rem;
         padding: 1px 3px;
     }
 
@@ -1216,22 +1223,23 @@ body {
         display: none;
     }
 
-    /* --- BOTTOM INFO BAR - Single Compact Row --- */
+    /* --- BOTTOM INFO BAR - Compact --- */
     .bottom-info-bar {
         flex-wrap: nowrap;
-        gap: 8px;
+        gap: 6px;
         padding: 4px 8px;
         justify-content: center;
         flex-shrink: 0;
         overflow-x: auto;
-        min-height: 36px;
+        min-height: 32px;
+        max-height: 32px;
     }
 
     .info-separator { display: none; }
 
     .info-item-inline {
-        font-size: 0.65rem;
-        padding: 2px 5px;
+        font-size: 0.6rem;
+        padding: 2px 4px;
         white-space: nowrap;
         flex-shrink: 0;
     }
@@ -1241,65 +1249,70 @@ body {
     }
 
     .expand-details-btn, .toggle-grid-btn {
-        padding: 4px 10px;
-        font-size: 0.7rem;
+        padding: 4px 8px;
+        font-size: 0.65rem;
         white-space: nowrap;
         flex-shrink: 0;
     }
 
-    /* --- CHARACTER GRID - Compact --- */
+    /* --- CHARACTER GRID - Compact & Contained --- */
     .character-grid-container {
-        height: 100px;
-        padding: 5px;
+        height: 90px;
+        max-height: 90px;
+        padding: 4px;
         flex-shrink: 0;
+        overflow: hidden;
     }
     
     .grid-controls {
         display: flex;
         flex-wrap: nowrap;
-        gap: 4px;
-        padding: 0 5px;
-        margin-bottom: 5px;
+        gap: 3px;
+        padding: 0 4px;
+        margin-bottom: 4px;
+        overflow-x: auto;
     }
     
     .search-box {
         flex: 1;
-        min-width: 80px;
-        padding: 4px 8px;
-        font-size: 0.75rem;
+        min-width: 70px;
+        max-width: 100px;
+        padding: 3px 6px;
+        font-size: 0.7rem;
     }
     
     .filter-select {
         flex: 0 0 auto;
         width: auto;
-        min-width: 60px;
-        padding: 4px 5px;
-        font-size: 0.65rem;
+        min-width: 55px;
+        padding: 3px 4px;
+        font-size: 0.6rem;
     }
     
     .filter-group {
         display: flex;
-        gap: 4px;
+        gap: 3px;
         flex: 0 0 auto;
     }
     
     .character-grid {
-        gap: 6px;
-        padding: 5px;
+        gap: 5px;
+        padding: 4px;
+        height: 55px;
     }
     
     .character-card {
-        min-width: 70px;
-        width: 70px;
-        height: 70px;
-    }
-    
-    .character-card-image {
+        min-width: 50px;
+        width: 50px;
         height: 50px;
     }
     
+    .character-card-image {
+        height: 35px;
+    }
+    
     .character-card-name {
-        font-size: 0.55rem;
+        font-size: 0.45rem;
         padding: 2px;
     }
 
@@ -1578,111 +1591,122 @@ body {
 @media (max-width: 480px) {
     /* Even more compact header */
     .game-header {
-        padding: 5px 8px;
-        gap: 10px;
-        min-height: 42px;
+        padding: 8px 6px 6px;
+        gap: 8px;
+        min-height: 38px;
     }
 
     .game-header h1 {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         letter-spacing: 1px;
     }
 
     .mode-btn {
-        padding: 5px 10px;
-        font-size: 0.7rem;
+        padding: 4px 8px;
+        font-size: 0.65rem;
     }
 
     /* Stats area */
     .character-display-area {
-        grid-template-columns: 1fr minmax(100px, 130px) 1fr;
+        grid-template-columns: 1fr minmax(90px, 110px) 1fr;
         padding: 3px;
-        gap: 3px;
+        gap: 2px;
     }
 
     .character-model-container {
-        max-width: 100px;
+        max-width: 90px;
     }
 
     .character-name-display {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
 
     .character-scientific-name {
-        font-size: 0.55rem;
+        font-size: 0.5rem;
     }
 
     .character-mini-info {
-        font-size: 0.5rem;
+        font-size: 0.45rem;
     }
     
     .stat-name {
-        font-size: 0.55rem;
+        font-size: 0.5rem;
     }
     
     .stat-bar {
-        height: 8px;
+        height: 6px;
     }
     
     .stat-value {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
     }
     
     .stat-tier-badge {
-        font-size: 0.5rem;
+        font-size: 0.45rem;
         padding: 0 2px;
     }
 
     /* Bottom bar */
     .bottom-info-bar {
-        padding: 3px 5px;
-        min-height: 30px;
+        padding: 3px 4px;
+        min-height: 28px;
+        max-height: 28px;
+        gap: 4px;
     }
 
     .info-item-inline {
-        font-size: 0.55rem;
+        font-size: 0.5rem;
         padding: 1px 3px;
     }
 
     .expand-details-btn, .toggle-grid-btn {
-        padding: 3px 8px;
-        font-size: 0.6rem;
+        padding: 3px 6px;
+        font-size: 0.55rem;
     }
 
     /* Grid */
     .character-grid-container {
-        height: 85px;
+        height: 75px;
+        max-height: 75px;
         padding: 3px;
     }
 
     .grid-controls {
-        gap: 3px;
-        margin-bottom: 3px;
+        gap: 2px;
+        margin-bottom: 2px;
     }
     
     .search-box {
-        padding: 3px 6px;
-        font-size: 0.65rem;
+        padding: 2px 4px;
+        font-size: 0.6rem;
+        min-width: 60px;
+        max-width: 80px;
     }
 
     .filter-select {
-        padding: 3px 4px;
-        font-size: 0.55rem;
-        min-width: 50px;
+        padding: 2px 3px;
+        font-size: 0.5rem;
+        min-width: 45px;
+    }
+
+    .character-grid {
+        gap: 4px;
+        padding: 3px;
+        height: 45px;
     }
 
     .character-card {
-        min-width: 55px;
-        width: 55px;
-        height: 55px;
+        min-width: 40px;
+        width: 40px;
+        height: 40px;
     }
 
     .character-card-image {
-        height: 38px;
+        height: 28px;
     }
 
     .character-card-name {
-        font-size: 0.45rem;
+        font-size: 0.35rem;
     }
 
     /* Compare View */
@@ -1692,34 +1716,34 @@ body {
     }
 
     .fighter-display {
-        width: 80px;
-        height: 80px;
+        width: 75px;
+        height: 75px;
     }
 
     .fighter-placeholder i {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
 
     .fighter-placeholder p {
-        font-size: 0.55rem;
+        font-size: 0.5rem;
     }
 
     .fighter-name {
-        font-size: 0.65rem;
+        font-size: 0.6rem;
     }
 
     .view-stats-btn {
         padding: 2px 4px;
-        font-size: 0.5rem;
+        font-size: 0.45rem;
     }
 
     .vs-badge {
-        font-size: 1.2rem;
+        font-size: 1rem;
     }
 
     .fight-btn {
-        padding: 6px 15px;
-        font-size: 0.9rem;
+        padding: 5px 12px;
+        font-size: 0.85rem;
     }
 }
 
