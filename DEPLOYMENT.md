@@ -94,8 +94,9 @@ npm install
    # Copy the example file
    cp .env.example .env.local
    
-   # Edit .env.local and add your MongoDB URI
+   # Edit .env.local and add your credentials
    MONGODB_URI=mongodb+srv://your_username:your_password@cluster.mongodb.net/animal-stats?retryWrites=true&w=majority
+   JWT_SECRET=your-secret-key-here
    ```
 
 ### Step 4: Seed the Database
@@ -241,6 +242,7 @@ Defines:
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `MONGODB_URI` | Yes | MongoDB connection string |
+| `JWT_SECRET` | Yes | Secret key for JWT authentication |
 | `NODE_ENV` | No | Environment (development/production) |
 
 ## 🛠️ Development
