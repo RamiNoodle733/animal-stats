@@ -231,7 +231,19 @@ body {
 }
 
 .stat-bar-fill.stat-bar-tier-d {
-    background: linear-gradient(90deg, #555, #777) !important;
+    background: linear-gradient(90deg, #888, #aaa) !important;
+    box-shadow: none;
+    animation: none;
+}
+
+.stat-bar-fill.stat-bar-tier-e {
+    background: linear-gradient(90deg, #6b5200, #8b6914) !important;
+    box-shadow: none;
+    animation: none;
+}
+
+.stat-bar-fill.stat-bar-tier-f {
+    background: linear-gradient(90deg, #333, #555) !important;
     box-shadow: none;
     animation: none;
 }
@@ -892,9 +904,11 @@ body {
 
 .tier-s { background: #ffd700; box-shadow: 0 0 10px #ffd700; }
 .tier-a { background: #ff4d4d; box-shadow: 0 0 8px #ff4d4d; }
-.tier-b { background: #4d94ff; }
+.tier-b { background: #4d94ff; box-shadow: 0 0 6px #4d94ff; }
 .tier-c { background: #00ff88; }
 .tier-d { background: #b3b3b3; }
+.tier-e { background: #8b6914; }
+.tier-f { background: #555555; color: #aaa; }
 
 .character-grid {
     display: flex;
@@ -965,6 +979,18 @@ body {
 }
 .character-card.card-tier-b {
     border-color: rgba(77, 148, 255, 0.4);
+}
+.character-card.card-tier-c {
+    border-color: rgba(0, 255, 136, 0.4);
+}
+.character-card.card-tier-d {
+    border-color: rgba(179, 179, 179, 0.4);
+}
+.character-card.card-tier-e {
+    border-color: rgba(139, 105, 20, 0.4);
+}
+.character-card.card-tier-f {
+    border-color: rgba(85, 85, 85, 0.4);
 }
 
 /* Hover Stats Overlay */

@@ -555,9 +555,11 @@ class AnimalStatsApp {
     calculateTier(value) {
         if (value >= 90) return 'S';
         if (value >= 80) return 'A';
-        if (value >= 65) return 'B';
-        if (value >= 50) return 'C';
-        return 'D';
+        if (value >= 70) return 'B';
+        if (value >= 55) return 'C';
+        if (value >= 40) return 'D';
+        if (value >= 25) return 'E';
+        return 'F';
     }
 
     /**
