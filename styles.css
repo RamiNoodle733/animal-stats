@@ -1040,6 +1040,15 @@ body {
 }
 
 @media (max-width: 1024px) {
+    /* Fix white edges - force black background */
+    html {
+        background-color: #000000 !important;
+    }
+    
+    body {
+        background-color: #000000;
+    }
+    
     /* --- GLOBAL LAYOUT --- */
     .game-screen {
         height: 100vh;
@@ -1084,10 +1093,11 @@ body {
         display: grid !important;
         grid-template-columns: 1fr minmax(130px, 180px) 1fr;
         grid-template-rows: 1fr;
-        padding: 8px;
-        gap: 8px;
-        flex: 1;
+        padding: 5px;
+        gap: 5px;
+        flex: 0 1 auto; /* Don't grow, just fit content */
         min-height: 0;
+        max-height: 45%; /* Limit height to leave room for bottom */
         overflow: hidden;
         align-items: stretch;
     }
@@ -1099,7 +1109,7 @@ body {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 10px 5px;
+        padding: 8px 5px;
         height: 100%;
         overflow: hidden;
         background: rgba(0, 20, 40, 0.3);
@@ -1233,23 +1243,25 @@ body {
         display: none;
     }
 
-    /* --- BOTTOM INFO BAR - Compact --- */
+    /* --- BOTTOM INFO BAR - Vertical 2-row layout, no scroll --- */
     .bottom-info-bar {
-        flex-wrap: nowrap;
-        gap: 6px;
-        padding: 4px 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        padding: 6px 10px;
         justify-content: center;
+        align-items: center;
         flex-shrink: 0;
-        overflow-x: auto;
-        min-height: 32px;
-        max-height: 32px;
+        overflow: visible;
+        min-height: auto;
+        max-height: none;
     }
 
     .info-separator { display: none; }
 
     .info-item-inline {
-        font-size: 0.6rem;
-        padding: 2px 4px;
+        font-size: 0.65rem;
+        padding: 3px 6px;
         white-space: nowrap;
         flex-shrink: 0;
     }
@@ -1259,80 +1271,87 @@ body {
     }
 
     .expand-details-btn, .toggle-grid-btn {
-        padding: 4px 8px;
-        font-size: 0.65rem;
+        padding: 5px 10px;
+        font-size: 0.7rem;
         white-space: nowrap;
         flex-shrink: 0;
     }
 
-    /* --- CHARACTER GRID - BIGGER Cards --- */
+    /* --- CHARACTER GRID - BIGGER, fills remaining space --- */
     .character-grid-container {
-        height: 130px;
-        max-height: 130px;
-        padding: 6px;
-        flex-shrink: 0;
+        flex: 1; /* Take remaining space */
+        min-height: 180px;
+        max-height: none;
+        padding: 8px;
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
     }
     
     .grid-controls {
         display: flex;
-        flex-wrap: nowrap;
-        gap: 4px;
-        padding: 0 4px;
-        margin-bottom: 5px;
-        overflow-x: auto;
+        flex-wrap: wrap;
+        gap: 5px;
+        padding: 0 5px;
+        margin-bottom: 8px;
+        overflow: visible;
+        justify-content: center;
     }
     
     .search-box {
         flex: 1;
-        min-width: 80px;
-        max-width: 110px;
-        padding: 4px 8px;
-        font-size: 0.7rem;
+        min-width: 100px;
+        max-width: 140px;
+        padding: 6px 10px;
+        font-size: 0.8rem;
     }
     
     .filter-select {
         flex: 0 0 auto;
         width: auto;
-        min-width: 60px;
-        padding: 4px 6px;
-        font-size: 0.6rem;
+        min-width: 70px;
+        padding: 6px 8px;
+        font-size: 0.7rem;
     }
     
     .filter-group {
         display: flex;
-        gap: 4px;
+        gap: 5px;
         flex: 0 0 auto;
     }
     
     .character-grid {
-        gap: 8px;
-        padding: 5px;
-        height: 85px;
+        gap: 10px;
+        padding: 8px;
+        flex: 1;
+        height: auto;
+        overflow-x: auto;
+        overflow-y: hidden;
+        align-items: center;
     }
     
     .character-card {
-        min-width: 75px;
-        width: 75px;
-        height: 75px;
+        min-width: 95px;
+        width: 95px;
+        height: 95px;
     }
     
     .character-card-image {
-        height: 52px;
+        height: 65px;
     }
     
     .character-card-name {
-        font-size: 0.55rem;
-        padding: 3px;
+        font-size: 0.65rem;
+        padding: 4px;
     }
 
-    /* --- COMPARE VIEW - Side by Side --- */
+    /* --- COMPARE VIEW - Bigger elements --- */
     .fight-screen {
         display: grid !important;
         grid-template-columns: 1fr auto 1fr;
         grid-template-rows: 1fr auto;
-        padding: 10px;
-        gap: 10px;
+        padding: 15px 10px;
+        gap: 8px;
         flex: 1;
         min-height: 0;
         overflow: hidden;
@@ -1341,7 +1360,7 @@ body {
 
     .fighter-section {
         flex-direction: column !important;
-        gap: 5px;
+        gap: 8px;
         justify-content: center;
         align-items: center;
     }
@@ -1363,56 +1382,56 @@ body {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        gap: 8px;
     }
 
     .fighter-display {
-        width: 90px;
-        height: 90px;
-        border-width: 2px;
+        width: 120px;
+        height: 120px;
+        border-width: 3px;
     }
 
     .fighter-placeholder i {
-        font-size: 1.5rem;
+        font-size: 2rem;
     }
     
     .fighter-placeholder p {
-        font-size: 0.6rem;
+        font-size: 0.7rem;
     }
     
     .fighter-name {
-        font-size: 0.7rem;
+        font-size: 0.85rem;
         letter-spacing: 1px;
     }
     
     .fighter-info-overlay {
-        padding: 8px 5px 5px;
+        padding: 10px 6px 6px;
     }
 
     .view-stats-btn {
-        padding: 3px 6px;
-        font-size: 0.55rem;
+        padding: 4px 8px;
+        font-size: 0.65rem;
     }
 
     .vs-badge { 
-        font-size: 1.2rem; 
+        font-size: 1.5rem; 
         margin: 0;
     }
     
-    /* Show radar chart on mobile - smaller size */
+    /* Show radar chart on mobile - bigger size */
     .radar-chart-container {
         display: block !important;
-        width: 120px;
-        height: 120px;
-        max-width: 120px;
+        width: 140px;
+        height: 140px;
+        max-width: 140px;
         margin: 0;
     }
 
     .fight-btn {
         grid-column: 1 / -1;
         grid-row: 2;
-        padding: 8px 20px;
-        font-size: 1rem;
+        padding: 12px 30px;
+        font-size: 1.2rem;
         justify-self: center;
     }
     
