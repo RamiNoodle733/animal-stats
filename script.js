@@ -2,10 +2,27 @@
  * Animal Stats - Expert Optimized Script
  * Handles application logic, state management, and UI rendering.
  * 
- * @version 2.0.0
+ * @version 3.0.0 - MongoDB Backend Integration
  */
 
 'use strict';
+
+// API Configuration
+const API_CONFIG = {
+    // Base URL for API - auto-detects local vs production
+    baseUrl: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? '' // Use relative paths in development
+        : '', // Use relative paths in production too (same domain)
+    endpoints: {
+        animals: '/api/animals',
+        search: '/api/search',
+        random: '/api/random',
+        stats: '/api/stats',
+        health: '/api/health'
+    },
+    // Fallback to local data if API fails
+    useFallback: true
+};
 
 class AnimalStatsApp {
     constructor() {
@@ -28,7 +45,11 @@ class AnimalStatsApp {
                 diet: 'all',
                 biome: 'all',
                 sort: 'name'
-            }
+            },
+            // API state
+            isLoading: false,
+            apiAvailable: false,
+            lastApiCheck: null
         };
 
         // DOM Elements Cache
@@ -165,6 +186,7 @@ class AnimalStatsApp {
      */
     async init() {
         try {
+            this.showLoadingState(true);
             await this.fetchData();
             this.populateClassFilter();
             this.setupEventListeners();
@@ -177,33 +199,106 @@ class AnimalStatsApp {
                 this.selectAnimal(this.state.animals[0]);
             }
             
-            console.log('Animal Stats App Initialized');
+            this.showLoadingState(false);
+            console.log(`Animal Stats App Initialized (API: ${this.state.apiAvailable ? 'Connected' : 'Fallback Mode'})`);
         } catch (error) {
             console.error('Initialization failed:', error);
+            this.showLoadingState(false);
             alert('Failed to load animal data. Please try refreshing the page.');
         }
     }
 
     /**
-     * Fetch animal data from JSON
+     * Show/hide loading state
+     */
+    showLoadingState(isLoading) {
+        this.state.isLoading = isLoading;
+        // Could add loading spinner UI here if desired
+    }
+
+    /**
+     * Check if API is available
+     */
+    async checkApiHealth() {
+        try {
+            const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.health}`, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' },
+                signal: AbortSignal.timeout(3000) // 3 second timeout
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                this.state.apiAvailable = data.success && data.status === 'healthy';
+                this.state.lastApiCheck = new Date();
+                return this.state.apiAvailable;
+            }
+            return false;
+        } catch (error) {
+            console.warn('API health check failed:', error.message);
+            return false;
+        }
+    }
+
+    /**
+     * Fetch animal data from API or fallback to local data
      */
     async fetchData() {
-        // Check for global data first (fixes local file CORS issues)
+        // First, check if API is available
+        const apiHealthy = await this.checkApiHealth();
+        
+        if (apiHealthy) {
+            try {
+                const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.animals}`, {
+                    method: 'GET',
+                    headers: { 'Accept': 'application/json' },
+                    signal: AbortSignal.timeout(10000) // 10 second timeout
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success && result.data) {
+                        this.state.animals = result.data;
+                        this.state.filteredAnimals = [...result.data];
+                        this.state.apiAvailable = true;
+                        console.log(`Loaded ${result.data.length} animals from API`);
+                        return;
+                    }
+                }
+                throw new Error('Invalid API response');
+            } catch (error) {
+                console.warn('API fetch failed, falling back to local data:', error.message);
+            }
+        }
+
+        // Fallback to local data
+        await this.loadLocalData();
+    }
+
+    /**
+     * Load data from local sources (window.animalData or animal_stats.json)
+     */
+    async loadLocalData() {
+        // Check for global data first (from data.js)
         if (window.animalData) {
             this.state.animals = window.animalData;
             this.state.filteredAnimals = [...window.animalData];
+            this.state.apiAvailable = false;
+            console.log(`Loaded ${window.animalData.length} animals from local data.js`);
             return;
         }
 
-        // Fallback to fetch
+        // Fallback to fetch JSON file
         try {
             const response = await fetch('animal_stats.json');
             if (!response.ok) throw new Error('Network response was not ok');
             const data = await response.json();
             this.state.animals = data;
             this.state.filteredAnimals = [...data];
+            this.state.apiAvailable = false;
+            console.log(`Loaded ${data.length} animals from animal_stats.json`);
         } catch (error) {
-            console.error('Error loading data:', error);
+            console.error('Error loading local data:', error);
             throw error;
         }
     }
