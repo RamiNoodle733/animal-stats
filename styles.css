@@ -198,9 +198,47 @@ body {
 .stat-bar-fill {
     height: 100%;
     background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4);
-    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 0 10px currentColor;
+    transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
     position: relative;
+    animation: statBarPulse 2s ease-in-out infinite;
+}
+
+@keyframes statBarPulse {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.15); }
+}
+
+/* Color-coded stat bars based on tier */
+.stat-bar-fill.stat-bar-tier-s {
+    background: linear-gradient(90deg, #ff6b00, #ffd700) !important;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 0 15px rgba(255, 215, 0, 0.6);
+    animation: statBarPulse 1.5s ease-in-out infinite, statBarGlowS 2s ease-in-out infinite;
+}
+
+.stat-bar-fill.stat-bar-tier-a {
+    background: linear-gradient(90deg, #ff4d4d, #ff8c00) !important;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 0 12px rgba(255, 77, 77, 0.5);
+}
+
+.stat-bar-fill.stat-bar-tier-b {
+    background: linear-gradient(90deg, #00d4ff, #00ff88) !important;
+    box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 0 10px rgba(0, 212, 255, 0.4);
+}
+
+.stat-bar-fill.stat-bar-tier-c {
+    background: linear-gradient(90deg, #4d94ff, #00d4ff) !important;
+}
+
+.stat-bar-fill.stat-bar-tier-d {
+    background: linear-gradient(90deg, #555, #777) !important;
+    box-shadow: none;
+    animation: none;
+}
+
+@keyframes statBarGlowS {
+    0%, 100% { box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 0 15px rgba(255, 215, 0, 0.6); }
+    50% { box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.4), 0 0 25px rgba(255, 215, 0, 0.9); }
 }
 
 .stat-bar-fill::after {
@@ -292,13 +330,18 @@ body {
     max-width: 100%;
     max-height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.6));
-    animation: float 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.6)) drop-shadow(0 0 60px rgba(0, 212, 255, 0.3));
+    animation: float 3s ease-in-out infinite, glow 4s ease-in-out infinite;
 }
 
 @keyframes float {
     0%, 100% { transform: translateY(0px); }
     50% { transform: translateY(-20px); }
+}
+
+@keyframes glow {
+    0%, 100% { filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.6)) drop-shadow(0 0 60px rgba(0, 212, 255, 0.3)); }
+    50% { filter: drop-shadow(0 0 40px rgba(0, 212, 255, 0.8)) drop-shadow(0 0 80px rgba(0, 212, 255, 0.5)); }
 }
 
 .character-mini-info {
@@ -898,10 +941,76 @@ body {
     padding: 0;
 }
 
+/* Card Tier Badge (corner) */
+.card-tier-badge {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.75rem;
+    padding: 2px 5px;
+    border-radius: 3px;
+    color: #000;
+    font-weight: bold;
+    z-index: 10;
+    text-shadow: none;
+}
+
+/* Card Tier Border Colors */
+.character-card.card-tier-s {
+    border-color: rgba(255, 215, 0, 0.6);
+}
+.character-card.card-tier-a {
+    border-color: rgba(255, 77, 77, 0.5);
+}
+.character-card.card-tier-b {
+    border-color: rgba(77, 148, 255, 0.4);
+}
+
+/* Hover Stats Overlay */
+.card-hover-stats {
+    position: absolute;
+    bottom: 28px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 4px;
+    background: rgba(0, 0, 0, 0.85);
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.25s ease;
+}
+
+.character-card:hover .card-hover-stats {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.hover-stat {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.7rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.hover-stat-icon {
+    font-size: 0.6rem;
+}
+
 .character-card:hover {
     border-color: var(--border-bright);
     box-shadow: 0 0 25px rgba(0, 212, 255, 0.8);
-    transform: translateY(-5px);
+    transform: translateY(-5px) scale(1.02);
+}
+
+/* S-tier cards get special glow on hover */
+.character-card.card-tier-s:hover {
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.9), 0 0 15px rgba(255, 215, 0, 0.5);
+    border-color: #ffd700;
 }
 
 .character-card.selected {

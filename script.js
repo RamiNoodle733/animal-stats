@@ -489,6 +489,13 @@ class AnimalStatsApp {
             card.className = 'character-card';
             card.dataset.id = animal.id || animal.name; // Fallback to name if ID missing
             
+            // Calculate overall tier based on total stats
+            const totalStats = (animal.attack || 0) + (animal.defense || 0) + (animal.agility || 0) + 
+                              (animal.stamina || 0) + (animal.intelligence || 0) + (animal.special_attack || 0);
+            const avgStat = totalStats / 6;
+            const overallTier = this.calculateTier(avgStat);
+            card.classList.add(`card-tier-${overallTier.toLowerCase()}`);
+            
             // Add selection classes
             if (this.state.view === 'stats' && this.state.selectedAnimal?.name === animal.name) {
                 card.classList.add('selected');
@@ -498,8 +505,14 @@ class AnimalStatsApp {
             }
 
             card.innerHTML = `
+                <span class="card-tier-badge tier-${overallTier.toLowerCase()}">${overallTier}</span>
                 <img src="${animal.image}" alt="${animal.name}" class="character-card-image" loading="lazy" onerror="this.src='https://via.placeholder.com/110x80?text=?'">
                 <div class="character-card-name">${animal.name}</div>
+                <div class="card-hover-stats">
+                    <div class="hover-stat"><span class="hover-stat-icon">⚔</span>${Math.round(animal.attack || 0)}</div>
+                    <div class="hover-stat"><span class="hover-stat-icon">🛡</span>${Math.round(animal.defense || 0)}</div>
+                    <div class="hover-stat"><span class="hover-stat-icon">⚡</span>${Math.round(animal.agility || 0)}</div>
+                </div>
             `;
             
             fragment.appendChild(card);
@@ -578,7 +591,11 @@ class AnimalStatsApp {
             const value = statsMap[stat] || 0;
             const tier = this.calculateTier(value);
             
-            if (this.dom.statBars[stat]) this.dom.statBars[stat].style.width = `${Math.min(value, 100)}%`;
+            if (this.dom.statBars[stat]) {
+                this.dom.statBars[stat].style.width = `${Math.min(value, 100)}%`;
+                // Add tier class for color-coding
+                this.dom.statBars[stat].className = `stat-bar-fill stat-bar-tier-${tier.toLowerCase()}`;
+            }
             
             if (this.dom.statValues[stat]) {
                 // Add Tier Badge
