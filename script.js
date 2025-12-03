@@ -7,6 +7,12 @@
 
 'use strict';
 
+// Helper function to format numbers with commas
+function formatNumber(num) {
+    if (num === null || num === undefined) return null;
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
 // API Configuration
 const API_CONFIG = {
     // Base URL for API - auto-detects local vs production
@@ -582,9 +588,9 @@ class AnimalStatsApp {
 
         // Mini Info
         let info = [];
-        if (animal.weight_kg) info.push(`${animal.weight_kg} kg`);
+        if (animal.weight_kg) info.push(`${formatNumber(animal.weight_kg)} kg`);
         if (animal.lifespan_years) info.push(`${animal.lifespan_years} yrs`);
-        if (animal.bite_force_psi) info.push(`${animal.bite_force_psi} PSI`);
+        if (animal.bite_force_psi) info.push(`${formatNumber(animal.bite_force_psi)} PSI`);
         this.dom.miniInfo.innerHTML = info.map(i => `<span>${i}</span>`).join('');
 
         // Info Bar
@@ -625,12 +631,12 @@ class AnimalStatsApp {
         d.diet.textContent = Array.isArray(animal.diet) ? animal.diet.join(', ') : (animal.diet || '---');
         d.nocturnal.textContent = animal.isNocturnal ? 'Yes ' : 'No ';
         d.social.textContent = animal.isSocial ? 'Yes ' : 'No (Solitary)';
-        d.weight.textContent = animal.weight_kg ? `${animal.weight_kg} kg` : '---';
-        d.height.textContent = animal.height_cm ? `${animal.height_cm} cm` : '---';
-        d.length.textContent = animal.length_cm ? `${animal.length_cm} cm` : '---';
+        d.weight.textContent = animal.weight_kg ? `${formatNumber(animal.weight_kg)} kg` : '---';
+        d.height.textContent = animal.height_cm ? `${formatNumber(animal.height_cm)} cm` : '---';
+        d.length.textContent = animal.length_cm ? `${formatNumber(animal.length_cm)} cm` : '---';
         d.speed.textContent = animal.speed_mps ? `${animal.speed_mps.toFixed(1)} m/s (${(animal.speed_mps * 3.6).toFixed(1)} km/h)` : '---';
         d.lifespan.textContent = animal.lifespan_years ? `${animal.lifespan_years} years` : '---';
-        d.bite.textContent = animal.bite_force_psi ? `${animal.bite_force_psi} PSI` : '---';
+        d.bite.textContent = animal.bite_force_psi ? `${formatNumber(animal.bite_force_psi)} PSI` : '---';
         d.sizeScore.textContent = animal.size_score ? `${animal.size_score.toFixed(1)} / 100` : '---';
         d.description.textContent = animal.description || 'No description available yet.';
 
