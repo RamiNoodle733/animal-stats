@@ -31,6 +31,25 @@
             <button class="mode-btn" id="compare-mode-btn" data-mode="compare">
                 <i class="fas fa-balance-scale"></i> COMPARE
             </button>
+            <!-- Auth Button -->
+            <div class="auth-container" id="auth-container">
+                <button class="auth-btn" id="auth-btn">
+                    <i class="fas fa-user"></i> <span id="auth-btn-text">LOG IN</span>
+                </button>
+                <!-- User dropdown (shown when logged in) -->
+                <div class="user-dropdown" id="user-dropdown">
+                    <div class="user-dropdown-header">
+                        <span class="user-avatar" id="user-avatar"><i class="fas fa-user-circle"></i></span>
+                        <span class="user-name" id="user-display-name">Username</span>
+                    </div>
+                    <div class="user-dropdown-menu">
+                        <a href="#" class="dropdown-item" id="profile-btn"><i class="fas fa-id-card"></i> Profile</a>
+                        <a href="#" class="dropdown-item" id="my-votes-btn"><i class="fas fa-thumbs-up"></i> My Votes</a>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+                    </div>
+                </div>
+            </div>
         </header>
         
         <!-- Stats View (Character Select Style) -->
@@ -420,8 +439,66 @@
             <div class="character-grid" id="character-grid"></div>
         </div>
     </div>
+
+    <!-- Auth Modal -->
+    <div class="auth-modal" id="auth-modal">
+        <div class="auth-modal-content">
+            <button class="auth-modal-close" id="auth-modal-close">&times;</button>
+            
+            <!-- Login Form -->
+            <div class="auth-form" id="login-form">
+                <h2><i class="fas fa-sign-in-alt"></i> LOG IN</h2>
+                <div class="auth-error" id="login-error"></div>
+                <div class="form-group">
+                    <label for="login-email"><i class="fas fa-envelope"></i> Email or Username</label>
+                    <input type="text" id="login-email" placeholder="Enter email or username" autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="login-password"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="login-password" placeholder="Enter password" autocomplete="current-password">
+                </div>
+                <button class="auth-submit-btn" id="login-submit">
+                    <span class="btn-text">LOG IN</span>
+                    <span class="btn-loader" style="display: none;"><i class="fas fa-spinner fa-spin"></i></span>
+                </button>
+                <div class="auth-switch">
+                    Don't have an account? <a href="#" id="show-signup">Sign up</a>
+                </div>
+            </div>
+            
+            <!-- Signup Form -->
+            <div class="auth-form" id="signup-form" style="display: none;">
+                <h2><i class="fas fa-user-plus"></i> SIGN UP</h2>
+                <div class="auth-error" id="signup-error"></div>
+                <div class="form-group">
+                    <label for="signup-username"><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="signup-username" placeholder="Choose a username" autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="signup-email"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="signup-email" placeholder="Enter your email" autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="signup-password"><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="signup-password" placeholder="Create a password (min 6 characters)" autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                    <label for="signup-confirm"><i class="fas fa-lock"></i> Confirm Password</label>
+                    <input type="password" id="signup-confirm" placeholder="Confirm your password" autocomplete="new-password">
+                </div>
+                <button class="auth-submit-btn" id="signup-submit">
+                    <span class="btn-text">CREATE ACCOUNT</span>
+                    <span class="btn-loader" style="display: none;"><i class="fas fa-spinner fa-spin"></i></span>
+                </button>
+                <div class="auth-switch">
+                    Already have an account? <a href="#" id="show-login">Log in</a>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <script src="data.js"></script>
+    <script src="auth.js"></script>
     <script src="script.js" defer></script>
 </body>
 </html>
