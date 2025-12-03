@@ -18,7 +18,8 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background: radial-gradient(ellipse at top, #0f1929 0%, #000000 100%),
+    background-color: #000000; /* Solid black background for edges */
+    background-image: radial-gradient(ellipse at top, #0f1929 0%, #000000 100%),
         repeating-linear-gradient(0deg, transparent 0px, rgba(0, 212, 255, 0.03) 1px, transparent 2px),
         repeating-linear-gradient(90deg, transparent 0px, rgba(0, 212, 255, 0.03) 1px, transparent 2px);
     color: var(--text-light);
@@ -178,6 +179,7 @@ body {
     letter-spacing: 2px;
     color: var(--text-light);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    white-space: nowrap; /* Fix: Prevent "RAW POWER" from wrapping */
 }
 
 .stat-bar-wrapper {
@@ -1040,12 +1042,19 @@ body {
 }
 
 @media (max-width: 1024px) {
+    /* --- FIX: Black background for phone edges --- */
+    html {
+        background-color: #000000;
+    }
+    
     /* --- GLOBAL LAYOUT --- */
     .game-screen {
         height: 100vh;
-        height: 100dvh; /* Dynamic viewport height for mobile browsers */
+        height: 100dvh;
         min-height: 0;
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
     }
     
     .view-container.active-view {
@@ -1055,18 +1064,20 @@ body {
         flex-direction: column;
     }
 
-    /* --- HEADER - Compact Single Row --- */
+    /* --- HEADER - Fixed at top, never cut off --- */
     .game-header {
-        padding: 10px 10px 8px;
-        gap: 15px;
+        padding: 12px 10px 8px;
+        gap: 12px;
         flex-wrap: nowrap;
         justify-content: center;
         flex-shrink: 0;
-        min-height: 45px;
+        min-height: 48px;
+        position: relative;
+        z-index: 100;
     }
 
     .game-header h1 {
-        font-size: 1rem;
+        font-size: 0.9rem;
         letter-spacing: 2px;
         margin: 0;
         order: 0;
@@ -1074,22 +1085,22 @@ body {
     }
 
     .mode-btn {
-        padding: 6px 14px;
-        font-size: 0.75rem;
+        padding: 6px 12px;
+        font-size: 0.7rem;
         flex: 0 0 auto;
     }
 
-    /* --- STATS VIEW - Side by Side Like Desktop --- */
+    /* --- STATS VIEW - 3 Column Grid --- */
     .character-display-area {
         display: grid !important;
-        grid-template-columns: 1fr minmax(100px, 140px) 1fr;
+        grid-template-columns: 1fr 130px 1fr;
         grid-template-rows: 1fr;
-        padding: 5px;
-        gap: 3px;
+        padding: 5px 3px;
+        gap: 5px;
         flex: 1;
         min-height: 0;
         overflow: hidden;
-        align-items: start;
+        align-items: stretch;
     }
 
     .character-showcase {
@@ -1100,7 +1111,6 @@ body {
         align-items: center;
         justify-content: flex-start;
         padding-top: 5px;
-        height: 100%;
         overflow: hidden;
     }
 
@@ -1109,8 +1119,10 @@ body {
         grid-row: 1;
         overflow-y: auto;
         overflow-x: hidden;
-        max-height: 100%;
-        padding: 5px 2px;
+        padding: 3px 2px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
     }
 
     .stats-panel-right {
@@ -1118,197 +1130,216 @@ body {
         grid-row: 1;
         overflow-y: auto;
         overflow-x: hidden;
-        max-height: 100%;
-        padding: 5px 2px;
+        padding: 3px 2px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
     }
 
     /* Character Display */
     .character-model-container {
-        max-width: 120px;
+        max-width: 110px;
         width: 100%;
         margin: 0 auto;
-        flex-shrink: 1;
+        flex-shrink: 0;
     }
 
     .character-name-display {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
         line-height: 1.1;
         margin-bottom: 2px;
-        letter-spacing: 2px;
+        letter-spacing: 1px;
     }
 
     .character-scientific-name {
-        font-size: 0.55rem;
-        margin-bottom: 3px;
+        font-size: 0.5rem;
+        margin-bottom: 2px;
     }
     
     .character-mini-info {
         justify-content: center;
-        gap: 4px;
-        font-size: 0.55rem;
-        margin-top: 3px;
+        gap: 3px;
+        font-size: 0.5rem;
+        margin-top: 2px;
     }
     
     .character-mini-info span {
-        padding: 2px 4px;
+        padding: 1px 3px;
     }
 
-    /* Stats - Compact Vertical Layout */
+    /* --- STATS - Vertical stacked layout with value ALWAYS below bar --- */
     .stats-panel {
         padding: 0;
-        gap: 2px;
+        gap: 4px;
     }
     
     .stat-group {
-        gap: 2px;
+        gap: 4px;
+    }
+    
+    .stat-group-container {
+        margin-bottom: 3px;
     }
 
     .stat-row {
         display: flex;
         flex-direction: column;
+        align-items: stretch;
         gap: 1px;
-        margin-bottom: 2px;
+        margin-bottom: 0;
     }
     
+    /* Reset any ordering */
     .stat-row > * {
         order: unset !important;
     }
 
-    /* Create a header row for stat */
     .stat-icon {
-        display: none; /* Hide icon to save space */
+        display: none;
     }
     
     .stat-name {
-        font-size: 0.6rem;
-        letter-spacing: 1px;
+        font-size: 0.55rem;
+        letter-spacing: 0.5px;
         text-align: center;
-        order: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     
     .stat-bar-wrapper {
-        order: 2;
         width: 100%;
     }
     
     .stat-bar {
-        height: 8px;
+        height: 6px;
+        border-width: 1px;
     }
     
+    /* FIX: Value and tier ALWAYS below the bar */
     .stat-value {
-        font-size: 0.85rem;
+        font-size: 0.75rem;
+        display: flex;
         justify-content: center !important;
+        align-items: center;
         flex-direction: row !important;
-        gap: 3px;
-        order: 3;
+        gap: 2px;
+        margin-top: 1px;
     }
     
     .stat-tier-badge {
-        font-size: 0.5rem;
-        padding: 1px 3px;
+        font-size: 0.45rem;
+        padding: 0 2px;
     }
 
-    /* Right panel same as left */
+    /* Right panel mirrors left panel exactly */
     .stats-panel-right .stat-row {
         display: flex;
         flex-direction: column;
+        align-items: stretch;
     }
     
     .stats-panel-right .stat-icon { display: none; }
     .stats-panel-right .stat-name { text-align: center; }
-    .stats-panel-right .stat-value { justify-content: center !important; flex-direction: row !important; }
-
-    /* Substats - Hidden on mobile to save space */
-    .substat-container {
-        display: none;
+    .stats-panel-right .stat-value { 
+        justify-content: center !important; 
+        flex-direction: row !important; 
     }
 
-    /* --- BOTTOM INFO BAR - Compact --- */
+    /* Substats - Hidden on mobile */
+    .substat-container {
+        display: none !important;
+    }
+
+    /* --- BOTTOM INFO BAR - Always visible, no scrolling needed --- */
     .bottom-info-bar {
-        flex-wrap: nowrap;
-        gap: 6px;
-        padding: 4px 8px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        padding: 4px 6px;
         justify-content: center;
+        align-items: center;
         flex-shrink: 0;
-        overflow-x: auto;
-        min-height: 32px;
-        max-height: 32px;
+        min-height: auto;
+        max-height: none;
+        overflow: visible;
     }
 
     .info-separator { display: none; }
 
     .info-item-inline {
-        font-size: 0.6rem;
+        font-size: 0.55rem;
         padding: 2px 4px;
         white-space: nowrap;
-        flex-shrink: 0;
     }
     
     .info-label {
-        display: none; /* Hide labels, just show values */
+        display: none;
     }
 
     .expand-details-btn, .toggle-grid-btn {
         padding: 4px 8px;
-        font-size: 0.65rem;
+        font-size: 0.6rem;
         white-space: nowrap;
-        flex-shrink: 0;
     }
 
-    /* --- CHARACTER GRID - Compact & Contained --- */
+    /* --- CHARACTER GRID - Bigger cards, properly contained --- */
     .character-grid-container {
-        height: 90px;
-        max-height: 90px;
-        padding: 4px;
+        height: auto;
+        min-height: 100px;
+        max-height: 110px;
+        padding: 5px;
         flex-shrink: 0;
         overflow: hidden;
+        padding-bottom: calc(5px + env(safe-area-inset-bottom));
     }
     
     .grid-controls {
         display: flex;
         flex-wrap: nowrap;
-        gap: 3px;
+        gap: 4px;
         padding: 0 4px;
-        margin-bottom: 4px;
+        margin-bottom: 5px;
         overflow-x: auto;
     }
     
     .search-box {
         flex: 1;
-        min-width: 70px;
-        max-width: 100px;
-        padding: 3px 6px;
-        font-size: 0.7rem;
+        min-width: 80px;
+        max-width: 120px;
+        padding: 4px 6px;
+        font-size: 0.65rem;
     }
     
     .filter-select {
         flex: 0 0 auto;
-        width: auto;
-        min-width: 55px;
-        padding: 3px 4px;
-        font-size: 0.6rem;
+        min-width: 60px;
+        padding: 4px 5px;
+        font-size: 0.55rem;
     }
     
     .filter-group {
         display: flex;
-        gap: 3px;
-        flex: 0 0 auto;
+        gap: 4px;
     }
     
     .character-grid {
-        gap: 5px;
-        padding: 4px;
-        height: 55px;
+        gap: 6px;
+        padding: 5px;
+        height: 65px;
+        overflow-x: auto;
+        overflow-y: hidden;
     }
     
     .character-card {
-        min-width: 50px;
-        width: 50px;
-        height: 50px;
+        min-width: 58px;
+        width: 58px;
+        height: 58px;
+        flex-shrink: 0;
     }
     
     .character-card-image {
-        height: 35px;
+        height: 40px;
     }
     
     .character-card-name {
@@ -1316,13 +1347,13 @@ body {
         padding: 2px;
     }
 
-    /* --- COMPARE VIEW - Side by Side --- */
+    /* --- COMPARE VIEW - Horizontal layout with chart --- */
     .fight-screen {
         display: grid !important;
-        grid-template-columns: 1fr auto 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
         grid-template-rows: 1fr auto;
         padding: 10px;
-        gap: 10px;
+        gap: 8px;
         flex: 1;
         min-height: 0;
         overflow: hidden;
@@ -1341,11 +1372,6 @@ body {
         grid-row: 1;
     }
     
-    .fighter-right {
-        grid-column: 3;
-        grid-row: 1;
-    }
-
     .fight-center {
         grid-column: 2;
         grid-row: 1;
@@ -1353,44 +1379,55 @@ body {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 10px;
+        gap: 8px;
+    }
+    
+    .fighter-right {
+        grid-column: 3;
+        grid-row: 1;
     }
 
+    /* Bigger fighter images on mobile */
     .fighter-display {
-        width: 100px;
-        height: 100px;
+        width: 90px;
+        height: 90px;
         border-width: 2px;
     }
 
     .fighter-placeholder i {
-        font-size: 1.8rem;
+        font-size: 1.5rem;
     }
     
     .fighter-placeholder p {
-        font-size: 0.65rem;
+        font-size: 0.55rem;
     }
     
     .fighter-name {
-        font-size: 0.75rem;
+        font-size: 0.65rem;
         letter-spacing: 1px;
     }
     
     .fighter-info-overlay {
-        padding: 8px 5px 5px;
+        padding: 6px 4px 4px;
     }
 
     .view-stats-btn {
-        padding: 3px 6px;
-        font-size: 0.55rem;
+        padding: 3px 5px;
+        font-size: 0.5rem;
     }
 
     .vs-badge { 
-        font-size: 1.5rem; 
+        font-size: 1.3rem; 
         margin: 0;
     }
     
+    /* Show radar chart on mobile (smaller) */
     .radar-chart-container {
-        display: none; /* Hide chart on mobile */
+        display: block;
+        width: 100%;
+        max-width: 100px;
+        height: 100px;
+        margin: 0;
     }
 
     .fight-btn {
@@ -1406,7 +1443,7 @@ body {
         display: none;
     }
 
-    /* --- DETAILS PANEL --- */
+    /* --- DETAILS PANEL - With close button visible --- */
     .details-grid {
         grid-template-columns: 1fr;
     }
@@ -1422,8 +1459,27 @@ body {
     }
     
     .details-panel.expanded {
-        max-height: 70vh;
+        max-height: 80vh;
         overflow-y: auto;
+        padding-bottom: 60px; /* Space for close button */
+    }
+    
+    /* Add a close button to details panel */
+    .details-panel.expanded::after {
+        content: '✕ TAP TO CLOSE';
+        position: fixed;
+        bottom: calc(10px + env(safe-area-inset-bottom));
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--primary-color);
+        color: #000;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        z-index: 101;
+        cursor: pointer;
     }
 }
 
@@ -1587,131 +1643,125 @@ body {
     }
 }
 
-/* --- SMALL PHONE OPTIMIZATIONS --- */
+/* --- SMALL PHONE OPTIMIZATIONS (< 480px) --- */
 @media (max-width: 480px) {
-    /* Even more compact header */
     .game-header {
-        padding: 8px 6px 6px;
-        gap: 8px;
-        min-height: 38px;
+        padding: 10px 6px 6px;
+        gap: 6px;
+        min-height: 42px;
     }
 
     .game-header h1 {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         letter-spacing: 1px;
     }
 
     .mode-btn {
-        padding: 4px 8px;
-        font-size: 0.65rem;
+        padding: 5px 8px;
+        font-size: 0.6rem;
     }
 
-    /* Stats area */
     .character-display-area {
-        grid-template-columns: 1fr minmax(90px, 110px) 1fr;
-        padding: 3px;
-        gap: 2px;
+        grid-template-columns: 1fr 100px 1fr;
+        padding: 3px 2px;
+        gap: 3px;
     }
 
     .character-model-container {
-        max-width: 90px;
+        max-width: 85px;
     }
 
     .character-name-display {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
     }
 
     .character-scientific-name {
-        font-size: 0.5rem;
+        font-size: 0.45rem;
     }
 
     .character-mini-info {
-        font-size: 0.45rem;
+        font-size: 0.4rem;
     }
     
     .stat-name {
-        font-size: 0.5rem;
+        font-size: 0.45rem;
+        letter-spacing: 0;
     }
     
     .stat-bar {
-        height: 6px;
+        height: 5px;
     }
     
     .stat-value {
-        font-size: 0.75rem;
+        font-size: 0.65rem;
     }
     
     .stat-tier-badge {
-        font-size: 0.45rem;
+        font-size: 0.4rem;
         padding: 0 2px;
     }
 
-    /* Bottom bar */
     .bottom-info-bar {
         padding: 3px 4px;
-        min-height: 28px;
-        max-height: 28px;
-        gap: 4px;
+        gap: 3px;
     }
 
     .info-item-inline {
-        font-size: 0.5rem;
+        font-size: 0.45rem;
         padding: 1px 3px;
     }
 
     .expand-details-btn, .toggle-grid-btn {
         padding: 3px 6px;
-        font-size: 0.55rem;
+        font-size: 0.5rem;
     }
 
-    /* Grid */
     .character-grid-container {
-        height: 75px;
-        max-height: 75px;
-        padding: 3px;
+        min-height: 85px;
+        max-height: 95px;
+        padding: 4px;
     }
 
     .grid-controls {
-        gap: 2px;
-        margin-bottom: 2px;
+        gap: 3px;
+        margin-bottom: 3px;
     }
     
     .search-box {
-        padding: 2px 4px;
-        font-size: 0.6rem;
+        padding: 3px 5px;
+        font-size: 0.55rem;
         min-width: 60px;
-        max-width: 80px;
+        max-width: 90px;
     }
 
     .filter-select {
-        padding: 2px 3px;
-        font-size: 0.5rem;
-        min-width: 45px;
+        padding: 3px 4px;
+        font-size: 0.45rem;
+        min-width: 50px;
     }
 
     .character-grid {
-        gap: 4px;
-        padding: 3px;
-        height: 45px;
+        gap: 5px;
+        height: 55px;
     }
 
     .character-card {
-        min-width: 40px;
-        width: 40px;
-        height: 40px;
+        min-width: 50px;
+        width: 50px;
+        height: 50px;
     }
 
     .character-card-image {
-        height: 28px;
+        height: 35px;
     }
 
     .character-card-name {
-        font-size: 0.35rem;
+        font-size: 0.4rem;
     }
 
     /* Compare View */
     .fight-screen {
-        padding: 5px;
+        padding: 8px 5px;
         gap: 5px;
     }
 
@@ -1721,28 +1771,33 @@ body {
     }
 
     .fighter-placeholder i {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
     }
 
     .fighter-placeholder p {
-        font-size: 0.5rem;
+        font-size: 0.45rem;
     }
 
     .fighter-name {
-        font-size: 0.6rem;
+        font-size: 0.55rem;
     }
 
     .view-stats-btn {
         padding: 2px 4px;
-        font-size: 0.45rem;
+        font-size: 0.4rem;
     }
 
     .vs-badge {
         font-size: 1rem;
     }
+    
+    .radar-chart-container {
+        max-width: 80px;
+        height: 80px;
+    }
 
     .fight-btn {
-        padding: 5px 12px;
+        padding: 6px 15px;
         font-size: 0.85rem;
     }
 }

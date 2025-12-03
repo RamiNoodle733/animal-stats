@@ -99,6 +99,7 @@ class AnimalStatsApp {
             },
             
             detailsPanel: document.getElementById('details-panel'),
+            detailsCloseBtn: document.getElementById('details-close-btn'),
             expandDetailsBtn: document.getElementById('expand-details-btn'),
             detailText: {
                 type: document.getElementById('detail-type'),
@@ -333,6 +334,11 @@ class AnimalStatsApp {
         // UI Toggles
         if (this.dom.expandDetailsBtn) {
             this.dom.expandDetailsBtn.addEventListener('click', this.toggleDetails);
+        }
+        if (this.dom.detailsCloseBtn) {
+            this.dom.detailsCloseBtn.addEventListener('click', () => {
+                if (this.state.isDetailsExpanded) this.toggleDetails();
+            });
         }
         if (this.dom.toggleGridBtn) {
             this.dom.toggleGridBtn.addEventListener('click', this.toggleGrid);
