@@ -5,10 +5,8 @@
   "main": "api/index.js",
   "scripts": {
     "dev": "vercel dev",
-    "build": "echo 'No build step required'",
     "start": "vercel dev",
-    "seed": "node scripts/seed-database.js",
-    "lint": "echo 'No lint configured'"
+    "seed": "node scripts/seed-database.js"
   },
   "keywords": [
     "animals",
