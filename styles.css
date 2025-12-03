@@ -1064,20 +1064,20 @@ body {
         flex-direction: column;
     }
 
-    /* --- HEADER - Fixed at top, never cut off --- */
+    /* --- HEADER - Fixed at top --- */
     .game-header {
-        padding: 12px 10px 8px;
-        gap: 12px;
+        padding: 10px 10px 8px;
+        gap: 10px;
         flex-wrap: nowrap;
         justify-content: center;
         flex-shrink: 0;
-        min-height: 48px;
+        min-height: 44px;
         position: relative;
         z-index: 100;
     }
 
     .game-header h1 {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         letter-spacing: 2px;
         margin: 0;
         order: 0;
@@ -1085,126 +1085,127 @@ body {
     }
 
     .mode-btn {
-        padding: 6px 12px;
-        font-size: 0.7rem;
+        padding: 5px 10px;
+        font-size: 0.65rem;
         flex: 0 0 auto;
     }
 
-    /* --- STATS VIEW - 3 Column Grid --- */
+    /* =====================================================
+       STATS VIEW - Vertical Layout (Animal on top, stats below)
+       ===================================================== */
     .character-display-area {
-        display: grid !important;
-        grid-template-columns: 1fr 130px 1fr;
-        grid-template-rows: 1fr;
-        padding: 5px 3px;
-        gap: 5px;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 8px;
+        gap: 8px;
         flex: 1;
         min-height: 0;
-        overflow: hidden;
-        align-items: stretch;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
 
+    /* Animal display at top */
     .character-showcase {
-        grid-column: 2;
-        grid-row: 1;
+        order: 1;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
-        justify-content: flex-start;
-        padding-top: 5px;
-        overflow: hidden;
-    }
-
-    .stats-panel-left {
-        grid-column: 1;
-        grid-row: 1;
-        overflow-y: auto;
-        overflow-x: hidden;
-        padding: 3px 2px;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-    }
-
-    .stats-panel-right {
-        grid-column: 3;
-        grid-row: 1;
-        overflow-y: auto;
-        overflow-x: hidden;
-        padding: 3px 2px;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-    }
-
-    /* Character Display */
-    .character-model-container {
-        max-width: 110px;
-        width: 100%;
-        margin: 0 auto;
+        justify-content: center;
+        gap: 15px;
+        padding: 10px;
         flex-shrink: 0;
+        background: rgba(0, 20, 40, 0.5);
+        border-radius: 10px;
+        border: 1px solid rgba(0, 212, 255, 0.3);
+    }
+
+    .character-model-container {
+        width: 100px;
+        max-width: 100px;
+        flex-shrink: 0;
+    }
+    
+    .character-model {
+        width: 100%;
+        height: auto;
     }
 
     .character-name-display {
-        font-size: 0.8rem;
-        line-height: 1.1;
+        font-size: 1.1rem;
+        line-height: 1.2;
         margin-bottom: 2px;
-        letter-spacing: 1px;
+        letter-spacing: 2px;
     }
 
     .character-scientific-name {
-        font-size: 0.5rem;
-        margin-bottom: 2px;
+        font-size: 0.6rem;
+        margin-bottom: 4px;
     }
     
     .character-mini-info {
-        justify-content: center;
-        gap: 3px;
-        font-size: 0.5rem;
-        margin-top: 2px;
+        justify-content: flex-start;
+        gap: 5px;
+        font-size: 0.6rem;
+        margin-top: 5px;
+        flex-wrap: wrap;
     }
     
     .character-mini-info span {
-        padding: 1px 3px;
+        padding: 2px 6px;
     }
 
-    /* --- STATS - Vertical stacked layout with value ALWAYS below bar --- */
+    /* Stats panels side by side below animal */
+    .stats-panel-left {
+        order: 2;
+        width: 100%;
+        padding: 5px;
+    }
+
+    .stats-panel-right {
+        order: 3;
+        width: 100%;
+        padding: 5px;
+    }
+    
+    /* Create a wrapper effect - stats in 2 columns */
     .stats-panel {
         padding: 0;
-        gap: 4px;
+        gap: 8px;
     }
     
     .stat-group {
-        gap: 4px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
     }
     
     .stat-group-container {
-        margin-bottom: 3px;
+        margin-bottom: 0;
+        background: rgba(0, 20, 40, 0.4);
+        padding: 8px;
+        border-radius: 6px;
+        border: 1px solid rgba(0, 212, 255, 0.2);
     }
 
     .stat-row {
         display: flex;
         flex-direction: column;
-        align-items: stretch;
-        gap: 1px;
+        align-items: center;
+        gap: 3px;
         margin-bottom: 0;
-    }
-    
-    /* Reset any ordering */
-    .stat-row > * {
-        order: unset !important;
     }
 
     .stat-icon {
-        display: none;
+        display: block;
+        font-size: 1rem;
+        margin-bottom: 2px;
     }
     
     .stat-name {
-        font-size: 0.55rem;
-        letter-spacing: 0.5px;
+        font-size: 0.65rem;
+        letter-spacing: 1px;
         text-align: center;
         white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
     
     .stat-bar-wrapper {
@@ -1212,65 +1213,61 @@ body {
     }
     
     .stat-bar {
-        height: 6px;
+        height: 8px;
         border-width: 1px;
+        border-radius: 4px;
     }
     
-    /* FIX: Value and tier ALWAYS below the bar */
     .stat-value {
-        font-size: 0.75rem;
+        font-size: 1rem;
+        font-weight: bold;
         display: flex;
-        justify-content: center !important;
+        justify-content: center;
         align-items: center;
-        flex-direction: row !important;
-        gap: 2px;
-        margin-top: 1px;
+        gap: 4px;
+        margin-top: 2px;
     }
     
     .stat-tier-badge {
-        font-size: 0.45rem;
-        padding: 0 2px;
+        font-size: 0.5rem;
+        padding: 1px 4px;
     }
 
-    /* Right panel mirrors left panel exactly */
+    /* Right panel same styling */
     .stats-panel-right .stat-row {
-        display: flex;
         flex-direction: column;
-        align-items: stretch;
+        align-items: center;
     }
     
-    .stats-panel-right .stat-icon { display: none; }
+    .stats-panel-right .stat-icon { display: block; }
     .stats-panel-right .stat-name { text-align: center; }
-    .stats-panel-right .stat-value { 
-        justify-content: center !important; 
-        flex-direction: row !important; 
-    }
+    .stats-panel-right .stat-value { justify-content: center; }
 
     /* Substats - Hidden on mobile */
     .substat-container {
         display: none !important;
     }
 
-    /* --- BOTTOM INFO BAR - Always visible, no scrolling needed --- */
+    /* --- BOTTOM INFO BAR --- */
     .bottom-info-bar {
         display: flex;
         flex-wrap: wrap;
-        gap: 4px;
-        padding: 4px 6px;
+        gap: 6px;
+        padding: 8px 10px;
         justify-content: center;
         align-items: center;
         flex-shrink: 0;
-        min-height: auto;
-        max-height: none;
-        overflow: visible;
+        background: rgba(0, 10, 20, 0.9);
+        border-top: 1px solid rgba(0, 212, 255, 0.3);
     }
 
     .info-separator { display: none; }
 
     .info-item-inline {
-        font-size: 0.55rem;
-        padding: 2px 4px;
-        white-space: nowrap;
+        font-size: 0.6rem;
+        padding: 3px 6px;
+        background: rgba(0, 212, 255, 0.1);
+        border-radius: 4px;
     }
     
     .info-label {
@@ -1278,20 +1275,22 @@ body {
     }
 
     .expand-details-btn, .toggle-grid-btn {
-        padding: 4px 8px;
-        font-size: 0.6rem;
+        padding: 6px 12px;
+        font-size: 0.65rem;
         white-space: nowrap;
     }
 
-    /* --- CHARACTER GRID - Bigger cards, properly contained --- */
+    /* --- CHARACTER GRID --- */
     .character-grid-container {
         height: auto;
-        min-height: 100px;
-        max-height: 110px;
+        min-height: 90px;
+        max-height: 100px;
         padding: 5px;
         flex-shrink: 0;
         overflow: hidden;
         padding-bottom: calc(5px + env(safe-area-inset-bottom));
+        background: rgba(0, 5, 15, 0.95);
+        border-top: 1px solid rgba(0, 212, 255, 0.2);
     }
     
     .grid-controls {
@@ -1299,151 +1298,170 @@ body {
         flex-wrap: nowrap;
         gap: 4px;
         padding: 0 4px;
-        margin-bottom: 5px;
+        margin-bottom: 4px;
         overflow-x: auto;
     }
     
     .search-box {
         flex: 1;
         min-width: 80px;
-        max-width: 120px;
+        max-width: 100px;
         padding: 4px 6px;
-        font-size: 0.65rem;
+        font-size: 0.6rem;
     }
     
     .filter-select {
         flex: 0 0 auto;
-        min-width: 60px;
-        padding: 4px 5px;
-        font-size: 0.55rem;
+        min-width: 55px;
+        padding: 3px 4px;
+        font-size: 0.5rem;
     }
     
     .filter-group {
         display: flex;
-        gap: 4px;
+        gap: 3px;
     }
     
     .character-grid {
-        gap: 6px;
-        padding: 5px;
-        height: 65px;
+        gap: 5px;
+        padding: 4px;
+        height: 58px;
         overflow-x: auto;
         overflow-y: hidden;
     }
     
     .character-card {
-        min-width: 58px;
-        width: 58px;
-        height: 58px;
+        min-width: 50px;
+        width: 50px;
+        height: 50px;
         flex-shrink: 0;
     }
     
     .character-card-image {
-        height: 40px;
+        height: 34px;
     }
     
     .character-card-name {
-        font-size: 0.45rem;
+        font-size: 0.4rem;
         padding: 2px;
     }
 
-    /* --- COMPARE VIEW - Horizontal layout with chart --- */
+    /* =====================================================
+       COMPARE VIEW - Clean layout without broken chart
+       ===================================================== */
     .fight-screen {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr 1fr;
-        grid-template-rows: 1fr auto;
+        display: flex !important;
+        flex-direction: column !important;
         padding: 10px;
-        gap: 8px;
+        gap: 10px;
         flex: 1;
         min-height: 0;
-        overflow: hidden;
-        align-items: center;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    /* Fighters container - side by side at top */
+    .fighters-row {
+        display: flex;
+        justify-content: space-around;
+        align-items: flex-start;
+        gap: 15px;
+        flex-shrink: 0;
     }
 
     .fighter-section {
         flex-direction: column !important;
-        gap: 5px;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    .fighter-left {
-        grid-column: 1;
-        grid-row: 1;
-    }
-    
-    .fight-center {
-        grid-column: 2;
-        grid-row: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
         gap: 8px;
+        justify-content: flex-start;
+        align-items: center;
+        flex: 1;
     }
     
-    .fighter-right {
-        grid-column: 3;
-        grid-row: 1;
+    .fighter-left, .fighter-right {
+        max-width: 45%;
+    }
+    
+    /* Hide the fight-center with radar on mobile - it's broken */
+    .fight-center {
+        display: none !important;
     }
 
-    /* Bigger fighter images on mobile */
+    /* Fighter images - bigger and cleaner */
     .fighter-display {
-        width: 90px;
-        height: 90px;
-        border-width: 2px;
+        width: 110px;
+        height: 110px;
+        border-width: 3px;
     }
 
     .fighter-placeholder i {
-        font-size: 1.5rem;
+        font-size: 2rem;
     }
     
     .fighter-placeholder p {
-        font-size: 0.55rem;
+        font-size: 0.6rem;
     }
     
     .fighter-name {
-        font-size: 0.65rem;
+        font-size: 0.75rem;
         letter-spacing: 1px;
+        text-align: center;
     }
     
     .fighter-info-overlay {
-        padding: 6px 4px 4px;
+        padding: 8px 6px 5px;
     }
 
     .view-stats-btn {
-        padding: 3px 5px;
-        font-size: 0.5rem;
+        padding: 4px 8px;
+        font-size: 0.55rem;
     }
 
     .vs-badge { 
-        font-size: 1.3rem; 
-        margin: 0;
+        display: none; /* Hide VS badge - looks cleaner */
     }
     
-    /* Show radar chart on mobile (smaller) */
+    /* Hide radar chart on mobile - it's causing issues */
     .radar-chart-container {
-        display: block;
+        display: none !important;
+    }
+
+    /* Show compare stats panels on mobile instead */
+    .compare-stats-panel {
+        display: block !important;
         width: 100%;
-        max-width: 100px;
-        height: 100px;
-        margin: 0;
+        padding: 8px;
+        font-size: 0.7rem;
+        background: rgba(0, 20, 40, 0.5);
+        border-radius: 6px;
+        margin-top: 5px;
+    }
+    
+    .compare-stat-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 3px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .compare-stat-row:last-child {
+        border-bottom: none;
     }
 
     .fight-btn {
-        grid-column: 1 / -1;
-        grid-row: 2;
-        padding: 8px 20px;
-        font-size: 1rem;
-        justify-self: center;
-    }
-    
-    /* Hide compare stats panels on mobile */
-    .compare-stats-panel {
-        display: none;
+        padding: 12px 30px;
+        font-size: 1.1rem;
+        margin-top: auto;
+        flex-shrink: 0;
+        align-self: center;
     }
 
-    /* --- DETAILS PANEL - With close button visible --- */
+    /* Toggle grid button for compare view */
+    .compare-toggle-grid-btn {
+        padding: 6px 12px;
+        font-size: 0.65rem;
+    }
+
+    /* --- DETAILS PANEL --- */
     .details-grid {
         grid-template-columns: 1fr;
     }
@@ -1461,25 +1479,24 @@ body {
     .details-panel.expanded {
         max-height: 80vh;
         overflow-y: auto;
-        padding-bottom: 60px; /* Space for close button */
+        padding: 15px;
+        padding-bottom: 60px;
     }
     
-    /* Add a close button to details panel */
-    .details-panel.expanded::after {
-        content: '✕ TAP TO CLOSE';
-        position: fixed;
-        bottom: calc(10px + env(safe-area-inset-bottom));
-        left: 50%;
-        transform: translateX(-50%);
+    .details-close-btn {
+        display: block !important;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 30px;
+        height: 30px;
         background: var(--primary-color);
         color: #000;
-        padding: 8px 20px;
-        border-radius: 20px;
-        font-family: 'Bebas Neue', sans-serif;
-        font-size: 0.8rem;
-        letter-spacing: 2px;
-        z-index: 101;
+        border: none;
+        border-radius: 50%;
+        font-size: 1rem;
         cursor: pointer;
+        z-index: 101;
     }
 }
 
@@ -1646,54 +1663,72 @@ body {
 /* --- SMALL PHONE OPTIMIZATIONS (< 480px) --- */
 @media (max-width: 480px) {
     .game-header {
-        padding: 10px 6px 6px;
+        padding: 8px 6px 6px;
         gap: 6px;
-        min-height: 42px;
+        min-height: 40px;
     }
 
     .game-header h1 {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         letter-spacing: 1px;
     }
 
     .mode-btn {
-        padding: 5px 8px;
-        font-size: 0.6rem;
+        padding: 4px 8px;
+        font-size: 0.55rem;
     }
 
+    /* Stats view adjustments for small screens */
     .character-display-area {
-        grid-template-columns: 1fr 100px 1fr;
-        padding: 3px 2px;
-        gap: 3px;
+        padding: 5px;
+        gap: 5px;
+    }
+    
+    .character-showcase {
+        padding: 8px;
+        gap: 10px;
     }
 
     .character-model-container {
-        max-width: 85px;
+        width: 80px;
+        max-width: 80px;
     }
 
     .character-name-display {
-        font-size: 0.65rem;
+        font-size: 0.9rem;
     }
 
     .character-scientific-name {
-        font-size: 0.45rem;
+        font-size: 0.5rem;
     }
 
     .character-mini-info {
-        font-size: 0.4rem;
+        font-size: 0.5rem;
+    }
+    
+    .stat-group {
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+    }
+    
+    .stat-group-container {
+        padding: 5px;
+    }
+    
+    .stat-icon {
+        font-size: 0.8rem;
     }
     
     .stat-name {
-        font-size: 0.45rem;
-        letter-spacing: 0;
+        font-size: 0.55rem;
     }
     
     .stat-bar {
-        height: 5px;
+        height: 6px;
     }
     
     .stat-value {
-        font-size: 0.65rem;
+        font-size: 0.85rem;
     }
     
     .stat-tier-badge {
@@ -1702,23 +1737,23 @@ body {
     }
 
     .bottom-info-bar {
-        padding: 3px 4px;
-        gap: 3px;
+        padding: 5px 6px;
+        gap: 4px;
     }
 
     .info-item-inline {
-        font-size: 0.45rem;
-        padding: 1px 3px;
+        font-size: 0.5rem;
+        padding: 2px 4px;
     }
 
     .expand-details-btn, .toggle-grid-btn {
-        padding: 3px 6px;
-        font-size: 0.5rem;
+        padding: 4px 8px;
+        font-size: 0.55rem;
     }
 
     .character-grid-container {
-        min-height: 85px;
-        max-height: 95px;
+        min-height: 80px;
+        max-height: 90px;
         padding: 4px;
     }
 
@@ -1729,76 +1764,67 @@ body {
     
     .search-box {
         padding: 3px 5px;
-        font-size: 0.55rem;
+        font-size: 0.5rem;
         min-width: 60px;
-        max-width: 90px;
+        max-width: 80px;
     }
 
     .filter-select {
         padding: 3px 4px;
         font-size: 0.45rem;
-        min-width: 50px;
+        min-width: 45px;
     }
 
     .character-grid {
-        gap: 5px;
-        height: 55px;
-    }
-
-    .character-card {
-        min-width: 50px;
-        width: 50px;
+        gap: 4px;
         height: 50px;
     }
 
+    .character-card {
+        min-width: 44px;
+        width: 44px;
+        height: 44px;
+    }
+
     .character-card-image {
-        height: 35px;
+        height: 30px;
     }
 
     .character-card-name {
-        font-size: 0.4rem;
+        font-size: 0.35rem;
     }
 
-    /* Compare View */
+    /* Compare View - Small phones */
     .fight-screen {
-        padding: 8px 5px;
-        gap: 5px;
+        padding: 8px;
+        gap: 8px;
     }
 
     .fighter-display {
-        width: 75px;
-        height: 75px;
+        width: 90px;
+        height: 90px;
     }
 
     .fighter-placeholder i {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
     }
 
     .fighter-placeholder p {
-        font-size: 0.45rem;
+        font-size: 0.5rem;
     }
 
     .fighter-name {
-        font-size: 0.55rem;
+        font-size: 0.65rem;
     }
 
     .view-stats-btn {
-        padding: 2px 4px;
-        font-size: 0.4rem;
-    }
-
-    .vs-badge {
-        font-size: 1rem;
-    }
-    
-    .radar-chart-container {
-        max-width: 80px;
-        height: 80px;
+        padding: 3px 6px;
+        font-size: 0.45rem;
     }
 
     .fight-btn {
-        padding: 6px 15px;
-        font-size: 0.85rem;
+        padding: 10px 25px;
+        font-size: 1rem;
     }
 }
 
