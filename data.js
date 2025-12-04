@@ -1,4 +1,4 @@
-// Animal data - synced from MongoDB on 2025-12-04T00:48:04.085Z
+// Animal data - synced from MongoDB on 2025-12-04T03:32:41.714Z
 const animals = [
   {
     "name": "African Elephant",
@@ -6,9 +6,9 @@ const animals = [
     "attack": 97.5,
     "defense": 98.9,
     "agility": 26,
-    "stamina": 91.1,
-    "intelligence": 98.9,
-    "special": 0,
+    "stamina": 73.8,
+    "intelligence": 95,
+    "special": 21.3,
     "description": "The largest land animal on Earth, possessing immense raw strength and high intelligence. Their thick skin and massive size make them nearly invulnerable to most predators."
   },
   {
@@ -17,9 +17,9 @@ const animals = [
     "attack": 85.2,
     "defense": 68.8,
     "agility": 77.9,
-    "stamina": 67.8,
-    "intelligence": 96.5,
-    "special": 0,
+    "stamina": 61,
+    "intelligence": 56.5,
+    "special": 81.5,
     "description": "The King of Beasts, known for its majestic mane and social pride structure. Males are built for fighting rivals, while females are expert cooperative hunters."
   },
   {
@@ -28,9 +28,9 @@ const animals = [
     "attack": 55.4,
     "defense": 63.1,
     "agility": 81.3,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 99,
+    "intelligence": 74.5,
+    "special": 68,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -39,9 +39,9 @@ const animals = [
     "attack": 10.8,
     "defense": 10.8,
     "agility": 55.9,
-    "stamina": 52.8,
-    "intelligence": 88.6,
-    "special": 0,
+    "stamina": 89.9,
+    "intelligence": 44,
+    "special": 16,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -50,9 +50,9 @@ const animals = [
     "attack": 91.4,
     "defense": 96.7,
     "agility": 11.6,
-    "stamina": 70.8,
-    "intelligence": 76.9,
-    "special": 0,
+    "stamina": 55.7,
+    "intelligence": 35.7,
+    "special": 85,
     "description": "A Large creature found in Swamps, rivers, lakes."
   },
   {
@@ -61,9 +61,9 @@ const animals = [
     "attack": 13.8,
     "defense": 23.7,
     "agility": 28,
-    "stamina": 64.6,
-    "intelligence": 96.1,
-    "special": 0,
+    "stamina": 70.4,
+    "intelligence": 40.8,
+    "special": 11.3,
     "description": "A Small creature found in Mountains, grasslands."
   },
   {
@@ -72,9 +72,9 @@ const animals = [
     "attack": 83.4,
     "defense": 36.1,
     "agility": 10.6,
-    "stamina": 58.3,
-    "intelligence": 67.5,
-    "special": 0,
+    "stamina": 40.9,
+    "intelligence": 21.2,
+    "special": 77,
     "description": "The heaviest snake in the world, a master of constriction. It coils around prey, suffocating them with immense pressure."
   },
   {
@@ -83,9 +83,9 @@ const animals = [
     "attack": 30.9,
     "defense": 27.7,
     "agility": 2,
-    "stamina": 53.6,
-    "intelligence": 73.9,
-    "special": 0,
+    "stamina": 55.7,
+    "intelligence": 30.7,
+    "special": 26,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -94,9 +94,9 @@ const animals = [
     "attack": 13.7,
     "defense": 5.8,
     "agility": 14.1,
-    "stamina": 60.6,
-    "intelligence": 90.4,
-    "special": 0,
+    "stamina": 56.9,
+    "intelligence": 47.9,
+    "special": 27.9,
     "description": "A Medium creature found in Grasslands, forests."
   },
   {
@@ -105,9 +105,9 @@ const animals = [
     "attack": 74.5,
     "defense": 56.6,
     "agility": 71.7,
-    "stamina": 36.9,
-    "intelligence": 92.3,
-    "special": 0,
+    "stamina": 56.6,
+    "intelligence": 76.6,
+    "special": 23.1,
     "description": "A Tiny creature found in Arctic tundra."
   },
   {
@@ -116,9 +116,9 @@ const animals = [
     "attack": 54.6,
     "defense": 62.6,
     "agility": 69,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 95.7,
+    "intelligence": 81.3,
+    "special": 72.6,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -127,9 +127,9 @@ const animals = [
     "attack": 10.7,
     "defense": 89.2,
     "agility": 6.8,
-    "stamina": 49.3,
-    "intelligence": 88,
-    "special": 0,
+    "stamina": 59.8,
+    "intelligence": 52.2,
+    "special": 50,
     "description": "A Small creature found in Forests, grasslands."
   },
   {
@@ -138,9 +138,9 @@ const animals = [
     "attack": 0.4,
     "defense": 5.5,
     "agility": 3.5,
-    "stamina": 53.6,
-    "intelligence": 66.8,
-    "special": 0,
+    "stamina": 17.3,
+    "intelligence": 10.8,
+    "special": 55,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -149,9 +149,9 @@ const animals = [
     "attack": 1.3,
     "defense": 1.3,
     "agility": 0.8,
-    "stamina": 33.3,
-    "intelligence": 64.2,
-    "special": 0,
+    "stamina": 47.3,
+    "intelligence": 27.3,
+    "special": 27.3,
     "description": "A Tiny creature found in Lakes of Mexico City."
   },
   {
@@ -160,9 +160,9 @@ const animals = [
     "attack": 47.7,
     "defense": 55.9,
     "agility": 39.5,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 60.2,
+    "intelligence": 87.5,
+    "special": 41.9,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -171,9 +171,9 @@ const animals = [
     "attack": 73.6,
     "defense": 79.7,
     "agility": 15.4,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 99.8,
+    "intelligence": 41,
+    "special": 65,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -182,9 +182,9 @@ const animals = [
     "attack": 10.5,
     "defense": 43,
     "agility": 19.7,
-    "stamina": 55.7,
-    "intelligence": 94.7,
-    "special": 0,
+    "stamina": 45.5,
+    "intelligence": 60.3,
+    "special": 70.2,
     "description": "A Small creature found in Forests, grasslands."
   },
   {
@@ -193,9 +193,9 @@ const animals = [
     "attack": 46.9,
     "defense": 23.4,
     "agility": 89.5,
-    "stamina": 46.1,
-    "intelligence": 83.2,
-    "special": 0,
+    "stamina": 87.3,
+    "intelligence": 73.6,
+    "special": 73.6,
     "description": "A powerful raptor with a white head and tail. It uses massive talons to snatch fish and small mammals from the water or land."
   },
   {
@@ -204,9 +204,9 @@ const animals = [
     "attack": 46.2,
     "defense": 23.2,
     "agility": 63.4,
-    "stamina": 52.8,
-    "intelligence": 88.6,
-    "special": 0,
+    "stamina": 82.7,
+    "intelligence": 65,
+    "special": 65,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -215,9 +215,9 @@ const animals = [
     "attack": 30.3,
     "defense": 27.5,
     "agility": 76.6,
-    "stamina": 53.6,
-    "intelligence": 73.9,
-    "special": 0,
+    "stamina": 49.3,
+    "intelligence": 24.3,
+    "special": 73,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -226,9 +226,9 @@ const animals = [
     "attack": 20.7,
     "defense": 10.6,
     "agility": 15.9,
-    "stamina": 66.5,
-    "intelligence": 97.3,
-    "special": 0,
+    "stamina": 60.2,
+    "intelligence": 71.4,
+    "special": 30.2,
     "description": "A Small creature found in Rivers, lakes, streams."
   },
   {
@@ -237,9 +237,9 @@ const animals = [
     "attack": 29.8,
     "defense": 88.4,
     "agility": 9.6,
-    "stamina": 76.9,
-    "intelligence": 98,
-    "special": 0,
+    "stamina": 90.5,
+    "intelligence": 81.9,
+    "special": 45.9,
     "description": "A Large creature found in Arctic and sub-Arctic waters."
   },
   {
@@ -248,9 +248,9 @@ const animals = [
     "attack": 13.6,
     "defense": 22.9,
     "agility": 61.4,
-    "stamina": 70.1,
-    "intelligence": 95.2,
-    "special": 0,
+    "stamina": 56.8,
+    "intelligence": 51.8,
+    "special": 65,
     "description": "A Medium creature found in Mountains, cliffs."
   },
   {
@@ -259,9 +259,9 @@ const animals = [
     "attack": 72.7,
     "defense": 87.6,
     "agility": 41.6,
-    "stamina": 75.9,
-    "intelligence": 96.9,
-    "special": 0,
+    "stamina": 94.4,
+    "intelligence": 50.1,
+    "special": 80,
     "description": "The largest land mammal in North America. Massive heads and shoulder humps power their devastating charges."
   },
   {
@@ -270,9 +270,9 @@ const animals = [
     "attack": 82.5,
     "defense": 83.7,
     "agility": 42.3,
-    "stamina": 60.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 68.6,
+    "intelligence": 40.7,
+    "special": 76.9,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -281,9 +281,9 @@ const animals = [
     "attack": 58.5,
     "defense": 35.5,
     "agility": 50.5,
-    "stamina": 42.4,
-    "intelligence": 64.7,
-    "special": 0,
+    "stamina": 49.8,
+    "intelligence": 33.1,
+    "special": 97.5,
     "description": "A Small creature found in Savannas of Africa."
   },
   {
@@ -292,9 +292,9 @@ const animals = [
     "attack": 71.8,
     "defense": 68.3,
     "agility": 90.7,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 60.7,
+    "intelligence": 56,
+    "special": 79.5,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -303,9 +303,9 @@ const animals = [
     "attack": 95,
     "defense": 95.6,
     "agility": 12.1,
-    "stamina": 60.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 79.8,
+    "intelligence": 59.5,
+    "special": 74.6,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -314,9 +314,9 @@ const animals = [
     "attack": 13.4,
     "defense": 22.7,
     "agility": 21.2,
-    "stamina": 53.6,
-    "intelligence": 65.3,
-    "special": 0,
+    "stamina": 56.1,
+    "intelligence": 16.1,
+    "special": 78,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -325,9 +325,9 @@ const animals = [
     "attack": 29.2,
     "defense": 92.2,
     "agility": 9.3,
-    "stamina": 89.3,
-    "intelligence": 98.2,
-    "special": 0,
+    "stamina": 91.1,
+    "intelligence": 71.2,
+    "special": 31.6,
     "description": "The largest animal to ever exist. While peaceful filter feeders, their sheer bulk makes them virtually immune to predation as adults."
   },
   {
@@ -336,9 +336,9 @@ const animals = [
     "attack": 81.6,
     "defense": 34.8,
     "agility": 10.3,
-    "stamina": 55.8,
-    "intelligence": 74.5,
-    "special": 0,
+    "stamina": 42.1,
+    "intelligence": 22.8,
+    "special": 75,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -347,9 +347,9 @@ const animals = [
     "attack": 70.9,
     "defense": 55.2,
     "agility": 75.2,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 62.7,
+    "intelligence": 59,
+    "special": 73.2,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -358,9 +358,9 @@ const animals = [
     "attack": 10.4,
     "defense": 22.4,
     "agility": 19.4,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 78.4,
+    "intelligence": 56.7,
+    "special": 35.1,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -369,9 +369,9 @@ const animals = [
     "attack": 28.6,
     "defense": 78.9,
     "agility": 75.9,
-    "stamina": 78.6,
-    "intelligence": 98.2,
-    "special": 0,
+    "stamina": 87.2,
+    "intelligence": 96.5,
+    "special": 36.9,
     "description": "Highly intelligent marine mammals that use complex teamwork and echolocation. They can kill sharks by ramming their soft underbellies."
   },
   {
@@ -380,9 +380,9 @@ const animals = [
     "attack": 20.1,
     "defense": 27.2,
     "agility": 22.2,
-    "stamina": 23.2,
-    "intelligence": 36,
-    "special": 0,
+    "stamina": 63.1,
+    "intelligence": 57.1,
+    "special": 100,
     "description": "One of the most venomous creatures on Earth. Its tentacles are covered in millions of explosive cells that deliver instant pain and death."
   },
   {
@@ -391,9 +391,9 @@ const animals = [
     "attack": 90.6,
     "defense": 27,
     "agility": 85.7,
-    "stamina": 56.9,
-    "intelligence": 66.1,
-    "special": 0,
+    "stamina": 86.9,
+    "intelligence": 27.6,
+    "special": 82,
     "description": "A Large creature found in Coastal waters and rivers."
   },
   {
@@ -402,9 +402,9 @@ const animals = [
     "attack": 0.3,
     "defense": 5.3,
     "agility": 3.3,
-    "stamina": 53.6,
-    "intelligence": 66.8,
-    "special": 0,
+    "stamina": 20.5,
+    "intelligence": 13.4,
+    "special": 90.5,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -413,9 +413,9 @@ const animals = [
     "attack": 1.2,
     "defense": 1,
     "agility": 8.1,
-    "stamina": 53.6,
-    "intelligence": 69.6,
-    "special": 0,
+    "stamina": 32.7,
+    "intelligence": 12.7,
+    "special": 14.1,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -424,9 +424,9 @@ const animals = [
     "attack": 70,
     "defense": 78.2,
     "agility": 15.1,
-    "stamina": 82.6,
-    "intelligence": 98,
-    "special": 0,
+    "stamina": 100,
+    "intelligence": 43.9,
+    "special": 65,
     "description": "A Large creature found in Deserts."
   },
   {
@@ -435,9 +435,9 @@ const animals = [
     "attack": 14.6,
     "defense": 77.4,
     "agility": 21.4,
-    "stamina": 53.6,
-    "intelligence": 62.9,
-    "special": 0,
+    "stamina": 33.7,
+    "intelligence": 24,
+    "special": 65,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -446,9 +446,9 @@ const animals = [
     "attack": 92.3,
     "defense": 91.1,
     "agility": 29,
-    "stamina": 75.8,
-    "intelligence": 96.7,
-    "special": 0,
+    "stamina": 76.8,
+    "intelligence": 53.5,
+    "special": 84,
     "description": "Known as 'The Black Death', these bovines are extremely aggressive and vengeful. Their fused horns form a bulletproof shield."
   },
   {
@@ -457,9 +457,9 @@ const animals = [
     "attack": 45.4,
     "defense": 54.5,
     "agility": 60,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 57.7,
+    "intelligence": 93,
+    "special": 47.7,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -468,9 +468,9 @@ const animals = [
     "attack": 19.5,
     "defense": 10.3,
     "agility": 9.1,
-    "stamina": 60,
-    "intelligence": 93.5,
-    "special": 0,
+    "stamina": 58.7,
+    "intelligence": 68.7,
+    "special": 26.6,
     "description": "A Medium creature found in South American wetlands."
   },
   {
@@ -479,9 +479,9 @@ const animals = [
     "attack": 70,
     "defense": 53.9,
     "agility": 80,
-    "stamina": 48.3,
-    "intelligence": 89.2,
-    "special": 0,
+    "stamina": 61.7,
+    "intelligence": 57.5,
+    "special": 75,
     "description": "A Medium creature found in Africa, Middle East, Central Asia."
   },
   {
@@ -490,9 +490,9 @@ const animals = [
     "attack": 10.2,
     "defense": 28.7,
     "agility": 31.4,
-    "stamina": 63.3,
-    "intelligence": 86.7,
-    "special": 0,
+    "stamina": 86.8,
+    "intelligence": 57,
+    "special": 85.5,
     "description": "Often called the world's most dangerous bird. It has a dagger-like claw on its foot capable of disemboweling predators."
   },
   {
@@ -501,9 +501,9 @@ const animals = [
     "attack": 10.1,
     "defense": 42.3,
     "agility": 13.9,
-    "stamina": 54.6,
-    "intelligence": 76,
-    "special": 0,
+    "stamina": 48.9,
+    "intelligence": 47.9,
+    "special": 51.9,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -512,9 +512,9 @@ const animals = [
     "attack": 69.2,
     "defense": 67.8,
     "agility": 98.2,
-    "stamina": 53.9,
-    "intelligence": 91.6,
-    "special": 0,
+    "stamina": 47.1,
+    "intelligence": 56.6,
+    "special": 76.5,
     "description": "The fastest land animal, built purely for speed. It sacrifices strength and defense for the ability to run down any prey."
   },
   {
@@ -523,9 +523,9 @@ const animals = [
     "attack": 44.6,
     "defense": 53.2,
     "agility": 49.8,
-    "stamina": 68,
-    "intelligence": 98,
-    "special": 0,
+    "stamina": 62,
+    "intelligence": 99,
+    "special": 24,
     "description": "Our closest relatives, capable of extreme violence and coordinated warfare. They are fast, strong for their size, and use tools."
   },
   {
@@ -534,9 +534,9 @@ const animals = [
     "attack": 68.5,
     "defense": 67.2,
     "agility": 88.2,
-    "stamina": 50.9,
-    "intelligence": 89.2,
-    "special": 0,
+    "stamina": 69.6,
+    "intelligence": 69.4,
+    "special": 78,
     "description": "A Medium creature found in Forests of Southeast Asia."
   },
   {
@@ -545,9 +545,9 @@ const animals = [
     "attack": 10,
     "defense": 8.6,
     "agility": 47,
-    "stamina": 52.8,
-    "intelligence": 88.6,
-    "special": 0,
+    "stamina": 65.9,
+    "intelligence": 85,
+    "special": 31.8,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -556,9 +556,9 @@ const animals = [
     "attack": 9.8,
     "defense": 22.2,
     "agility": 5.3,
-    "stamina": 55.6,
-    "intelligence": 70.2,
-    "special": 0,
+    "stamina": 24.7,
+    "intelligence": 16.8,
+    "special": 56.8,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -567,9 +567,9 @@ const animals = [
     "attack": 53.8,
     "defense": 21.9,
     "agility": 16.1,
-    "stamina": 54.8,
-    "intelligence": 70.2,
-    "special": 0,
+    "stamina": 45.7,
+    "intelligence": 38.6,
+    "special": 18.6,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -578,9 +578,9 @@ const animals = [
     "attack": 43.8,
     "defense": 21.7,
     "agility": 49.1,
-    "stamina": 52.8,
-    "intelligence": 88.6,
-    "special": 0,
+    "stamina": 82.7,
+    "intelligence": 65.1,
+    "special": 65.1,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -589,9 +589,9 @@ const animals = [
     "attack": 67.7,
     "defense": 66.7,
     "agility": 83.2,
-    "stamina": 57.5,
-    "intelligence": 91.8,
-    "special": 0,
+    "stamina": 62.4,
+    "intelligence": 58.6,
+    "special": 78,
     "description": "Also known as the mountain lion, it has the largest range of any land mammal in the Americas. It is a powerful jumper and silent stalker."
   },
   {
@@ -600,9 +600,9 @@ const animals = [
     "attack": 53.1,
     "defense": 62.1,
     "agility": 25,
-    "stamina": 60.4,
-    "intelligence": 96.5,
-    "special": 0,
+    "stamina": 67.7,
+    "intelligence": 74,
+    "special": 67.7,
     "description": "A Small creature found in Grasslands, forests, deserts."
   },
   {
@@ -611,9 +611,9 @@ const animals = [
     "attack": 9.7,
     "defense": 8.3,
     "agility": 55.2,
-    "stamina": 52.8,
-    "intelligence": 88.6,
-    "special": 0,
+    "stamina": 59.6,
+    "intelligence": 94.5,
+    "special": 19.2,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -622,9 +622,9 @@ const animals = [
     "attack": 28.1,
     "defense": 26.7,
     "agility": 59.3,
-    "stamina": 53.6,
-    "intelligence": 70.2,
-    "special": 0,
+    "stamina": 57.3,
+    "intelligence": 91.5,
+    "special": 68,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -633,9 +633,9 @@ const animals = [
     "attack": 13.3,
     "defense": 5,
     "agility": 8.8,
-    "stamina": 53.6,
-    "intelligence": 65.3,
-    "special": 0,
+    "stamina": 10.7,
+    "intelligence": 5.6,
+    "special": 93,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -644,9 +644,9 @@ const animals = [
     "attack": 52.3,
     "defense": 61.6,
     "agility": 24.7,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 96.5,
+    "intelligence": 75.2,
+    "special": 68.5,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -655,9 +655,9 @@ const animals = [
     "attack": 51.5,
     "defense": 61,
     "agility": 24.5,
-    "stamina": 55.9,
-    "intelligence": 95.9,
-    "special": 0,
+    "stamina": 97,
+    "intelligence": 72.9,
+    "special": 66.9,
     "description": "A Small creature found in Deserts, forests, grasslands."
   },
   {
@@ -666,9 +666,9 @@ const animals = [
     "attack": 13.1,
     "defense": 21.4,
     "agility": 20.9,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 71.2,
+    "intelligence": 42.4,
+    "special": 13.6,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -677,9 +677,9 @@ const animals = [
     "attack": 9.5,
     "defense": 41.6,
     "agility": 94.7,
-    "stamina": 53.6,
-    "intelligence": 66.8,
-    "special": 0,
+    "stamina": 55.5,
+    "intelligence": 45.8,
+    "special": 17.9,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -688,9 +688,9 @@ const animals = [
     "attack": 27.5,
     "defense": 26.5,
     "agility": 36.1,
-    "stamina": 54.7,
-    "intelligence": 65.5,
-    "special": 0,
+    "stamina": 63.2,
+    "intelligence": 38.2,
+    "special": 92.5,
     "description": "Not a true eel, but a knifefish capable of generating 860 volts of electricity. It can stun prey or deter predators from a distance."
   },
   {
@@ -699,9 +699,9 @@ const animals = [
     "attack": 19,
     "defense": 76.6,
     "agility": 62.1,
-    "stamina": 72.8,
-    "intelligence": 96.9,
-    "special": 0,
+    "stamina": 94.7,
+    "intelligence": 52.1,
+    "special": 69.1,
     "description": "A Large creature found in Forests, mountains."
   },
   {
@@ -710,9 +710,9 @@ const animals = [
     "attack": 13,
     "defense": 8.1,
     "agility": 7.3,
-    "stamina": 56.4,
-    "intelligence": 87,
-    "special": 0,
+    "stamina": 61.2,
+    "intelligence": 54.2,
+    "special": 36.2,
     "description": "A Medium creature found in Antarctica."
   },
   {
@@ -721,9 +721,9 @@ const animals = [
     "attack": 12.8,
     "defense": 4.8,
     "agility": 7.1,
-    "stamina": 31.6,
-    "intelligence": 61.8,
-    "special": 0,
+    "stamina": 34.9,
+    "intelligence": 24.9,
+    "special": 72,
     "description": "A Tiny creature found in Rainforests of West Africa."
   },
   {
@@ -732,9 +732,9 @@ const animals = [
     "attack": 12.7,
     "defense": 28.5,
     "agility": 33.4,
-    "stamina": 64.5,
-    "intelligence": 90,
-    "special": 0,
+    "stamina": 85.6,
+    "intelligence": 54.1,
+    "special": 77,
     "description": "A Large creature found in Grasslands, forests."
   },
   {
@@ -743,9 +743,9 @@ const animals = [
     "attack": 66.9,
     "defense": 52.5,
     "agility": 71,
-    "stamina": 41.6,
-    "intelligence": 94.8,
-    "special": 0,
+    "stamina": 53.7,
+    "intelligence": 73.7,
+    "special": 17.4,
     "description": "A Tiny creature found in Deserts."
   },
   {
@@ -754,9 +754,9 @@ const animals = [
     "attack": 9.4,
     "defense": 40.9,
     "agility": 27.5,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 53.9,
+    "intelligence": 63.9,
+    "special": 72.6,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -765,9 +765,9 @@ const animals = [
     "attack": 12.5,
     "defense": 10.1,
     "agility": 20.7,
-    "stamina": 62.2,
-    "intelligence": 90.9,
-    "special": 0,
+    "stamina": 59.6,
+    "intelligence": 46.2,
+    "special": 26.2,
     "description": "A Medium creature found in Lakes, lagoons."
   },
   {
@@ -776,9 +776,9 @@ const animals = [
     "attack": 9.2,
     "defense": 4.5,
     "agility": 46.4,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 51.3,
+    "intelligence": 64.7,
+    "special": 21.3,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -787,9 +787,9 @@ const animals = [
     "attack": 57.7,
     "defense": 34.1,
     "agility": 6.3,
-    "stamina": 54.6,
-    "intelligence": 74.5,
-    "special": 0,
+    "stamina": 45.7,
+    "intelligence": 27.6,
+    "special": 96,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -798,9 +798,9 @@ const animals = [
     "attack": 1,
     "defense": 90,
     "agility": 0.5,
-    "stamina": 89.8,
-    "intelligence": 81,
-    "special": 0,
+    "stamina": 40.3,
+    "intelligence": 15.3,
+    "special": 40.3,
     "description": "A Large creature found in Galapagos Islands."
   },
   {
@@ -809,9 +809,9 @@ const animals = [
     "attack": 18.4,
     "defense": 33.4,
     "agility": 92.9,
-    "stamina": 58.6,
-    "intelligence": 95.6,
-    "special": 0,
+    "stamina": 74,
+    "intelligence": 47.9,
+    "special": 61.7,
     "description": "A Small creature found in Savannas, grasslands."
   },
   {
@@ -820,9 +820,9 @@ const animals = [
     "attack": 9.1,
     "defense": 40.2,
     "agility": 30.7,
-    "stamina": 54.6,
-    "intelligence": 74.5,
-    "special": 0,
+    "stamina": 43,
+    "intelligence": 36,
+    "special": 44,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -831,9 +831,9 @@ const animals = [
     "attack": 14.4,
     "defense": 4.3,
     "agility": 14.4,
-    "stamina": 27.6,
-    "intelligence": 62.3,
-    "special": 0,
+    "stamina": 26.9,
+    "intelligence": 18.5,
+    "special": 70,
     "description": "A Tiny creature found in South American forests."
   },
   {
@@ -842,9 +842,9 @@ const animals = [
     "attack": 43.1,
     "defense": 4,
     "agility": 23.7,
-    "stamina": 54.8,
-    "intelligence": 70.2,
-    "special": 0,
+    "stamina": 51.9,
+    "intelligence": 47.8,
+    "special": 27.8,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -853,9 +853,9 @@ const animals = [
     "attack": 42.3,
     "defense": 51.8,
     "agility": 96.4,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 61.4,
+    "intelligence": 88.5,
+    "special": 43.5,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -864,9 +864,9 @@ const animals = [
     "attack": 17.8,
     "defense": 39.5,
     "agility": 7.6,
-    "stamina": 56.6,
-    "intelligence": 74.5,
-    "special": 0,
+    "stamina": 51,
+    "intelligence": 52,
+    "special": 87.5,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -875,9 +875,9 @@ const animals = [
     "attack": 8.9,
     "defense": 75.8,
     "agility": 30,
-    "stamina": 79.2,
-    "intelligence": 97.3,
-    "special": 0,
+    "stamina": 73.4,
+    "intelligence": 46.7,
+    "special": 65,
     "description": "A Colossal creature found in Savannas, woodlands."
   },
   {
@@ -886,9 +886,9 @@ const animals = [
     "attack": 41.5,
     "defense": 21.2,
     "agility": 91.4,
-    "stamina": 52.8,
-    "intelligence": 88.6,
-    "special": 0,
+    "stamina": 80.5,
+    "intelligence": 61,
+    "special": 61,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -897,9 +897,9 @@ const animals = [
     "attack": 14.3,
     "defense": 20.9,
     "agility": 2.8,
-    "stamina": 35.6,
-    "intelligence": 60.5,
-    "special": 0,
+    "stamina": 21.2,
+    "intelligence": 13.9,
+    "special": 60,
     "description": "A Tiny creature found in Rainforests of South America."
   },
   {
@@ -908,9 +908,9 @@ const animals = [
     "attack": 12.4,
     "defense": 9.8,
     "agility": 20.4,
-    "stamina": 58.7,
-    "intelligence": 89.1,
-    "special": 0,
+    "stamina": 87.4,
+    "intelligence": 58.5,
+    "special": 38.5,
     "description": "A Small creature found in Wetlands, grasslands."
   },
   {
@@ -919,9 +919,9 @@ const animals = [
     "attack": 86.1,
     "defense": 51.1,
     "agility": 28.5,
-    "stamina": 74.6,
-    "intelligence": 98,
-    "special": 0,
+    "stamina": 67,
+    "intelligence": 97.5,
+    "special": 34,
     "description": "A gentle giant until provoked, possessing immense upper body strength. Gorillas fight with crushing blows and powerful bites."
   },
   {
@@ -930,9 +930,9 @@ const animals = [
     "attack": 50.8,
     "defense": 60.5,
     "agility": 68.3,
-    "stamina": 68.3,
-    "intelligence": 96.3,
-    "special": 0,
+    "stamina": 96,
+    "intelligence": 77.7,
+    "special": 70.2,
     "description": "The ultimate endurance hunter. Wolves use complex pack tactics to wear down prey much larger than themselves over long distances."
   },
   {
@@ -941,9 +941,9 @@ const animals = [
     "attack": 40.8,
     "defense": 20.7,
     "agility": 67.6,
-    "stamina": 52.8,
-    "intelligence": 88.6,
-    "special": 0,
+    "stamina": 87.6,
+    "intelligence": 74.2,
+    "special": 71.1,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -952,9 +952,9 @@ const animals = [
     "attack": 95,
     "defense": 26.2,
     "agility": 86.3,
-    "stamina": 72.2,
-    "intelligence": 76.4,
-    "special": 0,
+    "stamina": 89.8,
+    "intelligence": 39.1,
+    "special": 85,
     "description": "The ultimate ocean predator, equipped with rows of serrated teeth and electromagnetic senses. It strikes from below with devastating force."
   },
   {
@@ -963,9 +963,9 @@ const animals = [
     "attack": 80.7,
     "defense": 32.7,
     "agility": 10.1,
-    "stamina": 55.8,
-    "intelligence": 74.5,
-    "special": 0,
+    "stamina": 50.9,
+    "intelligence": 34.5,
+    "special": 78,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -974,9 +974,9 @@ const animals = [
     "attack": 87,
     "defense": 84.5,
     "agility": 43,
-    "stamina": 64.5,
-    "intelligence": 91.6,
-    "special": 0,
+    "stamina": 72.9,
+    "intelligence": 53.6,
+    "special": 80.3,
     "description": "A massive omnivore with bone-crushing jaws and paws that can kill a moose in a single swipe. Extremely durable and aggressive when provoked."
   },
   {
@@ -985,9 +985,9 @@ const animals = [
     "attack": 8.8,
     "defense": 20.4,
     "agility": 27.2,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 91.7,
+    "intelligence": 46.9,
+    "special": 20.3,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -996,9 +996,9 @@ const animals = [
     "attack": 84.3,
     "defense": 28.2,
     "agility": 83.8,
-    "stamina": 69.3,
-    "intelligence": 76.4,
-    "special": 0,
+    "stamina": 88.1,
+    "intelligence": 32.5,
+    "special": 82.5,
     "description": "A Large creature found in Warm coastlines."
   },
   {
@@ -1007,9 +1007,9 @@ const animals = [
     "attack": 40,
     "defense": 20.2,
     "agility": 88.8,
-    "stamina": 49.2,
-    "intelligence": 84.3,
-    "special": 0,
+    "stamina": 85.1,
+    "intelligence": 69.5,
+    "special": 69.5,
     "description": "The most powerful eagle in the Americas, with talons larger than a grizzly bear's claws. It hunts monkeys and sloths in the canopy."
   },
   {
@@ -1018,9 +1018,9 @@ const animals = [
     "attack": 40,
     "defense": 75,
     "agility": 3,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 62.5,
+    "intelligence": 73.1,
+    "special": 55,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1029,9 +1029,9 @@ const animals = [
     "attack": 8.7,
     "defense": 0.8,
     "agility": 1.8,
-    "stamina": 55.6,
-    "intelligence": 69.6,
-    "special": 0,
+    "stamina": 38.8,
+    "intelligence": 18.8,
+    "special": 23.2,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1040,9 +1040,9 @@ const animals = [
     "attack": 12.3,
     "defense": 3.8,
     "agility": 2.5,
-    "stamina": 55.6,
-    "intelligence": 66.8,
-    "special": 0,
+    "stamina": 27.6,
+    "intelligence": 19.1,
+    "special": 59.1,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1051,9 +1051,9 @@ const animals = [
     "attack": 94.1,
     "defense": 93.3,
     "agility": 10.8,
-    "stamina": 85.9,
-    "intelligence": 98,
-    "special": 0,
+    "stamina": 74.6,
+    "intelligence": 49.3,
+    "special": 84.5,
     "description": "One of the most aggressive animals on Earth. Despite being herbivorous, their massive jaws and tusks can snap a crocodile in half."
   },
   {
@@ -1062,9 +1062,9 @@ const animals = [
     "attack": 8.5,
     "defense": 75,
     "agility": 45.7,
-    "stamina": 55.3,
-    "intelligence": 88.4,
-    "special": 0,
+    "stamina": 55.1,
+    "intelligence": 65.1,
+    "special": 88.5,
     "description": "Notorious for its fearlessness and loose, thick skin. It will attack animals ten times its size and is immune to many venoms."
   },
   {
@@ -1073,9 +1073,9 @@ const animals = [
     "attack": 12.1,
     "defense": 3.5,
     "agility": 32.7,
-    "stamina": 53.6,
-    "intelligence": 66.8,
-    "special": 0,
+    "stamina": 17.1,
+    "intelligence": 10.7,
+    "special": 62,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1084,9 +1084,9 @@ const animals = [
     "attack": 39.4,
     "defense": 50.5,
     "agility": 48.4,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 60.6,
+    "intelligence": 41.2,
+    "special": 42.5,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1095,9 +1095,9 @@ const animals = [
     "attack": 8.4,
     "defense": 7.8,
     "agility": 99.1,
-    "stamina": 52.8,
-    "intelligence": 88.6,
-    "special": 0,
+    "stamina": 60.6,
+    "intelligence": 53.5,
+    "special": 33.5,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1106,9 +1106,9 @@ const animals = [
     "attack": 12,
     "defense": 3.3,
     "agility": 11.1,
-    "stamina": 53.6,
-    "intelligence": 65.3,
-    "special": 0,
+    "stamina": 27.8,
+    "intelligence": 19.3,
+    "special": 69.3,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1117,9 +1117,9 @@ const animals = [
     "attack": 50,
     "defense": 60,
     "agility": 24.2,
-    "stamina": 69.6,
-    "intelligence": 97,
-    "special": 0,
+    "stamina": 72.9,
+    "intelligence": 89.5,
+    "special": 75,
     "description": "Often misunderstood as scavengers, spotted hyenas are highly successful hunters with jaws that can crush bone."
   },
   {
@@ -1128,9 +1128,9 @@ const animals = [
     "attack": 8.2,
     "defense": 19.9,
     "agility": 80,
-    "stamina": 70.7,
-    "intelligence": 95.7,
-    "special": 0,
+    "stamina": 93.5,
+    "intelligence": 57.6,
+    "special": 70,
     "description": "A Medium creature found in Mountains, cliffs."
   },
   {
@@ -1139,9 +1139,9 @@ const animals = [
     "attack": 8.1,
     "defense": 38.9,
     "agility": 13.6,
-    "stamina": 54.6,
-    "intelligence": 74.5,
-    "special": 0,
+    "stamina": 41.1,
+    "intelligence": 32.2,
+    "special": 41.4,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1150,9 +1150,9 @@ const animals = [
     "attack": 17.3,
     "defense": 32,
     "agility": 95.6,
-    "stamina": 61.3,
-    "intelligence": 96.3,
-    "special": 0,
+    "stamina": 94.1,
+    "intelligence": 47.3,
+    "special": 61.2,
     "description": "A Small creature found in Savannas, woodlands."
   },
   {
@@ -1161,9 +1161,9 @@ const animals = [
     "attack": 49.2,
     "defense": 19.7,
     "agility": 23.9,
-    "stamina": 52.4,
-    "intelligence": 94.8,
-    "special": 0,
+    "stamina": 69.1,
+    "intelligence": 76.1,
+    "special": 69.1,
     "description": "A Small creature found in Grasslands, deserts."
   },
   {
@@ -1172,9 +1172,9 @@ const animals = [
     "attack": 87,
     "defense": 66.2,
     "agility": 84.4,
-    "stamina": 63.3,
-    "intelligence": 91.9,
-    "special": 0,
+    "stamina": 61.8,
+    "intelligence": 57.7,
+    "special": 80.5,
     "description": "The tank of the big cat world, with the strongest bite relative to size. It kills by piercing the skull or shell of its prey."
   },
   {
@@ -1183,9 +1183,9 @@ const animals = [
     "attack": 38.9,
     "defense": 49.8,
     "agility": 38.9,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 55,
+    "intelligence": 86,
+    "special": 35,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1194,9 +1194,9 @@ const animals = [
     "attack": 7.9,
     "defense": 19.4,
     "agility": 73.8,
-    "stamina": 72.6,
-    "intelligence": 97.2,
-    "special": 0,
+    "stamina": 75.1,
+    "intelligence": 50.1,
+    "special": 25.2,
     "description": "A Medium creature found in Grasslands, deserts."
   },
   {
@@ -1205,9 +1205,9 @@ const animals = [
     "attack": 56.9,
     "defense": 31.4,
     "agility": 25.2,
-    "stamina": 50.7,
-    "intelligence": 69.2,
-    "special": 0,
+    "stamina": 50.8,
+    "intelligence": 34.4,
+    "special": 98.5,
     "description": "The longest venomous snake in the world. It feeds primarily on other snakes and delivers a massive dose of neurotoxin."
   },
   {
@@ -1216,9 +1216,9 @@ const animals = [
     "attack": 7.8,
     "defense": 19.2,
     "agility": 5,
-    "stamina": 55.6,
-    "intelligence": 70.2,
-    "special": 0,
+    "stamina": 58.1,
+    "intelligence": 49.7,
+    "special": 58.1,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1227,9 +1227,9 @@ const animals = [
     "attack": 7.6,
     "defense": 7.6,
     "agility": 4.8,
-    "stamina": 52.8,
-    "intelligence": 88.6,
-    "special": 0,
+    "stamina": 69.8,
+    "intelligence": 59.8,
+    "special": 39.8,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1238,9 +1238,9 @@ const animals = [
     "attack": 7.5,
     "defense": 18.9,
     "agility": 4.5,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 27.3,
+    "intelligence": 54.5,
+    "special": 34.5,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1249,9 +1249,9 @@ const animals = [
     "attack": 7.4,
     "defense": 82.9,
     "agility": 8.6,
-    "stamina": 64.7,
-    "intelligence": 70.8,
-    "special": 0,
+    "stamina": 41.1,
+    "intelligence": 75.8,
+    "special": 91.5,
     "description": "The largest living lizard, a patient hunter with a venomous bite. It tracks wounded prey for miles until they succumb."
   },
   {
@@ -1260,9 +1260,9 @@ const animals = [
     "attack": 7.2,
     "defense": 7.3,
     "agility": 30,
-    "stamina": 52.8,
-    "intelligence": 88.6,
-    "special": 0,
+    "stamina": 60.3,
+    "intelligence": 47.1,
+    "special": 73.5,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1271,9 +1271,9 @@ const animals = [
     "attack": 7.1,
     "defense": 30.7,
     "agility": 72.4,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 92.6,
+    "intelligence": 40.7,
+    "special": 11,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1282,9 +1282,9 @@ const animals = [
     "attack": 0.9,
     "defense": 90,
     "agility": 2.3,
-    "stamina": 56.6,
-    "intelligence": 74.5,
-    "special": 0,
+    "stamina": 82.3,
+    "intelligence": 16,
+    "special": 41,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1293,9 +1293,9 @@ const animals = [
     "attack": 66.2,
     "defense": 65.7,
     "agility": 90.1,
-    "stamina": 51.7,
-    "intelligence": 92.1,
-    "special": 0,
+    "stamina": 66.5,
+    "intelligence": 64.7,
+    "special": 79.5,
     "description": "The most adaptable big cat, capable of hauling heavy prey up trees. They are masters of stealth and ambush."
   },
   {
@@ -1304,9 +1304,9 @@ const animals = [
     "attack": 65.4,
     "defense": 65.2,
     "agility": 6.6,
-    "stamina": 53.6,
-    "intelligence": 73.9,
-    "special": 0,
+    "stamina": 53,
+    "intelligence": 28,
+    "special": 80,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1315,9 +1315,9 @@ const animals = [
     "attack": 11.8,
     "defense": 18.7,
     "agility": 27.7,
-    "stamina": 74.2,
-    "intelligence": 97.3,
-    "special": 0,
+    "stamina": 75.8,
+    "intelligence": 51.5,
+    "special": 27.3,
     "description": "A Medium creature found in Mountains, grasslands."
   },
   {
@@ -1326,9 +1326,9 @@ const animals = [
     "attack": 6.9,
     "defense": 18.4,
     "agility": 1.5,
-    "stamina": 55.6,
-    "intelligence": 70.2,
-    "special": 0,
+    "stamina": 49.7,
+    "intelligence": 37,
+    "special": 49.7,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1337,9 +1337,9 @@ const animals = [
     "attack": 64.6,
     "defense": 49.1,
     "agility": 77.2,
-    "stamina": 53.6,
-    "intelligence": 94.3,
-    "special": 0,
+    "stamina": 68.7,
+    "intelligence": 68.1,
+    "special": 76,
     "description": "A medium-sized cat with distinctive ear tufts and large paws that act as snowshoes. It is a specialist hunter of hares."
   },
   {
@@ -1348,9 +1348,9 @@ const animals = [
     "attack": 6.8,
     "defense": 7.1,
     "agility": 45,
-    "stamina": 52.8,
-    "intelligence": 88.6,
-    "special": 0,
+    "stamina": 66.7,
+    "intelligence": 84.5,
+    "special": 33.4,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1359,9 +1359,9 @@ const animals = [
     "attack": 6.6,
     "defense": 6.8,
     "agility": 54.5,
-    "stamina": 52.8,
-    "intelligence": 88.6,
-    "special": 0,
+    "stamina": 59.5,
+    "intelligence": 85.5,
+    "special": 18.9,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1370,9 +1370,9 @@ const animals = [
     "attack": 6.5,
     "defense": 74.5,
     "agility": 4.3,
-    "stamina": 85.6,
-    "intelligence": 98.6,
-    "special": 0,
+    "stamina": 85.8,
+    "intelligence": 80.9,
+    "special": 44.5,
     "description": "A Large creature found in Coastal waters, rivers."
   },
   {
@@ -1381,9 +1381,9 @@ const animals = [
     "attack": 6.3,
     "defense": 48.4,
     "agility": 43.6,
-    "stamina": 60.3,
-    "intelligence": 97,
-    "special": 0,
+    "stamina": 57.7,
+    "intelligence": 88,
+    "special": 38.6,
     "description": "A Medium creature found in Rainforests of equatorial Africa."
   },
   {
@@ -1392,9 +1392,9 @@ const animals = [
     "attack": 48.5,
     "defense": 60,
     "agility": 60,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 73.3,
+    "intelligence": 82.5,
+    "special": 73.3,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1403,9 +1403,9 @@ const animals = [
     "attack": 26.9,
     "defense": 3,
     "agility": 66.2,
-    "stamina": 53.6,
-    "intelligence": 73.9,
-    "special": 0,
+    "stamina": 88.5,
+    "intelligence": 32.7,
+    "special": 55.9,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1414,9 +1414,9 @@ const animals = [
     "attack": 14.1,
     "defense": 2.8,
     "agility": 56.6,
-    "stamina": 33.8,
-    "intelligence": 66,
-    "special": 0,
+    "stamina": 24.1,
+    "intelligence": 16.3,
+    "special": 92,
     "description": "A colorful crustacean with the fastest punch in the animal kingdom. Its strike boils the water and can crack aquarium glass."
   },
   {
@@ -1425,9 +1425,9 @@ const animals = [
     "attack": 26.4,
     "defense": 26,
     "agility": 92,
-    "stamina": 53.6,
-    "intelligence": 73.9,
-    "special": 0,
+    "stamina": 87.7,
+    "intelligence": 28.3,
+    "special": 50.4,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1436,9 +1436,9 @@ const animals = [
     "attack": 6.2,
     "defense": 18.2,
     "agility": 19.2,
-    "stamina": 42.3,
-    "intelligence": 96.2,
-    "special": 0,
+    "stamina": 52.4,
+    "intelligence": 62.4,
+    "special": 18.1,
     "description": "A Tiny creature found in Deserts, grasslands."
   },
   {
@@ -1447,9 +1447,9 @@ const animals = [
     "attack": 100,
     "defense": 100,
     "agility": 60.7,
-    "stamina": 83.1,
-    "intelligence": 75.2,
-    "special": 0,
+    "stamina": 56.7,
+    "intelligence": 47.5,
+    "special": 27.5,
     "description": "A Colossal creature found in Ancient Oceans."
   },
   {
@@ -1458,9 +1458,9 @@ const animals = [
     "attack": 6.1,
     "defense": 2.5,
     "agility": 13.4,
-    "stamina": 53.6,
-    "intelligence": 66.8,
-    "special": 0,
+    "stamina": 57.1,
+    "intelligence": 48.2,
+    "special": 19.1,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1469,9 +1469,9 @@ const animals = [
     "attack": 11.7,
     "defense": 38.2,
     "agility": 20.2,
-    "stamina": 39.5,
-    "intelligence": 93.5,
-    "special": 0,
+    "stamina": 61.1,
+    "intelligence": 71.1,
+    "special": 29.9,
     "description": "A Tiny creature found in Forests, grasslands."
   },
   {
@@ -1480,9 +1480,9 @@ const animals = [
     "attack": 5.9,
     "defense": 37.5,
     "agility": 13.1,
-    "stamina": 54.6,
-    "intelligence": 74.5,
-    "special": 0,
+    "stamina": 51.1,
+    "intelligence": 80,
+    "special": 54.8,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1491,9 +1491,9 @@ const animals = [
     "attack": 63.8,
     "defense": 74,
     "agility": 40.9,
-    "stamina": 69.3,
-    "intelligence": 90.7,
-    "special": 0,
+    "stamina": 95,
+    "intelligence": 47.8,
+    "special": 65.8,
     "description": "The largest species of deer, towering over most predators. Males grow massive antlers for fighting rivals and defending against wolves."
   },
   {
@@ -1502,9 +1502,9 @@ const animals = [
     "attack": 25.8,
     "defense": 25.7,
     "agility": 14.9,
-    "stamina": 53.6,
-    "intelligence": 73.9,
-    "special": 0,
+    "stamina": 49.7,
+    "intelligence": 24.7,
+    "special": 72,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1513,9 +1513,9 @@ const animals = [
     "attack": 11.5,
     "defense": 17.9,
     "agility": 80.6,
-    "stamina": 71.2,
-    "intelligence": 95.9,
-    "special": 0,
+    "stamina": 93.2,
+    "intelligence": 53.7,
+    "special": 66.7,
     "description": "A Medium creature found in Mountains, cliffs."
   },
   {
@@ -1524,9 +1524,9 @@ const animals = [
     "attack": 63.1,
     "defense": 73.4,
     "agility": 25.5,
-    "stamina": 76.8,
-    "intelligence": 97.1,
-    "special": 0,
+    "stamina": 91.4,
+    "intelligence": 43.5,
+    "special": 62.6,
     "description": "A Large creature found in Arctic tundra."
   },
   {
@@ -1535,9 +1535,9 @@ const animals = [
     "attack": 5.8,
     "defense": 9.6,
     "agility": 1.3,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 16.1,
+    "intelligence": 61.1,
+    "special": 12.1,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1546,9 +1546,9 @@ const animals = [
     "attack": 5.6,
     "defense": 72.9,
     "agility": 18.9,
-    "stamina": 78.7,
-    "intelligence": 98.4,
-    "special": 0,
+    "stamina": 90.2,
+    "intelligence": 79.1,
+    "special": 28.2,
     "description": "A Large creature found in Arctic waters."
   },
   {
@@ -1557,9 +1557,9 @@ const animals = [
     "attack": 5.5,
     "defense": 17.6,
     "agility": 1,
-    "stamina": 55.6,
-    "intelligence": 70.2,
-    "special": 0,
+    "stamina": 45.1,
+    "intelligence": 37.7,
+    "special": 50.1,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1568,9 +1568,9 @@ const animals = [
     "attack": 5.3,
     "defense": 47.7,
     "agility": 73.1,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 65.1,
+    "intelligence": 62.6,
+    "special": 73.5,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1579,9 +1579,9 @@ const animals = [
     "attack": 5.2,
     "defense": 17.4,
     "agility": 65.5,
-    "stamina": 33.7,
-    "intelligence": 91.3,
-    "special": 0,
+    "stamina": 53.1,
+    "intelligence": 92,
+    "special": 70,
     "description": "The most intelligent invertebrate. It can solve puzzles, change color and texture instantly, and squeeze through tiny gaps."
   },
   {
@@ -1590,9 +1590,9 @@ const animals = [
     "attack": 5,
     "defense": 17.1,
     "agility": 51.8,
-    "stamina": 71.4,
-    "intelligence": 92.4,
-    "special": 0,
+    "stamina": 79.2,
+    "intelligence": 58.5,
+    "special": 37.7,
     "description": "A Large creature found in Rainforests of DR Congo."
   },
   {
@@ -1601,9 +1601,9 @@ const animals = [
     "attack": 4.9,
     "defense": 16.9,
     "agility": 12.9,
-    "stamina": 41.6,
-    "intelligence": 85.5,
-    "special": 0,
+    "stamina": 49.2,
+    "intelligence": 63.2,
+    "special": 19.2,
     "description": "A Small creature found in Forests, urban areas."
   },
   {
@@ -1612,9 +1612,9 @@ const animals = [
     "attack": 38.3,
     "defense": 47,
     "agility": 23.4,
-    "stamina": 62.7,
-    "intelligence": 94.4,
-    "special": 0,
+    "stamina": 58.1,
+    "intelligence": 98.5,
+    "special": 39.1,
     "description": "A Large creature found in Rainforests of Borneo and Sumatra."
   },
   {
@@ -1623,9 +1623,9 @@ const animals = [
     "attack": 98.8,
     "defense": 16.6,
     "agility": 26.2,
-    "stamina": 89.1,
-    "intelligence": 99.1,
-    "special": 0,
+    "stamina": 87,
+    "intelligence": 95.5,
+    "special": 83,
     "description": "The apex predator of the ocean, combining immense size with pack intelligence. Orcas hunt everything from fish to blue whales."
   },
   {
@@ -1634,9 +1634,9 @@ const animals = [
     "attack": 4.8,
     "defense": 30,
     "agility": 64.8,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 92.3,
+    "intelligence": 44.5,
+    "special": 16.7,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1645,9 +1645,9 @@ const animals = [
     "attack": 37.7,
     "defense": 16.4,
     "agility": 86.9,
-    "stamina": 52.8,
-    "intelligence": 88.6,
-    "special": 0,
+    "stamina": 83.1,
+    "intelligence": 65.9,
+    "special": 65.9,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1656,9 +1656,9 @@ const animals = [
     "attack": 11.4,
     "defense": 28,
     "agility": 32,
-    "stamina": 68.3,
-    "intelligence": 93.3,
-    "special": 0,
+    "stamina": 83.4,
+    "intelligence": 48.6,
+    "special": 74.3,
     "description": "A Large creature found in Savannas, deserts."
   },
   {
@@ -1667,9 +1667,9 @@ const animals = [
     "attack": 16.7,
     "defense": 59.3,
     "agility": 58.6,
-    "stamina": 55.9,
-    "intelligence": 95.5,
-    "special": 0,
+    "stamina": 64.2,
+    "intelligence": 74.4,
+    "special": 60,
     "description": "A Small creature found in Rivers, coasts."
   },
   {
@@ -1678,9 +1678,9 @@ const animals = [
     "attack": 4.6,
     "defense": 86.8,
     "agility": 4,
-    "stamina": 52.7,
-    "intelligence": 89.5,
-    "special": 0,
+    "stamina": 58.8,
+    "intelligence": 50.7,
+    "special": 58,
     "description": "A Small creature found in Forests, grasslands."
   },
   {
@@ -1689,9 +1689,9 @@ const animals = [
     "attack": 4.5,
     "defense": 16.1,
     "agility": 15.6,
-    "stamina": 52.8,
-    "intelligence": 88.6,
-    "special": 0,
+    "stamina": 61.2,
+    "intelligence": 48.3,
+    "special": 22.4,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1700,9 +1700,9 @@ const animals = [
     "attack": 37.2,
     "defense": 9.3,
     "agility": 23.2,
-    "stamina": 56.8,
-    "intelligence": 94.8,
-    "special": 0,
+    "stamina": 86.8,
+    "intelligence": 56.9,
+    "special": 36.9,
     "description": "A Medium creature found in Coasts, lakes, rivers."
   },
   {
@@ -1711,9 +1711,9 @@ const animals = [
     "attack": 36.6,
     "defense": 15.9,
     "agility": 100,
-    "stamina": 38.9,
-    "intelligence": 85,
-    "special": 0,
+    "stamina": 82.9,
+    "intelligence": 65.5,
+    "special": 65.5,
     "description": "The fastest animal on the planet during its hunting stoop. It strikes birds in mid-air with the force of a bullet."
   },
   {
@@ -1722,9 +1722,9 @@ const animals = [
     "attack": 25.2,
     "defense": 25.5,
     "agility": 35.5,
-    "stamina": 37,
-    "intelligence": 76.2,
-    "special": 0,
+    "stamina": 50.6,
+    "intelligence": 25.6,
+    "special": 73.5,
     "description": "A Tiny creature found in Rivers, floodplains."
   },
   {
@@ -1733,9 +1733,9 @@ const animals = [
     "attack": 16.1,
     "defense": 15.6,
     "agility": 21.9,
-    "stamina": 40.3,
-    "intelligence": 88.8,
-    "special": 0,
+    "stamina": 61.4,
+    "intelligence": 72.3,
+    "special": 89,
     "description": "A Tiny creature found in Rivers, streams."
   },
   {
@@ -1744,9 +1744,9 @@ const animals = [
     "attack": 0.1,
     "defense": 0.5,
     "agility": 12.6,
-    "stamina": 32.2,
-    "intelligence": 66.2,
-    "special": 0,
+    "stamina": 33.8,
+    "intelligence": 13.8,
+    "special": 94.5,
     "description": "A Tiny creature found in Rainforests of Central/South America."
   },
   {
@@ -1755,9 +1755,9 @@ const animals = [
     "attack": 89.7,
     "defense": 86.1,
     "agility": 28.7,
-    "stamina": 67.1,
-    "intelligence": 91.3,
-    "special": 0,
+    "stamina": 74.3,
+    "intelligence": 57.8,
+    "special": 81.4,
     "description": "The largest land carnivore, perfectly adapted to the frozen north. They are tireless swimmers and powerful hunters of seals."
   },
   {
@@ -1766,9 +1766,9 @@ const animals = [
     "attack": 14,
     "defense": 82.1,
     "agility": 5.8,
-    "stamina": 57.1,
-    "intelligence": 88.3,
-    "special": 0,
+    "stamina": 56.6,
+    "intelligence": 68.7,
+    "special": 60,
     "description": "A Small creature found in Forests, grasslands."
   },
   {
@@ -1777,9 +1777,9 @@ const animals = [
     "attack": 24.7,
     "defense": 2.3,
     "agility": 22.4,
-    "stamina": 53.6,
-    "intelligence": 66.8,
-    "special": 0,
+    "stamina": 49.5,
+    "intelligence": 9.5,
+    "special": 54.5,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1788,9 +1788,9 @@ const animals = [
     "attack": 36,
     "defense": 46.4,
     "agility": 47.7,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 68.8,
+    "intelligence": 86.5,
+    "special": 53.5,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1799,9 +1799,9 @@ const animals = [
     "attack": 15.6,
     "defense": 30,
     "agility": 97.3,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 98.5,
+    "intelligence": 44.2,
+    "special": 58.6,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1810,9 +1810,9 @@ const animals = [
     "attack": 24.1,
     "defense": 25.2,
     "agility": 6.1,
-    "stamina": 51.7,
-    "intelligence": 63.1,
-    "special": 0,
+    "stamina": 63.7,
+    "intelligence": 38.7,
+    "special": 95,
     "description": "A Small creature found in Tropical oceans."
   },
   {
@@ -1821,9 +1821,9 @@ const animals = [
     "attack": 35.5,
     "defense": 6.6,
     "agility": 22.9,
-    "stamina": 52.8,
-    "intelligence": 88.6,
-    "special": 0,
+    "stamina": 84.6,
+    "intelligence": 51.5,
+    "special": 31.5,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1832,9 +1832,9 @@ const animals = [
     "attack": 79.8,
     "defense": 29.7,
     "agility": 9.8,
-    "stamina": 60.2,
-    "intelligence": 70.5,
-    "special": 0,
+    "stamina": 41.4,
+    "intelligence": 21.9,
+    "special": 74,
     "description": "A Large creature found in Rainforests, grasslands."
   },
   {
@@ -1843,9 +1843,9 @@ const animals = [
     "attack": 4.3,
     "defense": 15.4,
     "agility": 18.7,
-    "stamina": 56.4,
-    "intelligence": 93.4,
-    "special": 0,
+    "stamina": 50.8,
+    "intelligence": 31.7,
+    "special": 16.1,
     "description": "A Small creature found in Islands of Western Australia."
   },
   {
@@ -1854,9 +1854,9 @@ const animals = [
     "attack": 4.2,
     "defense": 15.1,
     "agility": 27,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 53.5,
+    "intelligence": 37,
+    "special": 17,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1865,9 +1865,9 @@ const animals = [
     "attack": 4,
     "defense": 14.9,
     "agility": 18.4,
-    "stamina": 43.8,
-    "intelligence": 86.4,
-    "special": 0,
+    "stamina": 52.2,
+    "intelligence": 92.5,
+    "special": 18,
     "description": "A Small creature found in Forests, urban areas."
   },
   {
@@ -1876,9 +1876,9 @@ const animals = [
     "attack": 56.2,
     "defense": 29.5,
     "agility": 7.8,
-    "stamina": 54.6,
-    "intelligence": 74.5,
-    "special": 0,
+    "stamina": 42,
+    "intelligence": 22.6,
+    "special": 79,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1887,9 +1887,9 @@ const animals = [
     "attack": 3.9,
     "defense": 6.3,
     "agility": 53.9,
-    "stamina": 52.8,
-    "intelligence": 88.6,
-    "special": 0,
+    "stamina": 64.2,
+    "intelligence": 94,
+    "special": 28.4,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1898,9 +1898,9 @@ const animals = [
     "attack": 62.3,
     "defense": 45.7,
     "agility": 70.3,
-    "stamina": 43.1,
-    "intelligence": 87,
-    "special": 0,
+    "stamina": 62,
+    "intelligence": 82,
+    "special": 34.1,
     "description": "A Small creature found in Forests, grasslands, urban."
   },
   {
@@ -1909,9 +1909,9 @@ const animals = [
     "attack": 3.8,
     "defense": 14.6,
     "agility": 26.7,
-    "stamina": 51.5,
-    "intelligence": 90.4,
-    "special": 0,
+    "stamina": 52.7,
+    "intelligence": 62.7,
+    "special": 15.3,
     "description": "A Small creature found in Mountain forests."
   },
   {
@@ -1920,9 +1920,9 @@ const animals = [
     "attack": 0,
     "defense": 0.3,
     "agility": 16.9,
-    "stamina": 53.6,
-    "intelligence": 69.6,
-    "special": 0,
+    "stamina": 33.6,
+    "intelligence": 13.6,
+    "special": 13.6,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1931,9 +1931,9 @@ const animals = [
     "attack": 34.9,
     "defense": 14.4,
     "agility": 82.5,
-    "stamina": 52.8,
-    "intelligence": 88.6,
-    "special": 0,
+    "stamina": 84.9,
+    "intelligence": 69.3,
+    "special": 69.3,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1942,9 +1942,9 @@ const animals = [
     "attack": 15,
     "defense": 29.2,
     "agility": 58,
-    "stamina": 73.8,
-    "intelligence": 95.5,
-    "special": 0,
+    "stamina": 95.4,
+    "intelligence": 55,
+    "special": 67.7,
     "description": "A Medium creature found in Tundra, boreal forests."
   },
   {
@@ -1953,9 +1953,9 @@ const animals = [
     "attack": 78.9,
     "defense": 29,
     "agility": 11.3,
-    "stamina": 55.8,
-    "intelligence": 74.5,
-    "special": 0,
+    "stamina": 45,
+    "intelligence": 26.6,
+    "special": 76,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1964,9 +1964,9 @@ const animals = [
     "attack": 93.2,
     "defense": 94.4,
     "agility": 11.8,
-    "stamina": 78.6,
-    "intelligence": 93.4,
-    "special": 0,
+    "stamina": 72.7,
+    "intelligence": 45.5,
+    "special": 83,
     "description": "A prehistoric-looking tank with thick skin and a deadly horn. Rhinos are nearsighted but will charge anything that smells like a threat."
   },
   {
@@ -1975,9 +1975,9 @@ const animals = [
     "attack": 34.3,
     "defense": 45,
     "agility": 38.2,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 63.6,
+    "intelligence": 73.6,
+    "special": 53.1,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1986,9 +1986,9 @@ const animals = [
     "attack": 15,
     "defense": 2,
     "agility": 34.1,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 92.9,
+    "intelligence": 45.7,
+    "special": 59.8,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -1997,9 +1997,9 @@ const animals = [
     "attack": 23.5,
     "defense": 25,
     "agility": 93.8,
-    "stamina": 53.6,
-    "intelligence": 73.9,
-    "special": 0,
+    "stamina": 88.4,
+    "intelligence": 32,
+    "special": 55,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -2008,9 +2008,9 @@ const animals = [
     "attack": 0.7,
     "defense": 0,
     "agility": 0.3,
-    "stamina": 53.6,
-    "intelligence": 69.6,
-    "special": 0,
+    "stamina": 33,
+    "intelligence": 13,
+    "special": 13,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -2019,9 +2019,9 @@ const animals = [
     "attack": 96.2,
     "defense": 97.8,
     "agility": 12.4,
-    "stamina": 74.5,
-    "intelligence": 78.2,
-    "special": 0,
+    "stamina": 52.3,
+    "intelligence": 32.3,
+    "special": 91,
     "description": "The largest living reptile, an ambush predator with the strongest bite force of any animal today. It dominates the water's edge, dragging prey to a watery grave."
   },
   {
@@ -2030,9 +2030,9 @@ const animals = [
     "attack": 23,
     "defense": 24.7,
     "agility": 14.6,
-    "stamina": 53.6,
-    "intelligence": 73.9,
-    "special": 0,
+    "stamina": 47.5,
+    "intelligence": 22.5,
+    "special": 13.7,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -2041,9 +2041,9 @@ const animals = [
     "attack": 61.5,
     "defense": 58.6,
     "agility": 69.7,
-    "stamina": 68.4,
-    "intelligence": 96.4,
-    "special": 0,
+    "stamina": 80.4,
+    "intelligence": 70.7,
+    "special": 65,
     "description": "A Large creature found in Coastal waters."
   },
   {
@@ -2052,9 +2052,9 @@ const animals = [
     "attack": 14.9,
     "defense": 58,
     "agility": 57.3,
-    "stamina": 63.4,
-    "intelligence": 97.2,
-    "special": 0,
+    "stamina": 85.9,
+    "intelligence": 90.5,
+    "special": 55,
     "description": "A Small creature found in Coastal waters."
   },
   {
@@ -2063,9 +2063,9 @@ const animals = [
     "attack": 3.6,
     "defense": 57.3,
     "agility": 53.2,
-    "stamina": 71.2,
-    "intelligence": 97.6,
-    "special": 0,
+    "stamina": 82.5,
+    "intelligence": 74.7,
+    "special": 50,
     "description": "A Medium creature found in Coastal waters, ice."
   },
   {
@@ -2074,9 +2074,9 @@ const animals = [
     "attack": 3.5,
     "defense": 14.1,
     "agility": 44.3,
-    "stamina": 43.7,
-    "intelligence": 80.8,
-    "special": 0,
+    "stamina": 82.1,
+    "intelligence": 63.9,
+    "special": 17.8,
     "description": "A Medium creature found in Savannas, grasslands."
   },
   {
@@ -2085,9 +2085,9 @@ const animals = [
     "attack": 3.3,
     "defense": 44.3,
     "agility": 79.3,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 63.1,
+    "intelligence": 59.6,
+    "special": 74,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -2096,9 +2096,9 @@ const animals = [
     "attack": 3.2,
     "defense": 13.9,
     "agility": 18.2,
-    "stamina": 52.2,
-    "intelligence": 86,
-    "special": 0,
+    "stamina": 63.7,
+    "intelligence": 58.7,
+    "special": 64,
     "description": "A Medium creature found in Swamps, marshes."
   },
   {
@@ -2107,9 +2107,9 @@ const animals = [
     "attack": 88.8,
     "defense": 64.7,
     "agility": 78.6,
-    "stamina": 62.2,
-    "intelligence": 94.3,
-    "special": 0,
+    "stamina": 62.7,
+    "intelligence": 59,
+    "special": 82.5,
     "description": "The largest of all big cats, a solitary hunter built for power and stealth. It can take down prey much larger than itself."
   },
   {
@@ -2118,9 +2118,9 @@ const animals = [
     "attack": 3,
     "defense": 13.6,
     "agility": 17.9,
-    "stamina": 44.1,
-    "intelligence": 85.4,
-    "special": 0,
+    "stamina": 51.8,
+    "intelligence": 65.1,
+    "special": 64,
     "description": "A Small creature found in Forests, grasslands, urban."
   },
   {
@@ -2129,9 +2129,9 @@ const animals = [
     "attack": 2.9,
     "defense": 13.4,
     "agility": 0,
-    "stamina": 62,
-    "intelligence": 90.2,
-    "special": 0,
+    "stamina": 17.3,
+    "intelligence": 34.6,
+    "special": 14.6,
     "description": "A Small creature found in Rainforests."
   },
   {
@@ -2140,9 +2140,9 @@ const animals = [
     "attack": 78.1,
     "defense": 80.5,
     "agility": 25.7,
-    "stamina": 69.9,
-    "intelligence": 90.8,
-    "special": 0,
+    "stamina": 72.6,
+    "intelligence": 52.9,
+    "special": 80.1,
     "description": "A Medium creature found in Forests, grasslands."
   },
   {
@@ -2151,9 +2151,9 @@ const animals = [
     "attack": 0.6,
     "defense": 13.1,
     "agility": 3.8,
-    "stamina": 56.6,
-    "intelligence": 74.5,
-    "special": 0,
+    "stamina": 41.8,
+    "intelligence": 17.4,
+    "special": 42.4,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -2162,9 +2162,9 @@ const animals = [
     "attack": 60.8,
     "defense": 64.1,
     "agility": 87.6,
-    "stamina": 53.5,
-    "intelligence": 94,
-    "special": 0,
+    "stamina": 66.9,
+    "intelligence": 65.4,
+    "special": 78.5,
     "description": "The ghost of the mountains, perfectly camouflaged against rocky slopes. Its long tail provides balance for incredible leaps."
   },
   {
@@ -2173,9 +2173,9 @@ const animals = [
     "attack": 33.8,
     "defense": 12.9,
     "agility": 62.8,
-    "stamina": 39.4,
-    "intelligence": 80.1,
-    "special": 0,
+    "stamina": 82.6,
+    "intelligence": 64.8,
+    "special": 64.8,
     "description": "A Small creature found in Arctic tundra."
   },
   {
@@ -2184,9 +2184,9 @@ const animals = [
     "attack": 77.2,
     "defense": 81.3,
     "agility": 28.2,
-    "stamina": 60.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 70.5,
+    "intelligence": 46.5,
+    "special": 78.4,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -2195,9 +2195,9 @@ const animals = [
     "attack": 33.2,
     "defense": 43.6,
     "agility": 66.9,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 65.3,
+    "intelligence": 87,
+    "special": 68.8,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -2206,9 +2206,9 @@ const animals = [
     "attack": 11.2,
     "defense": 1.8,
     "agility": 5.5,
-    "stamina": 53.6,
-    "intelligence": 66.8,
-    "special": 0,
+    "stamina": 14.7,
+    "intelligence": 8.7,
+    "special": 58.2,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -2217,9 +2217,9 @@ const animals = [
     "attack": 22.4,
     "defense": 24.5,
     "agility": 34.8,
-    "stamina": 53.6,
-    "intelligence": 75.4,
-    "special": 0,
+    "stamina": 47.3,
+    "intelligence": 22.3,
+    "special": 72.5,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -2228,9 +2228,9 @@ const animals = [
     "attack": 2.7,
     "defense": 36.8,
     "agility": 29.7,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 62.6,
+    "intelligence": 72.6,
+    "special": 78.4,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -2239,9 +2239,9 @@ const animals = [
     "attack": 2.6,
     "defense": 9.1,
     "agility": 17.6,
-    "stamina": 55.4,
-    "intelligence": 90.6,
-    "special": 0,
+    "stamina": 81.5,
+    "intelligence": 43.8,
+    "special": 23.8,
     "description": "A Medium creature found in Wetlands, grasslands."
   },
   {
@@ -2250,9 +2250,9 @@ const animals = [
     "attack": 2.5,
     "defense": 12.6,
     "agility": 52.5,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 46.5,
+    "intelligence": 61.1,
+    "special": 12.3,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -2261,9 +2261,9 @@ const animals = [
     "attack": 76.3,
     "defense": 12.4,
     "agility": 51.1,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 68.1,
+    "intelligence": 39.4,
+    "special": 76.5,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -2272,9 +2272,9 @@ const animals = [
     "attack": 11.1,
     "defense": 8.8,
     "agility": 19.9,
-    "stamina": 54.6,
-    "intelligence": 90,
-    "special": 0,
+    "stamina": 86.7,
+    "intelligence": 56.6,
+    "special": 36.6,
     "description": "A Medium creature found in Lakes, rivers, wetlands."
   },
   {
@@ -2283,9 +2283,9 @@ const animals = [
     "attack": 21.8,
     "defense": 24.2,
     "agility": 92,
-    "stamina": 55,
-    "intelligence": 66.4,
-    "special": 0,
+    "stamina": 89.1,
+    "intelligence": 35.5,
+    "special": 59.4,
     "description": "A Large creature found in Tropical and temperate oceans."
   },
   {
@@ -2294,9 +2294,9 @@ const animals = [
     "attack": 2.3,
     "defense": 72.4,
     "agility": 17.4,
-    "stamina": 75,
-    "intelligence": 91.7,
-    "special": 0,
+    "stamina": 74.3,
+    "intelligence": 48.6,
+    "special": 22.9,
     "description": "A Large creature found in Jungles of South America and Asia."
   },
   {
@@ -2305,9 +2305,9 @@ const animals = [
     "attack": 32.6,
     "defense": 12.1,
     "agility": 37.5,
-    "stamina": 53.6,
-    "intelligence": 66.8,
-    "special": 0,
+    "stamina": 23.3,
+    "intelligence": 15.7,
+    "special": 89.5,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -2316,9 +2316,9 @@ const animals = [
     "attack": 2.2,
     "defense": 11.8,
     "agility": 26.5,
-    "stamina": 41.7,
-    "intelligence": 84.6,
-    "special": 0,
+    "stamina": 50.3,
+    "intelligence": 37.9,
+    "special": 86.5,
     "description": "A Small creature found in Forests, scrublands."
   },
   {
@@ -2327,9 +2327,9 @@ const animals = [
     "attack": 87.9,
     "defense": 63.6,
     "agility": 85.1,
-    "stamina": 70.3,
-    "intelligence": 72.1,
-    "special": 0,
+    "stamina": 89.5,
+    "intelligence": 37.8,
+    "special": 83.5,
     "description": "A Large creature found in Tropical and temperate waters."
   },
   {
@@ -2338,9 +2338,9 @@ const animals = [
     "attack": 2,
     "defense": 6.1,
     "agility": 29.5,
-    "stamina": 50.7,
-    "intelligence": 89.7,
-    "special": 0,
+    "stamina": 65.9,
+    "intelligence": 54.6,
+    "special": 31.8,
     "description": "A Small creature found in Tropical forests."
   },
   {
@@ -2349,9 +2349,9 @@ const animals = [
     "attack": 21.2,
     "defense": 23.9,
     "agility": 81.9,
-    "stamina": 53.6,
-    "intelligence": 73.9,
-    "special": 0,
+    "stamina": 86.3,
+    "intelligence": 21.7,
+    "special": 42.2,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -2360,9 +2360,9 @@ const animals = [
     "attack": 32,
     "defense": 11.6,
     "agility": 36.8,
-    "stamina": 53.5,
-    "intelligence": 90.2,
-    "special": 0,
+    "stamina": 81.3,
+    "intelligence": 62.4,
+    "special": 62.4,
     "description": "A Medium creature found in Savannas, mountains."
   },
   {
@@ -2371,9 +2371,9 @@ const animals = [
     "attack": 1.9,
     "defense": 11.3,
     "agility": 64.1,
-    "stamina": 58.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 75,
+    "intelligence": 50.1,
+    "special": 25.1,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -2382,9 +2382,9 @@ const animals = [
     "attack": 1.7,
     "defense": 85.3,
     "agility": 8.3,
-    "stamina": 79.5,
-    "intelligence": 98,
-    "special": 0,
+    "stamina": 85.5,
+    "intelligence": 80.3,
+    "special": 75,
     "description": "A massive marine mammal with long tusks used for hauling out onto ice and fighting. Their thick skin is nearly impervious to cold and claws."
   },
   {
@@ -2393,9 +2393,9 @@ const animals = [
     "attack": 31.5,
     "defense": 71.9,
     "agility": 22.7,
-    "stamina": 62.2,
-    "intelligence": 95.5,
-    "special": 0,
+    "stamina": 75.5,
+    "intelligence": 51,
+    "special": 70,
     "description": "A Small creature found in Savannas, grasslands."
   },
   {
@@ -2404,9 +2404,9 @@ const animals = [
     "attack": 75.4,
     "defense": 71.4,
     "agility": 16.6,
-    "stamina": 58.9,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 71.2,
+    "intelligence": 42.5,
+    "special": 70.5,
     "description": "A Small creature found in Forests, grasslands."
   },
   {
@@ -2415,9 +2415,9 @@ const animals = [
     "attack": 11,
     "defense": 70.9,
     "agility": 74.5,
-    "stamina": 60.6,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 97.8,
+    "intelligence": 58.1,
+    "special": 74.1,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -2426,9 +2426,9 @@ const animals = [
     "attack": 60,
     "defense": 1.5,
     "agility": 40.2,
-    "stamina": 75.9,
-    "intelligence": 97,
-    "special": 0,
+    "stamina": 93.8,
+    "intelligence": 55.3,
+    "special": 33,
     "description": "A Medium creature found in Savannas, grasslands."
   },
   {
@@ -2437,9 +2437,9 @@ const animals = [
     "attack": 1.6,
     "defense": 70.3,
     "agility": 29.2,
-    "stamina": 48.3,
-    "intelligence": 85.4,
-    "special": 0,
+    "stamina": 63.6,
+    "intelligence": 73.6,
+    "special": 86,
     "description": "A stocky and muscular carnivore, known for its ferocity and strength out of proportion to its size. It can crush frozen bones."
   },
   {
@@ -2448,9 +2448,9 @@ const animals = [
     "attack": 14.7,
     "defense": 11.1,
     "agility": 21.7,
-    "stamina": 60.4,
-    "intelligence": 96.6,
-    "special": 0,
+    "stamina": 21.6,
+    "intelligence": 43.2,
+    "special": 23.2,
     "description": "A Medium creature found in Varied."
   },
   {
@@ -2459,9 +2459,9 @@ const animals = [
     "attack": 59.2,
     "defense": 69.8,
     "agility": 16.4,
-    "stamina": 77.7,
-    "intelligence": 97.3,
-    "special": 0,
+    "stamina": 92,
+    "intelligence": 57.5,
+    "special": 73.1,
     "description": "A Large creature found in Himalayan mountains."
   },
   {
@@ -2470,9 +2470,9 @@ const animals = [
     "attack": 1.4,
     "defense": 69.3,
     "agility": 17.1,
-    "stamina": 76.9,
-    "intelligence": 97.3,
-    "special": 0,
+    "stamina": 72.7,
+    "intelligence": 45.4,
+    "special": 18.2,
     "description": "A Medium creature found in Savannas, grasslands."
   }
 ];
