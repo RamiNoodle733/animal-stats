@@ -453,8 +453,8 @@ class AnimalStatsApp {
             if (sort === 'name') return a.name.localeCompare(b.name);
             
             if (sort === 'total') {
-                const totalA = a.attack + a.defense + a.agility + a.stamina + a.intelligence + a.special_attack;
-                const totalB = b.attack + b.defense + b.agility + b.stamina + b.intelligence + b.special_attack;
+                const totalA = a.attack + a.defense + a.agility + a.stamina + a.intelligence + a.special;
+                const totalB = b.attack + b.defense + b.agility + b.stamina + b.intelligence + b.special;
                 return totalB - totalA;
             }
 
@@ -465,7 +465,7 @@ class AnimalStatsApp {
                 'agility': 'agility',
                 'stamina': 'stamina',
                 'intelligence': 'intelligence',
-                'special': 'special_attack'
+                'special': 'special'
             };
             
             const key = keyMap[sort];
@@ -496,7 +496,7 @@ class AnimalStatsApp {
             
             // Calculate overall tier based on total stats
             const totalStats = (animal.attack || 0) + (animal.defense || 0) + (animal.agility || 0) + 
-                              (animal.stamina || 0) + (animal.intelligence || 0) + (animal.special_attack || 0);
+                              (animal.stamina || 0) + (animal.intelligence || 0) + (animal.special || 0);
             const avgStat = totalStats / 6;
             const overallTier = this.calculateTier(avgStat);
             card.classList.add(`card-tier-${overallTier.toLowerCase()}`);
@@ -591,7 +591,7 @@ class AnimalStatsApp {
             agility: animal.agility,
             stamina: animal.stamina,
             intelligence: animal.intelligence,
-            special: animal.special_attack
+            special: animal.special
         };
 
         Object.keys(this.dom.statBars).forEach(stat => {
@@ -780,7 +780,7 @@ class AnimalStatsApp {
         if (left) {
             data.datasets.push({
                 label: left.name,
-                data: [left.attack, left.defense, left.agility, left.stamina, left.intelligence, left.special_attack],
+                data: [left.attack, left.defense, left.agility, left.stamina, left.intelligence, left.special],
                 fill: true,
                 backgroundColor: 'rgba(0, 255, 136, 0.2)',
                 borderColor: '#00ff88',
@@ -794,7 +794,7 @@ class AnimalStatsApp {
         if (right) {
             data.datasets.push({
                 label: right.name,
-                data: [right.attack, right.defense, right.agility, right.stamina, right.intelligence, right.special_attack],
+                data: [right.attack, right.defense, right.agility, right.stamina, right.intelligence, right.special],
                 fill: true,
                 backgroundColor: 'rgba(255, 0, 153, 0.2)',
                 borderColor: '#ff0099',
@@ -856,7 +856,7 @@ class AnimalStatsApp {
             agility: animal.agility,
             stamina: animal.stamina,
             intelligence: animal.intelligence,
-            special: animal.special_attack
+            special: animal.special
         };
 
         Object.keys(els.stats).forEach(stat => {
