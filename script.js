@@ -167,12 +167,19 @@ class AnimalStatsApp {
             // Navigation
             navBtns: {
                 stats: document.getElementById('stats-mode-btn'),
-                compare: document.getElementById('compare-mode-btn')
+                compare: document.getElementById('compare-mode-btn'),
+                rankings: document.getElementById('rankings-mode-btn')
             },
+            
+            // Rankings View
+            rankingsView: document.getElementById('rankings-view'),
             
             // New Compare Controls
             compareToggleGridBtn: document.getElementById('compare-toggle-grid-btn')
         };
+
+        // Rankings Manager
+        this.rankingsManager = null;
 
         // Bind methods
         this.init = this.init.bind(this);
@@ -196,6 +203,10 @@ class AnimalStatsApp {
             await this.fetchData();
             this.populateClassFilter();
             this.setupEventListeners();
+            
+            // Initialize Rankings Manager
+            this.rankingsManager = new RankingsManager(this);
+            this.rankingsManager.init();
             
             // Initial Render
             this.renderGrid();
@@ -355,6 +366,7 @@ class AnimalStatsApp {
         // Navigation
         this.dom.navBtns.stats.addEventListener('click', () => this.switchView('stats'));
         this.dom.navBtns.compare.addEventListener('click', () => this.switchView('compare'));
+        this.dom.navBtns.rankings?.addEventListener('click', () => this.switchView('rankings'));
         
         // Compare View Interactions
         this.dom.fighter1.display.addEventListener('click', () => this.setSelectingSide('left'));
@@ -687,9 +699,11 @@ class AnimalStatsApp {
         // Update UI classes
         this.dom.statsView.classList.toggle('active-view', viewName === 'stats');
         this.dom.compareView.classList.toggle('active-view', viewName === 'compare');
+        this.dom.rankingsView?.classList.toggle('active-view', viewName === 'rankings');
         
         this.dom.navBtns.stats.classList.toggle('active', viewName === 'stats');
         this.dom.navBtns.compare.classList.toggle('active', viewName === 'compare');
+        this.dom.navBtns.rankings?.classList.toggle('active', viewName === 'rankings');
 
         // Grid visibility logic
         if (viewName === 'compare') {
@@ -700,22 +714,34 @@ class AnimalStatsApp {
             if (!this.state.compare.selectingSide) {
                 if (!this.state.compare.left) this.setSelectingSide('left');
             }
+        } else if (viewName === 'rankings') {
+            // Hide grid in rankings view
+            this.dom.gridWrapper.classList.add('hidden');
+            this.dom.toggleGridBtn.style.display = 'none';
+            
+            // Fetch rankings when entering rankings view
+            if (this.rankingsManager) {
+                this.rankingsManager.fetchRankings();
+            }
         } else {
             this.dom.toggleGridBtn.style.display = 'flex';
+            this.dom.gridWrapper.classList.remove('hidden');
         }
 
-        // Ensure grid state is synced
-        this.state.isGridVisible = true;
-        this.dom.gridWrapper.classList.remove('hidden');
-        
-        // Update buttons text
-        const updateBtn = (btn) => {
-            if (btn) btn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE MENU';
-        };
-        updateBtn(this.dom.toggleGridBtn);
-        updateBtn(this.dom.compareToggleGridBtn);
+        // Ensure grid state is synced for non-rankings views
+        if (viewName !== 'rankings') {
+            this.state.isGridVisible = true;
+            this.dom.gridWrapper.classList.remove('hidden');
+            
+            // Update buttons text
+            const updateBtn = (btn) => {
+                if (btn) btn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE MENU';
+            };
+            updateBtn(this.dom.toggleGridBtn);
+            updateBtn(this.dom.compareToggleGridBtn);
 
-        this.renderGrid();
+            this.renderGrid();
+        }
     }
 
     /**
@@ -966,7 +992,634 @@ class AnimalStatsApp {
      */
     calculateCombatScore(animal) {
         // Weighted formula
-        return (animal.attack * 2) + (animal.defense * 1.5) + (animal.agility * 1.5) + (animal.intelligence * 1.2) + animal.stamina + (animal.special_attack * 0.8);
+        return (animal.attack * 2) + (animal.defense * 1.5) + (animal.agility * 1.5) + (animal.intelligence * 1.2) + animal.stamina + (animal.special * 0.8);
+    }
+}
+
+/**
+ * Rankings Module
+ * Handles Power Rankings voting and comments
+ */
+class RankingsManager {
+    constructor(app) {
+        this.app = app;
+        this.rankings = [];
+        this.userVotes = {};
+        this.currentAnimal = null;
+        this.comments = [];
+        
+        // DOM Elements
+        this.dom = {
+            rankingsList: document.getElementById('rankings-list'),
+            rankingsSearch: document.getElementById('rankings-search'),
+            rankingsSort: document.getElementById('rankings-sort'),
+            loginPrompt: document.getElementById('rankings-login-prompt'),
+            
+            // Comments Modal
+            commentsModal: document.getElementById('comments-modal'),
+            commentsModalClose: document.getElementById('comments-modal-close'),
+            commentsAnimalName: document.getElementById('comments-animal-name'),
+            commentsAnimalImage: document.getElementById('comments-animal-image'),
+            commentsCount: document.getElementById('comments-count'),
+            commentsList: document.getElementById('comments-list'),
+            commentInput: document.getElementById('comment-input'),
+            charCount: document.getElementById('char-count'),
+            commentSubmit: document.getElementById('comment-submit'),
+            addCommentForm: document.getElementById('add-comment-form'),
+            commentsLoginPrompt: document.getElementById('comments-login-prompt'),
+            commentsLoginBtn: document.getElementById('comments-login-btn')
+        };
+    }
+
+    init() {
+        this.bindEvents();
+    }
+
+    bindEvents() {
+        // Rankings search
+        this.dom.rankingsSearch?.addEventListener('input', (e) => {
+            this.filterRankings(e.target.value);
+        });
+
+        // Rankings sort
+        this.dom.rankingsSort?.addEventListener('change', (e) => {
+            this.sortRankings(e.target.value);
+        });
+
+        // Comments modal close
+        this.dom.commentsModalClose?.addEventListener('click', () => this.hideCommentsModal());
+        this.dom.commentsModal?.addEventListener('click', (e) => {
+            if (e.target === this.dom.commentsModal) this.hideCommentsModal();
+        });
+
+        // Character counter for comment input
+        this.dom.commentInput?.addEventListener('input', () => {
+            const length = this.dom.commentInput.value.length;
+            this.dom.charCount.textContent = length;
+        });
+
+        // Submit comment
+        this.dom.commentSubmit?.addEventListener('click', () => this.submitComment());
+        this.dom.commentInput?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) this.submitComment();
+        });
+
+        // Comments login button
+        this.dom.commentsLoginBtn?.addEventListener('click', () => {
+            this.hideCommentsModal();
+            Auth.showModal('login');
+        });
+
+        // Escape key closes modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') this.hideCommentsModal();
+        });
+    }
+
+    async fetchRankings() {
+        try {
+            this.showLoading();
+            
+            const response = await fetch('/api/rankings', {
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (!response.ok) throw new Error('Failed to fetch rankings');
+
+            const result = await response.json();
+            if (result.success) {
+                this.rankings = result.data;
+                
+                // Fetch user's votes if logged in
+                if (Auth.isLoggedIn()) {
+                    await this.fetchUserVotes();
+                }
+                
+                this.renderRankings();
+            }
+        } catch (error) {
+            console.error('Error fetching rankings:', error);
+            this.dom.rankingsList.innerHTML = `
+                <div class="rankings-loading">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Failed to load rankings. Please try again.
+                </div>
+            `;
+        }
+    }
+
+    async fetchUserVotes() {
+        try {
+            const response = await fetch('/api/votes?myVotes=true', {
+                headers: {
+                    'Accept': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                }
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success) {
+                    // Direct object mapping from API
+                    this.userVotes = result.data;
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching user votes:', error);
+        }
+    }
+
+    showLoading() {
+        this.dom.rankingsList.innerHTML = `
+            <div class="rankings-loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                Loading rankings...
+            </div>
+        `;
+    }
+
+    renderRankings() {
+        if (!this.rankings.length) {
+            this.dom.rankingsList.innerHTML = `
+                <div class="rankings-loading">
+                    <i class="fas fa-trophy"></i>
+                    No rankings yet. Be the first to vote!
+                </div>
+            `;
+            return;
+        }
+
+        // Update login prompt
+        if (this.dom.loginPrompt) {
+            this.dom.loginPrompt.style.display = Auth.isLoggedIn() ? 'none' : 'block';
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        this.rankings.forEach((item, index) => {
+            const card = this.createRankingCard(item, index + 1);
+            fragment.appendChild(card);
+        });
+
+        this.dom.rankingsList.innerHTML = '';
+        this.dom.rankingsList.appendChild(fragment);
+    }
+
+    createRankingCard(item, rank) {
+        const card = document.createElement('div');
+        card.className = 'ranking-card';
+        
+        if (rank <= 3) {
+            card.classList.add('top-3', `rank-${rank}`);
+        }
+
+        const animal = item.animal || item;
+        const animalId = animal._id || animal.id;
+        const userVote = this.userVotes[animalId] || 0;
+        const isLoggedIn = Auth.isLoggedIn();
+
+        const scoreClass = item.netScore > 0 ? 'positive' : item.netScore < 0 ? 'negative' : '';
+
+        card.innerHTML = `
+            <div class="rank-number">#${rank}</div>
+            <img src="${animal.image}" alt="${animal.name}" class="ranking-animal-img" 
+                onerror="this.src='https://via.placeholder.com/70x70?text=?'">
+            <div class="ranking-animal-info">
+                <div class="ranking-animal-name">${animal.name}</div>
+                <div class="ranking-animal-stats">
+                    <span><i class="fas fa-fist-raised"></i> ${Math.round(animal.attack || 0)}</span>
+                    <span><i class="fas fa-shield-alt"></i> ${Math.round(animal.defense || 0)}</span>
+                    <span><i class="fas fa-bolt"></i> ${Math.round(animal.special || 0)}</span>
+                </div>
+            </div>
+            <div class="vote-buttons">
+                <button class="vote-btn upvote ${userVote === 1 ? 'active' : ''}" 
+                    data-animal-id="${animalId}" data-animal-name="${animal.name}" data-value="1"
+                    ${!isLoggedIn ? 'disabled title="Log in to vote"' : ''}>
+                    <i class="fas fa-arrow-up"></i>
+                </button>
+                <span class="vote-score ${scoreClass}">${item.netScore || 0}</span>
+                <button class="vote-btn downvote ${userVote === -1 ? 'active' : ''}" 
+                    data-animal-id="${animalId}" data-animal-name="${animal.name}" data-value="-1"
+                    ${!isLoggedIn ? 'disabled title="Log in to vote"' : ''}>
+                    <i class="fas fa-arrow-down"></i>
+                </button>
+            </div>
+            <button class="comments-btn" data-animal-id="${animalId}" data-animal-name="${animal.name}" 
+                data-animal-image="${animal.image}">
+                <i class="fas fa-comment"></i>
+                <span>Comments</span>
+                <span class="count">${item.commentCount || 0}</span>
+            </button>
+        `;
+
+        // Bind vote buttons
+        card.querySelectorAll('.vote-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => this.handleVote(e));
+        });
+
+        // Bind comments button
+        card.querySelector('.comments-btn').addEventListener('click', (e) => this.openCommentsModal(e));
+
+        return card;
+    }
+
+    async handleVote(e) {
+        const btn = e.currentTarget;
+        const animalId = btn.dataset.animalId;
+        const animalName = btn.dataset.animalName;
+        const value = parseInt(btn.dataset.value);
+        const voteType = value === 1 ? 'up' : 'down';
+
+        if (!Auth.isLoggedIn()) {
+            Auth.showToast('Please log in to vote!');
+            Auth.showModal('login');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/votes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                },
+                body: JSON.stringify({ animalId, animalName, voteType })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Update local state based on response
+                if (result.action === 'removed') {
+                    delete this.userVotes[animalId];
+                } else {
+                    // Store 1 for 'up', -1 for 'down'
+                    this.userVotes[animalId] = result.data.userVote === 'up' ? 1 : -1;
+                }
+
+                // Update the UI
+                const card = btn.closest('.ranking-card');
+                const upBtn = card.querySelector('.upvote');
+                const downBtn = card.querySelector('.downvote');
+                const scoreEl = card.querySelector('.vote-score');
+
+                upBtn.classList.toggle('active', this.userVotes[animalId] === 1);
+                downBtn.classList.toggle('active', this.userVotes[animalId] === -1);
+                
+                // Update score from response
+                const score = result.data.score;
+                scoreEl.textContent = score;
+                scoreEl.className = 'vote-score';
+                if (score > 0) scoreEl.classList.add('positive');
+                else if (score < 0) scoreEl.classList.add('negative');
+            } else {
+                Auth.showToast(result.error || 'Failed to vote');
+            }
+        } catch (error) {
+            console.error('Vote error:', error);
+            Auth.showToast('Error voting. Please try again.');
+        }
+    }
+
+    async refreshRankingScore(animalId, scoreEl) {
+        try {
+            const response = await fetch('/api/rankings');
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success) {
+                    const item = result.data.find(r => (r.animal?._id || r.animal?.id) === animalId);
+                    if (item && scoreEl) {
+                        const score = item.netScore || 0;
+                        scoreEl.textContent = score;
+                        scoreEl.className = 'vote-score';
+                        if (score > 0) scoreEl.classList.add('positive');
+                        else if (score < 0) scoreEl.classList.add('negative');
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error refreshing score:', error);
+        }
+    }
+
+    filterRankings(searchTerm) {
+        const term = searchTerm.toLowerCase();
+        const cards = this.dom.rankingsList.querySelectorAll('.ranking-card');
+        
+        cards.forEach(card => {
+            const name = card.querySelector('.ranking-animal-name').textContent.toLowerCase();
+            card.style.display = name.includes(term) ? '' : 'none';
+        });
+    }
+
+    sortRankings(sortBy) {
+        let sorted = [...this.rankings];
+
+        switch (sortBy) {
+            case 'rank':
+                // Already sorted by rank (netScore desc)
+                break;
+            case 'upvotes':
+                sorted.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0));
+                break;
+            case 'downvotes':
+                sorted.sort((a, b) => (b.downvotes || 0) - (a.downvotes || 0));
+                break;
+            case 'controversial':
+                // Most total votes (both up and down)
+                sorted.sort((a, b) => {
+                    const totalA = (a.upvotes || 0) + (a.downvotes || 0);
+                    const totalB = (b.upvotes || 0) + (b.downvotes || 0);
+                    return totalB - totalA;
+                });
+                break;
+            case 'name':
+                sorted.sort((a, b) => {
+                    const nameA = a.animal?.name || '';
+                    const nameB = b.animal?.name || '';
+                    return nameA.localeCompare(nameB);
+                });
+                break;
+        }
+
+        this.rankings = sorted;
+        this.renderRankings();
+    }
+
+    // ========================================
+    // Comments Modal
+    // ========================================
+
+    openCommentsModal(e) {
+        const btn = e.currentTarget;
+        this.currentAnimal = {
+            id: btn.dataset.animalId,
+            name: btn.dataset.animalName,
+            image: btn.dataset.animalImage
+        };
+
+        // Update modal header
+        this.dom.commentsAnimalName.textContent = this.currentAnimal.name;
+        this.dom.commentsAnimalImage.src = this.currentAnimal.image;
+        this.dom.commentsAnimalImage.onerror = () => {
+            this.dom.commentsAnimalImage.src = 'https://via.placeholder.com/60x60?text=?';
+        };
+
+        // Show/hide login prompt vs comment form
+        if (Auth.isLoggedIn()) {
+            this.dom.addCommentForm.style.display = 'block';
+            this.dom.commentsLoginPrompt.style.display = 'none';
+        } else {
+            this.dom.addCommentForm.style.display = 'none';
+            this.dom.commentsLoginPrompt.style.display = 'flex';
+        }
+
+        // Clear input
+        this.dom.commentInput.value = '';
+        this.dom.charCount.textContent = '0';
+
+        // Fetch and display comments
+        this.fetchComments();
+
+        // Show modal
+        this.dom.commentsModal.classList.add('show');
+    }
+
+    hideCommentsModal() {
+        this.dom.commentsModal.classList.remove('show');
+        this.currentAnimal = null;
+    }
+
+    async fetchComments() {
+        if (!this.currentAnimal) return;
+
+        this.dom.commentsList.innerHTML = '<div class="rankings-loading"><i class="fas fa-spinner fa-spin"></i> Loading comments...</div>';
+
+        try {
+            const response = await fetch(`/api/comments?animalId=${this.currentAnimal.id}`);
+            
+            if (!response.ok) throw new Error('Failed to fetch comments');
+
+            const result = await response.json();
+            
+            if (result.success) {
+                this.comments = result.data;
+                this.dom.commentsCount.textContent = `${this.comments.length} comment${this.comments.length !== 1 ? 's' : ''}`;
+                this.renderComments();
+            }
+        } catch (error) {
+            console.error('Error fetching comments:', error);
+            this.dom.commentsList.innerHTML = '<div class="no-comments"><i class="fas fa-exclamation-triangle"></i> Failed to load comments.</div>';
+        }
+    }
+
+    renderComments() {
+        if (!this.comments.length) {
+            this.dom.commentsList.innerHTML = `
+                <div class="no-comments">
+                    <i class="fas fa-comment-slash"></i>
+                    <p>No comments yet. Be the first to share your thoughts!</p>
+                </div>
+            `;
+            return;
+        }
+
+        const fragment = document.createDocumentFragment();
+
+        this.comments.forEach(comment => {
+            const el = this.createCommentElement(comment);
+            fragment.appendChild(el);
+        });
+
+        this.dom.commentsList.innerHTML = '';
+        this.dom.commentsList.appendChild(fragment);
+    }
+
+    createCommentElement(comment) {
+        const div = document.createElement('div');
+        div.className = 'comment-item';
+        div.dataset.commentId = comment._id;
+
+        // Handle both nested author object and flat authorUsername field
+        const authorName = comment.authorUsername || comment.author?.displayName || comment.author?.username || 'Unknown';
+        const authorInitial = authorName[0].toUpperCase();
+        const timeAgo = this.getTimeAgo(new Date(comment.createdAt));
+        const authorId = comment.authorId || comment.author?.userId;
+        const currentUserId = Auth.getUser()?.id;
+        const isOwn = Auth.isLoggedIn() && authorId && authorId.toString() === currentUserId;
+        const hasLiked = comment.likes?.some(id => id.toString() === currentUserId);
+
+        div.innerHTML = `
+            <div class="comment-header">
+                <div class="comment-author">
+                    <span class="comment-avatar">${authorInitial}</span>
+                    <span class="comment-author-name">${authorName}</span>
+                </div>
+                <span class="comment-date">${timeAgo}</span>
+            </div>
+            <div class="comment-content">${this.escapeHtml(comment.content)}</div>
+            <div class="comment-actions">
+                <button class="comment-action-btn like-btn ${hasLiked ? 'liked' : ''}" data-comment-id="${comment._id}">
+                    <i class="fas fa-heart"></i>
+                    <span>${comment.likeCount || comment.likes?.length || 0}</span>
+                </button>
+                <button class="comment-action-btn reply-btn" data-comment-id="${comment._id}">
+                    <i class="fas fa-reply"></i>
+                    Reply
+                </button>
+                ${isOwn ? `
+                    <button class="comment-action-btn delete-btn" data-comment-id="${comment._id}">
+                        <i class="fas fa-trash"></i>
+                        Delete
+                    </button>
+                ` : ''}
+            </div>
+        `;
+
+        // Bind actions
+        div.querySelector('.like-btn').addEventListener('click', (e) => this.handleLike(e));
+        div.querySelector('.reply-btn').addEventListener('click', () => this.handleReply(comment));
+        div.querySelector('.delete-btn')?.addEventListener('click', (e) => this.handleDelete(e));
+
+        return div;
+    }
+
+    async submitComment() {
+        const content = this.dom.commentInput.value.trim();
+
+        if (!content) {
+            Auth.showToast('Please write something!');
+            return;
+        }
+
+        if (!Auth.isLoggedIn()) {
+            Auth.showToast('Please log in to comment!');
+            Auth.showModal('login');
+            return;
+        }
+
+        this.dom.commentSubmit.disabled = true;
+
+        try {
+            const response = await fetch('/api/comments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                },
+                body: JSON.stringify({
+                    targetType: 'animal',
+                    animalId: this.currentAnimal.id,
+                    animalName: this.currentAnimal.name,
+                    content
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Clear input
+                this.dom.commentInput.value = '';
+                this.dom.charCount.textContent = '0';
+
+                // Refresh comments
+                await this.fetchComments();
+
+                Auth.showToast('Comment posted!');
+            } else {
+                Auth.showToast(result.error || 'Failed to post comment');
+            }
+        } catch (error) {
+            console.error('Error posting comment:', error);
+            Auth.showToast('Error posting comment');
+        } finally {
+            this.dom.commentSubmit.disabled = false;
+        }
+    }
+
+    async handleLike(e) {
+        const commentId = e.currentTarget.dataset.commentId;
+
+        if (!Auth.isLoggedIn()) {
+            Auth.showToast('Please log in to like comments!');
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/comments?id=${commentId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                },
+                body: JSON.stringify({ action: 'like' })
+            });
+
+            if (response.ok) {
+                await this.fetchComments();
+            }
+        } catch (error) {
+            console.error('Error liking comment:', error);
+        }
+    }
+
+    handleReply(comment) {
+        // Focus the input and prepend @username
+        const username = comment.author?.displayName || comment.author?.username || '';
+        this.dom.commentInput.value = `@${username} `;
+        this.dom.commentInput.focus();
+        this.dom.charCount.textContent = this.dom.commentInput.value.length;
+    }
+
+    async handleDelete(e) {
+        const commentId = e.currentTarget.dataset.commentId;
+
+        if (!confirm('Are you sure you want to delete this comment?')) return;
+
+        try {
+            const response = await fetch(`/api/comments?id=${commentId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                }
+            });
+
+            if (response.ok) {
+                await this.fetchComments();
+                Auth.showToast('Comment deleted');
+            }
+        } catch (error) {
+            console.error('Error deleting comment:', error);
+            Auth.showToast('Error deleting comment');
+        }
+    }
+
+    getTimeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
+        
+        const intervals = [
+            { label: 'year', seconds: 31536000 },
+            { label: 'month', seconds: 2592000 },
+            { label: 'day', seconds: 86400 },
+            { label: 'hour', seconds: 3600 },
+            { label: 'minute', seconds: 60 }
+        ];
+
+        for (const interval of intervals) {
+            const count = Math.floor(seconds / interval.seconds);
+            if (count >= 1) {
+                return `${count} ${interval.label}${count > 1 ? 's' : ''} ago`;
+            }
+        }
+
+        return 'Just now';
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 }
 

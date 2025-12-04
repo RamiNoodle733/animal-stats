@@ -2375,4 +2375,683 @@ body {
     }
 }
 
+/* ========================================
+   RANKINGS VIEW STYLES
+   ======================================== */
+
+#rankings-view {
+    background: linear-gradient(180deg, rgba(10, 14, 26, 0.95) 0%, rgba(5, 8, 16, 0.98) 100%);
+}
+
+.rankings-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.rankings-header {
+    text-align: center;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+}
+
+.rankings-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, #ffd700, #ff6b00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+    margin-bottom: 10px;
+}
+
+.rankings-header h2 i {
+    -webkit-text-fill-color: #ffd700;
+    margin-right: 10px;
+}
+
+.rankings-subtitle {
+    color: #888;
+    font-size: 0.95rem;
+}
+
+.rankings-login-prompt {
+    background: rgba(255, 107, 0, 0.15);
+    border: 1px solid rgba(255, 107, 0, 0.3);
+    border-radius: 8px;
+    padding: 10px 20px;
+    margin-top: 15px;
+    display: inline-block;
+    color: #ff9944;
+    font-size: 0.9rem;
+}
+
+.rankings-login-prompt i {
+    margin-right: 8px;
+}
+
+.rankings-controls {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+}
+
+.rankings-controls .search-box {
+    flex: 1;
+}
+
+.rankings-controls .filter-select {
+    min-width: 180px;
+}
+
+.rankings-list {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+
+.rankings-loading {
+    text-align: center;
+    padding: 40px;
+    color: #888;
+    font-size: 1.1rem;
+}
+
+.rankings-loading i {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    display: block;
+    color: var(--primary-color);
+}
+
+/* Individual Ranking Card */
+.ranking-card {
+    display: grid;
+    grid-template-columns: 60px 80px 1fr 150px 100px;
+    gap: 15px;
+    align-items: center;
+    background: rgba(15, 20, 35, 0.8);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 12px;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.ranking-card:hover {
+    background: rgba(20, 28, 50, 0.9);
+    border-color: rgba(0, 212, 255, 0.4);
+    transform: translateX(5px);
+}
+
+.ranking-card.top-3 {
+    border: 2px solid;
+}
+
+.ranking-card.rank-1 {
+    border-color: #ffd700;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(15, 20, 35, 0.9));
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+.ranking-card.rank-2 {
+    border-color: #c0c0c0;
+    background: linear-gradient(135deg, rgba(192, 192, 192, 0.1), rgba(15, 20, 35, 0.9));
+}
+
+.ranking-card.rank-3 {
+    border-color: #cd7f32;
+    background: linear-gradient(135deg, rgba(205, 127, 50, 0.1), rgba(15, 20, 35, 0.9));
+}
+
+/* Rank Number */
+.rank-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    color: #888;
+}
+
+.rank-1 .rank-number {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.rank-2 .rank-number {
+    color: #c0c0c0;
+    text-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
+}
+
+.rank-3 .rank-number {
+    color: #cd7f32;
+    text-shadow: 0 0 10px rgba(205, 127, 50, 0.5);
+}
+
+/* Animal Image in Rankings */
+.ranking-animal-img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(0, 212, 255, 0.3);
+}
+
+/* Animal Info */
+.ranking-animal-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.ranking-animal-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 2px;
+    color: #fff;
+}
+
+.ranking-animal-stats {
+    display: flex;
+    gap: 10px;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.ranking-animal-stats span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.ranking-animal-stats i {
+    font-size: 0.7rem;
+    color: var(--primary-color);
+}
+
+/* Vote Buttons */
+.vote-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.vote-btn {
+    width: 40px;
+    height: 35px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vote-btn.upvote {
+    background: rgba(0, 255, 136, 0.2);
+    color: #00ff88;
+    border: 1px solid rgba(0, 255, 136, 0.3);
+}
+
+.vote-btn.upvote:hover,
+.vote-btn.upvote.active {
+    background: rgba(0, 255, 136, 0.4);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+    transform: scale(1.1);
+}
+
+.vote-btn.downvote {
+    background: rgba(255, 51, 102, 0.2);
+    color: #ff3366;
+    border: 1px solid rgba(255, 51, 102, 0.3);
+}
+
+.vote-btn.downvote:hover,
+.vote-btn.downvote.active {
+    background: rgba(255, 51, 102, 0.4);
+    box-shadow: 0 0 15px rgba(255, 51, 102, 0.3);
+    transform: scale(1.1);
+}
+
+.vote-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+.vote-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    color: #fff;
+    min-width: 40px;
+    text-align: center;
+}
+
+.vote-score.positive {
+    color: #00ff88;
+}
+
+.vote-score.negative {
+    color: #ff3366;
+}
+
+/* Comments Button */
+.comments-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 15px;
+    background: rgba(0, 212, 255, 0.15);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.comments-btn:hover {
+    background: rgba(0, 212, 255, 0.25);
+    border-color: rgba(0, 212, 255, 0.5);
+}
+
+.comments-btn i {
+    font-size: 1rem;
+}
+
+.comments-btn .count {
+    background: rgba(0, 212, 255, 0.3);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+}
+
+/* ========================================
+   COMMENTS MODAL STYLES
+   ======================================== */
+
+.comments-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+}
+
+.comments-modal.show {
+    display: flex;
+}
+
+.comments-modal-content {
+    background: linear-gradient(180deg, #0f1929 0%, #0a0e1a 100%);
+    border: 2px solid var(--primary-color);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 650px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.3);
+    position: relative;
+}
+
+.comments-modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    z-index: 10;
+}
+
+.comments-modal-close:hover {
+    color: #ff3366;
+}
+
+.comments-header {
+    padding: 20px 25px;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+    flex-shrink: 0;
+}
+
+.comments-animal-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.comments-animal-img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(0, 212, 255, 0.3);
+}
+
+.comments-header h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.comments-count {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+/* Add Comment Form */
+.add-comment-form {
+    padding: 15px 25px;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.add-comment-form textarea {
+    width: 100%;
+    min-height: 80px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 8px;
+    padding: 12px;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    resize: vertical;
+    transition: border-color 0.2s;
+}
+
+.add-comment-form textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.add-comment-form textarea::placeholder {
+    color: #666;
+}
+
+.comment-form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.char-count {
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.comment-submit-btn {
+    background: linear-gradient(135deg, var(--primary-color), #00ff88);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    color: #000;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.comment-submit-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+}
+
+.comment-submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Comments Login Prompt */
+.comments-login-prompt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 15px 25px;
+    background: rgba(255, 107, 0, 0.1);
+    border-bottom: 1px solid rgba(255, 107, 0, 0.2);
+    color: #ff9944;
+    flex-shrink: 0;
+}
+
+.comments-login-prompt i {
+    font-size: 1.2rem;
+}
+
+.login-prompt-btn {
+    background: linear-gradient(135deg, #ff6b00, #ff9944);
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    color: #000;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.login-prompt-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Comments List */
+.comments-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 25px;
+}
+
+.comment-item {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(0, 212, 255, 0.1);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 12px;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.comment-author {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.comment-avatar {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, var(--primary-color), #00ff88);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    color: #000;
+    font-weight: bold;
+}
+
+.comment-author-name {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.comment-date {
+    color: #666;
+    font-size: 0.8rem;
+}
+
+.comment-content {
+    color: #ddd;
+    line-height: 1.5;
+    margin-bottom: 12px;
+}
+
+.comment-actions {
+    display: flex;
+    gap: 15px;
+}
+
+.comment-action-btn {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 0.85rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.2s;
+}
+
+.comment-action-btn:hover {
+    color: var(--primary-color);
+}
+
+.comment-action-btn.liked {
+    color: #ff3366;
+}
+
+.comment-action-btn.liked i {
+    animation: heartBeat 0.3s ease;
+}
+
+@keyframes heartBeat {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+/* No Comments State */
+.no-comments {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.no-comments i {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    display: block;
+    color: #444;
+}
+
+/* Reply Section */
+.replies-container {
+    margin-top: 15px;
+    padding-left: 20px;
+    border-left: 2px solid rgba(0, 212, 255, 0.2);
+}
+
+.reply-item {
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+
+/* ========================================
+   RESPONSIVE RANKINGS STYLES
+   ======================================== */
+
+@media (max-width: 768px) {
+    .ranking-card {
+        grid-template-columns: 50px 60px 1fr;
+        grid-template-rows: auto auto;
+        gap: 10px;
+        padding: 12px 15px;
+    }
+
+    .rank-number {
+        font-size: 1.5rem;
+    }
+
+    .ranking-animal-img {
+        width: 55px;
+        height: 55px;
+    }
+
+    .ranking-animal-name {
+        font-size: 1.2rem;
+    }
+
+    .vote-buttons {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        justify-content: center;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .comments-btn {
+        grid-column: 1 / -1;
+        justify-content: center;
+    }
+
+    .rankings-controls {
+        flex-direction: column;
+    }
+
+    .rankings-controls .filter-select {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .rankings-header h2 {
+        font-size: 1.8rem;
+    }
+
+    .ranking-card {
+        grid-template-columns: 40px 50px 1fr;
+    }
+
+    .ranking-animal-img {
+        width: 45px;
+        height: 45px;
+    }
+
+    .ranking-animal-stats {
+        display: none;
+    }
+
+    .comments-modal-content {
+        width: 95%;
+        max-height: 90vh;
+    }
+}
+
+
+
 

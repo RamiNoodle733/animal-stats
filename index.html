@@ -27,9 +27,12 @@
             <button class="mode-btn active" id="stats-mode-btn" data-mode="stats">
                 <i class="fas fa-chart-bar"></i> STATS
             </button>
-            <h1>ANIMAL BATTLE STATS</h1>
             <button class="mode-btn" id="compare-mode-btn" data-mode="compare">
                 <i class="fas fa-balance-scale"></i> COMPARE
+            </button>
+            <h1>ANIMAL BATTLE STATS</h1>
+            <button class="mode-btn" id="rankings-mode-btn" data-mode="rankings">
+                <i class="fas fa-trophy"></i> RANKINGS
             </button>
             <!-- Auth Button -->
             <div class="auth-container" id="auth-container">
@@ -399,6 +402,40 @@
             </div>
         </div>
         
+        <!-- Rankings View (Power Leaderboard) -->
+        <div id="rankings-view" class="view-container">
+            <div class="rankings-container">
+                <!-- Rankings Header -->
+                <div class="rankings-header">
+                    <h2><i class="fas fa-trophy"></i> POWER RANKINGS</h2>
+                    <p class="rankings-subtitle">Vote for your favorite animals to determine the ultimate power rankings!</p>
+                    <div class="rankings-login-prompt" id="rankings-login-prompt" style="display: none;">
+                        <i class="fas fa-info-circle"></i> <span>Log in to vote and comment!</span>
+                    </div>
+                </div>
+                
+                <!-- Rankings Search & Filter -->
+                <div class="rankings-controls">
+                    <input type="text" id="rankings-search" placeholder="Search animals..." class="search-box">
+                    <select id="rankings-sort" class="filter-select">
+                        <option value="rank">Sort by Rank</option>
+                        <option value="upvotes">Most Upvotes</option>
+                        <option value="downvotes">Most Downvotes</option>
+                        <option value="controversial">Most Controversial</option>
+                        <option value="name">Alphabetical</option>
+                    </select>
+                </div>
+                
+                <!-- Rankings List -->
+                <div class="rankings-list" id="rankings-list">
+                    <!-- Rankings will be populated by JavaScript -->
+                    <div class="rankings-loading">
+                        <i class="fas fa-spinner fa-spin"></i> Loading rankings...
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- Animal Grid (Bottom) -->
         <div class="character-grid-container">
             <div class="grid-controls">
@@ -493,6 +530,47 @@
                 <div class="auth-switch">
                     Already have an account? <a href="#" id="show-login">Log in</a>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Comments Modal -->
+    <div class="comments-modal" id="comments-modal">
+        <div class="comments-modal-content">
+            <button class="comments-modal-close" id="comments-modal-close">&times;</button>
+            
+            <!-- Comments Header -->
+            <div class="comments-header">
+                <div class="comments-animal-info">
+                    <img id="comments-animal-image" src="" alt="" class="comments-animal-img">
+                    <div>
+                        <h2 id="comments-animal-name">Animal Name</h2>
+                        <span class="comments-count" id="comments-count">0 comments</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Add Comment Form -->
+            <div class="add-comment-form" id="add-comment-form">
+                <textarea id="comment-input" placeholder="Share your thoughts about this animal..." maxlength="500"></textarea>
+                <div class="comment-form-footer">
+                    <span class="char-count"><span id="char-count">0</span>/500</span>
+                    <button class="comment-submit-btn" id="comment-submit">
+                        <i class="fas fa-paper-plane"></i> Post Comment
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Comments Login Prompt -->
+            <div class="comments-login-prompt" id="comments-login-prompt" style="display: none;">
+                <i class="fas fa-lock"></i>
+                <span>Log in to leave a comment</span>
+                <button class="login-prompt-btn" id="comments-login-btn">LOG IN</button>
+            </div>
+            
+            <!-- Comments List -->
+            <div class="comments-list" id="comments-list">
+                <!-- Comments will be populated by JavaScript -->
             </div>
         </div>
     </div>
