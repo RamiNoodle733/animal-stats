@@ -929,7 +929,9 @@ body {
     gap: 8px;
     box-shadow: 0 -4px 20px rgba(0, 212, 255, 0.3);
     transition: all 0.4s ease;
-    overflow: hidden;
+    overflow: visible;
+    position: relative;
+    z-index: 20;
 }
 
 .character-grid-container.hidden {
@@ -944,6 +946,9 @@ body {
     gap: 10px;
     padding: 0 10px;
     align-items: center;
+    position: relative;
+    z-index: 100;
+    overflow: visible;
 }
 
 /* Dropdown Menu Container for Filter/Sort */
