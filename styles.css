@@ -1238,80 +1238,93 @@ body {
         flex-direction: column;
     }
 
-    /* --- HEADER - Compact Single Row --- */
+    /* --- HEADER - Two rows on mobile --- */
     .game-header {
-        padding: 10px 10px 8px;
-        gap: 15px;
-        flex-wrap: nowrap;
+        padding: 8px 12px;
+        gap: 8px;
+        flex-wrap: wrap;
         justify-content: center;
         flex-shrink: 0;
-        min-height: 45px;
+        min-height: auto;
     }
 
     .game-header h1 {
-        font-size: 1rem;
+        font-size: 0.9rem;
         letter-spacing: 2px;
         margin: 0;
-        order: 0;
+        order: -1;
+        width: 100%;
+        text-align: center;
         white-space: nowrap;
     }
 
     .mode-btn {
-        padding: 6px 14px;
-        font-size: 0.75rem;
-        flex: 0 0 auto;
+        padding: 8px 14px;
+        font-size: 0.7rem;
+        flex: 1 1 auto;
+        max-width: 100px;
+        justify-content: center;
+    }
+    
+    .auth-container {
+        position: absolute;
+        top: 8px;
+        right: 10px;
+    }
+    
+    .auth-btn {
+        padding: 6px 10px;
+        font-size: 0.7rem;
+    }
+    
+    #auth-btn-text {
+        display: none;
     }
 
-    /* --- STATS VIEW - Side by Side Like Desktop --- */
+    /* --- STATS VIEW - Vertical stack on mobile --- */
     .character-display-area {
-        display: grid !important;
-        grid-template-columns: 1fr minmax(130px, 180px) 1fr;
-        grid-template-rows: 1fr;
-        padding: 5px;
-        gap: 5px;
-        flex: 0 1 auto; /* Don't grow, just fit content */
+        display: flex !important;
+        flex-direction: column;
+        padding: 10px;
+        gap: 10px;
+        flex: 1 1 auto;
         min-height: 0;
-        max-height: 45%; /* Limit height to leave room for bottom */
-        overflow: hidden;
-        align-items: stretch;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
     }
 
     .character-showcase {
-        grid-column: 2;
-        grid-row: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        padding: 8px 5px;
-        height: 100%;
-        overflow: hidden;
+        padding: 15px 10px;
+        background: rgba(0, 20, 40, 0.4);
+        border-radius: 12px;
+        border: 1px solid rgba(0, 212, 255, 0.3);
+        flex-shrink: 0;
+    }
+
+    .stats-panel-left,
+    .stats-panel-right {
+        display: none; /* Hide side panels, show combined stats below */
+    }
+    
+    /* Mobile stats container - shows all stats in grid */
+    .mobile-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        width: 100%;
+        padding: 10px;
         background: rgba(0, 20, 40, 0.3);
         border-radius: 10px;
-        border: 1px solid rgba(0, 212, 255, 0.2);
-    }
-
-    .stats-panel-left {
-        grid-column: 1;
-        grid-row: 1;
-        overflow-y: auto;
-        overflow-x: hidden;
-        max-height: 100%;
-        padding: 5px 2px;
-    }
-
-    .stats-panel-right {
-        grid-column: 3;
-        grid-row: 1;
-        overflow-y: auto;
-        overflow-x: hidden;
-        max-height: 100%;
-        padding: 5px 2px;
     }
 
     /* Character Display */
     .character-model-container {
-        max-width: 150px;
+        max-width: 200px;
         width: 100%;
         margin: 0 auto;
         flex-shrink: 0;
@@ -1320,31 +1333,34 @@ body {
     .character-model {
         width: 100%;
         height: auto;
-        max-height: 150px;
+        max-height: 180px;
         object-fit: contain;
     }
 
     .character-name-display {
-        font-size: 1rem;
+        font-size: 1.4rem;
         line-height: 1.2;
-        margin-bottom: 4px;
+        margin-bottom: 6px;
         letter-spacing: 2px;
     }
 
     .character-scientific-name {
-        font-size: 0.6rem;
-        margin-bottom: 5px;
+        font-size: 0.75rem;
+        margin-bottom: 8px;
     }
     
     .character-mini-info {
         justify-content: center;
-        gap: 4px;
-        font-size: 0.55rem;
-        margin-top: 3px;
+        gap: 6px;
+        font-size: 0.7rem;
+        margin-top: 5px;
+        flex-wrap: wrap;
     }
     
     .character-mini-info span {
-        padding: 2px 4px;
+        padding: 4px 8px;
+        background: rgba(0, 212, 255, 0.15);
+        border-radius: 4px;
     }
 
     /* Stats - Compact Vertical Layout */
@@ -1417,106 +1433,112 @@ body {
         display: none;
     }
 
-    /* --- BOTTOM INFO BAR - Vertical 2-row layout, no scroll --- */
+    /* --- BOTTOM INFO BAR - Simplified for mobile --- */
     .bottom-info-bar {
         display: flex;
         flex-wrap: wrap;
-        gap: 5px;
-        padding: 6px 10px;
+        gap: 8px;
+        padding: 10px 15px;
         justify-content: center;
         align-items: center;
         flex-shrink: 0;
         overflow: visible;
         min-height: auto;
-        max-height: none;
+        background: rgba(0, 20, 40, 0.8);
+        border-top: 1px solid rgba(0, 212, 255, 0.3);
     }
 
     .info-separator { display: none; }
 
     .info-item-inline {
-        font-size: 0.65rem;
-        padding: 3px 6px;
-        white-space: nowrap;
-        flex-shrink: 0;
+        display: none; /* Hide abilities/traits on mobile - too long */
     }
     
     .info-label {
-        display: none; /* Hide labels, just show values */
+        display: none;
     }
 
-    .expand-details-btn, .toggle-grid-btn {
-        padding: 5px 10px;
-        font-size: 0.7rem;
+    .expand-details-btn, .toggle-grid-btn, .stats-comments-btn {
+        padding: 10px 16px;
+        font-size: 0.8rem;
         white-space: nowrap;
         flex-shrink: 0;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
     }
 
-    /* --- CHARACTER GRID - BIGGER, fills remaining space --- */
+    /* --- CHARACTER GRID - Bottom dock style --- */
     .character-grid-container {
-        flex: 1; /* Take remaining space */
-        min-height: 180px;
-        max-height: none;
+        flex-shrink: 0;
+        min-height: 140px;
+        max-height: 160px;
         padding: 8px;
         overflow: hidden;
         display: flex;
         flex-direction: column;
+        background: rgba(0, 10, 20, 0.9);
+        border-top: 1px solid rgba(0, 212, 255, 0.2);
     }
     
     .grid-controls {
         display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
+        flex-wrap: nowrap;
+        gap: 8px;
         padding: 0 5px;
         margin-bottom: 8px;
-        overflow: visible;
-        justify-content: center;
+        overflow-x: auto;
+        justify-content: flex-start;
     }
     
     .search-box {
         flex: 1;
-        min-width: 100px;
-        max-width: 140px;
-        padding: 6px 10px;
-        font-size: 0.8rem;
+        min-width: 120px;
+        max-width: 180px;
+        padding: 8px 12px;
+        font-size: 0.85rem;
     }
     
     .filter-select {
         flex: 0 0 auto;
         width: auto;
-        min-width: 70px;
-        padding: 6px 8px;
-        font-size: 0.7rem;
+        min-width: 80px;
+        padding: 8px 10px;
+        font-size: 0.75rem;
     }
     
     .filter-group {
         display: flex;
-        gap: 5px;
+        gap: 6px;
         flex: 0 0 auto;
     }
     
     .character-grid {
         gap: 10px;
-        padding: 8px;
+        padding: 5px 8px;
         flex: 1;
         height: auto;
         overflow-x: auto;
         overflow-y: hidden;
         align-items: center;
+        -webkit-overflow-scrolling: touch;
     }
     
     .character-card {
-        min-width: 95px;
-        width: 95px;
-        height: 95px;
+        min-width: 80px;
+        width: 80px;
+        height: 90px;
+        flex-shrink: 0;
     }
     
     .character-card-image {
-        height: 65px;
+        height: 55px;
     }
     
     .character-card-name {
-        font-size: 0.65rem;
-        padding: 4px;
+        font-size: 0.6rem;
+        padding: 4px 2px;
     }
 
     /* --- COMPARE VIEW - Bigger elements --- */
@@ -1797,161 +1819,164 @@ body {
 
 /* --- SMALL PHONE OPTIMIZATIONS --- */
 @media (max-width: 480px) {
-    /* Even more compact header */
+    /* Header stays compact */
     .game-header {
-        padding: 8px 6px 6px;
-        gap: 8px;
-        min-height: 38px;
+        padding: 6px 10px;
+        gap: 6px;
     }
 
     .game-header h1 {
-        font-size: 0.75rem;
+        font-size: 0.8rem;
         letter-spacing: 1px;
     }
 
     .mode-btn {
-        padding: 4px 8px;
+        padding: 6px 10px;
+        font-size: 0.65rem;
+    }
+    
+    .auth-container {
+        top: 6px;
+        right: 8px;
+    }
+    
+    .auth-btn {
+        padding: 5px 8px;
         font-size: 0.65rem;
     }
 
     /* Stats area */
     .character-display-area {
-        grid-template-columns: 1fr minmax(90px, 110px) 1fr;
-        padding: 3px;
-        gap: 2px;
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .character-showcase {
+        padding: 12px 8px;
     }
 
     .character-model-container {
-        max-width: 90px;
+        max-width: 160px;
+    }
+    
+    .character-model {
+        max-height: 140px;
     }
 
     .character-name-display {
-        font-size: 0.7rem;
+        font-size: 1.2rem;
     }
 
     .character-scientific-name {
-        font-size: 0.5rem;
+        font-size: 0.65rem;
     }
 
     .character-mini-info {
-        font-size: 0.45rem;
+        font-size: 0.6rem;
+        gap: 4px;
     }
     
-    .stat-name {
-        font-size: 0.5rem;
-    }
-    
-    .stat-bar {
-        height: 6px;
-    }
-    
-    .stat-value {
-        font-size: 0.75rem;
-    }
-    
-    .stat-tier-badge {
-        font-size: 0.45rem;
-        padding: 0 2px;
+    .character-mini-info span {
+        padding: 3px 6px;
     }
 
     /* Bottom bar */
     .bottom-info-bar {
-        padding: 3px 4px;
-        min-height: 28px;
-        max-height: 28px;
-        gap: 4px;
+        padding: 8px 10px;
+        gap: 6px;
     }
 
-    .info-item-inline {
-        font-size: 0.5rem;
-        padding: 1px 3px;
-    }
-
-    .expand-details-btn, .toggle-grid-btn {
-        padding: 3px 6px;
-        font-size: 0.55rem;
+    .expand-details-btn, .toggle-grid-btn, .stats-comments-btn {
+        padding: 8px 12px;
+        font-size: 0.7rem;
+        min-height: 36px;
     }
 
     /* Grid */
     .character-grid-container {
-        height: 75px;
-        max-height: 75px;
-        padding: 3px;
+        min-height: 120px;
+        max-height: 130px;
+        padding: 6px;
     }
 
     .grid-controls {
-        gap: 2px;
-        margin-bottom: 2px;
+        gap: 5px;
+        margin-bottom: 6px;
     }
     
     .search-box {
-        padding: 2px 4px;
-        font-size: 0.6rem;
-        min-width: 60px;
-        max-width: 80px;
+        padding: 6px 10px;
+        font-size: 0.75rem;
+        min-width: 100px;
+        max-width: 140px;
     }
 
     .filter-select {
-        padding: 2px 3px;
-        font-size: 0.5rem;
-        min-width: 45px;
+        padding: 6px 8px;
+        font-size: 0.65rem;
+        min-width: 65px;
     }
 
     .character-grid {
-        gap: 4px;
-        padding: 3px;
-        height: 45px;
+        gap: 8px;
+        padding: 4px;
     }
 
     .character-card {
-        min-width: 40px;
-        width: 40px;
-        height: 40px;
+        min-width: 65px;
+        width: 65px;
+        height: 75px;
     }
 
     .character-card-image {
-        height: 28px;
+        height: 45px;
     }
 
     .character-card-name {
-        font-size: 0.35rem;
+        font-size: 0.5rem;
+        padding: 3px 2px;
     }
 
     /* Compare View */
     .fight-screen {
-        padding: 5px;
-        gap: 5px;
+        padding: 8px;
+        gap: 8px;
     }
 
     .fighter-display {
-        width: 75px;
-        height: 75px;
+        width: 100px;
+        height: 100px;
     }
 
     .fighter-placeholder i {
-        font-size: 1.3rem;
+        font-size: 1.8rem;
     }
 
     .fighter-placeholder p {
-        font-size: 0.5rem;
-    }
-
-    .fighter-name {
         font-size: 0.6rem;
     }
 
+    .fighter-name {
+        font-size: 0.75rem;
+    }
+
     .view-stats-btn {
-        padding: 2px 4px;
-        font-size: 0.45rem;
+        padding: 4px 8px;
+        font-size: 0.55rem;
     }
 
     .vs-badge {
-        font-size: 1rem;
+        font-size: 1.2rem;
     }
 
     .fight-btn {
-        padding: 5px 12px;
-        font-size: 0.85rem;
+        padding: 8px 20px;
+        font-size: 1rem;
+    }
+    
+    .radar-chart-container {
+        width: 100px;
+        height: 100px;
     }
 }
 
@@ -2510,10 +2535,9 @@ body {
 
 /* Individual Ranking Card */
 .ranking-card {
-    display: grid;
-    grid-template-columns: 50px 70px 1fr auto auto auto;
+    display: flex;
+    flex-direction: column;
     gap: 12px;
-    align-items: center;
     background: rgba(15, 20, 35, 0.8);
     border: 1px solid rgba(0, 212, 255, 0.2);
     border-radius: 12px;
@@ -2521,6 +2545,26 @@ body {
     margin-bottom: 10px;
     transition: background 0.2s ease, border-color 0.2s ease;
     min-width: 0;
+}
+
+.ranking-card-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ranking-card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 10px;
+}
+
+.ranking-card-btns {
+    display: flex;
+    gap: 8px;
 }
 
 .ranking-card:hover {
@@ -2591,6 +2635,7 @@ body {
     gap: 3px;
     min-width: 0;
     overflow: hidden;
+    flex: 1;
 }
 
 .ranking-animal-name {
@@ -3050,63 +3095,111 @@ body {
    ======================================== */
 
 @media (max-width: 768px) {
+    .rankings-view {
+        padding: 10px;
+    }
+    
+    .rankings-container {
+        padding: 15px;
+    }
+    
+    .rankings-header h2 {
+        font-size: 1.6rem;
+    }
+    
+    .rankings-header p {
+        font-size: 0.8rem;
+    }
+
     .ranking-card {
-        grid-template-columns: 50px 60px 1fr;
-        grid-template-rows: auto auto;
+        padding: 12px;
         gap: 10px;
-        padding: 12px 15px;
+    }
+    
+    .ranking-card-top {
+        gap: 10px;
     }
 
     .rank-number {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
+        min-width: 40px;
     }
 
     .ranking-animal-img {
-        width: 55px;
-        height: 55px;
+        width: 50px;
+        height: 50px;
     }
 
     .ranking-animal-name {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
+    }
+    
+    .ranking-animal-stats {
+        font-size: 0.7rem;
+        gap: 8px;
+    }
+    
+    .ranking-card-actions {
+        flex-wrap: wrap;
+        gap: 10px;
     }
 
     .vote-buttons {
-        grid-column: 1 / -1;
         flex-direction: row;
-        justify-content: center;
-        padding-top: 10px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        gap: 8px;
+    }
+    
+    .vote-btn {
+        width: 40px;
+        height: 36px;
     }
 
     .view-stats-ranking-btn,
     .comments-btn {
-        grid-column: 1 / -1;
-        justify-content: center;
+        padding: 8px 14px;
+        font-size: 0.75rem;
     }
 
     .rankings-controls {
         flex-direction: column;
+        gap: 10px;
     }
 
-    .rankings-controls .filter-select {
+    .rankings-controls .filter-select,
+    .rankings-search {
         width: 100%;
     }
 }
 
 @media (max-width: 480px) {
+    .rankings-container {
+        padding: 10px;
+    }
+    
+    .rankings-header {
+        margin-bottom: 15px;
+    }
+    
     .rankings-header h2 {
-        font-size: 1.8rem;
+        font-size: 1.4rem;
+    }
+    
+    .rankings-header p {
+        font-size: 0.7rem;
     }
 
     .ranking-card {
-        grid-template-columns: 35px 45px 1fr;
+        padding: 10px;
         gap: 8px;
-        padding: 10px 12px;
+    }
+    
+    .ranking-card-top {
+        gap: 8px;
     }
 
     .rank-number {
         font-size: 1.2rem;
-        min-width: 35px;
+        min-width: 32px;
     }
 
     .ranking-animal-img {
@@ -3115,37 +3208,69 @@ body {
     }
 
     .ranking-animal-name {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     .ranking-animal-stats {
         display: none;
     }
+    
+    .ranking-card-actions {
+        padding-top: 8px;
+        gap: 8px;
+    }
 
-    /* Stack vote buttons and other buttons below on mobile */
-    .vote-buttons,
+    .vote-buttons {
+        gap: 6px;
+    }
+    
+    .vote-btn {
+        width: 36px;
+        height: 32px;
+        font-size: 0.9rem;
+    }
+    
+    .vote-score {
+        font-size: 1rem;
+        min-width: 25px;
+    }
+    
+    .ranking-card-btns {
+        gap: 6px;
+    }
+
     .view-stats-ranking-btn,
     .comments-btn {
+        padding: 6px 10px;
+        font-size: 0.7rem;
+    }
+    
+    /* Hide text labels on very small screens */
+    .view-stats-ranking-btn span {
         display: none;
-    }
-
-    .ranking-animal-info {
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    /* Show simplified action buttons on mobile */
-    .ranking-card::after {
-        content: '▶';
-        color: var(--primary-color);
-        font-size: 1.2rem;
-        margin-left: auto;
     }
 
     .comments-modal-content {
         width: 95%;
-        max-height: 90vh;
+        max-height: 85vh;
+        margin: 10px;
+    }
+    
+    .comments-modal-header {
+        padding: 12px 15px;
+    }
+    
+    .comments-modal-header h3 {
+        font-size: 1.1rem;
+    }
+    
+    .comment-input-area {
+        padding: 10px;
+    }
+    
+    .comment-input {
+        font-size: 0.85rem;
+        min-height: 60px;
     }
 }
 

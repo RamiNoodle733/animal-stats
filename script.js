@@ -1254,39 +1254,45 @@ class RankingsManager {
         const scoreClass = item.netScore > 0 ? 'positive' : item.netScore < 0 ? 'negative' : '';
 
         card.innerHTML = `
-            <div class="rank-number">#${rank}</div>
-            <img src="${animal.image}" alt="${animal.name}" class="ranking-animal-img" 
-                onerror="this.src='https://via.placeholder.com/70x70?text=?'">
-            <div class="ranking-animal-info">
-                <div class="ranking-animal-name">${animal.name}</div>
-                <div class="ranking-animal-stats">
-                    <span><i class="fas fa-fist-raised"></i> ${Math.round(animal.attack || 0)}</span>
-                    <span><i class="fas fa-shield-alt"></i> ${Math.round(animal.defense || 0)}</span>
-                    <span><i class="fas fa-bolt"></i> ${Math.round(animal.special || 0)}</span>
+            <div class="ranking-card-top">
+                <div class="rank-number">#${rank}</div>
+                <img src="${animal.image}" alt="${animal.name}" class="ranking-animal-img" 
+                    onerror="this.src='https://via.placeholder.com/70x70?text=?'">
+                <div class="ranking-animal-info">
+                    <div class="ranking-animal-name">${animal.name}</div>
+                    <div class="ranking-animal-stats">
+                        <span><i class="fas fa-fist-raised"></i> ${Math.round(animal.attack || 0)}</span>
+                        <span><i class="fas fa-shield-alt"></i> ${Math.round(animal.defense || 0)}</span>
+                        <span><i class="fas fa-bolt"></i> ${Math.round(animal.special || 0)}</span>
+                    </div>
                 </div>
             </div>
-            <div class="vote-buttons">
-                <button class="vote-btn upvote ${userVote === 1 ? 'active' : ''}" 
-                    data-animal-id="${animalId}" data-animal-name="${animal.name}" data-value="1"
-                    ${!isLoggedIn ? 'disabled title="Log in to vote"' : ''}>
-                    <i class="fas fa-arrow-up"></i>
-                </button>
-                <span class="vote-score ${scoreClass}">${item.netScore || 0}</span>
-                <button class="vote-btn downvote ${userVote === -1 ? 'active' : ''}" 
-                    data-animal-id="${animalId}" data-animal-name="${animal.name}" data-value="-1"
-                    ${!isLoggedIn ? 'disabled title="Log in to vote"' : ''}>
-                    <i class="fas fa-arrow-down"></i>
-                </button>
+            <div class="ranking-card-actions">
+                <div class="vote-buttons">
+                    <button class="vote-btn upvote ${userVote === 1 ? 'active' : ''}" 
+                        data-animal-id="${animalId}" data-animal-name="${animal.name}" data-value="1"
+                        ${!isLoggedIn ? 'disabled title="Log in to vote"' : ''}>
+                        <i class="fas fa-arrow-up"></i>
+                    </button>
+                    <span class="vote-score ${scoreClass}">${item.netScore || 0}</span>
+                    <button class="vote-btn downvote ${userVote === -1 ? 'active' : ''}" 
+                        data-animal-id="${animalId}" data-animal-name="${animal.name}" data-value="-1"
+                        ${!isLoggedIn ? 'disabled title="Log in to vote"' : ''}>
+                        <i class="fas fa-arrow-down"></i>
+                    </button>
+                </div>
+                <div class="ranking-card-btns">
+                    <button class="view-stats-ranking-btn" data-animal-name="${animal.name}">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Stats</span>
+                    </button>
+                    <button class="comments-btn" data-animal-id="${animalId}" data-animal-name="${animal.name}" 
+                        data-animal-image="${animal.image}">
+                        <i class="fas fa-comment"></i>
+                        <span class="count">${item.commentCount || 0}</span>
+                    </button>
+                </div>
             </div>
-            <button class="view-stats-ranking-btn" data-animal-name="${animal.name}">
-                <i class="fas fa-chart-bar"></i>
-                <span>Stats</span>
-            </button>
-            <button class="comments-btn" data-animal-id="${animalId}" data-animal-name="${animal.name}" 
-                data-animal-image="${animal.image}">
-                <i class="fas fa-comment"></i>
-                <span class="count">${item.commentCount || 0}</span>
-            </button>
         `;
 
         // Bind vote buttons
