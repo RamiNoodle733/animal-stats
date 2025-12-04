@@ -207,6 +207,7 @@ class AnimalStatsApp {
             // Initialize Rankings Manager
             this.rankingsManager = new RankingsManager(this);
             this.rankingsManager.init();
+            window.rankingsManager = this.rankingsManager; // Expose globally for stats comments
             
             // Initial Render
             this.renderGrid();
@@ -343,7 +344,7 @@ class AnimalStatsApp {
      */
     setupEventListeners() {
         // Search & Filter
-        this.dom.searchInput.addEventListener('input', this.handleSearch);
+        this.dom.searchInput.addEventListener('input', this.debouncedSearch);
         this.dom.classFilter.addEventListener('change', this.handleFilter);
         this.dom.dietFilter.addEventListener('change', this.handleFilter);
         this.dom.biomeFilter.addEventListener('change', this.handleFilter);
@@ -361,6 +362,12 @@ class AnimalStatsApp {
         }
         if (this.dom.compareToggleGridBtn) {
             this.dom.compareToggleGridBtn.addEventListener('click', this.toggleGrid);
+        }
+        
+        // Stats Comments Button
+        const statsCommentsBtn = document.getElementById('stats-comments-btn');
+        if (statsCommentsBtn) {
+            statsCommentsBtn.addEventListener('click', () => this.openStatsComments());
         }
         
         // Navigation
@@ -394,12 +401,23 @@ class AnimalStatsApp {
     }
 
     /**
-     * Handle search input
+     * Handle search input with debounce for better INP
      */
     handleSearch = (e) => {
         this.state.filters.search = e.target.value.toLowerCase();
         this.applyFilters();
     }
+
+    /**
+     * Debounced search for better INP performance
+     */
+    debouncedSearch = (() => {
+        let timeout;
+        return (e) => {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => this.handleSearch(e), 150);
+        };
+    })()
 
     /**
      * Handle category filter
@@ -564,6 +582,61 @@ class AnimalStatsApp {
         this.state.selectedAnimal = animal;
         this.updateStatsView(animal);
         this.renderGrid(); // Re-render to update selection highlight
+        this.updateStatsCommentsBtn(animal);
+    }
+
+    /**
+     * Update the stats page comments button
+     */
+    async updateStatsCommentsBtn(animal) {
+        const btn = document.getElementById('stats-comments-btn');
+        const countEl = document.getElementById('stats-comment-count');
+        
+        if (!btn || !countEl) return;
+        
+        // Enable the button
+        btn.disabled = false;
+        
+        // Fetch comment count
+        try {
+            const animalId = animal._id || animal.id;
+            const response = await fetch(`/api/comments?animalId=${animalId}`);
+            if (response.ok) {
+                const result = await response.json();
+                const count = result.data?.length || 0;
+                countEl.textContent = count;
+            }
+        } catch (e) {
+            countEl.textContent = '0';
+        }
+    }
+
+    /**
+     * Open comments modal for the currently selected animal (Stats view)
+     */
+    openStatsComments() {
+        if (!this.state.selectedAnimal) {
+            Auth.showToast('Please select an animal first');
+            return;
+        }
+        
+        const animal = this.state.selectedAnimal;
+        const animalId = animal._id || animal.id;
+        
+        // Use RankingsManager's comments modal
+        if (window.rankingsManager) {
+            // Create a fake event object that the modal opener expects
+            const fakeEvent = {
+                currentTarget: {
+                    dataset: {
+                        animalId: animalId,
+                        animalName: animal.name,
+                        animalImage: animal.image
+                    }
+                }
+            };
+            window.rankingsManager.openCommentsModal(fakeEvent);
+        }
     }
 
     /**
@@ -1205,10 +1278,13 @@ class RankingsManager {
                     <i class="fas fa-arrow-down"></i>
                 </button>
             </div>
+            <button class="view-stats-ranking-btn" data-animal-name="${animal.name}">
+                <i class="fas fa-chart-bar"></i>
+                <span>Stats</span>
+            </button>
             <button class="comments-btn" data-animal-id="${animalId}" data-animal-name="${animal.name}" 
                 data-animal-image="${animal.image}">
                 <i class="fas fa-comment"></i>
-                <span>Comments</span>
                 <span class="count">${item.commentCount || 0}</span>
             </button>
         `;
@@ -1217,6 +1293,9 @@ class RankingsManager {
         card.querySelectorAll('.vote-btn').forEach(btn => {
             btn.addEventListener('click', (e) => this.handleVote(e));
         });
+
+        // Bind View Stats button
+        card.querySelector('.view-stats-ranking-btn').addEventListener('click', (e) => this.viewAnimalStats(e));
 
         // Bind comments button
         card.querySelector('.comments-btn').addEventListener('click', (e) => this.openCommentsModal(e));
@@ -1620,6 +1699,27 @@ class RankingsManager {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    viewAnimalStats(e) {
+        const animalName = e.currentTarget.dataset.animalName;
+        
+        // Switch to stats view
+        document.querySelector('[data-view="stats"]').click();
+        
+        // Wait for view to switch and find the animal
+        requestAnimationFrame(() => {
+            // Find and click the animal in the grid
+            const animalCards = document.querySelectorAll('.animal-card');
+            for (const card of animalCards) {
+                const nameEl = card.querySelector('.animal-name');
+                if (nameEl && nameEl.textContent.trim().toLowerCase() === animalName.toLowerCase()) {
+                    card.click();
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    break;
+                }
+            }
+        });
     }
 }
 
