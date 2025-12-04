@@ -1,5 +1,5 @@
-// Animal data - synced from MongoDB on 2025-12-04T03:32:41.714Z
-const animals = [
+// Animal data - synced from MongoDB on 2025-12-04T13:51:50.037Z
+window.animalData = [
   {
     "name": "African Elephant",
     "image": "https://pngimg.com/uploads/elephants/elephants_PNG18776.png",

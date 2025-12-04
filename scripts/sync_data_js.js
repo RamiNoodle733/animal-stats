@@ -41,9 +41,9 @@ async function syncDataJs() {
     // Sort by name
     formattedAnimals.sort((a, b) => a.name.localeCompare(b.name));
     
-    // Create data.js content
+    // Create data.js content - use window.animalData for frontend compatibility
     const dataJsContent = `// Animal data - synced from MongoDB on ${new Date().toISOString()}
-const animals = ${JSON.stringify(formattedAnimals, null, 2)};
+window.animalData = ${JSON.stringify(formattedAnimals, null, 2)};
 `;
     
     const dataJsPath = path.join(__dirname, '..', 'data.js');
