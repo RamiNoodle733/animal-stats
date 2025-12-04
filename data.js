@@ -1,4 +1,4 @@
-// Animal data - synced from MongoDB on 2025-12-04T13:51:50.037Z
+// Animal data - synced from MongoDB on 2025-12-04T14:16:03.919Z
 window.animalData = [
   {
     "name": "African Elephant",
