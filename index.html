@@ -454,83 +454,93 @@
                     <button class="dropdown-toggle-btn" id="filter-toggle">
                         <i class="fas fa-filter"></i> FILTER <i class="fas fa-chevron-down dropdown-arrow"></i>
                     </button>
-                    <div class="dropdown-panel" id="filter-panel">
-                        <div class="dropdown-section">
-                            <label class="section-label">Class</label>
-                            <div class="checkbox-group" id="class-checkboxes">
-                                <!-- Populated by JS -->
-                            </div>
-                            <select id="class-filter" class="filter-select" style="display: none;">
-                                <option value="all">All Classes</option>
-                            </select>
+                    <div class="dropdown-panel filter-panel-compact" id="filter-panel">
+                        <!-- Category Tabs -->
+                        <div class="filter-category-tabs">
+                            <button class="filter-tab active" data-category="class">Class</button>
+                            <button class="filter-tab" data-category="diet">Diet</button>
+                            <button class="filter-tab" data-category="biome">Biome</button>
                         </div>
-                        <div class="dropdown-section">
-                            <label class="section-label">Diet</label>
-                            <div class="checkbox-group" id="diet-checkboxes">
-                                <label class="checkbox-option">
-                                    <input type="checkbox" value="Carnivore" data-filter="diet"> 
-                                    <span>Carnivore</span>
-                                </label>
-                                <label class="checkbox-option">
-                                    <input type="checkbox" value="Herbivore" data-filter="diet"> 
-                                    <span>Herbivore</span>
-                                </label>
-                                <label class="checkbox-option">
-                                    <input type="checkbox" value="Omnivore" data-filter="diet"> 
-                                    <span>Omnivore</span>
-                                </label>
+                        
+                        <!-- Category Content -->
+                        <div class="filter-category-content">
+                            <div class="filter-category active" id="filter-category-class">
+                                <div class="checkbox-group" id="class-checkboxes">
+                                    <!-- Populated by JS -->
+                                </div>
                             </div>
-                            <select id="diet-filter" class="filter-select" style="display: none;">
-                                <option value="all">All Diets</option>
-                            </select>
-                        </div>
-                        <div class="dropdown-section">
-                            <label class="section-label">Biome</label>
-                            <div class="checkbox-group" id="biome-checkboxes">
-                                <label class="checkbox-option">
-                                    <input type="checkbox" value="Savanna" data-filter="biome"> 
-                                    <span>Savanna</span>
-                                </label>
-                                <label class="checkbox-option">
-                                    <input type="checkbox" value="Forest" data-filter="biome"> 
-                                    <span>Forest</span>
-                                </label>
-                                <label class="checkbox-option">
-                                    <input type="checkbox" value="Ocean" data-filter="biome"> 
-                                    <span>Ocean</span>
-                                </label>
-                                <label class="checkbox-option">
-                                    <input type="checkbox" value="Desert" data-filter="biome"> 
-                                    <span>Desert</span>
-                                </label>
-                                <label class="checkbox-option">
-                                    <input type="checkbox" value="Jungle" data-filter="biome"> 
-                                    <span>Jungle</span>
-                                </label>
-                                <label class="checkbox-option">
-                                    <input type="checkbox" value="Arctic" data-filter="biome"> 
-                                    <span>Arctic</span>
-                                </label>
-                                <label class="checkbox-option">
-                                    <input type="checkbox" value="River" data-filter="biome"> 
-                                    <span>River</span>
-                                </label>
-                                <label class="checkbox-option">
-                                    <input type="checkbox" value="Grassland" data-filter="biome"> 
-                                    <span>Grassland</span>
-                                </label>
-                                <label class="checkbox-option">
-                                    <input type="checkbox" value="Mountain" data-filter="biome"> 
-                                    <span>Mountain</span>
-                                </label>
+                            <div class="filter-category" id="filter-category-diet">
+                                <div class="checkbox-group">
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" value="Carnivore" data-filter="diet"> 
+                                        <span>Carnivore</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" value="Herbivore" data-filter="diet"> 
+                                        <span>Herbivore</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" value="Omnivore" data-filter="diet"> 
+                                        <span>Omnivore</span>
+                                    </label>
+                                </div>
                             </div>
-                            <select id="biome-filter" class="filter-select" style="display: none;">
-                                <option value="all">All Biomes</option>
-                            </select>
+                            <div class="filter-category" id="filter-category-biome">
+                                <div class="checkbox-group">
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" value="Savanna" data-filter="biome"> 
+                                        <span>Savanna</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" value="Forest" data-filter="biome"> 
+                                        <span>Forest</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" value="Ocean" data-filter="biome"> 
+                                        <span>Ocean</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" value="Desert" data-filter="biome"> 
+                                        <span>Desert</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" value="Jungle" data-filter="biome"> 
+                                        <span>Jungle</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" value="Arctic" data-filter="biome"> 
+                                        <span>Arctic</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" value="River" data-filter="biome"> 
+                                        <span>River</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" value="Grassland" data-filter="biome"> 
+                                        <span>Grassland</span>
+                                    </label>
+                                    <label class="checkbox-option">
+                                        <input type="checkbox" value="Mountain" data-filter="biome"> 
+                                        <span>Mountain</span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
+                        
                         <button class="clear-filters-btn" id="clear-filters">
                             <i class="fas fa-times"></i> Clear All
                         </button>
+                        
+                        <!-- Hidden selects for backwards compatibility -->
+                        <select id="class-filter" class="filter-select" style="display: none;">
+                            <option value="all">All Classes</option>
+                        </select>
+                        <select id="diet-filter" class="filter-select" style="display: none;">
+                            <option value="all">All Diets</option>
+                        </select>
+                        <select id="biome-filter" class="filter-select" style="display: none;">
+                            <option value="all">All Biomes</option>
+                        </select>
                     </div>
                 </div>
                 

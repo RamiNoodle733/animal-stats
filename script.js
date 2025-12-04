@@ -454,6 +454,25 @@ class AnimalStatsApp {
         // Populate class checkboxes
         this.populateClassCheckboxes();
         
+        // Filter category tab switching
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const category = tab.dataset.category;
+                
+                // Update tab active state
+                filterTabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                
+                // Show corresponding category content
+                document.querySelectorAll('.filter-category').forEach(cat => {
+                    cat.classList.remove('active');
+                });
+                document.getElementById(`filter-category-${category}`)?.classList.add('active');
+            });
+        });
+        
         // Toggle filter dropdown
         if (filterToggle && filterPanel) {
             filterToggle.addEventListener('click', (e) => {

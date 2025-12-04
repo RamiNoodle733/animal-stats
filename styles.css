@@ -996,17 +996,15 @@ body {
     position: absolute;
     bottom: 100%;
     right: 0;
-    min-width: 220px;
-    max-height: 400px;
-    overflow-y: auto;
+    min-width: 200px;
     background: rgba(10, 14, 26, 0.98);
     border: 2px solid rgba(0, 212, 255, 0.4);
     border-radius: 8px;
-    padding: 12px;
+    padding: 10px;
     margin-bottom: 8px;
     display: none;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
     z-index: 200;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(10px);
@@ -1016,25 +1014,95 @@ body {
     display: flex;
 }
 
+/* Filter panel with tabs - compact design */
+.filter-panel-compact {
+    width: 180px;
+    min-width: 180px;
+}
+
+.filter-category-tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+}
+
+.filter-tab {
+    flex: 1;
+    padding: 6px 4px;
+    background: transparent;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 4px;
+    color: var(--text-muted);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.filter-tab:hover {
+    background: rgba(0, 212, 255, 0.1);
+    color: var(--text-light);
+}
+
+.filter-tab.active {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.filter-category-content {
+    min-height: 100px;
+    max-height: 150px;
+}
+
+.filter-category {
+    display: none;
+}
+
+.filter-category.active {
+    display: block;
+}
+
 /* Checkbox group for multi-select filters */
 .checkbox-group {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    max-height: 150px;
+    gap: 2px;
+    max-height: 140px;
     overflow-y: auto;
-    padding-right: 5px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
+}
+
+.checkbox-group::-webkit-scrollbar {
+    width: 4px;
+}
+
+.checkbox-group::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.checkbox-group::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.3);
+    border-radius: 2px;
+}
+
+.checkbox-group::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 212, 255, 0.5);
 }
 
 .checkbox-option {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 6px 8px;
+    padding: 5px 6px;
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s ease;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
 }
 
 .checkbox-option:hover {
@@ -1042,8 +1110,8 @@ body {
 }
 
 .checkbox-option input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     accent-color: var(--primary-color);
     cursor: pointer;
 }
@@ -1051,6 +1119,18 @@ body {
 .checkbox-option input[type="checkbox"]:checked + span {
     color: var(--primary-color);
     font-weight: 500;
+}
+
+/* Sort panel specific styles */
+#sort-panel {
+    width: 160px;
+    min-width: 160px;
+}
+
+#sort-panel .sort-options {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
 .section-label {
@@ -1102,14 +1182,14 @@ body {
 .sort-options {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 2px;
 }
 
 .sort-option {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 10px;
+    gap: 8px;
+    padding: 5px 8px;
     border-radius: 4px;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -1131,13 +1211,14 @@ body {
 .sort-option span {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 0.85rem;
+    gap: 6px;
+    font-size: 0.8rem;
     color: var(--text-light);
 }
 
 .sort-option span i {
-    width: 18px;
+    width: 16px;
+    font-size: 0.75rem;
     color: var(--primary-color);
 }
 
