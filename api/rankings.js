@@ -94,10 +94,15 @@ module.exports = async function handler(req, res) {
             };
         });
 
-        // Sort by score (descending), then by upvotes, then alphabetically
+        // Sort by score (descending), then by attack stat for unvoted animals, then alphabetically
         rankings.sort((a, b) => {
+            // First by net score
             if (b.netScore !== a.netScore) return b.netScore - a.netScore;
+            // Then by upvotes
             if (b.upvotes !== a.upvotes) return b.upvotes - a.upvotes;
+            // For animals with same votes (including 0), sort by attack stat
+            if (b.animal.attack !== a.animal.attack) return b.animal.attack - a.animal.attack;
+            // Finally alphabetically
             return a.animal.name.localeCompare(b.animal.name);
         });
 

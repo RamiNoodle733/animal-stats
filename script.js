@@ -209,12 +209,16 @@ class AnimalStatsApp {
             this.rankingsManager.init();
             window.rankingsManager = this.rankingsManager; // Expose globally for stats comments
             
-            // Initial Render
-            this.renderGrid();
+            // Fetch rankings data to get power ranks for sorting
+            await this.rankingsManager.fetchRankings();
+            
+            // Initial Render with power rank sort as default
+            this.state.filters.sort = 'rank';
+            this.applyFilters();
             
             // Select first animal by default if available
-            if (this.state.animals.length > 0) {
-                this.selectAnimal(this.state.animals[0]);
+            if (this.state.filteredAnimals.length > 0) {
+                this.selectAnimal(this.state.filteredAnimals[0]);
             }
             
             this.showLoadingState(false);
@@ -350,6 +354,9 @@ class AnimalStatsApp {
         this.dom.biomeFilter.addEventListener('change', this.handleFilter);
         this.dom.sortBy.addEventListener('change', this.handleSort);
         
+        // New Filter/Sort Dropdown UI
+        this.setupDropdownMenus();
+        
         // Grid Interaction (Event Delegation)
         this.dom.gridContainer.addEventListener('click', this.handleGridClick);
         
@@ -426,6 +433,109 @@ class AnimalStatsApp {
     })()
 
     /**
+     * Setup dropdown menus for Filter and Sort
+     */
+    setupDropdownMenus() {
+        const filterToggle = document.getElementById('filter-toggle');
+        const filterPanel = document.getElementById('filter-panel');
+        const sortToggle = document.getElementById('sort-toggle');
+        const sortPanel = document.getElementById('sort-panel');
+        const clearFiltersBtn = document.getElementById('clear-filters');
+        
+        // Toggle filter dropdown
+        if (filterToggle && filterPanel) {
+            filterToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                filterToggle.classList.toggle('active');
+                filterPanel.classList.toggle('show');
+                // Close sort panel
+                sortToggle?.classList.remove('active');
+                sortPanel?.classList.remove('show');
+            });
+        }
+        
+        // Toggle sort dropdown
+        if (sortToggle && sortPanel) {
+            sortToggle.addEventListener('click', (e) => {
+                e.stopPropagation();
+                sortToggle.classList.toggle('active');
+                sortPanel.classList.toggle('show');
+                // Close filter panel
+                filterToggle?.classList.remove('active');
+                filterPanel?.classList.remove('show');
+            });
+        }
+        
+        // Sort radio buttons
+        const sortRadios = document.querySelectorAll('input[name="sort"]');
+        sortRadios.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                this.state.filters.sort = e.target.value;
+                this.dom.sortBy.value = e.target.value;
+                this.applyFilters();
+                this.updateFilterBadge();
+            });
+        });
+        
+        // Set default sort to rank (power ranking order)
+        const defaultSort = document.getElementById('sort-rank');
+        if (defaultSort) {
+            defaultSort.checked = true;
+            this.state.filters.sort = 'rank';
+        }
+        
+        // Clear filters button
+        if (clearFiltersBtn) {
+            clearFiltersBtn.addEventListener('click', () => {
+                this.dom.classFilter.value = 'all';
+                this.dom.dietFilter.value = 'all';
+                this.dom.biomeFilter.value = 'all';
+                this.state.filters.class = 'all';
+                this.state.filters.diet = 'all';
+                this.state.filters.biome = 'all';
+                this.applyFilters();
+                this.updateFilterBadge();
+            });
+        }
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.dropdown-menu-container')) {
+                filterToggle?.classList.remove('active');
+                filterPanel?.classList.remove('show');
+                sortToggle?.classList.remove('active');
+                sortPanel?.classList.remove('show');
+            }
+        });
+        
+        // Update filter badge on filter change
+        this.dom.classFilter.addEventListener('change', () => this.updateFilterBadge());
+        this.dom.dietFilter.addEventListener('change', () => this.updateFilterBadge());
+        this.dom.biomeFilter.addEventListener('change', () => this.updateFilterBadge());
+    }
+
+    /**
+     * Update the active filters badge
+     */
+    updateFilterBadge() {
+        const badge = document.getElementById('active-filters-badge');
+        const countEl = document.getElementById('filter-count');
+        if (!badge || !countEl) return;
+        
+        let count = 0;
+        if (this.state.filters.class !== 'all') count++;
+        if (this.state.filters.diet !== 'all') count++;
+        if (this.state.filters.biome !== 'all') count++;
+        
+        if (count > 0) {
+            countEl.textContent = count;
+            badge.style.display = 'inline-flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    /**
      * Handle category filter
      */
     handleFilter = (e) => {
@@ -486,6 +596,14 @@ class AnimalStatsApp {
 
         // Sort
         this.state.filteredAnimals.sort((a, b) => {
+            // Power Rank: sort by powerRank if available, otherwise by attack stat
+            if (sort === 'rank') {
+                // If rankings are loaded, use netScore, otherwise use attack
+                const aRank = a.powerRank ?? a.attack;
+                const bRank = b.powerRank ?? b.attack;
+                return bRank - aRank;
+            }
+            
             if (sort === 'name') return a.name.localeCompare(b.name);
             
             if (sort === 'total') {
@@ -967,12 +1085,54 @@ class AnimalStatsApp {
         Object.keys(els.stats).forEach(stat => {
             if (els.stats[stat]) els.stats[stat].textContent = statsMap[stat]?.toFixed(1) || '0';
         });
+        
+        // Update comparison highlighting
+        this.updateCompareHighlights();
+    }
+
+    /**
+     * Update stat comparison highlights to show which animal is better
+     */
+    updateCompareHighlights() {
+        const { left, right } = this.state.compare;
+        if (!left || !right) return;
+        
+        const stats = ['attack', 'defense', 'agility', 'stamina', 'intelligence', 'special'];
+        
+        stats.forEach(stat => {
+            const leftVal = left[stat] || 0;
+            const rightVal = right[stat] || 0;
+            const leftEl = this.dom.fighter1.stats[stat];
+            const rightEl = this.dom.fighter2.stats[stat];
+            const leftRow = leftEl?.closest('.compare-stat-row');
+            const rightRow = rightEl?.closest('.compare-stat-row');
+            
+            // Reset classes
+            leftRow?.classList.remove('stat-winner', 'stat-loser', 'stat-tie');
+            rightRow?.classList.remove('stat-winner', 'stat-loser', 'stat-tie');
+            
+            if (leftVal > rightVal) {
+                leftRow?.classList.add('stat-winner');
+                rightRow?.classList.add('stat-loser');
+            } else if (rightVal > leftVal) {
+                rightRow?.classList.add('stat-winner');
+                leftRow?.classList.add('stat-loser');
+            } else {
+                leftRow?.classList.add('stat-tie');
+                rightRow?.classList.add('stat-tie');
+            }
+        });
     }
 
     toggleFighterStats(side) {
         const els = side === 'left' ? this.dom.fighter1 : this.dom.fighter2;
         const isVisible = els.statsPanel.style.display === 'block';
         els.statsPanel.style.display = isVisible ? 'none' : 'block';
+        
+        // Update highlights when showing stats
+        if (!isVisible) {
+            this.updateCompareHighlights();
+        }
     }
 
     updateFightButton() {
@@ -1188,6 +1348,9 @@ class RankingsManager {
             if (result.success) {
                 this.rankings = result.data;
                 
+                // Update app animals with power ranks for sorting
+                this.updateAnimalPowerRanks();
+                
                 // Fetch user's votes if logged in
                 if (Auth.isLoggedIn()) {
                     await this.fetchUserVotes();
@@ -1203,6 +1366,32 @@ class RankingsManager {
                     Failed to load rankings. Please try again.
                 </div>
             `;
+        }
+    }
+
+    /**
+     * Update the main app's animals with power rank data for sorting
+     */
+    updateAnimalPowerRanks() {
+        if (!this.app || !this.app.state.animals) return;
+        
+        // Create a lookup map: name -> rank info
+        const rankMap = {};
+        this.rankings.forEach((item, index) => {
+            // powerRank = netScore (votes), or if no votes, use attack as tiebreaker
+            // Higher is better, so we use a composite score
+            const powerRank = item.netScore * 1000 + (item.animal.attack || 0);
+            rankMap[item.animal.name] = powerRank;
+        });
+        
+        // Update each animal with its power rank
+        this.app.state.animals.forEach(animal => {
+            animal.powerRank = rankMap[animal.name] ?? animal.attack;
+        });
+        
+        // Trigger re-render if current sort is 'rank'
+        if (this.app.state.filters.sort === 'rank') {
+            this.app.applyFilters();
         }
     }
 

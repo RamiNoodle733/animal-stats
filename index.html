@@ -424,7 +424,7 @@
                 
                 <!-- Rankings Search & Filter -->
                 <div class="rankings-controls">
-                    <input type="text" id="rankings-search" placeholder="Search animals..." class="search-box">
+                    <input type="text" id="rankings-search" placeholder="Search animals..." class="search-box" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other">
                     <select id="rankings-sort" class="filter-select">
                         <option value="rank">Sort by Rank</option>
                         <option value="upvotes">Most Upvotes</option>
@@ -447,29 +447,98 @@
         <!-- Animal Grid (Bottom) -->
         <div class="character-grid-container">
             <div class="grid-controls">
-                <input type="text" id="search-input" placeholder="Search animals..." class="search-box">
-                <div class="filter-group">
-                    <select id="class-filter" class="filter-select">
-                        <option value="all">All Classes</option>
-                    </select>
-                    <select id="diet-filter" class="filter-select">
-                        <option value="all">All Diets</option>
-                        <option value="Carnivore">Carnivore</option>
-                        <option value="Herbivore">Herbivore</option>
-                        <option value="Omnivore">Omnivore</option>
-                    </select>
-                    <select id="biome-filter" class="filter-select">
-                        <option value="all">All Biomes</option>
-                        <option value="Savanna">Savanna</option>
-                        <option value="Forest">Forest</option>
-                        <option value="Ocean">Ocean</option>
-                        <option value="Desert">Desert</option>
-                        <option value="Jungle">Jungle</option>
-                        <option value="Arctic">Arctic</option>
-                        <option value="River">River</option>
-                    </select>
+                <input type="text" id="search-input" placeholder="Search animals..." class="search-box" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other">
+                
+                <!-- Filter Dropdown -->
+                <div class="dropdown-menu-container">
+                    <button class="dropdown-toggle-btn" id="filter-toggle">
+                        <i class="fas fa-filter"></i> FILTER <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </button>
+                    <div class="dropdown-panel" id="filter-panel">
+                        <div class="dropdown-section">
+                            <label>Class</label>
+                            <select id="class-filter" class="filter-select">
+                                <option value="all">All Classes</option>
+                            </select>
+                        </div>
+                        <div class="dropdown-section">
+                            <label>Diet</label>
+                            <select id="diet-filter" class="filter-select">
+                                <option value="all">All Diets</option>
+                                <option value="Carnivore">Carnivore</option>
+                                <option value="Herbivore">Herbivore</option>
+                                <option value="Omnivore">Omnivore</option>
+                            </select>
+                        </div>
+                        <div class="dropdown-section">
+                            <label>Biome</label>
+                            <select id="biome-filter" class="filter-select">
+                                <option value="all">All Biomes</option>
+                                <option value="Savanna">Savanna</option>
+                                <option value="Forest">Forest</option>
+                                <option value="Ocean">Ocean</option>
+                                <option value="Desert">Desert</option>
+                                <option value="Jungle">Jungle</option>
+                                <option value="Arctic">Arctic</option>
+                                <option value="River">River</option>
+                            </select>
+                        </div>
+                        <button class="clear-filters-btn" id="clear-filters">
+                            <i class="fas fa-times"></i> Clear Filters
+                        </button>
+                    </div>
                 </div>
-                <select id="sort-by" class="filter-select">
+                
+                <!-- Sort Dropdown -->
+                <div class="dropdown-menu-container">
+                    <button class="dropdown-toggle-btn" id="sort-toggle">
+                        <i class="fas fa-sort"></i> SORT <i class="fas fa-chevron-down dropdown-arrow"></i>
+                    </button>
+                    <div class="dropdown-panel" id="sort-panel">
+                        <div class="sort-options">
+                            <label class="sort-option">
+                                <input type="radio" name="sort" value="rank" id="sort-rank"> 
+                                <span><i class="fas fa-trophy"></i> Power Rank</span>
+                            </label>
+                            <label class="sort-option">
+                                <input type="radio" name="sort" value="name" id="sort-name"> 
+                                <span><i class="fas fa-font"></i> Name (A-Z)</span>
+                            </label>
+                            <label class="sort-option">
+                                <input type="radio" name="sort" value="attack" id="sort-attack"> 
+                                <span><i class="fas fa-fist-raised"></i> Attack</span>
+                            </label>
+                            <label class="sort-option">
+                                <input type="radio" name="sort" value="defense" id="sort-defense"> 
+                                <span><i class="fas fa-shield-alt"></i> Defense</span>
+                            </label>
+                            <label class="sort-option">
+                                <input type="radio" name="sort" value="agility" id="sort-agility"> 
+                                <span><i class="fas fa-wind"></i> Agility</span>
+                            </label>
+                            <label class="sort-option">
+                                <input type="radio" name="sort" value="stamina" id="sort-stamina"> 
+                                <span><i class="fas fa-heart"></i> Stamina</span>
+                            </label>
+                            <label class="sort-option">
+                                <input type="radio" name="sort" value="intelligence" id="sort-intelligence"> 
+                                <span><i class="fas fa-brain"></i> Intelligence</span>
+                            </label>
+                            <label class="sort-option">
+                                <input type="radio" name="sort" value="special" id="sort-special"> 
+                                <span><i class="fas fa-bolt"></i> Special</span>
+                            </label>
+                            <label class="sort-option">
+                                <input type="radio" name="sort" value="total" id="sort-total"> 
+                                <span><i class="fas fa-calculator"></i> Total Stats</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Active Filters Badge (hidden select for backwards compatibility) -->
+                <select id="sort-by" class="filter-select" style="display: none;">
+                    <option value="rank">Sort by Rank</option>
                     <option value="name">Sort by Name</option>
                     <option value="attack">Sort by Attack</option>
                     <option value="defense">Sort by Defense</option>
@@ -479,6 +548,10 @@
                     <option value="special">Sort by Special</option>
                     <option value="total">Sort by Total Stats</option>
                 </select>
+                
+                <span class="active-filters-badge" id="active-filters-badge" style="display: none;">
+                    <span id="filter-count">0</span> filters
+                </span>
             </div>
             
             <div class="character-grid" id="character-grid"></div>
