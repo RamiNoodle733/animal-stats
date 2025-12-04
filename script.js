@@ -364,6 +364,12 @@ class AnimalStatsApp {
             this.dom.compareToggleGridBtn.addEventListener('click', this.toggleGrid);
         }
         
+        // Close details button (mobile)
+        const closeDetailsBtn = document.getElementById('close-details-btn');
+        if (closeDetailsBtn) {
+            closeDetailsBtn.addEventListener('click', this.toggleDetails);
+        }
+        
         // Stats Comments Button
         const statsCommentsBtn = document.getElementById('stats-comments-btn');
         if (statsCommentsBtn) {
@@ -1057,7 +1063,26 @@ class AnimalStatsApp {
             }
         }
 
+        // Notify Discord about the fight
+        this.notifyFight(left.name, right.name);
+
         alert(`FIGHT RESULT:\n\n${winner.name} defeats ${loser.name}!\n\n${winner.name} Score: ${score1.toFixed(1)}\n${loser.name} Score: ${score2.toFixed(1)}`);
+    }
+
+    /**
+     * Notify Discord about a fight comparison
+     */
+    async notifyFight(animal1, animal2) {
+        try {
+            const user = Auth.isLoggedIn() ? Auth.getUser()?.username : 'Anonymous';
+            await fetch('/api/rankings?action=fight', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ animal1, animal2, user })
+            });
+        } catch (e) {
+            // Silently fail - not critical
+        }
     }
 
     /**

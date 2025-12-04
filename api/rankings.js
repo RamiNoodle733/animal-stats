@@ -7,15 +7,23 @@ const { connectToDatabase } = require('../lib/mongodb');
 const Vote = require('../lib/models/Vote');
 const Comment = require('../lib/models/Comment');
 const Animal = require('../lib/models/Animal');
+const { notifyDiscord } = require('../lib/discord');
 
 module.exports = async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
 
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
+    }
+
+    // Handle fight notifications
+    if (req.method === 'POST' && req.query.action === 'fight') {
+        const { animal1, animal2, user } = req.body;
+        notifyDiscord('fight', { animal1, animal2, user: user || 'Anonymous' });
+        return res.status(200).json({ success: true });
     }
 
     if (req.method !== 'GET') {

@@ -6,6 +6,7 @@
 const { connectToDatabase } = require('../../lib/mongodb');
 const User = require('../../models/User');
 const jwt = require('jsonwebtoken');
+const { notifyDiscord } = require('../../lib/discord');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'animal-stats-secret-key-change-in-production';
 
@@ -70,6 +71,11 @@ module.exports = async function handler(req, res) {
             JWT_SECRET,
             { expiresIn: '7d' }
         );
+
+        // Notify Discord about login
+        notifyDiscord('login', {
+            username: user.username
+        });
 
         // Return user data (without password)
         res.status(200).json({
