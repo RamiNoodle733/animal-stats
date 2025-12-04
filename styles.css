@@ -382,19 +382,34 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: 15px;
     flex-shrink: 0;
     font-size: 0.85rem;
     color: var(--text-light);
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     position: relative;
-    z-index: 15;
+    z-index: 5;
+    overflow: hidden;
+    white-space: nowrap;
+    min-height: 40px;
+    max-height: 40px;
 }
 
 .info-item-inline {
     display: flex;
     align-items: center;
     gap: 8px;
+    max-width: 350px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex-shrink: 1;
+}
+
+.info-item-inline span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .info-item-inline i {
@@ -934,6 +949,7 @@ body {
 /* Dropdown Menu Container for Filter/Sort */
 .dropdown-menu-container {
     position: relative;
+    z-index: 150;
 }
 
 .dropdown-toggle-btn {
@@ -984,8 +1000,8 @@ body {
     display: none;
     flex-direction: column;
     gap: 10px;
-    z-index: 100;
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+    z-index: 200;
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(10px);
 }
 
