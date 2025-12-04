@@ -255,9 +255,14 @@ class AnimalStatsApp {
         
         if (apiHealthy) {
             try {
-                const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.animals}`, {
+                // Add cache-busting timestamp to always get fresh data from MongoDB
+                const cacheBuster = `?_t=${Date.now()}`;
+                const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.animals}${cacheBuster}`, {
                     method: 'GET',
-                    headers: { 'Accept': 'application/json' },
+                    headers: { 
+                        'Accept': 'application/json',
+                        'Cache-Control': 'no-cache'
+                    },
                     signal: AbortSignal.timeout(10000) // 10 second timeout
                 });
                 
@@ -267,7 +272,7 @@ class AnimalStatsApp {
                         this.state.animals = result.data;
                         this.state.filteredAnimals = [...result.data];
                         this.state.apiAvailable = true;
-                        console.log(`Loaded ${result.data.length} animals from API`);
+                        console.log(`Loaded ${result.data.length} animals from MongoDB API`);
                         return;
                     }
                 }
