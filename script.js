@@ -50,7 +50,11 @@ class AnimalStatsApp {
                 class: 'all',
                 diet: 'all',
                 biome: 'all',
-                sort: 'name'
+                sort: 'name',
+                // Multi-select arrays
+                classes: [],
+                diets: [],
+                biomes: []
             },
             // API state
             isLoading: false,
@@ -442,6 +446,14 @@ class AnimalStatsApp {
         const sortPanel = document.getElementById('sort-panel');
         const clearFiltersBtn = document.getElementById('clear-filters');
         
+        // Initialize multi-select filter state
+        this.state.filters.diets = [];
+        this.state.filters.biomes = [];
+        this.state.filters.classes = [];
+        
+        // Populate class checkboxes
+        this.populateClassCheckboxes();
+        
         // Toggle filter dropdown
         if (filterToggle && filterPanel) {
             filterToggle.addEventListener('click', (e) => {
@@ -473,7 +485,6 @@ class AnimalStatsApp {
                 this.state.filters.sort = e.target.value;
                 this.dom.sortBy.value = e.target.value;
                 this.applyFilters();
-                this.updateFilterBadge();
             });
         });
         
@@ -484,12 +495,51 @@ class AnimalStatsApp {
             this.state.filters.sort = 'rank';
         }
         
+        // Multi-select checkbox handlers
+        document.querySelectorAll('input[data-filter]').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                const filterType = e.target.dataset.filter;
+                const value = e.target.value;
+                
+                if (filterType === 'diet') {
+                    if (e.target.checked) {
+                        if (!this.state.filters.diets.includes(value)) {
+                            this.state.filters.diets.push(value);
+                        }
+                    } else {
+                        this.state.filters.diets = this.state.filters.diets.filter(d => d !== value);
+                    }
+                } else if (filterType === 'biome') {
+                    if (e.target.checked) {
+                        if (!this.state.filters.biomes.includes(value)) {
+                            this.state.filters.biomes.push(value);
+                        }
+                    } else {
+                        this.state.filters.biomes = this.state.filters.biomes.filter(b => b !== value);
+                    }
+                } else if (filterType === 'class') {
+                    if (e.target.checked) {
+                        if (!this.state.filters.classes.includes(value)) {
+                            this.state.filters.classes.push(value);
+                        }
+                    } else {
+                        this.state.filters.classes = this.state.filters.classes.filter(c => c !== value);
+                    }
+                }
+                
+                this.applyFilters();
+                this.updateFilterBadge();
+            });
+        });
+        
         // Clear filters button
         if (clearFiltersBtn) {
             clearFiltersBtn.addEventListener('click', () => {
-                this.dom.classFilter.value = 'all';
-                this.dom.dietFilter.value = 'all';
-                this.dom.biomeFilter.value = 'all';
+                // Clear all checkboxes
+                document.querySelectorAll('input[data-filter]').forEach(cb => cb.checked = false);
+                this.state.filters.diets = [];
+                this.state.filters.biomes = [];
+                this.state.filters.classes = [];
                 this.state.filters.class = 'all';
                 this.state.filters.diet = 'all';
                 this.state.filters.biome = 'all';
@@ -508,10 +558,40 @@ class AnimalStatsApp {
             }
         });
         
-        // Update filter badge on filter change
-        this.dom.classFilter.addEventListener('change', () => this.updateFilterBadge());
-        this.dom.dietFilter.addEventListener('change', () => this.updateFilterBadge());
-        this.dom.biomeFilter.addEventListener('change', () => this.updateFilterBadge());
+        // Initial badge update
+        this.updateFilterBadge();
+    }
+
+    /**
+     * Populate class checkboxes from animal data
+     */
+    populateClassCheckboxes() {
+        const container = document.getElementById('class-checkboxes');
+        if (!container) return;
+        
+        const types = [...new Set(this.state.animals.map(a => a.type))].sort();
+        container.innerHTML = types.map(type => `
+            <label class="checkbox-option">
+                <input type="checkbox" value="${type}" data-filter="class"> 
+                <span>${type}</span>
+            </label>
+        `).join('');
+        
+        // Add event listeners to new checkboxes
+        container.querySelectorAll('input[data-filter="class"]').forEach(checkbox => {
+            checkbox.addEventListener('change', (e) => {
+                const value = e.target.value;
+                if (e.target.checked) {
+                    if (!this.state.filters.classes.includes(value)) {
+                        this.state.filters.classes.push(value);
+                    }
+                } else {
+                    this.state.filters.classes = this.state.filters.classes.filter(c => c !== value);
+                }
+                this.applyFilters();
+                this.updateFilterBadge();
+            });
+        });
     }
 
     /**
@@ -523,16 +603,11 @@ class AnimalStatsApp {
         if (!badge || !countEl) return;
         
         let count = 0;
-        if (this.state.filters.class !== 'all') count++;
-        if (this.state.filters.diet !== 'all') count++;
-        if (this.state.filters.biome !== 'all') count++;
+        count += this.state.filters.classes?.length || 0;
+        count += this.state.filters.diets?.length || 0;
+        count += this.state.filters.biomes?.length || 0;
         
-        if (count > 0) {
-            countEl.textContent = count;
-            badge.style.display = 'inline-flex';
-        } else {
-            badge.style.display = 'none';
-        }
+        countEl.textContent = count;
     }
 
     /**
@@ -571,23 +646,35 @@ class AnimalStatsApp {
      * Apply all filters and sort
      */
     applyFilters() {
-        const { search, class: classFilter, diet: dietFilter, biome: biomeFilter, sort } = this.state.filters;
+        const { search, class: classFilter, diet: dietFilter, biome: biomeFilter, sort, classes, diets, biomes } = this.state.filters;
         
         // Filter
         this.state.filteredAnimals = this.state.animals.filter(animal => {
             const matchesSearch = animal.name.toLowerCase().includes(search);
-            const matchesClass = classFilter === 'all' || animal.type === classFilter;
             
-            // Diet Filter
+            // Class Filter - multi-select
+            let matchesClass = true;
+            if (classes && classes.length > 0) {
+                matchesClass = classes.includes(animal.type);
+            } else if (classFilter !== 'all') {
+                matchesClass = animal.type === classFilter;
+            }
+            
+            // Diet Filter - multi-select
             let matchesDiet = true;
-            if (dietFilter !== 'all') {
+            if (diets && diets.length > 0) {
+                const animalDiet = this.getDietType(animal);
+                matchesDiet = diets.includes(animalDiet);
+            } else if (dietFilter !== 'all') {
                 const animalDiet = this.getDietType(animal);
                 matchesDiet = animalDiet === dietFilter;
             }
 
-            // Biome Filter
+            // Biome Filter - multi-select
             let matchesBiome = true;
-            if (biomeFilter !== 'all') {
+            if (biomes && biomes.length > 0) {
+                matchesBiome = biomes.some(b => animal.habitat.toLowerCase().includes(b.toLowerCase()));
+            } else if (biomeFilter !== 'all') {
                 matchesBiome = animal.habitat.toLowerCase().includes(biomeFilter.toLowerCase());
             }
 

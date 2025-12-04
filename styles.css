@@ -995,8 +995,10 @@ body {
 .dropdown-panel {
     position: absolute;
     bottom: 100%;
-    left: 0;
-    min-width: 200px;
+    right: 0;
+    min-width: 220px;
+    max-height: 400px;
+    overflow-y: auto;
     background: rgba(10, 14, 26, 0.98);
     border: 2px solid rgba(0, 212, 255, 0.4);
     border-radius: 8px;
@@ -1012,6 +1014,53 @@ body {
 
 .dropdown-panel.show {
     display: flex;
+}
+
+/* Checkbox group for multi-select filters */
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 150px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.85rem;
+}
+
+.checkbox-option:hover {
+    background: rgba(0, 212, 255, 0.15);
+}
+
+.checkbox-option input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.checkbox-option input[type="checkbox"]:checked + span {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.section-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    color: var(--primary-color);
+    margin-bottom: 4px;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+    padding-bottom: 4px;
 }
 
 .dropdown-section {
@@ -1093,13 +1142,20 @@ body {
 }
 
 .active-filters-badge {
-    padding: 4px 10px;
-    background: rgba(0, 212, 255, 0.3);
-    border-radius: 12px;
+    padding: 6px 12px;
+    background: rgba(0, 212, 255, 0.2);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 6px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     letter-spacing: 1px;
     color: var(--primary-color);
+    min-width: 75px;
+    text-align: center;
+}
+
+#filter-count {
+    margin-right: 4px;
 }
 
 .search-box {

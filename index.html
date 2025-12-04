@@ -456,35 +456,80 @@
                     </button>
                     <div class="dropdown-panel" id="filter-panel">
                         <div class="dropdown-section">
-                            <label>Class</label>
-                            <select id="class-filter" class="filter-select">
+                            <label class="section-label">Class</label>
+                            <div class="checkbox-group" id="class-checkboxes">
+                                <!-- Populated by JS -->
+                            </div>
+                            <select id="class-filter" class="filter-select" style="display: none;">
                                 <option value="all">All Classes</option>
                             </select>
                         </div>
                         <div class="dropdown-section">
-                            <label>Diet</label>
-                            <select id="diet-filter" class="filter-select">
+                            <label class="section-label">Diet</label>
+                            <div class="checkbox-group" id="diet-checkboxes">
+                                <label class="checkbox-option">
+                                    <input type="checkbox" value="Carnivore" data-filter="diet"> 
+                                    <span>Carnivore</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" value="Herbivore" data-filter="diet"> 
+                                    <span>Herbivore</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" value="Omnivore" data-filter="diet"> 
+                                    <span>Omnivore</span>
+                                </label>
+                            </div>
+                            <select id="diet-filter" class="filter-select" style="display: none;">
                                 <option value="all">All Diets</option>
-                                <option value="Carnivore">Carnivore</option>
-                                <option value="Herbivore">Herbivore</option>
-                                <option value="Omnivore">Omnivore</option>
                             </select>
                         </div>
                         <div class="dropdown-section">
-                            <label>Biome</label>
-                            <select id="biome-filter" class="filter-select">
+                            <label class="section-label">Biome</label>
+                            <div class="checkbox-group" id="biome-checkboxes">
+                                <label class="checkbox-option">
+                                    <input type="checkbox" value="Savanna" data-filter="biome"> 
+                                    <span>Savanna</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" value="Forest" data-filter="biome"> 
+                                    <span>Forest</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" value="Ocean" data-filter="biome"> 
+                                    <span>Ocean</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" value="Desert" data-filter="biome"> 
+                                    <span>Desert</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" value="Jungle" data-filter="biome"> 
+                                    <span>Jungle</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" value="Arctic" data-filter="biome"> 
+                                    <span>Arctic</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" value="River" data-filter="biome"> 
+                                    <span>River</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" value="Grassland" data-filter="biome"> 
+                                    <span>Grassland</span>
+                                </label>
+                                <label class="checkbox-option">
+                                    <input type="checkbox" value="Mountain" data-filter="biome"> 
+                                    <span>Mountain</span>
+                                </label>
+                            </div>
+                            <select id="biome-filter" class="filter-select" style="display: none;">
                                 <option value="all">All Biomes</option>
-                                <option value="Savanna">Savanna</option>
-                                <option value="Forest">Forest</option>
-                                <option value="Ocean">Ocean</option>
-                                <option value="Desert">Desert</option>
-                                <option value="Jungle">Jungle</option>
-                                <option value="Arctic">Arctic</option>
-                                <option value="River">River</option>
                             </select>
                         </div>
                         <button class="clear-filters-btn" id="clear-filters">
-                            <i class="fas fa-times"></i> Clear Filters
+                            <i class="fas fa-times"></i> Clear All
                         </button>
                     </div>
                 </div>
@@ -549,8 +594,8 @@
                     <option value="total">Sort by Total Stats</option>
                 </select>
                 
-                <span class="active-filters-badge" id="active-filters-badge" style="display: none;">
-                    <span id="filter-count">0</span> filters
+                <span class="active-filters-badge" id="active-filters-badge">
+                    <span id="filter-count">0</span> FILTERS
                 </span>
             </div>
             
