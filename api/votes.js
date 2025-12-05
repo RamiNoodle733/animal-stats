@@ -1,4 +1,4 @@
-/**
+﻿/**
  * API Route: /api/votes
  * Handles voting on animals for power rankings
  */
@@ -117,15 +117,7 @@ async function handlePost(req, res) {
     if (existingVote) {
         if (existingVote.voteType === voteType) {
             // Same vote - remove it (toggle off)
-            const removedVoteType = existingVote.voteType;
             await Vote.deleteOne({ _id: existingVote._id });
-            
-            // Notify Discord about vote removal
-            notifyDiscord('vote_removed', {
-                user: user.username,
-                animal: animalName,
-                voteType: removedVoteType
-            });
             
             const newCounts = await Vote.getVoteCounts(animalId);
             return res.status(200).json({
@@ -143,8 +135,8 @@ async function handlePost(req, res) {
             notifyDiscord('vote_changed', {
                 user: user.username,
                 animal: animalName,
-                from: oldVoteType === 'up' ? '👍 Upvote' : '👎 Downvote',
-                to: voteType === 'up' ? '👍 Upvote' : '👎 Downvote'
+                from: oldVoteType === 'up' ? 'ðŸ‘ Upvote' : 'ðŸ‘Ž Downvote',
+                to: voteType === 'up' ? 'ðŸ‘ Upvote' : 'ðŸ‘Ž Downvote'
             });
 
             const newCounts = await Vote.getVoteCounts(animalId);
@@ -206,3 +198,4 @@ async function handleDelete(req, res) {
         data: { ...newCounts, userVote: null }
     });
 }
+

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Animal Stats - Expert Optimized Script
  * Handles application logic, state management, and UI rendering.
  * 
@@ -208,9 +208,6 @@ class AnimalStatsApp {
             this.populateClassFilter();
             this.setupEventListeners();
             
-            // Track site visit
-            this.trackSiteVisit();
-            
             // Initialize Rankings Manager
             this.rankingsManager = new RankingsManager(this);
             this.rankingsManager.init();
@@ -245,37 +242,7 @@ class AnimalStatsApp {
         // Could add loading spinner UI here if desired
     }
 
-    /**
-     * Track site visit - sends notification to Discord
-     */
-    trackSiteVisit() {
-        try {
-            // Get username if logged in
-            const token = localStorage.getItem('authToken');
-            let username = 'Anonymous';
-            
-            if (token) {
-                try {
-                    const payload = JSON.parse(atob(token.split('.')[1]));
-                    username = payload.username || 'Anonymous';
-                } catch (e) {
-                    // Invalid token, use anonymous
-                }
-            }
-            
-            // Send visit notification (fire and forget)
-            fetch(`${API_CONFIG.baseUrl}/api/visit`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    username,
-                    page: 'Home'
-                })
-            }).catch(() => {}); // Silently ignore errors
-        } catch (error) {
-            // Silently fail - visit tracking is not critical
-        }
-    }
+    
 
     /**
      * Check if API is available
@@ -809,9 +776,9 @@ class AnimalStatsApp {
                 <img src="${animal.image}" alt="${animal.name}" class="character-card-image" loading="lazy" onerror="this.src='https://via.placeholder.com/110x80?text=?'">
                 <div class="character-card-name">${animal.name}</div>
                 <div class="card-hover-stats">
-                    <div class="hover-stat"><span class="hover-stat-icon">⚔</span>${Math.round(animal.attack || 0)}</div>
-                    <div class="hover-stat"><span class="hover-stat-icon">🛡</span>${Math.round(animal.defense || 0)}</div>
-                    <div class="hover-stat"><span class="hover-stat-icon">⚡</span>${Math.round(animal.agility || 0)}</div>
+                    <div class="hover-stat"><span class="hover-stat-icon">âš”</span>${Math.round(animal.attack || 0)}</div>
+                    <div class="hover-stat"><span class="hover-stat-icon">ðŸ›¡</span>${Math.round(animal.defense || 0)}</div>
+                    <div class="hover-stat"><span class="hover-stat-icon">âš¡</span>${Math.round(animal.agility || 0)}</div>
                 </div>
             `;
             
@@ -2089,3 +2056,5 @@ document.addEventListener('DOMContentLoaded', () => {
     window.app = new AnimalStatsApp();
     window.app.init();
 });
+
+
