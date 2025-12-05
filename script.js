@@ -1421,8 +1421,14 @@ class RankingsManager {
             commentSubmit: document.getElementById('comment-submit'),
             addCommentForm: document.getElementById('add-comment-form'),
             commentsLoginPrompt: document.getElementById('comments-login-prompt'),
-            commentsLoginBtn: document.getElementById('comments-login-btn')
+            commentsLoginBtn: document.getElementById('comments-login-btn'),
+            replyingTo: document.getElementById('replying-to'),
+            replyToName: document.getElementById('reply-to-name'),
+            cancelReply: document.getElementById('cancel-reply'),
+            anonymousCheckbox: document.getElementById('anonymous-checkbox')
         };
+        
+        this.replyingToComment = null;
     }
 
     init() {
@@ -1464,10 +1470,19 @@ class RankingsManager {
             Auth.showModal('login');
         });
 
+        // Cancel reply button
+        this.dom.cancelReply?.addEventListener('click', () => this.cancelReply());
+
         // Escape key closes modal
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') this.hideCommentsModal();
         });
+    }
+    
+    cancelReply() {
+        this.replyingToComment = null;
+        if (this.dom.replyingTo) this.dom.replyingTo.style.display = 'none';
+        if (this.dom.commentInput) this.dom.commentInput.placeholder = 'Share your thoughts about this animal...';
     }
 
     async fetchRankings() {
@@ -1883,6 +1898,11 @@ class RankingsManager {
         const authorId = comment.authorId || comment.author?.userId;
         const currentUserId = Auth.getUser()?.id;
         const isOwn = Auth.isLoggedIn() && authorId && authorId.toString() === currentUserId;
+        // Vote state
+        const hasUpvoted = comment.upvotes?.some(id => id.toString() === currentUserId);
+        const hasDownvoted = comment.downvotes?.some(id => id.toString() === currentUserId);
+        const score = comment.score ?? ((comment.upvotes?.length || 0) - (comment.downvotes?.length || 0));
+        const scoreClass = score > 0 ? 'positive' : score < 0 ? 'negative' : '';
         const hasLiked = comment.likes?.some(id => id.toString() === currentUserId);
 
         div.innerHTML = `

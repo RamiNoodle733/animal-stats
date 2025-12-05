@@ -688,12 +688,24 @@
             
             <!-- Add Comment Form -->
             <div class="add-comment-form" id="add-comment-form">
+                <div class="replying-to" id="replying-to" style="display: none;">
+                    <span>Replying to <strong id="reply-to-name"></strong></span>
+                    <button class="cancel-reply-btn" id="cancel-reply">&times;</button>
+                </div>
                 <textarea id="comment-input" placeholder="Share your thoughts about this animal..." maxlength="500"></textarea>
                 <div class="comment-form-footer">
-                    <span class="char-count"><span id="char-count">0</span>/500</span>
-                    <button class="comment-submit-btn" id="comment-submit">
-                        <i class="fas fa-paper-plane"></i> Post Comment
-                    </button>
+                    <div class="comment-options">
+                        <label class="anonymous-toggle">
+                            <input type="checkbox" id="anonymous-checkbox">
+                            <span>Post anonymously</span>
+                        </label>
+                    </div>
+                    <div class="comment-form-right">
+                        <span class="char-count"><span id="char-count">0</span>/500</span>
+                        <button class="comment-submit-btn" id="comment-submit">
+                            <i class="fas fa-paper-plane"></i> Post
+                        </button>
+                    </div>
                 </div>
             </div>
             

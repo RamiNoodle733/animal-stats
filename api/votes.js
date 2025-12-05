@@ -1,4 +1,4 @@
-﻿/**
+/**
  * API Route: /api/votes
  * Handles voting on animals for power rankings
  */
@@ -143,8 +143,8 @@ async function handlePost(req, res) {
             notifyDiscord('vote_changed', {
                 user: user.username,
                 animal: animalName,
-                from: oldVoteType === 'up' ? 'ðŸ‘ Upvote' : 'ðŸ‘Ž Downvote',
-                to: voteType === 'up' ? 'ðŸ‘ Upvote' : 'ðŸ‘Ž Downvote'
+                oldVoteType: oldVoteType,
+                newVoteType: voteType
             });
 
             const newCounts = await Vote.getVoteCounts(animalId);

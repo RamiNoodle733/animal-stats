@@ -1,4 +1,4 @@
-﻿:root {
+:root {
     --primary-color: #00d4ff;
     --secondary-color: #ff6b00;
     --gold-color: #ffd700;
@@ -3739,3 +3739,131 @@ body {
 
 
 
+
+/* Comment Form Enhancements */
+.comment-options {
+    display: flex;
+    align-items: center;
+}
+
+.anonymous-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #888;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.anonymous-toggle input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.comment-form-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.replying-to {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    color: #aaa;
+}
+
+.replying-to strong {
+    color: var(--primary-color);
+}
+
+.cancel-reply-btn {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+.cancel-reply-btn:hover {
+    color: #ff4444;
+}
+
+/* Comment Voting */
+.comment-vote-btns {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.vote-btn {
+    background: none;
+    border: none;
+    color: #666;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.vote-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.vote-btn.upvote:hover,
+.vote-btn.upvote.active {
+    color: #00ff88;
+}
+
+.vote-btn.downvote:hover,
+.vote-btn.downvote.active {
+    color: #ff4444;
+}
+
+.comment-item .vote-score {
+    color: #888;
+    font-size: 0.85rem;
+    min-width: 20px;
+    text-align: center;
+}
+
+.comment-item .vote-score.positive {
+    color: #00ff88;
+}
+
+.comment-item .vote-score.negative {
+    color: #ff4444;
+}
+
+/* Nested Replies */
+.comment-replies {
+    margin-top: 12px;
+    margin-left: 20px;
+    padding-left: 15px;
+    border-left: 2px solid rgba(0, 212, 255, 0.2);
+}
+
+.comment-replies .comment-item {
+    background: rgba(0, 0, 0, 0.15);
+    margin-bottom: 8px;
+}
+
+/* Anonymous comment styling */
+.comment-item.anonymous .comment-avatar {
+    background: linear-gradient(135deg, #666, #888);
+}
+
+.comment-item.anonymous .comment-author-name {
+    color: #888;
+    font-style: italic;
+}
