@@ -207,7 +207,10 @@ class AnimalStatsApp {
             await this.fetchData();
             this.populateClassFilter();
             this.setupEventListeners();
-            
+
+            // Track site visit
+            this.trackSiteVisit();
+
             // Initialize Rankings Manager
             this.rankingsManager = new RankingsManager(this);
             this.rankingsManager.init();
@@ -242,7 +245,26 @@ class AnimalStatsApp {
         // Could add loading spinner UI here if desired
     }
 
-    
+    /**
+     * Track site visit - sends notification to Discord
+     */
+    trackSiteVisit() {
+        try {
+            const token = localStorage.getItem('authToken');
+            let username = 'Anonymous';
+            if (token) {
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    username = payload.username || 'Anonymous';
+                } catch (e) { }
+            }
+            fetch(API_CONFIG.baseUrl + '/api/health', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username })
+            }).catch(() => {});
+        } catch (error) { }
+    }
 
     /**
      * Check if API is available
@@ -2056,5 +2078,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.app = new AnimalStatsApp();
     window.app.init();
 });
+
+
 
 
