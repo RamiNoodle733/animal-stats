@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Animal Stats - Expert Optimized Script
  * Handles application logic, state management, and UI rendering.
  * 
@@ -250,7 +250,7 @@ class AnimalStatsApp {
      */
     trackSiteVisit() {
         try {
-            const token = localStorage.getItem('authToken');
+            const token = localStorage.getItem('auth_token');
             let username = 'Anonymous';
             if (token) {
                 try {
@@ -798,9 +798,9 @@ class AnimalStatsApp {
                 <img src="${animal.image}" alt="${animal.name}" class="character-card-image" loading="lazy" onerror="this.src='https://via.placeholder.com/110x80?text=?'">
                 <div class="character-card-name">${animal.name}</div>
                 <div class="card-hover-stats">
-                    <div class="hover-stat"><span class="hover-stat-icon">âš”</span>${Math.round(animal.attack || 0)}</div>
-                    <div class="hover-stat"><span class="hover-stat-icon">ðŸ›¡</span>${Math.round(animal.defense || 0)}</div>
-                    <div class="hover-stat"><span class="hover-stat-icon">âš¡</span>${Math.round(animal.agility || 0)}</div>
+                    <div class="hover-stat"><span class="hover-stat-icon">⚔</span>${Math.round(animal.attack || 0)}</div>
+                    <div class="hover-stat"><span class="hover-stat-icon">🛡</span>${Math.round(animal.defense || 0)}</div>
+                    <div class="hover-stat"><span class="hover-stat-icon">⚡</span>${Math.round(animal.agility || 0)}</div>
                 </div>
             `;
             
