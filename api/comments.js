@@ -1,4 +1,4 @@
-﻿/**
+/**
  * API Route: /api/comments
  * Handles comments on animals and comparisons
  */
@@ -193,7 +193,8 @@ async function handleDelete(req, res) {
     // Notify Discord about deletion
     notifyDiscord('comment_deleted', {
         user: user.username,
-        target: comment.animalName || comment.comparisonKey || 'Unknown'
+        target: comment.animalName || comment.comparisonKey || 'Unknown',
+        content: comment.content
     });
 
     await Comment.deleteOne({ _id: targetId });
