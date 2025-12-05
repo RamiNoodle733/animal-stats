@@ -263,6 +263,12 @@ class AnimalStatsApp {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username })
             }).catch(() => {});
+            
+            // Set up site leave tracking
+            window.addEventListener('beforeunload', () => {
+                const data = JSON.stringify({ type: 'site_leave', username });
+                navigator.sendBeacon(API_CONFIG.baseUrl + '/api/health', data);
+            });
         } catch (error) { }
     }
 

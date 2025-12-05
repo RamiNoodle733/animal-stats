@@ -1,7 +1,7 @@
 ﻿/**
  * API Route: /api/health
  * Health check endpoint for monitoring
- * Also handles site visit tracking via POST
+ * Also handles site visit, logout, and site leave tracking via POST
  */
 
 const { connectToDatabase } = require('../lib/mongodb');
@@ -17,16 +17,29 @@ module.exports = async function handler(req, res) {
         return res.status(200).end();
     }
 
-    // Handle site visit tracking via POST
+    // Handle notifications via POST (site_visit, logout, site_leave)
     if (req.method === 'POST') {
         try {
-            const { username } = req.body || {};
-            notifyDiscord('site_visit', {
-                username: username || 'Anonymous'
-            });
+            // Parse body - handle both JSON and text/plain from sendBeacon
+            let body = req.body;
+            if (typeof body === 'string') {
+                try { body = JSON.parse(body); } catch (e) { body = {}; }
+            }
+            
+            const { type, username } = body || {};
+            
+            if (type === 'logout') {
+                notifyDiscord('logout', { username: username || 'Unknown' });
+            } else if (type === 'site_leave') {
+                notifyDiscord('site_leave', { username: username || 'Anonymous' });
+            } else {
+                // Default: site_visit
+                notifyDiscord('site_visit', { username: username || 'Anonymous' });
+            }
+            
             return res.status(200).json({ success: true });
         } catch (error) {
-            console.error('Visit tracking error:', error);
+            console.error('Notification error:', error);
             return res.status(200).json({ success: true }); // Silent fail
         }
     }
@@ -59,17 +72,12 @@ module.exports = async function handler(req, res) {
         });
 
     } catch (error) {
-        console.error('Health Check Error:', error);
-        
+        console.error('Health check failed:', error);
         return res.status(503).json({
             success: false,
             status: 'unhealthy',
             timestamp: new Date().toISOString(),
-            database: {
-                connected: false,
-                error: error.message
-            },
-            environment: process.env.NODE_ENV || 'development'
+            error: 'Database connection failed'
         });
     }
 };

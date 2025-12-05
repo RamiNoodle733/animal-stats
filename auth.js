@@ -292,6 +292,12 @@ const Auth = {
      * Logout user
      */
     logout() {
+        const username = this.user?.username || this.user?.displayName || 'Unknown';
+        fetch('/api/health', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ type: 'logout', username })
+        }).catch(() => {});
         this.user = null;
         this.token = null;
         localStorage.removeItem('auth_token');
