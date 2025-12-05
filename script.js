@@ -1422,8 +1422,7 @@ class RankingsManager {
             addCommentForm: document.getElementById('add-comment-form'),
             commentsLoginPrompt: document.getElementById('comments-login-prompt'),
             commentsLoginBtn: document.getElementById('comments-login-btn'),
-            replyingTo: document.getElementById('replying-to'),
-            replyToName: document.getElementById('reply-to-name'),
+            replyIndicator: document.getElementById('reply-indicator'),
             cancelReply: document.getElementById('cancel-reply'),
             anonymousCheckbox: document.getElementById('anonymous-checkbox')
         };
@@ -1481,7 +1480,7 @@ class RankingsManager {
     
     cancelReply() {
         this.replyingToComment = null;
-        if (this.dom.replyingTo) this.dom.replyingTo.style.display = 'none';
+        if (this.dom.replyIndicator) this.dom.replyIndicator.style.display = 'none';
         if (this.dom.commentInput) this.dom.commentInput.placeholder = 'Share your thoughts about this animal...';
     }
 
@@ -1886,14 +1885,15 @@ class RankingsManager {
         this.dom.commentsList.appendChild(fragment);
     }
 
-    createCommentElement(comment) {
+    createCommentElement(comment, isReply = false) {
         const div = document.createElement('div');
-        div.className = 'comment-item';
+        div.className = 'comment-item' + (isReply ? ' reply-item' : '') + (comment.isAnonymous ? ' anonymous' : '');
         div.dataset.commentId = comment._id;
 
-        // Handle both nested author object and flat authorUsername field
-        const authorName = comment.authorUsername || comment.author?.displayName || comment.author?.username || 'Unknown';
-        const authorInitial = authorName[0].toUpperCase();
+        // Handle anonymous vs regular display
+        const displayName = comment.isAnonymous ? 'Anonymous' : 
+            (comment.authorUsername || comment.author?.displayName || comment.author?.username || 'Unknown');
+        const authorInitial = comment.isAnonymous ? '?' : displayName[0].toUpperCase();
         const timeAgo = this.getTimeAgo(new Date(comment.createdAt));
         const authorId = comment.authorId || comment.author?.userId;
         const currentUserId = Auth.getUser()?.id;
@@ -1903,22 +1903,18 @@ class RankingsManager {
         const hasDownvoted = comment.downvotes?.some(id => id.toString() === currentUserId);
         const score = comment.score ?? ((comment.upvotes?.length || 0) - (comment.downvotes?.length || 0));
         const scoreClass = score > 0 ? 'positive' : score < 0 ? 'negative' : '';
-        const hasLiked = comment.likes?.some(id => id.toString() === currentUserId);
-
+        
         div.innerHTML = `
             <div class="comment-header">
                 <div class="comment-author">
-                    <span class="comment-avatar">${authorInitial}</span>
-                    <span class="comment-author-name">${authorName}</span>
+                    <span class="comment-avatar">${comment.isAnonymous ? '<i class="fas fa-mask"></i>' : authorInitial}</span>
+                    <span class="comment-author-name">${displayName}</span>
                 </div>
                 <span class="comment-date">${timeAgo}</span>
             </div>
             <div class="comment-content">${this.escapeHtml(comment.content)}</div>
             <div class="comment-actions">
-                <button class="comment-action-btn like-btn ${hasLiked ? 'liked' : ''}" data-comment-id="${comment._id}">
-                    <i class="fas fa-heart"></i>
-                    <span>${comment.likeCount || comment.likes?.length || 0}</span>
-                </button>
+                <button class="comment-action-btn upvote-btn ${hasUpvoted ? 'upvoted' : ''}" data-comment-id="${comment._id}"><i class="fas fa-thumbs-up"></i></button><span class="vote-score ${scoreClass}">${score}</span><button class="comment-action-btn downvote-btn ${hasDownvoted ? 'downvoted' : ''}" data-comment-id="${comment._id}"><i class="fas fa-thumbs-down"></i></button>
                 <button class="comment-action-btn reply-btn" data-comment-id="${comment._id}">
                     <i class="fas fa-reply"></i>
                     Reply
@@ -1933,9 +1929,20 @@ class RankingsManager {
         `;
 
         // Bind actions
-        div.querySelector('.like-btn').addEventListener('click', (e) => this.handleLike(e));
+        div.querySelector('.upvote-btn').addEventListener('click', () => this.handleCommentVote(comment._id, 'upvote'));
+        div.querySelector('.downvote-btn').addEventListener('click', () => this.handleCommentVote(comment._id, 'downvote'));
         div.querySelector('.reply-btn').addEventListener('click', () => this.handleReply(comment));
         div.querySelector('.delete-btn')?.addEventListener('click', (e) => this.handleDelete(e));
+
+        // Render nested replies
+        if (comment.replies && comment.replies.length > 0) {
+            const repliesContainer = document.createElement('div');
+            repliesContainer.className = 'comment-replies';
+            comment.replies.forEach(reply => {
+                repliesContainer.appendChild(this.createCommentElement(reply, true));
+            });
+            div.appendChild(repliesContainer);
+        }
 
         return div;
     }
@@ -1967,21 +1974,25 @@ class RankingsManager {
                     targetType: 'animal',
                     animalId: this.currentAnimal.id,
                     animalName: this.currentAnimal.name,
-                    content
+                    content,
+                    isAnonymous: this.dom.anonymousCheckbox?.checked || false,
+                    parentId: this.replyingToComment?._id || null
                 })
             });
 
             const result = await response.json();
 
             if (result.success) {
-                // Clear input
+                // Clear input and reset reply state
                 this.dom.commentInput.value = '';
                 this.dom.charCount.textContent = '0';
+                const wasReply = this.replyingToComment !== null;
+                this.cancelReply();
 
                 // Refresh comments
                 await this.fetchComments();
 
-                Auth.showToast('Comment posted!');
+                Auth.showToast(wasReply ? 'Reply posted!' : 'Comment posted!');
             } else {
                 Auth.showToast(result.error || 'Failed to post comment');
             }
@@ -1993,11 +2004,10 @@ class RankingsManager {
         }
     }
 
-    async handleLike(e) {
-        const commentId = e.currentTarget.dataset.commentId;
+    async handleCommentVote(commentId, action) {
 
         if (!Auth.isLoggedIn()) {
-            Auth.showToast('Please log in to like comments!');
+            Auth.showToast(`Please log in to ${action} comments!`);
             return;
         }
 
@@ -2008,24 +2018,36 @@ class RankingsManager {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${Auth.getToken()}`
                 },
-                body: JSON.stringify({ action: 'like' })
+                body: JSON.stringify({ action })
             });
 
             if (response.ok) {
                 await this.fetchComments();
             }
         } catch (error) {
-            console.error('Error liking comment:', error);
+            console.error(`Error ${action}ing comment:`, error);
         }
     }
 
     handleReply(comment) {
-        // Focus the input and prepend @username
-        const username = comment.author?.displayName || comment.author?.username || '';
-        this.dom.commentInput.value = `@${username} `;
+        // Set the reply target
+        this.replyingToComment = comment;
+        
+        // Update reply indicator
+        const authorName = comment.isAnonymous ? 'Anonymous' : 
+            (comment.author?.displayName || comment.author?.username || 'User');
+        
+        if (this.dom.replyIndicator) {
+            const replyText = this.dom.replyIndicator.querySelector('.reply-text');
+            if (replyText) {
+                replyText.textContent = Replying to ${authorName};
+            }
+            this.dom.replyIndicator.style.display = 'flex';
+        }
+        
         this.dom.commentInput.focus();
-        this.dom.charCount.textContent = this.dom.commentInput.value.length;
     }
+
 
     async handleDelete(e) {
         const commentId = e.currentTarget.dataset.commentId;

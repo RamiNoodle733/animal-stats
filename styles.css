@@ -3510,6 +3510,14 @@ body {
     color: var(--primary-color);
 }
 
+.comment-action-btn.upvoted {
+    color: #00ff88;
+}
+
+.comment-action-btn.downvoted {
+    color: #ff4444;
+}
+
 .comment-action-btn.liked {
     color: #ff3366;
 }
@@ -3766,6 +3774,22 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
+}
+
+.reply-indicator {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.reply-indicator .reply-text {
+    color: var(--primary-color);
 }
 
 .replying-to {
