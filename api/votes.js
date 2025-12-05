@@ -117,7 +117,15 @@ async function handlePost(req, res) {
     if (existingVote) {
         if (existingVote.voteType === voteType) {
             // Same vote - remove it (toggle off)
+            const removedVoteType = existingVote.voteType;
             await Vote.deleteOne({ _id: existingVote._id });
+
+            // Notify Discord about vote removal
+            notifyDiscord('vote_removed', {
+                user: user.username,
+                animal: animalName,
+                voteType: removedVoteType
+            });
             
             const newCounts = await Vote.getVoteCounts(animalId);
             return res.status(200).json({
@@ -198,4 +206,5 @@ async function handleDelete(req, res) {
         data: { ...newCounts, userVote: null }
     });
 }
+
 

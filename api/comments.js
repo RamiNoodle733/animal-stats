@@ -190,6 +190,12 @@ async function handleDelete(req, res) {
         return res.status(403).json({ success: false, error: 'Not authorized to delete this comment' });
     }
 
+    // Notify Discord about deletion
+    notifyDiscord('comment_deleted', {
+        user: user.username,
+        target: comment.animalName || comment.comparisonKey || 'Unknown'
+    });
+
     await Comment.deleteOne({ _id: targetId });
 
     return res.status(200).json({
@@ -245,4 +251,5 @@ async function handlePatch(req, res) {
 
     return res.status(400).json({ success: false, error: 'Invalid action' });
 }
+
 
