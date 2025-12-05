@@ -2040,7 +2040,7 @@ class RankingsManager {
         if (this.dom.replyIndicator) {
             const replyText = this.dom.replyIndicator.querySelector('.reply-text');
             if (replyText) {
-                replyText.textContent = Replying to ${authorName};
+                replyText.textContent = `Replying to ${authorName}`;
             }
             this.dom.replyIndicator.style.display = 'flex';
         }
