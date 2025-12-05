@@ -135,6 +135,7 @@ async function handlePost(req, res) {
             });
         } else {
             // Different vote - change it
+            const oldVoteType = existingVote.voteType;
             existingVote.voteType = voteType;
             await existingVote.save();
             
@@ -142,8 +143,8 @@ async function handlePost(req, res) {
             notifyDiscord('vote_changed', {
                 user: user.username,
                 animal: animalName,
-                from: existingVote.voteType === 'up' ? 'downvote' : 'upvote',
-                to: voteType === 'up' ? 'upvote' : 'downvote'
+                from: oldVoteType === 'up' ? '👍 Upvote' : '👎 Downvote',
+                to: voteType === 'up' ? '👍 Upvote' : '👎 Downvote'
             });
 
             const newCounts = await Vote.getVoteCounts(animalId);
@@ -168,7 +169,7 @@ async function handlePost(req, res) {
     notifyDiscord('vote', {
         user: user.username,
         animal: animalName,
-        voteType: voteType === 'up' ? '👍 Upvote' : '👎 Downvote'
+        voteType: voteType
     });
 
     const newCounts = await Vote.getVoteCounts(animalId);

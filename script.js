@@ -208,6 +208,9 @@ class AnimalStatsApp {
             this.populateClassFilter();
             this.setupEventListeners();
             
+            // Track site visit
+            this.trackSiteVisit();
+            
             // Initialize Rankings Manager
             this.rankingsManager = new RankingsManager(this);
             this.rankingsManager.init();
@@ -240,6 +243,38 @@ class AnimalStatsApp {
     showLoadingState(isLoading) {
         this.state.isLoading = isLoading;
         // Could add loading spinner UI here if desired
+    }
+
+    /**
+     * Track site visit - sends notification to Discord
+     */
+    trackSiteVisit() {
+        try {
+            // Get username if logged in
+            const token = localStorage.getItem('authToken');
+            let username = 'Anonymous';
+            
+            if (token) {
+                try {
+                    const payload = JSON.parse(atob(token.split('.')[1]));
+                    username = payload.username || 'Anonymous';
+                } catch (e) {
+                    // Invalid token, use anonymous
+                }
+            }
+            
+            // Send visit notification (fire and forget)
+            fetch(`${API_CONFIG.baseUrl}/api/visit`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username,
+                    page: 'Home'
+                })
+            }).catch(() => {}); // Silently ignore errors
+        } catch (error) {
+            // Silently fail - visit tracking is not critical
+        }
     }
 
     /**
