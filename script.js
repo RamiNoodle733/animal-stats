@@ -249,10 +249,6 @@ class AnimalStatsApp {
      * Track site visit - sends notification to Discord
      */
     trackSiteVisit() {
-        // Skip if already tracked this session (prevents spam on refresh)
-        if (sessionStorage.getItem('visit_tracked')) return;
-        sessionStorage.setItem('visit_tracked', 'true');
-        
         try {
             const token = localStorage.getItem('auth_token');
             let username = 'Anonymous';
