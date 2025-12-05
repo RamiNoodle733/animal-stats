@@ -5,24 +5,6 @@
 
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 
-// Emoji constants for cross-platform compatibility
-const EMOJI = {
-    THUMBS_UP: '\u{1F44D}',
-    THUMBS_DOWN: '\u{1F44E}',
-    WASTEBASKET: '\u{1F5D1}\u{FE0F}',
-    ARROWS_CYCLE: '\u{1F504}',
-    SPEECH_BUBBLE: '\u{1F4AC}',
-    CROSSED_SWORDS: '\u{2694}\u{FE0F}',
-    PARTY: '\u{1F389}',
-    UNLOCKED: '\u{1F513}',
-    EYES: '\u{1F440}'
-};
-
-/**
- * Send a notification to Discord
- * @param {string} eventType - Type of event
- * @param {object} data - Event data
- */
 async function notifyDiscord(eventType, data) {
     if (!DISCORD_WEBHOOK_URL) {
         console.log('Discord webhook not configured, skipping notification');
@@ -51,73 +33,70 @@ function createEmbed(eventType, data) {
     
     switch (eventType) {
         case 'vote':
-            const voteEmoji = data.voteType === 'up' ? EMOJI.THUMBS_UP : EMOJI.THUMBS_DOWN;
+            const isUpvote = data.voteType === 'up';
             return {
-                title: voteEmoji + ' New Vote',
-                color: data.voteType === 'up' ? 0x00ff88 : 0xff3366,
+                title: isUpvote ? '\u{1F44D} Upvote' : '\u{1F44E} Downvote',
+                color: isUpvote ? 0x00ff88 : 0xff3366,
                 fields: [
                     { name: 'User', value: data.user, inline: true },
-                    { name: 'Animal', value: data.animal, inline: true },
-                    { name: 'Vote', value: voteEmoji + (data.voteType === 'up' ? ' Upvote' : ' Downvote'), inline: true }
+                    { name: 'Animal', value: data.animal, inline: true }
                 ],
                 timestamp
             };
 
         case 'vote_removed':
-            const removedEmoji = data.voteType === 'up' ? EMOJI.THUMBS_UP : EMOJI.THUMBS_DOWN;
             return {
-                title: EMOJI.WASTEBASKET + ' Vote Removed',
+                title: '\u{1F5D1}\u{FE0F} Vote Removed',
                 color: 0x888888,
                 fields: [
                     { name: 'User', value: data.user, inline: true },
                     { name: 'Animal', value: data.animal, inline: true },
-                    { name: 'Removed', value: removedEmoji + ' Was ' + (data.voteType === 'up' ? 'Upvote' : 'Downvote'), inline: true }
+                    { name: 'Was', value: data.voteType === 'up' ? '\u{1F44D} Upvote' : '\u{1F44E} Downvote', inline: true }
                 ],
                 timestamp
             };
 
         case 'vote_changed':
-            const oldEmoji = data.oldVoteType === 'up' ? EMOJI.THUMBS_UP : EMOJI.THUMBS_DOWN;
-            const newEmoji = data.newVoteType === 'up' ? EMOJI.THUMBS_UP : EMOJI.THUMBS_DOWN;
             return {
-                title: EMOJI.ARROWS_CYCLE + ' Vote Changed',
+                title: '\u{1F504} Vote Changed',
                 color: 0xffcc00,
                 fields: [
                     { name: 'User', value: data.user, inline: true },
                     { name: 'Animal', value: data.animal, inline: true },
-                    { name: 'Changed', value: oldEmoji + ' -> ' + newEmoji, inline: true }
+                    { name: 'Changed', value: data.from + ' \u{2192} ' + data.to, inline: true }
                 ],
                 timestamp
             };
 
         case 'comment':
             return {
-                title: EMOJI.SPEECH_BUBBLE + ' New Comment',
+                title: '\u{1F4AC} New Comment',
                 color: 0x00d4ff,
                 fields: [
                     { name: 'User', value: data.user, inline: true },
-                    { name: 'Target', value: data.target, inline: true },
-                    { name: 'Comment', value: data.comment.substring(0, 100) + (data.comment.length > 100 ? '...' : ''), inline: false }
+                    { name: 'On', value: data.target, inline: true },
+                    { name: 'Comment', value: data.content.length > 200 ? data.content.substring(0, 200) + '...' : data.content, inline: false }
                 ],
                 timestamp
             };
 
         case 'comment_deleted':
             return {
-                title: EMOJI.WASTEBASKET + ' Comment Deleted',
+                title: '\u{1F5D1}\u{FE0F} Comment Deleted',
                 color: 0xff4444,
                 fields: [
                     { name: 'User', value: data.user, inline: true },
-                    { name: 'Target', value: data.target, inline: true }
+                    { name: 'On', value: data.target, inline: true }
                 ],
                 timestamp
             };
 
         case 'fight':
             return {
-                title: EMOJI.CROSSED_SWORDS + ' Battle Comparison',
+                title: '\u{2694}\u{FE0F} Battle Comparison',
                 color: 0xff6b00,
                 fields: [
+                    { name: 'User', value: data.user || 'Anonymous', inline: true },
                     { name: 'Matchup', value: data.animal1 + ' vs ' + data.animal2, inline: false }
                 ],
                 timestamp
@@ -125,17 +104,18 @@ function createEmbed(eventType, data) {
 
         case 'signup':
             return {
-                title: EMOJI.PARTY + ' New User Signup',
+                title: '\u{1F389} New User Signup',
                 color: 0x9966ff,
                 fields: [
-                    { name: 'Username', value: data.username, inline: true }
+                    { name: 'Username', value: data.username, inline: true },
+                    { name: 'Email', value: data.email ? data.email.replace(/(.{2}).*(@.*)/, '$1***$2') : 'N/A', inline: true }
                 ],
                 timestamp
             };
 
         case 'login':
             return {
-                title: EMOJI.UNLOCKED + ' User Login',
+                title: '\u{1F513} User Login',
                 color: 0x00cc66,
                 fields: [
                     { name: 'Username', value: data.username, inline: true }
@@ -145,7 +125,7 @@ function createEmbed(eventType, data) {
 
         case 'site_visit':
             return {
-                title: EMOJI.EYES + ' Site Visit',
+                title: '\u{1F440} Site Visit',
                 color: 0x4488ff,
                 fields: [
                     { name: 'Visitor', value: data.username || 'Anonymous', inline: true }
@@ -155,8 +135,8 @@ function createEmbed(eventType, data) {
 
         default:
             return {
-                title: 'Event: ' + eventType,
-                color: 0x808080,
+                title: '\u{1F4E2} Site Event',
+                color: 0x888888,
                 description: JSON.stringify(data),
                 timestamp
             };
