@@ -172,11 +172,15 @@ class AnimalStatsApp {
             navBtns: {
                 stats: document.getElementById('stats-mode-btn'),
                 compare: document.getElementById('compare-mode-btn'),
-                rankings: document.getElementById('rankings-mode-btn')
+                rankings: document.getElementById('rankings-mode-btn'),
+                community: document.getElementById('community-mode-btn')
             },
             
             // Rankings View
             rankingsView: document.getElementById('rankings-view'),
+            
+            // Community View
+            communityView: document.getElementById('community-view'),
             
             // New Compare Controls
             compareToggleGridBtn: document.getElementById('compare-toggle-grid-btn')
@@ -215,6 +219,11 @@ class AnimalStatsApp {
             this.rankingsManager = new RankingsManager(this);
             this.rankingsManager.init();
             window.rankingsManager = this.rankingsManager; // Expose globally for stats comments
+            
+            // Initialize Community Manager
+            this.communityManager = new CommunityManager(this);
+            this.communityManager.init();
+            window.communityManager = this.communityManager;
             
             // Fetch rankings data to get power ranks for sorting
             await this.rankingsManager.fetchRankings();
@@ -421,6 +430,7 @@ class AnimalStatsApp {
         this.dom.navBtns.stats.addEventListener('click', () => this.switchView('stats'));
         this.dom.navBtns.compare.addEventListener('click', () => this.switchView('compare'));
         this.dom.navBtns.rankings?.addEventListener('click', () => this.switchView('rankings'));
+        this.dom.navBtns.community?.addEventListener('click', () => this.switchView('community'));
         
         // Compare View Interactions
         this.dom.fighter1.display.addEventListener('click', () => this.setSelectingSide('left'));
@@ -1033,10 +1043,12 @@ class AnimalStatsApp {
         this.dom.statsView.classList.toggle('active-view', viewName === 'stats');
         this.dom.compareView.classList.toggle('active-view', viewName === 'compare');
         this.dom.rankingsView?.classList.toggle('active-view', viewName === 'rankings');
+        this.dom.communityView?.classList.toggle('active-view', viewName === 'community');
         
         this.dom.navBtns.stats.classList.toggle('active', viewName === 'stats');
         this.dom.navBtns.compare.classList.toggle('active', viewName === 'compare');
         this.dom.navBtns.rankings?.classList.toggle('active', viewName === 'rankings');
+        this.dom.navBtns.community?.classList.toggle('active', viewName === 'community');
 
         // Grid visibility logic
         if (viewName === 'compare') {
@@ -1055,6 +1067,15 @@ class AnimalStatsApp {
             // Fetch rankings when entering rankings view
             if (this.rankingsManager) {
                 this.rankingsManager.fetchRankings();
+            }
+        } else if (viewName === 'community') {
+            // Hide grid in community view
+            this.dom.gridWrapper.classList.add('hidden');
+            this.dom.toggleGridBtn.style.display = 'none';
+            
+            // Load community content when entering
+            if (this.communityManager) {
+                this.communityManager.onViewEnter();
             }
         } else {
             this.dom.toggleGridBtn.style.display = 'flex';
@@ -2128,5 +2149,451 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+/**
+ * Community Manager - Handles general chat and comments feed
+ */
+class CommunityManager {
+    constructor(app) {
+        this.app = app;
+        this.chatMessages = [];
+        this.feedComments = [];
+        this.feedSkip = 0;
+        this.feedHasMore = true;
+        this.chatPollingInterval = null;
+        this.lastChatTime = null;
+        this.currentTab = 'chat';
+    }
 
+    init() {
+        this.setupEventListeners();
+        this.updateLoginState();
+        
+        // Listen for auth changes
+        window.addEventListener('authChange', () => this.updateLoginState());
+    }
 
+    setupEventListeners() {
+        // Tab switching
+        document.querySelectorAll('.community-tab').forEach(tab => {
+            tab.addEventListener('click', (e) => this.switchTab(e.target.dataset.tab));
+        });
+
+        // Chat input
+        const chatInput = document.getElementById('chat-input');
+        const chatSendBtn = document.getElementById('chat-send-btn');
+        
+        if (chatInput) {
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    this.sendChatMessage();
+                }
+            });
+        }
+        
+        if (chatSendBtn) {
+            chatSendBtn.addEventListener('click', () => this.sendChatMessage());
+        }
+
+        // Chat login link
+        const chatLoginLink = document.getElementById('chat-login-link');
+        if (chatLoginLink) {
+            chatLoginLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                Auth.showLoginModal();
+            });
+        }
+
+        // Load more button
+        const loadMoreBtn = document.getElementById('feed-load-more');
+        if (loadMoreBtn) {
+            loadMoreBtn.addEventListener('click', () => this.loadMoreFeed());
+        }
+    }
+
+    updateLoginState() {
+        const isLoggedIn = Auth.isAuthenticated();
+        const chatLoginPrompt = document.getElementById('chat-login-prompt');
+        const chatInputWrapper = document.getElementById('chat-input-wrapper');
+        
+        if (chatLoginPrompt) chatLoginPrompt.style.display = isLoggedIn ? 'none' : 'block';
+        if (chatInputWrapper) chatInputWrapper.style.display = isLoggedIn ? 'flex' : 'none';
+    }
+
+    switchTab(tabName) {
+        this.currentTab = tabName;
+        
+        // Update tab buttons
+        document.querySelectorAll('.community-tab').forEach(tab => {
+            tab.classList.toggle('active', tab.dataset.tab === tabName);
+        });
+        
+        // Update sections
+        document.getElementById('community-chat-section')?.classList.toggle('active', tabName === 'chat');
+        document.getElementById('community-feed-section')?.classList.toggle('active', tabName === 'feed');
+        
+        // Load content for the tab
+        if (tabName === 'chat') {
+            this.loadChat();
+            this.startChatPolling();
+        } else {
+            this.stopChatPolling();
+            this.loadFeed();
+        }
+    }
+
+    onViewEnter() {
+        // Called when entering community view
+        if (this.currentTab === 'chat') {
+            this.loadChat();
+            this.startChatPolling();
+        } else {
+            this.loadFeed();
+        }
+    }
+
+    onViewLeave() {
+        this.stopChatPolling();
+    }
+
+    // ==================== CHAT ====================
+
+    async loadChat() {
+        const container = document.getElementById('chat-messages');
+        if (!container) return;
+
+        try {
+            const response = await fetch('/api/chat?limit=50');
+            if (!response.ok) throw new Error('Failed to load chat');
+            
+            const result = await response.json();
+            this.chatMessages = result.data || [];
+            
+            if (this.chatMessages.length > 0) {
+                this.lastChatTime = this.chatMessages[this.chatMessages.length - 1].createdAt;
+            }
+            
+            this.renderChat();
+            
+            // Scroll to bottom
+            container.scrollTop = container.scrollHeight;
+        } catch (error) {
+            console.error('Error loading chat:', error);
+            container.innerHTML = `
+                <div class="chat-empty">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <p>Failed to load chat. Please try again.</p>
+                </div>
+            `;
+        }
+    }
+
+    renderChat() {
+        const container = document.getElementById('chat-messages');
+        if (!container) return;
+
+        if (this.chatMessages.length === 0) {
+            container.innerHTML = `
+                <div class="chat-empty">
+                    <i class="fas fa-comments"></i>
+                    <p>No messages yet. Be the first to say hello!</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = this.chatMessages.map(msg => this.renderChatMessage(msg)).join('');
+    }
+
+    renderChatMessage(msg) {
+        const initial = msg.authorUsername ? msg.authorUsername.charAt(0).toUpperCase() : '?';
+        const time = this.formatTime(msg.createdAt);
+        
+        return `
+            <div class="chat-message" data-id="${msg._id}">
+                <div class="chat-message-avatar">${initial}</div>
+                <div class="chat-message-content">
+                    <div class="chat-message-header">
+                        <span class="chat-message-author">${this.escapeHtml(msg.authorUsername)}</span>
+                        <span class="chat-message-time">${time}</span>
+                    </div>
+                    <div class="chat-message-text">${this.escapeHtml(msg.content)}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    async sendChatMessage() {
+        const input = document.getElementById('chat-input');
+        if (!input) return;
+
+        const content = input.value.trim();
+        if (!content) return;
+
+        const token = Auth.getToken();
+        if (!token) {
+            Auth.showToast('Please log in to send messages');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ content })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to send message');
+            }
+
+            const result = await response.json();
+            
+            // Add message to list and render
+            this.chatMessages.push(result.data);
+            this.renderChat();
+            
+            // Clear input and scroll to bottom
+            input.value = '';
+            const container = document.getElementById('chat-messages');
+            if (container) container.scrollTop = container.scrollHeight;
+
+        } catch (error) {
+            console.error('Error sending message:', error);
+            Auth.showToast(error.message || 'Failed to send message');
+        }
+    }
+
+    startChatPolling() {
+        this.stopChatPolling(); // Clear any existing
+        
+        // Poll for new messages every 5 seconds
+        this.chatPollingInterval = setInterval(() => this.pollNewMessages(), 5000);
+    }
+
+    stopChatPolling() {
+        if (this.chatPollingInterval) {
+            clearInterval(this.chatPollingInterval);
+            this.chatPollingInterval = null;
+        }
+    }
+
+    async pollNewMessages() {
+        if (this.currentTab !== 'chat') return;
+        
+        try {
+            const response = await fetch('/api/chat?limit=20');
+            if (!response.ok) return;
+            
+            const result = await response.json();
+            const newMessages = result.data || [];
+            
+            // Check for new messages
+            if (newMessages.length > 0) {
+                const existingIds = new Set(this.chatMessages.map(m => m._id));
+                const trulyNew = newMessages.filter(m => !existingIds.has(m._id));
+                
+                if (trulyNew.length > 0) {
+                    this.chatMessages.push(...trulyNew);
+                    this.renderChat();
+                    
+                    // Scroll to bottom
+                    const container = document.getElementById('chat-messages');
+                    if (container) container.scrollTop = container.scrollHeight;
+                }
+            }
+        } catch (error) {
+            console.error('Error polling messages:', error);
+        }
+    }
+
+    // ==================== FEED ====================
+
+    async loadFeed(reset = true) {
+        if (reset) {
+            this.feedSkip = 0;
+            this.feedComments = [];
+            this.feedHasMore = true;
+        }
+
+        const container = document.getElementById('feed-list');
+        const loadMoreBtn = document.getElementById('feed-load-more');
+        if (!container) return;
+
+        if (reset) {
+            container.innerHTML = `
+                <div class="feed-loading">
+                    <i class="fas fa-spinner fa-spin"></i> Loading comments...
+                </div>
+            `;
+        }
+
+        try {
+            const response = await fetch(`/api/community/feed?limit=20&skip=${this.feedSkip}`);
+            if (!response.ok) throw new Error('Failed to load feed');
+            
+            const result = await response.json();
+            const newComments = result.data || [];
+            
+            this.feedComments.push(...newComments);
+            this.feedHasMore = result.hasMore;
+            this.feedSkip += newComments.length;
+            
+            this.renderFeed();
+            
+            if (loadMoreBtn) {
+                loadMoreBtn.style.display = this.feedHasMore ? 'flex' : 'none';
+            }
+
+        } catch (error) {
+            console.error('Error loading feed:', error);
+            container.innerHTML = `
+                <div class="feed-empty">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <p>Failed to load comments. Please try again.</p>
+                </div>
+            `;
+        }
+    }
+
+    loadMoreFeed() {
+        this.loadFeed(false);
+    }
+
+    renderFeed() {
+        const container = document.getElementById('feed-list');
+        if (!container) return;
+
+        if (this.feedComments.length === 0) {
+            container.innerHTML = `
+                <div class="feed-empty">
+                    <i class="fas fa-comments"></i>
+                    <p>No comments yet. Be the first to comment on an animal!</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = this.feedComments.map(comment => this.renderFeedItem(comment)).join('');
+        
+        // Add click handlers for animal names
+        container.querySelectorAll('.feed-animal-name').forEach(el => {
+            el.addEventListener('click', (e) => {
+                const animalName = e.target.dataset.animal;
+                if (animalName) {
+                    this.goToAnimal(animalName);
+                }
+            });
+        });
+    }
+
+    renderFeedItem(comment) {
+        const initial = comment.isAnonymous ? '?' : (comment.authorUsername?.charAt(0).toUpperCase() || '?');
+        const authorName = comment.isAnonymous ? 'Anonymous' : comment.authorUsername;
+        const time = this.formatTime(comment.createdAt);
+        const animalImage = comment.animalImage || 'https://via.placeholder.com/50x50?text=?';
+        
+        // Score display
+        const score = comment.score || 0;
+        const scoreClass = score > 0 ? 'positive' : (score < 0 ? 'negative' : '');
+        
+        // Render replies (show first 2, with option to see more)
+        let repliesHtml = '';
+        if (comment.replies && comment.replies.length > 0) {
+            const displayReplies = comment.replies.slice(0, 2);
+            repliesHtml = `
+                <div class="feed-replies">
+                    ${displayReplies.map(reply => this.renderFeedReply(reply)).join('')}
+                    ${comment.replies.length > 2 ? `
+                        <div class="feed-more-replies" data-animal="${comment.animalName}">
+                            <i class="fas fa-comments"></i> View all ${comment.replies.length} replies
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        return `
+            <div class="feed-item" data-id="${comment._id}">
+                <div class="feed-item-header">
+                    <img src="${animalImage}" alt="${comment.animalName}" class="feed-animal-image" onerror="this.src='https://via.placeholder.com/50x50?text=?'">
+                    <div class="feed-animal-info">
+                        <div class="feed-animal-name" data-animal="${this.escapeHtml(comment.animalName)}">${this.escapeHtml(comment.animalName)}</div>
+                        <div class="feed-comment-type">${comment.targetType === 'comparison' ? 'Comparison' : 'Animal Discussion'}</div>
+                    </div>
+                </div>
+                <div class="feed-comment-main">
+                    <div class="feed-comment-avatar">${initial}</div>
+                    <div class="feed-comment-body">
+                        <div class="feed-comment-author">
+                            <span class="feed-comment-author-name">${this.escapeHtml(authorName)}</span>
+                            <span class="feed-comment-time">${time}</span>
+                        </div>
+                        <div class="feed-comment-content">${this.escapeHtml(comment.content)}</div>
+                        <div class="feed-comment-actions">
+                            <span class="${scoreClass}"><i class="fas fa-arrow-up"></i> ${score}</span>
+                            <span><i class="fas fa-reply"></i> ${comment.replyCount || 0} replies</span>
+                        </div>
+                    </div>
+                </div>
+                ${repliesHtml}
+            </div>
+        `;
+    }
+
+    renderFeedReply(reply) {
+        const initial = reply.isAnonymous ? '?' : (reply.authorUsername?.charAt(0).toUpperCase() || '?');
+        const authorName = reply.isAnonymous ? 'Anonymous' : reply.authorUsername;
+        const time = this.formatTime(reply.createdAt);
+        
+        return `
+            <div class="feed-reply">
+                <div class="feed-reply-header">
+                    <div class="feed-reply-avatar">${initial}</div>
+                    <span class="feed-reply-author">${this.escapeHtml(authorName)}</span>
+                    <span class="feed-reply-time">${time}</span>
+                </div>
+                <div class="feed-reply-content">${this.escapeHtml(reply.content)}</div>
+            </div>
+        `;
+    }
+
+    goToAnimal(animalName) {
+        // Switch to stats view and select the animal
+        const animal = this.app.state.animals.find(a => a.name.toLowerCase() === animalName.toLowerCase());
+        if (animal) {
+            this.app.switchView('stats');
+            this.app.selectAnimal(animal);
+        }
+    }
+
+    // ==================== HELPERS ====================
+
+    formatTime(dateString) {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diff = now - date;
+        
+        const minutes = Math.floor(diff / 60000);
+        const hours = Math.floor(diff / 3600000);
+        const days = Math.floor(diff / 86400000);
+        
+        if (minutes < 1) return 'Just now';
+        if (minutes < 60) return `${minutes}m ago`;
+        if (hours < 24) return `${hours}h ago`;
+        if (days < 7) return `${days}d ago`;
+        
+        return date.toLocaleDateString();
+    }
+
+    escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+}

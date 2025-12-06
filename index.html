@@ -34,6 +34,9 @@
             <button class="mode-btn" id="rankings-mode-btn" data-mode="rankings">
                 <i class="fas fa-trophy"></i> RANKINGS
             </button>
+            <button class="mode-btn" id="community-mode-btn" data-mode="community">
+                <i class="fas fa-users"></i> COMMUNITY
+            </button>
             <!-- Auth Button -->
             <div class="auth-container" id="auth-container">
                 <button class="auth-btn" id="auth-btn">
@@ -439,6 +442,63 @@
                     <!-- Rankings will be populated by JavaScript -->
                     <div class="rankings-loading">
                         <i class="fas fa-spinner fa-spin"></i> Loading rankings...
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Community View -->
+        <div id="community-view" class="view-container">
+            <div class="community-container">
+                <!-- Community Header -->
+                <div class="community-header">
+                    <h2><i class="fas fa-users"></i> COMMUNITY</h2>
+                    <p class="community-subtitle">Chat with other animal enthusiasts and see all discussions!</p>
+                </div>
+                
+                <!-- Community Tabs -->
+                <div class="community-tabs">
+                    <button class="community-tab active" data-tab="chat">
+                        <i class="fas fa-comments"></i> General Chat
+                    </button>
+                    <button class="community-tab" data-tab="feed">
+                        <i class="fas fa-stream"></i> All Comments
+                    </button>
+                </div>
+                
+                <!-- Chat Section -->
+                <div class="community-section active" id="community-chat-section">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chat-messages">
+                            <div class="chat-loading">
+                                <i class="fas fa-spinner fa-spin"></i> Loading messages...
+                            </div>
+                        </div>
+                        <div class="chat-input-container" id="chat-input-container">
+                            <div class="chat-login-prompt" id="chat-login-prompt" style="display: none;">
+                                <i class="fas fa-lock"></i> <a href="#" id="chat-login-link">Log in</a> to join the conversation
+                            </div>
+                            <div class="chat-input-wrapper" id="chat-input-wrapper" style="display: none;">
+                                <input type="text" id="chat-input" placeholder="Type a message..." maxlength="500" autocomplete="off">
+                                <button id="chat-send-btn" class="chat-send-btn">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Comments Feed Section -->
+                <div class="community-section" id="community-feed-section">
+                    <div class="feed-container">
+                        <div class="feed-list" id="feed-list">
+                            <div class="feed-loading">
+                                <i class="fas fa-spinner fa-spin"></i> Loading comments...
+                            </div>
+                        </div>
+                        <button class="load-more-btn" id="feed-load-more" style="display: none;">
+                            <i class="fas fa-chevron-down"></i> Load More Comments
+                        </button>
                     </div>
                 </div>
             </div>
