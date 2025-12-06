@@ -977,10 +977,10 @@ class AnimalStatsApp {
 
             // Map JSON keys to HTML IDs
             setSub('sub-raw-power', animal.substats.raw_power);
-            setSub('sub-natural-weapons', animal.substats.natural_weapons);
-            setSub('sub-armor', animal.substats.armor);
-            setSub('sub-resilience', animal.substats.resilience);
-            setSub('sub-speed-stat', animal.substats.speed_stat);
+            setSub('sub-weaponry', animal.substats.weaponry);
+            setSub('sub-protection', animal.substats.protection);
+            setSub('sub-toughness', animal.substats.toughness);
+            setSub('sub-speed', animal.substats.speed);
             setSub('sub-maneuverability', animal.substats.maneuverability);
             
             setSub('sub-endurance', animal.substats.endurance);
@@ -988,7 +988,7 @@ class AnimalStatsApp {
             setSub('sub-tactics', animal.substats.tactics);
             setSub('sub-senses', animal.substats.senses);
             setSub('sub-ferocity', animal.substats.ferocity);
-            setSub('sub-unique_abilities', animal.substats.unique_abilities);
+            setSub('sub-abilities', animal.substats.abilities);
         }
 
         // Details Panel
