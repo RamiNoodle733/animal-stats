@@ -41,30 +41,48 @@ body {
 }
 
 .game-header {
-    background: linear-gradient(180deg, rgba(0, 212, 255, 0.2) 0%, transparent 100%);
+    background: linear-gradient(180deg, rgba(0, 20, 40, 0.95) 0%, rgba(0, 14, 26, 0.9) 100%);
     border-bottom: 3px solid var(--border-bright);
-    padding: 5px 20px;
+    padding: 10px 20px;
     text-align: center;
-    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.5);
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
     flex-shrink: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 40px;
+    gap: 8px;
     z-index: 50;
     position: relative;
 }
 
 .game-header h1 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 8px;
+    font-size: 1.8rem;
+    letter-spacing: 6px;
     background: linear-gradient(135deg, #00d4ff, #00ff88);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.8));
     margin: 0;
+    white-space: nowrap;
+}
+
+.game-header h1 .title-mode {
+    color: inherit;
+    transition: all 0.3s ease;
+}
+
+/* Navigation Tabs Container */
+.nav-tabs {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 6px 10px;
+    border-radius: 30px;
+    border: 1px solid rgba(0, 212, 255, 0.2);
 }
 
 .view-container {
@@ -1473,36 +1491,78 @@ body {
 }
 
 .mode-btn {
-    padding: 10px 30px;
+    padding: 8px 20px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 3px;
-    background: rgba(0, 0, 0, 0.5);
-    border: 2px solid rgba(0, 212, 255, 0.3);
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    background: transparent;
+    border: none;
     color: rgba(255, 255, 255, 0.6);
     cursor: pointer;
     transition: all 0.3s ease;
-    border-radius: 8px;
+    border-radius: 20px;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .mode-btn:hover {
     color: var(--text-light);
-    background: rgba(0, 212, 255, 0.2);
-    border-color: var(--border-bright);
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+    background: rgba(0, 212, 255, 0.15);
 }
 
 .mode-btn.active {
-    background: linear-gradient(135deg, var(--primary-color), rgba(0, 212, 255, 0.6));
+    background: linear-gradient(135deg, var(--primary-color), rgba(0, 255, 136, 0.8));
     color: #000;
     text-shadow: none;
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
-    border-color: var(--primary-color);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+    font-weight: 600;
 }
 
 .mode-btn i {
-    margin-right: 8px;
+    font-size: 0.9rem;
+}
+
+/* Auth Container - Integrated into header */
+.auth-container {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 100;
+}
+
+.auth-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 212, 255, 0.05));
+    border: 2px solid var(--primary-color);
+    border-radius: 25px;
+    color: var(--primary-color);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.auth-btn:hover {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(0, 212, 255, 0.15));
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.auth-btn.logged-in {
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 212, 255, 0.05));
+    border-color: #00ff88;
+    color: #00ff88;
+}
+
+.auth-btn.logged-in:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
 }
 
 /* REMOVED fight-profile-badge */
@@ -1594,43 +1654,54 @@ body {
         flex-direction: column;
     }
 
-    /* --- HEADER - Two rows on mobile --- */
+    /* --- HEADER - Compact mobile layout --- */
     .game-header {
         padding: 8px 12px;
-        gap: 8px;
-        flex-wrap: wrap;
-        justify-content: center;
+        gap: 6px;
         flex-shrink: 0;
         min-height: auto;
+        padding-right: 60px; /* Space for auth button */
     }
 
     .game-header h1 {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         letter-spacing: 2px;
         margin: 0;
-        order: -1;
-        width: 100%;
-        text-align: center;
         white-space: nowrap;
+    }
+    
+    .nav-tabs {
+        gap: 4px;
+        padding: 4px 6px;
+        border-radius: 20px;
     }
 
     .mode-btn {
-        padding: 8px 14px;
-        font-size: 0.7rem;
-        flex: 1 1 auto;
-        max-width: 100px;
-        justify-content: center;
+        padding: 6px 10px;
+        font-size: 0.65rem;
+        letter-spacing: 1px;
+        gap: 4px;
+    }
+    
+    .mode-btn .mode-text {
+        display: none;
+    }
+    
+    .mode-btn i {
+        font-size: 0.85rem;
     }
     
     .auth-container {
         position: absolute;
-        top: 8px;
+        top: 50%;
         right: 10px;
+        transform: translateY(-50%);
     }
     
     .auth-btn {
-        padding: 6px 10px;
-        font-size: 0.7rem;
+        padding: 8px 12px;
+        font-size: 0.75rem;
+        border-width: 1px;
     }
     
     #auth-btn-text {
@@ -2277,26 +2348,35 @@ body {
     /* Header stays compact */
     .game-header {
         padding: 6px 10px;
-        gap: 6px;
+        gap: 4px;
+        padding-right: 50px;
     }
 
     .game-header h1 {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
         letter-spacing: 1px;
+    }
+    
+    .nav-tabs {
+        gap: 2px;
+        padding: 3px 5px;
     }
 
     .mode-btn {
-        padding: 6px 10px;
-        font-size: 0.65rem;
+        padding: 5px 8px;
+        font-size: 0.6rem;
+    }
+    
+    .mode-btn i {
+        font-size: 0.75rem;
     }
     
     .auth-container {
-        top: 6px;
-        right: 8px;
+        right: 6px;
     }
     
     .auth-btn {
-        padding: 5px 8px;
+        padding: 6px 10px;
         font-size: 0.65rem;
     }
 
@@ -2515,46 +2595,6 @@ body {
 /* =====================================================
    AUTHENTICATION STYLES
    ===================================================== */
-
-/* Auth Container in Header */
-.auth-container {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 100;
-}
-
-.auth-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 212, 255, 0.1));
-    border: 1px solid var(--primary-color);
-    border-radius: 20px;
-    color: var(--primary-color);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.auth-btn:hover {
-    background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(0, 212, 255, 0.2));
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
-}
-
-.auth-btn.logged-in {
-    background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.1));
-    border-color: #00ff88;
-    color: #00ff88;
-}
-
-.auth-btn.logged-in:hover {
-    box-shadow: 0 0 15px rgba(0, 255, 136, 0.4);
-}
 
 /* User Dropdown */
 .user-dropdown {
@@ -4927,7 +4967,63 @@ body {
     font-size: 1.6rem;
     letter-spacing: 2px;
     color: #fff;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
+}
+
+/* Fighter Stats Grid - 6 stats in 2 rows */
+.fighter-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.fighter-stat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 6px 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: #fff;
+}
+
+.fighter-stat i {
+    color: #00d4ff;
+    font-size: 0.75rem;
+}
+
+.fighter-stat .stat-label {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+}
+
+/* Fighter Comments Button */
+.fighter-comments-btn {
+    padding: 8px 16px;
+    background: rgba(0, 212, 255, 0.15);
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    border-radius: 6px;
+    color: #00d4ff;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.fighter-comments-btn:hover {
+    background: rgba(0, 212, 255, 0.25);
+    border-color: #00d4ff;
+    transform: translateY(-2px);
+}
+
+.fighter-comments-btn i {
+    font-size: 0.8rem;
 }
 
 .fighter-card .fighter-stats {

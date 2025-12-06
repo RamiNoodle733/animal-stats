@@ -24,19 +24,21 @@
     <div class="game-screen">
         <!-- Header -->
         <header class="game-header">
-            <button class="mode-btn active" id="stats-mode-btn" data-mode="stats">
-                <i class="fas fa-chart-bar"></i> STATS
-            </button>
-            <button class="mode-btn" id="compare-mode-btn" data-mode="compare">
-                <i class="fas fa-balance-scale"></i> COMPARE
-            </button>
-            <h1>ANIMAL BATTLE STATS</h1>
-            <button class="mode-btn" id="rankings-mode-btn" data-mode="rankings">
-                <i class="fas fa-trophy"></i> RANKINGS
-            </button>
-            <button class="mode-btn" id="community-mode-btn" data-mode="community">
-                <i class="fas fa-users"></i> COMMUNITY
-            </button>
+            <h1 id="main-title">ANIMAL BATTLE <span class="title-mode">STATS</span></h1>
+            <nav class="nav-tabs">
+                <button class="mode-btn active" id="stats-mode-btn" data-mode="stats">
+                    <i class="fas fa-chart-bar"></i> <span class="mode-text">STATS</span>
+                </button>
+                <button class="mode-btn" id="compare-mode-btn" data-mode="compare">
+                    <i class="fas fa-balance-scale"></i> <span class="mode-text">COMPARE</span>
+                </button>
+                <button class="mode-btn" id="rankings-mode-btn" data-mode="rankings">
+                    <i class="fas fa-trophy"></i> <span class="mode-text">RANKINGS</span>
+                </button>
+                <button class="mode-btn" id="community-mode-btn" data-mode="community">
+                    <i class="fas fa-users"></i> <span class="mode-text">COMMUNITY</span>
+                </button>
+            </nav>
             <!-- Auth Button -->
             <div class="auth-container" id="auth-container">
                 <button class="auth-btn" id="auth-btn">
@@ -418,7 +420,6 @@
             <div class="rankings-container">
                 <!-- Rankings Header -->
                 <div class="rankings-header">
-                    <h2><i class="fas fa-trophy"></i> POWER RANKINGS</h2>
                     <p class="rankings-subtitle">Vote for your favorite animals to determine the ultimate power rankings!</p>
                     <button class="tournament-btn" id="start-tournament-btn">
                         <i class="fas fa-crown"></i> START TOURNAMENT
@@ -455,7 +456,6 @@
             <div class="community-container">
                 <!-- Community Header -->
                 <div class="community-header">
-                    <h2><i class="fas fa-users"></i> COMMUNITY</h2>
                     <p class="community-subtitle">Chat with other animal enthusiasts and see all discussions!</p>
                     <div class="community-login-prompt" id="community-login-prompt">
                         <i class="fas fa-info-circle"></i> <span>Log in to chat, vote and comment!</span>
@@ -853,11 +853,17 @@
                         <img src="" alt="" class="fighter-img" id="fighter-1-img">
                         <div class="fighter-info">
                             <div class="fighter-name" id="fighter-1-name">Animal 1</div>
-                            <div class="fighter-stats">
-                                <span><i class="fas fa-fist-raised"></i> <span id="fighter-1-attack">0</span></span>
-                                <span><i class="fas fa-shield-alt"></i> <span id="fighter-1-defense">0</span></span>
-                                <span><i class="fas fa-bolt"></i> <span id="fighter-1-special">0</span></span>
+                            <div class="fighter-stats-grid">
+                                <div class="fighter-stat"><i class="fas fa-fist-raised"></i> <span class="stat-label">ATK</span> <span id="fighter-1-attack">0</span></div>
+                                <div class="fighter-stat"><i class="fas fa-shield-alt"></i> <span class="stat-label">DEF</span> <span id="fighter-1-defense">0</span></div>
+                                <div class="fighter-stat"><i class="fas fa-wind"></i> <span class="stat-label">AGI</span> <span id="fighter-1-agility">0</span></div>
+                                <div class="fighter-stat"><i class="fas fa-heart"></i> <span class="stat-label">STA</span> <span id="fighter-1-stamina">0</span></div>
+                                <div class="fighter-stat"><i class="fas fa-brain"></i> <span class="stat-label">INT</span> <span id="fighter-1-intelligence">0</span></div>
+                                <div class="fighter-stat"><i class="fas fa-bolt"></i> <span class="stat-label">SPE</span> <span id="fighter-1-special">0</span></div>
                             </div>
+                            <button class="fighter-comments-btn" id="fighter-1-comments" data-animal-id="" data-animal-name="" data-animal-image="">
+                                <i class="fas fa-comment"></i> Comments
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -871,18 +877,20 @@
                         <img src="" alt="" class="fighter-img" id="fighter-2-img">
                         <div class="fighter-info">
                             <div class="fighter-name" id="fighter-2-name">Animal 2</div>
-                            <div class="fighter-stats">
-                                <span><i class="fas fa-fist-raised"></i> <span id="fighter-2-attack">0</span></span>
-                                <span><i class="fas fa-shield-alt"></i> <span id="fighter-2-defense">0</span></span>
-                                <span><i class="fas fa-bolt"></i> <span id="fighter-2-special">0</span></span>
+                            <div class="fighter-stats-grid">
+                                <div class="fighter-stat"><i class="fas fa-fist-raised"></i> <span class="stat-label">ATK</span> <span id="fighter-2-attack">0</span></div>
+                                <div class="fighter-stat"><i class="fas fa-shield-alt"></i> <span class="stat-label">DEF</span> <span id="fighter-2-defense">0</span></div>
+                                <div class="fighter-stat"><i class="fas fa-wind"></i> <span class="stat-label">AGI</span> <span id="fighter-2-agility">0</span></div>
+                                <div class="fighter-stat"><i class="fas fa-heart"></i> <span class="stat-label">STA</span> <span id="fighter-2-stamina">0</span></div>
+                                <div class="fighter-stat"><i class="fas fa-brain"></i> <span class="stat-label">INT</span> <span id="fighter-2-intelligence">0</span></div>
+                                <div class="fighter-stat"><i class="fas fa-bolt"></i> <span class="stat-label">SPE</span> <span id="fighter-2-special">0</span></div>
                             </div>
+                            <button class="fighter-comments-btn" id="fighter-2-comments" data-animal-id="" data-animal-name="" data-animal-image="">
+                                <i class="fas fa-comment"></i> Comments
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="tournament-bracket-preview" id="tournament-bracket-preview">
-                <!-- Mini bracket will be rendered here -->
             </div>
         </div>
         

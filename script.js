@@ -169,6 +169,8 @@ class AnimalStatsApp {
             fightBtn: document.getElementById('fight-btn'),
             
             // Navigation
+            mainTitle: document.getElementById('main-title'),
+            titleMode: document.querySelector('.title-mode'),
             navBtns: {
                 stats: document.getElementById('stats-mode-btn'),
                 compare: document.getElementById('compare-mode-btn'),
@@ -1043,6 +1045,17 @@ class AnimalStatsApp {
      */
     switchView(viewName) {
         this.state.view = viewName;
+        
+        // Update the main title based on current view
+        const titleModes = {
+            stats: 'STATS',
+            compare: 'COMPARE',
+            rankings: 'RANKINGS',
+            community: 'COMMUNITY'
+        };
+        if (this.dom.titleMode) {
+            this.dom.titleMode.textContent = titleModes[viewName] || 'STATS';
+        }
         
         // Update UI classes
         this.dom.statsView.classList.toggle('active-view', viewName === 'stats');
@@ -2192,13 +2205,20 @@ class TournamentManager {
             fighter1Name: document.getElementById('fighter-1-name'),
             fighter1Attack: document.getElementById('fighter-1-attack'),
             fighter1Defense: document.getElementById('fighter-1-defense'),
+            fighter1Agility: document.getElementById('fighter-1-agility'),
+            fighter1Stamina: document.getElementById('fighter-1-stamina'),
+            fighter1Intelligence: document.getElementById('fighter-1-intelligence'),
             fighter1Special: document.getElementById('fighter-1-special'),
+            fighter1Comments: document.getElementById('fighter-1-comments'),
             fighter2Img: document.getElementById('fighter-2-img'),
             fighter2Name: document.getElementById('fighter-2-name'),
             fighter2Attack: document.getElementById('fighter-2-attack'),
             fighter2Defense: document.getElementById('fighter-2-defense'),
+            fighter2Agility: document.getElementById('fighter-2-agility'),
+            fighter2Stamina: document.getElementById('fighter-2-stamina'),
+            fighter2Intelligence: document.getElementById('fighter-2-intelligence'),
             fighter2Special: document.getElementById('fighter-2-special'),
-            bracketPreview: document.getElementById('tournament-bracket-preview'),
+            fighter2Comments: document.getElementById('fighter-2-comments'),
             // Results elements
             championImg: document.getElementById('champion-img'),
             championName: document.getElementById('champion-name'),
@@ -2240,6 +2260,20 @@ class TournamentManager {
         // Fighter selection
         this.dom.fighter1?.addEventListener('click', () => this.selectWinner(0));
         this.dom.fighter2?.addEventListener('click', () => this.selectWinner(1));
+        
+        // Comments buttons - open comments modal for each fighter
+        this.dom.fighter1CommentsBtn?.addEventListener('click', (e) => {
+            e.stopPropagation(); // Don't trigger fighter selection
+            if (this.currentAnimal1) {
+                window.rankingsManager?.openCommentsModal(this.currentAnimal1.name, this.currentAnimal1.image);
+            }
+        });
+        this.dom.fighter2CommentsBtn?.addEventListener('click', (e) => {
+            e.stopPropagation(); // Don't trigger fighter selection
+            if (this.currentAnimal2) {
+                window.rankingsManager?.openCommentsModal(this.currentAnimal2.name, this.currentAnimal2.image);
+            }
+        });
         
         // Results buttons
         this.dom.playAgainBtn?.addEventListener('click', () => this.showSetup());
@@ -2290,6 +2324,8 @@ class TournamentManager {
         this.winners = [];
         this.matchHistory = [];
         this.isActive = false;
+        this.currentAnimal1 = null;
+        this.currentAnimal2 = null;
     }
 
     startTournament(size) {
@@ -2345,27 +2381,34 @@ class TournamentManager {
         const match = this.bracket[this.currentMatch];
         const [animal1, animal2] = match;
         
+        // Store current animals for comments button
+        this.currentAnimal1 = animal1;
+        this.currentAnimal2 = animal2;
+        
         // Update progress
         this.updateProgress();
         
-        // Update fighter 1
+        // Update fighter 1 - all 6 stats
         this.dom.fighter1Img.src = animal1.image;
         this.dom.fighter1Img.onerror = () => { this.dom.fighter1Img.src = 'https://via.placeholder.com/300x200?text=?'; };
         this.dom.fighter1Name.textContent = animal1.name;
         this.dom.fighter1Attack.textContent = Math.round(animal1.attack || 0);
         this.dom.fighter1Defense.textContent = Math.round(animal1.defense || 0);
+        this.dom.fighter1Agility.textContent = Math.round(animal1.agility || 0);
+        this.dom.fighter1Stamina.textContent = Math.round(animal1.stamina || 0);
+        this.dom.fighter1Intelligence.textContent = Math.round(animal1.intelligence || 0);
         this.dom.fighter1Special.textContent = Math.round(animal1.special || 0);
         
-        // Update fighter 2
+        // Update fighter 2 - all 6 stats
         this.dom.fighter2Img.src = animal2.image;
         this.dom.fighter2Img.onerror = () => { this.dom.fighter2Img.src = 'https://via.placeholder.com/300x200?text=?'; };
         this.dom.fighter2Name.textContent = animal2.name;
         this.dom.fighter2Attack.textContent = Math.round(animal2.attack || 0);
         this.dom.fighter2Defense.textContent = Math.round(animal2.defense || 0);
+        this.dom.fighter2Agility.textContent = Math.round(animal2.agility || 0);
+        this.dom.fighter2Stamina.textContent = Math.round(animal2.stamina || 0);
+        this.dom.fighter2Intelligence.textContent = Math.round(animal2.intelligence || 0);
         this.dom.fighter2Special.textContent = Math.round(animal2.special || 0);
-        
-        // Update bracket preview
-        this.updateBracketPreview();
         
         // Add entrance animation
         this.dom.fighter1.style.animation = 'none';
@@ -2393,31 +2436,6 @@ class TournamentManager {
         if (round === totalRounds - 1) return 'SEMI-FINALS';
         if (round === totalRounds - 2) return 'QUARTER-FINALS';
         return `Round ${round} of ${totalRounds}`;
-    }
-
-    updateBracketPreview() {
-        // Show mini bracket with winners so far
-        let html = '<div class="bracket-mini">';
-        
-        // Show winners from previous matches
-        this.winners.forEach((winner, idx) => {
-            html += `<div class="bracket-mini-item winner">${winner.name}</div>`;
-        });
-        
-        // Show current match indicator
-        if (this.currentMatch < this.bracket.length) {
-            const match = this.bracket[this.currentMatch];
-            html += `<div class="bracket-mini-item current">${match[0].name} vs ${match[1].name}</div>`;
-        }
-        
-        // Show remaining matches in this round
-        for (let i = this.currentMatch + 1; i < this.bracket.length; i++) {
-            const match = this.bracket[i];
-            html += `<div class="bracket-mini-item">${match[0].name} vs ${match[1].name}</div>`;
-        }
-        
-        html += '</div>';
-        this.dom.bracketPreview.innerHTML = html;
     }
 
     selectWinner(fighterIndex) {
