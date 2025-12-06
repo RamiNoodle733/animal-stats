@@ -1082,8 +1082,8 @@ class AnimalStatsApp {
             this.dom.gridWrapper.classList.remove('hidden');
         }
 
-        // Ensure grid state is synced for non-rankings views
-        if (viewName !== 'rankings') {
+        // Ensure grid state is synced for stats/compare views only
+        if (viewName !== 'rankings' && viewName !== 'community') {
             this.state.isGridVisible = true;
             this.dom.gridWrapper.classList.remove('hidden');
             
