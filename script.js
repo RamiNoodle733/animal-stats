@@ -2213,10 +2213,10 @@ class CommunityManager {
 
     updateLoginState() {
         const isLoggedIn = Auth.isAuthenticated();
-        const chatLoginPrompt = document.getElementById('chat-login-prompt');
+        const communityLoginPrompt = document.getElementById('community-login-prompt');
         const chatInputWrapper = document.getElementById('chat-input-wrapper');
         
-        if (chatLoginPrompt) chatLoginPrompt.style.display = isLoggedIn ? 'none' : 'block';
+        if (communityLoginPrompt) communityLoginPrompt.style.display = isLoggedIn ? 'none' : 'block';
         if (chatInputWrapper) chatInputWrapper.style.display = isLoggedIn ? 'flex' : 'none';
     }
 

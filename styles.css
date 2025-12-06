@@ -2918,6 +2918,25 @@ body {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding-bottom: 20px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 215, 0, 0.3) transparent;
+}
+
+.rankings-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.rankings-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.rankings-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 215, 0, 0.3);
+    border-radius: 3px;
+}
+
+.rankings-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 215, 0, 0.5);
 }
 
 .rankings-header {
@@ -3903,9 +3922,11 @@ body {
     max-width: 900px;
     margin: 0 auto;
     padding: 20px;
-    height: calc(100vh - 200px);
+    padding-bottom: 40px;
+    height: calc(100vh - 120px);
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 .community-header {
@@ -3927,6 +3948,22 @@ body {
 .community-subtitle {
     color: rgba(255, 255, 255, 0.6);
     font-size: 0.9rem;
+}
+
+/* Community Login Prompt - matches rankings style */
+.community-login-prompt {
+    background: rgba(255, 107, 0, 0.15);
+    border: 1px solid rgba(255, 107, 0, 0.3);
+    border-radius: 8px;
+    padding: 10px 20px;
+    margin-top: 15px;
+    display: inline-block;
+    color: #ff9944;
+    font-size: 0.9rem;
+}
+
+.community-login-prompt i {
+    margin-right: 8px;
 }
 
 /* Community Tabs */
@@ -3994,6 +4031,25 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
+}
+
+.chat-messages::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.3);
+    border-radius: 3px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 212, 255, 0.5);
 }
 
 .chat-loading {
@@ -4138,6 +4194,25 @@ body {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
+}
+
+.feed-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.feed-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.feed-container::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.3);
+    border-radius: 3px;
+}
+
+.feed-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 212, 255, 0.5);
 }
 
 .feed-list {
