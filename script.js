@@ -220,6 +220,11 @@ class AnimalStatsApp {
             this.rankingsManager.init();
             window.rankingsManager = this.rankingsManager; // Expose globally for stats comments
             
+            // Initialize Tournament Manager
+            this.tournamentManager = new TournamentManager(this);
+            this.tournamentManager.init();
+            window.tournamentManager = this.tournamentManager;
+            
             // Initialize Community Manager
             this.communityManager = new CommunityManager(this);
             this.communityManager.init();
@@ -2147,6 +2152,386 @@ document.addEventListener('DOMContentLoaded', () => {
     window.app = new AnimalStatsApp();
     window.app.init();
 });
+
+
+/**
+ * Tournament Manager - Handles bracket tournaments
+ */
+class TournamentManager {
+    constructor(app) {
+        this.app = app;
+        this.bracketSize = 0;
+        this.animals = [];
+        this.bracket = [];
+        this.currentRound = 0;
+        this.currentMatch = 0;
+        this.totalMatches = 0;
+        this.completedMatches = 0;
+        this.winners = [];
+        this.matchHistory = [];
+        this.isActive = false;
+        
+        // DOM Elements
+        this.dom = {
+            modal: document.getElementById('tournament-modal'),
+            setup: document.getElementById('tournament-setup'),
+            battle: document.getElementById('tournament-battle'),
+            results: document.getElementById('tournament-results'),
+            closeBtn: document.getElementById('tournament-close'),
+            quitBtn: document.getElementById('tournament-quit'),
+            bracketOptions: document.querySelectorAll('.bracket-option'),
+            startBtn: document.getElementById('start-tournament-btn'),
+            loginNote: document.getElementById('tournament-login-note'),
+            // Battle elements
+            progressText: document.getElementById('tournament-progress-text'),
+            progressBar: document.getElementById('tournament-progress-bar'),
+            matchText: document.getElementById('tournament-match-text'),
+            fighter1: document.getElementById('tournament-fighter-1'),
+            fighter2: document.getElementById('tournament-fighter-2'),
+            fighter1Img: document.getElementById('fighter-1-img'),
+            fighter1Name: document.getElementById('fighter-1-name'),
+            fighter1Attack: document.getElementById('fighter-1-attack'),
+            fighter1Defense: document.getElementById('fighter-1-defense'),
+            fighter1Special: document.getElementById('fighter-1-special'),
+            fighter2Img: document.getElementById('fighter-2-img'),
+            fighter2Name: document.getElementById('fighter-2-name'),
+            fighter2Attack: document.getElementById('fighter-2-attack'),
+            fighter2Defense: document.getElementById('fighter-2-defense'),
+            fighter2Special: document.getElementById('fighter-2-special'),
+            bracketPreview: document.getElementById('tournament-bracket-preview'),
+            // Results elements
+            championImg: document.getElementById('champion-img'),
+            championName: document.getElementById('champion-name'),
+            resultMatches: document.getElementById('result-matches'),
+            resultBracket: document.getElementById('result-bracket'),
+            runnerUpList: document.getElementById('runner-up-list'),
+            playAgainBtn: document.getElementById('play-again-btn'),
+            closeResultsBtn: document.getElementById('close-results-btn')
+        };
+    }
+
+    init() {
+        this.bindEvents();
+        this.updateLoginNote();
+    }
+
+    bindEvents() {
+        // Start tournament button
+        this.dom.startBtn?.addEventListener('click', () => this.showSetup());
+        
+        // Close button
+        this.dom.closeBtn?.addEventListener('click', () => this.hideModal());
+        
+        // Quit button
+        this.dom.quitBtn?.addEventListener('click', () => {
+            if (confirm('Are you sure you want to quit the tournament?')) {
+                this.hideModal();
+            }
+        });
+        
+        // Bracket size options
+        this.dom.bracketOptions.forEach(option => {
+            option.addEventListener('click', (e) => {
+                const size = parseInt(e.currentTarget.dataset.rounds);
+                this.startTournament(size);
+            });
+        });
+        
+        // Fighter selection
+        this.dom.fighter1?.addEventListener('click', () => this.selectWinner(0));
+        this.dom.fighter2?.addEventListener('click', () => this.selectWinner(1));
+        
+        // Results buttons
+        this.dom.playAgainBtn?.addEventListener('click', () => this.showSetup());
+        this.dom.closeResultsBtn?.addEventListener('click', () => this.hideModal());
+        
+        // Escape key closes modal
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.dom.modal?.classList.contains('show')) {
+                if (this.isActive) {
+                    if (confirm('Are you sure you want to quit the tournament?')) {
+                        this.hideModal();
+                    }
+                } else {
+                    this.hideModal();
+                }
+            }
+        });
+    }
+
+    updateLoginNote() {
+        if (this.dom.loginNote) {
+            this.dom.loginNote.style.display = Auth.isLoggedIn() ? 'none' : 'block';
+        }
+    }
+
+    showSetup() {
+        this.reset();
+        this.updateLoginNote();
+        this.dom.setup.style.display = 'flex';
+        this.dom.battle.style.display = 'none';
+        this.dom.results.style.display = 'none';
+        this.dom.modal.classList.add('show');
+    }
+
+    hideModal() {
+        this.dom.modal.classList.remove('show');
+        this.isActive = false;
+    }
+
+    reset() {
+        this.bracketSize = 0;
+        this.animals = [];
+        this.bracket = [];
+        this.currentRound = 0;
+        this.currentMatch = 0;
+        this.totalMatches = 0;
+        this.completedMatches = 0;
+        this.winners = [];
+        this.matchHistory = [];
+        this.isActive = false;
+    }
+
+    startTournament(size) {
+        this.reset();
+        this.bracketSize = size;
+        this.totalMatches = size - 1;
+        this.isActive = true;
+        
+        // Get random animals for the bracket
+        this.animals = this.getRandomAnimals(size);
+        
+        // Build initial bracket (pairs of animals)
+        this.bracket = [];
+        for (let i = 0; i < this.animals.length; i += 2) {
+            this.bracket.push([this.animals[i], this.animals[i + 1]]);
+        }
+        
+        // Calculate total rounds
+        this.totalRounds = Math.log2(size);
+        this.currentRound = 1;
+        this.currentMatch = 0;
+        
+        // Show battle screen
+        this.dom.setup.style.display = 'none';
+        this.dom.battle.style.display = 'flex';
+        this.dom.results.style.display = 'none';
+        
+        // Show first matchup
+        this.showCurrentMatch();
+    }
+
+    getRandomAnimals(count) {
+        const allAnimals = [...this.app.state.animals];
+        const selected = [];
+        
+        // Shuffle array
+        for (let i = allAnimals.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [allAnimals[i], allAnimals[j]] = [allAnimals[j], allAnimals[i]];
+        }
+        
+        // Take first 'count' animals
+        return allAnimals.slice(0, count);
+    }
+
+    showCurrentMatch() {
+        if (this.currentMatch >= this.bracket.length) {
+            // Move to next round
+            this.advanceRound();
+            return;
+        }
+        
+        const match = this.bracket[this.currentMatch];
+        const [animal1, animal2] = match;
+        
+        // Update progress
+        this.updateProgress();
+        
+        // Update fighter 1
+        this.dom.fighter1Img.src = animal1.image;
+        this.dom.fighter1Img.onerror = () => { this.dom.fighter1Img.src = 'https://via.placeholder.com/300x200?text=?'; };
+        this.dom.fighter1Name.textContent = animal1.name;
+        this.dom.fighter1Attack.textContent = Math.round(animal1.attack || 0);
+        this.dom.fighter1Defense.textContent = Math.round(animal1.defense || 0);
+        this.dom.fighter1Special.textContent = Math.round(animal1.special || 0);
+        
+        // Update fighter 2
+        this.dom.fighter2Img.src = animal2.image;
+        this.dom.fighter2Img.onerror = () => { this.dom.fighter2Img.src = 'https://via.placeholder.com/300x200?text=?'; };
+        this.dom.fighter2Name.textContent = animal2.name;
+        this.dom.fighter2Attack.textContent = Math.round(animal2.attack || 0);
+        this.dom.fighter2Defense.textContent = Math.round(animal2.defense || 0);
+        this.dom.fighter2Special.textContent = Math.round(animal2.special || 0);
+        
+        // Update bracket preview
+        this.updateBracketPreview();
+        
+        // Add entrance animation
+        this.dom.fighter1.style.animation = 'none';
+        this.dom.fighter2.style.animation = 'none';
+        setTimeout(() => {
+            this.dom.fighter1.style.animation = 'slideInLeft 0.5s ease';
+            this.dom.fighter2.style.animation = 'slideInRight 0.5s ease';
+        }, 10);
+    }
+
+    updateProgress() {
+        const roundName = this.getRoundName(this.currentRound, this.totalRounds);
+        const matchInRound = this.currentMatch + 1;
+        const matchesInRound = this.bracket.length;
+        
+        this.dom.progressText.textContent = roundName;
+        this.dom.matchText.textContent = `Match ${matchInRound} of ${matchesInRound}`;
+        
+        const progressPercent = (this.completedMatches / this.totalMatches) * 100;
+        this.dom.progressBar.style.width = `${progressPercent}%`;
+    }
+
+    getRoundName(round, totalRounds) {
+        if (round === totalRounds) return 'FINALS';
+        if (round === totalRounds - 1) return 'SEMI-FINALS';
+        if (round === totalRounds - 2) return 'QUARTER-FINALS';
+        return `Round ${round} of ${totalRounds}`;
+    }
+
+    updateBracketPreview() {
+        // Show mini bracket with winners so far
+        let html = '<div class="bracket-mini">';
+        
+        // Show winners from previous matches
+        this.winners.forEach((winner, idx) => {
+            html += `<div class="bracket-mini-item winner">${winner.name}</div>`;
+        });
+        
+        // Show current match indicator
+        if (this.currentMatch < this.bracket.length) {
+            const match = this.bracket[this.currentMatch];
+            html += `<div class="bracket-mini-item current">${match[0].name} vs ${match[1].name}</div>`;
+        }
+        
+        // Show remaining matches in this round
+        for (let i = this.currentMatch + 1; i < this.bracket.length; i++) {
+            const match = this.bracket[i];
+            html += `<div class="bracket-mini-item">${match[0].name} vs ${match[1].name}</div>`;
+        }
+        
+        html += '</div>';
+        this.dom.bracketPreview.innerHTML = html;
+    }
+
+    selectWinner(fighterIndex) {
+        const match = this.bracket[this.currentMatch];
+        const winner = match[fighterIndex];
+        const loser = match[1 - fighterIndex];
+        
+        // Record match
+        this.matchHistory.push({
+            round: this.currentRound,
+            winner: winner,
+            loser: loser
+        });
+        
+        // Add winner to next round
+        this.winners.push(winner);
+        this.completedMatches++;
+        
+        // Visual feedback
+        const winnerEl = fighterIndex === 0 ? this.dom.fighter1 : this.dom.fighter2;
+        const loserEl = fighterIndex === 0 ? this.dom.fighter2 : this.dom.fighter1;
+        
+        winnerEl.querySelector('.fighter-card').style.borderColor = '#00ff88';
+        winnerEl.querySelector('.fighter-card').style.boxShadow = '0 0 40px rgba(0, 255, 136, 0.6)';
+        loserEl.querySelector('.fighter-card').style.opacity = '0.4';
+        
+        // Move to next match after brief delay
+        setTimeout(() => {
+            // Reset styles
+            winnerEl.querySelector('.fighter-card').style.borderColor = '';
+            winnerEl.querySelector('.fighter-card').style.boxShadow = '';
+            loserEl.querySelector('.fighter-card').style.opacity = '';
+            
+            this.currentMatch++;
+            this.showCurrentMatch();
+        }, 600);
+    }
+
+    advanceRound() {
+        if (this.winners.length === 1) {
+            // Tournament complete!
+            this.showResults();
+            return;
+        }
+        
+        // Build new bracket from winners
+        this.bracket = [];
+        for (let i = 0; i < this.winners.length; i += 2) {
+            this.bracket.push([this.winners[i], this.winners[i + 1]]);
+        }
+        
+        this.winners = [];
+        this.currentRound++;
+        this.currentMatch = 0;
+        
+        // Show next match
+        this.showCurrentMatch();
+    }
+
+    showResults() {
+        this.isActive = false;
+        const champion = this.winners[0];
+        
+        // Get final four (semi-finalists + finalists)
+        const finalFour = this.getFinalFour();
+        
+        // Update results screen
+        this.dom.championImg.src = champion.image;
+        this.dom.championImg.onerror = () => { this.dom.championImg.src = 'https://via.placeholder.com/180x180?text=?'; };
+        this.dom.championName.textContent = champion.name;
+        this.dom.resultMatches.textContent = this.totalMatches;
+        this.dom.resultBracket.textContent = this.bracketSize;
+        
+        // Show runner-ups
+        let runnerUpHtml = '';
+        finalFour.forEach(animal => {
+            if (animal.name !== champion.name) {
+                runnerUpHtml += `
+                    <div class="runner-up-item">
+                        <img src="${animal.image}" alt="${animal.name}" onerror="this.src='https://via.placeholder.com/50x50?text=?'">
+                        <span>${animal.name}</span>
+                    </div>
+                `;
+            }
+        });
+        this.dom.runnerUpList.innerHTML = runnerUpHtml;
+        
+        // Switch to results screen
+        this.dom.setup.style.display = 'none';
+        this.dom.battle.style.display = 'none';
+        this.dom.results.style.display = 'flex';
+    }
+
+    getFinalFour() {
+        // Get the last 4 unique animals from match history
+        const seen = new Set();
+        const finalFour = [];
+        
+        // Start from the end (finals, then semis)
+        for (let i = this.matchHistory.length - 1; i >= 0 && finalFour.length < 4; i--) {
+            const match = this.matchHistory[i];
+            if (!seen.has(match.winner.name)) {
+                seen.add(match.winner.name);
+                finalFour.push(match.winner);
+            }
+            if (!seen.has(match.loser.name) && finalFour.length < 4) {
+                seen.add(match.loser.name);
+                finalFour.push(match.loser);
+            }
+        }
+        
+        return finalFour;
+    }
+}
 
 
 /**

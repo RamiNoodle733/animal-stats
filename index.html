@@ -420,6 +420,9 @@
                 <div class="rankings-header">
                     <h2><i class="fas fa-trophy"></i> POWER RANKINGS</h2>
                     <p class="rankings-subtitle">Vote for your favorite animals to determine the ultimate power rankings!</p>
+                    <button class="tournament-btn" id="start-tournament-btn">
+                        <i class="fas fa-crown"></i> START TOURNAMENT
+                    </button>
                     <div class="rankings-login-prompt" id="rankings-login-prompt" style="display: none;">
                         <i class="fas fa-info-circle"></i> <span>Log in to vote and comment!</span>
                     </div>
@@ -779,6 +782,144 @@
             <!-- Comments List -->
             <div class="comments-list" id="comments-list">
                 <!-- Comments will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tournament Modal -->
+    <div class="tournament-modal" id="tournament-modal">
+        <!-- Setup Screen -->
+        <div class="tournament-setup" id="tournament-setup">
+            <div class="tournament-setup-content">
+                <button class="tournament-close-btn" id="tournament-close">&times;</button>
+                <div class="tournament-setup-header">
+                    <i class="fas fa-crown"></i>
+                    <h2>ANIMAL BATTLE TOURNAMENT</h2>
+                    <p>Choose your bracket size and battle animals head-to-head to crown the ultimate champion!</p>
+                </div>
+                <div class="tournament-options">
+                    <h3>SELECT BRACKET SIZE</h3>
+                    <div class="bracket-options">
+                        <button class="bracket-option" data-rounds="8">
+                            <span class="bracket-size">8</span>
+                            <span class="bracket-label">Animals</span>
+                            <span class="bracket-matches">7 Battles</span>
+                        </button>
+                        <button class="bracket-option" data-rounds="16">
+                            <span class="bracket-size">16</span>
+                            <span class="bracket-label">Animals</span>
+                            <span class="bracket-matches">15 Battles</span>
+                        </button>
+                        <button class="bracket-option featured" data-rounds="32">
+                            <span class="bracket-size">32</span>
+                            <span class="bracket-label">Animals</span>
+                            <span class="bracket-matches">31 Battles</span>
+                        </button>
+                        <button class="bracket-option" data-rounds="64">
+                            <span class="bracket-size">64</span>
+                            <span class="bracket-label">Animals</span>
+                            <span class="bracket-matches">63 Battles</span>
+                        </button>
+                    </div>
+                    <div class="tournament-login-note" id="tournament-login-note">
+                        <i class="fas fa-info-circle"></i> Log in to save your results and earn points!
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Battle Screen -->
+        <div class="tournament-battle" id="tournament-battle" style="display: none;">
+            <div class="tournament-battle-header">
+                <div class="tournament-progress">
+                    <span class="progress-text" id="tournament-progress-text">Round 1 of 3</span>
+                    <div class="progress-bar-bg">
+                        <div class="progress-bar-fill" id="tournament-progress-bar"></div>
+                    </div>
+                    <span class="match-text" id="tournament-match-text">Match 1 of 4</span>
+                </div>
+                <button class="tournament-quit-btn" id="tournament-quit">
+                    <i class="fas fa-times"></i> Quit
+                </button>
+            </div>
+            
+            <div class="tournament-question">
+                <h2>WHO WOULD WIN IN A FIGHT?</h2>
+            </div>
+            
+            <div class="tournament-fighters">
+                <div class="tournament-fighter" id="tournament-fighter-1">
+                    <div class="fighter-card">
+                        <img src="" alt="" class="fighter-img" id="fighter-1-img">
+                        <div class="fighter-info">
+                            <div class="fighter-name" id="fighter-1-name">Animal 1</div>
+                            <div class="fighter-stats">
+                                <span><i class="fas fa-fist-raised"></i> <span id="fighter-1-attack">0</span></span>
+                                <span><i class="fas fa-shield-alt"></i> <span id="fighter-1-defense">0</span></span>
+                                <span><i class="fas fa-bolt"></i> <span id="fighter-1-special">0</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tournament-vs">
+                    <span>VS</span>
+                </div>
+                
+                <div class="tournament-fighter" id="tournament-fighter-2">
+                    <div class="fighter-card">
+                        <img src="" alt="" class="fighter-img" id="fighter-2-img">
+                        <div class="fighter-info">
+                            <div class="fighter-name" id="fighter-2-name">Animal 2</div>
+                            <div class="fighter-stats">
+                                <span><i class="fas fa-fist-raised"></i> <span id="fighter-2-attack">0</span></span>
+                                <span><i class="fas fa-shield-alt"></i> <span id="fighter-2-defense">0</span></span>
+                                <span><i class="fas fa-bolt"></i> <span id="fighter-2-special">0</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tournament-bracket-preview" id="tournament-bracket-preview">
+                <!-- Mini bracket will be rendered here -->
+            </div>
+        </div>
+        
+        <!-- Results Screen -->
+        <div class="tournament-results" id="tournament-results" style="display: none;">
+            <div class="tournament-results-content">
+                <div class="results-confetti"></div>
+                <div class="champion-crown"><i class="fas fa-crown"></i></div>
+                <h2>TOURNAMENT CHAMPION!</h2>
+                <div class="champion-display">
+                    <img src="" alt="" class="champion-img" id="champion-img">
+                    <div class="champion-name" id="champion-name">Champion</div>
+                </div>
+                <div class="tournament-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="result-matches">0</span>
+                        <span class="stat-label">Matches</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="result-bracket">0</span>
+                        <span class="stat-label">Bracket Size</span>
+                    </div>
+                </div>
+                <div class="runner-ups">
+                    <h3>Final Four</h3>
+                    <div class="runner-up-list" id="runner-up-list">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+                <div class="results-actions">
+                    <button class="play-again-btn" id="play-again-btn">
+                        <i class="fas fa-redo"></i> Play Again
+                    </button>
+                    <button class="close-results-btn" id="close-results-btn">
+                        <i class="fas fa-times"></i> Close
+                    </button>
+                </div>
             </div>
         </div>
     </div>
