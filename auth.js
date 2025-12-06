@@ -131,7 +131,7 @@ const Auth = {
         if (!token) return;
 
         try {
-            const response = await fetch('/api/auth/me', {
+            const response = await fetch('/api/auth?action=me', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -203,7 +203,7 @@ const Auth = {
         this.setLoading('login', true);
 
         try {
-            const response = await fetch('/api/auth/login', {
+            const response = await fetch('/api/auth?action=login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ login, password })
@@ -262,7 +262,7 @@ const Auth = {
         this.setLoading('signup', true);
 
         try {
-            const response = await fetch('/api/auth/signup', {
+            const response = await fetch('/api/auth?action=signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, email, password })

@@ -2433,7 +2433,7 @@ class CommunityManager {
         }
 
         try {
-            const response = await fetch(`/api/community/feed?limit=20&skip=${this.feedSkip}`);
+            const response = await fetch(`/api/chat?feed=true&limit=20&skip=${this.feedSkip}`);
             if (!response.ok) throw new Error('Failed to load feed');
             
             const result = await response.json();

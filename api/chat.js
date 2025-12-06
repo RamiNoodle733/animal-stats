@@ -1,10 +1,17 @@
 /**
  * API Route: /api/chat
- * Handles community general chat messages
+ * Handles community general chat messages AND community feed
+ * 
+ * GET /api/chat - Get chat messages
+ * GET /api/chat?feed=true - Get all comments feed
+ * POST /api/chat - Send chat message
+ * DELETE /api/chat - Delete chat message
  */
 
 const { connectToDatabase } = require('../lib/mongodb');
 const ChatMessage = require('../lib/models/ChatMessage');
+const Comment = require('../lib/models/Comment');
+const Animal = require('../lib/models/Animal');
 const { verifyToken } = require('../lib/auth');
 
 module.exports = async function handler(req, res) {
@@ -19,6 +26,11 @@ module.exports = async function handler(req, res) {
 
     try {
         await connectToDatabase();
+
+        // Check if this is a feed request
+        if (req.query.feed === 'true' && req.method === 'GET') {
+            return await handleGetFeed(req, res);
+        }
 
         switch (req.method) {
             case 'GET':
@@ -35,6 +47,68 @@ module.exports = async function handler(req, res) {
         return res.status(500).json({ success: false, error: 'Internal server error' });
     }
 };
+
+// GET: Get community feed (all comments)
+async function handleGetFeed(req, res) {
+    const { limit = 50, skip = 0 } = req.query;
+
+    // Get all root comments (not replies) sorted by newest first
+    const comments = await Comment.find({
+        isHidden: false,
+        parentId: null
+    })
+        .sort({ createdAt: -1 })
+        .skip(parseInt(skip))
+        .limit(parseInt(limit))
+        .lean();
+
+    // Get reply counts and latest replies for each comment
+    const commentsWithReplies = await Promise.all(comments.map(async (comment) => {
+        const replyCount = await Comment.countDocuments({
+            parentId: comment._id,
+            isHidden: false
+        });
+
+        const replies = await Comment.find({
+            parentId: comment._id,
+            isHidden: false
+        })
+            .sort({ createdAt: 1 })
+            .lean();
+
+        const score = (comment.upvotes?.length || 0) - (comment.downvotes?.length || 0);
+
+        let animalImage = null;
+        if (comment.targetType === 'animal' && comment.animalName) {
+            const animal = await Animal.findOne({ name: comment.animalName }).select('image').lean();
+            animalImage = animal?.image || null;
+        }
+
+        return {
+            ...comment,
+            score,
+            replyCount,
+            replies: replies.map(r => ({
+                ...r,
+                score: (r.upvotes?.length || 0) - (r.downvotes?.length || 0)
+            })),
+            animalImage
+        };
+    }));
+
+    const totalCount = await Comment.countDocuments({
+        isHidden: false,
+        parentId: null
+    });
+
+    return res.status(200).json({
+        success: true,
+        count: commentsWithReplies.length,
+        total: totalCount,
+        hasMore: parseInt(skip) + commentsWithReplies.length < totalCount,
+        data: commentsWithReplies
+    });
+}
 
 // GET: Get recent chat messages
 async function handleGet(req, res) {
