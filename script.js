@@ -2489,6 +2489,47 @@ class CommunityManager {
                 }
             });
         });
+
+        // Add click handlers for view comment button
+        container.querySelectorAll('.feed-view-btn').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const animalName = e.currentTarget.dataset.animal;
+                const animalId = e.currentTarget.dataset.animalId;
+                const animalImage = e.currentTarget.dataset.animalImage;
+                this.openAnimalComments(animalName, animalId, animalImage);
+            });
+        });
+
+        // Add click handlers for upvote
+        container.querySelectorAll('.feed-upvote-btn').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const commentId = e.currentTarget.dataset.commentId;
+                this.voteComment(commentId, 'up');
+            });
+        });
+
+        // Add click handlers for downvote
+        container.querySelectorAll('.feed-downvote-btn').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const commentId = e.currentTarget.dataset.commentId;
+                this.voteComment(commentId, 'down');
+            });
+        });
+
+        // Add click handlers for reply
+        container.querySelectorAll('.feed-reply-btn').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const commentId = e.currentTarget.dataset.commentId;
+                const animalName = e.currentTarget.dataset.animal;
+                const animalId = e.currentTarget.dataset.animalId;
+                const animalImage = e.currentTarget.dataset.animalImage;
+                this.openAnimalComments(animalName, animalId, animalImage, commentId);
+            });
+        });
     }
 
     renderFeedItem(comment) {
@@ -2496,10 +2537,16 @@ class CommunityManager {
         const authorName = comment.isAnonymous ? 'Anonymous' : comment.authorUsername;
         const time = this.formatTime(comment.createdAt);
         const animalImage = comment.animalImage || 'https://via.placeholder.com/50x50?text=?';
+        const animalId = comment.animalId || '';
         
         // Score display
         const score = comment.score || 0;
         const scoreClass = score > 0 ? 'positive' : (score < 0 ? 'negative' : '');
+        
+        // Check if user has voted
+        const userId = Auth.user?.id;
+        const hasUpvoted = userId && comment.upvotes?.includes(userId);
+        const hasDownvoted = userId && comment.downvotes?.includes(userId);
         
         // Render replies (show first 2, with option to see more)
         let repliesHtml = '';
@@ -2509,7 +2556,7 @@ class CommunityManager {
                 <div class="feed-replies">
                     ${displayReplies.map(reply => this.renderFeedReply(reply)).join('')}
                     ${comment.replies.length > 2 ? `
-                        <div class="feed-more-replies" data-animal="${comment.animalName}">
+                        <div class="feed-more-replies feed-view-btn" data-animal="${this.escapeHtml(comment.animalName)}" data-animal-id="${animalId}" data-animal-image="${animalImage}">
                             <i class="fas fa-comments"></i> View all ${comment.replies.length} replies
                         </div>
                     ` : ''}
@@ -2525,6 +2572,9 @@ class CommunityManager {
                         <div class="feed-animal-name" data-animal="${this.escapeHtml(comment.animalName)}">${this.escapeHtml(comment.animalName)}</div>
                         <div class="feed-comment-type">${comment.targetType === 'comparison' ? 'Comparison' : 'Animal Discussion'}</div>
                     </div>
+                    <button class="feed-view-btn" data-animal="${this.escapeHtml(comment.animalName)}" data-animal-id="${animalId}" data-animal-image="${animalImage}" title="View in animal comments">
+                        <i class="fas fa-external-link-alt"></i>
+                    </button>
                 </div>
                 <div class="feed-comment-main">
                     <div class="feed-comment-avatar">${initial}</div>
@@ -2535,8 +2585,16 @@ class CommunityManager {
                         </div>
                         <div class="feed-comment-content">${this.escapeHtml(comment.content)}</div>
                         <div class="feed-comment-actions">
-                            <span class="${scoreClass}"><i class="fas fa-arrow-up"></i> ${score}</span>
-                            <span><i class="fas fa-reply"></i> ${comment.replyCount || 0} replies</span>
+                            <button class="feed-upvote-btn ${hasUpvoted ? 'active' : ''}" data-comment-id="${comment._id}" title="Upvote">
+                                <i class="fas fa-arrow-up"></i>
+                            </button>
+                            <span class="feed-vote-score ${scoreClass}">${score}</span>
+                            <button class="feed-downvote-btn ${hasDownvoted ? 'active' : ''}" data-comment-id="${comment._id}" title="Downvote">
+                                <i class="fas fa-arrow-down"></i>
+                            </button>
+                            <button class="feed-reply-btn" data-comment-id="${comment._id}" data-animal="${this.escapeHtml(comment.animalName)}" data-animal-id="${animalId}" data-animal-image="${animalImage}" title="Reply">
+                                <i class="fas fa-reply"></i> ${comment.replyCount || 0}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -2568,6 +2626,75 @@ class CommunityManager {
         if (animal) {
             this.app.switchView('stats');
             this.app.selectAnimal(animal);
+        }
+    }
+
+    // Open the animal's comments modal
+    openAnimalComments(animalName, animalId, animalImage, focusReplyTo = null) {
+        if (window.rankingsManager) {
+            const fakeEvent = {
+                currentTarget: {
+                    dataset: {
+                        animalId: animalId,
+                        animalName: animalName,
+                        animalImage: animalImage
+                    }
+                }
+            };
+            window.rankingsManager.openCommentsModal(fakeEvent);
+            
+            // If replying to a specific comment, scroll to it after modal opens
+            if (focusReplyTo) {
+                setTimeout(() => {
+                    const replyBtn = document.querySelector(`.comment-item[data-id="${focusReplyTo}"] .reply-btn`);
+                    if (replyBtn) {
+                        replyBtn.click();
+                    }
+                }, 500);
+            }
+        }
+    }
+
+    // Vote on a comment from the feed
+    async voteComment(commentId, voteType) {
+        if (!Auth.isAuthenticated()) {
+            Auth.showToast('Please log in to vote');
+            Auth.showLoginModal();
+            return;
+        }
+
+        const token = Auth.getToken();
+        
+        try {
+            const response = await fetch(`/api/comments?commentId=${commentId}&vote=${voteType}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to vote');
+            }
+
+            const result = await response.json();
+            
+            // Update the comment in our local data
+            const comment = this.feedComments.find(c => c._id === commentId);
+            if (comment && result.data) {
+                comment.upvotes = result.data.upvotes || [];
+                comment.downvotes = result.data.downvotes || [];
+                comment.score = (comment.upvotes.length || 0) - (comment.downvotes.length || 0);
+            }
+            
+            // Re-render the feed
+            this.renderFeed();
+            
+        } catch (error) {
+            console.error('Vote error:', error);
+            Auth.showToast(error.message || 'Failed to vote');
         }
     }
 

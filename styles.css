@@ -4258,7 +4258,7 @@ body {
 .feed-comment-actions {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 8px;
     font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.5);
 }
@@ -4275,6 +4275,84 @@ body {
 
 .feed-comment-actions .negative {
     color: #ff4444;
+}
+
+/* Feed Vote/Reply Buttons */
+.feed-upvote-btn,
+.feed-downvote-btn,
+.feed-reply-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    padding: 4px 8px;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+}
+
+.feed-upvote-btn:hover {
+    background: rgba(68, 255, 136, 0.15);
+    border-color: rgba(68, 255, 136, 0.3);
+    color: #44ff88;
+}
+
+.feed-downvote-btn:hover {
+    background: rgba(255, 68, 68, 0.15);
+    border-color: rgba(255, 68, 68, 0.3);
+    color: #ff4444;
+}
+
+.feed-reply-btn:hover {
+    background: rgba(0, 212, 255, 0.15);
+    border-color: rgba(0, 212, 255, 0.3);
+    color: #00d4ff;
+}
+
+.feed-upvote-btn.active {
+    background: rgba(68, 255, 136, 0.2);
+    border-color: #44ff88;
+    color: #44ff88;
+}
+
+.feed-downvote-btn.active {
+    background: rgba(255, 68, 68, 0.2);
+    border-color: #ff4444;
+    color: #ff4444;
+}
+
+.feed-vote-score {
+    font-weight: 600;
+    min-width: 20px;
+    text-align: center;
+}
+
+.feed-vote-score.positive {
+    color: #44ff88;
+}
+
+.feed-vote-score.negative {
+    color: #ff4444;
+}
+
+/* Feed View Button */
+.feed-view-btn {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 6px;
+    padding: 6px 10px;
+    color: #00d4ff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-left: auto;
+}
+
+.feed-view-btn:hover {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: #00d4ff;
 }
 
 /* Feed Replies */
