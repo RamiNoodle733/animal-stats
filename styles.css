@@ -42,23 +42,24 @@ body {
 
 .game-header {
     background: linear-gradient(180deg, rgba(0, 20, 40, 0.95) 0%, rgba(0, 14, 26, 0.9) 100%);
-    border-bottom: 3px solid var(--border-bright);
-    padding: 10px 20px;
+    border-bottom: 2px solid var(--border-bright);
+    padding: 8px 20px;
     text-align: center;
     box-shadow: 0 4px 20px rgba(0, 212, 255, 0.3);
     flex-shrink: 0;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
+    gap: 20px;
     z-index: 50;
     position: relative;
 }
 
 .game-header h1 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 6px;
+    font-size: 1.5rem;
+    letter-spacing: 4px;
     background: linear-gradient(135deg, #00d4ff, #00ff88);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -78,10 +79,10 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 6px;
     background: rgba(0, 0, 0, 0.3);
-    padding: 6px 10px;
-    border-radius: 30px;
+    padding: 4px 8px;
+    border-radius: 25px;
     border: 1px solid rgba(0, 212, 255, 0.2);
 }
 
@@ -102,12 +103,11 @@ body {
 .character-display-area {
     flex: 1;
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
-    gap: 10px;
-    padding: 5px;
+    grid-template-columns: 1fr 2.5fr 1fr;
+    gap: 8px;
+    padding: 5px 10px;
     align-items: stretch;
     min-height: 0;
-    max-height: calc(100% - 50px);
     position: relative;
     z-index: 5;
     transition: all 0.4s ease;
@@ -308,40 +308,41 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 6px;
     height: 100%;
     min-height: 0;
+    padding: 5px;
 }
 
 .character-name-display {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 6px;
+    font-size: 1.8rem;
+    letter-spacing: 5px;
     color: var(--text-light);
     text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.9);
     text-align: center;
     flex-shrink: 0;
+    line-height: 1.1;
 }
 
 .character-scientific-name {
     font-family: 'Inter', sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-style: italic;
     color: rgba(255, 255, 255, 0.6);
     text-align: center;
-    margin-top: -8px;
-    margin-bottom: 5px;
+    margin-top: -4px;
+    margin-bottom: 2px;
 }
 
 .character-model-container {
     position: relative;
     width: 100%;
-    max-width: 320px;
-    aspect-ratio: 1;
+    max-width: 400px;
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 1;
     min-height: 0;
 }
 
@@ -381,36 +382,37 @@ body {
 
 .character-mini-info {
     display: flex;
-    gap: 8px;
-    font-size: 0.75rem;
+    gap: 6px;
+    font-size: 0.7rem;
     color: rgba(255, 255, 255, 0.6);
-    margin-top: 5px;
+    margin-top: 3px;
+    flex-shrink: 0;
 }
 
 .character-mini-info span {
-    padding: 3px 8px;
+    padding: 2px 6px;
     background: rgba(0, 212, 255, 0.1);
     border-radius: 4px;
 }
 
 .bottom-info-bar {
     background: rgba(0, 212, 255, 0.05);
-    border-top: 2px solid rgba(0, 212, 255, 0.3);
-    padding: 8px 20px;
+    border-top: 1px solid rgba(0, 212, 255, 0.3);
+    padding: 6px 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 15px;
+    gap: 12px;
     flex-shrink: 0;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-light);
     flex-wrap: nowrap;
     position: relative;
     z-index: 5;
     overflow: hidden;
     white-space: nowrap;
-    min-height: 40px;
-    max-height: 40px;
+    min-height: 34px;
+    max-height: 34px;
 }
 
 .info-item-inline {
@@ -939,12 +941,12 @@ body {
 
 .character-grid-container {
     background: linear-gradient(180deg, transparent 0%, rgba(0, 212, 255, 0.1) 100%);
-    border-top: 3px solid var(--border-bright);
-    padding: 12px;
-    height: 240px;
+    border-top: 2px solid var(--border-bright);
+    padding: 10px 12px;
+    height: 200px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
     box-shadow: 0 -4px 20px rgba(0, 212, 255, 0.3);
     transition: all 0.4s ease;
     overflow: visible;
@@ -1491,20 +1493,20 @@ body {
 }
 
 .mode-btn {
-    padding: 8px 20px;
+    padding: 6px 14px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.95rem;
-    letter-spacing: 2px;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
     background: transparent;
     border: none;
     color: rgba(255, 255, 255, 0.6);
     cursor: pointer;
     transition: all 0.3s ease;
-    border-radius: 20px;
+    border-radius: 18px;
     white-space: nowrap;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
 }
 
 .mode-btn:hover {
@@ -1516,18 +1518,18 @@ body {
     background: linear-gradient(135deg, var(--primary-color), rgba(0, 255, 136, 0.8));
     color: #000;
     text-shadow: none;
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.6);
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.6);
     font-weight: 600;
 }
 
 .mode-btn i {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
 /* Auth Container - Integrated into header */
 .auth-container {
     position: absolute;
-    right: 20px;
+    right: 15px;
     top: 50%;
     transform: translateY(-50%);
     z-index: 100;
@@ -1536,23 +1538,22 @@ body {
 .auth-btn {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 18px;
+    gap: 6px;
+    padding: 8px 14px;
     background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 212, 255, 0.05));
-    border: 2px solid var(--primary-color);
-    border-radius: 25px;
+    border: 1px solid var(--primary-color);
+    border-radius: 20px;
     color: var(--primary-color);
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.95rem;
-    letter-spacing: 2px;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .auth-btn:hover {
     background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(0, 212, 255, 0.15));
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
-    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
 }
 
 .auth-btn.logged-in {
@@ -1562,7 +1563,7 @@ body {
 }
 
 .auth-btn.logged-in:hover {
-    box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
 }
 
 /* REMOVED fight-profile-badge */
