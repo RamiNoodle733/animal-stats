@@ -2200,7 +2200,7 @@ class CommunityManager {
         if (chatLoginLink) {
             chatLoginLink.addEventListener('click', (e) => {
                 e.preventDefault();
-                Auth.showLoginModal();
+                Auth.showModal('login');
             });
         }
 
@@ -2212,7 +2212,7 @@ class CommunityManager {
     }
 
     updateLoginState() {
-        const isLoggedIn = Auth.isAuthenticated();
+        const isLoggedIn = Auth.isLoggedIn();
         const communityLoginPrompt = document.getElementById('community-login-prompt');
         const chatInputWrapper = document.getElementById('chat-input-wrapper');
         
@@ -2657,9 +2657,9 @@ class CommunityManager {
 
     // Vote on a comment from the feed
     async voteComment(commentId, voteType) {
-        if (!Auth.isAuthenticated()) {
+        if (!Auth.isLoggedIn()) {
             Auth.showToast('Please log in to vote');
-            Auth.showLoginModal();
+            Auth.showModal('login');
             return;
         }
 
