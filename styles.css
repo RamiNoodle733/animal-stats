@@ -2205,20 +2205,23 @@ body {
 
 .substat-row {
     display: grid;
-    grid-template-columns: 70px 1fr 30px;
+    grid-template-columns: 95px 1fr 30px;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .substat-container.right-align .substat-row {
-    grid-template-columns: 30px 1fr 70px;
+    grid-template-columns: 30px 1fr 95px;
 }
 
 .substat-label {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     color: rgba(255, 255, 255, 0.6);
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .substat-value {
@@ -2261,11 +2264,11 @@ body {
     }
     
     .substat-row {
-        grid-template-columns: 60px 1fr 30px;
+        grid-template-columns: 80px 1fr 30px;
     }
     
     .substat-container.right-align .substat-row {
-        grid-template-columns: 30px 1fr 60px;
+        grid-template-columns: 30px 1fr 80px;
     }
 }
 
