@@ -1817,10 +1817,6 @@ class RankingsManager {
                         </div>
                     </div>
                 </div>
-                <div class="power-score">
-                    <div class="power-score-value">${powerScore}</div>
-                    <div class="power-score-label">Power</div>
-                </div>
             </div>
             <div class="ranking-card-actions">
                 <div class="vote-buttons">
@@ -3056,7 +3052,6 @@ class CommunityManager {
                             <i class="fas ${trendIcon}"></i>
                             ${trendText}
                         </div>
-                        <div class="preview-power-score">${item.powerScore || 50}</div>
                     </div>
                 `;
             }).join('');
