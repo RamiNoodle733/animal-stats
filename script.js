@@ -2233,8 +2233,8 @@ class RankingsManager {
             return '<i class="fas fa-mask"></i>';
         }
 
-        if (profileAnimal && this.state.animals) {
-            const animal = this.state.animals.find(a => 
+        if (profileAnimal && this.app?.state?.animals) {
+            const animal = this.app.state.animals.find(a => 
                 a.name.toLowerCase() === profileAnimal.toLowerCase()
             );
             if (animal?.image) {
