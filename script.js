@@ -812,7 +812,8 @@ class AnimalStatsApp {
                               (animal.stamina || 0) + (animal.intelligence || 0) + (animal.special || 0);
             const avgStat = totalStats / 6;
             const overallTier = this.calculateTier(avgStat);
-            card.classList.add(`card-tier-${overallTier.toLowerCase()}`);
+            const tierClass = overallTier.toLowerCase().replace('+', 'plus').replace('-', 'minus');
+            card.classList.add(`card-tier-${tierClass}`);
             
             // Add selection classes
             if (this.state.view === 'stats' && this.state.selectedAnimal?.name === animal.name) {
@@ -823,7 +824,7 @@ class AnimalStatsApp {
             }
 
             card.innerHTML = `
-                <span class="card-tier-badge tier-${overallTier.toLowerCase()}">${overallTier}</span>
+                <span class="card-tier-badge tier-${tierClass}">${overallTier}</span>
                 <img src="${animal.image}" alt="${animal.name}" class="character-card-image" loading="lazy" onerror="this.src='https://via.placeholder.com/110x80?text=?'">
                 <div class="character-card-name">${animal.name}</div>
                 <div class="card-hover-stats">
@@ -985,8 +986,9 @@ class AnimalStatsApp {
             }
             
             if (this.dom.statValues[stat]) {
-                // Add Tier Badge
-                this.dom.statValues[stat].innerHTML = `${value} <span class="stat-tier-badge tier-${tier.toLowerCase()}">${tier}</span>`;
+                // Add Tier Badge - convert +/- to valid CSS class names
+                const tierClass = tier.toLowerCase().replace('+', 'plus').replace('-', 'minus');
+                this.dom.statValues[stat].innerHTML = `${value} <span class="stat-tier-badge tier-${tierClass}">${tier}</span>`;
             }
         });
 
