@@ -45,6 +45,7 @@ class AnimalStatsApp {
             },
             isGridVisible: true,
             isDetailsExpanded: false,
+            weightUnit: 'kg', // 'kg' | 'lbs'
             filters: {
                 search: '',
                 class: 'all',
@@ -427,6 +428,18 @@ class AnimalStatsApp {
         const showMenuBtn = document.getElementById('show-menu-btn');
         if (showMenuBtn) {
             showMenuBtn.addEventListener('click', this.toggleGrid);
+        }
+        
+        // Weight unit toggle
+        const weightToggle = document.getElementById('weight-toggle');
+        if (weightToggle) {
+            weightToggle.addEventListener('click', () => this.toggleWeightUnit());
+        }
+        
+        // Load saved weight unit preference
+        const savedWeightUnit = localStorage.getItem('weightUnit');
+        if (savedWeightUnit) {
+            this.state.weightUnit = savedWeightUnit;
         }
         
         // Close details button (mobile)
@@ -996,7 +1009,7 @@ class AnimalStatsApp {
 
         // Quick Stats Bar
         if (this.dom.quickWeight) {
-            this.dom.quickWeight.textContent = animal.weight_kg ? `${formatNumber(animal.weight_kg)} kg` : '---';
+            this.updateWeightDisplay(animal);
         }
         if (this.dom.quickSpeed) {
             this.dom.quickSpeed.textContent = animal.speed_mps ? `${(animal.speed_mps * 3.6).toFixed(0)} km/h` : '---';
@@ -1369,6 +1382,38 @@ class AnimalStatsApp {
             this.dom.expandDetailsBtn.innerHTML = '<i class="fas fa-chevron-down"></i> MORE DETAILS';
             this.dom.gridWrapper.classList.remove('hidden');
             this.dom.toggleGridBtn.style.display = 'flex';
+        }
+    }
+
+    /**
+     * Update weight display based on current unit preference
+     */
+    updateWeightDisplay(animal) {
+        if (!this.dom.quickWeight || !animal) return;
+        
+        if (!animal.weight_kg) {
+            this.dom.quickWeight.textContent = '---';
+            return;
+        }
+        
+        if (this.state.weightUnit === 'lbs') {
+            const lbs = (animal.weight_kg * 2.20462).toFixed(0);
+            this.dom.quickWeight.textContent = `${formatNumber(parseFloat(lbs))} lbs`;
+        } else {
+            this.dom.quickWeight.textContent = `${formatNumber(animal.weight_kg)} kg`;
+        }
+    }
+
+    /**
+     * Toggle weight unit between kg and lbs
+     */
+    toggleWeightUnit() {
+        this.state.weightUnit = this.state.weightUnit === 'kg' ? 'lbs' : 'kg';
+        // Save preference to localStorage
+        localStorage.setItem('weightUnit', this.state.weightUnit);
+        // Update display
+        if (this.state.selectedAnimal) {
+            this.updateWeightDisplay(this.state.selectedAnimal);
         }
     }
 

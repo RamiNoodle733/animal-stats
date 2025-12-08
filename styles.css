@@ -423,6 +423,28 @@ body {
     border-color: rgba(0, 212, 255, 0.4);
 }
 
+.quick-info-item.clickable {
+    cursor: pointer;
+}
+
+.quick-info-item.clickable:hover {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+}
+
+.quick-info-item.clickable .toggle-icon {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-left: 4px;
+    transition: transform 0.3s ease;
+}
+
+.quick-info-item.clickable:hover .toggle-icon {
+    color: var(--primary-color);
+    transform: rotate(180deg);
+}
+
 .quick-info-item i {
     color: var(--primary-color);
     font-size: 1rem;
