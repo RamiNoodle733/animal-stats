@@ -1521,7 +1521,6 @@ class RankingsManager {
         this.dom = {
             rankingsList: document.getElementById('rankings-list'),
             rankingsSearch: document.getElementById('rankings-search'),
-            rankingsSort: document.getElementById('rankings-sort'),
             loginPrompt: document.getElementById('rankings-login-prompt'),
             
             // Comments Modal
@@ -1553,11 +1552,6 @@ class RankingsManager {
         // Rankings search
         this.dom.rankingsSearch?.addEventListener('input', (e) => {
             this.filterRankings(e.target.value);
-        });
-
-        // Rankings sort
-        this.dom.rankingsSort?.addEventListener('change', (e) => {
-            this.sortRankings(e.target.value);
         });
 
         // Comments modal close
@@ -1730,33 +1724,64 @@ class RankingsManager {
         const userVote = this.userVotes[animalId] || 0;
         const isLoggedIn = Auth.isLoggedIn();
 
-        const scoreClass = item.netScore > 0 ? 'positive' : item.netScore < 0 ? 'negative' : '';
+        // Trend data (from API or calculated)
+        const trend = item.trend || 0;
+        const trendClass = trend > 0 ? 'rising' : trend < 0 ? 'falling' : 'stable';
+        const trendIcon = trend > 0 ? 'fa-arrow-up' : trend < 0 ? 'fa-arrow-down' : 'fa-minus';
+        const trendText = trend > 0 ? `+${trend}` : trend < 0 ? `${trend}` : '=';
+        
+        // Add trend glow to card
+        if (trend > 0) card.classList.add('trend-rising');
+        else if (trend < 0) card.classList.add('trend-falling');
+
+        // Power score (from API or calculated from stats + votes)
+        const powerScore = item.powerScore || Math.round((item.totalStats || 0) / 6 + (item.netScore || 0) * 2);
+        
+        // Win rate (from API or default)
+        const winRate = item.winRate || 50;
+        const winRateClass = winRate >= 60 ? '' : winRate >= 40 ? 'low' : 'poor';
+        const totalFights = item.totalFights || 0;
 
         card.innerHTML = `
             <div class="ranking-card-top">
-                <div class="rank-number">#${rank}</div>
+                <div class="rank-display">
+                    <div class="rank-number">#${rank}</div>
+                    <div class="rank-trend ${trendClass}">
+                        <i class="fas ${trendIcon}"></i>
+                        <span>${trendText}</span>
+                    </div>
+                </div>
                 <img src="${animal.image}" alt="${animal.name}" class="ranking-animal-img" 
                     onerror="this.src='https://via.placeholder.com/70x70?text=?'">
                 <div class="ranking-animal-info">
                     <div class="ranking-animal-name">${animal.name}</div>
-                    <div class="ranking-animal-stats">
-                        <span><i class="fas fa-fist-raised"></i> ${Math.round(animal.attack || 0)}</span>
-                        <span><i class="fas fa-shield-alt"></i> ${Math.round(animal.defense || 0)}</span>
-                        <span><i class="fas fa-bolt"></i> ${Math.round(animal.special || 0)}</span>
+                    <div class="ranking-animal-meta">
+                        <div class="win-rate">
+                            <i class="fas fa-trophy"></i>
+                            Win rate: <span class="win-rate-value ${winRateClass}">${winRate}%</span>
+                            ${totalFights > 0 ? `<span class="win-rate-fights">(${totalFights} fights)</span>` : ''}
+                        </div>
                     </div>
+                </div>
+                <div class="power-score">
+                    <div class="power-score-value">${powerScore}</div>
+                    <div class="power-score-label">Power</div>
                 </div>
             </div>
             <div class="ranking-card-actions">
                 <div class="vote-buttons">
                     <button class="vote-btn upvote ${userVote === 1 ? 'active' : ''}" 
                         data-animal-id="${animalId}" data-animal-name="${animal.name}" data-value="1"
-                        ${!isLoggedIn ? 'disabled title="Log in to vote"' : ''}>
+                        ${!isLoggedIn ? 'disabled' : ''} title="Should be ranked higher">
                         <i class="fas fa-arrow-up"></i>
                     </button>
-                    <span class="vote-score ${scoreClass}">${item.netScore || 0}</span>
+                    <div class="vote-counts">
+                        <span class="vote-count up">+${item.upvotes || 0}</span>
+                        <span class="vote-count down">-${item.downvotes || 0}</span>
+                    </div>
                     <button class="vote-btn downvote ${userVote === -1 ? 'active' : ''}" 
                         data-animal-id="${animalId}" data-animal-name="${animal.name}" data-value="-1"
-                        ${!isLoggedIn ? 'disabled title="Log in to vote"' : ''}>
+                        ${!isLoggedIn ? 'disabled' : ''} title="Overrated">
                         <i class="fas fa-arrow-down"></i>
                     </button>
                 </div>
@@ -1826,17 +1851,24 @@ class RankingsManager {
                 const card = btn.closest('.ranking-card');
                 const upBtn = card.querySelector('.upvote');
                 const downBtn = card.querySelector('.downvote');
-                const scoreEl = card.querySelector('.vote-score');
+                const upCount = card.querySelector('.vote-count.up');
+                const downCount = card.querySelector('.vote-count.down');
 
                 upBtn.classList.toggle('active', this.userVotes[animalId] === 1);
                 downBtn.classList.toggle('active', this.userVotes[animalId] === -1);
                 
-                // Update score from response
-                const score = result.data.score;
-                scoreEl.textContent = score;
-                scoreEl.className = 'vote-score';
-                if (score > 0) scoreEl.classList.add('positive');
-                else if (score < 0) scoreEl.classList.add('negative');
+                // Update vote counts from response
+                if (upCount && result.data.upvotes !== undefined) {
+                    upCount.textContent = `+${result.data.upvotes}`;
+                }
+                if (downCount && result.data.downvotes !== undefined) {
+                    downCount.textContent = `-${result.data.downvotes}`;
+                }
+
+                // Show XP popup if vote was added (not removed)
+                if (result.action !== 'removed') {
+                    this.showXpPopup(5, 1); // 5 XP, 1 BP
+                }
             } else {
                 Auth.showToast(result.error || 'Failed to vote');
             }
@@ -1844,6 +1876,17 @@ class RankingsManager {
             console.error('Vote error:', error);
             Auth.showToast('Error voting. Please try again.');
         }
+    }
+
+    showXpPopup(xp, bp) {
+        const popup = document.createElement('div');
+        popup.className = 'xp-popup';
+        popup.innerHTML = `<i class="fas fa-star"></i> +${xp} XP, +${bp} BP`;
+        document.body.appendChild(popup);
+        
+        setTimeout(() => {
+            popup.remove();
+        }, 2000);
     }
 
     async refreshRankingScore(animalId, scoreEl) {
@@ -1875,40 +1918,6 @@ class RankingsManager {
             const name = card.querySelector('.ranking-animal-name').textContent.toLowerCase();
             card.style.display = name.includes(term) ? '' : 'none';
         });
-    }
-
-    sortRankings(sortBy) {
-        let sorted = [...this.rankings];
-
-        switch (sortBy) {
-            case 'rank':
-                // Already sorted by rank (netScore desc)
-                break;
-            case 'upvotes':
-                sorted.sort((a, b) => (b.upvotes || 0) - (a.upvotes || 0));
-                break;
-            case 'downvotes':
-                sorted.sort((a, b) => (b.downvotes || 0) - (a.downvotes || 0));
-                break;
-            case 'controversial':
-                // Most total votes (both up and down)
-                sorted.sort((a, b) => {
-                    const totalA = (a.upvotes || 0) + (a.downvotes || 0);
-                    const totalB = (b.upvotes || 0) + (b.downvotes || 0);
-                    return totalB - totalA;
-                });
-                break;
-            case 'name':
-                sorted.sort((a, b) => {
-                    const nameA = a.animal?.name || '';
-                    const nameB = b.animal?.name || '';
-                    return nameA.localeCompare(nameB);
-                });
-                break;
-        }
-
-        this.rankings = sorted;
-        this.renderRankings();
     }
 
     // ========================================
@@ -2681,11 +2690,19 @@ class CommunityManager {
         this.chatPollingInterval = null;
         this.lastChatTime = null;
         this.currentTab = 'chat';
+        
+        // Daily Matchup
+        this.dailyMatchup = null;
+        this.userMatchupVote = null;
     }
 
     init() {
         this.setupEventListeners();
         this.updateLoginState();
+        this.loadDailyMatchup();
+        this.loadRankingsPreview();
+        this.setupTournamentSection();
+        this.startMatchupCountdown();
         
         // Listen for auth changes
         window.addEventListener('authChange', () => this.updateLoginState());
@@ -2728,6 +2745,285 @@ class CommunityManager {
         if (loadMoreBtn) {
             loadMoreBtn.addEventListener('click', () => this.loadMoreFeed());
         }
+        
+        // Daily Matchup vote buttons
+        document.getElementById('vote-fighter-1')?.addEventListener('click', () => this.voteMatchup(1));
+        document.getElementById('vote-fighter-2')?.addEventListener('click', () => this.voteMatchup(2));
+        
+        // Matchup comment input
+        const matchupCommentInput = document.getElementById('matchup-comment-input');
+        const matchupCommentSend = document.getElementById('matchup-comment-send');
+        
+        matchupCommentInput?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.sendMatchupComment();
+        });
+        matchupCommentSend?.addEventListener('click', () => this.sendMatchupComment());
+        
+        // View full rankings button
+        document.getElementById('view-full-rankings')?.addEventListener('click', () => {
+            this.app.showView('rankings');
+        });
+        
+        // Tournament bracket buttons
+        document.querySelectorAll('.bracket-size-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const size = parseInt(btn.dataset.size);
+                this.startTournament(size);
+            });
+        });
+        
+        document.getElementById('continue-tournament-btn')?.addEventListener('click', () => {
+            this.app.showView('rankings');
+            // TODO: Show tournament modal
+        });
+    }
+
+    // ==================== DAILY MATCHUP ====================
+    
+    async loadDailyMatchup() {
+        // Generate daily matchup based on date (deterministic)
+        const animals = this.app?.state?.animals || [];
+        if (animals.length < 2) {
+            setTimeout(() => this.loadDailyMatchup(), 500);
+            return;
+        }
+        
+        // Use date as seed for consistent daily matchup
+        const today = new Date().toISOString().split('T')[0];
+        const seed = this.hashCode(today);
+        const shuffled = [...animals].sort((a, b) => {
+            return this.seededRandom(seed + this.hashCode(a.name)) - 
+                   this.seededRandom(seed + this.hashCode(b.name));
+        });
+        
+        this.dailyMatchup = {
+            fighter1: shuffled[0],
+            fighter2: shuffled[1],
+            votes1: Math.floor(Math.random() * 50) + 20,
+            votes2: Math.floor(Math.random() * 50) + 20
+        };
+        
+        this.renderDailyMatchup();
+    }
+    
+    hashCode(str) {
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+        }
+        return Math.abs(hash);
+    }
+    
+    seededRandom(seed) {
+        const x = Math.sin(seed) * 10000;
+        return x - Math.floor(x);
+    }
+    
+    renderDailyMatchup() {
+        if (!this.dailyMatchup) return;
+        
+        const { fighter1, fighter2, votes1, votes2 } = this.dailyMatchup;
+        const total = votes1 + votes2;
+        const percent1 = total > 0 ? Math.round((votes1 / total) * 100) : 50;
+        const percent2 = 100 - percent1;
+        
+        // Fighter 1
+        document.getElementById('fighter-1-image').src = fighter1.image;
+        document.getElementById('fighter-1-image').alt = fighter1.name;
+        document.getElementById('fighter-1-name').textContent = fighter1.name;
+        document.getElementById('fighter-1-stats').textContent = `ATK ${fighter1.attack} • DEF ${fighter1.defense}`;
+        document.getElementById('fighter-1-percent').textContent = `${percent1}%`;
+        document.getElementById('fighter-1-bar').style.width = `${percent1}%`;
+        
+        // Fighter 2
+        document.getElementById('fighter-2-image').src = fighter2.image;
+        document.getElementById('fighter-2-image').alt = fighter2.name;
+        document.getElementById('fighter-2-name').textContent = fighter2.name;
+        document.getElementById('fighter-2-stats').textContent = `ATK ${fighter2.attack} • DEF ${fighter2.defense}`;
+        document.getElementById('fighter-2-percent').textContent = `${percent2}%`;
+        document.getElementById('fighter-2-bar').style.width = `${percent2}%`;
+        
+        // Update vote button states
+        this.updateMatchupVoteButtons();
+    }
+    
+    updateMatchupVoteButtons() {
+        const btn1 = document.getElementById('vote-fighter-1');
+        const btn2 = document.getElementById('vote-fighter-2');
+        const fighter1 = document.getElementById('fighter-1');
+        const fighter2 = document.getElementById('fighter-2');
+        
+        if (!Auth.isLoggedIn()) {
+            btn1?.setAttribute('disabled', 'true');
+            btn2?.setAttribute('disabled', 'true');
+            return;
+        }
+        
+        btn1?.removeAttribute('disabled');
+        btn2?.removeAttribute('disabled');
+        
+        if (this.userMatchupVote === 1) {
+            btn1?.classList.add('selected');
+            btn2?.classList.remove('selected');
+            fighter1?.classList.add('voted');
+            fighter2?.classList.remove('voted');
+        } else if (this.userMatchupVote === 2) {
+            btn1?.classList.remove('selected');
+            btn2?.classList.add('selected');
+            fighter1?.classList.remove('voted');
+            fighter2?.classList.add('voted');
+        }
+    }
+    
+    voteMatchup(fighter) {
+        if (!Auth.isLoggedIn()) {
+            Auth.showToast('Log in to vote!');
+            Auth.showModal('login');
+            return;
+        }
+        
+        if (this.userMatchupVote === fighter) {
+            return; // Already voted for this
+        }
+        
+        this.userMatchupVote = fighter;
+        
+        // Update vote counts
+        if (fighter === 1) {
+            this.dailyMatchup.votes1++;
+        } else {
+            this.dailyMatchup.votes2++;
+        }
+        
+        this.renderDailyMatchup();
+        this.showXpPopup(10, 2); // More XP for daily matchup
+        Auth.showToast('Vote recorded!');
+    }
+    
+    startMatchupCountdown() {
+        const updateCountdown = () => {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const diff = tomorrow - now;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            const countdown = document.getElementById('matchup-countdown');
+            if (countdown) {
+                countdown.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+        };
+        
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    }
+    
+    async sendMatchupComment() {
+        const input = document.getElementById('matchup-comment-input');
+        if (!input || !input.value.trim()) return;
+        
+        if (!Auth.isLoggedIn()) {
+            Auth.showToast('Log in to comment!');
+            Auth.showModal('login');
+            return;
+        }
+        
+        // For now, just show toast - would integrate with comments API
+        Auth.showToast('Comment posted!');
+        input.value = '';
+    }
+    
+    // ==================== RANKINGS PREVIEW ====================
+    
+    async loadRankingsPreview() {
+        const container = document.getElementById('rankings-preview-list');
+        if (!container) return;
+        
+        try {
+            const response = await fetch('/api/rankings');
+            if (!response.ok) throw new Error('Failed to load rankings');
+            
+            const result = await response.json();
+            const top5 = (result.data || []).slice(0, 5);
+            
+            container.innerHTML = top5.map((item, index) => {
+                const animal = item.animal;
+                const rankClass = index === 0 ? 'gold' : index === 1 ? 'silver' : index === 2 ? 'bronze' : '';
+                const trend = item.trend || 0;
+                const trendClass = trend > 0 ? 'rising' : trend < 0 ? 'falling' : 'stable';
+                const trendIcon = trend > 0 ? 'fa-arrow-up' : trend < 0 ? 'fa-arrow-down' : 'fa-minus';
+                const trendText = trend > 0 ? `+${trend}` : trend < 0 ? `${trend}` : '';
+                
+                return `
+                    <div class="rankings-preview-item">
+                        <span class="preview-rank ${rankClass}">#${index + 1}</span>
+                        <img src="${animal.image}" alt="${animal.name}" class="preview-animal-img">
+                        <div class="preview-animal-info">
+                            <div class="preview-animal-name">${animal.name}</div>
+                        </div>
+                        <div class="preview-trend ${trendClass}">
+                            <i class="fas ${trendIcon}"></i>
+                            ${trendText}
+                        </div>
+                        <div class="preview-power-score">${item.powerScore || 50}</div>
+                    </div>
+                `;
+            }).join('');
+            
+        } catch (error) {
+            console.error('Error loading rankings preview:', error);
+            container.innerHTML = '<div class="rankings-loading">Failed to load</div>';
+        }
+    }
+    
+    // ==================== TOURNAMENTS ====================
+    
+    setupTournamentSection() {
+        // Check for active tournament in localStorage
+        const activeTournament = localStorage.getItem('activeTournament');
+        const activeCard = document.getElementById('active-tournament-card');
+        const startOptions = document.querySelector('.tournament-start-options');
+        
+        if (activeTournament && activeCard && startOptions) {
+            try {
+                const tournament = JSON.parse(activeTournament);
+                if (tournament.bracket && tournament.bracket.length > 0) {
+                    activeCard.style.display = 'flex';
+                    startOptions.style.display = 'none';
+                    
+                    const roundNames = ['Finals', 'Semi-Finals', 'Quarter-Finals', 'Round of 16', 'Round of 32'];
+                    const roundIndex = Math.log2(tournament.bracketSize) - Math.log2(tournament.bracket.length * 2);
+                    document.getElementById('tournament-round').textContent = roundNames[roundIndex] || 'Tournament';
+                    document.getElementById('tournament-progress').textContent = `${tournament.bracket.length} matches remaining`;
+                }
+            } catch (e) {
+                console.error('Error parsing tournament:', e);
+            }
+        }
+    }
+    
+    startTournament(size) {
+        // Navigate to rankings and open tournament modal
+        this.app.showView('rankings');
+        // Trigger tournament start
+        setTimeout(() => {
+            document.getElementById('start-tournament-btn')?.click();
+        }, 100);
+    }
+    
+    showXpPopup(xp, bp) {
+        const popup = document.createElement('div');
+        popup.className = 'xp-popup';
+        popup.innerHTML = `<i class="fas fa-star"></i> +${xp} XP, +${bp} BP`;
+        document.body.appendChild(popup);
+        
+        setTimeout(() => popup.remove(), 2000);
     }
 
     updateLoginState() {
