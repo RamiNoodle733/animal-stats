@@ -1963,10 +1963,12 @@ class RankingsManager {
         try {
             // Use animalName for reliable lookup (animalId may not always be set)
             const response = await fetch(`/api/comments?animalName=${encodeURIComponent(this.currentAnimal.name)}`);
-            
-            if (!response.ok) throw new Error('Failed to fetch comments');
-
             const result = await response.json();
+            
+            if (!response.ok) {
+                console.error('Comments API error:', result);
+                throw new Error(result.error || 'Failed to fetch comments');
+            }
             
             if (result.success) {
                 this.comments = result.data;
@@ -1975,7 +1977,7 @@ class RankingsManager {
             }
         } catch (error) {
             console.error('Error fetching comments:', error);
-            this.dom.commentsList.innerHTML = '<div class="no-comments"><i class="fas fa-exclamation-triangle"></i> Failed to load comments.</div>';
+            this.dom.commentsList.innerHTML = `<div class="no-comments"><i class="fas fa-exclamation-triangle"></i> Failed to load comments. ${error.message}</div>`;
         }
     }
 

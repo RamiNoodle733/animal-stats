@@ -70,64 +70,76 @@ function buildCommentTree(comments) {
 
 // GET: Get comments for an animal or comparison (with replies nested)
 async function handleGet(req, res) {
-    const { animalId, animalName, comparison, limit = 100 } = req.query;
-    const User = require('../lib/models/User');
+    try {
+        const { animalId, animalName, comparison, limit = 100 } = req.query;
 
-    let query = { isHidden: false };
-    
-    if (animalId) {
-        query.targetType = 'animal';
-        query.animalId = animalId;
-    } else if (animalName) {
-        query.targetType = 'animal';
-        // Escape special regex characters in animal name
-        const escapedName = animalName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        query.animalName = { $regex: new RegExp(`^${escapedName}$`, 'i') };
-    } else if (comparison) {
-        query.targetType = 'comparison';
-        query.comparisonKey = comparison;
+        let query = { isHidden: false };
+        
+        if (animalId) {
+            query.targetType = 'animal';
+            query.animalId = animalId;
+        } else if (animalName) {
+            query.targetType = 'animal';
+            // Escape special regex characters in animal name
+            const escapedName = animalName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            query.animalName = { $regex: new RegExp(`^${escapedName}$`, 'i') };
+        } else if (comparison) {
+            query.targetType = 'comparison';
+            query.comparisonKey = comparison;
+        }
+
+        const comments = await Comment.find(query)
+            .sort({ createdAt: -1 })
+            .limit(parseInt(limit))
+            .lean();
+        
+        // Try to get current user data, but don't fail if User model has issues
+        let userMap = {};
+        try {
+            const User = require('../models/User');
+            const authorIds = [...new Set(comments.map(c => c.authorId?.toString()).filter(Boolean))];
+            if (authorIds.length > 0) {
+                const users = await User.find({ _id: { $in: authorIds } })
+                    .select('_id displayName username profileAnimal')
+                    .lean();
+                
+                users.forEach(u => {
+                    userMap[u._id.toString()] = {
+                        displayName: u.displayName || u.username,
+                        username: u.username,
+                        profileAnimal: u.profileAnimal
+                    };
+                });
+            }
+        } catch (userError) {
+            console.error('Error fetching user data for comments:', userError);
+            // Continue without user data - will use stored comment data
+        }
+
+        // Update comments with current user data
+        const updatedComments = comments.map(c => {
+            const authorId = c.authorId?.toString();
+            const currentUser = authorId ? userMap[authorId] : null;
+            return {
+                ...c,
+                // Use current user data if available, fallback to stored data
+                authorUsername: currentUser?.displayName || c.authorUsername,
+                profileAnimal: currentUser?.profileAnimal ?? c.profileAnimal
+            };
+        });
+        
+        const tree = buildCommentTree(updatedComments);
+        const count = await Comment.countDocuments({ ...query, parentId: null });
+
+        return res.status(200).json({
+            success: true,
+            count,
+            data: tree
+        });
+    } catch (error) {
+        console.error('handleGet error:', error);
+        return res.status(500).json({ success: false, error: 'Failed to load comments: ' + error.message });
     }
-
-    const comments = await Comment.find(query)
-        .sort({ createdAt: -1 })
-        .limit(parseInt(limit))
-        .lean();
-    
-    // Get unique author IDs and fetch current user data
-    const authorIds = [...new Set(comments.map(c => c.authorId?.toString()).filter(Boolean))];
-    const users = await User.find({ _id: { $in: authorIds } })
-        .select('_id displayName username profileAnimal')
-        .lean();
-    
-    const userMap = {};
-    users.forEach(u => {
-        userMap[u._id.toString()] = {
-            displayName: u.displayName || u.username,
-            username: u.username,
-            profileAnimal: u.profileAnimal
-        };
-    });
-
-    // Update comments with current user data
-    const updatedComments = comments.map(c => {
-        const authorId = c.authorId?.toString();
-        const currentUser = authorId ? userMap[authorId] : null;
-        return {
-            ...c,
-            // Use current user data if available, fallback to stored data
-            authorUsername: currentUser?.displayName || c.authorUsername,
-            profileAnimal: currentUser?.profileAnimal ?? c.profileAnimal
-        };
-    });
-    
-    const tree = buildCommentTree(updatedComments);
-    const count = await Comment.countDocuments({ ...query, parentId: null });
-
-    return res.status(200).json({
-        success: true,
-        count,
-        data: tree
-    });
 }
 
 // POST: Create a new comment or reply
