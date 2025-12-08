@@ -58,6 +58,28 @@ const UserSchema = new mongoose.Schema({
         winnerId: { type: mongoose.Schema.Types.ObjectId, ref: 'Animal' },
         createdAt: { type: Date, default: Date.now }
     }],
+    // XP & Leveling System
+    xp: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    level: {
+        type: Number,
+        default: 1,
+        min: 1
+    },
+    // Battle Points (currency)
+    battlePoints: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    // Profile animal avatar (stores animal name)
+    profileAnimal: {
+        type: String,
+        default: null
+    },
     createdAt: {
         type: Date,
         default: Date.now

@@ -39,6 +39,33 @@
                     <i class="fas fa-users"></i> <span class="mode-text">COMMUNITY</span>
                 </button>
             </nav>
+            
+            <!-- User Stats Bar (shown when logged in) -->
+            <div class="user-stats-bar" id="user-stats-bar" style="display: none;">
+                <div class="user-profile-mini" id="user-profile-mini">
+                    <div class="user-avatar-mini" id="user-avatar-mini">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="user-level-info">
+                        <div class="user-name-level">
+                            <span class="user-name-mini" id="user-name-mini">Username</span>
+                            <span class="user-level-badge" id="user-level-badge">LV 1</span>
+                        </div>
+                        <div class="xp-bar-container">
+                            <div class="xp-bar-fill" id="xp-bar-fill" style="width: 0%;"></div>
+                            <span class="xp-bar-text" id="xp-bar-text">0 / 100 XP</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="battle-points-display" id="battle-points-display">
+                    <div class="bp-coin" id="bp-coin">
+                        <span class="bp-icon">⚔</span>
+                    </div>
+                    <span class="bp-amount" id="bp-amount">0</span>
+                    <span class="bp-label">BP</span>
+                </div>
+            </div>
+            
             <!-- Auth Button -->
             <div class="auth-container" id="auth-container">
                 <button class="auth-btn" id="auth-btn">
@@ -52,7 +79,6 @@
                     </div>
                     <div class="user-dropdown-menu">
                         <a href="#" class="dropdown-item" id="profile-btn"><i class="fas fa-id-card"></i> Profile</a>
-                        <a href="#" class="dropdown-item" id="my-votes-btn"><i class="fas fa-thumbs-up"></i> My Votes</a>
                         <div class="dropdown-divider"></div>
                         <a href="#" class="dropdown-item logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Log Out</a>
                     </div>
@@ -803,6 +829,78 @@
             <!-- Comments List -->
             <div class="comments-list" id="comments-list">
                 <!-- Comments will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Profile Modal -->
+    <div class="profile-modal" id="profile-modal">
+        <div class="profile-modal-content">
+            <button class="profile-modal-close" id="profile-modal-close">&times;</button>
+            
+            <div class="profile-header">
+                <div class="profile-avatar-large" id="profile-avatar-large">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="profile-user-info">
+                    <h2 class="profile-username" id="profile-username">Username</h2>
+                    <div class="profile-level-display">
+                        <span class="profile-level-badge" id="profile-level-badge">LEVEL 1</span>
+                        <div class="profile-xp-bar">
+                            <div class="profile-xp-fill" id="profile-xp-fill" style="width: 0%;"></div>
+                        </div>
+                        <span class="profile-xp-text" id="profile-xp-text">0 / 100 XP</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="profile-stats-grid">
+                <div class="profile-stat-card">
+                    <div class="profile-stat-icon bp-coin-large">
+                        <span>⚔</span>
+                    </div>
+                    <div class="profile-stat-value" id="profile-bp-value">0</div>
+                    <div class="profile-stat-label">Battle Points</div>
+                </div>
+                <div class="profile-stat-card">
+                    <div class="profile-stat-icon xp-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="profile-stat-value" id="profile-total-xp">0</div>
+                    <div class="profile-stat-label">Total XP</div>
+                </div>
+                <div class="profile-stat-card">
+                    <div class="profile-stat-icon level-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="profile-stat-value" id="profile-level-value">1</div>
+                    <div class="profile-stat-label">Level</div>
+                </div>
+            </div>
+            
+            <div class="profile-section">
+                <h3><i class="fas fa-paw"></i> Choose Your Avatar</h3>
+                <p class="profile-section-desc">Select an animal to represent you</p>
+                <div class="avatar-search-container">
+                    <input type="text" id="avatar-search" placeholder="Search animals..." class="avatar-search-input">
+                </div>
+                <div class="avatar-grid" id="avatar-grid">
+                    <!-- Animal avatars will be populated by JavaScript -->
+                </div>
+            </div>
+            
+            <div class="profile-section">
+                <h3><i class="fas fa-edit"></i> Display Name</h3>
+                <div class="display-name-edit">
+                    <input type="text" id="display-name-input" placeholder="Enter display name..." maxlength="30">
+                    <button class="save-display-name-btn" id="save-display-name-btn">
+                        <i class="fas fa-check"></i> Save
+                    </button>
+                </div>
+            </div>
+            
+            <div class="profile-footer">
+                <span class="profile-member-since">Member since: <span id="profile-member-since">---</span></span>
             </div>
         </div>
     </div>

@@ -22,7 +22,33 @@ const Auth = {
         loginForm: null,
         signupForm: null,
         loginError: null,
-        signupError: null
+        signupError: null,
+        // User Stats Bar elements
+        userStatsBar: null,
+        userProfileMini: null,
+        userAvatarMini: null,
+        userNameMini: null,
+        userLevelBadge: null,
+        xpBarFill: null,
+        xpBarText: null,
+        bpAmount: null,
+        // Profile Modal elements
+        profileModal: null,
+        profileModalClose: null,
+        profileAvatarLarge: null,
+        profileUsername: null,
+        profileLevelBadge: null,
+        profileXpFill: null,
+        profileXpText: null,
+        profileBpValue: null,
+        profileTotalXp: null,
+        profileLevelValue: null,
+        avatarGrid: null,
+        avatarSearch: null,
+        displayNameInput: null,
+        saveDisplayNameBtn: null,
+        profileMemberSince: null,
+        profileBtn: null
     },
 
     /**
@@ -55,7 +81,33 @@ const Auth = {
             signupSubmit: document.getElementById('signup-submit'),
             showSignup: document.getElementById('show-signup'),
             showLogin: document.getElementById('show-login'),
-            logoutBtn: document.getElementById('logout-btn')
+            logoutBtn: document.getElementById('logout-btn'),
+            // User Stats Bar
+            userStatsBar: document.getElementById('user-stats-bar'),
+            userProfileMini: document.getElementById('user-profile-mini'),
+            userAvatarMini: document.getElementById('user-avatar-mini'),
+            userNameMini: document.getElementById('user-name-mini'),
+            userLevelBadge: document.getElementById('user-level-badge'),
+            xpBarFill: document.getElementById('xp-bar-fill'),
+            xpBarText: document.getElementById('xp-bar-text'),
+            bpAmount: document.getElementById('bp-amount'),
+            // Profile Modal
+            profileModal: document.getElementById('profile-modal'),
+            profileModalClose: document.getElementById('profile-modal-close'),
+            profileAvatarLarge: document.getElementById('profile-avatar-large'),
+            profileUsername: document.getElementById('profile-username'),
+            profileLevelBadge: document.getElementById('profile-level-badge'),
+            profileXpFill: document.getElementById('profile-xp-fill'),
+            profileXpText: document.getElementById('profile-xp-text'),
+            profileBpValue: document.getElementById('profile-bp-value'),
+            profileTotalXp: document.getElementById('profile-total-xp'),
+            profileLevelValue: document.getElementById('profile-level-value'),
+            avatarGrid: document.getElementById('avatar-grid'),
+            avatarSearch: document.getElementById('avatar-search'),
+            displayNameInput: document.getElementById('display-name-input'),
+            saveDisplayNameBtn: document.getElementById('save-display-name-btn'),
+            profileMemberSince: document.getElementById('profile-member-since'),
+            profileBtn: document.getElementById('profile-btn')
         };
     },
 
@@ -105,6 +157,31 @@ const Auth = {
         this.elements.logoutBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             this.logout();
+        });
+
+        // Profile button
+        this.elements.profileBtn?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.elements.userDropdown?.classList.remove('show');
+            this.openProfileModal();
+        });
+
+        // Profile modal close
+        this.elements.profileModalClose?.addEventListener('click', () => this.closeProfileModal());
+        this.elements.profileModal?.addEventListener('click', (e) => {
+            if (e.target === this.elements.profileModal) this.closeProfileModal();
+        });
+
+        // User profile mini click opens profile
+        this.elements.userProfileMini?.addEventListener('click', () => this.openProfileModal());
+
+        // Avatar search
+        this.elements.avatarSearch?.addEventListener('input', (e) => this.filterAvatars(e.target.value));
+
+        // Save display name
+        this.elements.saveDisplayNameBtn?.addEventListener('click', () => this.saveDisplayName());
+        this.elements.displayNameInput?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.saveDisplayName();
         });
 
         // Close dropdown when clicking outside
@@ -315,11 +392,94 @@ const Auth = {
             this.elements.authBtnText.textContent = this.user.displayName;
             this.elements.userDisplayName.textContent = this.user.displayName;
             this.elements.authContainer?.classList.add('logged-in');
+            
+            // Show user stats bar
+            if (this.elements.userStatsBar) {
+                this.elements.userStatsBar.style.display = 'flex';
+            }
+            
+            // Update user stats bar
+            this.updateUserStatsBar();
         } else {
             this.elements.authBtn?.classList.remove('logged-in');
             this.elements.authBtnText.textContent = 'LOG IN';
             this.elements.authContainer?.classList.remove('logged-in');
+            
+            // Hide user stats bar
+            if (this.elements.userStatsBar) {
+                this.elements.userStatsBar.style.display = 'none';
+            }
         }
+    },
+
+    /**
+     * Update user stats bar in header
+     */
+    updateUserStatsBar() {
+        if (!this.user) return;
+
+        const { displayName, level = 1, xp = 0, battlePoints = 0, profileAnimal } = this.user;
+
+        // Calculate XP progress
+        const xpForCurrentLevel = this.calculateXpForLevel(level);
+        const xpForNextLevel = this.calculateXpForLevel(level + 1);
+        const xpProgress = xp - xpForCurrentLevel;
+        const xpNeeded = xpForNextLevel - xpForCurrentLevel;
+        const xpPercentage = Math.min(100, Math.round((xpProgress / xpNeeded) * 100));
+
+        // Update mini profile
+        if (this.elements.userNameMini) {
+            this.elements.userNameMini.textContent = displayName;
+        }
+        if (this.elements.userLevelBadge) {
+            this.elements.userLevelBadge.textContent = `LV ${level}`;
+        }
+        if (this.elements.xpBarFill) {
+            this.elements.xpBarFill.style.width = `${xpPercentage}%`;
+        }
+        if (this.elements.xpBarText) {
+            this.elements.xpBarText.textContent = `${xpProgress} / ${xpNeeded} XP`;
+        }
+        if (this.elements.bpAmount) {
+            this.elements.bpAmount.textContent = this.formatNumber(battlePoints);
+        }
+
+        // Update avatar
+        this.updateAvatarDisplay(this.elements.userAvatarMini, profileAnimal);
+    },
+
+    /**
+     * Update avatar display element with animal image or default icon
+     */
+    updateAvatarDisplay(element, animalName) {
+        if (!element) return;
+
+        if (animalName && window.app?.state?.animals) {
+            const animal = window.app.state.animals.find(a => 
+                a.name.toLowerCase() === animalName.toLowerCase()
+            );
+            if (animal?.image) {
+                element.innerHTML = `<img src="${animal.image}" alt="${animalName}">`;
+                return;
+            }
+        }
+        // Default icon
+        element.innerHTML = '<i class="fas fa-user-circle"></i>';
+    },
+
+    /**
+     * Calculate XP needed for a level
+     */
+    calculateXpForLevel(level) {
+        if (level <= 1) return 0;
+        return Math.floor(100 * Math.pow(level - 1, 1.5));
+    },
+
+    /**
+     * Format number with commas
+     */
+    formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     },
 
     /**
@@ -407,6 +567,258 @@ const Auth = {
      */
     getUser() {
         return this.user;
+    },
+
+    /**
+     * Open profile modal
+     */
+    async openProfileModal() {
+        if (!this.user) return;
+
+        // Fetch fresh profile data
+        await this.fetchProfile();
+
+        // Update profile modal UI
+        this.updateProfileModal();
+
+        // Populate avatar grid
+        this.populateAvatarGrid();
+
+        // Show modal
+        this.elements.profileModal?.classList.add('active');
+    },
+
+    /**
+     * Close profile modal
+     */
+    closeProfileModal() {
+        this.elements.profileModal?.classList.remove('active');
+    },
+
+    /**
+     * Fetch user profile from API
+     */
+    async fetchProfile() {
+        if (!this.token) return;
+
+        try {
+            const response = await fetch('/api/auth?action=profile', {
+                headers: {
+                    'Authorization': `Bearer ${this.token}`
+                }
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success && result.data.user) {
+                    this.user = { ...this.user, ...result.data.user };
+                    this.updateUserStatsBar();
+                }
+            }
+        } catch (error) {
+            console.error('Profile fetch error:', error);
+        }
+    },
+
+    /**
+     * Update profile modal with user data
+     */
+    updateProfileModal() {
+        if (!this.user) return;
+
+        const { 
+            username, displayName, level = 1, xp = 0, battlePoints = 0, 
+            profileAnimal, createdAt, xpProgress, xpNeeded, xpPercentage 
+        } = this.user;
+
+        // Calculate XP if not provided
+        const calcXpForLevel = this.calculateXpForLevel.bind(this);
+        const currentLevelXp = calcXpForLevel(level);
+        const nextLevelXp = calcXpForLevel(level + 1);
+        const progress = xpProgress ?? (xp - currentLevelXp);
+        const needed = xpNeeded ?? (nextLevelXp - currentLevelXp);
+        const percentage = xpPercentage ?? Math.min(100, Math.round((progress / needed) * 100));
+
+        // Update elements
+        if (this.elements.profileUsername) {
+            this.elements.profileUsername.textContent = displayName || username;
+        }
+        if (this.elements.profileLevelBadge) {
+            this.elements.profileLevelBadge.textContent = `LEVEL ${level}`;
+        }
+        if (this.elements.profileXpFill) {
+            this.elements.profileXpFill.style.width = `${percentage}%`;
+        }
+        if (this.elements.profileXpText) {
+            this.elements.profileXpText.textContent = `${progress} / ${needed} XP`;
+        }
+        if (this.elements.profileBpValue) {
+            this.elements.profileBpValue.textContent = this.formatNumber(battlePoints);
+        }
+        if (this.elements.profileTotalXp) {
+            this.elements.profileTotalXp.textContent = this.formatNumber(xp);
+        }
+        if (this.elements.profileLevelValue) {
+            this.elements.profileLevelValue.textContent = level;
+        }
+        if (this.elements.displayNameInput) {
+            this.elements.displayNameInput.value = displayName || '';
+        }
+        if (this.elements.profileMemberSince && createdAt) {
+            const date = new Date(createdAt);
+            this.elements.profileMemberSince.textContent = date.toLocaleDateString('en-US', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+        }
+
+        // Update large avatar
+        this.updateAvatarDisplay(this.elements.profileAvatarLarge, profileAnimal);
+    },
+
+    /**
+     * Populate avatar grid with animals
+     */
+    populateAvatarGrid(filter = '') {
+        if (!this.elements.avatarGrid) return;
+
+        const animals = window.app?.state?.animals || [];
+        const currentAnimal = this.user?.profileAnimal?.toLowerCase();
+
+        // Filter animals
+        const filteredAnimals = filter 
+            ? animals.filter(a => a.name.toLowerCase().includes(filter.toLowerCase()))
+            : animals;
+
+        // Sort: selected first, then alphabetically
+        const sorted = [...filteredAnimals].sort((a, b) => {
+            const aSelected = a.name.toLowerCase() === currentAnimal;
+            const bSelected = b.name.toLowerCase() === currentAnimal;
+            if (aSelected && !bSelected) return -1;
+            if (!aSelected && bSelected) return 1;
+            return a.name.localeCompare(b.name);
+        });
+
+        // Render grid
+        this.elements.avatarGrid.innerHTML = sorted.slice(0, 100).map(animal => {
+            const isSelected = animal.name.toLowerCase() === currentAnimal;
+            return `
+                <div class="avatar-option ${isSelected ? 'selected' : ''}" 
+                     data-animal="${animal.name}" 
+                     title="${animal.name}">
+                    <img src="${animal.image}" alt="${animal.name}" loading="lazy"
+                         onerror="this.src='https://via.placeholder.com/70?text=?'">
+                </div>
+            `;
+        }).join('');
+
+        // Add click handlers
+        this.elements.avatarGrid.querySelectorAll('.avatar-option').forEach(option => {
+            option.addEventListener('click', () => this.selectAvatar(option.dataset.animal));
+        });
+    },
+
+    /**
+     * Filter avatars based on search
+     */
+    filterAvatars(searchTerm) {
+        this.populateAvatarGrid(searchTerm);
+    },
+
+    /**
+     * Select an avatar
+     */
+    async selectAvatar(animalName) {
+        if (!this.token) return;
+
+        try {
+            const response = await fetch('/api/auth?action=profile', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.token}`
+                },
+                body: JSON.stringify({ profileAnimal: animalName })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.user = { ...this.user, ...result.data.user };
+                this.updateUserStatsBar();
+                this.updateProfileModal();
+                this.populateAvatarGrid(this.elements.avatarSearch?.value || '');
+                this.showToast(`Avatar changed to ${animalName}!`);
+            } else {
+                this.showToast(result.error || 'Failed to update avatar');
+            }
+        } catch (error) {
+            console.error('Avatar update error:', error);
+            this.showToast('Error updating avatar');
+        }
+    },
+
+    /**
+     * Save display name
+     */
+    async saveDisplayName() {
+        const newName = this.elements.displayNameInput?.value.trim();
+        if (!newName || !this.token) return;
+
+        if (newName.length > 30) {
+            this.showToast('Display name must be 30 characters or less');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/auth?action=profile', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.token}`
+                },
+                body: JSON.stringify({ displayName: newName })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.user = { ...this.user, ...result.data.user };
+                this.updateUI();
+                this.updateProfileModal();
+                this.showToast('Display name updated!');
+            } else {
+                this.showToast(result.error || 'Failed to update name');
+            }
+        } catch (error) {
+            console.error('Name update error:', error);
+            this.showToast('Error updating name');
+        }
+    },
+
+    /**
+     * Show a toast notification
+     */
+    showToast(message, duration = 3000) {
+        // Remove existing toasts
+        const existingToast = document.querySelector('.auth-toast');
+        if (existingToast) existingToast.remove();
+
+        // Create toast element
+        const toast = document.createElement('div');
+        toast.className = 'auth-toast';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+
+        // Trigger animation
+        requestAnimationFrame(() => {
+            toast.classList.add('show');
+        });
+
+        // Remove after duration
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 300);
+        }, duration);
     },
 
     /**

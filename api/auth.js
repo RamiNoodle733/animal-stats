@@ -48,8 +48,16 @@ module.exports = async function handler(req, res) {
                 }
                 return await handleMe(req, res);
             
+            case 'profile':
+                if (req.method === 'GET') {
+                    return await handleGetProfile(req, res);
+                } else if (req.method === 'PUT' || req.method === 'POST') {
+                    return await handleUpdateProfile(req, res);
+                }
+                return res.status(405).json({ success: false, error: 'Method not allowed' });
+            
             default:
-                return res.status(400).json({ success: false, error: 'Invalid action. Use ?action=login, signup, or me' });
+                return res.status(400).json({ success: false, error: 'Invalid action. Use ?action=login, signup, me, or profile' });
         }
     } catch (error) {
         console.error('Auth error:', error);
@@ -106,6 +114,10 @@ async function handleLogin(req, res) {
                 displayName: user.displayName,
                 avatar: user.avatar,
                 role: user.role,
+                xp: user.xp || 0,
+                level: user.level || 1,
+                battlePoints: user.battlePoints || 0,
+                profileAnimal: user.profileAnimal || null,
                 createdAt: user.createdAt,
                 lastLogin: user.lastLogin
             },
@@ -169,6 +181,10 @@ async function handleSignup(req, res) {
                 displayName: user.displayName,
                 avatar: user.avatar,
                 role: user.role,
+                xp: user.xp || 0,
+                level: user.level || 1,
+                battlePoints: user.battlePoints || 0,
+                profileAnimal: user.profileAnimal || null,
                 createdAt: user.createdAt
             },
             token
@@ -207,9 +223,148 @@ async function handleMe(req, res) {
                 displayName: user.displayName,
                 avatar: user.avatar,
                 role: user.role,
+                xp: user.xp || 0,
+                level: user.level || 1,
+                battlePoints: user.battlePoints || 0,
+                profileAnimal: user.profileAnimal || null,
                 createdAt: user.createdAt,
                 lastLogin: user.lastLogin
             }
         }
     });
+}
+
+// ==================== GET PROFILE ====================
+async function handleGetProfile(req, res) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ success: false, error: 'No token provided' });
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    let decoded;
+    try {
+        decoded = jwt.verify(token, JWT_SECRET);
+    } catch (err) {
+        return res.status(401).json({ success: false, error: 'Invalid or expired token' });
+    }
+
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+        return res.status(404).json({ success: false, error: 'User not found' });
+    }
+
+    // Calculate XP progress for current level
+    const xpForCurrentLevel = calculateXpForLevel(user.level);
+    const xpForNextLevel = calculateXpForLevel(user.level + 1);
+    const xpProgress = user.xp - xpForCurrentLevel;
+    const xpNeeded = xpForNextLevel - xpForCurrentLevel;
+
+    res.status(200).json({
+        success: true,
+        data: {
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                displayName: user.displayName,
+                avatar: user.avatar,
+                role: user.role,
+                xp: user.xp || 0,
+                level: user.level || 1,
+                battlePoints: user.battlePoints || 0,
+                profileAnimal: user.profileAnimal || null,
+                xpProgress,
+                xpNeeded,
+                xpPercentage: Math.min(100, Math.round((xpProgress / xpNeeded) * 100)),
+                createdAt: user.createdAt,
+                lastLogin: user.lastLogin
+            }
+        }
+    });
+}
+
+// ==================== UPDATE PROFILE ====================
+async function handleUpdateProfile(req, res) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ success: false, error: 'No token provided' });
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    let decoded;
+    try {
+        decoded = jwt.verify(token, JWT_SECRET);
+    } catch (err) {
+        return res.status(401).json({ success: false, error: 'Invalid or expired token' });
+    }
+
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+        return res.status(404).json({ success: false, error: 'User not found' });
+    }
+
+    const { displayName, profileAnimal } = req.body;
+
+    // Update allowed fields
+    if (displayName !== undefined) {
+        user.displayName = displayName;
+    }
+    if (profileAnimal !== undefined) {
+        user.profileAnimal = profileAnimal;
+    }
+
+    await user.save();
+
+    // Calculate XP progress
+    const xpForCurrentLevel = calculateXpForLevel(user.level);
+    const xpForNextLevel = calculateXpForLevel(user.level + 1);
+    const xpProgress = user.xp - xpForCurrentLevel;
+    const xpNeeded = xpForNextLevel - xpForCurrentLevel;
+
+    res.status(200).json({
+        success: true,
+        message: 'Profile updated successfully',
+        data: {
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                displayName: user.displayName,
+                avatar: user.avatar,
+                role: user.role,
+                xp: user.xp || 0,
+                level: user.level || 1,
+                battlePoints: user.battlePoints || 0,
+                profileAnimal: user.profileAnimal || null,
+                xpProgress,
+                xpNeeded,
+                xpPercentage: Math.min(100, Math.round((xpProgress / xpNeeded) * 100)),
+                createdAt: user.createdAt,
+                lastLogin: user.lastLogin
+            }
+        }
+    });
+}
+
+// ==================== XP CALCULATION HELPERS ====================
+/**
+ * Calculate total XP needed to reach a specific level
+ * Uses a polynomial curve: Level 1 = 0 XP, Level 2 = 100 XP, scales up
+ */
+function calculateXpForLevel(level) {
+    if (level <= 1) return 0;
+    // XP curve: 100 * (level-1)^1.5
+    return Math.floor(100 * Math.pow(level - 1, 1.5));
+}
+
+/**
+ * Calculate level from total XP
+ */
+function calculateLevelFromXp(xp) {
+    if (xp < 100) return 1;
+    // Inverse of the XP formula
+    return Math.floor(Math.pow(xp / 100, 1/1.5) + 1);
 }
