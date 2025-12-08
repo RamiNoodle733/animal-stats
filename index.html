@@ -838,6 +838,7 @@
                 </div>
                 <div class="profile-user-info">
                     <h2 class="profile-username" id="profile-username">Username</h2>
+                    <p class="profile-login-hint">Login: <span id="profile-login-username">@username</span></p>
                     <div class="profile-level-display">
                         <span class="profile-level-badge" id="profile-level-badge">LEVEL 1</span>
                         <div class="profile-xp-bar">
@@ -874,7 +875,7 @@
             
             <div class="profile-section">
                 <h3><i class="fas fa-paw"></i> Choose Your Avatar</h3>
-                <p class="profile-section-desc">Select an animal to represent you</p>
+                <p class="profile-section-desc">Select an animal to represent you in comments and chat</p>
                 <div class="avatar-search-container">
                     <input type="text" id="avatar-search" placeholder="Search animals..." class="avatar-search-input">
                 </div>
@@ -885,16 +886,24 @@
             
             <div class="profile-section">
                 <h3><i class="fas fa-edit"></i> Display Name</h3>
+                <p class="profile-section-desc">This is what others see. Your login username stays the same.</p>
                 <div class="display-name-edit">
                     <input type="text" id="display-name-input" placeholder="Enter display name..." maxlength="30">
-                    <button class="save-display-name-btn" id="save-display-name-btn">
-                        <i class="fas fa-check"></i> Save
-                    </button>
                 </div>
             </div>
             
             <div class="profile-footer">
-                <span class="profile-member-since">Member since: <span id="profile-member-since">---</span></span>
+                <div class="profile-footer-info">
+                    <span class="profile-member-since">Member since: <span id="profile-member-since">---</span></span>
+                </div>
+                <div class="profile-actions">
+                    <span class="profile-unsaved-indicator" id="profile-unsaved-indicator">
+                        <i class="fas fa-exclamation-circle"></i> Unsaved changes
+                    </span>
+                    <button class="profile-save-btn" id="profile-save-btn" disabled>
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
             </div>
         </div>
     </div>

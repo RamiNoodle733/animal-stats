@@ -10,46 +10,18 @@ const Auth = {
     user: null,
     token: null,
 
-    // DOM Elements
-    elements: {
-        authContainer: null,
-        authBtn: null,
-        authBtnText: null,
-        userDropdown: null,
-        userDisplayName: null,
-        userAvatar: null,
-        authModal: null,
-        loginForm: null,
-        signupForm: null,
-        loginError: null,
-        signupError: null,
-        // User Stats Bar elements
-        userStatsBar: null,
-        userProfileMini: null,
-        userAvatarMini: null,
-        userNameMini: null,
-        userLevelBadge: null,
-        xpBarFill: null,
-        xpBarText: null,
-        bpAmount: null,
-        // Profile Modal elements
-        profileModal: null,
-        profileModalClose: null,
-        profileAvatarLarge: null,
-        profileUsername: null,
-        profileLevelBadge: null,
-        profileXpFill: null,
-        profileXpText: null,
-        profileBpValue: null,
-        profileTotalXp: null,
-        profileLevelValue: null,
-        avatarGrid: null,
-        avatarSearch: null,
-        displayNameInput: null,
-        saveDisplayNameBtn: null,
-        profileMemberSince: null,
-        profileBtn: null
+    // Profile editing state
+    pendingChanges: {
+        displayName: null,
+        profileAnimal: null
     },
+    originalValues: {
+        displayName: null,
+        profileAnimal: null
+    },
+
+    // DOM Elements
+    elements: {},
 
     /**
      * Initialize auth module
@@ -96,6 +68,7 @@ const Auth = {
             profileModalClose: document.getElementById('profile-modal-close'),
             profileAvatarLarge: document.getElementById('profile-avatar-large'),
             profileUsername: document.getElementById('profile-username'),
+            profileLoginUsername: document.getElementById('profile-login-username'),
             profileLevelBadge: document.getElementById('profile-level-badge'),
             profileXpFill: document.getElementById('profile-xp-fill'),
             profileXpText: document.getElementById('profile-xp-text'),
@@ -105,8 +78,9 @@ const Auth = {
             avatarGrid: document.getElementById('avatar-grid'),
             avatarSearch: document.getElementById('avatar-search'),
             displayNameInput: document.getElementById('display-name-input'),
-            saveDisplayNameBtn: document.getElementById('save-display-name-btn'),
-            profileMemberSince: document.getElementById('profile-member-since')
+            profileMemberSince: document.getElementById('profile-member-since'),
+            profileSaveBtn: document.getElementById('profile-save-btn'),
+            profileUnsavedIndicator: document.getElementById('profile-unsaved-indicator')
         };
     },
 
@@ -161,26 +135,37 @@ const Auth = {
             this.openProfileModal();
         });
 
-        // Profile modal close
-        this.elements.profileModalClose?.addEventListener('click', () => this.closeProfileModal());
+        // Profile modal close - with unsaved changes check
+        this.elements.profileModalClose?.addEventListener('click', () => this.tryCloseProfileModal());
         this.elements.profileModal?.addEventListener('click', (e) => {
-            if (e.target === this.elements.profileModal) this.closeProfileModal();
+            if (e.target === this.elements.profileModal) this.tryCloseProfileModal();
         });
 
         // Avatar search
         this.elements.avatarSearch?.addEventListener('input', (e) => this.filterAvatars(e.target.value));
 
-        // Save display name
-        this.elements.saveDisplayNameBtn?.addEventListener('click', () => this.saveDisplayName());
-        this.elements.displayNameInput?.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.saveDisplayName();
+        // Display name input - track changes
+        this.elements.displayNameInput?.addEventListener('input', (e) => {
+            this.pendingChanges.displayName = e.target.value.trim();
+            this.updateSaveButtonState();
         });
+
+        // Save all changes button
+        this.elements.profileSaveBtn?.addEventListener('click', () => this.saveProfileChanges());
 
         // Escape key closes modals
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 this.hideModal();
-                this.closeProfileModal();
+                this.tryCloseProfileModal();
+            }
+        });
+
+        // Warn before leaving page with unsaved changes
+        window.addEventListener('beforeunload', (e) => {
+            if (this.hasUnsavedChanges()) {
+                e.preventDefault();
+                e.returnValue = '';
             }
         });
     },
@@ -553,14 +538,42 @@ const Auth = {
         // Fetch fresh profile data
         await this.fetchProfile();
 
+        // Store original values for change detection
+        this.originalValues = {
+            displayName: this.user.displayName || '',
+            profileAnimal: this.user.profileAnimal || null
+        };
+
+        // Reset pending changes
+        this.pendingChanges = {
+            displayName: null,
+            profileAnimal: null
+        };
+
         // Update profile modal UI
         this.updateProfileModal();
 
         // Populate avatar grid
         this.populateAvatarGrid();
 
+        // Reset save button state
+        this.updateSaveButtonState();
+
         // Show modal
         this.elements.profileModal?.classList.add('active');
+    },
+
+    /**
+     * Try to close profile modal (check for unsaved changes)
+     */
+    tryCloseProfileModal() {
+        if (this.hasUnsavedChanges()) {
+            if (confirm('You have unsaved changes. Are you sure you want to leave?')) {
+                this.closeProfileModal();
+            }
+        } else {
+            this.closeProfileModal();
+        }
     },
 
     /**
@@ -568,6 +581,36 @@ const Auth = {
      */
     closeProfileModal() {
         this.elements.profileModal?.classList.remove('active');
+        // Reset pending changes
+        this.pendingChanges = { displayName: null, profileAnimal: null };
+    },
+
+    /**
+     * Check if there are unsaved changes
+     */
+    hasUnsavedChanges() {
+        if (!this.elements.profileModal?.classList.contains('active')) return false;
+
+        const nameChanged = this.pendingChanges.displayName !== null && 
+            this.pendingChanges.displayName !== this.originalValues.displayName;
+        const avatarChanged = this.pendingChanges.profileAnimal !== null && 
+            this.pendingChanges.profileAnimal !== this.originalValues.profileAnimal;
+
+        return nameChanged || avatarChanged;
+    },
+
+    /**
+     * Update save button state based on pending changes
+     */
+    updateSaveButtonState() {
+        const hasChanges = this.hasUnsavedChanges();
+
+        if (this.elements.profileSaveBtn) {
+            this.elements.profileSaveBtn.disabled = !hasChanges;
+        }
+        if (this.elements.profileUnsavedIndicator) {
+            this.elements.profileUnsavedIndicator.classList.toggle('visible', hasChanges);
+        }
     },
 
     /**
@@ -617,6 +660,9 @@ const Auth = {
         // Update elements
         if (this.elements.profileUsername) {
             this.elements.profileUsername.textContent = displayName || username;
+        }
+        if (this.elements.profileLoginUsername) {
+            this.elements.profileLoginUsername.textContent = `@${username}`;
         }
         if (this.elements.profileLevelBadge) {
             this.elements.profileLevelBadge.textContent = `LEVEL ${level}`;
@@ -673,9 +719,10 @@ const Auth = {
             return a.name.localeCompare(b.name);
         });
 
-        // Render grid
+        // Render grid - show pending selection if any
+        const selectedAnimal = this.pendingChanges.profileAnimal ?? currentAnimal;
         this.elements.avatarGrid.innerHTML = sorted.slice(0, 100).map(animal => {
-            const isSelected = animal.name.toLowerCase() === currentAnimal;
+            const isSelected = animal.name.toLowerCase() === selectedAnimal?.toLowerCase();
             return `
                 <div class="avatar-option ${isSelected ? 'selected' : ''}" 
                      data-animal="${animal.name}" 
@@ -700,10 +747,44 @@ const Auth = {
     },
 
     /**
-     * Select an avatar
+     * Select an avatar (just marks as pending, doesn't save yet)
      */
-    async selectAvatar(animalName) {
-        if (!this.token) return;
+    selectAvatar(animalName) {
+        this.pendingChanges.profileAnimal = animalName;
+
+        // Update visual selection in grid
+        this.elements.avatarGrid?.querySelectorAll('.avatar-option').forEach(option => {
+            option.classList.toggle('selected', option.dataset.animal === animalName);
+        });
+
+        // Update preview avatar
+        this.updateAvatarDisplay(this.elements.profileAvatarLarge, animalName);
+
+        // Update save button state
+        this.updateSaveButtonState();
+    },
+
+    /**
+     * Save all profile changes
+     */
+    async saveProfileChanges() {
+        if (!this.token || !this.hasUnsavedChanges()) return;
+
+        const btn = this.elements.profileSaveBtn;
+        if (btn) {
+            btn.classList.add('saving');
+            btn.innerHTML = '<i class="fas fa-spinner"></i> Saving...';
+        }
+
+        const updates = {};
+        if (this.pendingChanges.displayName !== null && 
+            this.pendingChanges.displayName !== this.originalValues.displayName) {
+            updates.displayName = this.pendingChanges.displayName;
+        }
+        if (this.pendingChanges.profileAnimal !== null && 
+            this.pendingChanges.profileAnimal !== this.originalValues.profileAnimal) {
+            updates.profileAnimal = this.pendingChanges.profileAnimal;
+        }
 
         try {
             const response = await fetch('/api/auth?action=profile', {
@@ -712,61 +793,63 @@ const Auth = {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${this.token}`
                 },
-                body: JSON.stringify({ profileAnimal: animalName })
+                body: JSON.stringify(updates)
             });
 
             const result = await response.json();
 
             if (result.success) {
                 this.user = { ...this.user, ...result.data.user };
+
+                // Update original values
+                this.originalValues = {
+                    displayName: this.user.displayName || '',
+                    profileAnimal: this.user.profileAnimal || null
+                };
+
+                // Reset pending changes
+                this.pendingChanges = { displayName: null, profileAnimal: null };
+
+                // Update all UI
                 this.updateUserStatsBar();
                 this.updateProfileModal();
-                this.populateAvatarGrid(this.elements.avatarSearch?.value || '');
-                this.showToast(`Avatar changed to ${animalName}!`);
+                this.updateSaveButtonState();
+
+                // Update all user avatars on the page
+                this.refreshAllUserAvatars();
+
+                this.showToast('Profile saved successfully!');
             } else {
-                this.showToast(result.error || 'Failed to update avatar');
+                this.showToast(result.error || 'Failed to save profile');
             }
         } catch (error) {
-            console.error('Avatar update error:', error);
-            this.showToast('Error updating avatar');
+            console.error('Profile save error:', error);
+            this.showToast('Error saving profile');
+        } finally {
+            if (btn) {
+                btn.classList.remove('saving');
+                btn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+            }
         }
     },
 
     /**
-     * Save display name
+     * Refresh all user avatars displayed on the page
      */
-    async saveDisplayName() {
-        const newName = this.elements.displayNameInput?.value.trim();
-        if (!newName || !this.token) return;
+    refreshAllUserAvatars() {
+        if (!this.user) return;
 
-        if (newName.length > 30) {
-            this.showToast('Display name must be 30 characters or less');
-            return;
-        }
-
-        try {
-            const response = await fetch('/api/auth?action=profile', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.token}`
-                },
-                body: JSON.stringify({ displayName: newName })
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                this.user = { ...this.user, ...result.data.user };
-                this.updateUI();
-                this.updateProfileModal();
-                this.showToast('Display name updated!');
-            } else {
-                this.showToast(result.error || 'Failed to update name');
+        // Update all elements with data-user-avatar attribute
+        document.querySelectorAll(`[data-user-id="${this.user.id}"]`).forEach(el => {
+            const avatarEl = el.querySelector('.comment-avatar, .chat-avatar, .message-avatar');
+            if (avatarEl) {
+                this.updateAvatarDisplay(avatarEl, this.user.profileAnimal);
             }
-        } catch (error) {
-            console.error('Name update error:', error);
-            this.showToast('Error updating name');
+        });
+
+        // Also update any visible comments/chats (trigger re-render if needed)
+        if (window.app?.refreshComments) {
+            window.app.refreshComments();
         }
     },
 

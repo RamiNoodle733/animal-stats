@@ -123,10 +123,15 @@ async function handlePost(req, res) {
         return res.status(400).json({ success: false, error: 'Comment too long (max 1000 characters)' });
     }
 
+    // Get user's profile info for display
+    const User = require('../models/User');
+    const userDoc = await User.findById(user.id).select('displayName profileAnimal');
+
     const commentData = {
         content: content.trim(),
         authorId: user.id,
-        authorUsername: user.username,
+        authorUsername: userDoc?.displayName || user.username,
+        profileAnimal: userDoc?.profileAnimal || null,
         isAnonymous: !!isAnonymous,
         upvotes: [],
         downvotes: []

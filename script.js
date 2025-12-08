@@ -2013,16 +2013,24 @@ class RankingsManager {
         const authorId = comment.authorId || comment.author?.userId;
         const currentUserId = Auth.getUser()?.id;
         const isOwn = Auth.isLoggedIn() && authorId && authorId.toString() === currentUserId;
+
+        // Profile animal for avatar
+        const profileAnimal = comment.author?.profileAnimal || comment.profileAnimal;
+        const avatarHtml = this.getUserAvatarHtml(profileAnimal, authorInitial, comment.isAnonymous);
+
         // Vote state
         const hasUpvoted = comment.upvotes?.some(id => id.toString() === currentUserId);
         const hasDownvoted = comment.downvotes?.some(id => id.toString() === currentUserId);
         const score = comment.score ?? ((comment.upvotes?.length || 0) - (comment.downvotes?.length || 0));
         const scoreClass = score > 0 ? 'positive' : score < 0 ? 'negative' : '';
+
+        // Add user ID for avatar refresh
+        const userIdAttr = authorId ? `data-user-id="${authorId}"` : '';
         
         div.innerHTML = `
-            <div class="comment-header">
+            <div class="comment-header" ${userIdAttr}>
                 <div class="comment-author">
-                    <span class="comment-avatar">${comment.isAnonymous ? '<i class="fas fa-mask"></i>' : authorInitial}</span>
+                    <span class="comment-avatar">${avatarHtml}</span>
                     <span class="comment-author-name">${displayName}</span>
                 </div>
                 <span class="comment-date">${timeAgo}</span>
@@ -2212,6 +2220,35 @@ class RankingsManager {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    /**
+     * Get avatar HTML for a user (animal image or fallback)
+     */
+    getUserAvatarHtml(profileAnimal, fallbackInitial, isAnonymous = false) {
+        if (isAnonymous) {
+            return '<i class="fas fa-mask"></i>';
+        }
+
+        if (profileAnimal && this.state.animals) {
+            const animal = this.state.animals.find(a => 
+                a.name.toLowerCase() === profileAnimal.toLowerCase()
+            );
+            if (animal?.image) {
+                return `<img src="${animal.image}" alt="${profileAnimal}" class="user-avatar-img" onerror="this.parentElement.innerHTML='${fallbackInitial}'">`;
+            }
+        }
+
+        return fallbackInitial;
+    }
+
+    /**
+     * Refresh comments (called when user profile is updated)
+     */
+    refreshComments() {
+        if (this.currentAnimal && this.dom.commentsModal?.classList.contains('active')) {
+            this.fetchComments(this.currentAnimal._id || this.currentAnimal.id);
+        }
     }
 
     viewAnimalStats(e) {
@@ -2787,10 +2824,14 @@ class CommunityManager {
     renderChatMessage(msg) {
         const initial = msg.authorUsername ? msg.authorUsername.charAt(0).toUpperCase() : '?';
         const time = this.formatTime(msg.createdAt);
+        const profileAnimal = msg.author?.profileAnimal || msg.profileAnimal;
+        const avatarHtml = this.getUserAvatarHtml(profileAnimal, initial);
+        const authorId = msg.authorId || msg.author?._id;
+        const userIdAttr = authorId ? `data-user-id="${authorId}"` : '';
         
         return `
-            <div class="chat-message" data-id="${msg._id}">
-                <div class="chat-message-avatar">${initial}</div>
+            <div class="chat-message" data-id="${msg._id}" ${userIdAttr}>
+                <div class="chat-message-avatar">${avatarHtml}</div>
                 <div class="chat-message-content">
                     <div class="chat-message-header">
                         <span class="chat-message-author">${this.escapeHtml(msg.authorUsername)}</span>
@@ -3018,6 +3059,12 @@ class CommunityManager {
         const animalImage = comment.animalImage || 'https://via.placeholder.com/50x50?text=?';
         const animalId = comment.animalId || '';
         
+        // Profile animal for avatar
+        const profileAnimal = comment.author?.profileAnimal || comment.profileAnimal;
+        const avatarHtml = this.getUserAvatarHtml(profileAnimal, initial, comment.isAnonymous);
+        const authorId = comment.authorId || comment.author?._id;
+        const userIdAttr = authorId ? `data-user-id="${authorId}"` : '';
+        
         // Score display
         const score = comment.score || 0;
         const scoreClass = score > 0 ? 'positive' : (score < 0 ? 'negative' : '');
@@ -3055,8 +3102,8 @@ class CommunityManager {
                         <i class="fas fa-external-link-alt"></i>
                     </button>
                 </div>
-                <div class="feed-comment-main">
-                    <div class="feed-comment-avatar">${initial}</div>
+                <div class="feed-comment-main" ${userIdAttr}>
+                    <div class="feed-comment-avatar">${avatarHtml}</div>
                     <div class="feed-comment-body">
                         <div class="feed-comment-author">
                             <span class="feed-comment-author-name">${this.escapeHtml(authorName)}</span>
@@ -3087,16 +3134,42 @@ class CommunityManager {
         const authorName = reply.isAnonymous ? 'Anonymous' : reply.authorUsername;
         const time = this.formatTime(reply.createdAt);
         
+        // Profile animal for avatar
+        const profileAnimal = reply.author?.profileAnimal || reply.profileAnimal;
+        const avatarHtml = this.getUserAvatarHtml(profileAnimal, initial, reply.isAnonymous);
+        const authorId = reply.authorId || reply.author?._id;
+        const userIdAttr = authorId ? `data-user-id="${authorId}"` : '';
+        
         return `
-            <div class="feed-reply">
+            <div class="feed-reply" ${userIdAttr}>
                 <div class="feed-reply-header">
-                    <div class="feed-reply-avatar">${initial}</div>
+                    <div class="feed-reply-avatar">${avatarHtml}</div>
                     <span class="feed-reply-author">${this.escapeHtml(authorName)}</span>
                     <span class="feed-reply-time">${time}</span>
                 </div>
                 <div class="feed-reply-content">${this.escapeHtml(reply.content)}</div>
             </div>
         `;
+    }
+
+    /**
+     * Get avatar HTML for user (shared helper, uses app instance)
+     */
+    getUserAvatarHtml(profileAnimal, fallbackInitial, isAnonymous = false) {
+        if (isAnonymous) {
+            return '<i class="fas fa-mask"></i>';
+        }
+
+        if (profileAnimal && this.app?.state?.animals) {
+            const animal = this.app.state.animals.find(a => 
+                a.name.toLowerCase() === profileAnimal.toLowerCase()
+            );
+            if (animal?.image) {
+                return `<img src="${animal.image}" alt="${profileAnimal}" class="user-avatar-img" onerror="this.parentElement.innerHTML='${fallbackInitial}'">`;
+            }
+        }
+
+        return fallbackInitial;
     }
 
     goToAnimal(animalName) {

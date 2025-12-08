@@ -159,10 +159,15 @@ async function handlePost(req, res) {
         return res.status(400).json({ success: false, error: 'Message too long (max 500 characters)' });
     }
 
+    // Get user's profile info for display
+    const User = require('../models/User');
+    const userDoc = await User.findById(user.id).select('displayName profileAnimal');
+
     const message = await ChatMessage.create({
         content: content.trim(),
         authorId: user.id,
-        authorUsername: user.username
+        authorUsername: userDoc?.displayName || user.username,
+        profileAnimal: userDoc?.profileAnimal || null
     });
 
     return res.status(201).json({
@@ -172,6 +177,7 @@ async function handlePost(req, res) {
             content: message.content,
             authorId: message.authorId,
             authorUsername: message.authorUsername,
+            profileAnimal: message.profileAnimal,
             createdAt: message.createdAt
         }
     });
