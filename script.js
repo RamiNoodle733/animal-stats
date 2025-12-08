@@ -1734,13 +1734,14 @@ class RankingsManager {
         if (trend > 0) card.classList.add('trend-rising');
         else if (trend < 0) card.classList.add('trend-falling');
 
-        // Power score (from API or calculated from stats + votes)
-        const powerScore = item.powerScore || Math.round((item.totalStats || 0) / 6 + (item.netScore || 0) * 2);
+        // Power score (from API)
+        const powerScore = item.powerScore || 50;
         
-        // Win rate (from API or default)
+        // Win rate (from tournament battles)
         const winRate = item.winRate || 50;
         const winRateClass = winRate >= 60 ? '' : winRate >= 40 ? 'low' : 'poor';
         const totalFights = item.totalFights || 0;
+        const winRateLabel = totalFights > 0 ? `${winRate}%` : '--';
 
         card.innerHTML = `
             <div class="ranking-card-top">
@@ -1758,8 +1759,9 @@ class RankingsManager {
                     <div class="ranking-animal-meta">
                         <div class="win-rate">
                             <i class="fas fa-trophy"></i>
-                            Win rate: <span class="win-rate-value ${winRateClass}">${winRate}%</span>
-                            ${totalFights > 0 ? `<span class="win-rate-fights">(${totalFights} fights)</span>` : ''}
+                            ${totalFights > 0 
+                                ? `<span class="win-rate-value ${winRateClass}">${winRate}%</span> win rate <span class="win-rate-fights">(${totalFights} battles)</span>`
+                                : '<span class="win-rate-value">No battles yet</span>'}
                         </div>
                     </div>
                 </div>
@@ -2568,12 +2570,15 @@ class TournamentManager {
         const winner = match[fighterIndex];
         const loser = match[1 - fighterIndex];
         
-        // Record match
+        // Record match locally
         this.matchHistory.push({
             round: this.currentRound,
             winner: winner,
             loser: loser
         });
+        
+        // Record battle to API (updates ELO ratings)
+        this.recordBattle(winner.name, loser.name);
         
         // Add winner to next round
         this.winners.push(winner);
@@ -2597,6 +2602,34 @@ class TournamentManager {
             this.currentMatch++;
             this.showCurrentMatch();
         }, 600);
+    }
+    
+    async recordBattle(winnerName, loserName) {
+        try {
+            const response = await fetch('/api/battles', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ winner: winnerName, loser: loserName })
+            });
+            
+            if (!response.ok) {
+                console.error('Failed to record battle');
+                return;
+            }
+            
+            const result = await response.json();
+            console.log('Battle recorded:', result.data);
+            
+            // Show rating change (optional visual feedback)
+            if (result.success && result.data) {
+                const winnerChange = result.data.winner.change;
+                console.log(`${winnerName}: +${winnerChange} rating`);
+            }
+        } catch (error) {
+            console.error('Error recording battle:', error);
+        }
     }
 
     advanceRound() {

@@ -1,12 +1,19 @@
 /**
  * API Route: /api/rankings
  * Get power rankings leaderboard
+ * 
+ * Power Score Algorithm:
+ * - TournamentScore (60%): ELO-based battle rating from tournaments
+ * - VoteScore (25%): Community upvotes/downvotes
+ * - AttackScore (15%): Base attack stat as fallback
  */
 
 const { connectToDatabase } = require('../lib/mongodb');
 const Vote = require('../lib/models/Vote');
 const Comment = require('../lib/models/Comment');
 const Animal = require('../lib/models/Animal');
+const BattleStats = require('../lib/models/BattleStats');
+const RankHistory = require('../lib/models/RankHistory');
 const { notifyDiscord } = require('../lib/discord');
 
 module.exports = async function handler(req, res) {
@@ -52,7 +59,16 @@ module.exports = async function handler(req, res) {
             { $match: { targetType: 'animal', isHidden: false } },
             { $group: { _id: '$animalName', count: { $sum: 1 } } }
         ]);
-
+        
+        // Get battle stats for all animals
+        const battleStats = await BattleStats.find({}).lean();
+        
+        // Get yesterday's rankings for trend calculation
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = yesterday.toISOString().split('T')[0];
+        const yesterdayRanks = await RankHistory.findOne({ date: yesterdayStr });
+        
         // Create lookup maps
         const voteMap = {};
         voteAggregations.forEach(v => {
@@ -63,39 +79,67 @@ module.exports = async function handler(req, res) {
         commentCounts.forEach(c => {
             commentMap[c._id] = c.count;
         });
+        
+        const battleMap = {};
+        battleStats.forEach(b => {
+            battleMap[b.animalName] = {
+                battleRating: b.battleRating,
+                tournamentWins: b.tournamentWins,
+                tournamentBattles: b.tournamentBattles
+            };
+        });
+        
+        const yesterdayRankMap = {};
+        if (yesterdayRanks?.rankings) {
+            yesterdayRanks.rankings.forEach(r => {
+                yesterdayRankMap[r.animalName] = r.rank;
+            });
+        }
 
-        // Combine data and calculate power rankings
+        // Helper: clamp value between min and max
+        const clamp = (val, min, max) => Math.max(min, Math.min(max, val));
+
+        // Combine data and calculate power rankings using new algorithm
         const rankings = animals.map(animal => {
             const votes = voteMap[animal.name] || { upvotes: 0, downvotes: 0, score: 0 };
+            const battle = battleMap[animal.name] || { battleRating: 1000, tournamentWins: 0, tournamentBattles: 0 };
             const commentCount = commentMap[animal.name] || 0;
             
             // Calculate total stats for display
             const totalStats = (animal.attack || 0) + (animal.defense || 0) + (animal.agility || 0) + 
                               (animal.stamina || 0) + (animal.intelligence || 0) + (animal.special || 0);
 
-            // Calculate power score (base stats + community votes weighted)
-            // Base: average of all stats (0-100 scale)
-            // Community: net votes add/subtract points
-            const avgStats = totalStats / 6;
-            const voteBonus = votes.score * 2; // Each net vote = 2 power points
-            const powerScore = Math.max(0, Math.min(100, Math.round(avgStats + voteBonus)));
-
-            // Win rate - for now, estimate based on attack/defense ratio and votes
-            // In future, this will come from actual tournament/matchup data
-            const baseWinRate = 50;
-            const statBonus = ((animal.attack || 50) - 50) / 5; // +/- based on attack
-            const voteWinBonus = votes.score > 0 ? Math.min(votes.score, 10) : Math.max(votes.score, -10);
-            const winRate = Math.max(10, Math.min(90, Math.round(baseWinRate + statBonus + voteWinBonus)));
+            // ============================================
+            // NEW POWER SCORE ALGORITHM
+            // ============================================
             
-            // Total fights (from votes for now, will be actual battles later)
-            const totalFights = votes.upvotes + votes.downvotes;
+            // 1. AttackScore (0-100): raw attack stat
+            const attackScore = animal.attack || 0;
+            
+            // 2. VoteScore (0-100): based on net votes
+            // Formula: clamp(50 + 2 * netVotes, 0, 100)
+            const voteScore = clamp(50 + 2 * votes.score, 0, 100);
+            
+            // 3. TournamentScore (0-100): based on ELO battle rating
+            // Rating starts at 1000, so (rating - 800) / 4 maps 800-1200 to 0-100
+            const tournamentScore = clamp((battle.battleRating - 800) / 4, 0, 100);
+            
+            // 4. Final PowerScore: weighted combination
+            // 60% tournament + 25% votes + 15% attack
+            const powerScore = Math.round(
+                0.60 * tournamentScore +
+                0.25 * voteScore +
+                0.15 * attackScore
+            );
 
-            // Trend - for now randomize slightly, will be calculated from historical data later
-            // Positive score = more likely rising, negative = more likely falling
-            let trend = 0;
-            if (votes.score > 5) trend = Math.floor(Math.random() * 3) + 1; // +1 to +3
-            else if (votes.score < -3) trend = -Math.floor(Math.random() * 3) - 1; // -1 to -3
-            else trend = Math.random() > 0.7 ? (Math.random() > 0.5 ? 1 : -1) : 0;
+            // ============================================
+            // WIN RATE (from actual tournament data)
+            // ============================================
+            const winRate = battle.tournamentBattles > 0 
+                ? Math.round((battle.tournamentWins / battle.tournamentBattles) * 100)
+                : 50; // Default 50% if no battles
+            
+            const totalFights = battle.tournamentBattles;
 
             return {
                 animal: {
@@ -115,30 +159,65 @@ module.exports = async function handler(req, res) {
                 totalVotes: votes.upvotes + votes.downvotes,
                 commentCount,
                 totalStats,
-                // New power ranking fields
+                // Battle stats
+                battleRating: battle.battleRating,
+                tournamentWins: battle.tournamentWins,
+                tournamentBattles: battle.tournamentBattles,
+                // Power ranking fields
                 powerScore,
+                attackScore,
+                voteScore,
+                tournamentScore,
                 winRate,
                 totalFights,
-                trend
+                trend: 0 // Will be calculated after sorting
             };
         });
 
-        // Sort by power score (descending), then by stats, then alphabetically
+        // Sort by power score (descending), then by attack, then alphabetically
         rankings.sort((a, b) => {
             // First by power score
             if (b.powerScore !== a.powerScore) return b.powerScore - a.powerScore;
-            // Then by net votes
-            if (b.netScore !== a.netScore) return b.netScore - a.netScore;
-            // Then by total stats
-            if (b.totalStats !== a.totalStats) return b.totalStats - a.totalStats;
+            // Then by attack (base stat tiebreaker)
+            if (b.animal.attack !== a.animal.attack) return b.animal.attack - a.animal.attack;
             // Finally alphabetically
             return a.animal.name.localeCompare(b.animal.name);
         });
 
-        // Add rank numbers
+        // Add rank numbers and calculate trends
         rankings.forEach((r, i) => {
             r.rank = i + 1;
+            
+            // Calculate trend from yesterday's rank
+            const yesterdayRank = yesterdayRankMap[r.animal.name];
+            if (yesterdayRank !== undefined) {
+                const trendChange = yesterdayRank - r.rank; // positive = moved up
+                if (trendChange >= 2) {
+                    r.trend = trendChange; // Rising
+                } else if (trendChange <= -2) {
+                    r.trend = trendChange; // Falling
+                } else {
+                    r.trend = 0; // Stable
+                }
+            } else {
+                r.trend = 0; // No historical data
+            }
         });
+        
+        // Store today's rankings for tomorrow's trend calculation (async, don't wait)
+        const todayStr = new Date().toISOString().split('T')[0];
+        RankHistory.findOneAndUpdate(
+            { date: todayStr },
+            { 
+                date: todayStr,
+                rankings: rankings.map(r => ({
+                    animalName: r.animal.name,
+                    rank: r.rank,
+                    powerScore: r.powerScore
+                }))
+            },
+            { upsert: true, new: true }
+        ).catch(err => console.error('Error saving rank history:', err));
 
         return res.status(200).json({
             success: true,
