@@ -1961,7 +1961,8 @@ class RankingsManager {
         this.dom.commentsList.innerHTML = '<div class="rankings-loading"><i class="fas fa-spinner fa-spin"></i> Loading comments...</div>';
 
         try {
-            const response = await fetch(`/api/comments?animalId=${this.currentAnimal.id}`);
+            // Use animalName for reliable lookup (animalId may not always be set)
+            const response = await fetch(`/api/comments?animalName=${encodeURIComponent(this.currentAnimal.name)}`);
             
             if (!response.ok) throw new Error('Failed to fetch comments');
 
@@ -3216,14 +3217,16 @@ class CommunityManager {
         }
 
         const token = Auth.getToken();
+        const action = voteType === 'up' ? 'upvote' : 'downvote';
         
         try {
-            const response = await fetch(`/api/comments?commentId=${commentId}&vote=${voteType}`, {
+            const response = await fetch(`/api/comments?id=${commentId}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
-                }
+                },
+                body: JSON.stringify({ action })
             });
 
             if (!response.ok) {

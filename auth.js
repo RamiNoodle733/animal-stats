@@ -68,6 +68,7 @@ const Auth = {
             profileModalClose: document.getElementById('profile-modal-close'),
             profileAvatarLarge: document.getElementById('profile-avatar-large'),
             profileUsername: document.getElementById('profile-username'),
+            profileLoginUsername: document.getElementById('profile-login-username'),
             profileLevelBadge: document.getElementById('profile-level-badge'),
             profileXpFill: document.getElementById('profile-xp-fill'),
             profileXpText: document.getElementById('profile-xp-text'),
@@ -77,14 +78,13 @@ const Auth = {
             avatarGrid: document.getElementById('avatar-grid'),
             avatarSearch: document.getElementById('avatar-search'),
             displayNameInput: document.getElementById('display-name-input'),
+            usernameInput: document.getElementById('username-input'),
             usernameChangesRemaining: document.getElementById('username-changes-remaining'),
             profileMemberSince: document.getElementById('profile-member-since'),
             profileSaveBtn: document.getElementById('profile-save-btn'),
             profileUnsavedIndicator: document.getElementById('profile-unsaved-indicator'),
             // Avatar Picker Modal
             avatarPickerModal: document.getElementById('avatar-picker-modal'),
-            avatarPickerTrigger: document.getElementById('avatar-picker-trigger'),
-            avatarPickerPreview: document.getElementById('avatar-picker-preview'),
             avatarPickerClose: document.getElementById('avatar-picker-close')
         };
     },
@@ -146,8 +146,8 @@ const Auth = {
             if (e.target === this.elements.profileModal) this.tryCloseProfileModal();
         });
 
-        // Avatar picker trigger - open avatar selection popup
-        this.elements.avatarPickerTrigger?.addEventListener('click', () => this.openAvatarPicker());
+        // Avatar picker trigger - clicking the profile avatar header opens the picker
+        this.elements.profileAvatarLarge?.addEventListener('click', () => this.openAvatarPicker());
 
         // Avatar picker close
         this.elements.avatarPickerClose?.addEventListener('click', () => this.closeAvatarPicker());
@@ -158,9 +158,15 @@ const Auth = {
         // Avatar search
         this.elements.avatarSearch?.addEventListener('input', (e) => this.filterAvatars(e.target.value));
 
-        // Display name input - track changes
+        // Display name input - track changes (unlimited)
         this.elements.displayNameInput?.addEventListener('input', (e) => {
             this.pendingChanges.displayName = e.target.value.trim();
+            this.updateSaveButtonState();
+        });
+
+        // Username input - track changes (3/week limit)
+        this.elements.usernameInput?.addEventListener('input', (e) => {
+            this.pendingChanges.username = e.target.value.trim();
             this.updateSaveButtonState();
         });
 
@@ -554,22 +560,23 @@ const Auth = {
         await this.fetchProfile();
 
         // Store original values for change detection
-        // Note: displayName is synced with username, so we use username as source of truth
         this.originalValues = {
-            displayName: this.user.displayName || this.user.username || '',
+            displayName: this.user.displayName || '',
+            username: this.user.username || '',
             profileAnimal: this.user.profileAnimal || null
         };
 
         // Reset pending changes
         this.pendingChanges = {
             displayName: null,
+            username: null,
             profileAnimal: null
         };
 
         // Update profile modal UI
         this.updateProfileModal();
 
-        // Reset save button state (don't populate avatar grid here - it's in the popup now)
+        // Reset save button state
         this.updateSaveButtonState();
 
         // Show modal
@@ -596,7 +603,7 @@ const Auth = {
         this.elements.profileModal?.classList.remove('active');
         this.closeAvatarPicker();
         // Reset pending changes
-        this.pendingChanges = { displayName: null, profileAnimal: null };
+        this.pendingChanges = { displayName: null, username: null, profileAnimal: null };
     },
 
     /**
@@ -625,12 +632,14 @@ const Auth = {
     hasUnsavedChanges() {
         if (!this.elements.profileModal?.classList.contains('active')) return false;
 
-        const nameChanged = this.pendingChanges.displayName !== null && 
+        const displayNameChanged = this.pendingChanges.displayName !== null && 
             this.pendingChanges.displayName !== this.originalValues.displayName;
+        const usernameChanged = this.pendingChanges.username !== null && 
+            this.pendingChanges.username !== this.originalValues.username;
         const avatarChanged = this.pendingChanges.profileAnimal !== null && 
             this.pendingChanges.profileAnimal !== this.originalValues.profileAnimal;
 
-        return nameChanged || avatarChanged;
+        return displayNameChanged || usernameChanged || avatarChanged;
     },
 
     /**
@@ -695,6 +704,9 @@ const Auth = {
         if (this.elements.profileUsername) {
             this.elements.profileUsername.textContent = displayName || username;
         }
+        if (this.elements.profileLoginUsername) {
+            this.elements.profileLoginUsername.textContent = `@${username}`;
+        }
         if (this.elements.profileLevelBadge) {
             this.elements.profileLevelBadge.textContent = `LEVEL ${level}`;
         }
@@ -713,8 +725,13 @@ const Auth = {
         if (this.elements.profileLevelValue) {
             this.elements.profileLevelValue.textContent = level;
         }
+        // Display name input (unlimited changes)
         if (this.elements.displayNameInput) {
-            this.elements.displayNameInput.value = displayName || username || '';
+            this.elements.displayNameInput.value = displayName || '';
+        }
+        // Username input (3/week limit)
+        if (this.elements.usernameInput) {
+            this.elements.usernameInput.value = username || '';
         }
         if (this.elements.profileMemberSince && createdAt) {
             const date = new Date(createdAt);
@@ -735,11 +752,8 @@ const Auth = {
             }
         }
 
-        // Update large avatar in profile header
+        // Update large avatar in profile header (this is now clickable to open picker)
         this.updateAvatarDisplay(this.elements.profileAvatarLarge, profileAnimal);
-
-        // Update avatar picker preview
-        this.updateAvatarDisplay(this.elements.avatarPickerPreview, profileAnimal);
     },
 
     /**
@@ -806,9 +820,6 @@ const Auth = {
         // Update preview avatar in profile header
         this.updateAvatarDisplay(this.elements.profileAvatarLarge, animalName);
 
-        // Update avatar picker preview
-        this.updateAvatarDisplay(this.elements.avatarPickerPreview, animalName);
-
         // Close the avatar picker popup
         this.closeAvatarPicker();
 
@@ -829,10 +840,17 @@ const Auth = {
         }
 
         const updates = {};
+        // Display name - unlimited changes
         if (this.pendingChanges.displayName !== null && 
             this.pendingChanges.displayName !== this.originalValues.displayName) {
             updates.displayName = this.pendingChanges.displayName;
         }
+        // Username - 3/week limit (login credential)
+        if (this.pendingChanges.username !== null && 
+            this.pendingChanges.username !== this.originalValues.username) {
+            updates.username = this.pendingChanges.username;
+        }
+        // Profile animal
         if (this.pendingChanges.profileAnimal !== null && 
             this.pendingChanges.profileAnimal !== this.originalValues.profileAnimal) {
             updates.profileAnimal = this.pendingChanges.profileAnimal;
@@ -853,14 +871,15 @@ const Auth = {
             if (result.success) {
                 this.user = { ...this.user, ...result.data.user };
 
-                // Update original values (displayName is synced with username)
+                // Update original values
                 this.originalValues = {
-                    displayName: this.user.displayName || this.user.username || '',
+                    displayName: this.user.displayName || '',
+                    username: this.user.username || '',
                     profileAnimal: this.user.profileAnimal || null
                 };
 
                 // Reset pending changes
-                this.pendingChanges = { displayName: null, profileAnimal: null };
+                this.pendingChanges = { displayName: null, username: null, profileAnimal: null };
 
                 // Update all UI
                 this.updateUserStatsBar();

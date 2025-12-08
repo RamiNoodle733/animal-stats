@@ -71,6 +71,7 @@ function buildCommentTree(comments) {
 // GET: Get comments for an animal or comparison (with replies nested)
 async function handleGet(req, res) {
     const { animalId, animalName, comparison, limit = 100 } = req.query;
+    const User = require('../models/User');
 
     let query = { isHidden: false };
     
@@ -79,7 +80,7 @@ async function handleGet(req, res) {
         query.animalId = animalId;
     } else if (animalName) {
         query.targetType = 'animal';
-        query.animalName = animalName;
+        query.animalName = { $regex: new RegExp(`^${animalName}$`, 'i') };
     } else if (comparison) {
         query.targetType = 'comparison';
         query.comparisonKey = comparison;
@@ -90,7 +91,34 @@ async function handleGet(req, res) {
         .limit(parseInt(limit))
         .lean();
     
-    const tree = buildCommentTree(comments);
+    // Get unique author IDs and fetch current user data
+    const authorIds = [...new Set(comments.map(c => c.authorId?.toString()).filter(Boolean))];
+    const users = await User.find({ _id: { $in: authorIds } })
+        .select('_id displayName username profileAnimal')
+        .lean();
+    
+    const userMap = {};
+    users.forEach(u => {
+        userMap[u._id.toString()] = {
+            displayName: u.displayName || u.username,
+            username: u.username,
+            profileAnimal: u.profileAnimal
+        };
+    });
+
+    // Update comments with current user data
+    const updatedComments = comments.map(c => {
+        const authorId = c.authorId?.toString();
+        const currentUser = authorId ? userMap[authorId] : null;
+        return {
+            ...c,
+            // Use current user data if available, fallback to stored data
+            authorUsername: currentUser?.displayName || c.authorUsername,
+            profileAnimal: currentUser?.profileAnimal ?? c.profileAnimal
+        };
+    });
+    
+    const tree = buildCommentTree(updatedComments);
     const count = await Comment.countDocuments({ ...query, parentId: null });
 
     return res.status(200).json({

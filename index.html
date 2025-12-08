@@ -833,11 +833,15 @@
             <button class="profile-modal-close" id="profile-modal-close">&times;</button>
             
             <div class="profile-header">
-                <div class="profile-avatar-large" id="profile-avatar-large">
+                <div class="profile-avatar-large clickable" id="profile-avatar-large" title="Click to change avatar">
                     <i class="fas fa-user-circle"></i>
+                    <div class="avatar-edit-overlay">
+                        <i class="fas fa-camera"></i>
+                    </div>
                 </div>
                 <div class="profile-user-info">
                     <h2 class="profile-username" id="profile-username">Username</h2>
+                    <p class="profile-login-hint">Login: <span id="profile-login-username">@username</span></p>
                     <div class="profile-level-display">
                         <span class="profile-level-badge" id="profile-level-badge">LEVEL 1</span>
                         <div class="profile-xp-bar">
@@ -873,23 +877,18 @@
             </div>
             
             <div class="profile-section">
-                <h3><i class="fas fa-paw"></i> Profile Picture</h3>
-                <p class="profile-section-desc">Click the image below to choose your avatar</p>
-                <div class="avatar-picker-trigger" id="avatar-picker-trigger">
-                    <div class="avatar-picker-preview" id="avatar-picker-preview">
-                        <i class="fas fa-user-circle"></i>
-                    </div>
-                    <div class="avatar-picker-hint">
-                        <i class="fas fa-camera"></i> Click to change
-                    </div>
+                <h3><i class="fas fa-edit"></i> Display Name</h3>
+                <p class="profile-section-desc">This is how others see you in comments and chat. Change it anytime!</p>
+                <div class="profile-input-group">
+                    <input type="text" id="display-name-input" placeholder="Enter display name..." maxlength="30">
                 </div>
             </div>
             
             <div class="profile-section">
-                <h3><i class="fas fa-edit"></i> Username</h3>
-                <p class="profile-section-desc">This is your display name and login username. You can change it 3 times per week.</p>
-                <div class="display-name-edit">
-                    <input type="text" id="display-name-input" placeholder="Enter username..." maxlength="20">
+                <h3><i class="fas fa-at"></i> Username</h3>
+                <p class="profile-section-desc">Your login username. You can change it 3 times per week.</p>
+                <div class="profile-input-group">
+                    <input type="text" id="username-input" placeholder="Enter username..." maxlength="20">
                     <span class="username-changes-remaining" id="username-changes-remaining">3 changes remaining this week</span>
                 </div>
             </div>

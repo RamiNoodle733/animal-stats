@@ -51,6 +51,7 @@ module.exports = async function handler(req, res) {
 // GET: Get community feed (all comments)
 async function handleGetFeed(req, res) {
     const { limit = 50, skip = 0 } = req.query;
+    const User = require('../models/User');
 
     // Get all root comments (not replies) sorted by newest first
     const comments = await Comment.find({
@@ -61,6 +62,9 @@ async function handleGetFeed(req, res) {
         .skip(parseInt(skip))
         .limit(parseInt(limit))
         .lean();
+
+    // Collect all author IDs (including replies we'll fetch later)
+    const allAuthorIds = new Set(comments.map(c => c.authorId?.toString()).filter(Boolean));
 
     // Get reply counts and latest replies for each comment
     const commentsWithReplies = await Promise.all(comments.map(async (comment) => {
@@ -76,6 +80,11 @@ async function handleGetFeed(req, res) {
             .sort({ createdAt: 1 })
             .lean();
 
+        // Add reply author IDs
+        replies.forEach(r => {
+            if (r.authorId) allAuthorIds.add(r.authorId.toString());
+        });
+
         const score = (comment.upvotes?.length || 0) - (comment.downvotes?.length || 0);
 
         let animalImage = null;
@@ -85,16 +94,52 @@ async function handleGetFeed(req, res) {
         }
 
         return {
-            ...comment,
+            comment,
             score,
             replyCount,
-            replies: replies.map(r => ({
-                ...r,
-                score: (r.upvotes?.length || 0) - (r.downvotes?.length || 0)
-            })),
+            replies,
             animalImage
         };
     }));
+
+    // Fetch current user data for all authors
+    const users = await User.find({ _id: { $in: [...allAuthorIds] } })
+        .select('_id displayName username profileAnimal')
+        .lean();
+    
+    const userMap = {};
+    users.forEach(u => {
+        userMap[u._id.toString()] = {
+            displayName: u.displayName || u.username,
+            username: u.username,
+            profileAnimal: u.profileAnimal
+        };
+    });
+
+    // Update comments and replies with current user data
+    const finalComments = commentsWithReplies.map(({ comment, score, replyCount, replies, animalImage }) => {
+        const authorId = comment.authorId?.toString();
+        const currentUser = authorId ? userMap[authorId] : null;
+        
+        return {
+            ...comment,
+            authorUsername: currentUser?.displayName || comment.authorUsername,
+            profileAnimal: currentUser?.profileAnimal ?? comment.profileAnimal,
+            score,
+            replyCount,
+            replies: replies.map(r => {
+                const replyAuthorId = r.authorId?.toString();
+                const replyUser = replyAuthorId ? userMap[replyAuthorId] : null;
+                return {
+                    ...r,
+                    authorUsername: replyUser?.displayName || r.authorUsername,
+                    profileAnimal: replyUser?.profileAnimal ?? r.profileAnimal,
+                    score: (r.upvotes?.length || 0) - (r.downvotes?.length || 0)
+                };
+            }),
+            animalImage
+        };
+    });
 
     const totalCount = await Comment.countDocuments({
         isHidden: false,
@@ -103,16 +148,17 @@ async function handleGetFeed(req, res) {
 
     return res.status(200).json({
         success: true,
-        count: commentsWithReplies.length,
+        count: finalComments.length,
         total: totalCount,
-        hasMore: parseInt(skip) + commentsWithReplies.length < totalCount,
-        data: commentsWithReplies
+        hasMore: parseInt(skip) + finalComments.length < totalCount,
+        data: finalComments
     });
 }
 
 // GET: Get recent chat messages
 async function handleGet(req, res) {
     const { limit = 50, before } = req.query;
+    const User = require('../models/User');
 
     let query = {};
     
@@ -126,13 +172,39 @@ async function handleGet(req, res) {
         .limit(parseInt(limit))
         .lean();
 
+    // Fetch current user data for all message authors
+    const authorIds = [...new Set(messages.map(m => m.authorId?.toString()).filter(Boolean))];
+    const users = await User.find({ _id: { $in: authorIds } })
+        .select('_id displayName username profileAnimal')
+        .lean();
+    
+    const userMap = {};
+    users.forEach(u => {
+        userMap[u._id.toString()] = {
+            displayName: u.displayName || u.username,
+            username: u.username,
+            profileAnimal: u.profileAnimal
+        };
+    });
+
+    // Update messages with current user data
+    const updatedMessages = messages.map(m => {
+        const authorId = m.authorId?.toString();
+        const currentUser = authorId ? userMap[authorId] : null;
+        return {
+            ...m,
+            authorUsername: currentUser?.displayName || m.authorUsername,
+            profileAnimal: currentUser?.profileAnimal ?? m.profileAnimal
+        };
+    });
+
     // Reverse to get chronological order (oldest first)
-    messages.reverse();
+    updatedMessages.reverse();
 
     return res.status(200).json({
         success: true,
-        count: messages.length,
-        data: messages
+        count: updatedMessages.length,
+        data: updatedMessages
     });
 }
 

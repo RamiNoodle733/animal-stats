@@ -2005,9 +2005,42 @@ body {
     border: 3px solid var(--primary-color);
     box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
     flex-shrink: 0;
+    position: relative;
 }
 
-.profile-avatar-large i {
+.profile-avatar-large.clickable {
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.profile-avatar-large.clickable:hover {
+    border-color: #00ff88;
+    box-shadow: 0 0 40px rgba(0, 255, 136, 0.6);
+    transform: scale(1.05);
+}
+
+.profile-avatar-large.clickable:hover .avatar-edit-overlay {
+    opacity: 1;
+}
+
+.avatar-edit-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 50%;
+}
+
+.avatar-edit-overlay i {
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.profile-avatar-large > i {
     font-size: 3rem;
     color: #fff;
 }
@@ -2016,6 +2049,16 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.profile-login-hint {
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    margin: 0 0 8px 0;
+}
+
+.profile-login-hint span {
+    color: var(--primary-color);
 }
 
 .profile-user-info {
@@ -2259,10 +2302,35 @@ body {
     object-fit: cover;
 }
 
-/* Display Name Edit */
+/* Profile Input Groups */
+.profile-input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.profile-input-group input {
+    padding: 12px 15px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    color: var(--text-light);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.profile-input-group input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+}
+
+/* Display Name Edit (legacy) */
 .display-name-edit {
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .display-name-edit input {

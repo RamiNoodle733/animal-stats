@@ -306,11 +306,11 @@ async function handleUpdateProfile(req, res) {
         return res.status(404).json({ success: false, error: 'User not found' });
     }
 
-    const { displayName, profileAnimal } = req.body;
+    const { displayName, username, profileAnimal } = req.body;
 
-    // Handle username/displayName change (they are now synced)
-    if (displayName !== undefined && displayName !== user.displayName) {
-        const newUsername = displayName.trim();
+    // Handle username change (login credential) - 3/week limit
+    if (username !== undefined && username !== user.username) {
+        const newUsername = username.trim();
         
         // Validate username format
         if (newUsername.length < 3) {
@@ -357,9 +357,23 @@ async function handleUpdateProfile(req, res) {
             changedAt: new Date()
         });
 
-        // Update both username and displayName
+        // Update username
         user.username = newUsername;
-        user.displayName = newUsername;
+    }
+
+    // Handle display name change - unlimited
+    if (displayName !== undefined && displayName !== user.displayName) {
+        const newDisplayName = displayName.trim();
+        
+        // Basic validation for display name
+        if (newDisplayName.length < 1) {
+            return res.status(400).json({ success: false, error: 'Display name cannot be empty' });
+        }
+        if (newDisplayName.length > 30) {
+            return res.status(400).json({ success: false, error: 'Display name cannot exceed 30 characters' });
+        }
+        
+        user.displayName = newDisplayName;
     }
 
     // Update profile animal
