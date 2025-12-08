@@ -838,7 +838,6 @@
                 </div>
                 <div class="profile-user-info">
                     <h2 class="profile-username" id="profile-username">Username</h2>
-                    <p class="profile-login-hint">Login: <span id="profile-login-username">@username</span></p>
                     <div class="profile-level-display">
                         <span class="profile-level-badge" id="profile-level-badge">LEVEL 1</span>
                         <div class="profile-xp-bar">
@@ -874,21 +873,24 @@
             </div>
             
             <div class="profile-section">
-                <h3><i class="fas fa-paw"></i> Choose Your Avatar</h3>
-                <p class="profile-section-desc">Select an animal to represent you in comments and chat</p>
-                <div class="avatar-search-container">
-                    <input type="text" id="avatar-search" placeholder="Search animals..." class="avatar-search-input">
-                </div>
-                <div class="avatar-grid" id="avatar-grid">
-                    <!-- Animal avatars will be populated by JavaScript -->
+                <h3><i class="fas fa-paw"></i> Profile Picture</h3>
+                <p class="profile-section-desc">Click the image below to choose your avatar</p>
+                <div class="avatar-picker-trigger" id="avatar-picker-trigger">
+                    <div class="avatar-picker-preview" id="avatar-picker-preview">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="avatar-picker-hint">
+                        <i class="fas fa-camera"></i> Click to change
+                    </div>
                 </div>
             </div>
             
             <div class="profile-section">
-                <h3><i class="fas fa-edit"></i> Display Name</h3>
-                <p class="profile-section-desc">This is what others see. Your login username stays the same.</p>
+                <h3><i class="fas fa-edit"></i> Username</h3>
+                <p class="profile-section-desc">This is your display name and login username. You can change it 3 times per week.</p>
                 <div class="display-name-edit">
-                    <input type="text" id="display-name-input" placeholder="Enter display name..." maxlength="30">
+                    <input type="text" id="display-name-input" placeholder="Enter username..." maxlength="20">
+                    <span class="username-changes-remaining" id="username-changes-remaining">3 changes remaining this week</span>
                 </div>
             </div>
             
@@ -904,6 +906,22 @@
                         <i class="fas fa-save"></i> Save Changes
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Avatar Picker Popup -->
+    <div class="avatar-picker-modal" id="avatar-picker-modal">
+        <div class="avatar-picker-content">
+            <div class="avatar-picker-header">
+                <h3><i class="fas fa-paw"></i> Choose Your Avatar</h3>
+                <button class="avatar-picker-close" id="avatar-picker-close">&times;</button>
+            </div>
+            <div class="avatar-search-container">
+                <input type="text" id="avatar-search" placeholder="Search animals..." class="avatar-search-input">
+            </div>
+            <div class="avatar-grid" id="avatar-grid">
+                <!-- Animal avatars will be populated by JavaScript -->
             </div>
         </div>
     </div>

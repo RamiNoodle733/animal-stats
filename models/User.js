@@ -80,6 +80,12 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: null
     },
+    // Username change tracking (limit 3 per week)
+    usernameChanges: [{
+        oldUsername: String,
+        newUsername: String,
+        changedAt: { type: Date, default: Date.now }
+    }],
     createdAt: {
         type: Date,
         default: Date.now

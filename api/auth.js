@@ -308,15 +308,73 @@ async function handleUpdateProfile(req, res) {
 
     const { displayName, profileAnimal } = req.body;
 
-    // Update allowed fields
-    if (displayName !== undefined) {
-        user.displayName = displayName;
+    // Handle username/displayName change (they are now synced)
+    if (displayName !== undefined && displayName !== user.displayName) {
+        const newUsername = displayName.trim();
+        
+        // Validate username format
+        if (newUsername.length < 3) {
+            return res.status(400).json({ success: false, error: 'Username must be at least 3 characters' });
+        }
+        if (newUsername.length > 20) {
+            return res.status(400).json({ success: false, error: 'Username cannot exceed 20 characters' });
+        }
+        if (!/^[a-zA-Z0-9_]+$/.test(newUsername)) {
+            return res.status(400).json({ success: false, error: 'Username can only contain letters, numbers, and underscores' });
+        }
+
+        // Check if username is already taken (by another user)
+        const existingUser = await User.findOne({ 
+            username: { $regex: new RegExp(`^${newUsername}$`, 'i') },
+            _id: { $ne: user._id }
+        });
+        if (existingUser) {
+            return res.status(400).json({ success: false, error: 'Username is already taken' });
+        }
+
+        // Check weekly change limit (3 per week)
+        const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        const recentChanges = (user.usernameChanges || []).filter(
+            change => new Date(change.changedAt) > oneWeekAgo
+        );
+        
+        if (recentChanges.length >= 3) {
+            const oldestChange = recentChanges[0];
+            const resetDate = new Date(new Date(oldestChange.changedAt).getTime() + 7 * 24 * 60 * 60 * 1000);
+            return res.status(400).json({ 
+                success: false, 
+                error: `You can only change your username 3 times per week. Try again ${resetDate.toLocaleDateString()}.`,
+                usernameChangesRemaining: 0,
+                resetDate: resetDate.toISOString()
+            });
+        }
+
+        // Record the change
+        if (!user.usernameChanges) user.usernameChanges = [];
+        user.usernameChanges.push({
+            oldUsername: user.username,
+            newUsername: newUsername,
+            changedAt: new Date()
+        });
+
+        // Update both username and displayName
+        user.username = newUsername;
+        user.displayName = newUsername;
     }
+
+    // Update profile animal
     if (profileAnimal !== undefined) {
         user.profileAnimal = profileAnimal;
     }
 
     await user.save();
+
+    // Calculate username changes remaining this week
+    const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const recentChanges = (user.usernameChanges || []).filter(
+        change => new Date(change.changedAt) > oneWeekAgo
+    );
+    const usernameChangesRemaining = Math.max(0, 3 - recentChanges.length);
 
     // Calculate XP progress
     const xpForCurrentLevel = calculateXpForLevel(user.level);
@@ -332,13 +390,14 @@ async function handleUpdateProfile(req, res) {
                 id: user._id,
                 username: user.username,
                 email: user.email,
-                displayName: user.displayName,
+                displayName: user.displayName || user.username,
                 avatar: user.avatar,
                 role: user.role,
                 xp: user.xp || 0,
                 level: user.level || 1,
                 battlePoints: user.battlePoints || 0,
                 profileAnimal: user.profileAnimal || null,
+                usernameChangesRemaining,
                 xpProgress,
                 xpNeeded,
                 xpPercentage: Math.min(100, Math.round((xpProgress / xpNeeded) * 100)),

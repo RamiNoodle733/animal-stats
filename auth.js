@@ -68,7 +68,6 @@ const Auth = {
             profileModalClose: document.getElementById('profile-modal-close'),
             profileAvatarLarge: document.getElementById('profile-avatar-large'),
             profileUsername: document.getElementById('profile-username'),
-            profileLoginUsername: document.getElementById('profile-login-username'),
             profileLevelBadge: document.getElementById('profile-level-badge'),
             profileXpFill: document.getElementById('profile-xp-fill'),
             profileXpText: document.getElementById('profile-xp-text'),
@@ -78,9 +77,15 @@ const Auth = {
             avatarGrid: document.getElementById('avatar-grid'),
             avatarSearch: document.getElementById('avatar-search'),
             displayNameInput: document.getElementById('display-name-input'),
+            usernameChangesRemaining: document.getElementById('username-changes-remaining'),
             profileMemberSince: document.getElementById('profile-member-since'),
             profileSaveBtn: document.getElementById('profile-save-btn'),
-            profileUnsavedIndicator: document.getElementById('profile-unsaved-indicator')
+            profileUnsavedIndicator: document.getElementById('profile-unsaved-indicator'),
+            // Avatar Picker Modal
+            avatarPickerModal: document.getElementById('avatar-picker-modal'),
+            avatarPickerTrigger: document.getElementById('avatar-picker-trigger'),
+            avatarPickerPreview: document.getElementById('avatar-picker-preview'),
+            avatarPickerClose: document.getElementById('avatar-picker-close')
         };
     },
 
@@ -141,6 +146,15 @@ const Auth = {
             if (e.target === this.elements.profileModal) this.tryCloseProfileModal();
         });
 
+        // Avatar picker trigger - open avatar selection popup
+        this.elements.avatarPickerTrigger?.addEventListener('click', () => this.openAvatarPicker());
+
+        // Avatar picker close
+        this.elements.avatarPickerClose?.addEventListener('click', () => this.closeAvatarPicker());
+        this.elements.avatarPickerModal?.addEventListener('click', (e) => {
+            if (e.target === this.elements.avatarPickerModal) this.closeAvatarPicker();
+        });
+
         // Avatar search
         this.elements.avatarSearch?.addEventListener('input', (e) => this.filterAvatars(e.target.value));
 
@@ -157,6 +171,7 @@ const Auth = {
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 this.hideModal();
+                this.closeAvatarPicker();
                 this.tryCloseProfileModal();
             }
         });
@@ -539,8 +554,9 @@ const Auth = {
         await this.fetchProfile();
 
         // Store original values for change detection
+        // Note: displayName is synced with username, so we use username as source of truth
         this.originalValues = {
-            displayName: this.user.displayName || '',
+            displayName: this.user.displayName || this.user.username || '',
             profileAnimal: this.user.profileAnimal || null
         };
 
@@ -553,10 +569,7 @@ const Auth = {
         // Update profile modal UI
         this.updateProfileModal();
 
-        // Populate avatar grid
-        this.populateAvatarGrid();
-
-        // Reset save button state
+        // Reset save button state (don't populate avatar grid here - it's in the popup now)
         this.updateSaveButtonState();
 
         // Show modal
@@ -581,8 +594,29 @@ const Auth = {
      */
     closeProfileModal() {
         this.elements.profileModal?.classList.remove('active');
+        this.closeAvatarPicker();
         // Reset pending changes
         this.pendingChanges = { displayName: null, profileAnimal: null };
+    },
+
+    /**
+     * Open avatar picker popup
+     */
+    openAvatarPicker() {
+        // Populate the avatar grid
+        this.populateAvatarGrid();
+        this.elements.avatarPickerModal?.classList.add('active');
+        // Clear search and focus it
+        if (this.elements.avatarSearch) {
+            this.elements.avatarSearch.value = '';
+        }
+    },
+
+    /**
+     * Close avatar picker popup
+     */
+    closeAvatarPicker() {
+        this.elements.avatarPickerModal?.classList.remove('active');
     },
 
     /**
@@ -661,9 +695,6 @@ const Auth = {
         if (this.elements.profileUsername) {
             this.elements.profileUsername.textContent = displayName || username;
         }
-        if (this.elements.profileLoginUsername) {
-            this.elements.profileLoginUsername.textContent = `@${username}`;
-        }
         if (this.elements.profileLevelBadge) {
             this.elements.profileLevelBadge.textContent = `LEVEL ${level}`;
         }
@@ -683,7 +714,7 @@ const Auth = {
             this.elements.profileLevelValue.textContent = level;
         }
         if (this.elements.displayNameInput) {
-            this.elements.displayNameInput.value = displayName || '';
+            this.elements.displayNameInput.value = displayName || username || '';
         }
         if (this.elements.profileMemberSince && createdAt) {
             const date = new Date(createdAt);
@@ -692,8 +723,23 @@ const Auth = {
             });
         }
 
-        // Update large avatar
+        // Update username changes remaining indicator
+        if (this.elements.usernameChangesRemaining) {
+            const remaining = this.user.usernameChangesRemaining ?? 3;
+            this.elements.usernameChangesRemaining.textContent = `${remaining} change${remaining !== 1 ? 's' : ''} remaining this week`;
+            this.elements.usernameChangesRemaining.classList.remove('warning', 'error');
+            if (remaining === 0) {
+                this.elements.usernameChangesRemaining.classList.add('error');
+            } else if (remaining === 1) {
+                this.elements.usernameChangesRemaining.classList.add('warning');
+            }
+        }
+
+        // Update large avatar in profile header
         this.updateAvatarDisplay(this.elements.profileAvatarLarge, profileAnimal);
+
+        // Update avatar picker preview
+        this.updateAvatarDisplay(this.elements.avatarPickerPreview, profileAnimal);
     },
 
     /**
@@ -757,8 +803,14 @@ const Auth = {
             option.classList.toggle('selected', option.dataset.animal === animalName);
         });
 
-        // Update preview avatar
+        // Update preview avatar in profile header
         this.updateAvatarDisplay(this.elements.profileAvatarLarge, animalName);
+
+        // Update avatar picker preview
+        this.updateAvatarDisplay(this.elements.avatarPickerPreview, animalName);
+
+        // Close the avatar picker popup
+        this.closeAvatarPicker();
 
         // Update save button state
         this.updateSaveButtonState();
@@ -801,9 +853,9 @@ const Auth = {
             if (result.success) {
                 this.user = { ...this.user, ...result.data.user };
 
-                // Update original values
+                // Update original values (displayName is synced with username)
                 this.originalValues = {
-                    displayName: this.user.displayName || '',
+                    displayName: this.user.displayName || this.user.username || '',
                     profileAnimal: this.user.profileAnimal || null
                 };
 
