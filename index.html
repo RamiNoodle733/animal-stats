@@ -40,47 +40,41 @@
                 </button>
             </nav>
             
-            <!-- User Stats Bar (shown when logged in) -->
-            <div class="user-stats-bar" id="user-stats-bar" style="display: none;">
-                <div class="user-profile-mini" id="user-profile-mini">
-                    <div class="user-avatar-mini" id="user-avatar-mini">
-                        <i class="fas fa-user-circle"></i>
-                    </div>
-                    <div class="user-level-info">
-                        <div class="user-name-level">
-                            <span class="user-name-mini" id="user-name-mini">Username</span>
-                            <span class="user-level-badge" id="user-level-badge">LV 1</span>
-                        </div>
-                        <div class="xp-bar-container">
-                            <div class="xp-bar-fill" id="xp-bar-fill" style="width: 0%;"></div>
-                            <span class="xp-bar-text" id="xp-bar-text">0 / 100 XP</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="battle-points-display" id="battle-points-display">
-                    <div class="bp-coin" id="bp-coin">
-                        <span class="bp-icon">⚔</span>
-                    </div>
-                    <span class="bp-amount" id="bp-amount">0</span>
-                    <span class="bp-label">BP</span>
-                </div>
-            </div>
-            
-            <!-- Auth Button -->
-            <div class="auth-container" id="auth-container">
-                <button class="auth-btn" id="auth-btn">
-                    <i class="fas fa-user"></i> <span id="auth-btn-text">LOG IN</span>
+            <!-- Auth Area - Shows login button when logged out, stats bar when logged in -->
+            <div class="auth-area" id="auth-area">
+                <!-- Login Button (shown when logged out) -->
+                <button class="auth-login-btn" id="auth-login-btn">
+                    <i class="fas fa-user"></i> LOG IN
                 </button>
-                <!-- User dropdown (shown when logged in) -->
-                <div class="user-dropdown" id="user-dropdown">
-                    <div class="user-dropdown-header">
-                        <span class="user-avatar" id="user-avatar"><i class="fas fa-user-circle"></i></span>
-                        <span class="user-name" id="user-display-name">Username</span>
+                
+                <!-- User Stats Bar (shown when logged in) -->
+                <div class="user-stats-bar" id="user-stats-bar" style="display: none;">
+                    <div class="user-profile-mini" id="user-profile-mini">
+                        <div class="user-avatar-mini" id="user-avatar-mini">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="user-level-info">
+                            <div class="user-name-level">
+                                <span class="user-name-mini" id="user-name-mini">Username</span>
+                                <span class="user-level-badge" id="user-level-badge">LV 1</span>
+                            </div>
+                            <div class="xp-bar-container">
+                                <div class="xp-bar-fill" id="xp-bar-fill" style="width: 0%;"></div>
+                                <span class="xp-bar-text" id="xp-bar-text">0 / 100 XP</span>
+                            </div>
+                        </div>
+                        <!-- Profile Dropdown -->
+                        <div class="profile-dropdown" id="profile-dropdown">
+                            <a href="#" class="profile-dropdown-item" id="profile-btn"><i class="fas fa-id-card"></i> Profile</a>
+                            <a href="#" class="profile-dropdown-item logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+                        </div>
                     </div>
-                    <div class="user-dropdown-menu">
-                        <a href="#" class="dropdown-item" id="profile-btn"><i class="fas fa-id-card"></i> Profile</a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+                    <div class="battle-points-display" id="battle-points-display">
+                        <div class="bp-coin" id="bp-coin">
+                            <span class="bp-icon">⚔</span>
+                        </div>
+                        <span class="bp-amount" id="bp-amount">0</span>
+                        <span class="bp-label">BP</span>
                     </div>
                 </div>
             </div>

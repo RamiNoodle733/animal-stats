@@ -1667,6 +1667,38 @@ body {
     box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
 }
 
+/* ==================== AUTH AREA ==================== */
+.auth-area {
+    display: flex;
+    align-items: center;
+}
+
+.auth-login-btn {
+    padding: 8px 20px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: none;
+    border-radius: 25px;
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+}
+
+.auth-login-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px rgba(0, 212, 255, 0.5);
+}
+
+.auth-login-btn i {
+    font-size: 0.9rem;
+}
+
 /* ==================== USER STATS BAR (Header) ==================== */
 .user-stats-bar {
     display: flex;
@@ -1685,6 +1717,7 @@ body {
     border-radius: 25px;
     cursor: pointer;
     transition: all 0.3s ease;
+    position: relative;
 }
 
 .user-profile-mini:hover {
@@ -1776,6 +1809,68 @@ body {
     color: rgba(255, 255, 255, 0.9);
     text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
     white-space: nowrap;
+}
+
+/* Profile Dropdown */
+.profile-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 8px;
+    background: rgba(10, 25, 47, 0.98);
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    border-radius: 12px;
+    padding: 8px 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    min-width: 160px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 212, 255, 0.2);
+}
+
+.user-profile-mini:hover .profile-dropdown,
+.user-profile-mini.dropdown-open .profile-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.profile-dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    color: var(--text-light);
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.profile-dropdown-item:hover {
+    background: rgba(0, 212, 255, 0.15);
+    color: var(--primary-color);
+}
+
+.profile-dropdown-item i {
+    font-size: 0.9rem;
+    width: 18px;
+    text-align: center;
+}
+
+.profile-dropdown-item.logout {
+    color: #ff6b6b;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 4px;
+    padding-top: 12px;
+}
+
+.profile-dropdown-item.logout:hover {
+    background: rgba(255, 77, 77, 0.15);
+    color: #ff4d4d;
 }
 
 /* Battle Points Display */

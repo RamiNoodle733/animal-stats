@@ -65,12 +65,9 @@ const Auth = {
      */
     cacheElements() {
         this.elements = {
-            authContainer: document.getElementById('auth-container'),
-            authBtn: document.getElementById('auth-btn'),
-            authBtnText: document.getElementById('auth-btn-text'),
-            userDropdown: document.getElementById('user-dropdown'),
-            userDisplayName: document.getElementById('user-display-name'),
-            userAvatar: document.getElementById('user-avatar'),
+            // Auth area
+            authArea: document.getElementById('auth-area'),
+            authLoginBtn: document.getElementById('auth-login-btn'),
             authModal: document.getElementById('auth-modal'),
             authModalClose: document.getElementById('auth-modal-close'),
             loginForm: document.getElementById('login-form'),
@@ -81,7 +78,6 @@ const Auth = {
             signupSubmit: document.getElementById('signup-submit'),
             showSignup: document.getElementById('show-signup'),
             showLogin: document.getElementById('show-login'),
-            logoutBtn: document.getElementById('logout-btn'),
             // User Stats Bar
             userStatsBar: document.getElementById('user-stats-bar'),
             userProfileMini: document.getElementById('user-profile-mini'),
@@ -91,6 +87,10 @@ const Auth = {
             xpBarFill: document.getElementById('xp-bar-fill'),
             xpBarText: document.getElementById('xp-bar-text'),
             bpAmount: document.getElementById('bp-amount'),
+            // Profile Dropdown
+            profileDropdown: document.getElementById('profile-dropdown'),
+            profileBtn: document.getElementById('profile-btn'),
+            logoutBtn: document.getElementById('logout-btn'),
             // Profile Modal
             profileModal: document.getElementById('profile-modal'),
             profileModalClose: document.getElementById('profile-modal-close'),
@@ -106,8 +106,7 @@ const Auth = {
             avatarSearch: document.getElementById('avatar-search'),
             displayNameInput: document.getElementById('display-name-input'),
             saveDisplayNameBtn: document.getElementById('save-display-name-btn'),
-            profileMemberSince: document.getElementById('profile-member-since'),
-            profileBtn: document.getElementById('profile-btn')
+            profileMemberSince: document.getElementById('profile-member-since')
         };
     },
 
@@ -115,14 +114,9 @@ const Auth = {
      * Bind event listeners
      */
     bindEvents() {
-        // Auth button click
-        this.elements.authBtn?.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (this.user) {
-                this.toggleDropdown();
-            } else {
-                this.showModal('login');
-            }
+        // Login button click (when logged out)
+        this.elements.authLoginBtn?.addEventListener('click', () => {
+            this.showModal('login');
         });
 
         // Close modal
@@ -156,13 +150,14 @@ const Auth = {
         // Logout
         this.elements.logoutBtn?.addEventListener('click', (e) => {
             e.preventDefault();
+            e.stopPropagation();
             this.logout();
         });
 
         // Profile button
         this.elements.profileBtn?.addEventListener('click', (e) => {
             e.preventDefault();
-            this.elements.userDropdown?.classList.remove('show');
+            e.stopPropagation();
             this.openProfileModal();
         });
 
@@ -171,9 +166,6 @@ const Auth = {
         this.elements.profileModal?.addEventListener('click', (e) => {
             if (e.target === this.elements.profileModal) this.closeProfileModal();
         });
-
-        // User profile mini click opens profile
-        this.elements.userProfileMini?.addEventListener('click', () => this.openProfileModal());
 
         // Avatar search
         this.elements.avatarSearch?.addEventListener('input', (e) => this.filterAvatars(e.target.value));
@@ -184,18 +176,11 @@ const Auth = {
             if (e.key === 'Enter') this.saveDisplayName();
         });
 
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!this.elements.authContainer?.contains(e.target)) {
-                this.elements.userDropdown?.classList.remove('show');
-            }
-        });
-
-        // Escape key closes modal
+        // Escape key closes modals
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 this.hideModal();
-                this.elements.userDropdown?.classList.remove('show');
+                this.closeProfileModal();
             }
         });
     },
@@ -256,13 +241,6 @@ const Auth = {
         this.elements.authModal?.classList.remove('show');
         this.clearErrors();
         this.clearForms();
-    },
-
-    /**
-     * Toggle user dropdown
-     */
-    toggleDropdown() {
-        this.elements.userDropdown?.classList.toggle('show');
     },
 
     /**
@@ -388,12 +366,10 @@ const Auth = {
      */
     updateUI() {
         if (this.user) {
-            this.elements.authBtn?.classList.add('logged-in');
-            this.elements.authBtnText.textContent = this.user.displayName;
-            this.elements.userDisplayName.textContent = this.user.displayName;
-            this.elements.authContainer?.classList.add('logged-in');
-            
-            // Show user stats bar
+            // Hide login button, show stats bar
+            if (this.elements.authLoginBtn) {
+                this.elements.authLoginBtn.style.display = 'none';
+            }
             if (this.elements.userStatsBar) {
                 this.elements.userStatsBar.style.display = 'flex';
             }
@@ -401,11 +377,10 @@ const Auth = {
             // Update user stats bar
             this.updateUserStatsBar();
         } else {
-            this.elements.authBtn?.classList.remove('logged-in');
-            this.elements.authBtnText.textContent = 'LOG IN';
-            this.elements.authContainer?.classList.remove('logged-in');
-            
-            // Hide user stats bar
+            // Show login button, hide stats bar
+            if (this.elements.authLoginBtn) {
+                this.elements.authLoginBtn.style.display = 'flex';
+            }
             if (this.elements.userStatsBar) {
                 this.elements.userStatsBar.style.display = 'none';
             }
