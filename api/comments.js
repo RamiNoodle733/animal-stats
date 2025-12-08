@@ -71,7 +71,7 @@ function buildCommentTree(comments) {
 // GET: Get comments for an animal or comparison (with replies nested)
 async function handleGet(req, res) {
     const { animalId, animalName, comparison, limit = 100 } = req.query;
-    const User = require('../models/User');
+    const User = require('../lib/models/User');
 
     let query = { isHidden: false };
     
