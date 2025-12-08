@@ -1452,32 +1452,77 @@ class AnimalStatsApp {
         
         if (!left || !right) return;
 
-        // Calculate scores
-        const score1 = this.calculateCombatScore(left);
-        const score2 = this.calculateCombatScore(right);
+        // Fetch battle stats (PowerScores) for both animals
+        let leftStats = { battleRating: 1000 };
+        let rightStats = { battleRating: 1000 };
         
-        let winner, loser;
-        if (score1 > score2) {
+        try {
+            const [leftRes, rightRes] = await Promise.all([
+                fetch(`/api/battles?animal=${encodeURIComponent(left.name)}`),
+                fetch(`/api/battles?animal=${encodeURIComponent(right.name)}`)
+            ]);
+            
+            if (leftRes.ok) {
+                const data = await leftRes.json();
+                if (data.success && data.data) {
+                    leftStats = data.data;
+                }
+            }
+            if (rightRes.ok) {
+                const data = await rightRes.json();
+                if (data.success && data.data) {
+                    rightStats = data.data;
+                }
+            }
+        } catch (e) {
+            console.warn('Could not fetch battle stats, using defaults');
+        }
+
+        // Calculate fight scores using PowerScore formula
+        // PowerScore = 0.60 * TournamentScore + 0.25 * VoteScore + 0.15 * AttackScore
+        // For fight prediction, we use battleRating as the primary indicator
+        const score1 = this.calculateFightScore(left, leftStats.battleRating);
+        const score2 = this.calculateFightScore(right, rightStats.battleRating);
+        
+        // Calculate win probability: probA = scoreA / (scoreA + scoreB)
+        const prob1 = score1 / (score1 + score2);
+        const prob2 = 1 - prob1;
+        
+        let winner, loser, winnerScore, loserScore, winnerProb;
+        if (prob1 > prob2) {
             winner = left;
             loser = right;
-        } else if (score2 > score1) {
+            winnerScore = score1;
+            loserScore = score2;
+            winnerProb = prob1;
+        } else if (prob2 > prob1) {
             winner = right;
             loser = left;
+            winnerScore = score2;
+            loserScore = score1;
+            winnerProb = prob2;
         } else {
-            // Tie breaker: Aggression/Attack
+            // Tie breaker: Attack stat
             if (left.attack > right.attack) {
                 winner = left;
                 loser = right;
+                winnerScore = score1;
+                loserScore = score2;
             } else {
                 winner = right;
                 loser = left;
+                winnerScore = score2;
+                loserScore = score1;
             }
+            winnerProb = 0.5;
         }
 
-        // Notify Discord about the fight (await to ensure it sends before alert blocks)
+        // Notify Discord about the fight
         await this.notifyFight(left.name, right.name);
 
-        alert(`FIGHT RESULT:\n\n${winner.name} defeats ${loser.name}!\n\n${winner.name} Score: ${score1.toFixed(1)}\n${loser.name} Score: ${score2.toFixed(1)}`);
+        // Display result with win probability
+        const probPercent = Math.round(winnerProb * 100);
+        alert(`FIGHT PREDICTION:\n\n🏆 ${winner.name} wins!\n\n${winner.name}: ${probPercent}% chance\n${loser.name}: ${100 - probPercent}% chance\n\nFight Score:\n${winner.name}: ${winnerScore.toFixed(1)}\n${loser.name}: ${loserScore.toFixed(1)}`);
     }
 
     /**
@@ -1497,11 +1542,18 @@ class AnimalStatsApp {
     }
 
     /**
-     * Calculate a simple combat score
+     * Calculate fight score using battle rating (ELO) and raw stats
+     * FightScore = battleRating * (1 + statsBonus)
+     * where statsBonus comes from raw attack/defense/agility
      */
-    calculateCombatScore(animal) {
-        // Weighted formula
-        return (animal.attack * 2) + (animal.defense * 1.5) + (animal.agility * 1.5) + (animal.intelligence * 1.2) + animal.stamina + (animal.special * 0.8);
+    calculateFightScore(animal, battleRating = 1000) {
+        // Stats bonus: weighted combination normalized to 0-0.3 range
+        const rawScore = (animal.attack * 2) + (animal.defense * 1.5) + (animal.agility * 1.2) + animal.stamina;
+        const maxPossible = 100 * 2 + 100 * 1.5 + 100 * 1.2 + 100; // 570
+        const statsBonus = (rawScore / maxPossible) * 0.3; // 0 to 0.3 bonus
+        
+        // FightScore = battleRating * (1 + statsBonus)
+        return battleRating * (1 + statsBonus);
     }
 }
 
