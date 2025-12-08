@@ -259,12 +259,6 @@ body {
     animation: none;
 }
 
-.stat-bar-fill.stat-bar-tier-e {
-    background: linear-gradient(90deg, #6b5200, #8b6914) !important;
-    box-shadow: none;
-    animation: none;
-}
-
 .stat-bar-fill.stat-bar-tier-f {
     background: linear-gradient(90deg, #333, #555) !important;
     box-shadow: none;
@@ -961,6 +955,40 @@ body {
     opacity: 0;
 }
 
+/* Floating Show Menu Button */
+.show-menu-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    border: 2px solid var(--border-bright);
+    border-radius: 30px;
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4), 0 0 30px rgba(255, 107, 0, 0.3);
+    transition: all 0.3s ease;
+    animation: showMenuPulse 2s ease-in-out infinite;
+}
+
+.show-menu-btn:hover {
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 6px 30px rgba(0, 212, 255, 0.6), 0 0 40px rgba(255, 107, 0, 0.4);
+}
+
+@keyframes showMenuPulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4), 0 0 30px rgba(255, 107, 0, 0.3); }
+    50% { box-shadow: 0 4px 30px rgba(0, 212, 255, 0.6), 0 0 40px rgba(255, 107, 0, 0.5); }
+}
+
 .grid-controls {
     display: flex;
     gap: 10px;
@@ -1316,13 +1344,12 @@ body {
     text-shadow: none;
 }
 
-.tier-s { background: #ffd700; box-shadow: 0 0 10px #ffd700; }
-.tier-a { background: #ff4d4d; box-shadow: 0 0 8px #ff4d4d; }
-.tier-b { background: #4d94ff; box-shadow: 0 0 6px #4d94ff; }
-.tier-c { background: #00ff88; }
-.tier-d { background: #b3b3b3; }
-.tier-e { background: #8b6914; }
-.tier-f { background: #555555; color: #aaa; }
+.tier-s, .tier-splus, .tier-sminus { background: #ffd700; box-shadow: 0 0 10px #ffd700; }
+.tier-a, .tier-aplus, .tier-aminus { background: #ff4d4d; box-shadow: 0 0 8px #ff4d4d; }
+.tier-b, .tier-bplus, .tier-bminus { background: #4d94ff; box-shadow: 0 0 6px #4d94ff; }
+.tier-c, .tier-cplus, .tier-cminus { background: #00ff88; }
+.tier-d, .tier-dplus, .tier-dminus { background: #b3b3b3; }
+.tier-f, .tier-fplus, .tier-fminus { background: #555555; color: #aaa; }
 
 .character-grid {
     display: flex;

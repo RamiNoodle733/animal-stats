@@ -421,6 +421,12 @@ class AnimalStatsApp {
             this.dom.compareToggleGridBtn.addEventListener('click', this.toggleGrid);
         }
         
+        // Floating show menu button
+        const showMenuBtn = document.getElementById('show-menu-btn');
+        if (showMenuBtn) {
+            showMenuBtn.addEventListener('click', this.toggleGrid);
+        }
+        
         // Close details button (mobile)
         const closeDetailsBtn = document.getElementById('close-details-btn');
         if (closeDetailsBtn) {
@@ -917,16 +923,27 @@ class AnimalStatsApp {
     }
 
     /**
-     * Calculate Tier based on stat value
+     * Calculate Tier based on stat value (18-tier system)
      */
     calculateTier(value) {
-        if (value >= 90) return 'S';
-        if (value >= 80) return 'A';
-        if (value >= 70) return 'B';
-        if (value >= 55) return 'C';
-        if (value >= 40) return 'D';
-        if (value >= 25) return 'E';
-        return 'F';
+        if (value >= 97) return 'S+';
+        if (value >= 93) return 'S';
+        if (value >= 88) return 'S-';
+        if (value >= 83) return 'A+';
+        if (value >= 78) return 'A';
+        if (value >= 73) return 'A-';
+        if (value >= 68) return 'B+';
+        if (value >= 63) return 'B';
+        if (value >= 58) return 'B-';
+        if (value >= 53) return 'C+';
+        if (value >= 48) return 'C';
+        if (value >= 43) return 'C-';
+        if (value >= 38) return 'D+';
+        if (value >= 33) return 'D';
+        if (value >= 28) return 'D-';
+        if (value >= 20) return 'F+';
+        if (value >= 12) return 'F';
+        return 'F-';
     }
 
     /**
@@ -962,8 +979,9 @@ class AnimalStatsApp {
             
             if (this.dom.statBars[stat]) {
                 this.dom.statBars[stat].style.width = `${Math.min(value, 100)}%`;
-                // Add tier class for color-coding
-                this.dom.statBars[stat].className = `stat-bar-fill stat-bar-tier-${tier.toLowerCase()}`;
+                // Add tier class for color-coding (use base letter for color)
+                const tierBase = tier.charAt(0).toLowerCase();
+                this.dom.statBars[stat].className = `stat-bar-fill stat-bar-tier-${tierBase}`;
             }
             
             if (this.dom.statValues[stat]) {
@@ -1352,9 +1370,8 @@ class AnimalStatsApp {
     toggleGrid() {
         this.state.isGridVisible = !this.state.isGridVisible;
         this.dom.gridWrapper.classList.toggle('hidden', !this.state.isGridVisible);
-        this.dom.toggleGridBtn.classList.toggle('hidden', !this.state.isGridVisible);
         
-        // Update both buttons if they exist
+        // Update button text
         const updateBtn = (btn) => {
             if (!btn) return;
             if (this.state.isGridVisible) {
@@ -1366,6 +1383,12 @@ class AnimalStatsApp {
 
         updateBtn(this.dom.toggleGridBtn);
         updateBtn(this.dom.compareToggleGridBtn);
+        
+        // Show/hide the floating show menu button
+        const showMenuBtn = document.getElementById('show-menu-btn');
+        if (showMenuBtn) {
+            showMenuBtn.style.display = this.state.isGridVisible ? 'none' : 'flex';
+        }
     }
 
     /**
