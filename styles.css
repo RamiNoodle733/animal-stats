@@ -2040,6 +2040,35 @@ body {
     color: #fff;
 }
 
+/* Always show a subtle edit hint on the avatar */
+.profile-avatar-large.clickable::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, var(--primary-color), #00ff88);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--darker-bg);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    z-index: 2;
+}
+
+.profile-avatar-large.clickable::before {
+    content: '✎';
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    font-size: 0.9rem;
+    color: #000;
+    z-index: 3;
+    font-weight: bold;
+}
+
 .profile-avatar-large > i {
     font-size: 3rem;
     color: #fff;

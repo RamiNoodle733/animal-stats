@@ -80,7 +80,9 @@ async function handleGet(req, res) {
         query.animalId = animalId;
     } else if (animalName) {
         query.targetType = 'animal';
-        query.animalName = { $regex: new RegExp(`^${animalName}$`, 'i') };
+        // Escape special regex characters in animal name
+        const escapedName = animalName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        query.animalName = { $regex: new RegExp(`^${escapedName}$`, 'i') };
     } else if (comparison) {
         query.targetType = 'comparison';
         query.comparisonKey = comparison;

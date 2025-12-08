@@ -3238,10 +3238,21 @@ class CommunityManager {
             
             // Update the comment in our local data
             const comment = this.feedComments.find(c => c._id === commentId);
-            if (comment && result.data) {
-                comment.upvotes = result.data.upvotes || [];
-                comment.downvotes = result.data.downvotes || [];
-                comment.score = (comment.upvotes.length || 0) - (comment.downvotes.length || 0);
+            if (comment && result.success) {
+                // API returns score directly, not arrays
+                comment.score = result.score;
+                // Update user vote state for UI
+                const userId = Auth.user?.id;
+                if (result.userVote === 'up') {
+                    comment.upvotes = [userId];
+                    comment.downvotes = [];
+                } else if (result.userVote === 'down') {
+                    comment.upvotes = [];
+                    comment.downvotes = [userId];
+                } else {
+                    comment.upvotes = [];
+                    comment.downvotes = [];
+                }
             }
             
             // Re-render the feed
