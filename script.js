@@ -84,7 +84,9 @@ class AnimalStatsApp {
             charScientific: document.getElementById('character-scientific'),
             charImage: document.getElementById('character-model'),
             charSilhouette: document.getElementById('character-silhouette'),
-            miniInfo: document.getElementById('character-mini-info'),
+            quickWeight: document.getElementById('quick-weight'),
+            quickSpeed: document.getElementById('quick-speed'),
+            quickBite: document.getElementById('quick-bite'),
             
             statBars: {
                 attack: document.getElementById('stat-attack-bar'),
@@ -992,12 +994,16 @@ class AnimalStatsApp {
             }
         });
 
-        // Mini Info
-        let info = [];
-        if (animal.weight_kg) info.push(`${formatNumber(animal.weight_kg)} kg`);
-        if (animal.lifespan_years) info.push(`${animal.lifespan_years} yrs`);
-        if (animal.bite_force_psi) info.push(`${formatNumber(animal.bite_force_psi)} PSI`);
-        this.dom.miniInfo.innerHTML = info.map(i => `<span>${i}</span>`).join('');
+        // Quick Stats Bar
+        if (this.dom.quickWeight) {
+            this.dom.quickWeight.textContent = animal.weight_kg ? `${formatNumber(animal.weight_kg)} kg` : '---';
+        }
+        if (this.dom.quickSpeed) {
+            this.dom.quickSpeed.textContent = animal.speed_mps ? `${(animal.speed_mps * 3.6).toFixed(0)} km/h` : '---';
+        }
+        if (this.dom.quickBite) {
+            this.dom.quickBite.textContent = animal.bite_force_psi ? `${formatNumber(animal.bite_force_psi)} PSI` : '---';
+        }
 
         // Info Bar
         this.dom.info.abilities.textContent = animal.special_abilities?.join(', ') || 'None';
