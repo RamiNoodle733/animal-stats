@@ -2371,6 +2371,7 @@ class TournamentManager {
             closeBtn: document.getElementById('tournament-close'),
             quitBtn: document.getElementById('tournament-quit'),
             bracketOptions: document.querySelectorAll('.bracket-option'),
+            openBtn: document.getElementById('open-tournament-btn'),
             startBtn: document.getElementById('start-tournament-btn'),
             loginNote: document.getElementById('tournament-login-note'),
             typeFilters: document.getElementById('tournament-type-filters'),
@@ -2433,6 +2434,9 @@ class TournamentManager {
     }
 
     bindEvents() {
+        // Open tournament modal button
+        this.dom.openBtn?.addEventListener('click', () => this.showSetup());
+        
         // Start tournament button - now actually starts the tournament
         this.dom.startBtn?.addEventListener('click', () => this.startTournament());
         
