@@ -2757,6 +2757,10 @@ class TournamentManager {
     }
 
     hideModal() {
+        // Notify Discord if quitting an active tournament
+        if (this.isActive && this.completedMatches > 0) {
+            this.notifyTournamentQuit();
+        }
         this.dom.modal.classList.remove('show');
         this.isActive = false;
     }
@@ -3066,6 +3070,9 @@ class TournamentManager {
         // Get final four (semi-finalists + finalists)
         const finalFour = this.getFinalFour();
         
+        // Send tournament completion to Discord
+        this.notifyTournamentComplete(champion, finalFour);
+        
         // Update results screen
         this.dom.championImg.src = champion.image;
         this.dom.championImg.onerror = () => { this.dom.championImg.src = 'https://via.placeholder.com/180x180?text=?'; };
@@ -3112,6 +3119,63 @@ class TournamentManager {
         }
         
         return finalFour;
+    }
+
+    /**
+     * Send tournament completion notification to Discord
+     */
+    async notifyTournamentComplete(champion, finalFour) {
+        try {
+            const runnerUps = finalFour.filter(a => a.name !== champion.name);
+            const matchHistoryData = this.matchHistory.map(m => ({
+                winner: m.winner.name,
+                loser: m.loser.name
+            }));
+            
+            await fetch('/api/battles?action=tournament_complete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    user: Auth.isLoggedIn() ? Auth.getUser()?.username : 'Anonymous',
+                    bracketSize: this.bracketSize,
+                    totalMatches: this.totalMatches,
+                    champion: champion.name,
+                    runnerUp: runnerUps[0]?.name || 'N/A',
+                    thirdFourth: runnerUps.slice(1).map(a => a.name).join(', ') || 'N/A',
+                    matchHistory: matchHistoryData
+                })
+            });
+        } catch (error) {
+            console.error('Failed to notify tournament completion:', error);
+        }
+    }
+
+    /**
+     * Send tournament quit notification to Discord
+     */
+    async notifyTournamentQuit() {
+        if (this.completedMatches === 0) return; // Don't notify if no matches played
+        
+        try {
+            const matchHistoryData = this.matchHistory.map(m => ({
+                winner: m.winner.name,
+                loser: m.loser.name
+            }));
+            
+            await fetch('/api/battles?action=tournament_quit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    user: Auth.isLoggedIn() ? Auth.getUser()?.username : 'Anonymous',
+                    bracketSize: this.bracketSize,
+                    totalMatches: this.totalMatches,
+                    completedMatches: this.completedMatches,
+                    matchHistory: matchHistoryData
+                })
+            });
+        } catch (error) {
+            console.error('Failed to notify tournament quit:', error);
+        }
     }
 }
 

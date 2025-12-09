@@ -125,7 +125,7 @@ async function handlePost(req, res) {
                 user: user.username,
                 animal: animalName,
                 voteType: removedVoteType
-            });
+            }, req);
             
             const newCounts = await Vote.getVoteCounts(animalId);
             return res.status(200).json({
@@ -145,7 +145,7 @@ async function handlePost(req, res) {
                 animal: animalName,
                 oldVoteType: oldVoteType,
                 newVoteType: voteType
-            });
+            }, req);
 
             const newCounts = await Vote.getVoteCounts(animalId);
             return res.status(200).json({
@@ -170,7 +170,7 @@ async function handlePost(req, res) {
         user: user.username,
         animal: animalName,
         voteType: voteType
-    });
+    }, req);
 
     const newCounts = await Vote.getVoteCounts(animalId);
     return res.status(200).json({

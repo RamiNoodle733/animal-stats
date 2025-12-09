@@ -29,7 +29,7 @@ module.exports = async function handler(req, res) {
     // Handle fight notifications
     if (req.method === 'POST' && req.query.action === 'fight') {
         const { animal1, animal2, user } = req.body;
-        await notifyDiscord('fight', { animal1, animal2, user: user || 'Anonymous' });
+        await notifyDiscord('fight', { animal1, animal2, user: user || 'Anonymous' }, req);
         return res.status(200).json({ success: true });
     }
 

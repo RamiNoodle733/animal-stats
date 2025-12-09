@@ -1,11 +1,13 @@
 /**
  * API Route: /api/battles
  * Records tournament battle results and updates ELO ratings
+ * Also handles tournament completion/quit notifications
  */
 
 const { connectToDatabase } = require('../lib/mongodb');
 const BattleStats = require('../lib/models/BattleStats');
 const { verifyToken } = require('../lib/auth');
+const { notifyDiscord } = require('../lib/discord');
 
 // ELO K-factor (how much ratings change per battle)
 const K_FACTOR = 20;
@@ -23,6 +25,14 @@ module.exports = async function handler(req, res) {
     try {
         await connectToDatabase();
 
+        // Handle tournament notifications via query param
+        if (req.method === 'POST' && req.query.action === 'tournament_complete') {
+            return await handleTournamentComplete(req, res);
+        }
+        if (req.method === 'POST' && req.query.action === 'tournament_quit') {
+            return await handleTournamentQuit(req, res);
+        }
+
         switch (req.method) {
             case 'POST':
                 return await recordBattle(req, res);
@@ -36,6 +46,42 @@ module.exports = async function handler(req, res) {
         return res.status(500).json({ success: false, error: 'Internal server error' });
     }
 };
+
+/**
+ * Handle tournament completion notification
+ */
+async function handleTournamentComplete(req, res) {
+    const { user, bracketSize, totalMatches, champion, runnerUp, thirdFourth, matchHistory } = req.body;
+    
+    notifyDiscord('tournament_complete', {
+        user: user || 'Anonymous',
+        bracketSize: bracketSize || 0,
+        totalMatches: totalMatches || 0,
+        champion: champion || 'Unknown',
+        runnerUp: runnerUp || 'N/A',
+        thirdFourth: thirdFourth || 'N/A',
+        matchHistory: matchHistory || []
+    }, req);
+    
+    return res.status(200).json({ success: true });
+}
+
+/**
+ * Handle tournament quit notification
+ */
+async function handleTournamentQuit(req, res) {
+    const { user, bracketSize, totalMatches, completedMatches, matchHistory } = req.body;
+    
+    notifyDiscord('tournament_quit', {
+        user: user || 'Anonymous',
+        bracketSize: bracketSize || 0,
+        totalMatches: totalMatches || 0,
+        completedMatches: completedMatches || 0,
+        matchHistory: matchHistory || []
+    }, req);
+    
+    return res.status(200).json({ success: true });
+}
 
 /**
  * Record a tournament battle result

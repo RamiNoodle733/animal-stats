@@ -13,6 +13,7 @@ const ChatMessage = require('../lib/models/ChatMessage');
 const Comment = require('../lib/models/Comment');
 const Animal = require('../lib/models/Animal');
 const { verifyToken } = require('../lib/auth');
+const { notifyDiscord } = require('../lib/discord');
 
 module.exports = async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -241,6 +242,12 @@ async function handlePost(req, res) {
         authorUsername: userDoc?.displayName || user.username,
         profileAnimal: userDoc?.profileAnimal || null
     });
+
+    // Notify Discord about the chat message
+    notifyDiscord('chat_message', {
+        user: userDoc?.displayName || user.username,
+        content: content.trim()
+    }, req);
 
     return res.status(201).json({
         success: true,

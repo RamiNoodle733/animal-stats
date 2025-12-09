@@ -29,12 +29,12 @@ module.exports = async function handler(req, res) {
             const { type, username } = body || {};
             
             if (type === 'logout') {
-                notifyDiscord('logout', { username: username || 'Unknown' });
+                notifyDiscord('logout', { username: username || 'Unknown' }, req);
             } else if (type === 'site_leave') {
-                notifyDiscord('site_leave', { username: username || 'Anonymous' });
+                notifyDiscord('site_leave', { username: username || 'Anonymous' }, req);
             } else {
                 // Default: site_visit
-                notifyDiscord('site_visit', { username: username || 'Anonymous' });
+                notifyDiscord('site_visit', { username: username || 'Anonymous' }, req);
             }
             
             return res.status(200).json({ success: true });

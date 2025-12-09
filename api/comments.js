@@ -199,7 +199,7 @@ async function handlePost(req, res) {
             replyTo: parentAuthor,
             target: parent.animalName || parent.comparisonKey || 'Unknown',
             content: content.substring(0, 100) + (content.length > 100 ? '...' : '')
-        });
+        }, req);
     } else {
         // New top-level comment
         if (!targetType) {
@@ -226,7 +226,7 @@ async function handlePost(req, res) {
             user: displayName,
             target: targetType === 'animal' ? animalName : comparisonKey,
             content: content.substring(0, 100) + (content.length > 100 ? '...' : '')
-        });
+        }, req);
     }
 
     const comment = await Comment.create(commentData);
@@ -271,7 +271,7 @@ async function handleDelete(req, res) {
         user: displayName,
         target: comment.animalName || comment.comparisonKey || 'Unknown',
         content: comment.content
-    });
+    }, req);
 
     // Also delete all replies
     await Comment.deleteMany({ parentId: targetId });
@@ -329,7 +329,7 @@ async function handlePatch(req, res) {
                 user: user.username,
                 commentAuthor: authorName,
                 target: comment.animalName || comment.comparisonKey || 'Unknown'
-            });
+            }, req);
         }
     } else if (action === 'downvote') {
         if (downvoteIndex > -1) {
@@ -348,7 +348,7 @@ async function handlePatch(req, res) {
                 user: user.username,
                 commentAuthor: authorName,
                 target: comment.animalName || comment.comparisonKey || 'Unknown'
-            });
+            }, req);
         }
     } else {
         return res.status(400).json({ success: false, error: 'Invalid action. Use upvote or downvote' });
