@@ -103,9 +103,9 @@ body {
 .character-display-area {
     flex: 1;
     display: grid;
-    grid-template-columns: 1fr 2.5fr 1fr;
-    gap: 8px;
-    padding: 5px 10px;
+    grid-template-columns: minmax(200px, 280px) 1fr minmax(200px, 280px);
+    gap: 15px;
+    padding: 10px 20px;
     align-items: stretch;
     min-height: 0;
     position: relative;
@@ -161,34 +161,35 @@ body {
 .stats-panel {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 10px;
-    padding: 0 10px;
-    overflow: hidden;
+    justify-content: flex-start;
+    gap: 3px;
+    padding: 10px 5px;
+    overflow-y: auto;
+    overflow-x: hidden;
     max-height: 100%;
 }
 
 .stat-group {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    overflow: hidden;
+    gap: 3px;
+    overflow: visible;
     flex: 1;
 }
 
 .stat-row {
     display: grid;
-    grid-template-columns: 35px 80px 1fr 75px;
+    grid-template-columns: 30px 45px 1fr 50px;
     align-items: center;
-    gap: 10px;
+    gap: 6px;
 }
 
 .stats-panel-right .stat-row {
-    grid-template-columns: 75px 1fr 80px 35px;
+    grid-template-columns: 50px 1fr 45px 30px;
 }
 
 .stat-icon {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     color: var(--primary-color);
     text-shadow: var(--text-glow);
     display: flex;
@@ -198,8 +199,8 @@ body {
 
 .stat-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
     color: var(--text-light);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
 }
@@ -282,13 +283,13 @@ body {
 
 .stat-value {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: var(--gold-color);
     text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 2px 2px 4px rgba(0, 0, 0, 0.9);
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 8px;
+    gap: 4px;
     white-space: nowrap;
 }
 
@@ -301,11 +302,12 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 6px;
+    justify-content: flex-start;
+    gap: 4px;
     height: 100%;
     min-height: 0;
-    padding: 5px;
+    padding: 10px 5px;
+    overflow: hidden;
 }
 
 .character-name-display {
@@ -332,12 +334,12 @@ body {
 .character-model-container {
     position: relative;
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 0;
+    min-height: 200px;
 }
 
 .character-silhouette {
@@ -1522,13 +1524,14 @@ body {
 
 .stat-tier-badge {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.9rem;
-    padding: 2px 6px;
-    border-radius: 4px;
+    font-size: 0.7rem;
+    padding: 1px 4px;
+    border-radius: 3px;
     margin-left: 0;
     color: #000;
     font-weight: bold;
     text-shadow: none;
+    flex-shrink: 0;
 }
 
 .tier-s, .tier-splus, .tier-sminus { background: #ffd700; box-shadow: 0 0 10px #ffd700; }
@@ -3509,8 +3512,8 @@ body {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    gap: 6px;
-    padding: 2px 0;
+    gap: 4px;
+    padding: 1px 0;
 }
 
 .substat-container.right-align .substat-row.compact {
@@ -3518,17 +3521,17 @@ body {
 }
 
 .substat-row.compact .substat-label {
-    font-size: 0.55rem;
+    font-size: 0.5rem;
     color: rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    min-width: 30px;
+    min-width: 24px;
 }
 
 .substat-row.compact .substat-value {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.8);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.7);
     font-weight: 600;
 }
 
@@ -3544,25 +3547,26 @@ body {
 /* --- ABILITIES & TRAITS CARDS --- */
 .abilities-card,
 .traits-card {
-    margin-top: 15px;
+    margin-top: 10px;
     background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.02));
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    border-radius: 8px;
     overflow: hidden;
+    flex-shrink: 0;
 }
 
 .abilities-card .card-header,
 .traits-card .card-header {
     background: linear-gradient(90deg, rgba(255, 107, 0, 0.2), transparent);
-    padding: 8px 12px;
-    font-family: 'Orbitron', sans-serif;
+    padding: 5px 10px;
+    font-family: 'Bebas Neue', sans-serif;
     font-size: 0.7rem;
     color: #ff6b00;
     letter-spacing: 1px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .traits-card .card-header {
@@ -3573,24 +3577,24 @@ body {
 
 .abilities-list,
 .traits-list {
-    padding: 8px;
+    padding: 6px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    max-height: 150px;
+    gap: 3px;
+    max-height: 100px;
     overflow-y: auto;
 }
 
 .ability-item,
 .trait-item {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: rgba(255, 255, 255, 0.8);
-    padding: 5px 8px;
+    padding: 4px 6px;
     background: rgba(255, 255, 255, 0.03);
-    border-radius: 4px;
+    border-radius: 3px;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
 }
 
 .ability-item i,
@@ -3617,19 +3621,20 @@ body {
     align-items: center;
     gap: 0;
     background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(255, 255, 255, 0.02));
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 8px 15px;
-    margin: 10px auto;
-    max-width: 320px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 6px 12px;
+    margin: 5px auto;
+    max-width: 280px;
+    flex-shrink: 0;
 }
 
 .battle-record-badge .record-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
-    padding: 0 15px;
+    gap: 1px;
+    padding: 0 12px;
 }
 
 .battle-record-badge .record-item i {
@@ -3646,8 +3651,8 @@ body {
 }
 
 .battle-record-badge .record-value {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.95rem;
     font-weight: 700;
     color: #fff;
 }
@@ -3661,7 +3666,7 @@ body {
 
 .record-divider {
     width: 1px;
-    height: 35px;
+    height: 28px;
     background: rgba(255, 255, 255, 0.1);
 }
 
