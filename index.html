@@ -173,14 +173,35 @@
                             <i class="fas fa-sync-alt toggle-icon"></i>
                         </div>
                         <div class="quick-info-divider"></div>
-                        <div class="quick-info-item">
+                        <div class="quick-info-item clickable" id="speed-toggle" title="Click to switch km/h / mph">
                             <i class="fas fa-tachometer-alt"></i>
                             <span id="quick-speed">---</span>
+                            <i class="fas fa-sync-alt toggle-icon"></i>
                         </div>
                         <div class="quick-info-divider"></div>
                         <div class="quick-info-item">
                             <i class="fas fa-tooth"></i>
                             <span id="quick-bite">---</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Abilities & Traits Tags -->
+                    <div class="abilities-traits-section">
+                        <div class="abilities-container">
+                            <div class="abilities-header">
+                                <i class="fas fa-bolt"></i> ABILITIES
+                            </div>
+                            <div class="abilities-tags" id="abilities-tags">
+                                <span class="ability-tag placeholder">Select an animal</span>
+                            </div>
+                        </div>
+                        <div class="traits-container">
+                            <div class="traits-header">
+                                <i class="fas fa-star"></i> TRAITS
+                            </div>
+                            <div class="traits-tags" id="traits-tags">
+                                <span class="trait-tag placeholder">Select an animal</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -263,24 +284,12 @@
                     <i class="fas fa-chevron-down"></i> HIDE MENU
                 </button>
                 <div class="info-separator">•</div>
-                <div class="info-item-inline">
-                    <i class="fas fa-bolt"></i>
-                    <span class="info-label">ABILITIES:</span>
-                    <span id="abilities-inline">Select an animal</span>
-                </div>
-                <div class="info-separator">•</div>
-                <div class="info-item-inline">
-                    <i class="fas fa-star"></i>
-                    <span class="info-label">TRAITS:</span>
-                    <span id="traits-inline">Select an animal</span>
-                </div>
-                <div class="info-separator">•</div>
                 <button class="stats-comments-btn" id="stats-comments-btn" disabled>
                     <i class="fas fa-comment"></i> COMMENTS <span class="stats-comment-count" id="stats-comment-count">0</span>
                 </button>
                 <div class="info-separator">•</div>
                 <button class="expand-details-btn" id="expand-details-btn">
-                    <i class="fas fa-chevron-down"></i> MORE DETAILS
+                    <i class="fas fa-info-circle"></i> MORE DETAILS
                 </button>
             </div>
             
@@ -486,190 +495,189 @@
         <!-- Community View -->
         <div id="community-view" class="view-container">
             <div class="community-container">
-                
-                <!-- ========================================
-                     DAILY MATCHUP - Top Section
-                     ======================================== -->
-                <div class="daily-matchup-section" id="daily-matchup-section">
-                    <div class="daily-matchup-header">
-                        <div class="daily-matchup-badge">
-                            <i class="fas fa-fire"></i> DAILY MATCHUP
-                        </div>
-                        <div class="daily-matchup-timer" id="daily-matchup-timer">
-                            <i class="fas fa-clock"></i> Resets in <span id="matchup-countdown">--:--:--</span>
-                        </div>
-                    </div>
-                    
-                    <div class="daily-matchup-arena">
-                        <div class="matchup-fighter" id="fighter-1">
-                            <div class="fighter-image-container">
-                                <img src="" alt="" class="fighter-image" id="fighter-1-image">
+                <!-- Left/Center Column: Features -->
+                <div class="community-main-column">
+                    <!-- ========================================
+                         DAILY MATCHUP - Top Section
+                         ======================================== -->
+                    <div class="daily-matchup-section" id="daily-matchup-section">
+                        <div class="daily-matchup-header">
+                            <div class="daily-matchup-badge">
+                                <i class="fas fa-fire"></i> DAILY MATCHUP
                             </div>
-                            <div class="fighter-name" id="fighter-1-name">Loading...</div>
-                            <div class="fighter-stats" id="fighter-1-stats"></div>
-                            <button class="vote-fighter-btn" id="vote-fighter-1" data-fighter="1">
-                                <i class="fas fa-crown"></i> VOTE TO WIN
-                            </button>
-                            <div class="fighter-votes">
-                                <div class="vote-bar" id="fighter-1-bar" style="width: 50%;"></div>
-                                <span class="vote-percent" id="fighter-1-percent">50%</span>
+                            <div class="daily-matchup-timer" id="daily-matchup-timer">
+                                <i class="fas fa-clock"></i> Resets in <span id="matchup-countdown">--:--:--</span>
                             </div>
                         </div>
                         
-                        <div class="matchup-vs">
-                            <span>VS</span>
-                        </div>
-                        
-                        <div class="matchup-fighter" id="fighter-2">
-                            <div class="fighter-image-container">
-                                <img src="" alt="" class="fighter-image" id="fighter-2-image">
-                            </div>
-                            <div class="fighter-name" id="fighter-2-name">Loading...</div>
-                            <div class="fighter-stats" id="fighter-2-stats"></div>
-                            <button class="vote-fighter-btn" id="vote-fighter-2" data-fighter="2">
-                                <i class="fas fa-crown"></i> VOTE TO WIN
-                            </button>
-                            <div class="fighter-votes">
-                                <div class="vote-bar" id="fighter-2-bar" style="width: 50%;"></div>
-                                <span class="vote-percent" id="fighter-2-percent">50%</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="matchup-comments-preview" id="matchup-comments-preview">
-                        <div class="matchup-comments-header">
-                            <i class="fas fa-comments"></i> Discussion
-                            <span class="matchup-comments-count" id="matchup-comments-count">0</span>
-                        </div>
-                        <div class="matchup-comments-list" id="matchup-comments-list">
-                            <!-- Comments loaded by JS -->
-                        </div>
-                        <div class="matchup-comment-input" id="matchup-comment-input-container">
-                            <input type="text" id="matchup-comment-input" placeholder="Share your take..." maxlength="300">
-                            <button id="matchup-comment-send"><i class="fas fa-paper-plane"></i></button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ========================================
-                     POWER RANKINGS PREVIEW - Middle Section
-                     ======================================== -->
-                <div class="rankings-preview-section">
-                    <div class="section-header">
-                        <h3><i class="fas fa-crown"></i> Power Rankings</h3>
-                        <button class="view-all-btn" id="view-full-rankings">
-                            View All <i class="fas fa-arrow-right"></i>
-                        </button>
-                    </div>
-                    <div class="rankings-preview-list" id="rankings-preview-list">
-                        <!-- Top 5 rankings loaded by JS -->
-                        <div class="rankings-loading">
-                            <i class="fas fa-spinner fa-spin"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ========================================
-                     TOURNAMENTS BLOCK
-                     ======================================== -->
-                <div class="tournaments-section">
-                    <div class="section-header">
-                        <h3><i class="fas fa-trophy"></i> Tournaments</h3>
-                    </div>
-                    <div class="tournament-content" id="tournament-content">
-                        <div class="tournament-start-options">
-                            <p class="tournament-prompt">Compete animals in bracket-style tournaments!</p>
-                            <div class="bracket-size-options">
-                                <button class="bracket-size-btn" data-size="8">
-                                    <span class="size-number">8</span>
-                                    <span class="size-label">Quick</span>
+                        <div class="daily-matchup-arena">
+                            <div class="matchup-fighter" id="fighter-1">
+                                <div class="fighter-image-container">
+                                    <img src="" alt="" class="fighter-image" id="fighter-1-image">
+                                </div>
+                                <div class="fighter-name" id="fighter-1-name">Loading...</div>
+                                <div class="fighter-stats" id="fighter-1-stats"></div>
+                                <button class="vote-fighter-btn" id="vote-fighter-1" data-fighter="1">
+                                    <i class="fas fa-crown"></i> VOTE TO WIN
                                 </button>
-                                <button class="bracket-size-btn" data-size="16">
-                                    <span class="size-number">16</span>
-                                    <span class="size-label">Standard</span>
-                                </button>
-                                <button class="bracket-size-btn" data-size="32">
-                                    <span class="size-number">32</span>
-                                    <span class="size-label">Epic</span>
-                                </button>
-                            </div>
-                        </div>
-                        <!-- Active tournament shown here when in progress -->
-                        <div class="active-tournament-card" id="active-tournament-card" style="display: none;">
-                            <div class="active-tournament-info">
-                                <span class="tournament-round" id="tournament-round">Quarter Finals</span>
-                                <span class="tournament-progress" id="tournament-progress">Match 2 of 4</span>
-                            </div>
-                            <button class="continue-tournament-btn" id="continue-tournament-btn">
-                                <i class="fas fa-play"></i> Continue Tournament
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ========================================
-                     CHAT & COMMENTS - Bottom Section
-                     ======================================== -->
-                <div class="community-chat-section">
-                    <div class="community-tabs">
-                        <button class="community-tab active" data-tab="chat">
-                            <i class="fas fa-comments"></i> General Chat
-                        </button>
-                        <button class="community-tab" data-tab="feed">
-                            <i class="fas fa-stream"></i> All Comments
-                        </button>
-                    </div>
-                    
-                    <!-- Chat Section -->
-                    <div class="community-section active" id="community-chat-section">
-                        <div class="chat-container">
-                            <div class="chat-messages" id="chat-messages">
-                                <div class="chat-loading">
-                                    <i class="fas fa-spinner fa-spin"></i> Loading messages...
+                                <div class="fighter-votes">
+                                    <div class="vote-bar" id="fighter-1-bar" style="width: 50%;"></div>
+                                    <span class="vote-percent" id="fighter-1-percent">50%</span>
                                 </div>
                             </div>
-                            <div class="chat-input-container" id="chat-input-container">
-                                <div class="chat-input-wrapper" id="chat-input-wrapper" style="display: none;">
-                                    <input type="text" id="chat-input" placeholder="Type a message..." maxlength="500" autocomplete="off">
-                                    <button id="chat-send-btn" class="chat-send-btn">
-                                        <i class="fas fa-paper-plane"></i>
+                            
+                            <div class="matchup-vs">
+                                <span>VS</span>
+                            </div>
+                            
+                            <div class="matchup-fighter" id="fighter-2">
+                                <div class="fighter-image-container">
+                                    <img src="" alt="" class="fighter-image" id="fighter-2-image">
+                                </div>
+                                <div class="fighter-name" id="fighter-2-name">Loading...</div>
+                                <div class="fighter-stats" id="fighter-2-stats"></div>
+                                <button class="vote-fighter-btn" id="vote-fighter-2" data-fighter="2">
+                                    <i class="fas fa-crown"></i> VOTE TO WIN
+                                </button>
+                                <div class="fighter-votes">
+                                    <div class="vote-bar" id="fighter-2-bar" style="width: 50%;"></div>
+                                    <span class="vote-percent" id="fighter-2-percent">50%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="matchup-comments-preview" id="matchup-comments-preview">
+                            <div class="matchup-comments-header">
+                                <i class="fas fa-comments"></i> Discussion
+                                <span class="matchup-comments-count" id="matchup-comments-count">0</span>
+                            </div>
+                            <div class="matchup-comments-list" id="matchup-comments-list">
+                                <!-- Comments loaded by JS -->
+                            </div>
+                            <div class="matchup-comment-input" id="matchup-comment-input-container">
+                                <input type="text" id="matchup-comment-input" placeholder="Share your take..." maxlength="300" autocomplete="off" data-lpignore="true" data-1p-ignore="true" data-form-type="other" name="matchup-comment-field">
+                                <button id="matchup-comment-send"><i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================
+                         POWER RANKINGS PREVIEW
+                         ======================================== -->
+                    <div class="rankings-preview-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-crown"></i> Power Rankings</h3>
+                            <button class="view-all-btn" id="view-full-rankings">
+                                View All <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div class="rankings-preview-list" id="rankings-preview-list">
+                            <!-- Top 5 rankings loaded by JS -->
+                            <div class="rankings-loading">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================
+                         TOURNAMENTS BLOCK
+                         ======================================== -->
+                    <div class="tournaments-section">
+                        <div class="section-header">
+                            <h3><i class="fas fa-trophy"></i> Tournaments</h3>
+                        </div>
+                        <div class="tournament-content" id="tournament-content">
+                            <div class="tournament-start-options">
+                                <p class="tournament-prompt">Compete animals in bracket-style tournaments!</p>
+                                <div class="bracket-size-options">
+                                    <button class="bracket-size-btn" data-size="8">
+                                        <span class="size-number">8</span>
+                                        <span class="size-label">Quick</span>
+                                    </button>
+                                    <button class="bracket-size-btn" data-size="16">
+                                        <span class="size-number">16</span>
+                                        <span class="size-label">Standard</span>
+                                    </button>
+                                    <button class="bracket-size-btn" data-size="32">
+                                        <span class="size-number">32</span>
+                                        <span class="size-label">Epic</span>
                                     </button>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Comments Feed Section -->
-                    <div class="community-section" id="community-feed-section">
-                        <div class="feed-container">
-                            <div class="feed-list" id="feed-list">
-                                <div class="feed-loading">
-                                    <i class="fas fa-spinner fa-spin"></i> Loading comments...
+                            <!-- Active tournament shown here when in progress -->
+                            <div class="active-tournament-card" id="active-tournament-card" style="display: none;">
+                                <div class="active-tournament-info">
+                                    <span class="tournament-round" id="tournament-round">Quarter Finals</span>
+                                    <span class="tournament-progress" id="tournament-progress">Match 2 of 4</span>
                                 </div>
+                                <button class="continue-tournament-btn" id="continue-tournament-btn">
+                                    <i class="fas fa-play"></i> Continue Tournament
+                                </button>
                             </div>
-                            <button class="load-more-btn" id="feed-load-more" style="display: none;">
-                                <i class="fas fa-chevron-down"></i> Load More Comments
-                            </button>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Login Prompt (shown when needed) -->
-                <div class="community-login-prompt" id="community-login-prompt" style="display: none;">
-                    <i class="fas fa-info-circle"></i> <span>Log in to vote, chat and earn XP!</span>
+
+                <!-- Right Column: Chat & Comments -->
+                <div class="community-chat-column">
+                    <div class="community-chat-section">
+                        <div class="community-tabs">
+                            <button class="community-tab active" data-tab="chat">
+                                <i class="fas fa-comments"></i> General Chat
+                            </button>
+                            <button class="community-tab" data-tab="feed">
+                                <i class="fas fa-stream"></i> All Comments
+                            </button>
+                        </div>
+                        
+                        <!-- Chat Section -->
+                        <div class="community-section active" id="community-chat-section">
+                            <div class="chat-container">
+                                <div class="chat-messages" id="chat-messages">
+                                    <div class="chat-loading">
+                                        <i class="fas fa-spinner fa-spin"></i> Loading messages...
+                                    </div>
+                                </div>
+                                <div class="chat-input-container" id="chat-input-container">
+                                    <div class="chat-input-wrapper" id="chat-input-wrapper" style="display: none;">
+                                        <input type="text" id="chat-input" placeholder="Type a message..." maxlength="500" autocomplete="off">
+                                        <button id="chat-send-btn" class="chat-send-btn">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Comments Feed Section -->
+                        <div class="community-section" id="community-feed-section">
+                            <div class="feed-container">
+                                <div class="feed-list" id="feed-list">
+                                    <div class="feed-loading">
+                                        <i class="fas fa-spinner fa-spin"></i> Loading comments...
+                                    </div>
+                                </div>
+                                <button class="load-more-btn" id="feed-load-more" style="display: none;">
+                                    <i class="fas fa-chevron-down"></i> Load More Comments
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Login Prompt (shown when needed) -->
+                    <div class="community-login-prompt" id="community-login-prompt" style="display: none;">
+                        <i class="fas fa-info-circle"></i> <span>Log in to vote, chat and earn XP!</span>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <!-- Floating Show Menu Button (visible when grid is hidden) -->
-        <button class="show-menu-btn" id="show-menu-btn" style="display: none;">
-            <i class="fas fa-chevron-up"></i> SHOW MENU
-        </button>
+        <!-- Floating Show Menu Button removed - toggle button in bottom bar handles this -->
         
         <!-- Animal Grid (Bottom) -->
         <div class="character-grid-container">
             <div class="grid-controls">
-                <input type="text" id="search-input" placeholder="Search animals..." class="search-box" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other">
+                <input type="text" id="search-input" placeholder="Search animals..." class="search-box" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore="true" name="animal-search-field">
                 
                 <!-- Filter Dropdown -->
                 <div class="dropdown-menu-container">
@@ -914,7 +922,7 @@
                     <span class="reply-text">Replying to...</span>
                     <button class="cancel-reply-btn" id="cancel-reply">&times;</button>
                 </div>
-                <textarea id="comment-input" placeholder="Share your thoughts about this animal..." maxlength="500"></textarea>
+                <textarea id="comment-input" placeholder="Share your thoughts about this animal..." maxlength="500" autocomplete="off" data-lpignore="true" data-1p-ignore="true" data-form-type="other" name="animal-comment-field"></textarea>
                 <div class="comment-form-footer">
                     <div class="comment-options">
                         <label class="anonymous-toggle">

@@ -13,6 +13,13 @@ function formatNumber(num) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
+// Helper function to format numbers with consistent decimals (.0 for whole numbers)
+function formatStat(num, decimals = 1) {
+    if (num === null || num === undefined) return null;
+    const formatted = Number(num).toFixed(decimals);
+    return formatNumber(parseFloat(formatted));
+}
+
 // API Configuration
 const API_CONFIG = {
     // Base URL for API - auto-detects local vs production
@@ -46,6 +53,7 @@ class AnimalStatsApp {
             isGridVisible: true,
             isDetailsExpanded: false,
             weightUnit: 'kg', // 'kg' | 'lbs'
+            speedUnit: 'kmh', // 'kmh' | 'mph'
             filters: {
                 search: '',
                 class: 'all',
@@ -107,8 +115,8 @@ class AnimalStatsApp {
             },
             
             info: {
-                abilities: document.getElementById('abilities-inline'),
-                traits: document.getElementById('traits-inline')
+                abilitiesTags: document.getElementById('abilities-tags'),
+                traitsTags: document.getElementById('traits-tags')
             },
             
             detailsPanel: document.getElementById('details-panel'),
@@ -245,6 +253,11 @@ class AnimalStatsApp {
             // Select first animal by default if available
             if (this.state.filteredAnimals.length > 0) {
                 this.selectAnimal(this.state.filteredAnimals[0]);
+            }
+            
+            // Refresh user avatar now that animals are loaded
+            if (window.Auth && window.Auth.isLoggedIn()) {
+                window.Auth.updateUserStatsBar();
             }
             
             this.showLoadingState(false);
@@ -424,22 +437,26 @@ class AnimalStatsApp {
             this.dom.compareToggleGridBtn.addEventListener('click', this.toggleGrid);
         }
         
-        // Floating show menu button
-        const showMenuBtn = document.getElementById('show-menu-btn');
-        if (showMenuBtn) {
-            showMenuBtn.addEventListener('click', this.toggleGrid);
-        }
-        
         // Weight unit toggle
         const weightToggle = document.getElementById('weight-toggle');
         if (weightToggle) {
             weightToggle.addEventListener('click', () => this.toggleWeightUnit());
         }
         
-        // Load saved weight unit preference
+        // Speed unit toggle
+        const speedToggle = document.getElementById('speed-toggle');
+        if (speedToggle) {
+            speedToggle.addEventListener('click', () => this.toggleSpeedUnit());
+        }
+        
+        // Load saved unit preferences
         const savedWeightUnit = localStorage.getItem('weightUnit');
         if (savedWeightUnit) {
             this.state.weightUnit = savedWeightUnit;
+        }
+        const savedSpeedUnit = localStorage.getItem('speedUnit');
+        if (savedSpeedUnit) {
+            this.state.speedUnit = savedSpeedUnit;
         }
         
         // Close details button (mobile)
@@ -1012,15 +1029,14 @@ class AnimalStatsApp {
             this.updateWeightDisplay(animal);
         }
         if (this.dom.quickSpeed) {
-            this.dom.quickSpeed.textContent = animal.speed_mps ? `${(animal.speed_mps * 3.6).toFixed(0)} km/h` : '---';
+            this.updateSpeedDisplay(animal);
         }
         if (this.dom.quickBite) {
-            this.dom.quickBite.textContent = animal.bite_force_psi ? `${formatNumber(animal.bite_force_psi)} PSI` : '---';
+            this.dom.quickBite.textContent = animal.bite_force_psi ? `${formatStat(animal.bite_force_psi, 0)} PSI` : '---';
         }
 
-        // Info Bar
-        this.dom.info.abilities.textContent = animal.special_abilities?.join(', ') || 'None';
-        this.dom.info.traits.textContent = animal.unique_traits?.join(', ') || 'None';
+        // Abilities & Traits Tags
+        this.updateAbilitiesTraitsTags(animal);
 
         // Update Substats in Side Panels
         if (animal.substats) {
@@ -1056,13 +1072,13 @@ class AnimalStatsApp {
         d.diet.textContent = Array.isArray(animal.diet) ? animal.diet.join(', ') : (animal.diet || '---');
         d.nocturnal.textContent = animal.isNocturnal ? 'Yes ' : 'No ';
         d.social.textContent = animal.isSocial ? 'Yes ' : 'No (Solitary)';
-        d.weight.textContent = animal.weight_kg ? `${formatNumber(animal.weight_kg)} kg` : '---';
-        d.height.textContent = animal.height_cm ? `${formatNumber(animal.height_cm)} cm` : '---';
-        d.length.textContent = animal.length_cm ? `${formatNumber(animal.length_cm)} cm` : '---';
-        d.speed.textContent = animal.speed_mps ? `${animal.speed_mps.toFixed(1)} m/s (${(animal.speed_mps * 3.6).toFixed(1)} km/h)` : '---';
-        d.lifespan.textContent = animal.lifespan_years ? `${animal.lifespan_years} years` : '---';
-        d.bite.textContent = animal.bite_force_psi ? `${formatNumber(animal.bite_force_psi)} PSI` : '---';
-        d.sizeScore.textContent = animal.size_score ? `${animal.size_score.toFixed(1)} / 100` : '---';
+        d.weight.textContent = animal.weight_kg ? `${formatStat(animal.weight_kg)} kg` : '---';
+        d.height.textContent = animal.height_cm ? `${formatStat(animal.height_cm)} cm` : '---';
+        d.length.textContent = animal.length_cm ? `${formatStat(animal.length_cm)} cm` : '---';
+        d.speed.textContent = animal.speed_mps ? `${formatStat(animal.speed_mps)} m/s (${formatStat(animal.speed_mps * 3.6)} km/h)` : '---';
+        d.lifespan.textContent = animal.lifespan_years ? `${formatStat(animal.lifespan_years, 0)} years` : '---';
+        d.bite.textContent = animal.bite_force_psi ? `${formatStat(animal.bite_force_psi, 0)} PSI` : '---';
+        d.sizeScore.textContent = animal.size_score ? `${formatStat(animal.size_score)} / 100` : '---';
         d.description.textContent = animal.description || 'No description available yet.';
 
         // Battle Profile
@@ -1379,7 +1395,7 @@ class AnimalStatsApp {
             this.dom.toggleGridBtn.style.display = 'none';
         } else {
             icon.className = 'fas fa-chevron-up';
-            this.dom.expandDetailsBtn.innerHTML = '<i class="fas fa-chevron-down"></i> MORE DETAILS';
+            this.dom.expandDetailsBtn.innerHTML = '<i class="fas fa-info-circle"></i> MORE DETAILS';
             this.dom.gridWrapper.classList.remove('hidden');
             this.dom.toggleGridBtn.style.display = 'flex';
         }
@@ -1397,10 +1413,31 @@ class AnimalStatsApp {
         }
         
         if (this.state.weightUnit === 'lbs') {
-            const lbs = (animal.weight_kg * 2.20462).toFixed(0);
+            const lbs = (animal.weight_kg * 2.20462).toFixed(1);
             this.dom.quickWeight.textContent = `${formatNumber(parseFloat(lbs))} lbs`;
         } else {
-            this.dom.quickWeight.textContent = `${formatNumber(animal.weight_kg)} kg`;
+            const kg = Number.isInteger(animal.weight_kg) ? animal.weight_kg.toFixed(1) : animal.weight_kg;
+            this.dom.quickWeight.textContent = `${formatNumber(parseFloat(kg))} kg`;
+        }
+    }
+
+    /**
+     * Update speed display based on current unit preference
+     */
+    updateSpeedDisplay(animal) {
+        if (!this.dom.quickSpeed || !animal) return;
+        
+        if (!animal.speed_mps) {
+            this.dom.quickSpeed.textContent = '---';
+            return;
+        }
+        
+        if (this.state.speedUnit === 'mph') {
+            const mph = (animal.speed_mps * 2.23694).toFixed(1);
+            this.dom.quickSpeed.textContent = `${formatNumber(parseFloat(mph))} mph`;
+        } else {
+            const kmh = (animal.speed_mps * 3.6).toFixed(1);
+            this.dom.quickSpeed.textContent = `${formatNumber(parseFloat(kmh))} km/h`;
         }
     }
 
@@ -1414,6 +1451,48 @@ class AnimalStatsApp {
         // Update display
         if (this.state.selectedAnimal) {
             this.updateWeightDisplay(this.state.selectedAnimal);
+        }
+    }
+
+    /**
+     * Toggle speed unit between km/h and mph
+     */
+    toggleSpeedUnit() {
+        this.state.speedUnit = this.state.speedUnit === 'kmh' ? 'mph' : 'kmh';
+        // Save preference to localStorage
+        localStorage.setItem('speedUnit', this.state.speedUnit);
+        // Update display
+        if (this.state.selectedAnimal) {
+            this.updateSpeedDisplay(this.state.selectedAnimal);
+        }
+    }
+
+    /**
+     * Update abilities and traits as interactive tags
+     */
+    updateAbilitiesTraitsTags(animal) {
+        // Update abilities
+        if (this.dom.info.abilitiesTags) {
+            const abilities = animal.special_abilities || [];
+            if (abilities.length > 0) {
+                this.dom.info.abilitiesTags.innerHTML = abilities.map(ability => 
+                    `<span class="ability-tag"><i class="fas fa-bolt"></i> ${ability}</span>`
+                ).join('');
+            } else {
+                this.dom.info.abilitiesTags.innerHTML = '<span class="ability-tag none">None</span>';
+            }
+        }
+        
+        // Update traits
+        if (this.dom.info.traitsTags) {
+            const traits = animal.unique_traits || [];
+            if (traits.length > 0) {
+                this.dom.info.traitsTags.innerHTML = traits.map(trait => 
+                    `<span class="trait-tag"><i class="fas fa-star"></i> ${trait}</span>`
+                ).join('');
+            } else {
+                this.dom.info.traitsTags.innerHTML = '<span class="trait-tag none">None</span>';
+            }
         }
     }
 
@@ -1436,12 +1515,6 @@ class AnimalStatsApp {
 
         updateBtn(this.dom.toggleGridBtn);
         updateBtn(this.dom.compareToggleGridBtn);
-        
-        // Show/hide the floating show menu button
-        const showMenuBtn = document.getElementById('show-menu-btn');
-        if (showMenuBtn) {
-            showMenuBtn.style.display = this.state.isGridVisible ? 'none' : 'flex';
-        }
     }
 
     /**
