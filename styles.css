@@ -1544,7 +1544,8 @@ body {
     overflow-x: auto;
     overflow-y: hidden;
     padding: 10px;
-    padding-bottom: 16px;
+    padding-bottom: 20px;
+    margin-bottom: 5px;
     scrollbar-width: thin;
     scrollbar-color: var(--primary-color) rgba(0, 0, 0, 0.3);
 }
@@ -3501,6 +3502,167 @@ body {
 /* Hide the old battle profile grid since we moved it */
 .main-battle-profile {
     display: none !important;
+}
+
+/* --- COMPACT SUBSTAT STYLES --- */
+.substat-row.compact {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 0;
+}
+
+.substat-container.right-align .substat-row.compact {
+    justify-content: flex-end;
+}
+
+.substat-row.compact .substat-label {
+    font-size: 0.55rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    min-width: 30px;
+}
+
+.substat-row.compact .substat-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+}
+
+.substat-container.right-align .substat-row.compact .substat-label {
+    order: 2;
+    text-align: left;
+}
+
+.substat-container.right-align .substat-row.compact .substat-value {
+    order: 1;
+}
+
+/* --- ABILITIES & TRAITS CARDS --- */
+.abilities-card,
+.traits-card {
+    margin-top: 15px;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.abilities-card .card-header,
+.traits-card .card-header {
+    background: linear-gradient(90deg, rgba(255, 107, 0, 0.2), transparent);
+    padding: 8px 12px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    color: #ff6b00;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.traits-card .card-header {
+    background: linear-gradient(90deg, transparent, rgba(255, 204, 0, 0.2));
+    color: #ffcc00;
+    justify-content: flex-end;
+}
+
+.abilities-list,
+.traits-list {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.ability-item,
+.trait-item {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 5px 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ability-item i,
+.trait-item i {
+    font-size: 0.6rem;
+    color: #ff6b00;
+}
+
+.trait-item i {
+    color: #ffcc00;
+}
+
+.ability-item.placeholder,
+.trait-item.placeholder {
+    color: rgba(255, 255, 255, 0.3);
+    font-style: italic;
+    justify-content: center;
+}
+
+/* --- BATTLE RECORD BADGE --- */
+.battle-record-badge {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(255, 255, 255, 0.02));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 8px 15px;
+    margin: 10px auto;
+    max-width: 320px;
+}
+
+.battle-record-badge .record-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 0 15px;
+}
+
+.battle-record-badge .record-item i {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.battle-record-badge .record-item.rank i {
+    color: #ffcc00;
+}
+
+.battle-record-badge .record-item.winrate i {
+    color: #00ff88;
+}
+
+.battle-record-badge .record-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.battle-record-badge .record-label {
+    font-size: 0.5rem;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.record-divider {
+    width: 1px;
+    height: 35px;
+    background: rgba(255, 255, 255, 0.1);
 }
 
 /* Adjust mobile layout for new substats */
@@ -7617,7 +7779,8 @@ body {
     display: flex;
     flex-direction: column;
     background: radial-gradient(ellipse at center, rgba(10, 20, 40, 0.98) 0%, rgba(0, 0, 0, 0.99) 100%);
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 /* Battle Header */

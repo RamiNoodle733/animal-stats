@@ -16,8 +16,11 @@ function formatNumber(num) {
 // Helper function to format numbers with consistent decimals (.0 for whole numbers)
 function formatStat(num, decimals = 1) {
     if (num === null || num === undefined) return null;
-    const formatted = Number(num).toFixed(decimals);
-    return formatNumber(parseFloat(formatted));
+    const fixed = Number(num).toFixed(decimals);
+    // Insert commas only in the integer part, keep decimal part intact
+    const parts = fixed.split('.');
+    const intPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return parts.length > 1 ? `${intPart}.${parts[1]}` : intPart;
 }
 
 // API Configuration
@@ -115,8 +118,12 @@ class AnimalStatsApp {
             },
             
             info: {
-                abilitiesTags: document.getElementById('abilities-tags'),
-                traitsTags: document.getElementById('traits-tags')
+                abilitiesList: document.getElementById('abilities-list'),
+                traitsList: document.getElementById('traits-list'),
+                // Battle record
+                animalRank: document.getElementById('animal-rank'),
+                animalBattles: document.getElementById('animal-battles'),
+                animalWinrate: document.getElementById('animal-winrate')
             },
             
             detailsPanel: document.getElementById('details-panel'),
@@ -1468,31 +1475,75 @@ class AnimalStatsApp {
     }
 
     /**
-     * Update abilities and traits as interactive tags
+     * Update abilities and traits in side cards
      */
     updateAbilitiesTraitsTags(animal) {
-        // Update abilities
-        if (this.dom.info.abilitiesTags) {
+        // Update abilities list
+        if (this.dom.info.abilitiesList) {
             const abilities = animal.special_abilities || [];
             if (abilities.length > 0) {
-                this.dom.info.abilitiesTags.innerHTML = abilities.map(ability => 
-                    `<span class="ability-tag"><i class="fas fa-bolt"></i> ${ability}</span>`
+                this.dom.info.abilitiesList.innerHTML = abilities.map(ability => 
+                    `<div class="ability-item"><i class="fas fa-bolt"></i> ${ability}</div>`
                 ).join('');
             } else {
-                this.dom.info.abilitiesTags.innerHTML = '<span class="ability-tag none">None</span>';
+                this.dom.info.abilitiesList.innerHTML = '<div class="ability-item placeholder">No abilities</div>';
             }
         }
         
-        // Update traits
-        if (this.dom.info.traitsTags) {
+        // Update traits list
+        if (this.dom.info.traitsList) {
             const traits = animal.unique_traits || [];
             if (traits.length > 0) {
-                this.dom.info.traitsTags.innerHTML = traits.map(trait => 
-                    `<span class="trait-tag"><i class="fas fa-star"></i> ${trait}</span>`
+                this.dom.info.traitsList.innerHTML = traits.map(trait => 
+                    `<div class="trait-item"><i class="fas fa-star"></i> ${trait}</div>`
                 ).join('');
             } else {
-                this.dom.info.traitsTags.innerHTML = '<span class="trait-tag none">None</span>';
+                this.dom.info.traitsList.innerHTML = '<div class="trait-item placeholder">No traits</div>';
             }
+        }
+        
+        // Update battle record
+        this.updateBattleRecord(animal);
+    }
+    
+    /**
+     * Update battle record from rankings data
+     */
+    updateBattleRecord(animal) {
+        // Find animal in rankings (from RankingsManager)
+        const animalName = animal.name.toLowerCase();
+        const rankings = (this.rankingsManager && this.rankingsManager.rankings) ? this.rankingsManager.rankings : [];
+        const rankData = rankings.find(r => r.name && r.name.toLowerCase() === animalName);
+        
+        if (rankData) {
+            // Set rank
+            if (this.dom.info.animalRank) {
+                this.dom.info.animalRank.textContent = `#${rankData.rank || '--'}`;
+            }
+            
+            // Calculate battles (wins + losses)
+            const wins = rankData.wins || 0;
+            const losses = rankData.losses || 0;
+            const battles = wins + losses;
+            
+            if (this.dom.info.animalBattles) {
+                this.dom.info.animalBattles.textContent = battles;
+            }
+            
+            // Calculate win rate
+            if (this.dom.info.animalWinrate) {
+                if (battles > 0) {
+                    const winRate = Math.round((wins / battles) * 100);
+                    this.dom.info.animalWinrate.textContent = `${winRate}%`;
+                } else {
+                    this.dom.info.animalWinrate.textContent = '--%';
+                }
+            }
+        } else {
+            // No ranking data found
+            if (this.dom.info.animalRank) this.dom.info.animalRank.textContent = '#--';
+            if (this.dom.info.animalBattles) this.dom.info.animalBattles.textContent = '0';
+            if (this.dom.info.animalWinrate) this.dom.info.animalWinrate.textContent = '--%';
         }
     }
 
@@ -3422,6 +3473,7 @@ class CommunityManager {
 
     onViewEnter() {
         // Called when entering community view
+        this.updateLoginState();
         if (this.currentTab === 'chat') {
             this.loadChat();
             this.startChatPolling();

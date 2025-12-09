@@ -90,19 +90,17 @@
                         <div class="stat-group-container">
                             <div class="stat-row">
                                 <div class="stat-icon"><i class="fas fa-fist-raised"></i></div>
-                                <div class="stat-name">ATTACK</div>
+                                <div class="stat-name">ATK</div>
                                 <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-attack-bar" style="width: 0%; background: #ff6b00;"></div></div></div>
                                 <div class="stat-value" id="stat-attack-val">0</div>
                             </div>
                             <div class="substat-container">
-                                <div class="substat-row">
-                                    <span class="substat-label">Raw Power</span>
-                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-raw-power-bar" style="width: 0%; background: #ff6b00;"></div></div>
+                                <div class="substat-row compact">
+                                    <span class="substat-label">PWR</span>
                                     <span class="substat-value" id="sub-raw-power-val">0</span>
                                 </div>
-                                <div class="substat-row">
-                                    <span class="substat-label">Weaponry</span>
-                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-weaponry-bar" style="width: 0%; background: #ff6b00;"></div></div>
+                                <div class="substat-row compact">
+                                    <span class="substat-label">WPN</span>
                                     <span class="substat-value" id="sub-weaponry-val">0</span>
                                 </div>
                             </div>
@@ -112,19 +110,17 @@
                         <div class="stat-group-container">
                             <div class="stat-row">
                                 <div class="stat-icon"><i class="fas fa-shield-alt"></i></div>
-                                <div class="stat-name">DEFENSE</div>
+                                <div class="stat-name">DEF</div>
                                 <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-defense-bar" style="width: 0%; background: #00d4ff;"></div></div></div>
                                 <div class="stat-value" id="stat-defense-val">0</div>
                             </div>
                             <div class="substat-container">
-                                <div class="substat-row">
-                                    <span class="substat-label">Protection</span>
-                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-protection-bar" style="width: 0%; background: #00d4ff;"></div></div>
+                                <div class="substat-row compact">
+                                    <span class="substat-label">PRT</span>
                                     <span class="substat-value" id="sub-protection-val">0</span>
                                 </div>
-                                <div class="substat-row">
-                                    <span class="substat-label">Toughness</span>
-                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-toughness-bar" style="width: 0%; background: #00d4ff;"></div></div>
+                                <div class="substat-row compact">
+                                    <span class="substat-label">TGH</span>
                                     <span class="substat-value" id="sub-toughness-val">0</span>
                                 </div>
                             </div>
@@ -134,22 +130,30 @@
                         <div class="stat-group-container">
                             <div class="stat-row">
                                 <div class="stat-icon"><i class="fas fa-wind"></i></div>
-                                <div class="stat-name">AGILITY</div>
+                                <div class="stat-name">AGI</div>
                                 <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-agility-bar" style="width: 0%; background: #00ff88;"></div></div></div>
                                 <div class="stat-value" id="stat-agility-val">0</div>
                             </div>
                             <div class="substat-container">
-                                <div class="substat-row">
-                                    <span class="substat-label">Speed</span>
-                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-speed-bar" style="width: 0%; background: #00ff88;"></div></div>
+                                <div class="substat-row compact">
+                                    <span class="substat-label">SPD</span>
                                     <span class="substat-value" id="sub-speed-val">0</span>
                                 </div>
-                                <div class="substat-row">
-                                    <span class="substat-label">Maneuverability</span>
-                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-maneuverability-bar" style="width: 0%; background: #00ff88;"></div></div>
+                                <div class="substat-row compact">
+                                    <span class="substat-label">MNV</span>
                                     <span class="substat-value" id="sub-maneuverability-val">0</span>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Abilities Section (below left stats) -->
+                    <div class="abilities-card">
+                        <div class="card-header">
+                            <i class="fas fa-bolt"></i> ABILITIES
+                        </div>
+                        <div class="abilities-list" id="abilities-list">
+                            <div class="ability-item placeholder">Select an animal</div>
                         </div>
                     </div>
                 </div>
@@ -158,6 +162,28 @@
                 <div class="character-showcase">
                     <div class="character-name-display" id="character-name">SELECT AN ANIMAL</div>
                     <div class="character-scientific-name" id="character-scientific">---</div>
+                    
+                    <!-- Battle Record Badge -->
+                    <div class="battle-record-badge" id="battle-record-badge">
+                        <div class="record-item rank">
+                            <i class="fas fa-crown"></i>
+                            <span class="record-value" id="animal-rank">#--</span>
+                            <span class="record-label">RANK</span>
+                        </div>
+                        <div class="record-divider"></div>
+                        <div class="record-item battles">
+                            <i class="fas fa-swords"></i>
+                            <span class="record-value" id="animal-battles">0</span>
+                            <span class="record-label">BATTLES</span>
+                        </div>
+                        <div class="record-divider"></div>
+                        <div class="record-item winrate">
+                            <i class="fas fa-trophy"></i>
+                            <span class="record-value" id="animal-winrate">--%</span>
+                            <span class="record-label">WIN %</span>
+                        </div>
+                    </div>
+                    
                     <div class="character-model-container">
                         <div class="character-silhouette" id="character-silhouette">
                             <i class="fas fa-question"></i>
@@ -184,26 +210,6 @@
                             <span id="quick-bite">---</span>
                         </div>
                     </div>
-                    
-                    <!-- Abilities & Traits Tags -->
-                    <div class="abilities-traits-section">
-                        <div class="abilities-container">
-                            <div class="abilities-header">
-                                <i class="fas fa-bolt"></i> ABILITIES
-                            </div>
-                            <div class="abilities-tags" id="abilities-tags">
-                                <span class="ability-tag placeholder">Select an animal</span>
-                            </div>
-                        </div>
-                        <div class="traits-container">
-                            <div class="traits-header">
-                                <i class="fas fa-star"></i> TRAITS
-                            </div>
-                            <div class="traits-tags" id="traits-tags">
-                                <span class="trait-tag placeholder">Select an animal</span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 
                 <!-- Right Stats Panel -->
@@ -214,19 +220,17 @@
                             <div class="stat-row">
                                 <div class="stat-value" id="stat-stamina-val">0</div>
                                 <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-stamina-bar" style="width: 0%; background: #ff3366;"></div></div></div>
-                                <div class="stat-name">STAMINA</div>
+                                <div class="stat-name">STA</div>
                                 <div class="stat-icon"><i class="fas fa-heart"></i></div>
                             </div>
                             <div class="substat-container right-align">
-                                <div class="substat-row">
+                                <div class="substat-row compact">
                                     <span class="substat-value" id="sub-endurance-val">0</span>
-                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-endurance-bar" style="width: 0%; background: #ff3366;"></div></div>
-                                    <span class="substat-label">Endurance</span>
+                                    <span class="substat-label">END</span>
                                 </div>
-                                <div class="substat-row">
+                                <div class="substat-row compact">
                                     <span class="substat-value" id="sub-recovery-val">0</span>
-                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-recovery-bar" style="width: 0%; background: #ff3366;"></div></div>
-                                    <span class="substat-label">Recovery</span>
+                                    <span class="substat-label">REC</span>
                                 </div>
                             </div>
                         </div>
@@ -236,19 +240,17 @@
                             <div class="stat-row">
                                 <div class="stat-value" id="stat-intelligence-val">0</div>
                                 <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-intelligence-bar" style="width: 0%; background: #9966ff;"></div></div></div>
-                                <div class="stat-name">INTELLIGENCE</div>
+                                <div class="stat-name">INT</div>
                                 <div class="stat-icon"><i class="fas fa-brain"></i></div>
                             </div>
                             <div class="substat-container right-align">
-                                <div class="substat-row">
+                                <div class="substat-row compact">
                                     <span class="substat-value" id="sub-tactics-val">0</span>
-                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-tactics-bar" style="width: 0%; background: #9966ff;"></div></div>
-                                    <span class="substat-label">Tactics</span>
+                                    <span class="substat-label">TAC</span>
                                 </div>
-                                <div class="substat-row">
+                                <div class="substat-row compact">
                                     <span class="substat-value" id="sub-senses-val">0</span>
-                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-senses-bar" style="width: 0%; background: #9966ff;"></div></div>
-                                    <span class="substat-label">Senses</span>
+                                    <span class="substat-label">SNS</span>
                                 </div>
                             </div>
                         </div>
@@ -258,21 +260,29 @@
                             <div class="stat-row">
                                 <div class="stat-value" id="stat-special-val">0</div>
                                 <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="stat-special-bar" style="width: 0%; background: #ffcc00;"></div></div></div>
-                                <div class="stat-name">SPECIAL</div>
+                                <div class="stat-name">SPL</div>
                                 <div class="stat-icon"><i class="fas fa-bolt"></i></div>
                             </div>
                             <div class="substat-container right-align">
-                                <div class="substat-row">
+                                <div class="substat-row compact">
                                     <span class="substat-value" id="sub-ferocity-val">0</span>
-                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-ferocity-bar" style="width: 0%; background: #ffcc00;"></div></div>
-                                    <span class="substat-label">Ferocity</span>
+                                    <span class="substat-label">FRC</span>
                                 </div>
-                                <div class="substat-row">
+                                <div class="substat-row compact">
                                     <span class="substat-value" id="sub-abilities-val">0</span>
-                                    <div class="substat-bar-bg"><div class="substat-bar-fill" id="sub-abilities-bar" style="width: 0%; background: #ffcc00;"></div></div>
-                                    <span class="substat-label">Abilities</span>
+                                    <span class="substat-label">ABL</span>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Traits Section (below right stats) -->
+                    <div class="traits-card">
+                        <div class="card-header">
+                            <i class="fas fa-star"></i> TRAITS
+                        </div>
+                        <div class="traits-list" id="traits-list">
+                            <div class="trait-item placeholder">Select an animal</div>
                         </div>
                     </div>
                 </div>
@@ -677,7 +687,7 @@
         <!-- Animal Grid (Bottom) -->
         <div class="character-grid-container">
             <div class="grid-controls">
-                <input type="text" id="search-input" placeholder="Search animals..." class="search-box" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore="true" name="animal-search-field">
+                <input type="search" id="search-input" placeholder="Search animals..." class="search-box" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore="true" name="animal-search-query-7391" readonly onfocus="this.removeAttribute('readonly');" aria-autocomplete="none">
                 
                 <!-- Filter Dropdown -->
                 <div class="dropdown-menu-container">
