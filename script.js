@@ -1027,9 +1027,14 @@ class AnimalStatsApp {
             if (this.dom.statValues[stat]) {
                 // Add Tier Badge - convert +/- to valid CSS class names
                 const tierClass = tier.toLowerCase().replace('+', 'plus').replace('-', 'minus');
-                // Add MAX badge for stats >= 95
-                const maxBadge = value >= 95 ? '<span class="stat-max-badge">MAX</span>' : '';
-                this.dom.statValues[stat].innerHTML = `${maxBadge}${formatStat(value, 1)} <span class="stat-tier-badge tier-${tierClass}">${tier}</span>`;
+                // Add MAX badge only for stats = 100, HIGH for 90-99, empty for others
+                let statBadge = '';
+                if (value >= 100) {
+                    statBadge = '<span class="stat-max-badge">MAX</span>';
+                } else if (value >= 90) {
+                    statBadge = '<span class="stat-high-badge">HIGH</span>';
+                }
+                this.dom.statValues[stat].innerHTML = `<span class="stat-tier-badge tier-${tierClass}">${tier}</span><span class="stat-number">${formatStat(value, 1)}</span>${statBadge}`;
             }
         });
 
@@ -1515,15 +1520,28 @@ class AnimalStatsApp {
         // Find animal in rankings (from RankingsManager)
         const animalName = animal.name.toLowerCase();
         const rankings = (this.rankingsManager && this.rankingsManager.rankings) ? this.rankingsManager.rankings : [];
-        const rankData = rankings.find(r => r.name && r.name.toLowerCase() === animalName);
+        
+        // Rankings data uses item.animal.name structure
+        const rankData = rankings.find((item, index) => {
+            const itemAnimal = item.animal || item;
+            return itemAnimal.name && itemAnimal.name.toLowerCase() === animalName;
+        });
+        
+        // Get the rank (1-based index in the rankings array)
+        const rankIndex = rankings.findIndex((item) => {
+            const itemAnimal = item.animal || item;
+            return itemAnimal.name && itemAnimal.name.toLowerCase() === animalName;
+        });
         
         if (rankData) {
-            // Set rank
+            const itemAnimal = rankData.animal || rankData;
+            
+            // Set rank (1-based)
             if (this.dom.info.animalRank) {
-                this.dom.info.animalRank.textContent = `#${rankData.rank || '--'}`;
+                this.dom.info.animalRank.textContent = `#${rankIndex + 1}`;
             }
             
-            // Calculate battles (wins + losses)
+            // Get wins and losses from rankData
             const wins = rankData.wins || 0;
             const losses = rankData.losses || 0;
             const battles = wins + losses;

@@ -157,9 +157,9 @@ body {
 .character-display-area {
     flex: 1;
     display: grid;
-    grid-template-columns: minmax(180px, 240px) 1fr minmax(180px, 240px);
-    gap: 10px;
-    padding: 8px 15px;
+    grid-template-columns: minmax(220px, 300px) 1fr minmax(220px, 300px);
+    gap: 8px;
+    padding: 8px 12px;
     align-items: stretch;
     min-height: 0;
     position: relative;
@@ -230,10 +230,10 @@ body {
 
 .stat-row {
     display: grid;
-    grid-template-columns: 24px 38px 1fr 48px;
+    grid-template-columns: 26px 42px 1fr 90px;
     align-items: center;
-    gap: 4px;
-    padding: 2px 0;
+    gap: 6px;
+    padding: 2px 4px;
     transition: all var(--transition-fast);
     border-radius: 4px;
 }
@@ -243,7 +243,7 @@ body {
 }
 
 .stats-panel-right .stat-row {
-    grid-template-columns: 48px 1fr 38px 24px;
+    grid-template-columns: 90px 1fr 42px 26px;
 }
 
 .stat-icon {
@@ -388,15 +388,21 @@ body {
 
 .stat-value {
     font-family: var(--font-display);
-    font-size: 1rem;
+    font-size: 0.85rem;
     font-weight: 700;
     color: #fff;
     text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 3px;
+    gap: 4px;
     white-space: nowrap;
+    min-width: 85px;
+}
+
+.stat-value .stat-number {
+    min-width: 32px;
+    text-align: right;
 }
 
 /* Tier badge inside stat value */
@@ -412,10 +418,10 @@ body {
     line-height: 1;
 }
 
-/* MAX badge for stats >= 95 */
+/* MAX badge for stats = 100 */
 .stat-max-badge {
     font-family: var(--font-display);
-    font-size: 0.5rem;
+    font-size: 0.45rem;
     font-weight: 900;
     padding: 2px 4px;
     background: linear-gradient(135deg, #ffd700 0%, #ff8c00 50%, #ffd700 100%);
@@ -423,25 +429,54 @@ body {
     border-radius: 2px;
     color: #000;
     text-shadow: none;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     animation: maxBadgePulse 1.5s ease-in-out infinite;
-    box-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+    box-shadow: 0 0 6px rgba(255, 215, 0, 0.8);
+    flex-shrink: 0;
+}
+
+/* HIGH badge for stats 98-99 */
+.stat-high-badge {
+    font-family: var(--font-display);
+    font-size: 0.4rem;
+    font-weight: 700;
+    padding: 1px 3px;
+    background: linear-gradient(135deg, #ff4d4d 0%, #cc0000 100%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    color: #fff;
+    text-shadow: none;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+/* ELITE badge for stats 95-97 */
+.stat-elite-badge {
+    font-family: var(--font-display);
+    font-size: 0.38rem;
+    font-weight: 700;
+    padding: 1px 3px;
+    background: linear-gradient(135deg, #9933ff 0%, #6600cc 100%);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 2px;
+    color: #fff;
+    text-shadow: none;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
 }
 
 @keyframes maxBadgePulse {
     0%, 100% { 
-        box-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
-        transform: scale(1);
+        box-shadow: 0 0 6px rgba(255, 215, 0, 0.8);
     }
     50% { 
-        box-shadow: 0 0 15px rgba(255, 215, 0, 1);
-        transform: scale(1.05);
+        box-shadow: 0 0 12px rgba(255, 215, 0, 1);
     }
 }
 
 .stats-panel-right .stat-value {
     justify-content: flex-start;
-    flex-direction: row-reverse;
+    flex-direction: row;
 }
 
 .character-showcase {
@@ -1326,7 +1361,7 @@ body {
     background: linear-gradient(180deg, rgba(5, 10, 20, 0.95) 0%, rgba(0, 10, 20, 0.98) 100%);
     border-top: 1px solid rgba(0, 212, 255, 0.3);
     padding: 6px 10px;
-    height: 155px;
+    height: 168px;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -1773,9 +1808,9 @@ body {
 }
 
 .character-card {
-    min-width: 100px;
-    width: 100px;
-    height: 115px;
+    min-width: 95px;
+    width: 95px;
+    height: 120px;
     background: rgba(10, 20, 35, 0.9);
     border: 2px solid rgba(0, 212, 255, 0.25);
     border-radius: 6px;
@@ -1898,9 +1933,10 @@ body {
 
 .character-card-image {
     width: 100%;
-    height: 80px;
+    height: 75px;
     object-fit: cover;
     object-position: center;
+    flex-shrink: 0;
 }
 
 .character-card-name {
@@ -1908,18 +1944,19 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-display);
-    font-size: 0.55rem;
+    font-family: var(--font-body);
+    font-size: 0.6rem;
     font-weight: 600;
-    letter-spacing: 0.5px;
+    letter-spacing: 0;
     color: var(--text-light);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.95));
-    padding: 4px 3px;
+    padding: 4px 4px;
     text-align: center;
-    line-height: 1.1;
+    line-height: 1.15;
     word-break: break-word;
-    hyphens: auto;
+    overflow-wrap: break-word;
+    min-height: 32px;
 }
 
 .mode-btn {
