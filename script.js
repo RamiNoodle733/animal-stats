@@ -16,6 +16,8 @@ function formatNumber(num) {
 // Helper function to format numbers with consistent decimals (.0 for whole numbers)
 function formatStat(num, decimals = 1) {
     if (num === null || num === undefined) return null;
+    // Don't show decimal for 100 since it's already 3 digits
+    if (num === 100) return '100';
     const fixed = Number(num).toFixed(decimals);
     // Insert commas only in the integer part, keep decimal part intact
     const parts = fixed.split('.');
@@ -1027,14 +1029,17 @@ class AnimalStatsApp {
             if (this.dom.statValues[stat]) {
                 // Add Tier Badge - convert +/- to valid CSS class names
                 const tierClass = tier.toLowerCase().replace('+', 'plus').replace('-', 'minus');
-                // Add MAX badge only for stats = 100, HIGH for 90-99, empty for others
+                // Add MAX badge only for stats = 100, HIGH for 90+, ELITE for 95+ (but not 100)
                 let statBadge = '';
                 if (value >= 100) {
                     statBadge = '<span class="stat-max-badge">MAX</span>';
-                } else if (value >= 90) {
+                } else if (value >= 95) {
                     statBadge = '<span class="stat-high-badge">HIGH</span>';
                 }
-                this.dom.statValues[stat].innerHTML = `<span class="stat-tier-badge tier-${tierClass}">${tier}</span><span class="stat-number">${formatStat(value, 1)}</span>${statBadge}`;
+                // Left stats: badge, number, tier (so tier is towards center)
+                // Right stats: tier, number, badge (so tier is towards center)
+                // The CSS will handle alignment - left stats have badge first
+                this.dom.statValues[stat].innerHTML = `<span class="stat-badge-slot">${statBadge}</span><span class="stat-number">${formatStat(value, 1)}</span><span class="stat-tier-badge tier-${tierClass}">${tier}</span>`;
             }
         });
 
@@ -1401,17 +1406,20 @@ class AnimalStatsApp {
         this.dom.expandDetailsBtn.classList.toggle('expanded', this.state.isDetailsExpanded);
         
         const icon = this.dom.expandDetailsBtn.querySelector('i');
+        const toggleSeparator = document.getElementById('toggle-separator');
         
         if (this.state.isDetailsExpanded) {
             icon.className = 'fas fa-chevron-down';
             this.dom.expandDetailsBtn.innerHTML = '<i class="fas fa-chevron-up"></i> LESS DETAILS';
             this.dom.gridWrapper.classList.add('hidden');
             this.dom.toggleGridBtn.style.display = 'none';
+            if (toggleSeparator) toggleSeparator.style.display = 'none';
         } else {
             icon.className = 'fas fa-chevron-up';
             this.dom.expandDetailsBtn.innerHTML = '<i class="fas fa-info-circle"></i> MORE DETAILS';
             this.dom.gridWrapper.classList.remove('hidden');
             this.dom.toggleGridBtn.style.display = 'flex';
+            if (toggleSeparator) toggleSeparator.style.display = 'block';
         }
     }
 
@@ -1534,27 +1542,23 @@ class AnimalStatsApp {
         });
         
         if (rankData) {
-            const itemAnimal = rankData.animal || rankData;
-            
             // Set rank (1-based)
             if (this.dom.info.animalRank) {
                 this.dom.info.animalRank.textContent = `#${rankIndex + 1}`;
             }
             
-            // Get wins and losses from rankData
-            const wins = rankData.wins || 0;
-            const losses = rankData.losses || 0;
-            const battles = wins + losses;
+            // Get totalFights and winRate from rankData (API structure)
+            const battles = rankData.totalFights || 0;
+            const winRate = rankData.winRate || 0;
             
             if (this.dom.info.animalBattles) {
                 this.dom.info.animalBattles.textContent = battles;
             }
             
-            // Calculate win rate
+            // Set win rate
             if (this.dom.info.animalWinrate) {
                 if (battles > 0) {
-                    const winRate = Math.round((wins / battles) * 100);
-                    this.dom.info.animalWinrate.textContent = `${winRate}%`;
+                    this.dom.info.animalWinrate.textContent = `${Math.round(winRate)}%`;
                 } else {
                     this.dom.info.animalWinrate.textContent = '--%';
                 }

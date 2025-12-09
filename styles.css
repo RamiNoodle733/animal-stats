@@ -391,18 +391,26 @@ body {
     font-size: 0.85rem;
     font-weight: 700;
     color: #fff;
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 4px;
+    gap: 3px;
     white-space: nowrap;
-    min-width: 85px;
+    min-width: 90px;
+}
+
+/* Badge slot takes fixed space even when empty */
+.stat-value .stat-badge-slot {
+    min-width: 28px;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .stat-value .stat-number {
-    min-width: 32px;
-    text-align: right;
+    min-width: 36px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
 }
 
 /* Tier badge inside stat value */
@@ -476,7 +484,11 @@ body {
 
 .stats-panel-right .stat-value {
     justify-content: flex-start;
-    flex-direction: row;
+    flex-direction: row-reverse;
+}
+
+.stats-panel-right .stat-value .stat-badge-slot {
+    justify-content: flex-start;
 }
 
 .character-showcase {
@@ -829,6 +841,11 @@ body {
     white-space: nowrap;
     min-height: 32px;
     max-height: 32px;
+}
+
+/* Keep buttons centered when toggle-grid-btn is hidden */
+.bottom-info-bar .toggle-grid-btn[style*="display: none"] + .info-separator {
+    display: none;
 }
 
 .info-item-inline {
@@ -1783,7 +1800,8 @@ body {
     overflow-x: auto;
     overflow-y: hidden;
     padding: 4px 8px;
-    padding-bottom: 6px;
+    padding-bottom: 10px;
+    margin-bottom: -4px;
     scrollbar-width: thin;
     scrollbar-color: var(--primary-color) rgba(0, 0, 0, 0.3);
     flex: 1;
@@ -3731,9 +3749,10 @@ body {
 
 .substat-value {
     font-family: var(--font-display);
-    font-size: 0.6rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: none;
 }
 
 /* Hide substat bars - just show label + value */
