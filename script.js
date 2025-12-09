@@ -1027,7 +1027,9 @@ class AnimalStatsApp {
             if (this.dom.statValues[stat]) {
                 // Add Tier Badge - convert +/- to valid CSS class names
                 const tierClass = tier.toLowerCase().replace('+', 'plus').replace('-', 'minus');
-                this.dom.statValues[stat].innerHTML = `${value} <span class="stat-tier-badge tier-${tierClass}">${tier}</span>`;
+                // Add MAX badge for stats >= 95
+                const maxBadge = value >= 95 ? '<span class="stat-max-badge">MAX</span>' : '';
+                this.dom.statValues[stat].innerHTML = `${maxBadge}${formatStat(value, 1)} <span class="stat-tier-badge tier-${tierClass}">${tier}</span>`;
             }
         });
 
