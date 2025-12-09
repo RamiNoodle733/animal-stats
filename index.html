@@ -1050,12 +1050,20 @@
             <div class="tournament-setup-content">
                 <button class="tournament-close-btn" id="tournament-close">&times;</button>
                 <div class="tournament-setup-header">
-                    <i class="fas fa-crown"></i>
+                    <div class="tournament-logo">
+                        <i class="fas fa-crown"></i>
+                        <div class="logo-glow"></div>
+                    </div>
                     <h2>ANIMAL BATTLE TOURNAMENT</h2>
-                    <p>Choose your bracket size and battle animals head-to-head to crown the ultimate champion!</p>
+                    <p>Choose your bracket size, filter by animal type, and battle head-to-head to crown the ultimate champion!</p>
                 </div>
-                <div class="tournament-options">
-                    <h3>SELECT BRACKET SIZE</h3>
+                
+                <!-- Step 1: Bracket Size -->
+                <div class="tournament-step" id="tournament-step-1">
+                    <div class="step-header">
+                        <span class="step-number">1</span>
+                        <h3>SELECT BRACKET SIZE</h3>
+                    </div>
                     <div class="bracket-options">
                         <button class="bracket-option" data-rounds="8">
                             <span class="bracket-size">8</span>
@@ -1067,7 +1075,7 @@
                             <span class="bracket-label">Animals</span>
                             <span class="bracket-matches">15 Battles</span>
                         </button>
-                        <button class="bracket-option featured" data-rounds="32">
+                        <button class="bracket-option" data-rounds="32">
                             <span class="bracket-size">32</span>
                             <span class="bracket-label">Animals</span>
                             <span class="bracket-matches">31 Battles</span>
@@ -1078,9 +1086,43 @@
                             <span class="bracket-matches">63 Battles</span>
                         </button>
                     </div>
-                    <div class="tournament-login-note" id="tournament-login-note">
-                        <i class="fas fa-info-circle"></i> Log in to save your results and earn points!
+                </div>
+                
+                <!-- Step 2: Animal Type Filter -->
+                <div class="tournament-step" id="tournament-step-2">
+                    <div class="step-header">
+                        <span class="step-number">2</span>
+                        <h3>FILTER BY TYPE <span class="optional-tag">(Optional)</span></h3>
                     </div>
+                    <div class="type-filter-options" id="tournament-type-filters">
+                        <button class="type-filter-btn active" data-type="all">
+                            <i class="fas fa-globe"></i>
+                            <span>All Animals</span>
+                        </button>
+                        <!-- Dynamically populated -->
+                    </div>
+                </div>
+                
+                <!-- Tournament Preview & Start -->
+                <div class="tournament-preview" id="tournament-preview">
+                    <div class="preview-info">
+                        <div class="preview-item">
+                            <i class="fas fa-users"></i>
+                            <span id="preview-animal-count">0 animals available</span>
+                        </div>
+                        <div class="preview-item">
+                            <i class="fas fa-trophy"></i>
+                            <span id="preview-bracket-size">Select bracket size</span>
+                        </div>
+                    </div>
+                    <button class="start-tournament-btn" id="start-tournament-btn" disabled>
+                        <i class="fas fa-play"></i>
+                        <span>START TOURNAMENT</span>
+                    </button>
+                </div>
+                
+                <div class="tournament-login-note" id="tournament-login-note">
+                    <i class="fas fa-info-circle"></i> Log in to save your results and earn points!
                 </div>
             </div>
         </div>
@@ -1101,50 +1143,182 @@
             </div>
             
             <div class="tournament-question">
-                <h2>WHO WOULD WIN IN A FIGHT?</h2>
+                <h2>WHO WOULD WIN?</h2>
+                <p class="tournament-instruction">Click on the fighter you think would win this battle</p>
             </div>
             
-            <div class="tournament-fighters">
-                <div class="tournament-fighter" id="tournament-fighter-1">
-                    <div class="fighter-card">
-                        <img src="" alt="" class="fighter-img" id="fighter-1-img">
-                        <div class="fighter-info">
-                            <div class="fighter-name" id="fighter-1-name">Animal 1</div>
-                            <div class="fighter-stats-grid">
-                                <div class="fighter-stat"><i class="fas fa-fist-raised"></i> <span class="stat-label">ATK</span> <span id="fighter-1-attack">0</span></div>
-                                <div class="fighter-stat"><i class="fas fa-shield-alt"></i> <span class="stat-label">DEF</span> <span id="fighter-1-defense">0</span></div>
-                                <div class="fighter-stat"><i class="fas fa-wind"></i> <span class="stat-label">AGI</span> <span id="fighter-1-agility">0</span></div>
-                                <div class="fighter-stat"><i class="fas fa-heart"></i> <span class="stat-label">STA</span> <span id="fighter-1-stamina">0</span></div>
-                                <div class="fighter-stat"><i class="fas fa-brain"></i> <span class="stat-label">INT</span> <span id="fighter-1-intelligence">0</span></div>
-                                <div class="fighter-stat"><i class="fas fa-bolt"></i> <span class="stat-label">SPE</span> <span id="fighter-1-special">0</span></div>
+            <div class="tournament-arena">
+                <div class="arena-backdrop"></div>
+                <div class="tournament-fighters">
+                    <div class="tournament-fighter" id="tournament-fighter-1">
+                        <div class="fighter-card-enhanced">
+                            <div class="fighter-image-container">
+                                <div class="fighter-image-bg"></div>
+                                <img src="" alt="" class="fighter-img" id="fighter-1-img">
+                                <div class="fighter-corner-tag left">FIGHTER 1</div>
                             </div>
-                            <button class="fighter-comments-btn" id="fighter-1-comments" data-animal-id="" data-animal-name="" data-animal-image="">
-                                <i class="fas fa-comment"></i> Comments
-                            </button>
+                            <div class="fighter-info-enhanced">
+                                <div class="fighter-name-enhanced" id="fighter-1-name">Animal 1</div>
+                                <div class="fighter-type" id="fighter-1-type">Type</div>
+                                
+                                <div class="stats-display-grid">
+                                    <div class="stat-bar-item">
+                                        <div class="stat-bar-header">
+                                            <span class="stat-icon"><i class="fas fa-fist-raised"></i></span>
+                                            <span class="stat-name">Attack</span>
+                                            <span class="stat-value" id="fighter-1-attack">0</span>
+                                        </div>
+                                        <div class="stat-bar-bg">
+                                            <div class="stat-bar-fill attack" id="fighter-1-attack-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-bar-item">
+                                        <div class="stat-bar-header">
+                                            <span class="stat-icon"><i class="fas fa-shield-alt"></i></span>
+                                            <span class="stat-name">Defense</span>
+                                            <span class="stat-value" id="fighter-1-defense">0</span>
+                                        </div>
+                                        <div class="stat-bar-bg">
+                                            <div class="stat-bar-fill defense" id="fighter-1-defense-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-bar-item">
+                                        <div class="stat-bar-header">
+                                            <span class="stat-icon"><i class="fas fa-wind"></i></span>
+                                            <span class="stat-name">Agility</span>
+                                            <span class="stat-value" id="fighter-1-agility">0</span>
+                                        </div>
+                                        <div class="stat-bar-bg">
+                                            <div class="stat-bar-fill agility" id="fighter-1-agility-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-bar-item">
+                                        <div class="stat-bar-header">
+                                            <span class="stat-icon"><i class="fas fa-heart"></i></span>
+                                            <span class="stat-name">Stamina</span>
+                                            <span class="stat-value" id="fighter-1-stamina">0</span>
+                                        </div>
+                                        <div class="stat-bar-bg">
+                                            <div class="stat-bar-fill stamina" id="fighter-1-stamina-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-bar-item">
+                                        <div class="stat-bar-header">
+                                            <span class="stat-icon"><i class="fas fa-brain"></i></span>
+                                            <span class="stat-name">Intel</span>
+                                            <span class="stat-value" id="fighter-1-intelligence">0</span>
+                                        </div>
+                                        <div class="stat-bar-bg">
+                                            <div class="stat-bar-fill intelligence" id="fighter-1-intelligence-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-bar-item">
+                                        <div class="stat-bar-header">
+                                            <span class="stat-icon"><i class="fas fa-bolt"></i></span>
+                                            <span class="stat-name">Special</span>
+                                            <span class="stat-value" id="fighter-1-special">0</span>
+                                        </div>
+                                        <div class="stat-bar-bg">
+                                            <div class="stat-bar-fill special" id="fighter-1-special-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="fighter-total-power">
+                                    <span class="total-label">TOTAL POWER</span>
+                                    <span class="total-value" id="fighter-1-total">0</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <div class="tournament-vs">
-                    <span>VS</span>
-                </div>
-                
-                <div class="tournament-fighter" id="tournament-fighter-2">
-                    <div class="fighter-card">
-                        <img src="" alt="" class="fighter-img" id="fighter-2-img">
-                        <div class="fighter-info">
-                            <div class="fighter-name" id="fighter-2-name">Animal 2</div>
-                            <div class="fighter-stats-grid">
-                                <div class="fighter-stat"><i class="fas fa-fist-raised"></i> <span class="stat-label">ATK</span> <span id="fighter-2-attack">0</span></div>
-                                <div class="fighter-stat"><i class="fas fa-shield-alt"></i> <span class="stat-label">DEF</span> <span id="fighter-2-defense">0</span></div>
-                                <div class="fighter-stat"><i class="fas fa-wind"></i> <span class="stat-label">AGI</span> <span id="fighter-2-agility">0</span></div>
-                                <div class="fighter-stat"><i class="fas fa-heart"></i> <span class="stat-label">STA</span> <span id="fighter-2-stamina">0</span></div>
-                                <div class="fighter-stat"><i class="fas fa-brain"></i> <span class="stat-label">INT</span> <span id="fighter-2-intelligence">0</span></div>
-                                <div class="fighter-stat"><i class="fas fa-bolt"></i> <span class="stat-label">SPE</span> <span id="fighter-2-special">0</span></div>
+                    
+                    <div class="tournament-vs-enhanced">
+                        <div class="vs-circle">
+                            <span>VS</span>
+                        </div>
+                        <div class="vs-lightning left"></div>
+                        <div class="vs-lightning right"></div>
+                    </div>
+                    
+                    <div class="tournament-fighter" id="tournament-fighter-2">
+                        <div class="fighter-card-enhanced">
+                            <div class="fighter-image-container">
+                                <div class="fighter-image-bg"></div>
+                                <img src="" alt="" class="fighter-img" id="fighter-2-img">
+                                <div class="fighter-corner-tag right">FIGHTER 2</div>
                             </div>
-                            <button class="fighter-comments-btn" id="fighter-2-comments" data-animal-id="" data-animal-name="" data-animal-image="">
-                                <i class="fas fa-comment"></i> Comments
-                            </button>
+                            <div class="fighter-info-enhanced">
+                                <div class="fighter-name-enhanced" id="fighter-2-name">Animal 2</div>
+                                <div class="fighter-type" id="fighter-2-type">Type</div>
+                                
+                                <div class="stats-display-grid">
+                                    <div class="stat-bar-item">
+                                        <div class="stat-bar-header">
+                                            <span class="stat-icon"><i class="fas fa-fist-raised"></i></span>
+                                            <span class="stat-name">Attack</span>
+                                            <span class="stat-value" id="fighter-2-attack">0</span>
+                                        </div>
+                                        <div class="stat-bar-bg">
+                                            <div class="stat-bar-fill attack" id="fighter-2-attack-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-bar-item">
+                                        <div class="stat-bar-header">
+                                            <span class="stat-icon"><i class="fas fa-shield-alt"></i></span>
+                                            <span class="stat-name">Defense</span>
+                                            <span class="stat-value" id="fighter-2-defense">0</span>
+                                        </div>
+                                        <div class="stat-bar-bg">
+                                            <div class="stat-bar-fill defense" id="fighter-2-defense-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-bar-item">
+                                        <div class="stat-bar-header">
+                                            <span class="stat-icon"><i class="fas fa-wind"></i></span>
+                                            <span class="stat-name">Agility</span>
+                                            <span class="stat-value" id="fighter-2-agility">0</span>
+                                        </div>
+                                        <div class="stat-bar-bg">
+                                            <div class="stat-bar-fill agility" id="fighter-2-agility-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-bar-item">
+                                        <div class="stat-bar-header">
+                                            <span class="stat-icon"><i class="fas fa-heart"></i></span>
+                                            <span class="stat-name">Stamina</span>
+                                            <span class="stat-value" id="fighter-2-stamina">0</span>
+                                        </div>
+                                        <div class="stat-bar-bg">
+                                            <div class="stat-bar-fill stamina" id="fighter-2-stamina-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-bar-item">
+                                        <div class="stat-bar-header">
+                                            <span class="stat-icon"><i class="fas fa-brain"></i></span>
+                                            <span class="stat-name">Intel</span>
+                                            <span class="stat-value" id="fighter-2-intelligence">0</span>
+                                        </div>
+                                        <div class="stat-bar-bg">
+                                            <div class="stat-bar-fill intelligence" id="fighter-2-intelligence-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-bar-item">
+                                        <div class="stat-bar-header">
+                                            <span class="stat-icon"><i class="fas fa-bolt"></i></span>
+                                            <span class="stat-name">Special</span>
+                                            <span class="stat-value" id="fighter-2-special">0</span>
+                                        </div>
+                                        <div class="stat-bar-bg">
+                                            <div class="stat-bar-fill special" id="fighter-2-special-bar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="fighter-total-power">
+                                    <span class="total-label">TOTAL POWER</span>
+                                    <span class="total-value" id="fighter-2-total">0</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

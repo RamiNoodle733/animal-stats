@@ -2349,7 +2349,10 @@ class TournamentManager {
     constructor(app) {
         this.app = app;
         this.bracketSize = 0;
+        this.selectedBracketSize = 0;
+        this.selectedType = 'all';
         this.animals = [];
+        this.filteredAnimals = [];
         this.bracket = [];
         this.currentRound = 0;
         this.currentMatch = 0;
@@ -2370,6 +2373,9 @@ class TournamentManager {
             bracketOptions: document.querySelectorAll('.bracket-option'),
             startBtn: document.getElementById('start-tournament-btn'),
             loginNote: document.getElementById('tournament-login-note'),
+            typeFilters: document.getElementById('tournament-type-filters'),
+            previewAnimalCount: document.getElementById('preview-animal-count'),
+            previewBracketSize: document.getElementById('preview-bracket-size'),
             // Battle elements
             progressText: document.getElementById('tournament-progress-text'),
             progressBar: document.getElementById('tournament-progress-bar'),
@@ -2378,22 +2384,36 @@ class TournamentManager {
             fighter2: document.getElementById('tournament-fighter-2'),
             fighter1Img: document.getElementById('fighter-1-img'),
             fighter1Name: document.getElementById('fighter-1-name'),
+            fighter1Type: document.getElementById('fighter-1-type'),
             fighter1Attack: document.getElementById('fighter-1-attack'),
             fighter1Defense: document.getElementById('fighter-1-defense'),
             fighter1Agility: document.getElementById('fighter-1-agility'),
             fighter1Stamina: document.getElementById('fighter-1-stamina'),
             fighter1Intelligence: document.getElementById('fighter-1-intelligence'),
             fighter1Special: document.getElementById('fighter-1-special'),
-            fighter1Comments: document.getElementById('fighter-1-comments'),
+            fighter1Total: document.getElementById('fighter-1-total'),
+            fighter1AttackBar: document.getElementById('fighter-1-attack-bar'),
+            fighter1DefenseBar: document.getElementById('fighter-1-defense-bar'),
+            fighter1AgilityBar: document.getElementById('fighter-1-agility-bar'),
+            fighter1StaminaBar: document.getElementById('fighter-1-stamina-bar'),
+            fighter1IntelligenceBar: document.getElementById('fighter-1-intelligence-bar'),
+            fighter1SpecialBar: document.getElementById('fighter-1-special-bar'),
             fighter2Img: document.getElementById('fighter-2-img'),
             fighter2Name: document.getElementById('fighter-2-name'),
+            fighter2Type: document.getElementById('fighter-2-type'),
             fighter2Attack: document.getElementById('fighter-2-attack'),
             fighter2Defense: document.getElementById('fighter-2-defense'),
             fighter2Agility: document.getElementById('fighter-2-agility'),
             fighter2Stamina: document.getElementById('fighter-2-stamina'),
             fighter2Intelligence: document.getElementById('fighter-2-intelligence'),
             fighter2Special: document.getElementById('fighter-2-special'),
-            fighter2Comments: document.getElementById('fighter-2-comments'),
+            fighter2Total: document.getElementById('fighter-2-total'),
+            fighter2AttackBar: document.getElementById('fighter-2-attack-bar'),
+            fighter2DefenseBar: document.getElementById('fighter-2-defense-bar'),
+            fighter2AgilityBar: document.getElementById('fighter-2-agility-bar'),
+            fighter2StaminaBar: document.getElementById('fighter-2-stamina-bar'),
+            fighter2IntelligenceBar: document.getElementById('fighter-2-intelligence-bar'),
+            fighter2SpecialBar: document.getElementById('fighter-2-special-bar'),
             // Results elements
             championImg: document.getElementById('champion-img'),
             championName: document.getElementById('champion-name'),
@@ -2408,11 +2428,13 @@ class TournamentManager {
     init() {
         this.bindEvents();
         this.updateLoginNote();
+        this.populateTypeFilters();
+        this.updateFilteredAnimals();
     }
 
     bindEvents() {
-        // Start tournament button
-        this.dom.startBtn?.addEventListener('click', () => this.showSetup());
+        // Start tournament button - now actually starts the tournament
+        this.dom.startBtn?.addEventListener('click', () => this.startTournament());
         
         // Close button
         this.dom.closeBtn?.addEventListener('click', () => this.hideModal());
@@ -2424,31 +2446,17 @@ class TournamentManager {
             }
         });
         
-        // Bracket size options
+        // Bracket size options - now just selects, doesn't start
         this.dom.bracketOptions.forEach(option => {
             option.addEventListener('click', (e) => {
                 const size = parseInt(e.currentTarget.dataset.rounds);
-                this.startTournament(size);
+                this.selectBracketSize(size, e.currentTarget);
             });
         });
         
         // Fighter selection
         this.dom.fighter1?.addEventListener('click', () => this.selectWinner(0));
         this.dom.fighter2?.addEventListener('click', () => this.selectWinner(1));
-        
-        // Comments buttons - open comments modal for each fighter
-        this.dom.fighter1CommentsBtn?.addEventListener('click', (e) => {
-            e.stopPropagation(); // Don't trigger fighter selection
-            if (this.currentAnimal1) {
-                window.rankingsManager?.openCommentsModal(this.currentAnimal1.name, this.currentAnimal1.image);
-            }
-        });
-        this.dom.fighter2CommentsBtn?.addEventListener('click', (e) => {
-            e.stopPropagation(); // Don't trigger fighter selection
-            if (this.currentAnimal2) {
-                window.rankingsManager?.openCommentsModal(this.currentAnimal2.name, this.currentAnimal2.image);
-            }
-        });
         
         // Results buttons
         this.dom.playAgainBtn?.addEventListener('click', () => this.showSetup());
@@ -2467,6 +2475,113 @@ class TournamentManager {
             }
         });
     }
+    
+    /**
+     * Populate type filter buttons from animal data
+     */
+    populateTypeFilters() {
+        if (!this.dom.typeFilters) return;
+        
+        const types = [...new Set(this.app.state.animals.map(a => a.type).filter(Boolean))].sort();
+        
+        // Keep the "All Animals" button, add type buttons
+        let html = `
+            <button class="type-filter-btn active" data-type="all">
+                <i class="fas fa-globe"></i>
+                <span>All Animals</span>
+            </button>
+        `;
+        
+        const typeIcons = {
+            'Mammal': 'fa-paw',
+            'Bird': 'fa-dove',
+            'Reptile': 'fa-dragon',
+            'Fish': 'fa-fish',
+            'Amphibian': 'fa-frog',
+            'Insect': 'fa-bug',
+            'Arachnid': 'fa-spider',
+            'Crustacean': 'fa-shrimp',
+            'Mollusk': 'fa-shell'
+        };
+        
+        types.forEach(type => {
+            const icon = typeIcons[type] || 'fa-paw';
+            html += `
+                <button class="type-filter-btn" data-type="${type}">
+                    <i class="fas ${icon}"></i>
+                    <span>${type}</span>
+                </button>
+            `;
+        });
+        
+        this.dom.typeFilters.innerHTML = html;
+        
+        // Bind click events
+        this.dom.typeFilters.querySelectorAll('.type-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active from all
+                this.dom.typeFilters.querySelectorAll('.type-filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                this.selectedType = btn.dataset.type;
+                this.updateFilteredAnimals();
+                this.updatePreview();
+            });
+        });
+    }
+    
+    /**
+     * Update filtered animals based on selected type
+     */
+    updateFilteredAnimals() {
+        if (this.selectedType === 'all') {
+            this.filteredAnimals = [...this.app.state.animals];
+        } else {
+            this.filteredAnimals = this.app.state.animals.filter(a => a.type === this.selectedType);
+        }
+        this.updatePreview();
+    }
+    
+    /**
+     * Select bracket size (doesn't start tournament yet)
+     */
+    selectBracketSize(size, element) {
+        // Remove selected from all
+        this.dom.bracketOptions.forEach(opt => opt.classList.remove('selected'));
+        // Add selected to clicked
+        element.classList.add('selected');
+        this.selectedBracketSize = size;
+        this.updatePreview();
+    }
+    
+    /**
+     * Update the preview panel
+     */
+    updatePreview() {
+        const available = this.filteredAnimals.length;
+        const size = this.selectedBracketSize;
+        
+        if (this.dom.previewAnimalCount) {
+            this.dom.previewAnimalCount.textContent = `${available} animals available`;
+        }
+        
+        if (this.dom.previewBracketSize) {
+            if (size > 0) {
+                this.dom.previewBracketSize.textContent = `${size}-animal bracket`;
+            } else {
+                this.dom.previewBracketSize.textContent = 'Select bracket size';
+            }
+        }
+        
+        // Enable/disable start button
+        if (this.dom.startBtn) {
+            const canStart = size > 0 && available >= size;
+            this.dom.startBtn.disabled = !canStart;
+            
+            if (size > 0 && available < size) {
+                this.dom.previewAnimalCount.textContent = `${available} animals available (need ${size})`;
+            }
+        }
+    }
 
     updateLoginNote() {
         if (this.dom.loginNote) {
@@ -2475,8 +2590,14 @@ class TournamentManager {
     }
 
     showSetup() {
-        this.reset();
+        this.resetTournamentState();
         this.updateLoginNote();
+        this.updateFilteredAnimals();
+        // Reset UI selections
+        this.dom.bracketOptions.forEach(opt => opt.classList.remove('selected'));
+        this.selectedBracketSize = 0;
+        this.updatePreview();
+        
         this.dom.setup.style.display = 'flex';
         this.dom.battle.style.display = 'none';
         this.dom.results.style.display = 'none';
@@ -2488,7 +2609,7 @@ class TournamentManager {
         this.isActive = false;
     }
 
-    reset() {
+    resetTournamentState() {
         this.bracketSize = 0;
         this.animals = [];
         this.bracket = [];
@@ -2502,14 +2623,27 @@ class TournamentManager {
         this.currentAnimal1 = null;
         this.currentAnimal2 = null;
     }
-
-    startTournament(size) {
-        this.reset();
+    
+    reset() {
+        this.resetTournamentState();
+        this.selectedBracketSize = 0;
+        this.selectedType = 'all';
+    }
+    
+    startTournament() {
+        // Use selected bracket size
+        const size = this.selectedBracketSize;
+        if (!size || this.filteredAnimals.length < size) {
+            alert('Please select a bracket size with enough animals available.');
+            return;
+        }
+        
+        this.resetTournamentState();
         this.bracketSize = size;
         this.totalMatches = size - 1;
         this.isActive = true;
         
-        // Get random animals for the bracket
+        // Get random animals from filtered list
         this.animals = this.getRandomAnimals(size);
         
         // Build initial bracket (pairs of animals)
@@ -2533,8 +2667,8 @@ class TournamentManager {
     }
 
     getRandomAnimals(count) {
-        const allAnimals = [...this.app.state.animals];
-        const selected = [];
+        // Use filtered animals instead of all animals
+        const allAnimals = [...this.filteredAnimals];
         
         // Shuffle array
         for (let i = allAnimals.length - 1; i > 0; i--) {
@@ -2556,34 +2690,22 @@ class TournamentManager {
         const match = this.bracket[this.currentMatch];
         const [animal1, animal2] = match;
         
-        // Store current animals for comments button
+        // Store current animals
         this.currentAnimal1 = animal1;
         this.currentAnimal2 = animal2;
         
         // Update progress
         this.updateProgress();
         
-        // Update fighter 1 - all 6 stats
-        this.dom.fighter1Img.src = animal1.image;
-        this.dom.fighter1Img.onerror = () => { this.dom.fighter1Img.src = 'https://via.placeholder.com/300x200?text=?'; };
-        this.dom.fighter1Name.textContent = animal1.name;
-        this.dom.fighter1Attack.textContent = Math.round(animal1.attack || 0);
-        this.dom.fighter1Defense.textContent = Math.round(animal1.defense || 0);
-        this.dom.fighter1Agility.textContent = Math.round(animal1.agility || 0);
-        this.dom.fighter1Stamina.textContent = Math.round(animal1.stamina || 0);
-        this.dom.fighter1Intelligence.textContent = Math.round(animal1.intelligence || 0);
-        this.dom.fighter1Special.textContent = Math.round(animal1.special || 0);
+        // Reset any previous selection styling
+        this.dom.fighter1.classList.remove('selected', 'eliminated');
+        this.dom.fighter2.classList.remove('selected', 'eliminated');
         
-        // Update fighter 2 - all 6 stats
-        this.dom.fighter2Img.src = animal2.image;
-        this.dom.fighter2Img.onerror = () => { this.dom.fighter2Img.src = 'https://via.placeholder.com/300x200?text=?'; };
-        this.dom.fighter2Name.textContent = animal2.name;
-        this.dom.fighter2Attack.textContent = Math.round(animal2.attack || 0);
-        this.dom.fighter2Defense.textContent = Math.round(animal2.defense || 0);
-        this.dom.fighter2Agility.textContent = Math.round(animal2.agility || 0);
-        this.dom.fighter2Stamina.textContent = Math.round(animal2.stamina || 0);
-        this.dom.fighter2Intelligence.textContent = Math.round(animal2.intelligence || 0);
-        this.dom.fighter2Special.textContent = Math.round(animal2.special || 0);
+        // Update fighter 1
+        this.updateFighterCard(1, animal1);
+        
+        // Update fighter 2
+        this.updateFighterCard(2, animal2);
         
         // Add entrance animation
         this.dom.fighter1.style.animation = 'none';
@@ -2592,6 +2714,51 @@ class TournamentManager {
             this.dom.fighter1.style.animation = 'slideInLeft 0.5s ease';
             this.dom.fighter2.style.animation = 'slideInRight 0.5s ease';
         }, 10);
+    }
+    
+    /**
+     * Update a fighter card with animal data and stat bars
+     */
+    updateFighterCard(fighterNum, animal) {
+        const prefix = `fighter${fighterNum}`;
+        
+        // Image
+        const imgEl = this.dom[`${prefix}Img`];
+        if (imgEl) {
+            imgEl.src = animal.image;
+            imgEl.alt = animal.name;
+            imgEl.onerror = () => { imgEl.src = 'https://via.placeholder.com/300x200?text=?'; };
+        }
+        
+        // Name
+        const nameEl = this.dom[`${prefix}Name`];
+        if (nameEl) nameEl.textContent = animal.name;
+        
+        // Type
+        const typeEl = this.dom[`${prefix}Type`];
+        if (typeEl) typeEl.textContent = animal.type || 'Unknown';
+        
+        // Stats
+        const stats = ['Attack', 'Defense', 'Agility', 'Stamina', 'Intelligence', 'Special'];
+        const statKeys = ['attack', 'defense', 'agility', 'stamina', 'intelligence', 'special'];
+        
+        let total = 0;
+        statKeys.forEach((key, i) => {
+            const value = Math.round(animal[key] || 0);
+            total += value;
+            
+            // Update stat value
+            const statEl = this.dom[`${prefix}${stats[i]}`];
+            if (statEl) statEl.textContent = value;
+            
+            // Update stat bar
+            const barEl = this.dom[`${prefix}${stats[i]}Bar`];
+            if (barEl) barEl.style.width = `${value}%`;
+        });
+        
+        // Update total power
+        const totalEl = this.dom[`${prefix}Total`];
+        if (totalEl) totalEl.textContent = total;
     }
 
     updateProgress() {
@@ -2632,24 +2799,22 @@ class TournamentManager {
         this.winners.push(winner);
         this.completedMatches++;
         
-        // Visual feedback
+        // Visual feedback using CSS classes
         const winnerEl = fighterIndex === 0 ? this.dom.fighter1 : this.dom.fighter2;
         const loserEl = fighterIndex === 0 ? this.dom.fighter2 : this.dom.fighter1;
         
-        winnerEl.querySelector('.fighter-card').style.borderColor = '#00ff88';
-        winnerEl.querySelector('.fighter-card').style.boxShadow = '0 0 40px rgba(0, 255, 136, 0.6)';
-        loserEl.querySelector('.fighter-card').style.opacity = '0.4';
+        winnerEl.classList.add('selected');
+        loserEl.classList.add('eliminated');
         
         // Move to next match after brief delay
         setTimeout(() => {
-            // Reset styles
-            winnerEl.querySelector('.fighter-card').style.borderColor = '';
-            winnerEl.querySelector('.fighter-card').style.boxShadow = '';
-            loserEl.querySelector('.fighter-card').style.opacity = '';
+            // Reset classes
+            winnerEl.classList.remove('selected');
+            loserEl.classList.remove('eliminated');
             
             this.currentMatch++;
             this.showCurrentMatch();
-        }, 600);
+        }, 800);
     }
     
     async recordBattle(winnerName, loserName) {

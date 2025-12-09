@@ -7237,3 +7237,626 @@ body {
 .tournament-fighter {
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
+
+/* ============================================
+   ENHANCED TOURNAMENT UI - Video Game Style
+   ============================================ */
+
+/* Setup Screen Enhancements */
+.tournament-logo {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.tournament-logo i {
+    font-size: 4rem;
+    color: #ffd700;
+    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
+    animation: crownFloat 3s ease-in-out infinite;
+}
+
+.logo-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+    animation: glowPulse 2s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes crownFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-8px) rotate(3deg); }
+}
+
+@keyframes glowPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+}
+
+/* Step Layout */
+.tournament-step {
+    margin-bottom: 25px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.step-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.step-number {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #00d4ff, #0099cc);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    color: #000;
+    font-weight: bold;
+}
+
+.step-header h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    color: #fff;
+    margin: 0;
+}
+
+.optional-tag {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 1px;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Type Filter Buttons */
+.type-filter-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.type-filter-btn {
+    padding: 10px 16px;
+    background: rgba(0, 212, 255, 0.08);
+    border: 2px solid rgba(0, 212, 255, 0.25);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.type-filter-btn:hover {
+    border-color: rgba(0, 212, 255, 0.5);
+    background: rgba(0, 212, 255, 0.15);
+    color: #fff;
+}
+
+.type-filter-btn.active {
+    border-color: #00d4ff;
+    background: rgba(0, 212, 255, 0.2);
+    color: #00d4ff;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+}
+
+.type-filter-btn i {
+    font-size: 0.9rem;
+}
+
+/* Tournament Preview */
+.tournament-preview {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(255, 215, 0, 0.1) 100%);
+    border-radius: 12px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    margin-bottom: 20px;
+}
+
+.preview-info {
+    display: flex;
+    gap: 25px;
+}
+
+.preview-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+}
+
+.preview-item i {
+    color: #00d4ff;
+}
+
+.start-tournament-btn {
+    padding: 14px 30px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    border: none;
+    border-radius: 10px;
+    color: #000;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+}
+
+.start-tournament-btn:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 6px 30px rgba(255, 215, 0, 0.6);
+}
+
+.start-tournament-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: linear-gradient(135deg, #666, #444);
+    box-shadow: none;
+}
+
+/* Bracket Option - Remove featured styling */
+.bracket-option.selected {
+    border-color: #ffd700 !important;
+    background: rgba(255, 215, 0, 0.15) !important;
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
+    transform: scale(1.02);
+}
+
+.bracket-option.selected .bracket-size {
+    color: #ffd700;
+}
+
+/* ============================================
+   ENHANCED BATTLE SCREEN
+   ============================================ */
+
+.tournament-instruction {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+    margin-top: 5px;
+}
+
+/* Arena */
+.tournament-arena {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.arena-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(ellipse at 50% 120%, rgba(255, 107, 0, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 40%),
+        radial-gradient(ellipse at 80% 50%, rgba(255, 60, 60, 0.1) 0%, transparent 40%);
+    pointer-events: none;
+}
+
+.tournament-fighters {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+    max-width: 1100px;
+}
+
+/* Enhanced Fighter Card */
+.tournament-fighter {
+    flex: 1;
+    max-width: 420px;
+    cursor: pointer;
+}
+
+.fighter-card-enhanced {
+    background: linear-gradient(180deg, rgba(15, 25, 45, 0.95) 0%, rgba(5, 10, 20, 0.98) 100%);
+    border: 3px solid rgba(0, 212, 255, 0.4);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.tournament-fighter:hover .fighter-card-enhanced {
+    border-color: #ffd700;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+    transform: translateY(-5px);
+}
+
+/* Fighter Image */
+.fighter-image-container {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, rgba(0, 20, 40, 0.5) 0%, rgba(0, 0, 0, 0.8) 100%);
+}
+
+.fighter-image-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at center, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+}
+
+.fighter-card-enhanced .fighter-img {
+    max-width: 90%;
+    max-height: 200px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.8));
+    transition: transform 0.3s ease;
+    z-index: 1;
+}
+
+.tournament-fighter:hover .fighter-img {
+    transform: scale(1.08);
+}
+
+.fighter-corner-tag {
+    position: absolute;
+    top: 10px;
+    padding: 4px 12px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 4px;
+}
+
+.fighter-corner-tag.left {
+    left: 10px;
+    border-left: 3px solid #00d4ff;
+}
+
+.fighter-corner-tag.right {
+    right: 10px;
+    border-right: 3px solid #ff6b6b;
+}
+
+/* Fighter Info */
+.fighter-info-enhanced {
+    padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.fighter-name-enhanced {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 4px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.fighter-type {
+    text-align: center;
+    font-size: 0.8rem;
+    color: #00d4ff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    opacity: 0.8;
+}
+
+/* Stats Display Grid */
+.stats-display-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.stat-bar-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.stat-bar-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.stat-bar-header .stat-icon {
+    width: 20px;
+    text-align: center;
+}
+
+.stat-bar-header .stat-icon i {
+    font-size: 0.75rem;
+}
+
+.stat-bar-header .stat-name {
+    flex: 1;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-bar-header .stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    color: #fff;
+    min-width: 30px;
+    text-align: right;
+}
+
+.stat-bar-bg {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.stat-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+.stat-bar-fill.attack {
+    background: linear-gradient(90deg, #ff4444, #ff6666);
+}
+
+.stat-bar-fill.defense {
+    background: linear-gradient(90deg, #4488ff, #66aaff);
+}
+
+.stat-bar-fill.agility {
+    background: linear-gradient(90deg, #44ff88, #66ffaa);
+}
+
+.stat-bar-fill.stamina {
+    background: linear-gradient(90deg, #ff8844, #ffaa66);
+}
+
+.stat-bar-fill.intelligence {
+    background: linear-gradient(90deg, #aa44ff, #cc66ff);
+}
+
+.stat-bar-fill.special {
+    background: linear-gradient(90deg, #ffd700, #ffee66);
+}
+
+/* Stat Icons Colors */
+.stat-bar-item:nth-child(1) .stat-icon i { color: #ff4444; }
+.stat-bar-item:nth-child(2) .stat-icon i { color: #4488ff; }
+.stat-bar-item:nth-child(3) .stat-icon i { color: #44ff88; }
+.stat-bar-item:nth-child(4) .stat-icon i { color: #ff8844; }
+.stat-bar-item:nth-child(5) .stat-icon i { color: #aa44ff; }
+.stat-bar-item:nth-child(6) .stat-icon i { color: #ffd700; }
+
+/* Total Power */
+.fighter-total-power {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 15px;
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 107, 0, 0.15) 100%);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    margin-top: auto;
+}
+
+.total-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.total-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+/* VS Badge Enhanced */
+.tournament-vs-enhanced {
+    position: relative;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.vs-circle {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #ff6b00, #ff4400);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 40px rgba(255, 107, 0, 0.6);
+    animation: vsPulseNew 1.5s ease-in-out infinite;
+}
+
+.vs-circle span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 2px;
+    color: #fff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+@keyframes vsPulseNew {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(255, 107, 0, 0.6); }
+    50% { transform: scale(1.1); box-shadow: 0 0 60px rgba(255, 107, 0, 0.8); }
+}
+
+.vs-lightning {
+    position: absolute;
+    width: 40px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #ffd700, transparent);
+    animation: lightningFlash 2s ease-in-out infinite;
+}
+
+.vs-lightning.left {
+    left: -50px;
+    animation-delay: 0s;
+}
+
+.vs-lightning.right {
+    right: -50px;
+    animation-delay: 1s;
+}
+
+@keyframes lightningFlash {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+/* Winner Selection Feedback */
+.tournament-fighter.selected .fighter-card-enhanced {
+    border-color: #00ff88 !important;
+    box-shadow: 0 0 50px rgba(0, 255, 136, 0.6) !important;
+}
+
+.tournament-fighter.eliminated .fighter-card-enhanced {
+    opacity: 0.4;
+    filter: grayscale(50%);
+}
+
+/* Mobile Responsive for Enhanced Tournament */
+@media (max-width: 900px) {
+    .tournament-fighters {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .tournament-fighter {
+        max-width: 100%;
+    }
+    
+    .fighter-image-container {
+        height: 180px;
+    }
+    
+    .fighter-card-enhanced .fighter-img {
+        max-height: 160px;
+    }
+    
+    .tournament-vs-enhanced {
+        transform: rotate(90deg);
+        margin: 10px 0;
+    }
+    
+    .vs-circle {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .vs-circle span {
+        font-size: 1.5rem;
+    }
+    
+    .vs-lightning {
+        display: none;
+    }
+    
+    .tournament-preview {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .preview-info {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    .tournament-step {
+        padding: 15px;
+    }
+    
+    .bracket-options {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+    
+    .bracket-option {
+        padding: 12px;
+    }
+    
+    .bracket-option .bracket-size {
+        font-size: 1.8rem;
+    }
+    
+    .type-filter-options {
+        gap: 6px;
+    }
+    
+    .type-filter-btn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .fighter-name-enhanced {
+        font-size: 1.4rem;
+    }
+    
+    .stats-display-grid {
+        gap: 6px;
+    }
+    
+    .stat-bar-header .stat-name {
+        font-size: 0.7rem;
+    }
+    
+    .stat-bar-header .stat-value {
+        font-size: 0.9rem;
+    }
+}
