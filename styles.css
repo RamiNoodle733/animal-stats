@@ -6534,29 +6534,32 @@ body {
 
 .tournament-modal.show {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    padding: 20px;
 }
 
 /* Setup Screen */
 .tournament-setup {
     width: 100%;
-    height: 100%;
+    max-height: 100%;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    padding: 20px;
+    padding: 10px;
+    overflow-y: auto;
 }
 
 .tournament-setup-content {
     background: linear-gradient(180deg, rgba(10, 14, 26, 0.98) 0%, rgba(5, 8, 16, 0.98) 100%);
-    border: 3px solid rgba(255, 215, 0, 0.5);
-    border-radius: 20px;
-    padding: 40px;
-    max-width: 600px;
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    border-radius: 16px;
+    padding: 25px 30px;
+    max-width: 520px;
     width: 100%;
     position: relative;
-    box-shadow: 0 0 60px rgba(255, 215, 0, 0.3);
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.2);
+    margin: auto;
 }
 
 .tournament-close-btn {
@@ -6578,26 +6581,26 @@ body {
 
 .tournament-setup-header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .tournament-setup-header i {
-    font-size: 3rem;
+    font-size: 2.2rem;
     color: #ffd700;
-    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
-    margin-bottom: 15px;
+    filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.8));
+    margin-bottom: 10px;
     display: block;
 }
 
 .tournament-setup-header h2 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.2rem;
-    letter-spacing: 4px;
+    font-size: 1.8rem;
+    letter-spacing: 3px;
     background: linear-gradient(135deg, #ffd700, #ff8c00);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .tournament-setup-header p {
@@ -7433,430 +7436,475 @@ body {
 }
 
 /* ============================================
-   ENHANCED BATTLE SCREEN
+   HEAD-TO-HEAD BATTLE SCREEN
    ============================================ */
 
-.tournament-instruction {
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 0.9rem;
-    margin-top: 5px;
-}
-
-/* Arena */
-.tournament-arena {
-    position: relative;
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.arena-backdrop {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: 
-        radial-gradient(ellipse at 50% 120%, rgba(255, 107, 0, 0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 40%),
-        radial-gradient(ellipse at 80% 50%, rgba(255, 60, 60, 0.1) 0%, transparent 40%);
-    pointer-events: none;
-}
-
-.tournament-fighters {
-    position: relative;
-    z-index: 1;
-    display: flex;
-    align-items: stretch;
-    justify-content: center;
-    gap: 30px;
+.tournament-battle {
     width: 100%;
-    max-width: 1100px;
-}
-
-/* Enhanced Fighter Card */
-.tournament-fighter {
-    flex: 1;
-    max-width: 420px;
-    cursor: pointer;
-}
-
-.fighter-card-enhanced {
-    background: linear-gradient(180deg, rgba(15, 25, 45, 0.95) 0%, rgba(5, 10, 20, 0.98) 100%);
-    border: 3px solid rgba(0, 212, 255, 0.4);
-    border-radius: 16px;
-    overflow: hidden;
-    transition: all 0.3s ease;
     height: 100%;
     display: flex;
     flex-direction: column;
-}
-
-.tournament-fighter:hover .fighter-card-enhanced {
-    border-color: #ffd700;
-    box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
-    transform: translateY(-5px);
-}
-
-/* Fighter Image */
-.fighter-image-container {
-    position: relative;
-    height: 220px;
+    background: radial-gradient(ellipse at center, rgba(10, 20, 40, 0.98) 0%, rgba(0, 0, 0, 0.99) 100%);
     overflow: hidden;
+}
+
+/* Battle Header */
+.battle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 25px;
+    background: rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.battle-progress {
     display: flex;
     align-items: center;
-    justify-content: center;
-    background: linear-gradient(180deg, rgba(0, 20, 40, 0.5) 0%, rgba(0, 0, 0, 0.8) 100%);
+    gap: 15px;
 }
 
-.fighter-image-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(circle at center, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
-}
-
-.fighter-card-enhanced .fighter-img {
-    max-width: 90%;
-    max-height: 200px;
-    width: auto;
-    height: auto;
-    object-fit: contain;
-    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.8));
-    transition: transform 0.3s ease;
-    z-index: 1;
-}
-
-.tournament-fighter:hover .fighter-img {
-    transform: scale(1.08);
-}
-
-.fighter-corner-tag {
-    position: absolute;
-    top: 10px;
-    padding: 4px 12px;
+.round-label {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    color: rgba(255, 255, 255, 0.8);
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 4px;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    color: #ffd700;
 }
 
-.fighter-corner-tag.left {
-    left: 10px;
-    border-left: 3px solid #00d4ff;
-}
-
-.fighter-corner-tag.right {
-    right: 10px;
-    border-right: 3px solid #ff6b6b;
-}
-
-/* Fighter Info */
-.fighter-info-enhanced {
-    padding: 20px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-.fighter-name-enhanced {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 2px;
-    color: #fff;
-    text-align: center;
-    margin-bottom: 4px;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-}
-
-.fighter-type {
-    text-align: center;
-    font-size: 0.8rem;
-    color: #00d4ff;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 15px;
-    opacity: 0.8;
-}
-
-/* Stats Display Grid */
-.stats-display-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 15px;
-}
-
-.stat-bar-item {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.stat-bar-header {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.stat-bar-header .stat-icon {
-    width: 20px;
-    text-align: center;
-}
-
-.stat-bar-header .stat-icon i {
-    font-size: 0.75rem;
-}
-
-.stat-bar-header .stat-name {
-    flex: 1;
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.6);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.stat-bar-header .stat-value {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    color: #fff;
-    min-width: 30px;
-    text-align: right;
-}
-
-.stat-bar-bg {
+.progress-track {
+    width: 150px;
     height: 6px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 3px;
     overflow: hidden;
 }
 
-.stat-bar-fill {
+.progress-fill {
     height: 100%;
+    background: linear-gradient(90deg, #00d4ff, #ffd700);
     border-radius: 3px;
     transition: width 0.5s ease;
 }
 
-.stat-bar-fill.attack {
-    background: linear-gradient(90deg, #ff4444, #ff6666);
-}
-
-.stat-bar-fill.defense {
-    background: linear-gradient(90deg, #4488ff, #66aaff);
-}
-
-.stat-bar-fill.agility {
-    background: linear-gradient(90deg, #44ff88, #66ffaa);
-}
-
-.stat-bar-fill.stamina {
-    background: linear-gradient(90deg, #ff8844, #ffaa66);
-}
-
-.stat-bar-fill.intelligence {
-    background: linear-gradient(90deg, #aa44ff, #cc66ff);
-}
-
-.stat-bar-fill.special {
-    background: linear-gradient(90deg, #ffd700, #ffee66);
-}
-
-/* Stat Icons Colors */
-.stat-bar-item:nth-child(1) .stat-icon i { color: #ff4444; }
-.stat-bar-item:nth-child(2) .stat-icon i { color: #4488ff; }
-.stat-bar-item:nth-child(3) .stat-icon i { color: #44ff88; }
-.stat-bar-item:nth-child(4) .stat-icon i { color: #ff8844; }
-.stat-bar-item:nth-child(5) .stat-icon i { color: #aa44ff; }
-.stat-bar-item:nth-child(6) .stat-icon i { color: #ffd700; }
-
-/* Total Power */
-.fighter-total-power {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 15px;
-    background: linear-gradient(90deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 107, 0, 0.15) 100%);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 215, 0, 0.3);
-    margin-top: auto;
-}
-
-.total-label {
-    font-family: 'Bebas Neue', sans-serif;
+.match-label {
     font-size: 0.85rem;
-    letter-spacing: 2px;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.6);
 }
 
-.total-value {
+.quit-btn {
+    background: rgba(255, 100, 100, 0.2);
+    border: 1px solid rgba(255, 100, 100, 0.4);
+    color: #ff6666;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+}
+
+.quit-btn:hover {
+    background: rgba(255, 100, 100, 0.4);
+    border-color: #ff6666;
+}
+
+/* Battle Title */
+.battle-title {
+    text-align: center;
+    padding: 20px;
+}
+
+.battle-title h2 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
-    color: #ffd700;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    font-size: 2.2rem;
+    letter-spacing: 5px;
+    color: #fff;
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+    margin-bottom: 5px;
 }
 
-/* VS Badge Enhanced */
-.tournament-vs-enhanced {
-    position: relative;
-    flex-shrink: 0;
+.battle-title p {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+}
+
+/* Battle Arena - 3-column layout */
+.battle-arena {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 20px;
+    padding: 20px 30px 40px;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Fighter Panels */
+.fighter-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 25px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 3px solid transparent;
+}
+
+.fighter-panel:hover {
+    transform: scale(1.02);
+}
+
+.fighter-panel.left {
+    border-color: rgba(0, 212, 255, 0.3);
+}
+
+.fighter-panel.right {
+    border-color: rgba(255, 107, 0, 0.3);
+}
+
+.fighter-panel.left:hover {
+    border-color: #00d4ff;
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.4);
+    background: rgba(0, 212, 255, 0.05);
+}
+
+.fighter-panel.right:hover {
+    border-color: #ff6b00;
+    box-shadow: 0 0 40px rgba(255, 107, 0, 0.4);
+    background: rgba(255, 107, 0, 0.05);
+}
+
+/* Fighter Image - BIGGER */
+.fighter-image-wrapper {
+    width: 300px;
+    height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin-bottom: 20px;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+    border-radius: 16px;
 }
 
-.vs-circle {
-    width: 80px;
-    height: 80px;
+.fighter-image-wrapper img {
+    max-width: 95%;
+    max-height: 95%;
+    object-fit: contain;
+    filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.7));
+    transition: transform 0.3s ease;
+}
+
+.fighter-panel:hover .fighter-image-wrapper img {
+    transform: scale(1.08);
+}
+
+/* Fighter Identity */
+.fighter-identity {
+    text-align: center;
+}
+
+.fighter-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem;
+    letter-spacing: 3px;
+    color: #fff;
+    margin-bottom: 12px;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
+}
+
+.fighter-badges {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.rank-badge {
+    padding: 6px 14px;
+    background: rgba(255, 215, 0, 0.15);
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    border-radius: 6px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: #ffd700;
+    letter-spacing: 1px;
+}
+
+.winrate-badge {
+    padding: 6px 14px;
+    background: rgba(0, 212, 255, 0.15);
+    border: 1px solid rgba(0, 212, 255, 0.5);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #00d4ff;
+}
+
+/* Stats Comparison - Center Column */
+.stats-comparison {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 380px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.vs-badge {
+    align-self: center;
+    width: 70px;
+    height: 70px;
     background: linear-gradient(135deg, #ff6b00, #ff4400);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 40px rgba(255, 107, 0, 0.6);
-    animation: vsPulseNew 1.5s ease-in-out infinite;
-}
-
-.vs-circle span {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 2px;
+    font-size: 1.8rem;
     color: #fff;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 35px rgba(255, 107, 0, 0.6);
+    margin-bottom: 15px;
+    animation: vsPulse 2s ease-in-out infinite;
 }
 
-@keyframes vsPulseNew {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(255, 107, 0, 0.6); }
-    50% { transform: scale(1.1); box-shadow: 0 0 60px rgba(255, 107, 0, 0.8); }
+@keyframes vsPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
 }
 
-.vs-lightning {
+/* Stat Rows - Head to Head */
+.stat-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 0;
+}
+
+.stat-side {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.stat-side.left {
+    justify-content: flex-end;
+}
+
+.stat-side.right {
+    justify-content: flex-start;
+}
+
+.stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: #fff;
+    min-width: 40px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.stat-side.left .stat-val { text-align: right; }
+.stat-side.right .stat-val { text-align: left; }
+
+.stats-comparison .stat-bar {
+    width: 100px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+}
+
+.stats-comparison .stat-side.left .stat-bar {
+    transform: scaleX(-1);
+}
+
+.stats-comparison .bar-fill {
+    height: 100%;
+    border-radius: 5px;
+    transition: width 0.5s ease;
     position: absolute;
-    width: 40px;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, #ffd700, transparent);
-    animation: lightningFlash 2s ease-in-out infinite;
+    left: 0;
+    top: 0;
 }
 
-.vs-lightning.left {
-    left: -50px;
-    animation-delay: 0s;
+.stat-icon-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 50px;
 }
 
-.vs-lightning.right {
-    right: -50px;
-    animation-delay: 1s;
+.stat-icon-center i {
+    font-size: 1rem;
 }
 
-@keyframes lightningFlash {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 1; }
+.stat-icon-center span {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 1px;
 }
 
-/* Winner Selection Feedback */
-.tournament-fighter.selected .fighter-card-enhanced {
+/* Stat Colors */
+.stat-row[data-stat="attack"] .bar-fill { background: linear-gradient(90deg, #ff4444, #ff6666); }
+.stat-row[data-stat="defense"] .bar-fill { background: linear-gradient(90deg, #4488ff, #66aaff); }
+.stat-row[data-stat="agility"] .bar-fill { background: linear-gradient(90deg, #44ff88, #66ffaa); }
+.stat-row[data-stat="stamina"] .bar-fill { background: linear-gradient(90deg, #ff8844, #ffaa66); }
+.stat-row[data-stat="intelligence"] .bar-fill { background: linear-gradient(90deg, #aa44ff, #cc66ff); }
+.stat-row[data-stat="special"] .bar-fill { background: linear-gradient(90deg, #ffd700, #ffee66); }
+
+.stat-row[data-stat="attack"] .stat-icon-center i { color: #ff4444; }
+.stat-row[data-stat="defense"] .stat-icon-center i { color: #4488ff; }
+.stat-row[data-stat="agility"] .stat-icon-center i { color: #44ff88; }
+.stat-row[data-stat="stamina"] .stat-icon-center i { color: #ff8844; }
+.stat-row[data-stat="intelligence"] .stat-icon-center i { color: #aa44ff; }
+.stat-row[data-stat="special"] .stat-icon-center i { color: #ffd700; }
+
+/* Winner Stat Highlighting */
+.stat-row.left-wins .stat-side.left .stat-val {
+    color: #00ff88;
+    text-shadow: 0 0 15px rgba(0, 255, 136, 0.6);
+    font-size: 1.7rem;
+}
+
+.stat-row.right-wins .stat-side.right .stat-val {
+    color: #00ff88;
+    text-shadow: 0 0 15px rgba(0, 255, 136, 0.6);
+    font-size: 1.7rem;
+}
+
+.stat-row.left-wins .stat-side.right .stat-val,
+.stat-row.right-wins .stat-side.left .stat-val {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 1.3rem;
+}
+
+.stat-row.left-wins .stat-side.left .stat-bar {
+    box-shadow: 0 0 12px rgba(0, 255, 136, 0.5);
+}
+
+.stat-row.right-wins .stat-side.right .stat-bar {
+    box-shadow: 0 0 12px rgba(0, 255, 136, 0.5);
+}
+
+.stat-row.left-wins .stat-side.right .bar-fill,
+.stat-row.right-wins .stat-side.left .bar-fill {
+    opacity: 0.4;
+}
+
+.stat-row.tie .stat-val {
+    color: rgba(255, 215, 0, 0.8);
+}
+
+/* Fighter Selection States */
+.fighter-panel.selected {
     border-color: #00ff88 !important;
     box-shadow: 0 0 50px rgba(0, 255, 136, 0.6) !important;
+    background: rgba(0, 255, 136, 0.1);
 }
 
-.tournament-fighter.eliminated .fighter-card-enhanced {
+.fighter-panel.eliminated {
     opacity: 0.4;
-    filter: grayscale(50%);
+    filter: grayscale(40%);
+    pointer-events: none;
 }
 
-/* Mobile Responsive for Enhanced Tournament */
-@media (max-width: 900px) {
-    .tournament-fighters {
-        flex-direction: column;
+/* Entrance Animations */
+@keyframes slideInLeft {
+    from { transform: translateX(-50px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(50px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+/* Mobile Responsive - Battle Screen */
+@media (max-width: 1100px) {
+    .battle-arena {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
         gap: 20px;
+        padding: 15px 20px;
     }
     
-    .tournament-fighter {
-        max-width: 100%;
+    .fighter-panel {
+        flex-direction: row;
+        gap: 20px;
+        padding: 20px;
     }
     
-    .fighter-image-container {
-        height: 180px;
+    .fighter-image-wrapper {
+        width: 150px;
+        height: 150px;
+        margin-bottom: 0;
     }
     
-    .fighter-card-enhanced .fighter-img {
-        max-height: 160px;
+    .fighter-name {
+        font-size: 1.8rem;
     }
     
-    .tournament-vs-enhanced {
-        transform: rotate(90deg);
-        margin: 10px 0;
+    .stats-comparison {
+        min-width: unset;
+        order: 3;
     }
     
-    .vs-circle {
-        width: 60px;
-        height: 60px;
-    }
+    .fighter-panel.left { order: 1; }
+    .fighter-panel.right { order: 2; }
     
-    .vs-circle span {
-        font-size: 1.5rem;
-    }
-    
-    .vs-lightning {
+    .vs-badge {
         display: none;
-    }
-    
-    .tournament-preview {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .preview-info {
-        flex-direction: column;
-        gap: 10px;
     }
 }
 
 @media (max-width: 600px) {
-    .tournament-step {
+    .battle-header {
+        padding: 10px 15px;
+    }
+    
+    .round-label {
+        font-size: 1rem;
+    }
+    
+    .progress-track {
+        width: 100px;
+    }
+    
+    .battle-title h2 {
+        font-size: 1.6rem;
+    }
+    
+    .fighter-panel {
+        flex-direction: column;
         padding: 15px;
     }
     
-    .bracket-options {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
+    .fighter-image-wrapper {
+        width: 120px;
+        height: 120px;
     }
     
-    .bracket-option {
-        padding: 12px;
+    .fighter-name {
+        font-size: 1.5rem;
     }
     
-    .bracket-option .bracket-size {
-        font-size: 1.8rem;
+    .stat-bar {
+        width: 70px;
     }
     
-    .type-filter-options {
-        gap: 6px;
+    .stat-val {
+        font-size: 1.2rem;
+        min-width: 30px;
     }
     
-    .type-filter-btn {
-        padding: 8px 12px;
-        font-size: 0.8rem;
-    }
-    
-    .fighter-name-enhanced {
+    .stat-row.left-wins .stat-side.left .stat-val,
+    .stat-row.right-wins .stat-side.right .stat-val {
         font-size: 1.4rem;
-    }
-    
-    .stats-display-grid {
-        gap: 6px;
-    }
-    
-    .stat-bar-header .stat-name {
-        font-size: 0.7rem;
-    }
-    
-    .stat-bar-header .stat-value {
-        font-size: 0.9rem;
     }
 }

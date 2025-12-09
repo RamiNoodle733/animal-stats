@@ -2385,14 +2385,14 @@ class TournamentManager {
             fighter2: document.getElementById('tournament-fighter-2'),
             fighter1Img: document.getElementById('fighter-1-img'),
             fighter1Name: document.getElementById('fighter-1-name'),
-            fighter1Type: document.getElementById('fighter-1-type'),
+            fighter1Rank: document.getElementById('fighter-1-rank'),
+            fighter1Winrate: document.getElementById('fighter-1-winrate'),
             fighter1Attack: document.getElementById('fighter-1-attack'),
             fighter1Defense: document.getElementById('fighter-1-defense'),
             fighter1Agility: document.getElementById('fighter-1-agility'),
             fighter1Stamina: document.getElementById('fighter-1-stamina'),
             fighter1Intelligence: document.getElementById('fighter-1-intelligence'),
             fighter1Special: document.getElementById('fighter-1-special'),
-            fighter1Total: document.getElementById('fighter-1-total'),
             fighter1AttackBar: document.getElementById('fighter-1-attack-bar'),
             fighter1DefenseBar: document.getElementById('fighter-1-defense-bar'),
             fighter1AgilityBar: document.getElementById('fighter-1-agility-bar'),
@@ -2401,14 +2401,14 @@ class TournamentManager {
             fighter1SpecialBar: document.getElementById('fighter-1-special-bar'),
             fighter2Img: document.getElementById('fighter-2-img'),
             fighter2Name: document.getElementById('fighter-2-name'),
-            fighter2Type: document.getElementById('fighter-2-type'),
+            fighter2Rank: document.getElementById('fighter-2-rank'),
+            fighter2Winrate: document.getElementById('fighter-2-winrate'),
             fighter2Attack: document.getElementById('fighter-2-attack'),
             fighter2Defense: document.getElementById('fighter-2-defense'),
             fighter2Agility: document.getElementById('fighter-2-agility'),
             fighter2Stamina: document.getElementById('fighter-2-stamina'),
             fighter2Intelligence: document.getElementById('fighter-2-intelligence'),
             fighter2Special: document.getElementById('fighter-2-special'),
-            fighter2Total: document.getElementById('fighter-2-total'),
             fighter2AttackBar: document.getElementById('fighter-2-attack-bar'),
             fighter2DefenseBar: document.getElementById('fighter-2-defense-bar'),
             fighter2AgilityBar: document.getElementById('fighter-2-agility-bar'),
@@ -2711,6 +2711,9 @@ class TournamentManager {
         // Update fighter 2
         this.updateFighterCard(2, animal2);
         
+        // Highlight stat winners for each row
+        this.highlightStatWinners(animal1, animal2);
+        
         // Add entrance animation
         this.dom.fighter1.style.animation = 'none';
         this.dom.fighter2.style.animation = 'none';
@@ -2718,6 +2721,32 @@ class TournamentManager {
             this.dom.fighter1.style.animation = 'slideInLeft 0.5s ease';
             this.dom.fighter2.style.animation = 'slideInRight 0.5s ease';
         }, 10);
+    }
+    
+    /**
+     * Highlight which fighter wins each stat category
+     */
+    highlightStatWinners(animal1, animal2) {
+        const stats = ['attack', 'defense', 'agility', 'stamina', 'intelligence', 'special'];
+        
+        stats.forEach(stat => {
+            const row = document.querySelector(`.stat-row[data-stat="${stat}"]`);
+            if (!row) return;
+            
+            const val1 = Math.round(animal1[stat] || 0);
+            const val2 = Math.round(animal2[stat] || 0);
+            
+            // Remove previous winner classes
+            row.classList.remove('left-wins', 'right-wins', 'tie');
+            
+            if (val1 > val2) {
+                row.classList.add('left-wins');
+            } else if (val2 > val1) {
+                row.classList.add('right-wins');
+            } else {
+                row.classList.add('tie');
+            }
+        });
     }
     
     /**
@@ -2738,18 +2767,34 @@ class TournamentManager {
         const nameEl = this.dom[`${prefix}Name`];
         if (nameEl) nameEl.textContent = animal.name;
         
-        // Type
-        const typeEl = this.dom[`${prefix}Type`];
-        if (typeEl) typeEl.textContent = animal.type || 'Unknown';
+        // Rank badge
+        const rankEl = this.dom[`${prefix}Rank`];
+        if (rankEl) {
+            const rankings = this.app.state.animals
+                .filter(a => a.powerRanking !== undefined)
+                .sort((a, b) => b.powerRanking - a.powerRanking);
+            const rankIndex = rankings.findIndex(a => a.name === animal.name);
+            rankEl.textContent = rankIndex >= 0 ? `#${rankIndex + 1}` : '-';
+        }
+        
+        // Win rate badge
+        const winrateEl = this.dom[`${prefix}Winrate`];
+        if (winrateEl) {
+            const stats = animal.battleStats;
+            if (stats && stats.totalBattles > 0) {
+                const winRate = Math.round((stats.wins / stats.totalBattles) * 100);
+                winrateEl.textContent = `${winRate}% wins`;
+            } else {
+                winrateEl.textContent = 'New';
+            }
+        }
         
         // Stats
         const stats = ['Attack', 'Defense', 'Agility', 'Stamina', 'Intelligence', 'Special'];
         const statKeys = ['attack', 'defense', 'agility', 'stamina', 'intelligence', 'special'];
         
-        let total = 0;
         statKeys.forEach((key, i) => {
             const value = Math.round(animal[key] || 0);
-            total += value;
             
             // Update stat value
             const statEl = this.dom[`${prefix}${stats[i]}`];
@@ -2759,10 +2804,6 @@ class TournamentManager {
             const barEl = this.dom[`${prefix}${stats[i]}Bar`];
             if (barEl) barEl.style.width = `${value}%`;
         });
-        
-        // Update total power
-        const totalEl = this.dom[`${prefix}Total`];
-        if (totalEl) totalEl.textContent = total;
     }
 
     updateProgress() {
