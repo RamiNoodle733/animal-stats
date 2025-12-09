@@ -7827,84 +7827,84 @@ body {
 
 /* Mobile Responsive - Battle Screen */
 @media (max-width: 1100px) {
-    .battle-arena {
+    .tournament-battle .battle-arena {
         grid-template-columns: 1fr;
         grid-template-rows: auto auto auto;
         gap: 20px;
         padding: 15px 20px;
     }
     
-    .fighter-panel {
+    .tournament-battle .fighter-panel {
         flex-direction: row;
         gap: 20px;
         padding: 20px;
     }
     
-    .fighter-image-wrapper {
+    .tournament-battle .fighter-image-wrapper {
         width: 150px;
         height: 150px;
         margin-bottom: 0;
     }
     
-    .fighter-name {
+    .tournament-battle .fighter-name {
         font-size: 1.8rem;
     }
     
-    .stats-comparison {
+    .tournament-battle .stats-comparison {
         min-width: unset;
         order: 3;
     }
     
-    .fighter-panel.left { order: 1; }
-    .fighter-panel.right { order: 2; }
+    .tournament-battle .fighter-panel.left { order: 1; }
+    .tournament-battle .fighter-panel.right { order: 2; }
     
-    .vs-badge {
+    .tournament-battle .vs-badge {
         display: none;
     }
 }
 
 @media (max-width: 600px) {
-    .battle-header {
+    .tournament-battle .battle-header {
         padding: 10px 15px;
     }
     
-    .round-label {
+    .tournament-battle .round-label {
         font-size: 1rem;
     }
     
-    .progress-track {
+    .tournament-battle .progress-track {
         width: 100px;
     }
     
-    .battle-title h2 {
+    .tournament-battle .battle-title h2 {
         font-size: 1.6rem;
     }
     
-    .fighter-panel {
+    .tournament-battle .fighter-panel {
         flex-direction: column;
         padding: 15px;
     }
     
-    .fighter-image-wrapper {
+    .tournament-battle .fighter-image-wrapper {
         width: 120px;
         height: 120px;
     }
     
-    .fighter-name {
+    .tournament-battle .fighter-name {
         font-size: 1.5rem;
     }
     
-    .stat-bar {
+    .tournament-battle .stats-comparison .stat-bar {
         width: 70px;
     }
     
-    .stat-val {
+    .tournament-battle .stat-val {
         font-size: 1.2rem;
         min-width: 30px;
     }
     
-    .stat-row.left-wins .stat-side.left .stat-val,
-    .stat-row.right-wins .stat-side.right .stat-val {
+    .tournament-battle .stat-row.left-wins .stat-side.left .stat-val,
+    .tournament-battle .stat-row.right-wins .stat-side.right .stat-val {
         font-size: 1.4rem;
     }
 }
