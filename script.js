@@ -733,9 +733,6 @@ class AnimalStatsApp {
         const grid = this.dom.gridContainer;
         const leftArrow = document.getElementById('grid-arrow-left');
         const rightArrow = document.getElementById('grid-arrow-right');
-        const scrollbarContainer = document.getElementById('grid-scrollbar-container');
-        const scrollbarTrack = scrollbarContainer?.querySelector('.grid-scrollbar-track');
-        const scrollbarThumb = document.getElementById('grid-scrollbar-thumb');
         
         if (!grid) return;
         
@@ -743,45 +740,9 @@ class AnimalStatsApp {
         const getScrollAmount = () => {
             const card = grid.querySelector('.character-card');
             if (!card) return 105; // Default fallback
-            const cardStyle = getComputedStyle(card);
             const cardWidth = card.offsetWidth;
             const gap = parseInt(getComputedStyle(grid).gap) || 10;
             return cardWidth + gap;
-        };
-        
-        // Update custom scrollbar position
-        const updateScrollbar = () => {
-            if (!scrollbarThumb || !grid) return;
-            
-            const scrollWidth = grid.scrollWidth;
-            const clientWidth = grid.clientWidth;
-            const scrollLeft = grid.scrollLeft;
-            
-            if (scrollWidth <= clientWidth) {
-                // All content visible, hide scrollbar
-                scrollbarContainer.style.opacity = '0.3';
-                scrollbarThumb.style.width = '100%';
-                scrollbarThumb.style.left = '0';
-                return;
-            }
-            
-            scrollbarContainer.style.opacity = '1';
-            
-            // Calculate thumb size and position
-            const thumbWidth = Math.max(40, (clientWidth / scrollWidth) * 100);
-            const maxScroll = scrollWidth - clientWidth;
-            const scrollPercent = scrollLeft / maxScroll;
-            const maxThumbLeft = 100 - thumbWidth;
-            const thumbLeft = scrollPercent * maxThumbLeft;
-            
-            scrollbarThumb.style.width = `${thumbWidth}%`;
-            scrollbarThumb.style.left = `${thumbLeft}%`;
-        };
-        
-        // Smooth scroll by one card
-        const scrollByCard = (direction) => {
-            const amount = getScrollAmount() * direction;
-            grid.scrollBy({ left: amount, behavior: 'smooth' });
         };
         
         // Continuous scroll for arrow hold
@@ -789,8 +750,9 @@ class AnimalStatsApp {
         const startContinuousScroll = (direction) => {
             if (scrollInterval) return;
             // First immediate scroll
-            scrollByCard(direction);
-            // Then continuous scrolling at 200ms intervals
+            const amount = getScrollAmount() * direction;
+            grid.scrollBy({ left: amount, behavior: 'smooth' });
+            // Then continuous scrolling at intervals
             scrollInterval = setInterval(() => {
                 grid.scrollBy({ left: getScrollAmount() * direction * 0.5, behavior: 'auto' });
             }, 100);
@@ -829,69 +791,6 @@ class AnimalStatsApp {
             }, { passive: false });
             rightArrow.addEventListener('touchend', stopContinuousScroll);
         }
-        
-        // Update scrollbar on scroll
-        grid.addEventListener('scroll', updateScrollbar, { passive: true });
-        
-        // Click on track to jump to position
-        if (scrollbarTrack) {
-            scrollbarTrack.addEventListener('click', (e) => {
-                // Don't handle if clicking on thumb
-                if (e.target === scrollbarThumb) return;
-                const rect = scrollbarTrack.getBoundingClientRect();
-                const clickPercent = (e.clientX - rect.left) / rect.width;
-                const maxScroll = grid.scrollWidth - grid.clientWidth;
-                const targetScroll = clickPercent * maxScroll;
-                grid.scrollTo({ left: targetScroll, behavior: 'smooth' });
-            });
-        }
-        
-        // Drag scrollbar thumb
-        if (scrollbarThumb && scrollbarTrack) {
-            let isDragging = false;
-            let startX = 0;
-            let startScrollLeft = 0;
-            
-            const onDragStart = (e) => {
-                isDragging = true;
-                scrollbarThumb.classList.add('dragging');
-                startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
-                startScrollLeft = grid.scrollLeft;
-                e.preventDefault();
-            };
-            
-            const onDragMove = (e) => {
-                if (!isDragging) return;
-                const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-                const deltaX = clientX - startX;
-                const trackWidth = scrollbarTrack.offsetWidth;
-                const scrollWidth = grid.scrollWidth - grid.clientWidth;
-                const thumbWidth = scrollbarThumb.offsetWidth;
-                const maxThumbMove = trackWidth - thumbWidth;
-                
-                // Calculate scroll based on thumb movement
-                const scrollDelta = (deltaX / maxThumbMove) * scrollWidth;
-                grid.scrollLeft = startScrollLeft + scrollDelta;
-            };
-            
-            const onDragEnd = () => {
-                isDragging = false;
-                scrollbarThumb.classList.remove('dragging');
-            };
-            
-            scrollbarThumb.addEventListener('mousedown', onDragStart);
-            scrollbarThumb.addEventListener('touchstart', onDragStart, { passive: false });
-            document.addEventListener('mousemove', onDragMove);
-            document.addEventListener('touchmove', onDragMove, { passive: true });
-            document.addEventListener('mouseup', onDragEnd);
-            document.addEventListener('touchend', onDragEnd);
-        }
-        
-        // Initialize scrollbar on load and after renders
-        requestAnimationFrame(updateScrollbar);
-        
-        // Store reference for updating after grid rerenders
-        this.updateGridScrollbar = updateScrollbar;
     }
 
     /**
@@ -1050,11 +949,6 @@ class AnimalStatsApp {
         });
         
         this.dom.gridContainer.appendChild(fragment);
-        
-        // Update custom scrollbar after render
-        if (this.updateGridScrollbar) {
-            requestAnimationFrame(this.updateGridScrollbar);
-        }
     }
 
     /**
