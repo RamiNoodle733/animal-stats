@@ -1377,8 +1377,8 @@ body {
 .character-grid-container {
     background: linear-gradient(180deg, rgba(5, 10, 20, 0.95) 0%, rgba(0, 10, 20, 0.98) 100%);
     border-top: 1px solid rgba(0, 212, 255, 0.3);
-    padding: 6px 10px 12px 10px;
-    height: 175px;
+    padding: 6px 10px 8px 10px;
+    height: 185px;
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -1388,6 +1388,7 @@ body {
     position: relative;
     z-index: 20;
     flex-shrink: 0;
+    margin-bottom: 8px;
 }
 
 .character-grid-container.hidden {
@@ -1800,8 +1801,8 @@ body {
     overflow-x: auto;
     overflow-y: hidden;
     padding: 4px 8px;
-    padding-bottom: 14px;
-    margin-bottom: 0;
+    padding-bottom: 22px;
+    margin-bottom: 6px;
     scrollbar-width: thin;
     scrollbar-color: var(--primary-color) rgba(0, 0, 0, 0.3);
     flex: 1;
