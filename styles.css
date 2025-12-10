@@ -1375,20 +1375,21 @@ body {
 }
 
 .character-grid-container {
-    background: linear-gradient(180deg, rgba(5, 10, 20, 0.95) 0%, rgba(0, 10, 20, 0.98) 100%);
-    border-top: 1px solid rgba(0, 212, 255, 0.3);
-    padding: 6px 10px 8px 10px;
-    height: 185px;
+    background: linear-gradient(180deg, rgba(5, 10, 20, 0.98) 0%, rgba(0, 8, 18, 1) 100%);
+    border-top: 2px solid rgba(0, 212, 255, 0.4);
+    padding: 8px 0 12px 0;
+    height: auto;
+    min-height: 190px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    box-shadow: 0 -2px 15px rgba(0, 212, 255, 0.2);
+    gap: 6px;
+    box-shadow: 0 -4px 20px rgba(0, 212, 255, 0.2), inset 0 1px 0 rgba(0, 212, 255, 0.1);
     transition: all 0.4s ease;
     overflow: visible;
     position: relative;
     z-index: 20;
     flex-shrink: 0;
-    margin-bottom: 8px;
+    margin-bottom: 0;
 }
 
 .character-grid-container.hidden {
@@ -1435,7 +1436,7 @@ body {
 .grid-controls {
     display: flex;
     gap: 10px;
-    padding: 0 10px;
+    padding: 0 16px;
     align-items: center;
     position: relative;
     z-index: 100;
@@ -1797,33 +1798,137 @@ body {
 
 .character-grid {
     display: flex;
-    gap: 8px;
+    gap: 10px;
     overflow-x: auto;
     overflow-y: hidden;
-    padding: 4px 8px;
-    padding-bottom: 22px;
-    margin-bottom: 6px;
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) rgba(0, 0, 0, 0.3);
+    padding: 6px 12px 14px 12px;
+    scroll-behavior: smooth;
     flex: 1;
+    /* Hide native scrollbar - we use custom one */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
 }
 
 .character-grid::-webkit-scrollbar {
-    height: 6px;
+    display: none;
 }
 
-.character-grid::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 3px;
+/* ==================== GRID ROW WRAPPER ==================== */
+.grid-row-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 60px;
 }
 
-.character-grid::-webkit-scrollbar-thumb {
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-    border-radius: 3px;
+/* ==================== ARROW BUTTONS ==================== */
+.grid-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    min-height: 52px;
+    background: linear-gradient(135deg, rgba(10, 20, 35, 0.95), rgba(5, 12, 25, 0.98));
+    border: 2px solid rgba(0, 212, 255, 0.5);
+    border-radius: 50%;
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    cursor: pointer;
+    z-index: 50;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 212, 255, 0.15);
 }
 
-.character-grid::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+.grid-arrow:hover {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 212, 255, 0.08));
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 212, 255, 0.4);
+    transform: translateY(-50%) scale(1.08);
+}
+
+.grid-arrow:active {
+    transform: translateY(-50%) scale(0.95);
+    background: rgba(0, 212, 255, 0.1);
+    transition: transform 0.1s ease;
+}
+
+.grid-arrow:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: translateY(-50%);
+}
+
+.grid-arrow-left {
+    left: 4px;
+}
+
+.grid-arrow-right {
+    right: 4px;
+}
+
+/* ==================== FADE MASKS ==================== */
+.grid-fade-mask {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.grid-fade-left {
+    left: 60px;
+    background: linear-gradient(to right, rgba(5, 10, 20, 0.95) 0%, transparent 100%);
+}
+
+.grid-fade-right {
+    right: 60px;
+    background: linear-gradient(to left, rgba(5, 10, 20, 0.95) 0%, transparent 100%);
+}
+
+/* ==================== CUSTOM SCROLLBAR ==================== */
+.grid-scrollbar-container {
+    padding: 0 70px;
+    margin-top: 2px;
+}
+
+.grid-scrollbar-track {
+    position: relative;
+    width: 100%;
+    height: 7px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.grid-scrollbar-track:hover {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.grid-scrollbar-thumb {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    min-width: 40px;
+    background: linear-gradient(90deg, 
+        rgba(0, 212, 255, 0.7),
+        rgba(0, 255, 180, 0.8),
+        rgba(0, 212, 255, 0.7)
+    );
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.6), 0 0 20px rgba(0, 212, 255, 0.3);
+    transition: box-shadow 0.2s ease, left 0.1s ease-out;
+}
+
+.grid-scrollbar-track:hover .grid-scrollbar-thumb {
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.8), 0 0 30px rgba(0, 212, 255, 0.5);
 }
 
 .character-card {
@@ -1832,15 +1937,38 @@ body {
     height: 120px;
     background: rgba(10, 20, 35, 0.9);
     border: 2px solid rgba(0, 212, 255, 0.25);
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     padding: 0;
     flex-shrink: 0;
+}
+
+.character-card:hover {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.6), 0 4px 15px rgba(0, 0, 0, 0.4);
+    transform: translateY(-3px) scale(1.03);
+}
+
+/* S-tier cards get special glow on hover */
+.character-card.card-tier-s:hover,
+.character-card.card-tier-splus:hover,
+.character-card.card-tier-sminus:hover {
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.8), 0 4px 15px rgba(0, 0, 0, 0.4);
+    border-color: #ffd700;
+}
+
+.character-card.selected {
+    border-color: var(--gold-color);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.7), 0 0 50px rgba(255, 215, 0, 0.3), inset 0 0 20px rgba(255, 215, 0, 0.1);
+    background: rgba(255, 215, 0, 0.12);
+    transform: scale(1.05);
+    animation: selectedPulse 2s ease-in-out infinite;
+    z-index: 5;
 }
 
 /* Card Tier Badge (corner) */
@@ -1858,25 +1986,34 @@ body {
 }
 
 /* Card Tier Border Colors */
-.character-card.card-tier-s {
+.character-card.card-tier-s,
+.character-card.card-tier-splus,
+.character-card.card-tier-sminus {
     border-color: rgba(255, 215, 0, 0.5);
 }
-.character-card.card-tier-a {
+.character-card.card-tier-a,
+.character-card.card-tier-aplus,
+.character-card.card-tier-aminus {
     border-color: rgba(255, 77, 77, 0.4);
 }
-.character-card.card-tier-b {
+.character-card.card-tier-b,
+.character-card.card-tier-bplus,
+.character-card.card-tier-bminus {
     border-color: rgba(77, 148, 255, 0.4);
 }
-.character-card.card-tier-c {
+.character-card.card-tier-c,
+.character-card.card-tier-cplus,
+.character-card.card-tier-cminus {
     border-color: rgba(0, 255, 136, 0.4);
 }
-.character-card.card-tier-d {
+.character-card.card-tier-d,
+.character-card.card-tier-dplus,
+.character-card.card-tier-dminus {
     border-color: rgba(179, 179, 179, 0.4);
 }
-.character-card.card-tier-e {
-    border-color: rgba(139, 105, 20, 0.4);
-}
-.character-card.card-tier-f {
+.character-card.card-tier-f,
+.character-card.card-tier-fplus,
+.character-card.card-tier-fminus {
     border-color: rgba(85, 85, 85, 0.4);
 }
 
@@ -1912,25 +2049,6 @@ body {
 
 .hover-stat-icon {
     font-size: 0.6rem;
-}
-
-.character-card:hover {
-    border-color: var(--border-bright);
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.7);
-    transform: translateY(-3px);
-}
-
-/* S-tier cards get special glow on hover */
-.character-card.card-tier-s:hover {
-    box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
-    border-color: #ffd700;
-}
-
-.character-card.selected {
-    border-color: var(--gold-color);
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.7), inset 0 0 20px rgba(255, 215, 0, 0.1);
-    background: rgba(255, 215, 0, 0.15);
-    animation: selectedPulse 2s ease-in-out infinite;
 }
 
 @keyframes selectedPulse {
@@ -3479,6 +3597,47 @@ body {
         width: 80px;
         height: 90px;
         flex-shrink: 0;
+    }
+    
+    /* Grid navigation responsive */
+    .grid-row-wrapper {
+        padding: 0 44px;
+    }
+    
+    .grid-arrow {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        font-size: 0.9rem;
+    }
+    
+    .grid-arrow-left {
+        left: 2px;
+    }
+    
+    .grid-arrow-right {
+        right: 2px;
+    }
+    
+    .grid-fade-mask {
+        width: 25px;
+    }
+    
+    .grid-fade-left {
+        left: 44px;
+    }
+    
+    .grid-fade-right {
+        right: 44px;
+    }
+    
+    .grid-scrollbar-container {
+        padding: 0 50px;
+    }
+    
+    .grid-scrollbar-track {
+        height: 5px;
     }
     
     .character-card-image {

@@ -849,7 +849,34 @@
                 </span>
             </div>
             
-            <div class="character-grid" id="character-grid"></div>
+            <!-- Card Row with Arrows -->
+            <div class="grid-row-wrapper">
+                <!-- Left Arrow Button -->
+                <button class="grid-arrow grid-arrow-left" id="grid-arrow-left" aria-label="Scroll left">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                
+                <!-- Left Fade Mask -->
+                <div class="grid-fade-mask grid-fade-left"></div>
+                
+                <!-- Card Container -->
+                <div class="character-grid" id="character-grid"></div>
+                
+                <!-- Right Fade Mask -->
+                <div class="grid-fade-mask grid-fade-right"></div>
+                
+                <!-- Right Arrow Button -->
+                <button class="grid-arrow grid-arrow-right" id="grid-arrow-right" aria-label="Scroll right">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            
+            <!-- Custom Scrollbar -->
+            <div class="grid-scrollbar-container" id="grid-scrollbar-container">
+                <div class="grid-scrollbar-track">
+                    <div class="grid-scrollbar-thumb" id="grid-scrollbar-thumb"></div>
+                </div>
+            </div>
         </div>
     </div>
 
