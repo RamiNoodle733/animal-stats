@@ -784,12 +784,50 @@ class AnimalStatsApp {
             grid.scrollBy({ left: amount, behavior: 'smooth' });
         };
         
-        // Arrow button click handlers
+        // Continuous scroll for arrow hold
+        let scrollInterval = null;
+        const startContinuousScroll = (direction) => {
+            if (scrollInterval) return;
+            // First immediate scroll
+            scrollByCard(direction);
+            // Then continuous scrolling at 200ms intervals
+            scrollInterval = setInterval(() => {
+                grid.scrollBy({ left: getScrollAmount() * direction * 0.5, behavior: 'auto' });
+            }, 100);
+        };
+        const stopContinuousScroll = () => {
+            if (scrollInterval) {
+                clearInterval(scrollInterval);
+                scrollInterval = null;
+            }
+        };
+        
+        // Arrow button event handlers
         if (leftArrow) {
-            leftArrow.addEventListener('click', () => scrollByCard(-1));
+            leftArrow.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                startContinuousScroll(-1);
+            });
+            leftArrow.addEventListener('mouseup', stopContinuousScroll);
+            leftArrow.addEventListener('mouseleave', stopContinuousScroll);
+            leftArrow.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                startContinuousScroll(-1);
+            }, { passive: false });
+            leftArrow.addEventListener('touchend', stopContinuousScroll);
         }
         if (rightArrow) {
-            rightArrow.addEventListener('click', () => scrollByCard(1));
+            rightArrow.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                startContinuousScroll(1);
+            });
+            rightArrow.addEventListener('mouseup', stopContinuousScroll);
+            rightArrow.addEventListener('mouseleave', stopContinuousScroll);
+            rightArrow.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                startContinuousScroll(1);
+            }, { passive: false });
+            rightArrow.addEventListener('touchend', stopContinuousScroll);
         }
         
         // Update scrollbar on scroll
@@ -798,12 +836,55 @@ class AnimalStatsApp {
         // Click on track to jump to position
         if (scrollbarTrack) {
             scrollbarTrack.addEventListener('click', (e) => {
+                // Don't handle if clicking on thumb
+                if (e.target === scrollbarThumb) return;
                 const rect = scrollbarTrack.getBoundingClientRect();
                 const clickPercent = (e.clientX - rect.left) / rect.width;
                 const maxScroll = grid.scrollWidth - grid.clientWidth;
                 const targetScroll = clickPercent * maxScroll;
                 grid.scrollTo({ left: targetScroll, behavior: 'smooth' });
             });
+        }
+        
+        // Drag scrollbar thumb
+        if (scrollbarThumb && scrollbarTrack) {
+            let isDragging = false;
+            let startX = 0;
+            let startScrollLeft = 0;
+            
+            const onDragStart = (e) => {
+                isDragging = true;
+                scrollbarThumb.classList.add('dragging');
+                startX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+                startScrollLeft = grid.scrollLeft;
+                e.preventDefault();
+            };
+            
+            const onDragMove = (e) => {
+                if (!isDragging) return;
+                const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+                const deltaX = clientX - startX;
+                const trackWidth = scrollbarTrack.offsetWidth;
+                const scrollWidth = grid.scrollWidth - grid.clientWidth;
+                const thumbWidth = scrollbarThumb.offsetWidth;
+                const maxThumbMove = trackWidth - thumbWidth;
+                
+                // Calculate scroll based on thumb movement
+                const scrollDelta = (deltaX / maxThumbMove) * scrollWidth;
+                grid.scrollLeft = startScrollLeft + scrollDelta;
+            };
+            
+            const onDragEnd = () => {
+                isDragging = false;
+                scrollbarThumb.classList.remove('dragging');
+            };
+            
+            scrollbarThumb.addEventListener('mousedown', onDragStart);
+            scrollbarThumb.addEventListener('touchstart', onDragStart, { passive: false });
+            document.addEventListener('mousemove', onDragMove);
+            document.addEventListener('touchmove', onDragMove, { passive: true });
+            document.addEventListener('mouseup', onDragEnd);
+            document.addEventListener('touchend', onDragEnd);
         }
         
         // Initialize scrollbar on load and after renders
