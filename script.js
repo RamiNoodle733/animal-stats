@@ -2919,25 +2919,24 @@ class TournamentManager {
         const nameEl = this.dom[`${prefix}Name`];
         if (nameEl) nameEl.textContent = animal.name;
         
+        // Get ranking data from RankingsManager
+        const rankings = this.app.rankingsManager?.rankings || [];
+        const rankingItem = rankings.find(r => r.animal?.name === animal.name);
+        const rankIndex = rankings.findIndex(r => r.animal?.name === animal.name);
+        
         // Rank badge
         const rankEl = this.dom[`${prefix}Rank`];
         if (rankEl) {
-            const rankings = this.app.state.animals
-                .filter(a => a.powerRanking !== undefined)
-                .sort((a, b) => b.powerRanking - a.powerRanking);
-            const rankIndex = rankings.findIndex(a => a.name === animal.name);
             rankEl.textContent = rankIndex >= 0 ? `#${rankIndex + 1}` : '-';
         }
         
         // Win rate badge
         const winrateEl = this.dom[`${prefix}Winrate`];
         if (winrateEl) {
-            const stats = animal.battleStats;
-            if (stats && stats.totalBattles > 0) {
-                const winRate = Math.round((stats.wins / stats.totalBattles) * 100);
-                winrateEl.textContent = `${winRate}% wins`;
+            if (rankingItem && rankingItem.totalFights > 0) {
+                winrateEl.textContent = `${rankingItem.winRate || 0}% (${rankingItem.totalFights} battles)`;
             } else {
-                winrateEl.textContent = 'New';
+                winrateEl.textContent = 'No battles yet';
             }
         }
         
@@ -3124,7 +3123,7 @@ class TournamentManager {
     /**
      * Send tournament completion notification to Discord
      */
-    async notifyTournamentComplete(champion, finalFour) {
+    notifyTournamentComplete(champion, finalFour) {
         try {
             const runnerUps = finalFour.filter(a => a.name !== champion.name);
             const matchHistoryData = this.matchHistory.map(m => ({
@@ -3132,19 +3131,19 @@ class TournamentManager {
                 loser: m.loser.name
             }));
             
-            await fetch('/api/battles?action=tournament_complete', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    user: Auth.isLoggedIn() ? Auth.getUser()?.username : 'Anonymous',
-                    bracketSize: this.bracketSize,
-                    totalMatches: this.totalMatches,
-                    champion: champion.name,
-                    runnerUp: runnerUps[0]?.name || 'N/A',
-                    thirdFourth: runnerUps.slice(1).map(a => a.name).join(', ') || 'N/A',
-                    matchHistory: matchHistoryData
-                })
+            const data = JSON.stringify({
+                user: Auth.isLoggedIn() ? Auth.getUser()?.username : 'Anonymous',
+                bracketSize: this.bracketSize,
+                totalMatches: this.totalMatches,
+                champion: champion.name,
+                runnerUp: runnerUps[0]?.name || 'N/A',
+                thirdFourth: runnerUps.slice(1).map(a => a.name).join(', ') || 'N/A',
+                matchHistory: matchHistoryData
             });
+            
+            // Use sendBeacon for more reliable delivery
+            const sent = navigator.sendBeacon('/api/battles?action=tournament_complete', data);
+            console.log('Tournament complete notification sent:', sent);
         } catch (error) {
             console.error('Failed to notify tournament completion:', error);
         }
@@ -3153,7 +3152,7 @@ class TournamentManager {
     /**
      * Send tournament quit notification to Discord
      */
-    async notifyTournamentQuit() {
+    notifyTournamentQuit() {
         if (this.completedMatches === 0) return; // Don't notify if no matches played
         
         try {
@@ -3162,17 +3161,17 @@ class TournamentManager {
                 loser: m.loser.name
             }));
             
-            await fetch('/api/battles?action=tournament_quit', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    user: Auth.isLoggedIn() ? Auth.getUser()?.username : 'Anonymous',
-                    bracketSize: this.bracketSize,
-                    totalMatches: this.totalMatches,
-                    completedMatches: this.completedMatches,
-                    matchHistory: matchHistoryData
-                })
+            const data = JSON.stringify({
+                user: Auth.isLoggedIn() ? Auth.getUser()?.username : 'Anonymous',
+                bracketSize: this.bracketSize,
+                totalMatches: this.totalMatches,
+                completedMatches: this.completedMatches,
+                matchHistory: matchHistoryData
             });
+            
+            // Use sendBeacon for more reliable delivery
+            const sent = navigator.sendBeacon('/api/battles?action=tournament_quit', data);
+            console.log('Tournament quit notification sent:', sent);
         } catch (error) {
             console.error('Failed to notify tournament quit:', error);
         }

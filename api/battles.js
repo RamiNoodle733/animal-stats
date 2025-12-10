@@ -51,7 +51,13 @@ module.exports = async function handler(req, res) {
  * Handle tournament completion notification
  */
 async function handleTournamentComplete(req, res) {
-    const { user, bracketSize, totalMatches, champion, runnerUp, thirdFourth, matchHistory } = req.body;
+    // Parse body - handle both JSON and text/plain from sendBeacon
+    let body = req.body;
+    if (typeof body === 'string') {
+        try { body = JSON.parse(body); } catch (e) { body = {}; }
+    }
+    
+    const { user, bracketSize, totalMatches, champion, runnerUp, thirdFourth, matchHistory } = body || {};
     
     notifyDiscord('tournament_complete', {
         user: user || 'Anonymous',
@@ -70,7 +76,13 @@ async function handleTournamentComplete(req, res) {
  * Handle tournament quit notification
  */
 async function handleTournamentQuit(req, res) {
-    const { user, bracketSize, totalMatches, completedMatches, matchHistory } = req.body;
+    // Parse body - handle both JSON and text/plain from sendBeacon
+    let body = req.body;
+    if (typeof body === 'string') {
+        try { body = JSON.parse(body); } catch (e) { body = {}; }
+    }
+    
+    const { user, bracketSize, totalMatches, completedMatches, matchHistory } = body || {};
     
     notifyDiscord('tournament_quit', {
         user: user || 'Anonymous',
