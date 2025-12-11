@@ -2074,6 +2074,22 @@ class RankingsManager {
         const userVote = this.userVotes[animalId] || 0;
         const upActiveClass = userVote === 1 ? 'active' : '';
         const downActiveClass = userVote === -1 ? 'active' : '';
+        
+        // Status badge based on win rate and battles
+        let statusBadge = '';
+        if (totalFights >= 5 && winRate >= 80) {
+            statusBadge = '<span class="row-status-badge hot"><i class="fas fa-fire"></i>HOT</span>';
+        } else if (totalFights >= 10 && winRate >= 70) {
+            statusBadge = '<span class="row-status-badge mvp"><i class="fas fa-star"></i>MVP</span>';
+        } else if (totalFights > 0 && totalFights <= 3) {
+            statusBadge = '<span class="row-status-badge rookie"><i class="fas fa-seedling"></i>NEW</span>';
+        } else if (rank === 1) {
+            statusBadge = '<span class="row-status-badge champion"><i class="fas fa-crown"></i>#1</span>';
+        }
+        
+        // Win rate mini progress bar
+        const winBarWidth = totalFights > 0 ? Math.min(winRate, 100) : 0;
+        const winBarColor = winRate >= 70 ? '#00ff88' : winRate >= 50 ? '#ffd700' : '#ff3366';
 
         row.innerHTML = `
             <div class="row-rank">
@@ -2083,20 +2099,26 @@ class RankingsManager {
             <div class="row-animal">
                 <img src="${animal.image}" alt="${animal.name}" class="row-animal-img" 
                     onerror="this.src='https://via.placeholder.com/40x40?text=?'">
-                <span class="row-animal-name">${animal.name}</span>
+                <div class="row-animal-info">
+                    <span class="row-animal-name">${animal.name}</span>
+                    ${statusBadge}
+                </div>
             </div>
             <div class="row-winrate">
-                ${totalFights > 0 
-                    ? `<span class="row-winrate-value ${winRateClass}">${winRate}%</span><span class="row-battles"> (${totalFights})</span>`
-                    : '<span class="row-winrate-value">--</span>'}
+                <div class="winrate-display">
+                    ${totalFights > 0 
+                        ? `<span class="row-winrate-value ${winRateClass}">${winRate}%</span><span class="row-battles">(${totalFights})</span>`
+                        : '<span class="row-winrate-value dim">--</span>'}
+                </div>
+                ${totalFights > 0 ? `<div class="winrate-bar"><div class="winrate-fill" style="width: ${winBarWidth}%; background: ${winBarColor}"></div></div>` : ''}
             </div>
             <div class="row-votes">
                 <button class="row-vote-btn row-vote-up ${upActiveClass}" data-animal-id="${animalId}" data-animal-name="${animal.name}" data-vote="up" title="Underrated">
-                    <i class="fas fa-arrow-up"></i>
+                    <i class="fas fa-caret-up"></i>
                     <span class="vote-count">${upvotes}</span>
                 </button>
                 <button class="row-vote-btn row-vote-down ${downActiveClass}" data-animal-id="${animalId}" data-animal-name="${animal.name}" data-vote="down" title="Overrated">
-                    <i class="fas fa-arrow-down"></i>
+                    <i class="fas fa-caret-down"></i>
                     <span class="vote-count">${downvotes}</span>
                 </button>
                 <button class="row-comments-btn" data-animal-id="${animalId}" data-animal-name="${animal.name}" data-animal-image="${animal.image}" title="Comments">
@@ -2990,8 +3012,9 @@ class TournamentManager {
     }
 
     bindEvents() {
-        // Open tournament modal button
+        // Open tournament modal button (both hero and sidebar)
         this.dom.openBtn?.addEventListener('click', () => this.showSetup());
+        document.getElementById('hero-tournament-btn')?.addEventListener('click', () => this.showSetup());
         
         // Start tournament button - now actually starts the tournament
         this.dom.startBtn?.addEventListener('click', () => this.startTournament());
