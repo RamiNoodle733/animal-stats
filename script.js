@@ -1850,6 +1850,28 @@ class RankingsManager {
     init() {
         this.bindEvents();
         this.bindDetailPanelEvents();
+        this.bindHeroBannerScroll();
+    }
+    
+    bindHeroBannerScroll() {
+        const rankingsList = document.querySelector('.rankings-list');
+        const heroBanner = document.getElementById('rankings-hero-banner');
+        
+        if (!rankingsList || !heroBanner) return;
+        
+        rankingsList.addEventListener('scroll', () => {
+            const scrollTop = rankingsList.scrollTop;
+            const maxScroll = 80; // Shrink fully after 80px scroll
+            const shrinkRatio = Math.min(scrollTop / maxScroll, 1);
+            
+            if (shrinkRatio > 0.1) {
+                heroBanner.classList.add('compact');
+                heroBanner.style.setProperty('--shrink-ratio', shrinkRatio);
+            } else {
+                heroBanner.classList.remove('compact');
+                heroBanner.style.removeProperty('--shrink-ratio');
+            }
+        });
     }
 
     bindEvents() {
@@ -2167,11 +2189,148 @@ class RankingsManager {
         if (commentsBtn) {
             commentsBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                this.openCommentsModal(e);
+                this.toggleInlineComments(row, {
+                    id: animalId,
+                    name: animal.name,
+                    image: animal.image
+                });
             });
         }
 
         return row;
+    }
+    
+    // Toggle inline comments panel under a row
+    async toggleInlineComments(row, animal) {
+        // Check if there's already an inline comments panel for this row
+        const existingPanel = row.nextElementSibling;
+        if (existingPanel && existingPanel.classList.contains('inline-comments-panel')) {
+            // Close it
+            existingPanel.remove();
+            row.classList.remove('comments-expanded');
+            return;
+        }
+        
+        // Close any other open inline comments
+        document.querySelectorAll('.inline-comments-panel').forEach(p => p.remove());
+        document.querySelectorAll('.ranking-row.comments-expanded').forEach(r => r.classList.remove('comments-expanded'));
+        
+        // Mark this row as expanded
+        row.classList.add('comments-expanded');
+        
+        // Create inline comments panel
+        const panel = document.createElement('div');
+        panel.className = 'inline-comments-panel';
+        panel.innerHTML = `
+            <div class="inline-comments-header">
+                <div class="inline-comments-animal">
+                    <img src="${animal.image}" alt="${animal.name}" onerror="this.src='https://via.placeholder.com/30?text=?'">
+                    <span>${animal.name}</span>
+                    <span class="inline-comments-label">Discussion</span>
+                </div>
+                <div class="inline-comments-actions">
+                    <button class="inline-view-all-btn" data-animal-name="${animal.name}" data-animal-id="${animal.id}" data-animal-image="${animal.image}">
+                        <i class="fas fa-external-link-alt"></i> View All
+                    </button>
+                    <button class="inline-comments-close"><i class="fas fa-times"></i></button>
+                </div>
+            </div>
+            <div class="inline-comments-list">
+                <div class="inline-comments-loading"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
+            </div>
+        `;
+        
+        // Insert after the row
+        row.insertAdjacentElement('afterend', panel);
+        
+        // Bind close button
+        panel.querySelector('.inline-comments-close').addEventListener('click', () => {
+            panel.remove();
+            row.classList.remove('comments-expanded');
+        });
+        
+        // Bind view all button - opens the full modal
+        panel.querySelector('.inline-view-all-btn').addEventListener('click', (e) => {
+            panel.remove();
+            row.classList.remove('comments-expanded');
+            this.openCommentsModal({ currentTarget: e.currentTarget });
+        });
+        
+        // Fetch comments
+        try {
+            const response = await fetch(`/api/comments?animalName=${encodeURIComponent(animal.name)}`);
+            const result = await response.json();
+            
+            if (result.success && result.data) {
+                const comments = result.data.slice(0, 3); // Show max 3 inline
+                const listEl = panel.querySelector('.inline-comments-list');
+                
+                if (comments.length === 0) {
+                    listEl.innerHTML = `
+                        <div class="inline-no-comments">
+                            <i class="fas fa-comment-slash"></i>
+                            <span>No comments yet</span>
+                        </div>
+                    `;
+                } else {
+                    listEl.innerHTML = comments.map(c => this.createInlineCommentHTML(c)).join('');
+                    
+                    // If there are more comments, show count
+                    if (result.data.length > 3) {
+                        listEl.innerHTML += `<div class="inline-more-comments">+ ${result.data.length - 3} more comments</div>`;
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching inline comments:', error);
+            panel.querySelector('.inline-comments-list').innerHTML = `
+                <div class="inline-no-comments">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span>Failed to load</span>
+                </div>
+            `;
+        }
+    }
+    
+    createInlineCommentHTML(comment) {
+        const displayName = comment.isAnonymous ? 'Anonymous' : 
+            (comment.authorUsername || comment.author?.displayName || 'Unknown');
+        const timeAgo = this.getTimeAgo(new Date(comment.createdAt));
+        
+        return `
+            <div class="inline-comment-item ${comment.isAnonymous ? 'anonymous' : ''}">
+                <div class="inline-comment-avatar">
+                    ${comment.isAnonymous 
+                        ? '<i class="fas fa-user-secret"></i>' 
+                        : `<span>${displayName[0].toUpperCase()}</span>`}
+                </div>
+                <div class="inline-comment-content">
+                    <div class="inline-comment-meta">
+                        <span class="inline-comment-author">${displayName}</span>
+                        <span class="inline-comment-time">${timeAgo}</span>
+                    </div>
+                    <p class="inline-comment-text">${this.escapeHtml(comment.content)}</p>
+                </div>
+            </div>
+        `;
+    }
+    
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+    
+    getTimeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
+        if (seconds < 60) return 'just now';
+        const minutes = Math.floor(seconds / 60);
+        if (minutes < 60) return `${minutes}m ago`;
+        const hours = Math.floor(minutes / 60);
+        if (hours < 24) return `${hours}h ago`;
+        const days = Math.floor(hours / 24);
+        if (days < 7) return `${days}d ago`;
+        return date.toLocaleDateString();
     }
     
     selectRankingRow(index) {

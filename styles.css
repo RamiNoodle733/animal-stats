@@ -5424,6 +5424,63 @@ body {
     margin-bottom: 16px;
     overflow: hidden;
     flex-shrink: 0;
+    transition: padding 0.3s ease, margin-bottom 0.3s ease;
+}
+
+/* Compact hero banner when scrolling */
+.rankings-hero-banner.compact {
+    padding: 10px 20px;
+    margin-bottom: 10px;
+}
+
+.rankings-hero-banner.compact .hero-top-row {
+    gap: 12px;
+}
+
+.rankings-hero-banner.compact .hero-trophy-badge {
+    width: 28px;
+    height: 28px;
+}
+
+.rankings-hero-banner.compact .hero-trophy-badge i {
+    font-size: 0.85rem;
+}
+
+.rankings-hero-banner.compact .hero-title {
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+}
+
+.rankings-hero-banner.compact .hero-content-centered {
+    flex-direction: row;
+    gap: 20px;
+}
+
+.rankings-hero-banner.compact .hero-play-btn-big {
+    padding: 10px 28px;
+    border-radius: 10px;
+}
+
+.rankings-hero-banner.compact .hero-play-btn-big .btn-inner {
+    gap: 8px;
+}
+
+.rankings-hero-banner.compact .hero-play-btn-big .btn-inner i {
+    font-size: 1rem;
+}
+
+.rankings-hero-banner.compact .hero-play-btn-big .btn-inner span {
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+}
+
+.rankings-hero-banner.compact .hero-subtitle {
+    display: none;
+}
+
+.rankings-hero-banner.compact .hero-bg-glow,
+.rankings-hero-banner.compact .hero-bg-pulse {
+    opacity: 0.3;
 }
 
 .hero-bg-glow {
@@ -6365,6 +6422,212 @@ body {
     font-size: 0.85rem;
 }
 
+/* ========================================
+   INLINE COMMENTS PANEL - Expandable
+   ======================================== */
+
+.ranking-row.comments-expanded {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-color: transparent;
+}
+
+.inline-comments-panel {
+    background: rgba(10, 15, 30, 0.95);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    margin-bottom: 4px;
+    margin-top: -4px;
+    padding: 12px;
+    animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; max-height: 0; padding: 0 12px; }
+    to { opacity: 1; max-height: 400px; padding: 12px; }
+}
+
+.inline-comments-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+    margin-bottom: 10px;
+}
+
+.inline-comments-animal {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.inline-comments-animal img {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    object-fit: contain;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.inline-comments-animal span:first-of-type {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    color: #fff;
+}
+
+.inline-comments-label {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.4);
+    background: rgba(0, 212, 255, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.inline-comments-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.inline-view-all-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 6px;
+    color: #00d4ff;
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.inline-view-all-btn:hover {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: #00d4ff;
+}
+
+.inline-comments-close {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 100, 100, 0.1);
+    border: 1px solid rgba(255, 100, 100, 0.3);
+    border-radius: 6px;
+    color: #ff6666;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.inline-comments-close:hover {
+    background: rgba(255, 100, 100, 0.25);
+    border-color: #ff6666;
+}
+
+.inline-comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.inline-comments-loading {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.4);
+    padding: 15px;
+    font-size: 0.85rem;
+}
+
+.inline-no-comments {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 15px;
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.85rem;
+}
+
+.inline-comment-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.inline-comment-item.anonymous {
+    border-color: rgba(128, 128, 128, 0.2);
+}
+
+.inline-comment-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff6b00, #ff9944);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #fff;
+}
+
+.inline-comment-item.anonymous .inline-comment-avatar {
+    background: linear-gradient(135deg, #444, #666);
+}
+
+.inline-comment-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.inline-comment-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.inline-comment-author {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: #ff9944;
+}
+
+.inline-comment-item.anonymous .inline-comment-author {
+    color: #888;
+}
+
+.inline-comment-time {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.inline-comment-text {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.4;
+    margin: 0;
+    word-wrap: break-word;
+}
+
+.inline-more-comments {
+    text-align: center;
+    padding: 8px;
+    font-size: 0.75rem;
+    color: rgba(0, 212, 255, 0.7);
+    background: rgba(0, 212, 255, 0.05);
+    border-radius: 6px;
+}
+
 /* Right Column - Selected Animal Detail Panel */
 .rankings-right-column {
     width: 320px;
@@ -6476,14 +6739,13 @@ body {
 
 /* Detail Panel - Compact */
 .rankings-detail-panel {
-    flex: 1;
     background: linear-gradient(180deg, rgba(10, 15, 30, 0.95), rgba(5, 8, 18, 0.98));
     border: 1px solid rgba(0, 212, 255, 0.25);
     border-radius: 12px;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    min-height: 0;
+    overflow: visible;
+    flex-shrink: 0;
 }
 
 .detail-panel-empty {
@@ -6508,12 +6770,11 @@ body {
 }
 
 .detail-panel-content {
-    flex: 1;
     display: flex;
     flex-direction: column;
     padding: 12px;
     gap: 10px;
-    overflow-y: auto;
+    overflow: visible;
 }
 
 /* Compact Header with inline portrait */
@@ -9651,12 +9912,140 @@ body {
     display: none;
     align-items: center;
     justify-content: center;
-    padding: 30px;
+    padding: 20px;
     background: radial-gradient(ellipse at center, rgba(50, 30, 0, 0.9) 0%, rgba(0, 0, 0, 0.98) 100%);
+    overflow-y: auto;
 }
 
 .tournament-results.active {
     display: flex;
+}
+
+.tournament-results-content {
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    padding: 30px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 20px;
+}
+
+.champion-crown {
+    font-size: 3rem;
+    color: #ffd700;
+    filter: drop-shadow(0 0 25px rgba(255, 215, 0, 0.9));
+    animation: crownBounce 1s ease-in-out infinite;
+    margin-bottom: 8px;
+}
+
+.tournament-results-content h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 20px;
+}
+
+.champion-display {
+    margin-bottom: 20px;
+}
+
+.champion-display img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    border-radius: 16px;
+    border: 3px solid #ffd700;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+    margin-bottom: 12px;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.champion-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 3px;
+    color: #fff;
+    text-shadow: 0 0 12px rgba(255, 215, 0, 0.5);
+}
+
+.tournament-stats {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+}
+
+.tournament-stats .stat-item {
+    text-align: center;
+}
+
+.tournament-stats .stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: #00d4ff;
+    display: block;
+}
+
+.tournament-stats .stat-label {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.runner-ups {
+    margin-bottom: 20px;
+}
+
+.runner-ups h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 12px;
+}
+
+.runner-up-list {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.runner-up-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.runner-up-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    border-radius: 8px;
+    border: 2px solid rgba(192, 192, 192, 0.5);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.runner-up-item span {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 70px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.results-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
 }
 
 .results-content {
@@ -9958,14 +10347,15 @@ body {
 .battle-arena-v2 {
     flex: 1;
     display: grid;
-    grid-template-columns: 1fr 320px 1fr;
-    gap: 25px;
-    padding: 20px 40px;
+    grid-template-columns: 1fr 280px 1fr;
+    gap: 20px;
+    padding: 15px 30px;
     align-items: stretch;
-    max-width: 1600px;
+    max-width: 1400px;
     margin: 0 auto;
     width: 100%;
     min-height: 0;
+    overflow-y: auto;
 }
 
 /* Fighter Card V2 */
@@ -9974,9 +10364,9 @@ body {
     flex-direction: column;
     align-items: center;
     background: rgba(255, 255, 255, 0.02);
-    border: 3px solid rgba(0, 212, 255, 0.3);
-    border-radius: 20px;
-    padding: 30px 25px;
+    border: 2px solid rgba(0, 212, 255, 0.3);
+    border-radius: 16px;
+    padding: 20px 18px;
     cursor: pointer;
     transition: all 0.25s ease;
     position: relative;
@@ -10022,19 +10412,19 @@ body {
 /* Fighter Portrait V2 */
 .fighter-card-v2 .fighter-portrait {
     width: 100%;
-    height: 220px;
+    height: 160px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .fighter-card-v2 .fighter-portrait img {
-    max-height: 200px;
+    max-height: 150px;
     max-width: 90%;
     object-fit: contain;
-    filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.7));
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.7));
     transition: transform 0.3s ease;
 }
 
@@ -10061,16 +10451,16 @@ body {
 /* Fighter Info V2 */
 .fighter-info-v2 {
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .fighter-info-v2 .fighter-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 3px;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
     color: #fff;
-    margin-bottom: 10px;
-    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
+    margin-bottom: 8px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .fighter-meta {
