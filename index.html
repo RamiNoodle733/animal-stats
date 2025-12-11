@@ -1377,10 +1377,11 @@
                 </div>
                 
                 <!-- Center VS & Stats Comparison -->
-                <div class="battle-center-v3">
-                    <div class="vs-badge-v3">VS</div>
-                    
-                    <div class="stats-comparison-v3">
+                <div class="vs-section-v3">
+                    <div class="vs-badge-v3"><span>VS</span></div>
+                </div>
+                
+                <div class="stats-comparison-v3">
                         <div class="stat-row-v3" data-stat="attack">
                             <div class="stat-bar-v3 left"><div class="bar-fill-v3" id="t-fighter-1-attack-bar"></div></div>
                             <span class="stat-val-v3 left" id="t-fighter-1-attack">0</span>
@@ -1424,7 +1425,6 @@
                             <div class="stat-bar-v3 right"><div class="bar-fill-v3" id="t-fighter-2-special-bar"></div></div>
                         </div>
                     </div>
-                </div>
                 
                 <!-- Right Fighter Card -->
                 <div class="fighter-card-v3 right" id="tournament-fighter-2">
@@ -1464,34 +1464,67 @@
         
         <!-- Results Screen -->
         <div class="tournament-results" id="tournament-results" style="display: none;">
-            <div class="tournament-results-content">
+            <div class="tournament-results-v3">
                 <div class="results-confetti"></div>
-                <div class="champion-crown"><i class="fas fa-crown"></i></div>
-                <h2>CHAMPION!</h2>
-                <div class="champion-display">
-                    <img src="" alt="" class="champion-img" id="champion-img">
-                    <div class="champion-name" id="champion-name">Champion</div>
-                </div>
-                <div class="tournament-stats">
-                    <div class="stat-item">
-                        <span class="stat-value" id="result-matches">0</span>
-                        <span class="stat-label">Matches</span>
+                
+                <!-- Champion Header -->
+                <div class="champion-header-v3">
+                    <div class="tournament-logo">
+                        <i class="fas fa-crown"></i>
                     </div>
-                    <div class="stat-item">
-                        <span class="stat-value" id="result-bracket">0</span>
-                        <span class="stat-label">Bracket</span>
+                    <div class="champion-title-v3">CHAMPION</div>
+                </div>
+                
+                <!-- Champion Card -->
+                <div class="champion-card-v3">
+                    <img src="" alt="" class="champion-image-v3" id="champion-img">
+                    <div class="champion-name-v3"><span id="champion-name">Champion</span></div>
+                    <div class="champion-stats-row-v3">
+                        <div class="champion-stat-v3">
+                            <span class="stat-label">Matches Won</span>
+                            <span class="stat-value" id="result-matches">0</span>
+                        </div>
+                        <div class="champion-stat-v3">
+                            <span class="stat-label">Bracket Size</span>
+                            <span class="stat-value" id="result-bracket">0</span>
+                        </div>
                     </div>
                 </div>
-                <div class="runner-ups">
-                    <h3>Final Four</h3>
-                    <div class="runner-up-list" id="runner-up-list"></div>
+                
+                <!-- Tournament Stats Panel -->
+                <div class="tournament-stats-panel-v3">
+                    <h4>TOURNAMENT STATISTICS</h4>
+                    <div class="tournament-stats-grid-v3" id="tournament-stats-grid">
+                        <div class="tournament-stat-item-v3">
+                            <span class="value" id="stat-total-battles">0</span>
+                            <span class="label">Total Battles</span>
+                        </div>
+                        <div class="tournament-stat-item-v3">
+                            <span class="value" id="stat-avg-rating">0</span>
+                            <span class="label">Avg Rating</span>
+                        </div>
+                        <div class="tournament-stat-item-v3">
+                            <span class="value" id="stat-duration">0s</span>
+                            <span class="label">Duration</span>
+                        </div>
+                    </div>
                 </div>
-                <div class="results-actions">
-                    <button class="play-again-btn" id="play-again-btn">
-                        <i class="fas fa-redo"></i> Play Again
+                
+                <!-- Runner-ups -->
+                <div class="runner-ups-section-v3" id="runner-up-list">
+                    <!-- Dynamically populated -->
+                </div>
+                
+                <!-- Action Buttons -->
+                <div class="results-actions-v3">
+                    <button class="btn-play-again" id="play-again-btn">
+                        <i class="fas fa-redo"></i> <span>PLAY AGAIN</span>
                     </button>
-                    <button class="close-results-btn" id="close-results-btn">
-                        <i class="fas fa-times"></i> Close
+                    <button class="btn-share" id="share-results-btn">
+                        <i class="fas fa-share-alt"></i> <span>SHARE</span>
+                    </button>
+                    <button class="btn-view-bracket" id="close-results-btn">
+                        <i class="fas fa-times"></i> <span>CLOSE</span>
                     </button>
                 </div>
             </div>
