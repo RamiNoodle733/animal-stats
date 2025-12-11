@@ -662,9 +662,29 @@
                                     <button class="action-btn-sm" id="detail-view-stats">
                                         <i class="fas fa-chart-bar"></i> Stats
                                     </button>
-                                    <button class="action-btn-sm" id="detail-comments">
-                                        <i class="fas fa-comment"></i> <span id="detail-comment-count">0</span>
+                                    <button class="action-btn-sm" id="detail-view-all-comments">
+                                        <i class="fas fa-expand"></i> All
                                     </button>
+                                </div>
+                                
+                                <!-- Inline Comments Section -->
+                                <div class="detail-comments-section" id="detail-comments-section">
+                                    <div class="detail-comments-header">
+                                        <span><i class="fas fa-comments"></i> Discussion</span>
+                                        <span class="detail-comments-count" id="detail-comments-total">0</span>
+                                    </div>
+                                    <div class="detail-comments-list" id="detail-comments-list">
+                                        <!-- Comments loaded by JS -->
+                                    </div>
+                                    <div class="detail-comment-input-area" id="detail-comment-input-area">
+                                        <input type="text" id="detail-comment-input" placeholder="Add a comment..." maxlength="300" autocomplete="off">
+                                        <button class="detail-comment-send" id="detail-comment-send">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                    <div class="detail-comments-login" id="detail-comments-login" style="display: none;">
+                                        <i class="fas fa-lock"></i> <span>Log in to comment</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1113,15 +1133,11 @@
         <div class="comments-modal-content">
             <button class="comments-modal-close" id="comments-modal-close">&times;</button>
             
-            <!-- Comments Header -->
-            <div class="comments-header">
-                <div class="comments-animal-info">
-                    <img id="comments-animal-image" src="" alt="" class="comments-animal-img">
-                    <div>
-                        <h2 id="comments-animal-name">Animal Name</h2>
-                        <span class="comments-count" id="comments-count">0 comments</span>
-                    </div>
-                </div>
+            <!-- Minimal Comments Header -->
+            <div class="comments-header-minimal">
+                <img id="comments-animal-image" src="" alt="" class="comments-animal-img-hidden" style="display: none;">
+                <span class="comments-title" id="comments-animal-name">Comments</span>
+                <span class="comments-count-badge" id="comments-count">0</span>
             </div>
             
             <!-- Add Comment Form -->

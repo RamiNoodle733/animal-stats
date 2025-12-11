@@ -1823,8 +1823,16 @@ class RankingsManager {
             detailUpvoteBtn: document.getElementById('detail-upvote'),
             detailDownvoteBtn: document.getElementById('detail-downvote'),
             detailViewStats: document.getElementById('detail-view-stats'),
-            detailComments: document.getElementById('detail-comments'),
-            detailCommentCount: document.getElementById('detail-comment-count'),
+            detailViewAllComments: document.getElementById('detail-view-all-comments'),
+            
+            // Inline Comments in Detail Panel
+            detailCommentsSection: document.getElementById('detail-comments-section'),
+            detailCommentsList: document.getElementById('detail-comments-list'),
+            detailCommentsTotal: document.getElementById('detail-comments-total'),
+            detailCommentInput: document.getElementById('detail-comment-input'),
+            detailCommentSend: document.getElementById('detail-comment-send'),
+            detailCommentsLogin: document.getElementById('detail-comments-login'),
+            detailCommentInputArea: document.getElementById('detail-comment-input-area'),
             
             // Comments Modal
             commentsModal: document.getElementById('comments-modal'),
@@ -1913,8 +1921,8 @@ class RankingsManager {
             }
         });
         
-        // Comments button
-        this.dom.detailComments?.addEventListener('click', () => {
+        // View all comments button - opens the full modal
+        this.dom.detailViewAllComments?.addEventListener('click', () => {
             if (this.currentAnimal) {
                 const rankItem = this.rankings.find(r => r.animal?.name === this.currentAnimal.name);
                 if (rankItem) {
@@ -1930,6 +1938,161 @@ class RankingsManager {
                 }
             }
         });
+        
+        // Inline comment send button
+        this.dom.detailCommentSend?.addEventListener('click', () => this.submitInlineComment());
+        this.dom.detailCommentInput?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') this.submitInlineComment();
+        });
+    }
+    
+    /**
+     * Submit a comment from the inline input in detail panel
+     */
+    async submitInlineComment() {
+        const content = this.dom.detailCommentInput?.value?.trim();
+        
+        if (!content) {
+            Auth.showToast('Please write something!');
+            return;
+        }
+        
+        if (!Auth.isLoggedIn()) {
+            Auth.showToast('Please log in to comment!');
+            Auth.showModal('login');
+            return;
+        }
+        
+        if (!this.currentAnimal) return;
+        
+        const rankItem = this.rankings.find(r => r.animal?.name === this.currentAnimal.name);
+        const animalId = rankItem?.animal?._id || rankItem?.animal?.id;
+        
+        try {
+            this.dom.detailCommentSend.disabled = true;
+            
+            const response = await fetch('/api/comments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                },
+                body: JSON.stringify({
+                    targetType: 'animal',
+                    animalId: animalId,
+                    animalName: this.currentAnimal.name,
+                    content,
+                    isAnonymous: false
+                })
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                this.dom.detailCommentInput.value = '';
+                Auth.showToast('Comment posted!');
+                // Refresh inline comments
+                this.loadInlineComments(this.currentAnimal.name);
+            } else {
+                Auth.showToast(result.error || 'Failed to post comment');
+            }
+        } catch (error) {
+            console.error('Error posting comment:', error);
+            Auth.showToast('Error posting comment');
+        } finally {
+            if (this.dom.detailCommentSend) this.dom.detailCommentSend.disabled = false;
+        }
+    }
+    
+    /**
+     * Load comments for the inline section in detail panel
+     */
+    async loadInlineComments(animalName) {
+        if (!this.dom.detailCommentsList) return;
+        
+        // Show/hide input based on login
+        if (this.dom.detailCommentInputArea) {
+            this.dom.detailCommentInputArea.style.display = Auth.isLoggedIn() ? 'flex' : 'none';
+        }
+        if (this.dom.detailCommentsLogin) {
+            this.dom.detailCommentsLogin.style.display = Auth.isLoggedIn() ? 'none' : 'flex';
+        }
+        
+        this.dom.detailCommentsList.innerHTML = '<div class="inline-comments-loading"><i class="fas fa-spinner fa-spin"></i></div>';
+        
+        try {
+            const response = await fetch(`/api/comments?animalName=${encodeURIComponent(animalName)}`);
+            const result = await response.json();
+            
+            if (result.success && result.data) {
+                const allComments = result.data;
+                this.dom.detailCommentsTotal.textContent = allComments.length;
+                
+                if (allComments.length === 0) {
+                    this.dom.detailCommentsList.innerHTML = `
+                        <div class="inline-no-comments">
+                            <i class="fas fa-comment-slash"></i>
+                            <span>No comments yet</span>
+                        </div>
+                    `;
+                } else {
+                    // Show recent comments with replies
+                    const html = allComments.slice(0, 5).map(c => this.createDetailCommentHTML(c)).join('');
+                    this.dom.detailCommentsList.innerHTML = html;
+                    
+                    if (allComments.length > 5) {
+                        this.dom.detailCommentsList.innerHTML += `
+                            <div class="inline-more-comments">+ ${allComments.length - 5} more</div>
+                        `;
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error loading inline comments:', error);
+            this.dom.detailCommentsList.innerHTML = '<div class="inline-no-comments"><i class="fas fa-exclamation-triangle"></i> Error</div>';
+        }
+    }
+    
+    /**
+     * Create HTML for a comment in the detail panel (with avatar and replies)
+     */
+    createDetailCommentHTML(comment, isReply = false) {
+        const displayName = comment.isAnonymous ? 'Anonymous' : 
+            (comment.authorUsername || comment.author?.displayName || 'Unknown');
+        const timeAgo = this.getTimeAgo(new Date(comment.createdAt));
+        const profileAnimal = comment.author?.profileAnimal || comment.profileAnimal;
+        
+        // Avatar HTML - profile animal or initial
+        let avatarHtml;
+        if (comment.isAnonymous) {
+            avatarHtml = '<i class="fas fa-user-secret"></i>';
+        } else if (profileAnimal?.image) {
+            avatarHtml = `<img src="${profileAnimal.image}" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'"><span style="display:none">${displayName[0].toUpperCase()}</span>`;
+        } else {
+            avatarHtml = `<span>${displayName[0].toUpperCase()}</span>`;
+        }
+        
+        // Replies HTML
+        let repliesHtml = '';
+        if (comment.replies && comment.replies.length > 0) {
+            repliesHtml = `<div class="detail-comment-replies">
+                ${comment.replies.map(r => this.createDetailCommentHTML(r, true)).join('')}
+            </div>`;
+        }
+        
+        return `
+            <div class="detail-comment-item ${isReply ? 'is-reply' : ''} ${comment.isAnonymous ? 'anonymous' : ''}">
+                <div class="detail-comment-avatar">${avatarHtml}</div>
+                <div class="detail-comment-body">
+                    <div class="detail-comment-meta">
+                        <span class="detail-comment-author">${displayName}</span>
+                        <span class="detail-comment-time">${timeAgo}</span>
+                    </div>
+                    <p class="detail-comment-text">${this.escapeHtml(comment.content)}</p>
+                </div>
+            </div>
+            ${repliesHtml}
+        `;
     }
     
     cancelReply() {
@@ -2351,6 +2514,8 @@ class RankingsManager {
         const item = this.rankings[index];
         if (item) {
             this.updateDetailPanel(item, index + 1);
+            // Load inline comments for selected animal
+            this.loadInlineComments(item.animal?.name || item.name);
         }
     }
     
@@ -2758,11 +2923,12 @@ class RankingsManager {
 
     filterRankings(searchTerm) {
         const term = searchTerm.toLowerCase();
-        const cards = this.dom.rankingsList.querySelectorAll('.ranking-card');
+        const rows = this.dom.rankingsList.querySelectorAll('.ranking-row');
         
-        cards.forEach(card => {
-            const name = card.querySelector('.ranking-animal-name').textContent.toLowerCase();
-            card.style.display = name.includes(term) ? '' : 'none';
+        rows.forEach(row => {
+            const nameEl = row.querySelector('.row-animal-name');
+            const name = nameEl ? nameEl.textContent.toLowerCase() : '';
+            row.style.display = name.includes(term) ? '' : 'none';
         });
     }
 
@@ -2827,7 +2993,8 @@ class RankingsManager {
             
             if (result.success) {
                 this.comments = result.data;
-                this.dom.commentsCount.textContent = `${this.comments.length} comment${this.comments.length !== 1 ? 's' : ''}`;
+                // Update count badge (just the number)
+                this.dom.commentsCount.textContent = this.comments.length;
                 this.renderComments();
             }
         } catch (error) {
@@ -3091,7 +3258,13 @@ class RankingsManager {
             return '<i class="fas fa-mask"></i>';
         }
 
-        if (profileAnimal && this.app?.state?.animals) {
+        // Handle profileAnimal as object with image property
+        if (profileAnimal?.image) {
+            return `<img src="${profileAnimal.image}" alt="${profileAnimal.name || 'Avatar'}" class="user-avatar-img" onerror="this.style.display='none'">`;
+        }
+        
+        // Handle profileAnimal as string (animal name)
+        if (profileAnimal && typeof profileAnimal === 'string' && this.app?.state?.animals) {
             const animal = this.app.state.animals.find(a => 
                 a.name.toLowerCase() === profileAnimal.toLowerCase()
             );
