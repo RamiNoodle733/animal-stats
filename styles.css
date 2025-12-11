@@ -5539,7 +5539,7 @@ body {
 /* Ranking Row - Compact */
 .ranking-row {
     display: grid;
-    grid-template-columns: 60px 1fr 100px 90px;
+    grid-template-columns: 60px 1fr 100px 160px;
     gap: 10px;
     padding: 8px 12px;
     background: rgba(15, 20, 35, 0.6);
@@ -5657,22 +5657,24 @@ body {
 .row-votes {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
+    flex-wrap: nowrap;
 }
 
 /* Inline Vote Buttons */
 .row-vote-btn {
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 4px 8px;
+    gap: 3px;
+    padding: 3px 6px;
     border: 1px solid transparent;
-    border-radius: 6px;
-    font-size: 0.8rem;
+    border-radius: 5px;
+    font-size: 0.75rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.15s ease;
     background: transparent;
+    flex-shrink: 0;
 }
 
 .row-vote-btn.row-vote-up {
@@ -5733,15 +5735,16 @@ body {
 .row-comments-btn {
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 4px 8px;
+    gap: 3px;
+    padding: 3px 6px;
     background: transparent;
     border: 1px solid rgba(0, 212, 255, 0.3);
-    border-radius: 6px;
+    border-radius: 5px;
     color: var(--primary-color);
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     cursor: pointer;
     transition: all 0.15s ease;
+    flex-shrink: 0;
 }
 
 .row-comments-btn:hover {
