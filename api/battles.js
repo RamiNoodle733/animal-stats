@@ -49,6 +49,7 @@ module.exports = async function handler(req, res) {
 
 /**
  * Handle tournament completion notification
+ * Also saves tournament placements (1st, 2nd, 3rd, 4th)
  */
 async function handleTournamentComplete(req, res) {
     // Parse body - handle both JSON and text/plain from sendBeacon
@@ -58,6 +59,50 @@ async function handleTournamentComplete(req, res) {
     }
     
     const { user, bracketSize, totalMatches, champion, runnerUp, thirdFourth, matchHistory } = body || {};
+    
+    // Save tournament placements to database
+    try {
+        // Champion gets 1st place
+        if (champion) {
+            await updateTournamentPlacement(champion, 1);
+        }
+        
+        // Runner-up gets 2nd place
+        if (runnerUp && runnerUp !== 'N/A') {
+            await updateTournamentPlacement(runnerUp, 2);
+        }
+        
+        // Third/Fourth place finishers
+        if (thirdFourth && thirdFourth !== 'N/A') {
+            const thirdFourthAnimals = thirdFourth.split(',').map(s => s.trim()).filter(Boolean);
+            for (const animalName of thirdFourthAnimals) {
+                await updateTournamentPlacement(animalName, 3);
+            }
+        }
+        
+        // Mark all animals in the tournament as having played
+        const allAnimals = new Set([champion]);
+        if (runnerUp && runnerUp !== 'N/A') allAnimals.add(runnerUp);
+        if (thirdFourth && thirdFourth !== 'N/A') {
+            thirdFourth.split(',').map(s => s.trim()).filter(Boolean).forEach(a => allAnimals.add(a));
+        }
+        // Also add all participants from match history
+        if (matchHistory && Array.isArray(matchHistory)) {
+            matchHistory.forEach(match => {
+                if (match.winner) allAnimals.add(match.winner);
+                if (match.loser) allAnimals.add(match.loser);
+            });
+        }
+        
+        // Increment tournamentsPlayed for all participants
+        for (const animalName of allAnimals) {
+            await incrementTournamentsPlayed(animalName);
+        }
+        
+    } catch (err) {
+        console.error('Error saving tournament placements:', err);
+        // Don't fail the request - still notify Discord
+    }
     
     notifyDiscord('tournament_complete', {
         user: user || 'Anonymous',
@@ -70,6 +115,40 @@ async function handleTournamentComplete(req, res) {
     }, req);
     
     return res.status(200).json({ success: true });
+}
+
+/**
+ * Update tournament placement for an animal
+ * @param {string} animalName - Name of the animal
+ * @param {number} place - 1, 2, or 3 (3rd and 4th both count as 3rd)
+ */
+async function updateTournamentPlacement(animalName, place) {
+    let stats = await BattleStats.findOne({ animalName });
+    if (!stats) {
+        stats = new BattleStats({ animalName });
+    }
+    
+    if (place === 1) {
+        stats.tournamentsFirst = (stats.tournamentsFirst || 0) + 1;
+    } else if (place === 2) {
+        stats.tournamentsSecond = (stats.tournamentsSecond || 0) + 1;
+    } else if (place === 3) {
+        stats.tournamentsThird = (stats.tournamentsThird || 0) + 1;
+    }
+    
+    await stats.save();
+}
+
+/**
+ * Increment tournaments played count for an animal
+ */
+async function incrementTournamentsPlayed(animalName) {
+    let stats = await BattleStats.findOne({ animalName });
+    if (!stats) {
+        stats = new BattleStats({ animalName });
+    }
+    stats.tournamentsPlayed = (stats.tournamentsPlayed || 0) + 1;
+    await stats.save();
 }
 
 /**

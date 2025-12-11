@@ -85,7 +85,11 @@ module.exports = async function handler(req, res) {
             battleMap[b.animalName] = {
                 battleRating: b.battleRating,
                 tournamentWins: b.tournamentWins,
-                tournamentBattles: b.tournamentBattles
+                tournamentBattles: b.tournamentBattles,
+                tournamentsPlayed: b.tournamentsPlayed || 0,
+                tournamentsFirst: b.tournamentsFirst || 0,
+                tournamentsSecond: b.tournamentsSecond || 0,
+                tournamentsThird: b.tournamentsThird || 0
             };
         });
         
@@ -102,7 +106,15 @@ module.exports = async function handler(req, res) {
         // Combine data and calculate power rankings using new algorithm
         const rankings = animals.map(animal => {
             const votes = voteMap[animal.name] || { upvotes: 0, downvotes: 0, score: 0 };
-            const battle = battleMap[animal.name] || { battleRating: 1000, tournamentWins: 0, tournamentBattles: 0 };
+            const battle = battleMap[animal.name] || { 
+                battleRating: 1000, 
+                tournamentWins: 0, 
+                tournamentBattles: 0,
+                tournamentsPlayed: 0,
+                tournamentsFirst: 0,
+                tournamentsSecond: 0,
+                tournamentsThird: 0
+            };
             const commentCount = commentMap[animal.name] || 0;
             
             // Calculate total stats for display
@@ -163,6 +175,11 @@ module.exports = async function handler(req, res) {
                 battleRating: battle.battleRating,
                 tournamentWins: battle.tournamentWins,
                 tournamentBattles: battle.tournamentBattles,
+                // Tournament placements
+                tournamentsPlayed: battle.tournamentsPlayed,
+                tournamentsFirst: battle.tournamentsFirst,
+                tournamentsSecond: battle.tournamentsSecond,
+                tournamentsThird: battle.tournamentsThird,
                 // Power ranking fields
                 powerScore,
                 attackScore,

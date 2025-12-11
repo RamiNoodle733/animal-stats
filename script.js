@@ -1850,28 +1850,15 @@ class RankingsManager {
     init() {
         this.bindEvents();
         this.bindDetailPanelEvents();
-        this.bindHeroBannerScroll();
+        this.setHeroBannerCompact(); // Always compact, no scroll behavior
     }
     
-    bindHeroBannerScroll() {
-        const rankingsList = document.querySelector('.rankings-list');
+    setHeroBannerCompact() {
+        // Make hero banner always compact - no scroll behavior
         const heroBanner = document.getElementById('rankings-hero-banner');
-        
-        if (!rankingsList || !heroBanner) return;
-        
-        rankingsList.addEventListener('scroll', () => {
-            const scrollTop = rankingsList.scrollTop;
-            const maxScroll = 80; // Shrink fully after 80px scroll
-            const shrinkRatio = Math.min(scrollTop / maxScroll, 1);
-            
-            if (shrinkRatio > 0.1) {
-                heroBanner.classList.add('compact');
-                heroBanner.style.setProperty('--shrink-ratio', shrinkRatio);
-            } else {
-                heroBanner.classList.remove('compact');
-                heroBanner.style.removeProperty('--shrink-ratio');
-            }
-        });
+        if (heroBanner) {
+            heroBanner.classList.add('compact');
+        }
     }
 
     bindEvents() {
@@ -3512,9 +3499,13 @@ class TournamentManager {
         // Update progress
         this.updateProgress();
         
+        // Get fighter cards fresh from DOM
+        const fighter1Card = this.getFighterCard(1);
+        const fighter2Card = this.getFighterCard(2);
+        
         // Reset any previous selection styling
-        this.dom.fighter1.classList.remove('selected', 'eliminated');
-        this.dom.fighter2.classList.remove('selected', 'eliminated');
+        if (fighter1Card) fighter1Card.classList.remove('selected', 'eliminated');
+        if (fighter2Card) fighter2Card.classList.remove('selected', 'eliminated');
         
         // Update fighter 1
         this.updateFighterCard(1, animal1);
@@ -3526,11 +3517,13 @@ class TournamentManager {
         this.highlightStatWinners(animal1, animal2);
         
         // Add entrance animation
-        this.dom.fighter1.style.animation = 'none';
-        this.dom.fighter2.style.animation = 'none';
+        if (fighter1Card) fighter1Card.style.animation = 'none';
+        if (fighter2Card) fighter2Card.style.animation = 'none';
         setTimeout(() => {
-            this.dom.fighter1.style.animation = 'slideInLeft 0.5s ease';
-            this.dom.fighter2.style.animation = 'slideInRight 0.5s ease';
+            const f1 = this.getFighterCard(1);
+            const f2 = this.getFighterCard(2);
+            if (f1) f1.style.animation = 'slideInLeft 0.5s ease';
+            if (f2) f2.style.animation = 'slideInRight 0.5s ease';
         }, 10);
     }
     
@@ -3541,8 +3534,9 @@ class TournamentManager {
         const stats = ['attack', 'defense', 'agility', 'stamina', 'intelligence', 'special'];
         
         stats.forEach(stat => {
-            // Try v2 selector first, fall back to v1
-            let row = document.querySelector(`.stat-row-v2[data-stat="${stat}"]`);
+            // Try v3 selector first, then v2, then v1
+            let row = document.querySelector(`.stat-row-v3[data-stat="${stat}"]`);
+            if (!row) row = document.querySelector(`.stat-row-v2[data-stat="${stat}"]`);
             if (!row) row = document.querySelector(`.stat-row[data-stat="${stat}"]`);
             if (!row) return;
             
@@ -3563,22 +3557,37 @@ class TournamentManager {
     }
     
     /**
+     * Get fighter card element (refreshed from DOM)
+     */
+    getFighterCard(fighterNum) {
+        return document.getElementById(`tournament-fighter-${fighterNum}`);
+    }
+    
+    /**
      * Update a fighter card with animal data and stat bars
+     * Re-fetches DOM elements each time to ensure they exist
      */
     updateFighterCard(fighterNum, animal) {
-        const prefix = `fighter${fighterNum}`;
+        // Re-fetch DOM elements to ensure they exist
+        const imgEl = document.getElementById(`fighter-${fighterNum}-img`);
+        const nameEl = document.getElementById(`fighter-${fighterNum}-name`);
+        const rankEl = document.getElementById(`fighter-${fighterNum}-rank`);
+        const winrateEl = document.getElementById(`fighter-${fighterNum}-winrate`);
+        const weightEl = document.getElementById(`fighter-${fighterNum}-weight`);
+        const speedEl = document.getElementById(`fighter-${fighterNum}-speed`);
+        const biteEl = document.getElementById(`fighter-${fighterNum}-bite`);
         
         // Image
-        const imgEl = this.dom[`${prefix}Img`];
         if (imgEl) {
-            imgEl.src = animal.image;
-            imgEl.alt = animal.name;
-            imgEl.onerror = () => { imgEl.src = 'https://via.placeholder.com/300x200?text=?'; };
+            imgEl.src = animal.image || '';
+            imgEl.alt = animal.name || 'Unknown';
+            imgEl.onerror = () => { imgEl.src = 'https://via.placeholder.com/200x150?text=?'; };
         }
         
-        // Name
-        const nameEl = this.dom[`${prefix}Name`];
-        if (nameEl) nameEl.textContent = animal.name;
+        // Name - IMPORTANT: Set from actual animal data
+        if (nameEl) {
+            nameEl.textContent = animal.name || 'Unknown Animal';
+        }
         
         // Get ranking data from RankingsManager
         const rankings = this.app.rankingsManager?.rankings || [];
@@ -3586,34 +3595,62 @@ class TournamentManager {
         const rankIndex = rankings.findIndex(r => r.animal?.name === animal.name);
         
         // Rank badge
-        const rankEl = this.dom[`${prefix}Rank`];
         if (rankEl) {
-            rankEl.textContent = rankIndex >= 0 ? `#${rankIndex + 1}` : '-';
+            rankEl.textContent = rankIndex >= 0 ? `#${rankIndex + 1}` : '#--';
         }
         
         // Win rate badge
-        const winrateEl = this.dom[`${prefix}Winrate`];
         if (winrateEl) {
             if (rankingItem && rankingItem.totalFights > 0) {
                 winrateEl.textContent = `${rankingItem.winRate || 0}% (${rankingItem.totalFights} battles)`;
             } else {
-                winrateEl.textContent = 'No battles yet';
+                winrateEl.textContent = '0% (0 battles)';
+            }
+        }
+        
+        // Physical specs (weight, speed, bite force)
+        if (weightEl) {
+            const weight = animal.weight || animal.averageWeight;
+            if (weight) {
+                const weightNum = typeof weight === 'number' ? weight : parseFloat(weight);
+                weightEl.innerHTML = `<i class="fas fa-weight-hanging"></i><span>${weightNum.toLocaleString()} lbs</span>`;
+            } else {
+                weightEl.innerHTML = `<i class="fas fa-weight-hanging"></i><span>--</span>`;
+            }
+        }
+        
+        if (speedEl) {
+            const speed = animal.speed || animal.topSpeed;
+            if (speed) {
+                const speedNum = typeof speed === 'number' ? speed : parseFloat(speed);
+                speedEl.innerHTML = `<i class="fas fa-tachometer-alt"></i><span>${speedNum} km/h</span>`;
+            } else {
+                speedEl.innerHTML = `<i class="fas fa-tachometer-alt"></i><span>--</span>`;
+            }
+        }
+        
+        if (biteEl) {
+            const bite = animal.biteForce || animal.bite;
+            if (bite) {
+                const biteNum = typeof bite === 'number' ? bite : parseFloat(bite);
+                biteEl.innerHTML = `<i class="fas fa-teeth"></i><span>${biteNum.toLocaleString()} PSI</span>`;
+            } else {
+                biteEl.innerHTML = `<i class="fas fa-teeth"></i><span>--</span>`;
             }
         }
         
         // Stats
-        const stats = ['Attack', 'Defense', 'Agility', 'Stamina', 'Intelligence', 'Special'];
         const statKeys = ['attack', 'defense', 'agility', 'stamina', 'intelligence', 'special'];
         
-        statKeys.forEach((key, i) => {
+        statKeys.forEach(key => {
             const value = Math.round(animal[key] || 0);
             
-            // Update stat value
-            const statEl = this.dom[`${prefix}${stats[i]}`];
+            // Update stat value - use fresh DOM query
+            const statEl = document.getElementById(`fighter-${fighterNum}-${key}`);
             if (statEl) statEl.textContent = value;
             
             // Update stat bar
-            const barEl = this.dom[`${prefix}${stats[i]}Bar`];
+            const barEl = document.getElementById(`fighter-${fighterNum}-${key}-bar`);
             if (barEl) barEl.style.width = `${value}%`;
         });
     }
@@ -3656,18 +3693,18 @@ class TournamentManager {
         this.winners.push(winner);
         this.completedMatches++;
         
-        // Visual feedback using CSS classes
-        const winnerEl = fighterIndex === 0 ? this.dom.fighter1 : this.dom.fighter2;
-        const loserEl = fighterIndex === 0 ? this.dom.fighter2 : this.dom.fighter1;
+        // Visual feedback using CSS classes - fetch fresh from DOM
+        const winnerEl = this.getFighterCard(fighterIndex === 0 ? 1 : 2);
+        const loserEl = this.getFighterCard(fighterIndex === 0 ? 2 : 1);
         
-        winnerEl.classList.add('selected');
-        loserEl.classList.add('eliminated');
+        if (winnerEl) winnerEl.classList.add('selected');
+        if (loserEl) loserEl.classList.add('eliminated');
         
         // Move to next match after brief delay
         setTimeout(() => {
             // Reset classes
-            winnerEl.classList.remove('selected');
-            loserEl.classList.remove('eliminated');
+            if (winnerEl) winnerEl.classList.remove('selected');
+            if (loserEl) loserEl.classList.remove('eliminated');
             
             this.currentMatch++;
             this.showCurrentMatch();
