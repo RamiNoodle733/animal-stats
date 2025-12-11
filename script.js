@@ -2062,11 +2062,18 @@ class RankingsManager {
         }
 
         const animal = item.animal || item;
+        const animalId = animal._id || animal.id;
         const winRate = item.winRate || 0;
         const winRateClass = winRate >= 60 ? '' : winRate >= 40 ? 'low' : 'poor';
         const totalFights = item.totalFights || 0;
         const upvotes = item.upvotes || 0;
         const downvotes = item.downvotes || 0;
+        const commentCount = item.commentCount || 0;
+        
+        // Check user's current vote on this animal
+        const userVote = this.userVotes[animalId] || 0;
+        const upActiveClass = userVote === 1 ? 'active' : '';
+        const downActiveClass = userVote === -1 ? 'active' : '';
 
         row.innerHTML = `
             <div class="row-rank">
@@ -2084,13 +2091,44 @@ class RankingsManager {
                     : '<span class="row-winrate-value">--</span>'}
             </div>
             <div class="row-votes">
-                <span class="row-vote-up"><i class="fas fa-arrow-up"></i> ${upvotes}</span>
-                <span class="row-vote-down"><i class="fas fa-arrow-down"></i> ${downvotes}</span>
+                <button class="row-vote-btn row-vote-up ${upActiveClass}" data-animal-id="${animalId}" data-animal-name="${animal.name}" data-vote="up" title="Underrated">
+                    <i class="fas fa-arrow-up"></i>
+                    <span class="vote-count">${upvotes}</span>
+                </button>
+                <button class="row-vote-btn row-vote-down ${downActiveClass}" data-animal-id="${animalId}" data-animal-name="${animal.name}" data-vote="down" title="Overrated">
+                    <i class="fas fa-arrow-down"></i>
+                    <span class="vote-count">${downvotes}</span>
+                </button>
+                <button class="row-comments-btn" data-animal-id="${animalId}" data-animal-name="${animal.name}" data-animal-image="${animal.image}" title="Comments">
+                    <i class="fas fa-comment"></i>
+                    <span class="comment-count">${commentCount}</span>
+                </button>
             </div>
         `;
 
-        // Click to select
-        row.addEventListener('click', () => this.selectRankingRow(index));
+        // Click on row body (not buttons) to select
+        row.addEventListener('click', (e) => {
+            if (!e.target.closest('.row-vote-btn') && !e.target.closest('.row-comments-btn')) {
+                this.selectRankingRow(index);
+            }
+        });
+        
+        // Inline vote buttons
+        row.querySelectorAll('.row-vote-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.handleRowVote(e, index);
+            });
+        });
+        
+        // Inline comments button
+        const commentsBtn = row.querySelector('.row-comments-btn');
+        if (commentsBtn) {
+            commentsBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.openCommentsModal(e);
+            });
+        }
 
         return row;
     }
@@ -2250,8 +2288,9 @@ class RankingsManager {
                     this.dom.detailDownvotes.textContent = result.data.downvotes;
                 }
                 
-                // Update the row in the list
-                this.updateRowVotes(this.selectedRankIndex, result.data.upvotes, result.data.downvotes);
+                // Update the row in the list (including active states)
+                const animalId = this.dom.detailUpvoteBtn?.dataset.animalId;
+                this.updateRowVotes(this.selectedRankIndex, result.data.upvotes, result.data.downvotes, animalId);
 
                 // Show XP popup if vote was added
                 if (result.action !== 'removed') {
@@ -2266,13 +2305,113 @@ class RankingsManager {
         }
     }
     
-    updateRowVotes(index, upvotes, downvotes) {
+    updateRowVotes(index, upvotes, downvotes, animalId = null) {
         const row = this.dom.rankingsList.querySelector(`.ranking-row[data-index="${index}"]`);
         if (row) {
             const upEl = row.querySelector('.row-vote-up');
             const downEl = row.querySelector('.row-vote-down');
-            if (upEl) upEl.innerHTML = `<i class="fas fa-arrow-up"></i> ${upvotes}`;
-            if (downEl) downEl.innerHTML = `<i class="fas fa-arrow-down"></i> ${downvotes}`;
+            if (upEl) {
+                const countEl = upEl.querySelector('.vote-count');
+                if (countEl) countEl.textContent = upvotes;
+            }
+            if (downEl) {
+                const countEl = downEl.querySelector('.vote-count');
+                if (countEl) countEl.textContent = downvotes;
+            }
+            
+            // Update active states if animalId provided
+            if (animalId) {
+                const userVote = this.userVotes[animalId] || 0;
+                upEl?.classList.toggle('active', userVote === 1);
+                downEl?.classList.toggle('active', userVote === -1);
+            }
+        }
+    }
+    
+    /**
+     * Update comment counts in the row and detail panel
+     */
+    updateCommentCounts(count) {
+        // Find the current animal's row
+        if (this.currentAnimal) {
+            const animalId = this.currentAnimal._id || this.currentAnimal.id;
+            const rows = this.dom.rankingsList.querySelectorAll('.ranking-row');
+            rows.forEach(row => {
+                const commentsBtn = row.querySelector('.row-comments-btn');
+                if (commentsBtn && commentsBtn.dataset.animalId === animalId) {
+                    const countEl = commentsBtn.querySelector('.comment-count');
+                    if (countEl) countEl.textContent = count;
+                }
+            });
+            
+            // Update detail panel if same animal is selected
+            if (this.dom.detailCommentCount) {
+                this.dom.detailCommentCount.textContent = count;
+            }
+        }
+    }
+    
+    /**
+     * Handle voting from the inline row buttons
+     */
+    async handleRowVote(e, rowIndex) {
+        const btn = e.currentTarget;
+        const animalId = btn.dataset.animalId;
+        const animalName = btn.dataset.animalName;
+        const voteType = btn.dataset.vote;
+        
+        if (!Auth.isLoggedIn()) {
+            Auth.showToast('Please log in to vote!');
+            Auth.showModal('login');
+            return;
+        }
+        
+        // Add click animation
+        btn.classList.add('vote-clicked');
+        setTimeout(() => btn.classList.remove('vote-clicked'), 200);
+        
+        try {
+            const response = await fetch('/api/votes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                },
+                body: JSON.stringify({ animalId, animalName, voteType })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Update local state
+                if (result.action === 'removed') {
+                    delete this.userVotes[animalId];
+                } else {
+                    this.userVotes[animalId] = result.data.userVote === 'up' ? 1 : -1;
+                }
+
+                // Update row buttons and counts
+                this.updateRowVotes(rowIndex, result.data.upvotes, result.data.downvotes, animalId);
+                
+                // Also update detail panel if same animal is selected
+                if (this.selectedRankIndex === rowIndex) {
+                    const userVote = this.userVotes[animalId] || 0;
+                    this.dom.detailUpvoteBtn?.classList.toggle('active', userVote === 1);
+                    this.dom.detailDownvoteBtn?.classList.toggle('active', userVote === -1);
+                    if (this.dom.detailUpvotes) this.dom.detailUpvotes.textContent = result.data.upvotes;
+                    if (this.dom.detailDownvotes) this.dom.detailDownvotes.textContent = result.data.downvotes;
+                }
+
+                // Show XP popup if vote was added
+                if (result.action !== 'removed') {
+                    this.showXpPopup(5, 1);
+                }
+            } else {
+                Auth.showToast(result.error || 'Failed to vote');
+            }
+        } catch (error) {
+            console.error('Vote error:', error);
+            Auth.showToast('Error voting. Please try again.');
         }
     }
 
@@ -2590,6 +2729,9 @@ class RankingsManager {
 
                 // Refresh comments
                 await this.fetchComments();
+                
+                // Update comment counts in row and detail panel
+                this.updateCommentCounts(this.comments.length);
 
                 Auth.showToast(wasReply ? 'Reply posted!' : 'Comment posted!');
             } else {

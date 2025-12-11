@@ -5657,18 +5657,110 @@ body {
 .row-votes {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
-.row-vote-up, .row-vote-down {
+/* Inline Vote Buttons */
+.row-vote-btn {
     display: flex;
     align-items: center;
-    gap: 3px;
+    gap: 4px;
+    padding: 4px 8px;
+    border: 1px solid transparent;
+    border-radius: 6px;
     font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    background: transparent;
 }
 
-.row-vote-up { color: #00ff88; }
-.row-vote-down { color: #ff3366; }
+.row-vote-btn.row-vote-up {
+    color: #00ff88;
+    border-color: rgba(0, 255, 136, 0.3);
+}
+
+.row-vote-btn.row-vote-up:hover {
+    background: rgba(0, 255, 136, 0.15);
+    border-color: rgba(0, 255, 136, 0.5);
+    transform: scale(1.05);
+}
+
+.row-vote-btn.row-vote-up.active {
+    background: rgba(0, 255, 136, 0.25);
+    border-color: #00ff88;
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.3);
+}
+
+.row-vote-btn.row-vote-down {
+    color: #ff3366;
+    border-color: rgba(255, 51, 102, 0.3);
+}
+
+.row-vote-btn.row-vote-down:hover {
+    background: rgba(255, 51, 102, 0.15);
+    border-color: rgba(255, 51, 102, 0.5);
+    transform: scale(1.05);
+}
+
+.row-vote-btn.row-vote-down.active {
+    background: rgba(255, 51, 102, 0.25);
+    border-color: #ff3366;
+    box-shadow: 0 0 8px rgba(255, 51, 102, 0.3);
+}
+
+.row-vote-btn:active {
+    transform: scale(0.95);
+}
+
+/* Vote click animation */
+@keyframes voteClickPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+.row-vote-btn.vote-clicked {
+    animation: voteClickPulse 0.2s ease;
+}
+
+.row-vote-btn .vote-count {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+}
+
+/* Inline Comments Button */
+.row-comments-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    background: transparent;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 6px;
+    color: var(--primary-color);
+    font-size: 0.75rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.row-comments-btn:hover {
+    background: rgba(0, 212, 255, 0.15);
+    border-color: rgba(0, 212, 255, 0.5);
+    transform: scale(1.05);
+}
+
+.row-comments-btn:active {
+    transform: scale(0.95);
+}
+
+.row-comments-btn i {
+    font-size: 0.7rem;
+}
+
+.row-comments-btn .comment-count {
+    font-family: 'Inter', sans-serif;
+}
 
 /* Right Column - Tournament CTA + Detail Panel */
 .rankings-right-column {
