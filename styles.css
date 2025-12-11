@@ -10056,9 +10056,9 @@ body {
 .tournament-setup-content {
     background: linear-gradient(180deg, rgba(10, 14, 26, 0.98) 0%, rgba(5, 8, 16, 0.98) 100%);
     border: 2px solid rgba(255, 215, 0, 0.5);
-    border-radius: 16px;
-    padding: 30px 40px;
-    max-width: 700px;
+    border-radius: 12px;
+    padding: 20px 25px;
+    max-width: 620px;
     width: 100%;
     position: relative;
     box-shadow: 0 0 50px rgba(255, 215, 0, 0.2);
@@ -10086,16 +10086,16 @@ body {
 .setup-header,
 .tournament-setup-header {
     text-align: center;
-    margin-bottom: 25px;
+    margin-bottom: 14px;
 }
 
 .setup-header i.fa-trophy,
 .tournament-setup-header i.fa-crown,
 .tournament-logo i {
-    font-size: 2.5rem;
+    font-size: 1.8rem;
     color: #ffd700;
-    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
-    margin-bottom: 10px;
+    filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.8));
+    margin-bottom: 6px;
     display: block;
     animation: trophyFloat 2s ease-in-out infinite;
 }
@@ -10108,8 +10108,8 @@ body {
 .setup-header h2,
 .tournament-setup-header h2 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 4px;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
     background: linear-gradient(135deg, #ffd700, #ff8c00);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -10120,17 +10120,17 @@ body {
 .bracket-row {
     display: flex;
     justify-content: center;
-    gap: 12px;
-    margin-bottom: 25px;
+    gap: 10px;
+    margin-bottom: 16px;
 }
 
 .bracket-btn {
     flex: 1;
-    max-width: 120px;
-    padding: 18px 12px;
+    max-width: 90px;
+    padding: 12px 8px;
     background: rgba(0, 212, 255, 0.08);
     border: 2px solid rgba(0, 212, 255, 0.3);
-    border-radius: 12px;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
     text-align: center;
@@ -10150,7 +10150,7 @@ body {
 
 .bracket-btn .size {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.2rem;
+    font-size: 1.6rem;
     color: #fff;
     line-height: 1;
     display: block;
@@ -10161,28 +10161,28 @@ body {
 }
 
 .bracket-btn .label {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     color: rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
     letter-spacing: 1px;
-    margin-top: 4px;
+    margin-top: 2px;
     display: block;
 }
 
 /* Type Filter Grid */
 .type-section {
-    margin-bottom: 25px;
+    margin-bottom: 16px;
 }
 
 .type-section-label {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     letter-spacing: 2px;
     color: rgba(255, 255, 255, 0.6);
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .type-section-label span {
@@ -10199,17 +10199,17 @@ body {
 }
 
 .type-chip {
-    padding: 8px 14px;
+    padding: 5px 10px;
     background: rgba(0, 212, 255, 0.06);
     border: 1px solid rgba(0, 212, 255, 0.2);
-    border-radius: 20px;
+    border-radius: 16px;
     color: rgba(255, 255, 255, 0.6);
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
 }
 
 .type-chip:hover {
@@ -10234,11 +10234,11 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 20px;
+    padding: 10px 14px;
     background: linear-gradient(90deg, rgba(0, 212, 255, 0.08) 0%, rgba(255, 215, 0, 0.08) 100%);
-    border-radius: 10px;
+    border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 20px;
+    margin-bottom: 0;
 }
 
 .preview-stats {
@@ -10263,19 +10263,19 @@ body {
 }
 
 .start-btn {
-    padding: 12px 30px;
+    padding: 8px 20px;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 3px;
+    font-size: 1rem;
+    letter-spacing: 2px;
     background: linear-gradient(135deg, #ffd700, #ff8c00);
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     color: #000;
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
 }
 
@@ -11306,11 +11306,20 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
-    padding: 12px;
+    justify-content: flex-start;
+    gap: 16px;
+    padding: 16px;
     background: rgba(0, 0, 0, 0.4);
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.battle-center-v3 .vs-section-v3 {
+    margin: 0;
+}
+
+.battle-center-v3 .stats-comparison-v3 {
+    width: 100%;
 }
 
 .vs-badge-v3 {
