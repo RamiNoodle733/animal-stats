@@ -2090,6 +2090,22 @@ class RankingsManager {
         // Win rate mini progress bar
         const winBarWidth = totalFights > 0 ? Math.min(winRate, 100) : 0;
         const winBarColor = winRate >= 70 ? '#00ff88' : winRate >= 50 ? '#ffd700' : '#ff3366';
+        
+        // Tournament placement stats (optional fields - graceful degradation)
+        const tournamentsFirst = animal.tournamentsFirst || item.tournamentsFirst || 0;
+        const tournamentsSecond = animal.tournamentsSecond || item.tournamentsSecond || 0;
+        const tournamentsThird = animal.tournamentsThird || item.tournamentsThird || 0;
+        const hasTournamentData = tournamentsFirst > 0 || tournamentsSecond > 0 || tournamentsThird > 0;
+        
+        let tournamentBadges = '';
+        if (hasTournamentData) {
+            tournamentBadges = `
+                <div class="row-tournament-stats">
+                    ${tournamentsFirst > 0 ? `<span class="tournament-mini gold"><i class="fas fa-trophy"></i>${tournamentsFirst}</span>` : ''}
+                    ${tournamentsSecond > 0 ? `<span class="tournament-mini silver"><i class="fas fa-medal"></i>${tournamentsSecond}</span>` : ''}
+                    ${tournamentsThird > 0 ? `<span class="tournament-mini bronze"><i class="fas fa-medal"></i>${tournamentsThird}</span>` : ''}
+                </div>`;
+        }
 
         row.innerHTML = `
             <div class="row-rank">
@@ -2100,8 +2116,11 @@ class RankingsManager {
                 <img src="${animal.image}" alt="${animal.name}" class="row-animal-img" 
                     onerror="this.src='https://via.placeholder.com/40x40?text=?'">
                 <div class="row-animal-info">
-                    <span class="row-animal-name">${animal.name}</span>
-                    ${statusBadge}
+                    <div class="row-animal-name-line">
+                        <span class="row-animal-name">${animal.name}</span>
+                        ${statusBadge}
+                    </div>
+                    ${tournamentBadges}
                 </div>
             </div>
             <div class="row-winrate">
@@ -2251,6 +2270,39 @@ class RankingsManager {
         
         // Comment count
         if (this.dom.detailCommentCount) this.dom.detailCommentCount.textContent = item.commentCount || 0;
+        
+        // Tournament History (optional fields - graceful degradation)
+        this.updateTournamentHistory(animal, item);
+    }
+    
+    updateTournamentHistory(animal, item) {
+        const tournamentsPlayed = animal.tournamentsPlayed || item.tournamentsPlayed || 0;
+        const tournamentsFirst = animal.tournamentsFirst || item.tournamentsFirst || 0;
+        const tournamentsSecond = animal.tournamentsSecond || item.tournamentsSecond || 0;
+        const tournamentsThird = animal.tournamentsThird || item.tournamentsThird || 0;
+        
+        const hasTournamentData = tournamentsPlayed > 0 || tournamentsFirst > 0 || tournamentsSecond > 0 || tournamentsThird > 0;
+        
+        const historyContent = document.getElementById('tournament-history-content');
+        const historyEmpty = document.getElementById('tournament-history-empty');
+        const goldCount = document.getElementById('detail-gold-count');
+        const silverCount = document.getElementById('detail-silver-count');
+        const bronzeCount = document.getElementById('detail-bronze-count');
+        const playedDisplay = document.getElementById('detail-tournaments-played');
+        
+        if (hasTournamentData) {
+            if (historyContent) historyContent.style.display = 'block';
+            if (historyEmpty) historyEmpty.style.display = 'none';
+            if (goldCount) goldCount.textContent = tournamentsFirst;
+            if (silverCount) silverCount.textContent = tournamentsSecond;
+            if (bronzeCount) bronzeCount.textContent = tournamentsThird;
+            if (playedDisplay) {
+                playedDisplay.innerHTML = `<span class="played-count">${tournamentsPlayed}</span> tournaments played`;
+            }
+        } else {
+            if (historyContent) historyContent.style.display = 'none';
+            if (historyEmpty) historyEmpty.style.display = 'block';
+        }
     }
     
     calculateGrade(animal) {

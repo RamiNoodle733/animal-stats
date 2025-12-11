@@ -473,24 +473,29 @@
         <!-- Rankings View (Power Leaderboard) -->
         <div id="rankings-view" class="view-container">
             <div class="rankings-console">
-                <!-- Tournament Hero Banner - Full Width -->
+                <!-- Tournament Hero Banner - Centered CTA Layout -->
                 <div class="rankings-hero-banner" id="rankings-hero-banner">
                     <div class="hero-bg-glow"></div>
                     <div class="hero-bg-pulse"></div>
-                    <div class="hero-content">
-                        <div class="hero-icon-container">
-                            <div class="hero-icon-ring"></div>
-                            <i class="fas fa-trophy"></i>
-                        </div>
-                        <div class="hero-text">
+                    <div class="hero-bg-lines"></div>
+                    <div class="hero-content-centered">
+                        <div class="hero-top-row">
+                            <div class="hero-trophy-badge">
+                                <i class="fas fa-trophy"></i>
+                            </div>
                             <span class="hero-title">ANIMAL BATTLE TOURNAMENT</span>
-                            <span class="hero-subtitle">Vote head-to-head in rapid matchups to shape the Power Rankings</span>
+                            <div class="hero-trophy-badge mirror">
+                                <i class="fas fa-trophy"></i>
+                            </div>
                         </div>
-                        <button class="hero-play-btn" id="hero-tournament-btn">
-                            <span class="btn-glow"></span>
-                            <i class="fas fa-play"></i>
-                            <span>PLAY NOW</span>
+                        <button class="hero-play-btn-big" id="hero-tournament-btn">
+                            <span class="btn-pulse-ring"></span>
+                            <span class="btn-inner">
+                                <i class="fas fa-play"></i>
+                                <span>PLAY NOW</span>
+                            </span>
                         </button>
+                        <span class="hero-subtitle">Vote head-to-head in rapid matchups to shape the Power Rankings</span>
                     </div>
                 </div>
                 
@@ -525,27 +530,9 @@
                         </div>
                     </div>
                     
-                    <!-- Right Column: Detail Panel + Tournament CTA -->
+                    <!-- Right Column: Selected Animal Detail Panel -->
                     <div class="rankings-right-column">
-                        <!-- Tournament Call-to-Action Banner -->
-                        <div class="tournament-cta-banner" id="tournament-cta">
-                            <div class="cta-glow"></div>
-                            <div class="cta-content">
-                                <div class="cta-icon">
-                                    <i class="fas fa-trophy"></i>
-                                </div>
-                                <div class="cta-text">
-                                    <span class="cta-label">TOURNAMENT</span>
-                                    <span class="cta-desc">Vote head-to-head to shape the rankings</span>
-                                </div>
-                                <button class="cta-play-btn" id="open-tournament-btn">
-                                    <i class="fas fa-play"></i>
-                                    <span>PLAY</span>
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <!-- Selected Animal Panel (more compact) -->
+                        <!-- Selected Animal Panel -->
                         <div class="rankings-detail-panel" id="rankings-detail-panel">
                             <div class="detail-panel-empty" id="detail-panel-empty">
                                 <i class="fas fa-mouse-pointer"></i>
@@ -604,6 +591,36 @@
                                     <div class="battle-metric">
                                         <span class="metric-value" id="detail-score">0</span>
                                         <span class="metric-label">Net Score</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Tournament History Section -->
+                                <div class="detail-tournament-history" id="detail-tournament-history">
+                                    <div class="tournament-history-header">
+                                        <i class="fas fa-medal"></i>
+                                        <span>Tournament History</span>
+                                    </div>
+                                    <div class="tournament-history-content" id="tournament-history-content">
+                                        <div class="tournament-medals">
+                                            <div class="medal-stat gold">
+                                                <i class="fas fa-trophy"></i>
+                                                <span class="medal-count" id="detail-gold-count">0</span>
+                                            </div>
+                                            <div class="medal-stat silver">
+                                                <i class="fas fa-medal"></i>
+                                                <span class="medal-count" id="detail-silver-count">0</span>
+                                            </div>
+                                            <div class="medal-stat bronze">
+                                                <i class="fas fa-medal"></i>
+                                                <span class="medal-count" id="detail-bronze-count">0</span>
+                                            </div>
+                                        </div>
+                                        <div class="tournament-played" id="detail-tournaments-played">
+                                            <span class="played-count">0</span> tournaments played
+                                        </div>
+                                    </div>
+                                    <div class="tournament-history-empty" id="tournament-history-empty" style="display: none;">
+                                        <span>No completed tournaments yet</span>
                                     </div>
                                 </div>
                                 

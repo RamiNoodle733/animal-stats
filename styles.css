@@ -5408,18 +5408,19 @@ body {
 }
 
 /* ========================================
-   RANKINGS HERO BANNER - Tournament CTA
+   RANKINGS HERO BANNER - Centered CTA Layout
    ======================================== */
 
 .rankings-hero-banner {
     position: relative;
     background: linear-gradient(135deg, 
-        rgba(255, 215, 0, 0.12) 0%, 
-        rgba(255, 107, 0, 0.08) 50%, 
-        rgba(255, 215, 0, 0.05) 100%);
-    border: 2px solid rgba(255, 215, 0, 0.5);
+        rgba(255, 215, 0, 0.08) 0%, 
+        rgba(20, 25, 45, 0.95) 30%,
+        rgba(20, 25, 45, 0.95) 70%,
+        rgba(255, 107, 0, 0.08) 100%);
+    border: 2px solid rgba(255, 215, 0, 0.4);
     border-radius: 12px;
-    padding: 16px 24px;
+    padding: 20px 24px;
     margin-bottom: 16px;
     overflow: hidden;
     flex-shrink: 0;
@@ -5427,31 +5428,166 @@ body {
 
 .hero-bg-glow {
     position: absolute;
-    top: -50%;
-    left: -10%;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+    top: -60%;
+    left: 10%;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.25) 0%, transparent 70%);
     pointer-events: none;
     animation: heroPulse 4s ease-in-out infinite;
 }
 
 .hero-bg-pulse {
     position: absolute;
-    bottom: -50%;
-    right: -5%;
-    width: 150px;
-    height: 150px;
-    background: radial-gradient(circle, rgba(255, 107, 0, 0.25) 0%, transparent 70%);
+    top: -60%;
+    right: 10%;
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(255, 107, 0, 0.2) 0%, transparent 70%);
     pointer-events: none;
     animation: heroPulse 4s ease-in-out infinite 2s;
 }
 
-@keyframes heroPulse {
-    0%, 100% { opacity: 0.5; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.1); }
+.hero-bg-lines {
+    position: absolute;
+    inset: 0;
+    background: 
+        repeating-linear-gradient(
+            90deg,
+            transparent 0px,
+            transparent 40px,
+            rgba(255, 215, 0, 0.03) 40px,
+            rgba(255, 215, 0, 0.03) 41px
+        );
+    pointer-events: none;
 }
 
+@keyframes heroPulse {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.15); }
+}
+
+.hero-content-centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+
+.hero-top-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.hero-trophy-badge {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 107, 0, 0.1));
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    border-radius: 8px;
+}
+
+.hero-trophy-badge.mirror {
+    transform: scaleX(-1);
+}
+
+.hero-trophy-badge i {
+    font-size: 1.1rem;
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 4px;
+    background: linear-gradient(135deg, #ffd700, #ff6b00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-subtitle {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    max-width: 400px;
+}
+
+/* Big centered PLAY button - focal point */
+.hero-play-btn-big {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    border: none;
+    border-radius: 14px;
+    padding: 16px 48px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 
+        0 0 30px rgba(255, 215, 0, 0.5),
+        0 4px 20px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    overflow: hidden;
+}
+
+.hero-play-btn-big .btn-pulse-ring {
+    position: absolute;
+    inset: -4px;
+    border: 2px solid rgba(255, 215, 0, 0.6);
+    border-radius: 18px;
+    animation: playBtnPulse 2s ease-in-out infinite;
+}
+
+@keyframes playBtnPulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.08); opacity: 0; }
+}
+
+.hero-play-btn-big .btn-inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-play-btn-big .btn-inner i {
+    font-size: 1.2rem;
+    color: #000;
+}
+
+.hero-play-btn-big .btn-inner span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    color: #000;
+}
+
+.hero-play-btn-big:hover {
+    transform: scale(1.05);
+    box-shadow: 
+        0 0 50px rgba(255, 215, 0, 0.7),
+        0 6px 30px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.hero-play-btn-big:active {
+    transform: scale(0.98);
+    box-shadow: 
+        0 0 20px rgba(255, 215, 0, 0.4),
+        0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Legacy styles for backwards compatibility */
 .hero-content {
     display: flex;
     align-items: center;
@@ -5797,80 +5933,169 @@ body {
     filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.6));
 }
 
-/* Status Badges - Game UI Style */
+/* Status Badges - Persona/Injustice Game UI Style */
 .row-status-badge {
     display: inline-flex;
     align-items: center;
     gap: 4px;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 0.65rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+    padding: 3px 10px 3px 8px;
+    border-radius: 3px 12px 12px 3px;
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 1px;
     text-transform: uppercase;
     flex-shrink: 0;
-    animation: badgePulse 2s ease-in-out infinite;
+    position: relative;
+    clip-path: polygon(0 0, 100% 0, 95% 100%, 0 100%);
 }
 
-@keyframes badgePulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.85; }
+.row-status-badge::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+}
+
+.row-status-badge i {
+    font-size: 0.55rem;
 }
 
 .row-status-badge.hot {
-    background: linear-gradient(135deg, rgba(255, 107, 0, 0.25), rgba(255, 50, 50, 0.2));
-    border: 1px solid rgba(255, 107, 0, 0.5);
-    color: #ff6b00;
-    text-shadow: 0 0 8px rgba(255, 107, 0, 0.4);
+    background: linear-gradient(90deg, rgba(255, 80, 0, 0.9), rgba(255, 107, 0, 0.7));
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 8px rgba(255, 107, 0, 0.4);
+}
+
+.row-status-badge.hot::before {
+    background: #ff4500;
+    box-shadow: 0 0 8px #ff4500;
 }
 
 .row-status-badge.hot i {
-    color: #ff4500;
+    color: #ffdd00;
+    filter: drop-shadow(0 0 3px #ff4500);
 }
 
 .row-status-badge.mvp {
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 180, 0, 0.15));
-    border: 1px solid rgba(255, 215, 0, 0.5);
-    color: #ffd700;
-    text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+    background: linear-gradient(90deg, rgba(255, 200, 0, 0.9), rgba(255, 180, 0, 0.7));
+    color: #000;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+}
+
+.row-status-badge.mvp::before {
+    background: #ffd700;
+    box-shadow: 0 0 8px #ffd700;
 }
 
 .row-status-badge.mvp i {
-    color: #ffd700;
+    color: #000;
 }
 
 .row-status-badge.rookie {
-    background: linear-gradient(135deg, rgba(0, 255, 136, 0.15), rgba(0, 200, 100, 0.1));
-    border: 1px solid rgba(0, 255, 136, 0.4);
-    color: #00ff88;
-    text-shadow: 0 0 8px rgba(0, 255, 136, 0.3);
+    background: linear-gradient(90deg, rgba(0, 200, 100, 0.9), rgba(0, 180, 80, 0.7));
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 2px 8px rgba(0, 255, 136, 0.3);
+}
+
+.row-status-badge.rookie::before {
+    background: #00ff88;
+    box-shadow: 0 0 8px #00ff88;
 }
 
 .row-status-badge.rookie i {
-    color: #00ff88;
+    color: #aaffcc;
 }
 
 .row-status-badge.champion {
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.3), rgba(255, 165, 0, 0.2));
-    border: 1px solid rgba(255, 215, 0, 0.7);
-    color: #ffd700;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-    animation: championGlow 1.5s ease-in-out infinite;
+    background: linear-gradient(90deg, rgba(255, 215, 0, 1), rgba(255, 180, 0, 0.9));
+    color: #000;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+    box-shadow: 0 2px 12px rgba(255, 215, 0, 0.6);
+    animation: championPulse 1.5s ease-in-out infinite;
 }
 
-@keyframes championGlow {
-    0%, 100% { box-shadow: 0 0 6px rgba(255, 215, 0, 0.3); }
-    50% { box-shadow: 0 0 12px rgba(255, 215, 0, 0.6); }
+@keyframes championPulse {
+    0%, 100% { box-shadow: 0 2px 12px rgba(255, 215, 0, 0.6); }
+    50% { box-shadow: 0 2px 20px rgba(255, 215, 0, 0.9); }
+}
+
+.row-status-badge.champion::before {
+    background: #fff;
+    box-shadow: 0 0 10px #ffd700;
 }
 
 .row-status-badge.champion i {
-    color: #ffd700;
+    color: #000;
     animation: crownBounce 1s ease-in-out infinite;
 }
 
 @keyframes crownBounce {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-1px); }
+}
+
+/* Row Animal Name Line */
+.row-animal-name-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Tournament Mini Badges - Inline in Rows */
+.row-tournament-stats {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+}
+
+.tournament-mini {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.6rem;
+    font-weight: 700;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.tournament-mini i {
+    font-size: 0.55rem;
+}
+
+.tournament-mini.gold {
+    border-color: rgba(255, 215, 0, 0.5);
+    color: #ffd700;
+}
+
+.tournament-mini.gold i {
+    color: #ffd700;
+}
+
+.tournament-mini.silver {
+    border-color: rgba(192, 192, 192, 0.5);
+    color: #c0c0c0;
+}
+
+.tournament-mini.silver i {
+    color: #c0c0c0;
+}
+
+.tournament-mini.bronze {
+    border-color: rgba(205, 127, 50, 0.5);
+    color: #cd7f32;
+}
+
+.tournament-mini.bronze i {
+    color: #cd7f32;
 }
 
 /* Win Rate Progress Bar */
@@ -5981,104 +6206,154 @@ body {
 .row-votes {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
     flex-wrap: nowrap;
 }
 
-/* Inline Vote Buttons */
+/* Inline Vote Buttons - Game Chip Style */
 .row-vote-btn {
     display: flex;
     align-items: center;
-    gap: 3px;
-    padding: 3px 6px;
+    gap: 4px;
+    padding: 4px 8px;
     border: 1px solid transparent;
-    border-radius: 5px;
+    border-radius: 6px;
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.15s ease;
-    background: transparent;
+    background: rgba(0, 0, 0, 0.4);
     flex-shrink: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.row-vote-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.15s ease;
 }
 
 .row-vote-btn.row-vote-up {
     color: #00ff88;
-    border-color: rgba(0, 255, 136, 0.3);
+    border-color: rgba(0, 255, 136, 0.4);
+    box-shadow: inset 0 -2px 0 rgba(0, 255, 136, 0.3);
+}
+
+.row-vote-btn.row-vote-up::before {
+    background: linear-gradient(180deg, rgba(0, 255, 136, 0.2), transparent);
 }
 
 .row-vote-btn.row-vote-up:hover {
-    background: rgba(0, 255, 136, 0.15);
-    border-color: rgba(0, 255, 136, 0.5);
-    transform: scale(1.05);
+    background: rgba(0, 255, 136, 0.2);
+    border-color: rgba(0, 255, 136, 0.7);
+    transform: translateY(-1px);
+    box-shadow: 
+        inset 0 -2px 0 rgba(0, 255, 136, 0.5),
+        0 4px 12px rgba(0, 255, 136, 0.25);
+}
+
+.row-vote-btn.row-vote-up:hover::before {
+    opacity: 1;
 }
 
 .row-vote-btn.row-vote-up.active {
-    background: rgba(0, 255, 136, 0.25);
+    background: linear-gradient(180deg, rgba(0, 255, 136, 0.35), rgba(0, 255, 136, 0.2));
     border-color: #00ff88;
-    box-shadow: 0 0 8px rgba(0, 255, 136, 0.3);
+    box-shadow: 
+        inset 0 -2px 0 rgba(0, 200, 100, 0.6),
+        0 0 12px rgba(0, 255, 136, 0.4);
 }
 
 .row-vote-btn.row-vote-down {
     color: #ff3366;
-    border-color: rgba(255, 51, 102, 0.3);
+    border-color: rgba(255, 51, 102, 0.4);
+    box-shadow: inset 0 -2px 0 rgba(255, 51, 102, 0.3);
+}
+
+.row-vote-btn.row-vote-down::before {
+    background: linear-gradient(180deg, rgba(255, 51, 102, 0.2), transparent);
 }
 
 .row-vote-btn.row-vote-down:hover {
-    background: rgba(255, 51, 102, 0.15);
-    border-color: rgba(255, 51, 102, 0.5);
-    transform: scale(1.05);
+    background: rgba(255, 51, 102, 0.2);
+    border-color: rgba(255, 51, 102, 0.7);
+    transform: translateY(-1px);
+    box-shadow: 
+        inset 0 -2px 0 rgba(255, 51, 102, 0.5),
+        0 4px 12px rgba(255, 51, 102, 0.25);
+}
+
+.row-vote-btn.row-vote-down:hover::before {
+    opacity: 1;
 }
 
 .row-vote-btn.row-vote-down.active {
-    background: rgba(255, 51, 102, 0.25);
+    background: linear-gradient(180deg, rgba(255, 51, 102, 0.35), rgba(255, 51, 102, 0.2));
     border-color: #ff3366;
-    box-shadow: 0 0 8px rgba(255, 51, 102, 0.3);
+    box-shadow: 
+        inset 0 -2px 0 rgba(200, 40, 80, 0.6),
+        0 0 12px rgba(255, 51, 102, 0.4);
 }
 
 .row-vote-btn:active {
-    transform: scale(0.95);
+    transform: translateY(1px) scale(0.98);
+    box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 
 /* Vote click animation */
 @keyframes voteClickPulse {
     0% { transform: scale(1); }
-    50% { transform: scale(1.15); }
+    50% { transform: scale(1.1); }
     100% { transform: scale(1); }
 }
 
 .row-vote-btn.vote-clicked {
-    animation: voteClickPulse 0.2s ease;
+    animation: voteClickPulse 0.18s ease;
 }
 
 .row-vote-btn .vote-count {
-    font-family: 'Inter', sans-serif;
-    font-size: 0.75rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
 }
 
-/* Inline Comments Button */
+.row-vote-btn i {
+    font-size: 0.9rem;
+}
+
+/* Inline Comments Button - Game Chip Style */
 .row-comments-btn {
     display: flex;
     align-items: center;
-    gap: 3px;
-    padding: 3px 6px;
-    background: transparent;
-    border: 1px solid rgba(0, 212, 255, 0.3);
-    border-radius: 5px;
+    gap: 4px;
+    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    border-radius: 6px;
     color: var(--primary-color);
-    font-size: 0.7rem;
+    font-size: 0.75rem;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.15s ease;
     flex-shrink: 0;
+    box-shadow: inset 0 -2px 0 rgba(0, 212, 255, 0.3);
 }
 
 .row-comments-btn:hover {
     background: rgba(0, 212, 255, 0.15);
-    border-color: rgba(0, 212, 255, 0.5);
-    transform: scale(1.05);
+    border-color: rgba(0, 212, 255, 0.7);
+    transform: translateY(-1px);
+    box-shadow: 
+        inset 0 -2px 0 rgba(0, 212, 255, 0.5),
+        0 4px 12px rgba(0, 212, 255, 0.2);
 }
 
 .row-comments-btn:active {
-    transform: scale(0.95);
+    transform: translateY(1px) scale(0.98);
+    box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.3);
 }
 
 .row-comments-btn i {
@@ -6086,10 +6361,11 @@ body {
 }
 
 .row-comments-btn .comment-count {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
 }
 
-/* Right Column - Tournament CTA + Detail Panel */
+/* Right Column - Selected Animal Detail Panel */
 .rankings-right-column {
     width: 320px;
     flex-shrink: 0;
@@ -6097,9 +6373,10 @@ body {
     flex-direction: column;
     gap: 12px;
     overflow: hidden;
+    padding-top: 8px;
 }
 
-/* Tournament CTA Banner */
+/* Tournament CTA Banner - Legacy (hidden when using hero banner) */
 .tournament-cta-banner {
     position: relative;
     background: linear-gradient(135deg, rgba(255, 215, 0, 0.12) 0%, rgba(255, 107, 0, 0.08) 100%);
@@ -6108,6 +6385,7 @@ body {
     padding: 14px;
     overflow: hidden;
     flex-shrink: 0;
+    display: none; /* Hidden - using hero banner instead */
 }
 
 .tournament-cta-banner .cta-glow {
@@ -6361,6 +6639,106 @@ body {
     color: rgba(255, 255, 255, 0.4);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+/* Tournament History Section */
+.detail-tournament-history {
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+}
+
+.tournament-history-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.tournament-history-header i {
+    color: #ffd700;
+    font-size: 0.75rem;
+}
+
+.tournament-history-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.tournament-medals {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+}
+
+.medal-stat {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.medal-stat.gold {
+    border-color: rgba(255, 215, 0, 0.4);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 215, 0, 0.05));
+}
+
+.medal-stat.gold i {
+    color: #ffd700;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+.medal-stat.silver {
+    border-color: rgba(192, 192, 192, 0.4);
+    background: linear-gradient(135deg, rgba(192, 192, 192, 0.15), rgba(192, 192, 192, 0.05));
+}
+
+.medal-stat.silver i {
+    color: #c0c0c0;
+    text-shadow: 0 0 8px rgba(192, 192, 192, 0.5);
+}
+
+.medal-stat.bronze {
+    border-color: rgba(205, 127, 50, 0.4);
+    background: linear-gradient(135deg, rgba(205, 127, 50, 0.15), rgba(205, 127, 50, 0.05));
+}
+
+.medal-stat.bronze i {
+    color: #cd7f32;
+    text-shadow: 0 0 8px rgba(205, 127, 50, 0.5);
+}
+
+.medal-count {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    color: #fff;
+}
+
+.tournament-played {
+    text-align: center;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.tournament-played .played-count {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    color: #00d4ff;
+}
+
+.tournament-history-empty {
+    text-align: center;
+    padding: 8px;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.35);
+    font-style: italic;
 }
 
 /* Actions Row */
