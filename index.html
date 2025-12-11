@@ -473,11 +473,14 @@
         <!-- Rankings View (Power Leaderboard) -->
         <div id="rankings-view" class="view-container">
             <div class="rankings-console">
-                <!-- Tournament Hero Banner - Centered CTA Layout -->
+                <!-- Tournament Hero Banner - Persona/Comic Panel Style -->
                 <div class="rankings-hero-banner" id="rankings-hero-banner">
                     <div class="hero-bg-glow"></div>
                     <div class="hero-bg-pulse"></div>
                     <div class="hero-bg-lines"></div>
+                    <div class="hero-light-sweep"></div>
+                    <div class="hero-accent-bar left"></div>
+                    <div class="hero-accent-bar right"></div>
                     <div class="hero-content-centered">
                         <div class="hero-top-row">
                             <div class="hero-trophy-badge">
@@ -490,6 +493,7 @@
                         </div>
                         <button class="hero-play-btn-big" id="hero-tournament-btn">
                             <span class="btn-pulse-ring"></span>
+                            <span class="btn-light-sweep"></span>
                             <span class="btn-inner">
                                 <i class="fas fa-play"></i>
                                 <span>PLAY NOW</span>
@@ -594,33 +598,52 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Tournament History Section -->
-                                <div class="detail-tournament-history" id="detail-tournament-history">
-                                    <div class="tournament-history-header">
-                                        <i class="fas fa-medal"></i>
-                                        <span>Tournament History</span>
+                                <!-- Tournament History - Persona-style Mini Dashboard -->
+                                <div class="detail-tournament-dashboard" id="detail-tournament-history">
+                                    <div class="dashboard-header">
+                                        <div class="dashboard-accent-left"></div>
+                                        <span class="dashboard-title"><i class="fas fa-trophy"></i> TOURNAMENT RECORD</span>
+                                        <div class="dashboard-accent-right"></div>
                                     </div>
-                                    <div class="tournament-history-content" id="tournament-history-content">
-                                        <div class="tournament-medals">
-                                            <div class="medal-stat gold">
-                                                <i class="fas fa-trophy"></i>
-                                                <span class="medal-count" id="detail-gold-count">0</span>
+                                    <div class="dashboard-content" id="tournament-history-content">
+                                        <div class="medal-row">
+                                            <div class="medal-card gold">
+                                                <div class="medal-icon-wrap">
+                                                    <i class="fas fa-trophy"></i>
+                                                </div>
+                                                <div class="medal-info">
+                                                    <span class="medal-count" id="detail-gold-count">0</span>
+                                                    <span class="medal-label">1ST</span>
+                                                </div>
                                             </div>
-                                            <div class="medal-stat silver">
-                                                <i class="fas fa-medal"></i>
-                                                <span class="medal-count" id="detail-silver-count">0</span>
+                                            <div class="medal-card silver">
+                                                <div class="medal-icon-wrap">
+                                                    <i class="fas fa-medal"></i>
+                                                </div>
+                                                <div class="medal-info">
+                                                    <span class="medal-count" id="detail-silver-count">0</span>
+                                                    <span class="medal-label">2ND</span>
+                                                </div>
                                             </div>
-                                            <div class="medal-stat bronze">
-                                                <i class="fas fa-medal"></i>
-                                                <span class="medal-count" id="detail-bronze-count">0</span>
+                                            <div class="medal-card bronze">
+                                                <div class="medal-icon-wrap">
+                                                    <i class="fas fa-medal"></i>
+                                                </div>
+                                                <div class="medal-info">
+                                                    <span class="medal-count" id="detail-bronze-count">0</span>
+                                                    <span class="medal-label">3RD</span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="tournament-played" id="detail-tournaments-played">
-                                            <span class="played-count">0</span> tournaments played
+                                        <div class="dashboard-total" id="detail-tournaments-played">
+                                            <span class="total-icon"><i class="fas fa-gamepad"></i></span>
+                                            <span class="total-count">0</span>
+                                            <span class="total-label">EVENTS ENTERED</span>
                                         </div>
                                     </div>
-                                    <div class="tournament-history-empty" id="tournament-history-empty" style="display: none;">
-                                        <span>No completed tournaments yet</span>
+                                    <div class="dashboard-empty" id="tournament-history-empty" style="display: none;">
+                                        <i class="fas fa-hourglass-start"></i>
+                                        <span>No tournament history yet</span>
                                     </div>
                                 </div>
                                 

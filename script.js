@@ -2097,6 +2097,18 @@ class RankingsManager {
         const upActiveClass = userVote === 1 ? 'active' : '';
         const downActiveClass = userVote === -1 ? 'active' : '';
         
+        // Win streak calculation (consecutive wins based on recent battles)
+        const winStreak = item.winStreak || 0;
+        const lossStreak = item.lossStreak || 0;
+        
+        // Streak badge logic
+        let streakBadge = '';
+        if (winStreak >= 3) {
+            streakBadge = `<span class="row-streak-badge hot"><i class="fas fa-fire"></i>${winStreak}W</span>`;
+        } else if (lossStreak >= 3) {
+            streakBadge = `<span class="row-streak-badge cold"><i class="fas fa-snowflake"></i>${lossStreak}L</span>`;
+        }
+        
         // Status badge based on win rate and battles
         let statusBadge = '';
         if (totalFights >= 5 && winRate >= 80) {
@@ -2119,20 +2131,19 @@ class RankingsManager {
         const tournamentsThird = animal.tournamentsThird || item.tournamentsThird || 0;
         const hasTournamentData = tournamentsFirst > 0 || tournamentsSecond > 0 || tournamentsThird > 0;
         
-        let tournamentBadges = '';
-        if (hasTournamentData) {
-            tournamentBadges = `
-                <div class="row-tournament-stats">
-                    ${tournamentsFirst > 0 ? `<span class="tournament-mini gold"><i class="fas fa-trophy"></i>${tournamentsFirst}</span>` : ''}
-                    ${tournamentsSecond > 0 ? `<span class="tournament-mini silver"><i class="fas fa-medal"></i>${tournamentsSecond}</span>` : ''}
-                    ${tournamentsThird > 0 ? `<span class="tournament-mini bronze"><i class="fas fa-medal"></i>${tournamentsThird}</span>` : ''}
-                </div>`;
-        }
+        // Always show tournament chips (0 if no data)
+        let tournamentBadges = `
+            <div class="row-tournament-chips">
+                <span class="tournament-chip gold" title="1st Place"><i class="fas fa-trophy"></i><span>${tournamentsFirst}</span></span>
+                <span class="tournament-chip silver" title="2nd Place"><i class="fas fa-medal"></i><span>${tournamentsSecond}</span></span>
+                <span class="tournament-chip bronze" title="3rd Place"><i class="fas fa-medal"></i><span>${tournamentsThird}</span></span>
+            </div>`;
 
         row.innerHTML = `
             <div class="row-rank">
                 <span class="row-rank-num">#${rank}</span>
                 ${rank <= 3 ? '<i class="fas fa-crown row-crown"></i>' : ''}
+                ${streakBadge}
             </div>
             <div class="row-animal">
                 <img src="${animal.image}" alt="${animal.name}" class="row-animal-img" 
@@ -2153,15 +2164,17 @@ class RankingsManager {
                 </div>
                 ${totalFights > 0 ? `<div class="winrate-bar"><div class="winrate-fill" style="width: ${winBarWidth}%; background: ${winBarColor}"></div></div>` : ''}
             </div>
-            <div class="row-votes">
-                <button class="row-vote-btn row-vote-up ${upActiveClass}" data-animal-id="${animalId}" data-animal-name="${animal.name}" data-vote="up" title="Underrated">
-                    <i class="fas fa-caret-up"></i>
-                    <span class="vote-count">${upvotes}</span>
-                </button>
-                <button class="row-vote-btn row-vote-down ${downActiveClass}" data-animal-id="${animalId}" data-animal-name="${animal.name}" data-vote="down" title="Overrated">
-                    <i class="fas fa-caret-down"></i>
-                    <span class="vote-count">${downvotes}</span>
-                </button>
+            <div class="row-votes control-pad">
+                <div class="vote-pad-cluster">
+                    <button class="row-vote-btn row-vote-up ${upActiveClass}" data-animal-id="${animalId}" data-animal-name="${animal.name}" data-vote="up" title="Underrated">
+                        <i class="fas fa-caret-up"></i>
+                        <span class="vote-count">${upvotes}</span>
+                    </button>
+                    <button class="row-vote-btn row-vote-down ${downActiveClass}" data-animal-id="${animalId}" data-animal-name="${animal.name}" data-vote="down" title="Overrated">
+                        <i class="fas fa-caret-down"></i>
+                        <span class="vote-count">${downvotes}</span>
+                    </button>
+                </div>
                 <button class="row-comments-btn" data-animal-id="${animalId}" data-animal-name="${animal.name}" data-animal-image="${animal.image}" title="Comments">
                     <i class="fas fa-comment"></i>
                     <span class="comment-count">${commentCount}</span>
@@ -2449,18 +2462,22 @@ class RankingsManager {
         const bronzeCount = document.getElementById('detail-bronze-count');
         const playedDisplay = document.getElementById('detail-tournaments-played');
         
-        if (hasTournamentData) {
-            if (historyContent) historyContent.style.display = 'block';
-            if (historyEmpty) historyEmpty.style.display = 'none';
-            if (goldCount) goldCount.textContent = tournamentsFirst;
-            if (silverCount) silverCount.textContent = tournamentsSecond;
-            if (bronzeCount) bronzeCount.textContent = tournamentsThird;
-            if (playedDisplay) {
+        // Always show the dashboard (even with 0s for new comic panel style)
+        if (historyContent) historyContent.style.display = 'flex';
+        if (historyEmpty) historyEmpty.style.display = 'none';
+        if (goldCount) goldCount.textContent = tournamentsFirst;
+        if (silverCount) silverCount.textContent = tournamentsSecond;
+        if (bronzeCount) bronzeCount.textContent = tournamentsThird;
+        
+        // Update tournaments played display (new dashboard style)
+        if (playedDisplay) {
+            const totalCount = playedDisplay.querySelector('.total-count');
+            if (totalCount) {
+                totalCount.textContent = tournamentsPlayed;
+            } else {
+                // Legacy format fallback
                 playedDisplay.innerHTML = `<span class="played-count">${tournamentsPlayed}</span> tournaments played`;
             }
-        } else {
-            if (historyContent) historyContent.style.display = 'none';
-            if (historyEmpty) historyEmpty.style.display = 'block';
         }
     }
     
