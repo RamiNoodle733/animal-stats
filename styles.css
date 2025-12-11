@@ -5393,6 +5393,683 @@ body {
 }
 
 /* ========================================
+   RANKINGS CONSOLE - NEW TWO-COLUMN LAYOUT
+   ======================================== */
+
+.rankings-console {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 15px 20px;
+    overflow: hidden;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Header Bar */
+.rankings-header-bar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
+.rankings-title-area {
+    flex: 1;
+    min-width: 200px;
+}
+
+.rankings-title-area .rankings-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, #ffd700, #ff6b00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rankings-title-area .rankings-title i {
+    -webkit-text-fill-color: #ffd700;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+}
+
+.rankings-title-area .rankings-subtitle {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 4px 0 0 0;
+}
+
+.rankings-header-controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.rankings-search-box {
+    width: 220px;
+    padding: 8px 14px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rankings-search-box:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+}
+
+.rankings-search-box::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.tournament-launch-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 107, 0, 0.15));
+    border: 2px solid rgba(255, 215, 0, 0.5);
+    border-radius: 8px;
+    color: #ffd700;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.tournament-launch-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.35), rgba(255, 107, 0, 0.25));
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    transform: translateY(-2px);
+}
+
+.rankings-console .rankings-login-prompt {
+    padding: 6px 12px;
+    background: rgba(255, 107, 0, 0.15);
+    border: 1px solid rgba(255, 107, 0, 0.3);
+    border-radius: 6px;
+    color: #ff9944;
+    font-size: 0.8rem;
+}
+
+/* Main Two-Column Content */
+.rankings-main-content {
+    flex: 1;
+    display: flex;
+    gap: 20px;
+    margin-top: 15px;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* Left Column - Rankings List */
+.rankings-list-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: rgba(5, 10, 20, 0.6);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.rankings-list-header {
+    display: grid;
+    grid-template-columns: 70px 1fr 120px 100px;
+    gap: 10px;
+    padding: 10px 15px;
+    background: rgba(0, 212, 255, 0.08);
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.6);
+    flex-shrink: 0;
+}
+
+.rankings-console .rankings-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
+}
+
+.rankings-console .rankings-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.rankings-console .rankings-list::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.rankings-console .rankings-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.3);
+    border-radius: 3px;
+}
+
+/* Ranking Row - Compact */
+.ranking-row {
+    display: grid;
+    grid-template-columns: 70px 1fr 120px 100px;
+    gap: 10px;
+    padding: 10px 12px;
+    background: rgba(15, 20, 35, 0.6);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    border-radius: 8px;
+    margin-bottom: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    align-items: center;
+}
+
+.ranking-row:hover {
+    background: rgba(0, 212, 255, 0.08);
+    border-color: rgba(0, 212, 255, 0.4);
+    transform: translateX(4px);
+}
+
+.ranking-row.selected {
+    background: rgba(0, 212, 255, 0.12);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
+}
+
+.ranking-row.top-3 {
+    border-width: 2px;
+}
+
+.ranking-row.rank-1 {
+    border-color: #ffd700;
+    background: linear-gradient(90deg, rgba(255, 215, 0, 0.1), rgba(15, 20, 35, 0.8));
+}
+
+.ranking-row.rank-2 {
+    border-color: #c0c0c0;
+    background: linear-gradient(90deg, rgba(192, 192, 192, 0.08), rgba(15, 20, 35, 0.8));
+}
+
+.ranking-row.rank-3 {
+    border-color: #cd7f32;
+    background: linear-gradient(90deg, rgba(205, 127, 50, 0.08), rgba(15, 20, 35, 0.8));
+}
+
+/* Row - Rank Cell */
+.row-rank {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.row-rank-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    color: #888;
+    min-width: 35px;
+}
+
+.ranking-row.rank-1 .row-rank-num { color: #ffd700; }
+.ranking-row.rank-2 .row-rank-num { color: #c0c0c0; }
+.ranking-row.rank-3 .row-rank-num { color: #cd7f32; }
+
+.row-crown {
+    font-size: 0.9rem;
+    color: #ffd700;
+    filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.6));
+}
+
+/* Row - Animal Cell */
+.row-animal {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.row-animal-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    flex-shrink: 0;
+}
+
+.row-animal-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Row - Win Rate Cell */
+.row-winrate {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.row-winrate-value {
+    font-weight: 600;
+    color: #00ff88;
+}
+
+.row-winrate-value.low { color: #ff9944; }
+.row-winrate-value.poor { color: #ff3366; }
+
+.row-battles {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Row - Votes Cell */
+.row-votes {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.row-vote-up, .row-vote-down {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    font-size: 0.8rem;
+}
+
+.row-vote-up { color: #00ff88; }
+.row-vote-down { color: #ff3366; }
+
+/* Right Column - Detail Panel */
+.rankings-detail-panel {
+    width: 340px;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, rgba(10, 15, 30, 0.95), rgba(5, 8, 18, 0.98));
+    border: 2px solid rgba(0, 212, 255, 0.3);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.detail-panel-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.3);
+    text-align: center;
+    padding: 40px;
+}
+
+.detail-panel-empty i {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.detail-panel-empty p {
+    font-size: 0.95rem;
+    max-width: 200px;
+}
+
+.detail-panel-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+/* Detail Header */
+.detail-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.detail-rank-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: #ffd700;
+    background: rgba(255, 215, 0, 0.15);
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 215, 0, 0.4);
+}
+
+.detail-names {
+    flex: 1;
+    min-width: 0;
+}
+
+.detail-animal-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    color: #fff;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.detail-scientific {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+}
+
+.detail-grade-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: #ffd700;
+    color: #000;
+    font-weight: bold;
+}
+
+/* Detail Portrait */
+.detail-portrait-area {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding: 15px 0;
+}
+
+.detail-portrait-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle, rgba(0, 212, 255, 0.25) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: detailGlow 3s ease-in-out infinite;
+}
+
+@keyframes detailGlow {
+    0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+}
+
+.detail-portrait {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(0, 212, 255, 0.4);
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+
+/* Detail Stats Grid */
+.detail-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+}
+
+.detail-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 8px 4px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+}
+
+.detail-stat i {
+    font-size: 0.85rem;
+    color: var(--primary-color);
+}
+
+.detail-stat[data-stat="attack"] i { color: #ff4444; }
+.detail-stat[data-stat="defense"] i { color: #4488ff; }
+.detail-stat[data-stat="agility"] i { color: #44ff88; }
+.detail-stat[data-stat="stamina"] i { color: #ff88cc; }
+.detail-stat[data-stat="intelligence"] i { color: #aa88ff; }
+.detail-stat[data-stat="special"] i { color: #ffcc44; }
+
+.detail-stat .stat-label {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.5);
+    letter-spacing: 0.5px;
+}
+
+.stat-bar-mini {
+    width: 100%;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.stat-bar-mini .bar-fill {
+    height: 100%;
+    background: var(--primary-color);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+}
+
+.detail-stat[data-stat="attack"] .bar-fill { background: #ff4444; }
+.detail-stat[data-stat="defense"] .bar-fill { background: #4488ff; }
+.detail-stat[data-stat="agility"] .bar-fill { background: #44ff88; }
+.detail-stat[data-stat="stamina"] .bar-fill { background: #ff88cc; }
+.detail-stat[data-stat="intelligence"] .bar-fill { background: #aa88ff; }
+.detail-stat[data-stat="special"] .bar-fill { background: #ffcc44; }
+
+.detail-stat .stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: #fff;
+}
+
+/* Detail Battle Stats */
+.detail-battle-stats {
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+}
+
+.battle-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.battle-stat i {
+    font-size: 1rem;
+    color: #ffd700;
+    margin-bottom: 4px;
+}
+
+.battle-stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    color: #fff;
+}
+
+.battle-stat-label {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Detail Vote Section */
+.detail-vote-section {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 12px 0;
+}
+
+.detail-vote-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 2px solid;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.detail-vote-btn.upvote {
+    background: rgba(0, 255, 136, 0.1);
+    border-color: rgba(0, 255, 136, 0.4);
+    color: #00ff88;
+}
+
+.detail-vote-btn.upvote:hover,
+.detail-vote-btn.upvote.active {
+    background: rgba(0, 255, 136, 0.25);
+    border-color: #00ff88;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+}
+
+.detail-vote-btn.downvote {
+    background: rgba(255, 51, 102, 0.1);
+    border-color: rgba(255, 51, 102, 0.4);
+    color: #ff3366;
+}
+
+.detail-vote-btn.downvote:hover,
+.detail-vote-btn.downvote.active {
+    background: rgba(255, 51, 102, 0.25);
+    border-color: #ff3366;
+    box-shadow: 0 0 15px rgba(255, 51, 102, 0.3);
+}
+
+.detail-vote-btn .vote-count {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+}
+
+.detail-vote-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Detail Action Buttons */
+.detail-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 12px;
+}
+
+.detail-action-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    background: rgba(0, 212, 255, 0.1);
+    color: var(--primary-color);
+}
+
+.detail-action-btn:hover {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: var(--primary-color);
+}
+
+.detail-action-btn.primary {
+    background: linear-gradient(135deg, rgba(255, 107, 0, 0.3), rgba(255, 60, 0, 0.2));
+    border-color: rgba(255, 107, 0, 0.5);
+    color: #ff9944;
+}
+
+.detail-action-btn.primary:hover {
+    background: linear-gradient(135deg, rgba(255, 107, 0, 0.45), rgba(255, 60, 0, 0.35));
+    border-color: #ff9944;
+    box-shadow: 0 0 15px rgba(255, 107, 0, 0.3);
+}
+
+/* Loading Animation for Rankings */
+.rankings-console .rankings-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.rankings-console .rankings-loading i {
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+/* Slide-in animation for ranking rows */
+@keyframes slideInRow {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.ranking-row {
+    animation: slideInRow 0.3s ease forwards;
+}
+
+/* Stagger animation delays */
+.ranking-row:nth-child(1) { animation-delay: 0.02s; }
+.ranking-row:nth-child(2) { animation-delay: 0.04s; }
+.ranking-row:nth-child(3) { animation-delay: 0.06s; }
+.ranking-row:nth-child(4) { animation-delay: 0.08s; }
+.ranking-row:nth-child(5) { animation-delay: 0.10s; }
+.ranking-row:nth-child(6) { animation-delay: 0.12s; }
+.ranking-row:nth-child(7) { animation-delay: 0.14s; }
+.ranking-row:nth-child(8) { animation-delay: 0.16s; }
+.ranking-row:nth-child(9) { animation-delay: 0.18s; }
+.ranking-row:nth-child(10) { animation-delay: 0.20s; }
+
+/* ========================================
    COMMENTS MODAL STYLES
    ======================================== */
 

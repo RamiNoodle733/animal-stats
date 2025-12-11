@@ -1785,6 +1785,7 @@ class RankingsManager {
         this.rankings = [];
         this.userVotes = {};
         this.currentAnimal = null;
+        this.selectedRankIndex = -1;
         this.comments = [];
         
         // DOM Elements
@@ -1792,6 +1793,38 @@ class RankingsManager {
             rankingsList: document.getElementById('rankings-list'),
             rankingsSearch: document.getElementById('rankings-search'),
             loginPrompt: document.getElementById('rankings-login-prompt'),
+            
+            // Detail Panel Elements
+            detailPanel: document.getElementById('rankings-detail-panel'),
+            detailEmpty: document.getElementById('detail-panel-empty'),
+            detailContent: document.getElementById('detail-panel-content'),
+            detailRankBadge: document.getElementById('detail-rank-badge'),
+            detailAnimalName: document.getElementById('detail-animal-name'),
+            detailScientific: document.getElementById('detail-scientific'),
+            detailGradeBadge: document.getElementById('detail-grade-badge'),
+            detailPortrait: document.getElementById('detail-portrait'),
+            detailAtkBar: document.getElementById('detail-atk-bar'),
+            detailDefBar: document.getElementById('detail-def-bar'),
+            detailAgiBar: document.getElementById('detail-agi-bar'),
+            detailStaBar: document.getElementById('detail-sta-bar'),
+            detailIntBar: document.getElementById('detail-int-bar'),
+            detailSpeBar: document.getElementById('detail-spe-bar'),
+            detailAtkVal: document.getElementById('detail-atk-val'),
+            detailDefVal: document.getElementById('detail-def-val'),
+            detailAgiVal: document.getElementById('detail-agi-val'),
+            detailStaVal: document.getElementById('detail-sta-val'),
+            detailIntVal: document.getElementById('detail-int-val'),
+            detailSpeVal: document.getElementById('detail-spe-val'),
+            detailWinrate: document.getElementById('detail-winrate'),
+            detailBattles: document.getElementById('detail-battles'),
+            detailScore: document.getElementById('detail-score'),
+            detailUpvotes: document.getElementById('detail-upvotes'),
+            detailDownvotes: document.getElementById('detail-downvotes'),
+            detailUpvoteBtn: document.getElementById('detail-upvote'),
+            detailDownvoteBtn: document.getElementById('detail-downvote'),
+            detailViewStats: document.getElementById('detail-view-stats'),
+            detailComments: document.getElementById('detail-comments'),
+            detailCommentCount: document.getElementById('detail-comment-count'),
             
             // Comments Modal
             commentsModal: document.getElementById('comments-modal'),
@@ -1816,6 +1849,7 @@ class RankingsManager {
 
     init() {
         this.bindEvents();
+        this.bindDetailPanelEvents();
     }
 
     bindEvents() {
@@ -1854,6 +1888,38 @@ class RankingsManager {
         // Escape key closes modal
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') this.hideCommentsModal();
+        });
+    }
+    
+    bindDetailPanelEvents() {
+        // Detail panel vote buttons
+        this.dom.detailUpvoteBtn?.addEventListener('click', () => this.handleDetailVote(1));
+        this.dom.detailDownvoteBtn?.addEventListener('click', () => this.handleDetailVote(-1));
+        
+        // View full stats button
+        this.dom.detailViewStats?.addEventListener('click', () => {
+            if (this.currentAnimal) {
+                this.app.selectAnimal(this.currentAnimal.name);
+                this.app.switchView('stats');
+            }
+        });
+        
+        // Comments button
+        this.dom.detailComments?.addEventListener('click', () => {
+            if (this.currentAnimal) {
+                const rankItem = this.rankings.find(r => r.animal?.name === this.currentAnimal.name);
+                if (rankItem) {
+                    this.openCommentsModal({
+                        currentTarget: {
+                            dataset: {
+                                animalId: rankItem.animal._id || rankItem.animal.id,
+                                animalName: this.currentAnimal.name,
+                                animalImage: this.currentAnimal.image
+                            }
+                        }
+                    });
+                }
+            }
         });
     }
     
@@ -1973,114 +2039,244 @@ class RankingsManager {
         const fragment = document.createDocumentFragment();
 
         this.rankings.forEach((item, index) => {
-            const card = this.createRankingCard(item, index + 1);
-            fragment.appendChild(card);
+            const row = this.createRankingRow(item, index + 1, index);
+            fragment.appendChild(row);
         });
 
         this.dom.rankingsList.innerHTML = '';
         this.dom.rankingsList.appendChild(fragment);
+        
+        // Auto-select first animal
+        if (this.rankings.length > 0) {
+            this.selectRankingRow(0);
+        }
     }
 
-    createRankingCard(item, rank) {
-        const card = document.createElement('div');
-        card.className = 'ranking-card';
+    createRankingRow(item, rank, index) {
+        const row = document.createElement('div');
+        row.className = 'ranking-row';
+        row.dataset.index = index;
         
         if (rank <= 3) {
-            card.classList.add('top-3', `rank-${rank}`);
+            row.classList.add('top-3', `rank-${rank}`);
         }
 
         const animal = item.animal || item;
-        const animalId = animal._id || animal.id;
-        const userVote = this.userVotes[animalId] || 0;
-        const isLoggedIn = Auth.isLoggedIn();
-
-        // Trend data (from API or calculated)
-        const trend = item.trend || 0;
-        const trendClass = trend > 0 ? 'rising' : trend < 0 ? 'falling' : 'stable';
-        const trendIcon = trend > 0 ? 'fa-arrow-up' : trend < 0 ? 'fa-arrow-down' : 'fa-minus';
-        const trendText = trend > 0 ? `+${trend}` : trend < 0 ? `${trend}` : '=';
-        
-        // Add trend glow to card
-        if (trend > 0) card.classList.add('trend-rising');
-        else if (trend < 0) card.classList.add('trend-falling');
-
-        // Power score (from API)
-        const powerScore = item.powerScore || 50;
-        
-        // Win rate (from tournament battles)
-        const winRate = item.winRate || 50;
+        const winRate = item.winRate || 0;
         const winRateClass = winRate >= 60 ? '' : winRate >= 40 ? 'low' : 'poor';
         const totalFights = item.totalFights || 0;
-        const winRateLabel = totalFights > 0 ? `${winRate}%` : '--';
+        const upvotes = item.upvotes || 0;
+        const downvotes = item.downvotes || 0;
 
-        card.innerHTML = `
-            <div class="ranking-card-top">
-                <div class="rank-display">
-                    <div class="rank-number">#${rank}</div>
-                    <div class="rank-trend ${trendClass}">
-                        <i class="fas ${trendIcon}"></i>
-                        <span>${trendText}</span>
-                    </div>
-                </div>
-                <img src="${animal.image}" alt="${animal.name}" class="ranking-animal-img" 
-                    onerror="this.src='https://via.placeholder.com/70x70?text=?'">
-                <div class="ranking-animal-info">
-                    <div class="ranking-animal-name">${animal.name}</div>
-                    <div class="ranking-animal-meta">
-                        <div class="win-rate">
-                            <i class="fas fa-trophy"></i>
-                            ${totalFights > 0 
-                                ? `<span class="win-rate-value ${winRateClass}">${winRate}%</span> win rate <span class="win-rate-fights">(${totalFights} battles)</span>`
-                                : '<span class="win-rate-value">No battles yet</span>'}
-                        </div>
-                    </div>
-                </div>
+        row.innerHTML = `
+            <div class="row-rank">
+                <span class="row-rank-num">#${rank}</span>
+                ${rank <= 3 ? '<i class="fas fa-crown row-crown"></i>' : ''}
             </div>
-            <div class="ranking-card-actions">
-                <div class="vote-buttons">
-                    <button class="vote-btn upvote ${userVote === 1 ? 'active' : ''}" 
-                        data-animal-id="${animalId}" data-animal-name="${animal.name}" data-value="1"
-                        ${!isLoggedIn ? 'disabled' : ''} title="Should be ranked higher">
-                        <i class="fas fa-arrow-up"></i>
-                    </button>
-                    <div class="vote-counts">
-                        <span class="vote-count up">+${item.upvotes || 0}</span>
-                        <span class="vote-count down">-${item.downvotes || 0}</span>
-                    </div>
-                    <button class="vote-btn downvote ${userVote === -1 ? 'active' : ''}" 
-                        data-animal-id="${animalId}" data-animal-name="${animal.name}" data-value="-1"
-                        ${!isLoggedIn ? 'disabled' : ''} title="Overrated">
-                        <i class="fas fa-arrow-down"></i>
-                    </button>
-                </div>
-                <div class="ranking-card-btns">
-                    <button class="view-stats-ranking-btn" data-animal-name="${animal.name}">
-                        <i class="fas fa-chart-bar"></i>
-                        <span>Stats</span>
-                    </button>
-                    <button class="comments-btn" data-animal-id="${animalId}" data-animal-name="${animal.name}" 
-                        data-animal-image="${animal.image}">
-                        <i class="fas fa-comment"></i>
-                        <span class="count">${item.commentCount || 0}</span>
-                    </button>
-                </div>
+            <div class="row-animal">
+                <img src="${animal.image}" alt="${animal.name}" class="row-animal-img" 
+                    onerror="this.src='https://via.placeholder.com/40x40?text=?'">
+                <span class="row-animal-name">${animal.name}</span>
+            </div>
+            <div class="row-winrate">
+                ${totalFights > 0 
+                    ? `<span class="row-winrate-value ${winRateClass}">${winRate}%</span><span class="row-battles"> (${totalFights})</span>`
+                    : '<span class="row-winrate-value">--</span>'}
+            </div>
+            <div class="row-votes">
+                <span class="row-vote-up"><i class="fas fa-arrow-up"></i> ${upvotes}</span>
+                <span class="row-vote-down"><i class="fas fa-arrow-down"></i> ${downvotes}</span>
             </div>
         `;
 
-        // Bind vote buttons
-        card.querySelectorAll('.vote-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => this.handleVote(e));
+        // Click to select
+        row.addEventListener('click', () => this.selectRankingRow(index));
+
+        return row;
+    }
+    
+    selectRankingRow(index) {
+        // Remove previous selection
+        this.dom.rankingsList.querySelectorAll('.ranking-row').forEach(r => r.classList.remove('selected'));
+        
+        // Select new row
+        const row = this.dom.rankingsList.querySelector(`.ranking-row[data-index="${index}"]`);
+        if (row) row.classList.add('selected');
+        
+        this.selectedRankIndex = index;
+        const item = this.rankings[index];
+        if (item) {
+            this.updateDetailPanel(item, index + 1);
+        }
+    }
+    
+    updateDetailPanel(item, rank) {
+        const animal = item.animal || item;
+        this.currentAnimal = animal;
+        
+        // Show content, hide empty state
+        if (this.dom.detailEmpty) this.dom.detailEmpty.style.display = 'none';
+        if (this.dom.detailContent) this.dom.detailContent.style.display = 'flex';
+        
+        // Header
+        if (this.dom.detailRankBadge) this.dom.detailRankBadge.textContent = `#${rank}`;
+        if (this.dom.detailAnimalName) this.dom.detailAnimalName.textContent = animal.name;
+        if (this.dom.detailScientific) this.dom.detailScientific.textContent = animal.scientificName || '';
+        
+        // Grade badge
+        if (this.dom.detailGradeBadge) {
+            const grade = this.calculateGrade(animal);
+            this.dom.detailGradeBadge.textContent = grade;
+            this.dom.detailGradeBadge.className = 'detail-grade-badge tier-' + grade.toLowerCase().replace('+', 'plus').replace('-', 'minus');
+        }
+        
+        // Portrait with animation
+        if (this.dom.detailPortrait) {
+            this.dom.detailPortrait.style.opacity = '0';
+            this.dom.detailPortrait.src = animal.image;
+            this.dom.detailPortrait.onerror = () => { this.dom.detailPortrait.src = 'https://via.placeholder.com/120x120?text=?'; };
+            setTimeout(() => {
+                this.dom.detailPortrait.style.opacity = '1';
+                this.dom.detailPortrait.style.transition = 'opacity 0.3s ease';
+            }, 50);
+        }
+        
+        // Stats with animation
+        const stats = [
+            { key: 'attack', bar: this.dom.detailAtkBar, val: this.dom.detailAtkVal },
+            { key: 'defense', bar: this.dom.detailDefBar, val: this.dom.detailDefVal },
+            { key: 'agility', bar: this.dom.detailAgiBar, val: this.dom.detailAgiVal },
+            { key: 'stamina', bar: this.dom.detailStaBar, val: this.dom.detailStaVal },
+            { key: 'intelligence', bar: this.dom.detailIntBar, val: this.dom.detailIntVal },
+            { key: 'special', bar: this.dom.detailSpeBar, val: this.dom.detailSpeVal }
+        ];
+        
+        stats.forEach(({ key, bar, val }) => {
+            const value = Math.round(animal[key] || 0);
+            if (bar) {
+                bar.style.width = '0%';
+                setTimeout(() => { bar.style.width = `${value}%`; }, 50);
+            }
+            if (val) val.textContent = value;
         });
+        
+        // Battle stats
+        if (this.dom.detailWinrate) {
+            const winRate = item.winRate || 0;
+            const totalFights = item.totalFights || 0;
+            this.dom.detailWinrate.textContent = totalFights > 0 ? `${winRate}%` : '--';
+        }
+        if (this.dom.detailBattles) this.dom.detailBattles.textContent = item.totalFights || 0;
+        if (this.dom.detailScore) this.dom.detailScore.textContent = item.netScore || 0;
+        
+        // Votes
+        const animalId = animal._id || animal.id;
+        const userVote = this.userVotes[animalId] || 0;
+        
+        if (this.dom.detailUpvotes) this.dom.detailUpvotes.textContent = item.upvotes || 0;
+        if (this.dom.detailDownvotes) this.dom.detailDownvotes.textContent = item.downvotes || 0;
+        
+        if (this.dom.detailUpvoteBtn) {
+            this.dom.detailUpvoteBtn.classList.toggle('active', userVote === 1);
+            this.dom.detailUpvoteBtn.disabled = !Auth.isLoggedIn();
+            this.dom.detailUpvoteBtn.dataset.animalId = animalId;
+            this.dom.detailUpvoteBtn.dataset.animalName = animal.name;
+        }
+        if (this.dom.detailDownvoteBtn) {
+            this.dom.detailDownvoteBtn.classList.toggle('active', userVote === -1);
+            this.dom.detailDownvoteBtn.disabled = !Auth.isLoggedIn();
+            this.dom.detailDownvoteBtn.dataset.animalId = animalId;
+            this.dom.detailDownvoteBtn.dataset.animalName = animal.name;
+        }
+        
+        // Comment count
+        if (this.dom.detailCommentCount) this.dom.detailCommentCount.textContent = item.commentCount || 0;
+    }
+    
+    calculateGrade(animal) {
+        const total = (animal.attack || 0) + (animal.defense || 0) + (animal.agility || 0) + 
+                      (animal.stamina || 0) + (animal.intelligence || 0) + (animal.special || 0);
+        const avg = total / 6;
+        
+        if (avg >= 90) return 'S';
+        if (avg >= 80) return 'A';
+        if (avg >= 70) return 'B';
+        if (avg >= 60) return 'C';
+        if (avg >= 50) return 'D';
+        return 'F';
+    }
+    
+    async handleDetailVote(value) {
+        const animalId = this.dom.detailUpvoteBtn?.dataset.animalId;
+        const animalName = this.dom.detailUpvoteBtn?.dataset.animalName;
+        const voteType = value === 1 ? 'up' : 'down';
 
-        // Bind View Stats button
-        card.querySelector('.view-stats-ranking-btn').addEventListener('click', (e) => this.viewAnimalStats(e));
+        if (!Auth.isLoggedIn()) {
+            Auth.showToast('Please log in to vote!');
+            Auth.showModal('login');
+            return;
+        }
 
-        // Bind comments button
-        card.querySelector('.comments-btn').addEventListener('click', (e) => this.openCommentsModal(e));
+        try {
+            const response = await fetch('/api/votes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                },
+                body: JSON.stringify({ animalId, animalName, voteType })
+            });
 
-        return card;
+            const result = await response.json();
+
+            if (result.success) {
+                // Update local state
+                if (result.action === 'removed') {
+                    delete this.userVotes[animalId];
+                } else {
+                    this.userVotes[animalId] = result.data.userVote === 'up' ? 1 : -1;
+                }
+
+                // Update detail panel buttons
+                const userVote = this.userVotes[animalId] || 0;
+                this.dom.detailUpvoteBtn?.classList.toggle('active', userVote === 1);
+                this.dom.detailDownvoteBtn?.classList.toggle('active', userVote === -1);
+                
+                // Update counts
+                if (this.dom.detailUpvotes && result.data.upvotes !== undefined) {
+                    this.dom.detailUpvotes.textContent = result.data.upvotes;
+                }
+                if (this.dom.detailDownvotes && result.data.downvotes !== undefined) {
+                    this.dom.detailDownvotes.textContent = result.data.downvotes;
+                }
+                
+                // Update the row in the list
+                this.updateRowVotes(this.selectedRankIndex, result.data.upvotes, result.data.downvotes);
+
+                // Show XP popup if vote was added
+                if (result.action !== 'removed') {
+                    this.showXpPopup(5, 1);
+                }
+            } else {
+                Auth.showToast(result.error || 'Failed to vote');
+            }
+        } catch (error) {
+            console.error('Vote error:', error);
+            Auth.showToast('Error voting. Please try again.');
+        }
+    }
+    
+    updateRowVotes(index, upvotes, downvotes) {
+        const row = this.dom.rankingsList.querySelector(`.ranking-row[data-index="${index}"]`);
+        if (row) {
+            const upEl = row.querySelector('.row-vote-up');
+            const downEl = row.querySelector('.row-vote-down');
+            if (upEl) upEl.innerHTML = `<i class="fas fa-arrow-up"></i> ${upvotes}`;
+            if (downEl) downEl.innerHTML = `<i class="fas fa-arrow-down"></i> ${downvotes}`;
+        }
     }
 
+    // Keep old handleVote for backward compatibility with old card format
     async handleVote(e) {
         const btn = e.currentTarget;
         const animalId = btn.dataset.animalId;

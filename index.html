@@ -472,31 +472,145 @@
         
         <!-- Rankings View (Power Leaderboard) -->
         <div id="rankings-view" class="view-container">
-            <div class="rankings-container">
-                <!-- Rankings Header -->
-                <div class="rankings-header">
-                    <div class="rankings-title-section">
+            <div class="rankings-console">
+                <!-- Rankings Header Bar -->
+                <div class="rankings-header-bar">
+                    <div class="rankings-title-area">
                         <h2 class="rankings-title"><i class="fas fa-crown"></i> Power Rankings</h2>
-                        <p class="rankings-subtitle">Official community power rankings. Updated from tournaments, matchup votes, and rating votes.</p>
+                        <p class="rankings-subtitle">Community power rankings from tournaments & votes</p>
+                    </div>
+                    <div class="rankings-header-controls">
+                        <input type="text" id="rankings-search" placeholder="Search animals..." class="rankings-search-box" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other">
+                        <button class="tournament-launch-btn" id="open-tournament-btn">
+                            <i class="fas fa-trophy"></i> <span>Tournament</span>
+                        </button>
                     </div>
                     <div class="rankings-login-prompt" id="rankings-login-prompt" style="display: none;">
-                        <i class="fas fa-info-circle"></i> <span>Log in to vote and earn XP!</span>
+                        <i class="fas fa-info-circle"></i> <span>Log in to vote!</span>
                     </div>
                 </div>
                 
-                <!-- Rankings Search (sort removed) -->
-                <div class="rankings-controls">
-                    <input type="text" id="rankings-search" placeholder="Search animals..." class="search-box" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other">
-                    <button class="tournament-btn" id="open-tournament-btn">
-                        <i class="fas fa-trophy"></i> Tournament
-                    </button>
-                </div>
-                
-                <!-- Rankings List -->
-                <div class="rankings-list" id="rankings-list">
-                    <!-- Rankings will be populated by JavaScript -->
-                    <div class="rankings-loading">
-                        <i class="fas fa-spinner fa-spin"></i> Loading rankings...
+                <!-- Two Column Layout -->
+                <div class="rankings-main-content">
+                    <!-- Left Column: Rankings List -->
+                    <div class="rankings-list-column">
+                        <div class="rankings-list-header">
+                            <span class="list-header-rank">Rank</span>
+                            <span class="list-header-animal">Animal</span>
+                            <span class="list-header-stats">Win Rate</span>
+                            <span class="list-header-votes">Votes</span>
+                        </div>
+                        <div class="rankings-list" id="rankings-list">
+                            <div class="rankings-loading">
+                                <i class="fas fa-spinner fa-spin"></i> Loading rankings...
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Right Column: Selected Animal Panel -->
+                    <div class="rankings-detail-panel" id="rankings-detail-panel">
+                        <div class="detail-panel-empty" id="detail-panel-empty">
+                            <i class="fas fa-mouse-pointer"></i>
+                            <p>Select an animal from the list to view details</p>
+                        </div>
+                        <div class="detail-panel-content" id="detail-panel-content" style="display: none;">
+                            <!-- Header with name and rank -->
+                            <div class="detail-header">
+                                <div class="detail-rank-badge" id="detail-rank-badge">#1</div>
+                                <div class="detail-names">
+                                    <h3 class="detail-animal-name" id="detail-animal-name">Animal Name</h3>
+                                    <span class="detail-scientific" id="detail-scientific">Scientific name</span>
+                                </div>
+                                <div class="detail-grade-badge" id="detail-grade-badge">S</div>
+                            </div>
+                            
+                            <!-- Portrait with glow -->
+                            <div class="detail-portrait-area">
+                                <div class="detail-portrait-glow"></div>
+                                <img src="" alt="" class="detail-portrait" id="detail-portrait">
+                            </div>
+                            
+                            <!-- Stats summary -->
+                            <div class="detail-stats-grid">
+                                <div class="detail-stat" data-stat="attack">
+                                    <i class="fas fa-fist-raised"></i>
+                                    <span class="stat-label">ATK</span>
+                                    <div class="stat-bar-mini"><div class="bar-fill" id="detail-atk-bar"></div></div>
+                                    <span class="stat-value" id="detail-atk-val">0</span>
+                                </div>
+                                <div class="detail-stat" data-stat="defense">
+                                    <i class="fas fa-shield-alt"></i>
+                                    <span class="stat-label">DEF</span>
+                                    <div class="stat-bar-mini"><div class="bar-fill" id="detail-def-bar"></div></div>
+                                    <span class="stat-value" id="detail-def-val">0</span>
+                                </div>
+                                <div class="detail-stat" data-stat="agility">
+                                    <i class="fas fa-wind"></i>
+                                    <span class="stat-label">AGI</span>
+                                    <div class="stat-bar-mini"><div class="bar-fill" id="detail-agi-bar"></div></div>
+                                    <span class="stat-value" id="detail-agi-val">0</span>
+                                </div>
+                                <div class="detail-stat" data-stat="stamina">
+                                    <i class="fas fa-heart"></i>
+                                    <span class="stat-label">STA</span>
+                                    <div class="stat-bar-mini"><div class="bar-fill" id="detail-sta-bar"></div></div>
+                                    <span class="stat-value" id="detail-sta-val">0</span>
+                                </div>
+                                <div class="detail-stat" data-stat="intelligence">
+                                    <i class="fas fa-brain"></i>
+                                    <span class="stat-label">INT</span>
+                                    <div class="stat-bar-mini"><div class="bar-fill" id="detail-int-bar"></div></div>
+                                    <span class="stat-value" id="detail-int-val">0</span>
+                                </div>
+                                <div class="detail-stat" data-stat="special">
+                                    <i class="fas fa-bolt"></i>
+                                    <span class="stat-label">SPE</span>
+                                    <div class="stat-bar-mini"><div class="bar-fill" id="detail-spe-bar"></div></div>
+                                    <span class="stat-value" id="detail-spe-val">0</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Battle stats -->
+                            <div class="detail-battle-stats">
+                                <div class="battle-stat">
+                                    <i class="fas fa-trophy"></i>
+                                    <span class="battle-stat-value" id="detail-winrate">--</span>
+                                    <span class="battle-stat-label">Win Rate</span>
+                                </div>
+                                <div class="battle-stat">
+                                    <i class="fas fa-gamepad"></i>
+                                    <span class="battle-stat-value" id="detail-battles">0</span>
+                                    <span class="battle-stat-label">Battles</span>
+                                </div>
+                                <div class="battle-stat">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span class="battle-stat-value" id="detail-score">0</span>
+                                    <span class="battle-stat-label">Net Score</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Vote buttons -->
+                            <div class="detail-vote-section">
+                                <button class="detail-vote-btn upvote" id="detail-upvote" title="Should be ranked higher">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span class="vote-count" id="detail-upvotes">0</span>
+                                </button>
+                                <button class="detail-vote-btn downvote" id="detail-downvote" title="Overrated">
+                                    <i class="fas fa-arrow-down"></i>
+                                    <span class="vote-count" id="detail-downvotes">0</span>
+                                </button>
+                            </div>
+                            
+                            <!-- Action buttons -->
+                            <div class="detail-actions">
+                                <button class="detail-action-btn primary" id="detail-view-stats">
+                                    <i class="fas fa-chart-bar"></i> View Full Stats
+                                </button>
+                                <button class="detail-action-btn" id="detail-comments">
+                                    <i class="fas fa-comment"></i> Comments <span id="detail-comment-count">0</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
