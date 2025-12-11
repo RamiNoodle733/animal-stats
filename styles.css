@@ -11276,6 +11276,79 @@ body {
     color: rgba(255, 107, 0, 0.7);
 }
 
+/* Fighter Extra Info (Medals & Votes) */
+.fighter-extra-v3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    margin-bottom: 6px;
+}
+
+.fighter-medals-v3 {
+    display: flex;
+    gap: 6px;
+}
+
+.mini-medal {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 0.6rem;
+    font-weight: 600;
+}
+
+.mini-medal.gold {
+    background: rgba(255, 215, 0, 0.15);
+    color: #ffd700;
+}
+
+.mini-medal.silver {
+    background: rgba(192, 192, 192, 0.15);
+    color: #c0c0c0;
+}
+
+.mini-medal.bronze {
+    background: rgba(205, 127, 50, 0.15);
+    color: #cd7f32;
+}
+
+.mini-medal i {
+    font-size: 0.55rem;
+}
+
+.fighter-votes-v3 {
+    display: flex;
+    gap: 6px;
+}
+
+.fighter-votes-v3 .vote-up,
+.fighter-votes-v3 .vote-down {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    font-size: 0.6rem;
+    padding: 2px 5px;
+    border-radius: 3px;
+}
+
+.fighter-votes-v3 .vote-up {
+    background: rgba(0, 255, 136, 0.1);
+    color: #00ff88;
+}
+
+.fighter-votes-v3 .vote-down {
+    background: rgba(255, 100, 100, 0.1);
+    color: #ff6666;
+}
+
+.fighter-votes-v3 i {
+    font-size: 0.55rem;
+}
+
 /* Click Zone */
 .fighter-click-zone {
     display: flex;
@@ -11901,43 +11974,43 @@ body {
 .tournament-setup-body {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 25px;
-    margin-bottom: 20px;
+    gap: 12px;
+    margin-bottom: 10px;
 }
 
 .setup-section {
     background: rgba(0, 0, 0, 0.3);
-    border-radius: 12px;
-    padding: 18px;
+    border-radius: 8px;
+    padding: 12px;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .setup-section h3 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
+    font-size: 0.85rem;
     letter-spacing: 2px;
     color: #00d4ff;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .step-num {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     background: linear-gradient(135deg, #00d4ff, #0099cc);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: #000;
     font-weight: bold;
 }
 
 .optional-label {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     color: rgba(255, 255, 255, 0.4);
     font-family: 'Roboto', sans-serif;
     letter-spacing: 0;
@@ -11947,14 +12020,14 @@ body {
 .tournament-setup-body .bracket-options {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: 6px;
 }
 
 .tournament-setup-body .bracket-option {
-    padding: 15px;
+    padding: 8px;
     background: rgba(0, 212, 255, 0.08);
     border: 2px solid rgba(0, 212, 255, 0.3);
-    border-radius: 10px;
+    border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s ease;
     text-align: center;
@@ -11968,12 +12041,12 @@ body {
 .tournament-setup-body .bracket-option.selected {
     border-color: #ffd700;
     background: rgba(255, 215, 0, 0.15);
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
 }
 
 .tournament-setup-body .bracket-option .bracket-size {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
+    font-size: 1.4rem;
     color: #fff;
     line-height: 1;
     display: block;
@@ -11984,30 +12057,32 @@ body {
 }
 
 .tournament-setup-body .bracket-option .bracket-info {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     color: rgba(255, 255, 255, 0.5);
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
 /* Type Filter Options */
 .type-filter-options {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 5px;
+    max-height: 140px;
+    overflow-y: auto;
 }
 
 .type-filter-btn {
-    padding: 8px 14px;
+    padding: 4px 8px;
     background: rgba(0, 212, 255, 0.06);
     border: 1px solid rgba(0, 212, 255, 0.2);
-    border-radius: 20px;
+    border-radius: 12px;
     color: rgba(255, 255, 255, 0.6);
-    font-size: 0.8rem;
+    font-size: 0.65rem;
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
 }
 
 .type-filter-btn:hover {
@@ -12031,29 +12106,30 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 18px 20px;
+    padding: 10px 14px;
     background: linear-gradient(90deg, rgba(0, 212, 255, 0.08) 0%, rgba(255, 215, 0, 0.08) 100%);
-    border-radius: 12px;
+    border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 15px;
+    margin-bottom: 8px;
 }
 
 .setup-summary {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
     color: rgba(255, 255, 255, 0.7);
-    font-size: 0.9rem;
+    font-size: 0.75rem;
 }
 
 .summary-item {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 4px;
 }
 
 .summary-item i {
     color: #00d4ff;
+    font-size: 0.7rem;
 }
 
 .summary-divider {
@@ -12089,8 +12165,9 @@ body {
     border: 3px solid rgba(255, 45, 45, 0.4);
     border-left: 5px solid #ff2d2d;
     border-radius: 4px;
-    padding: 30px 40px;
-    max-width: 750px;
+    padding: 16px 20px;
+    max-width: 580px;
+    max-height: calc(100vh - 100px);
     width: 100%;
     position: relative;
     box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.5), 0 0 60px rgba(255, 45, 45, 0.15);
