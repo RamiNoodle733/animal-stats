@@ -3148,7 +3148,9 @@ class TournamentManager {
         const stats = ['attack', 'defense', 'agility', 'stamina', 'intelligence', 'special'];
         
         stats.forEach(stat => {
-            const row = document.querySelector(`.stat-row[data-stat="${stat}"]`);
+            // Try v2 selector first, fall back to v1
+            let row = document.querySelector(`.stat-row-v2[data-stat="${stat}"]`);
+            if (!row) row = document.querySelector(`.stat-row[data-stat="${stat}"]`);
             if (!row) return;
             
             const val1 = Math.round(animal1[stat] || 0);

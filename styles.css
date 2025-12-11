@@ -8043,7 +8043,10 @@ body {
     font-size: 1.2rem;
 }
 
-/* Tournament Modal */
+/* ============================================
+   TOURNAMENT MODAL - Compact Console Design
+   ============================================ */
+
 .tournament-modal {
     position: fixed;
     top: 0;
@@ -8053,470 +8056,671 @@ body {
     background: rgba(0, 0, 0, 0.95);
     z-index: 2000;
     display: none;
-    overflow-y: auto;
+    overflow: hidden;
 }
 
 .tournament-modal.show {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ---- Setup Screen ---- */
+.tournament-setup {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
     justify-content: center;
     padding: 20px;
 }
 
-/* Setup Screen */
-.tournament-setup {
-    width: 100%;
-    max-height: 100%;
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    padding: 10px;
-    overflow-y: auto;
-}
-
+.tournament-setup-compact,
 .tournament-setup-content {
     background: linear-gradient(180deg, rgba(10, 14, 26, 0.98) 0%, rgba(5, 8, 16, 0.98) 100%);
     border: 2px solid rgba(255, 215, 0, 0.5);
     border-radius: 16px;
-    padding: 25px 30px;
-    max-width: 520px;
+    padding: 30px 40px;
+    max-width: 700px;
     width: 100%;
     position: relative;
-    box-shadow: 0 0 40px rgba(255, 215, 0, 0.2);
-    margin: auto;
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.2);
 }
 
+.setup-close-btn,
 .tournament-close-btn {
     position: absolute;
     top: 15px;
     right: 20px;
     background: none;
     border: none;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 2rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.8rem;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
+.setup-close-btn:hover,
 .tournament-close-btn:hover {
     color: #ff6666;
     transform: scale(1.1);
 }
 
+.setup-header,
 .tournament-setup-header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
-.tournament-setup-header i {
-    font-size: 2.2rem;
+.setup-header i.fa-trophy,
+.tournament-setup-header i.fa-crown,
+.tournament-logo i {
+    font-size: 2.5rem;
     color: #ffd700;
-    filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.8));
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.8));
     margin-bottom: 10px;
     display: block;
+    animation: trophyFloat 2s ease-in-out infinite;
 }
 
+@keyframes trophyFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+
+.setup-header h2,
 .tournament-setup-header h2 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 3px;
+    font-size: 2rem;
+    letter-spacing: 4px;
     background: linear-gradient(135deg, #ffd700, #ff8c00);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 8px;
 }
 
-.tournament-setup-header p {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.95rem;
-    line-height: 1.5;
+/* Bracket Size Selection - Horizontal */
+.bracket-row {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 25px;
 }
 
-.tournament-options h3 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 2px;
-    color: #00d4ff;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.bracket-options {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
-
-.bracket-option {
+.bracket-btn {
+    flex: 1;
+    max-width: 120px;
+    padding: 18px 12px;
     background: rgba(0, 212, 255, 0.08);
     border: 2px solid rgba(0, 212, 255, 0.3);
     border-radius: 12px;
-    padding: 20px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
+    transition: all 0.2s ease;
+    text-align: center;
 }
 
-.bracket-option:hover {
-    border-color: #00d4ff;
-    background: rgba(0, 212, 255, 0.15);
-    transform: translateY(-3px);
-    box-shadow: 0 5px 20px rgba(0, 212, 255, 0.3);
+.bracket-btn:hover {
+    border-color: rgba(0, 212, 255, 0.6);
+    background: rgba(0, 212, 255, 0.12);
+    transform: translateY(-2px);
 }
 
-.bracket-option.featured {
+.bracket-btn.selected {
     border-color: #ffd700;
-    background: rgba(255, 215, 0, 0.1);
+    background: rgba(255, 215, 0, 0.15);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.3);
 }
 
-.bracket-option.featured:hover {
-    background: rgba(255, 215, 0, 0.2);
-    box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
-}
-
-.bracket-option .bracket-size {
+.bracket-btn .size {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     color: #fff;
     line-height: 1;
+    display: block;
 }
 
-.bracket-option.featured .bracket-size {
+.bracket-btn.selected .size {
     color: #ffd700;
 }
 
-.bracket-option .bracket-label {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.6);
+.bracket-btn .label {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
     letter-spacing: 1px;
-}
-
-.bracket-option .bracket-matches {
-    font-size: 0.8rem;
-    color: #00d4ff;
-    margin-top: 5px;
-}
-
-.bracket-option.featured .bracket-matches {
-    color: #ffd700;
-}
-
-.tournament-login-note {
-    text-align: center;
-    margin-top: 25px;
-    padding: 12px 20px;
-    background: rgba(255, 107, 0, 0.15);
-    border: 1px solid rgba(255, 107, 0, 0.3);
-    border-radius: 8px;
-    color: #ff9944;
-    font-size: 0.85rem;
-}
-
-.tournament-login-note i {
-    margin-right: 8px;
-}
-
-/* Battle Screen */
-.tournament-battle {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    background: radial-gradient(ellipse at center, rgba(0, 20, 40, 0.95) 0%, rgba(0, 0, 0, 0.98) 100%);
-}
-
-.tournament-battle-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 25px;
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 12px;
-    margin-bottom: 20px;
-}
-
-.tournament-progress {
-    flex: 1;
-    max-width: 400px;
-}
-
-.progress-text {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    color: #ffd700;
+    margin-top: 4px;
     display: block;
-    margin-bottom: 8px;
 }
 
-.progress-bar-bg {
-    height: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 6px;
+/* Type Filter Grid */
+.type-section {
+    margin-bottom: 25px;
 }
 
-.progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #ffd700, #ff8c00);
-    border-radius: 4px;
-    transition: width 0.5s ease;
-}
-
-.match-text {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.tournament-quit-btn {
-    padding: 10px 20px;
-    background: rgba(255, 60, 60, 0.2);
-    border: 2px solid rgba(255, 60, 60, 0.5);
-    border-radius: 8px;
-    color: #ff6666;
+.type-section-label {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 0.95rem;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.tournament-quit-btn:hover {
-    background: rgba(255, 60, 60, 0.3);
-    border-color: #ff6666;
-}
-
-.tournament-question {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.tournament-question h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 4px;
-    color: #fff;
-    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-}
-
-.tournament-fighters {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 30px;
-    flex: 1;
-    min-height: 0;
-}
-
-.tournament-fighter {
-    flex: 1;
-    max-width: 350px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.tournament-fighter:hover {
-    transform: scale(1.03);
-}
-
-.tournament-fighter:hover .fighter-card {
-    border-color: #ffd700;
-    box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
-}
-
-.fighter-card {
-    background: rgba(0, 212, 255, 0.08);
-    border: 3px solid rgba(0, 212, 255, 0.4);
-    border-radius: 16px;
-    overflow: hidden;
-    transition: all 0.3s ease;
-}
-
-.fighter-card .fighter-img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-bottom: 2px solid rgba(0, 212, 255, 0.3);
-}
-
-.fighter-card .fighter-info {
-    padding: 20px;
-    text-align: center;
-}
-
-.fighter-card .fighter-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
     letter-spacing: 2px;
-    color: #fff;
+    color: rgba(255, 255, 255, 0.6);
     margin-bottom: 12px;
-}
-
-/* Fighter Stats Grid - 6 stats in 2 rows */
-.fighter-stats-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-bottom: 15px;
-}
-
-.fighter-stat {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 4px;
-    padding: 6px 8px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 6px;
-    font-size: 0.85rem;
-    color: #fff;
+    gap: 8px;
 }
 
-.fighter-stat i {
-    color: #00d4ff;
-    font-size: 0.75rem;
-}
-
-.fighter-stat .stat-label {
-    color: rgba(255, 255, 255, 0.5);
+.type-section-label span {
     font-size: 0.7rem;
-    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.35);
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0;
 }
 
-/* Fighter Comments Button */
-.fighter-comments-btn {
-    padding: 8px 16px;
-    background: rgba(0, 212, 255, 0.15);
-    border: 1px solid rgba(0, 212, 255, 0.4);
-    border-radius: 6px;
-    color: #00d4ff;
-    font-size: 0.85rem;
+.type-filter-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.type-chip {
+    padding: 8px 14px;
+    background: rgba(0, 212, 255, 0.06);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 20px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.8rem;
     cursor: pointer;
     transition: all 0.2s ease;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 6px;
 }
 
-.fighter-comments-btn:hover {
-    background: rgba(0, 212, 255, 0.25);
+.type-chip:hover {
+    border-color: rgba(0, 212, 255, 0.5);
+    background: rgba(0, 212, 255, 0.1);
+    color: #fff;
+}
+
+.type-chip.active {
     border-color: #00d4ff;
-    transform: translateY(-2px);
+    background: rgba(0, 212, 255, 0.2);
+    color: #00d4ff;
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.25);
 }
 
-.fighter-comments-btn i {
-    font-size: 0.8rem;
+.type-chip i {
+    font-size: 0.85rem;
 }
 
-.fighter-card .fighter-stats {
+/* Preview Summary Bar */
+.preview-bar {
     display: flex;
-    justify-content: center;
-    gap: 20px;
-    color: rgba(255, 255, 255, 0.7);
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.08) 0%, rgba(255, 215, 0, 0.08) 100%);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 20px;
+}
+
+.preview-stats {
+    display: flex;
+    gap: 25px;
+}
+
+.preview-stat {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.8);
     font-size: 0.9rem;
 }
 
-.fighter-card .fighter-stats i {
+.preview-stat i {
     color: #00d4ff;
-    margin-right: 4px;
 }
 
-.tournament-vs {
+.preview-stat strong {
+    color: #fff;
+}
+
+.start-btn {
+    padding: 12px 30px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    border: none;
+    border-radius: 8px;
+    color: #000;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+}
+
+.start-btn:hover:not(:disabled) {
+    transform: scale(1.03);
+    box-shadow: 0 6px 30px rgba(255, 215, 0, 0.5);
+}
+
+.start-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: linear-gradient(135deg, #666, #444);
+    box-shadow: none;
+}
+
+/* ---- Battle Screen ---- */
+.tournament-battle {
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    background: radial-gradient(ellipse at center, rgba(10, 20, 40, 0.98) 0%, rgba(0, 0, 0, 0.99) 100%);
+    overflow: hidden;
+}
+
+.tournament-battle.active {
+    display: flex;
+}
+
+/* Battle Header */
+.battle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 25px;
+    background: rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
     flex-shrink: 0;
 }
 
-.tournament-vs span {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 3rem;
-    letter-spacing: 4px;
-    color: #ff6b00;
-    text-shadow: 0 0 30px rgba(255, 107, 0, 0.8);
-    animation: vsPulse 1.5s ease-in-out infinite;
-}
-
-@keyframes vsPulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.1); opacity: 0.8; }
-}
-
-/* Mini Bracket Preview */
-.tournament-bracket-preview {
-    margin-top: 20px;
-    padding: 15px;
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.bracket-mini {
+.battle-progress {
     display: flex;
-    justify-content: center;
-    gap: 8px;
-    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
 }
 
-.bracket-mini-item {
-    padding: 6px 12px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.6);
-    white-space: nowrap;
-}
-
-.bracket-mini-item.winner {
-    background: rgba(0, 212, 255, 0.2);
-    color: #00d4ff;
-    border: 1px solid rgba(0, 212, 255, 0.4);
-}
-
-.bracket-mini-item.current {
-    background: rgba(255, 215, 0, 0.2);
+.round-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
     color: #ffd700;
-    border: 1px solid rgba(255, 215, 0, 0.5);
-    animation: currentPulse 1s ease-in-out infinite;
+    padding: 4px 12px;
+    background: rgba(255, 215, 0, 0.15);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 6px;
 }
 
-@keyframes currentPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
+.progress-track {
+    width: 120px;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
 }
 
-/* Results Screen */
-.tournament-results {
-    width: 100%;
+.progress-fill {
     height: 100%;
+    background: linear-gradient(90deg, #00d4ff, #ffd700);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+}
+
+.match-counter {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.battle-question {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+}
+
+.quit-battle-btn,
+.quit-btn {
+    padding: 8px 16px;
+    background: rgba(255, 100, 100, 0.15);
+    border: 1px solid rgba(255, 100, 100, 0.3);
+    color: #ff6666;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+}
+
+.quit-battle-btn:hover,
+.quit-btn:hover {
+    background: rgba(255, 100, 100, 0.3);
+    border-color: #ff6666;
+}
+
+/* Battle Arena - Full Screen 3-Column */
+.battle-arena-full {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 20px;
+    padding: 20px 30px;
+    align-items: stretch;
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+    min-height: 0;
+}
+
+/* Fighter Cards - Full Detail */
+.fighter-full-card {
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.02);
+    border: 2px solid rgba(0, 212, 255, 0.3);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.fighter-full-card:hover {
+    transform: scale(1.02);
+    border-color: #ffd700;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+}
+
+.fighter-full-card.selected {
+    border-color: #00ff88;
+    box-shadow: 0 0 50px rgba(0, 255, 136, 0.5);
+}
+
+.fighter-portrait {
+    height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: radial-gradient(circle at center, rgba(0, 212, 255, 0.08) 0%, transparent 70%);
+    position: relative;
+    overflow: hidden;
+}
+
+.fighter-portrait img {
+    max-height: 180px;
+    max-width: 90%;
+    object-fit: contain;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.7));
+    transition: transform 0.3s ease;
+}
+
+.fighter-full-card:hover .fighter-portrait img {
+    transform: scale(1.08);
+}
+
+.fighter-body {
     padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.fighter-identity {
+    text-align: center;
+}
+
+.fighter-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.fighter-badges {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.rank-badge {
+    padding: 4px 12px;
+    background: rgba(255, 215, 0, 0.15);
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    border-radius: 6px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.95rem;
+    color: #ffd700;
+    letter-spacing: 1px;
+}
+
+.winrate-badge {
+    padding: 4px 12px;
+    background: rgba(0, 212, 255, 0.15);
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: #00d4ff;
+}
+
+/* Fighter Mini Stats - Compact Grid */
+.fighter-mini-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.mini-stat {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    font-size: 0.8rem;
+}
+
+.mini-stat i {
+    font-size: 0.7rem;
+}
+
+.mini-stat.attack i { color: #ff4444; }
+.mini-stat.defense i { color: #4488ff; }
+.mini-stat.agility i { color: #44ff88; }
+.mini-stat.stamina i { color: #ff8844; }
+.mini-stat.intelligence i { color: #aa44ff; }
+.mini-stat.special i { color: #ffd700; }
+
+.mini-stat span {
+    color: #fff;
+    font-weight: 600;
+}
+
+/* Fighter Actions */
+.fighter-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.vote-btn, .comments-btn {
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.vote-btn.up {
+    background: rgba(68, 255, 136, 0.1);
+    border: 1px solid rgba(68, 255, 136, 0.3);
+    color: #44ff88;
+}
+
+.vote-btn.up:hover {
+    background: rgba(68, 255, 136, 0.2);
+    border-color: #44ff88;
+}
+
+.vote-btn.down {
+    background: rgba(255, 68, 68, 0.1);
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    color: #ff4444;
+}
+
+.vote-btn.down:hover {
+    background: rgba(255, 68, 68, 0.2);
+    border-color: #ff4444;
+}
+
+.comments-btn {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    color: #00d4ff;
+}
+
+.comments-btn:hover {
+    background: rgba(0, 212, 255, 0.2);
+    border-color: #00d4ff;
+}
+
+/* Stats Comparison Column - Center */
+.stats-compare-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-width: 300px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.vs-badge {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #ff6b00, #ff4400);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: #fff;
+    box-shadow: 0 0 35px rgba(255, 107, 0, 0.6);
+    margin-bottom: 20px;
+    animation: vsPulse 2s ease-in-out infinite;
+}
+
+@keyframes vsPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+.stat-compare-rows {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.stat-compare-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 10px;
+    align-items: center;
+}
+
+.stat-compare-row .left-val,
+.stat-compare-row .right-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.stat-compare-row .left-val { text-align: right; }
+.stat-compare-row .right-val { text-align: left; }
+
+.stat-compare-row.left-wins .left-val {
+    color: #00ff88;
+    text-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
+    font-size: 1.6rem;
+}
+
+.stat-compare-row.right-wins .right-val {
+    color: #00ff88;
+    text-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
+    font-size: 1.6rem;
+}
+
+.stat-compare-row.left-wins .right-val,
+.stat-compare-row.right-wins .left-val {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 1.2rem;
+}
+
+.stat-icon-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 50px;
+}
+
+.stat-icon-label i {
+    font-size: 1rem;
+}
+
+.stat-icon-label span {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Stat Icon Colors */
+.stat-compare-row[data-stat="attack"] .stat-icon-label i { color: #ff4444; }
+.stat-compare-row[data-stat="defense"] .stat-icon-label i { color: #4488ff; }
+.stat-compare-row[data-stat="agility"] .stat-icon-label i { color: #44ff88; }
+.stat-compare-row[data-stat="stamina"] .stat-icon-label i { color: #ff8844; }
+.stat-compare-row[data-stat="intelligence"] .stat-icon-label i { color: #aa44ff; }
+.stat-compare-row[data-stat="special"] .stat-icon-label i { color: #ffd700; }
+
+/* ---- Results Screen ---- */
+.tournament-results {
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
     background: radial-gradient(ellipse at center, rgba(50, 30, 0, 0.9) 0%, rgba(0, 0, 0, 0.98) 100%);
 }
 
-.tournament-results-content {
+.tournament-results.active {
+    display: flex;
+}
+
+.results-content {
     text-align: center;
     max-width: 500px;
     width: 100%;
 }
 
-.results-confetti {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-    /* JS will add confetti animation */
-}
-
-.champion-crown {
+.results-crown {
     font-size: 4rem;
     color: #ffd700;
     filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.9));
@@ -8529,7 +8733,7 @@ body {
     50% { transform: translateY(-10px); }
 }
 
-.tournament-results h2 {
+.results-content h2 {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 2.5rem;
     letter-spacing: 5px;
@@ -8537,24 +8741,24 @@ body {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
-.champion-display {
-    margin-bottom: 30px;
+.champion-showcase {
+    margin-bottom: 25px;
 }
 
-.champion-img {
-    width: 180px;
-    height: 180px;
+.champion-showcase img {
+    width: 160px;
+    height: 160px;
     object-fit: cover;
     border-radius: 50%;
-    border: 5px solid #ffd700;
+    border: 4px solid #ffd700;
     box-shadow: 0 0 50px rgba(255, 215, 0, 0.6);
     margin-bottom: 15px;
 }
 
-.champion-name {
+.champion-showcase h3 {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 2rem;
     letter-spacing: 3px;
@@ -8562,71 +8766,32 @@ body {
     text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
 }
 
-.tournament-stats {
+.results-stats {
     display: flex;
     justify-content: center;
-    gap: 40px;
-    margin-bottom: 30px;
+    gap: 35px;
+    margin-bottom: 25px;
 }
 
-.tournament-stats .stat-item {
+.results-stats .stat {
     text-align: center;
 }
 
-.tournament-stats .stat-value {
+.results-stats .stat .value {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 2rem;
     color: #00d4ff;
     display: block;
 }
 
-.tournament-stats .stat-label {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.6);
+.results-stats .stat .label {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
     letter-spacing: 1px;
 }
 
-.runner-ups {
-    margin-bottom: 30px;
-}
-
-.runner-ups h3 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    color: rgba(255, 255, 255, 0.5);
-    margin-bottom: 15px;
-}
-
-.runner-up-list {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-}
-
-.runner-up-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
-}
-
-.runner-up-item img {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-}
-
-.runner-up-item span {
-    font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.results-actions {
+.results-buttons {
     display: flex;
     justify-content: center;
     gap: 15px;
@@ -8675,182 +8840,655 @@ body {
 }
 
 /* Tournament Mobile Responsive */
-@media (max-width: 768px) {
-    .tournament-setup-content {
+@media (max-width: 1100px) {
+    .tournament-setup-compact {
         padding: 25px;
-        margin: 10px;
+        max-width: 95%;
     }
     
-    .tournament-setup-header h2 {
+    .bracket-row {
+        flex-wrap: wrap;
+    }
+    
+    .bracket-btn {
+        flex: 0 0 calc(50% - 6px);
+    }
+    
+    .battle-arena-full {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        gap: 15px;
+        padding: 15px 20px;
+    }
+    
+    .stats-compare-column {
+        order: -1;
+        min-width: unset;
+    }
+    
+    .fighter-portrait {
+        height: 150px;
+    }
+    
+    .fighter-portrait img {
+        max-height: 130px;
+    }
+    
+    .fighter-name {
+        font-size: 1.5rem;
+    }
+    
+    .vs-badge {
+        width: 50px;
+        height: 50px;
+        font-size: 1.4rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .setup-header h2 {
         font-size: 1.6rem;
     }
     
-    .bracket-options {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+    .bracket-btn {
+        padding: 14px 10px;
     }
     
-    .bracket-option {
-        padding: 15px;
+    .bracket-btn .size {
+        font-size: 1.8rem;
     }
     
-    .bracket-option .bracket-size {
-        font-size: 2rem;
+    .type-filter-grid {
+        justify-content: center;
     }
     
-    .tournament-fighters {
+    .preview-bar {
         flex-direction: column;
         gap: 15px;
     }
     
-    .tournament-fighter {
-        max-width: 100%;
+    .preview-stats {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .start-btn {
         width: 100%;
+        justify-content: center;
     }
     
-    .fighter-card .fighter-img {
-        height: 150px;
+    .battle-header {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px 15px;
     }
     
-    .fighter-card .fighter-name {
-        font-size: 1.3rem;
+    .battle-question {
+        font-size: 1.2rem;
+        order: -1;
+        width: 100%;
+        text-align: center;
     }
     
-    .tournament-vs span {
-        font-size: 2rem;
+    .fighter-full-card {
+        flex-direction: row;
+        align-items: center;
     }
     
-    .tournament-question h2 {
+    .fighter-portrait {
+        width: 120px;
+        height: 120px;
+        flex-shrink: 0;
+    }
+    
+    .fighter-portrait img {
+        max-height: 100px;
+    }
+    
+    .fighter-body {
+        padding: 15px;
+    }
+    
+    .fighter-mini-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .stat-compare-row .left-val,
+    .stat-compare-row .right-val {
+        font-size: 1.2rem;
+    }
+    
+    .stat-compare-row.left-wins .left-val,
+    .stat-compare-row.right-wins .right-val {
         font-size: 1.4rem;
     }
     
-    .champion-img {
+    .champion-showcase img {
         width: 120px;
         height: 120px;
     }
     
-    .champion-name {
-        font-size: 1.5rem;
+    .champion-showcase h3 {
+        font-size: 1.6rem;
     }
     
-    .results-actions {
+    .results-buttons {
         flex-direction: column;
     }
 }
 
-/* Tournament Fighter Animations */
+/* Fighter Card Entrance Animations */
 @keyframes slideInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+    from { transform: translateX(-40px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
 }
 
 @keyframes slideInRight {
-    from {
-        opacity: 0;
-        transform: translateX(50px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+    from { transform: translateX(40px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
 }
 
-.tournament-fighter {
-    transition: transform 0.3s ease, opacity 0.3s ease;
+@keyframes fadeInUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.fighter-full-card:first-child {
+    animation: slideInLeft 0.3s ease-out;
+}
+
+.fighter-full-card:last-child {
+    animation: slideInRight 0.3s ease-out;
+}
+
+.stats-compare-column {
+    animation: fadeInUp 0.3s ease-out 0.1s both;
 }
 
 /* ============================================
-   ENHANCED TOURNAMENT UI - Video Game Style
+   TOURNAMENT BATTLE ARENA V2
+   Clean 3-column layout for 1920x1080
    ============================================ */
 
-/* Setup Screen Enhancements */
-.tournament-logo {
+.battle-arena-v2 {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 320px 1fr;
+    gap: 25px;
+    padding: 20px 40px;
+    align-items: stretch;
+    max-width: 1600px;
+    margin: 0 auto;
+    width: 100%;
+    min-height: 0;
+}
+
+/* Fighter Card V2 */
+.fighter-card-v2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.02);
+    border: 3px solid rgba(0, 212, 255, 0.3);
+    border-radius: 20px;
+    padding: 30px 25px;
+    cursor: pointer;
+    transition: all 0.25s ease;
     position: relative;
-    display: inline-block;
+    overflow: hidden;
+}
+
+.fighter-card-v2.left {
+    border-color: rgba(0, 212, 255, 0.4);
+}
+
+.fighter-card-v2.right {
+    border-color: rgba(255, 107, 0, 0.4);
+}
+
+.fighter-card-v2:hover {
+    transform: scale(1.02);
+}
+
+.fighter-card-v2.left:hover {
+    border-color: #00d4ff;
+    box-shadow: 0 0 50px rgba(0, 212, 255, 0.5);
+    background: rgba(0, 212, 255, 0.06);
+}
+
+.fighter-card-v2.right:hover {
+    border-color: #ff6b00;
+    box-shadow: 0 0 50px rgba(255, 107, 0, 0.5);
+    background: rgba(255, 107, 0, 0.06);
+}
+
+.fighter-card-v2.selected {
+    border-color: #00ff88 !important;
+    box-shadow: 0 0 60px rgba(0, 255, 136, 0.6) !important;
+    background: rgba(0, 255, 136, 0.1);
+}
+
+.fighter-card-v2.eliminated {
+    opacity: 0.35;
+    filter: grayscale(50%);
+    pointer-events: none;
+}
+
+/* Fighter Portrait V2 */
+.fighter-card-v2 .fighter-portrait {
+    width: 100%;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
     margin-bottom: 20px;
 }
 
-.tournament-logo i {
-    font-size: 4rem;
-    color: #ffd700;
-    filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8));
-    animation: crownFloat 3s ease-in-out infinite;
+.fighter-card-v2 .fighter-portrait img {
+    max-height: 200px;
+    max-width: 90%;
+    object-fit: contain;
+    filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.7));
+    transition: transform 0.3s ease;
 }
 
-.logo-glow {
+.fighter-card-v2:hover .fighter-portrait img {
+    transform: scale(1.1);
+}
+
+.fighter-glow {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
-    animation: glowPulse 2s ease-in-out infinite;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 212, 255, 0.15) 0%, transparent 70%);
     pointer-events: none;
 }
 
-@keyframes crownFloat {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-8px) rotate(3deg); }
+.fighter-card-v2.right .fighter-glow {
+    background: radial-gradient(circle, rgba(255, 107, 0, 0.15) 0%, transparent 70%);
 }
 
-@keyframes glowPulse {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-}
-
-/* Step Layout */
-.tournament-step {
-    margin-bottom: 25px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.step-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+/* Fighter Info V2 */
+.fighter-info-v2 {
+    text-align: center;
     margin-bottom: 15px;
 }
 
-.step-number {
-    width: 28px;
-    height: 28px;
+.fighter-info-v2 .fighter-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 3px;
+    color: #fff;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
+}
+
+.fighter-meta {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+/* Vote Hint */
+.fighter-vote-hint {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 16px;
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 20px;
+    color: rgba(255, 215, 0, 0.8);
+    font-size: 0.8rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.fighter-card-v2:hover .fighter-vote-hint {
+    opacity: 1;
+}
+
+/* Battle Center V2 */
+.battle-center-v2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* VS Orb */
+.vs-orb {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #ff6b00, #ff4400);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 40px rgba(255, 107, 0, 0.6);
+    animation: vsOrbPulse 2s ease-in-out infinite;
+}
+
+.vs-orb span {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: #fff;
+    letter-spacing: 2px;
+}
+
+@keyframes vsOrbPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(255, 107, 0, 0.6); }
+    50% { transform: scale(1.08); box-shadow: 0 0 60px rgba(255, 107, 0, 0.8); }
+}
+
+/* Stats Comparison V2 */
+.stats-comparison-v2 {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.stat-row-v2 {
+    display: grid;
+    grid-template-columns: 1fr 40px 40px 1fr;
+    gap: 8px;
+    align-items: center;
+    padding: 6px 0;
+}
+
+.stat-row-v2 .stat-bar-left,
+.stat-row-v2 .stat-bar-right {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.stat-row-v2 .stat-bar-left {
+    direction: rtl;
+}
+
+.stat-row-v2 .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.stat-row-v2 .stat-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    color: #fff;
+    text-align: center;
+    min-width: 40px;
+    transition: all 0.3s ease;
+}
+
+.stat-row-v2 .stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stat-row-v2 .stat-icon i {
+    font-size: 0.95rem;
+}
+
+/* Stat Icon Colors V2 */
+.stat-row-v2[data-stat="attack"] .bar-fill { background: linear-gradient(90deg, #ff4444, #ff6666); }
+.stat-row-v2[data-stat="defense"] .bar-fill { background: linear-gradient(90deg, #4488ff, #66aaff); }
+.stat-row-v2[data-stat="agility"] .bar-fill { background: linear-gradient(90deg, #44ff88, #66ffaa); }
+.stat-row-v2[data-stat="stamina"] .bar-fill { background: linear-gradient(90deg, #ff8844, #ffaa66); }
+.stat-row-v2[data-stat="intelligence"] .bar-fill { background: linear-gradient(90deg, #aa44ff, #cc66ff); }
+.stat-row-v2[data-stat="special"] .bar-fill { background: linear-gradient(90deg, #ffd700, #ffee66); }
+
+.stat-row-v2[data-stat="attack"] .stat-icon i { color: #ff4444; }
+.stat-row-v2[data-stat="defense"] .stat-icon i { color: #4488ff; }
+.stat-row-v2[data-stat="agility"] .stat-icon i { color: #44ff88; }
+.stat-row-v2[data-stat="stamina"] .stat-icon i { color: #ff8844; }
+.stat-row-v2[data-stat="intelligence"] .stat-icon i { color: #aa44ff; }
+.stat-row-v2[data-stat="special"] .stat-icon i { color: #ffd700; }
+
+/* Stat Winner Highlighting V2 */
+.stat-row-v2.left-wins .stat-val.left {
+    color: #00ff88;
+    text-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
+    font-size: 1.5rem;
+}
+
+.stat-row-v2.right-wins .stat-val.right {
+    color: #00ff88;
+    text-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
+    font-size: 1.5rem;
+}
+
+.stat-row-v2.left-wins .stat-val.right,
+.stat-row-v2.right-wins .stat-val.left {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 1.1rem;
+}
+
+.stat-row-v2.left-wins .stat-bar-left {
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+}
+
+.stat-row-v2.right-wins .stat-bar-right {
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+}
+
+/* Battle Instructions */
+.battle-instructions {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.85rem;
+    margin-top: 10px;
+}
+
+/* Mobile Responsive - Battle Arena V2 */
+@media (max-width: 1200px) {
+    .battle-arena-v2 {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        gap: 15px;
+        padding: 15px 20px;
+    }
+    
+    .battle-center-v2 {
+        order: -1;
+    }
+    
+    .fighter-card-v2 {
+        flex-direction: row;
+        padding: 20px;
+        gap: 20px;
+    }
+    
+    .fighter-card-v2 .fighter-portrait {
+        width: 140px;
+        height: 140px;
+        margin-bottom: 0;
+    }
+    
+    .fighter-card-v2 .fighter-portrait img {
+        max-height: 120px;
+    }
+    
+    .fighter-info-v2 {
+        flex: 1;
+        text-align: left;
+        margin-bottom: 0;
+    }
+    
+    .fighter-info-v2 .fighter-name {
+        font-size: 1.6rem;
+    }
+    
+    .fighter-meta {
+        justify-content: flex-start;
+    }
+    
+    .fighter-vote-hint {
+        position: static;
+        transform: none;
+        margin-top: 15px;
+    }
+    
+    .vs-orb {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .vs-orb span {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .battle-arena-v2 {
+        padding: 10px 15px;
+    }
+    
+    .fighter-card-v2 {
+        flex-direction: column;
+        padding: 15px;
+    }
+    
+    .fighter-card-v2 .fighter-portrait {
+        width: 100%;
+        height: 150px;
+        margin-bottom: 15px;
+    }
+    
+    .fighter-card-v2 .fighter-portrait img {
+        max-height: 130px;
+    }
+    
+    .fighter-info-v2 {
+        text-align: center;
+    }
+    
+    .fighter-meta {
+        justify-content: center;
+    }
+    
+    .stat-row-v2 .stat-val {
+        font-size: 1.1rem;
+    }
+    
+    .stat-row-v2.left-wins .stat-val.left,
+    .stat-row-v2.right-wins .stat-val.right {
+        font-size: 1.3rem;
+    }
+}
+
+/* Tournament Setup V2 */
+.tournament-setup-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 20px;
+}
+
+.setup-section {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    padding: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.setup-section h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    color: #00d4ff;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.step-num {
+    width: 24px;
+    height: 24px;
     background: linear-gradient(135deg, #00d4ff, #0099cc);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
+    font-size: 0.85rem;
     color: #000;
     font-weight: bold;
 }
 
-.step-header h3 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-    color: #fff;
-    margin: 0;
-}
-
-.optional-tag {
+.optional-label {
     font-size: 0.7rem;
     color: rgba(255, 255, 255, 0.4);
-    letter-spacing: 1px;
     font-family: 'Roboto', sans-serif;
+    letter-spacing: 0;
 }
 
-/* Type Filter Buttons */
+/* Bracket Options Grid */
+.tournament-setup-body .bracket-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.tournament-setup-body .bracket-option {
+    padding: 15px;
+    background: rgba(0, 212, 255, 0.08);
+    border: 2px solid rgba(0, 212, 255, 0.3);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.tournament-setup-body .bracket-option:hover {
+    border-color: rgba(0, 212, 255, 0.6);
+    background: rgba(0, 212, 255, 0.12);
+}
+
+.tournament-setup-body .bracket-option.selected {
+    border-color: #ffd700;
+    background: rgba(255, 215, 0, 0.15);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+}
+
+.tournament-setup-body .bracket-option .bracket-size {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    color: #fff;
+    line-height: 1;
+    display: block;
+}
+
+.tournament-setup-body .bracket-option.selected .bracket-size {
+    color: #ffd700;
+}
+
+.tournament-setup-body .bracket-option .bracket-info {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 4px;
+}
+
+/* Type Filter Options */
 .type-filter-options {
     display: flex;
     flex-wrap: wrap;
@@ -8858,12 +9496,12 @@ body {
 }
 
 .type-filter-btn {
-    padding: 10px 16px;
-    background: rgba(0, 212, 255, 0.08);
-    border: 2px solid rgba(0, 212, 255, 0.25);
-    border-radius: 8px;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 0.85rem;
+    padding: 8px 14px;
+    background: rgba(0, 212, 255, 0.06);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 20px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.8rem;
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
@@ -8873,7 +9511,7 @@ body {
 
 .type-filter-btn:hover {
     border-color: rgba(0, 212, 255, 0.5);
-    background: rgba(0, 212, 255, 0.15);
+    background: rgba(0, 212, 255, 0.1);
     color: #fff;
 }
 
@@ -8881,555 +9519,60 @@ body {
     border-color: #00d4ff;
     background: rgba(0, 212, 255, 0.2);
     color: #00d4ff;
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
 }
 
 .type-filter-btn i {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
-/* Tournament Preview */
-.tournament-preview {
+/* Setup Footer */
+.tournament-setup-footer {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
-    padding: 20px;
-    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(255, 215, 0, 0.1) 100%);
+    padding: 18px 20px;
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.08) 0%, rgba(255, 215, 0, 0.08) 100%);
     border-radius: 12px;
-    border: 2px solid rgba(255, 215, 0, 0.3);
-    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 15px;
 }
 
-.preview-info {
-    display: flex;
-    gap: 25px;
-}
-
-.preview-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.9rem;
-}
-
-.preview-item i {
-    color: #00d4ff;
-}
-
-.start-tournament-btn {
-    padding: 14px 30px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 3px;
-    background: linear-gradient(135deg, #ffd700, #ff8c00);
-    border: none;
-    border-radius: 10px;
-    color: #000;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
-}
-
-.start-tournament-btn:hover:not(:disabled) {
-    transform: scale(1.05);
-    box-shadow: 0 6px 30px rgba(255, 215, 0, 0.6);
-}
-
-.start-tournament-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    background: linear-gradient(135deg, #666, #444);
-    box-shadow: none;
-}
-
-/* Bracket Option - Remove featured styling */
-.bracket-option.selected {
-    border-color: #ffd700 !important;
-    background: rgba(255, 215, 0, 0.15) !important;
-    box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
-    transform: scale(1.02);
-}
-
-.bracket-option.selected .bracket-size {
-    color: #ffd700;
-}
-
-/* ============================================
-   HEAD-TO-HEAD BATTLE SCREEN
-   ============================================ */
-
-.tournament-battle {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    background: radial-gradient(ellipse at center, rgba(10, 20, 40, 0.98) 0%, rgba(0, 0, 0, 0.99) 100%);
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-/* Battle Header */
-.battle-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 25px;
-    background: rgba(0, 0, 0, 0.5);
-    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
-}
-
-.battle-progress {
+.setup-summary {
     display: flex;
     align-items: center;
     gap: 15px;
-}
-
-.round-label {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 3px;
-    color: #ffd700;
-}
-
-.progress-track {
-    width: 150px;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #00d4ff, #ffd700);
-    border-radius: 3px;
-    transition: width 0.5s ease;
-}
-
-.match-label {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.6);
-}
-
-.quit-btn {
-    background: rgba(255, 100, 100, 0.2);
-    border: 1px solid rgba(255, 100, 100, 0.4);
-    color: #ff6666;
-    padding: 8px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-size: 1rem;
-}
-
-.quit-btn:hover {
-    background: rgba(255, 100, 100, 0.4);
-    border-color: #ff6666;
-}
-
-/* Battle Title */
-.battle-title {
-    text-align: center;
-    padding: 20px;
-}
-
-.battle-title h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.2rem;
-    letter-spacing: 5px;
-    color: #fff;
-    text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-    margin-bottom: 5px;
-}
-
-.battle-title p {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.7);
     font-size: 0.9rem;
 }
 
-/* Battle Arena - 3-column layout */
-.battle-arena {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    gap: 20px;
-    padding: 20px 30px 40px;
-    align-items: center;
-    max-width: 1400px;
-    margin: 0 auto;
-    width: 100%;
-}
-
-/* Fighter Panels */
-.fighter-panel {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    padding: 25px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 3px solid transparent;
-}
-
-.fighter-panel:hover {
-    transform: scale(1.02);
-}
-
-.fighter-panel.left {
-    border-color: rgba(0, 212, 255, 0.3);
-}
-
-.fighter-panel.right {
-    border-color: rgba(255, 107, 0, 0.3);
-}
-
-.fighter-panel.left:hover {
-    border-color: #00d4ff;
-    box-shadow: 0 0 40px rgba(0, 212, 255, 0.4);
-    background: rgba(0, 212, 255, 0.05);
-}
-
-.fighter-panel.right:hover {
-    border-color: #ff6b00;
-    box-shadow: 0 0 40px rgba(255, 107, 0, 0.4);
-    background: rgba(255, 107, 0, 0.05);
-}
-
-/* Fighter Image - BIGGER */
-.fighter-image-wrapper {
-    width: 300px;
-    height: 300px;
+.summary-item {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
-    border-radius: 16px;
+    gap: 6px;
 }
 
-.fighter-image-wrapper img {
-    max-width: 95%;
-    max-height: 95%;
-    object-fit: contain;
-    filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.7));
-    transition: transform 0.3s ease;
-}
-
-.fighter-panel:hover .fighter-image-wrapper img {
-    transform: scale(1.08);
-}
-
-/* Fighter Identity */
-.fighter-identity {
-    text-align: center;
-}
-
-.fighter-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.4rem;
-    letter-spacing: 3px;
-    color: #fff;
-    margin-bottom: 12px;
-    text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
-}
-
-.fighter-badges {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-.rank-badge {
-    padding: 6px 14px;
-    background: rgba(255, 215, 0, 0.15);
-    border: 1px solid rgba(255, 215, 0, 0.5);
-    border-radius: 6px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    color: #ffd700;
-    letter-spacing: 1px;
-}
-
-.winrate-badge {
-    padding: 6px 14px;
-    background: rgba(0, 212, 255, 0.15);
-    border: 1px solid rgba(0, 212, 255, 0.5);
-    border-radius: 6px;
-    font-size: 0.9rem;
+.summary-item i {
     color: #00d4ff;
 }
 
-/* Stats Comparison - Center Column */
-.stats-comparison {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    min-width: 380px;
-    padding: 20px;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+.summary-divider {
+    color: rgba(255, 255, 255, 0.3);
 }
 
-.vs-badge {
-    align-self: center;
-    width: 70px;
-    height: 70px;
-    background: linear-gradient(135deg, #ff6b00, #ff4400);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    color: #fff;
-    box-shadow: 0 0 35px rgba(255, 107, 0, 0.6);
-    margin-bottom: 15px;
-    animation: vsPulse 2s ease-in-out infinite;
-}
-
-@keyframes vsPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.08); }
-}
-
-/* Stat Rows - Head to Head */
-.stats-comparison .stat-row {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    gap: 12px;
-    align-items: center;
-    padding: 8px 0;
-}
-
-.stats-comparison .stat-side {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.stats-comparison .stat-side.left {
-    justify-content: flex-end;
-}
-
-.stats-comparison .stat-side.right {
-    justify-content: flex-start;
-}
-
-.stats-comparison .stat-val {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    color: #fff;
-    min-width: 40px;
-    text-align: center;
-    transition: all 0.3s ease;
-}
-
-.stats-comparison .stat-side.left .stat-val { text-align: right; }
-.stats-comparison .stat-side.right .stat-val { text-align: left; }
-
-.stats-comparison .stat-bar {
-    width: 100px;
-    height: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 5px;
-    overflow: hidden;
-    position: relative;
-}
-
-.stats-comparison .stat-side.left .stat-bar {
-    transform: scaleX(-1);
-}
-
-.stats-comparison .bar-fill {
-    height: 100%;
-    border-radius: 5px;
-    transition: width 0.5s ease;
-    position: absolute;
-    left: 0;
-    top: 0;
-}
-
-.stats-comparison .stat-icon-center {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    min-width: 50px;
-}
-
-.stats-comparison .stat-icon-center i {
-    font-size: 1rem;
-}
-
-.stats-comparison .stat-icon-center span {
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.5);
-    letter-spacing: 1px;
-}
-
-/* Stat Colors */
-.stats-comparison .stat-row[data-stat="attack"] .bar-fill { background: linear-gradient(90deg, #ff4444, #ff6666); }
-.stats-comparison .stat-row[data-stat="defense"] .bar-fill { background: linear-gradient(90deg, #4488ff, #66aaff); }
-.stats-comparison .stat-row[data-stat="agility"] .bar-fill { background: linear-gradient(90deg, #44ff88, #66ffaa); }
-.stats-comparison .stat-row[data-stat="stamina"] .bar-fill { background: linear-gradient(90deg, #ff8844, #ffaa66); }
-.stats-comparison .stat-row[data-stat="intelligence"] .bar-fill { background: linear-gradient(90deg, #aa44ff, #cc66ff); }
-.stats-comparison .stat-row[data-stat="special"] .bar-fill { background: linear-gradient(90deg, #ffd700, #ffee66); }
-
-.stats-comparison .stat-row[data-stat="attack"] .stat-icon-center i { color: #ff4444; }
-.stats-comparison .stat-row[data-stat="defense"] .stat-icon-center i { color: #4488ff; }
-.stats-comparison .stat-row[data-stat="agility"] .stat-icon-center i { color: #44ff88; }
-.stats-comparison .stat-row[data-stat="stamina"] .stat-icon-center i { color: #ff8844; }
-.stats-comparison .stat-row[data-stat="intelligence"] .stat-icon-center i { color: #aa44ff; }
-.stats-comparison .stat-row[data-stat="special"] .stat-icon-center i { color: #ffd700; }
-
-/* Winner Stat Highlighting */
-.stats-comparison .stat-row.left-wins .stat-side.left .stat-val {
-    color: #00ff88;
-    text-shadow: 0 0 15px rgba(0, 255, 136, 0.6);
-    font-size: 1.7rem;
-}
-
-.stats-comparison .stat-row.right-wins .stat-side.right .stat-val {
-    color: #00ff88;
-    text-shadow: 0 0 15px rgba(0, 255, 136, 0.6);
-    font-size: 1.7rem;
-}
-
-.stats-comparison .stat-row.left-wins .stat-side.right .stat-val,
-.stats-comparison .stat-row.right-wins .stat-side.left .stat-val {
-    color: rgba(255, 255, 255, 0.35);
-    font-size: 1.3rem;
-}
-
-.stats-comparison .stat-row.left-wins .stat-side.left .stat-bar {
-    box-shadow: 0 0 12px rgba(0, 255, 136, 0.5);
-}
-
-.stats-comparison .stat-row.right-wins .stat-side.right .stat-bar {
-    box-shadow: 0 0 12px rgba(0, 255, 136, 0.5);
-}
-
-.stats-comparison .stat-row.left-wins .stat-side.right .bar-fill,
-.stats-comparison .stat-row.right-wins .stat-side.left .bar-fill {
-    opacity: 0.4;
-}
-
-.stats-comparison .stat-row.tie .stat-val {
-    color: rgba(255, 215, 0, 0.8);
-}
-
-/* Fighter Selection States */
-.fighter-panel.selected {
-    border-color: #00ff88 !important;
-    box-shadow: 0 0 50px rgba(0, 255, 136, 0.6) !important;
-    background: rgba(0, 255, 136, 0.1);
-}
-
-.fighter-panel.eliminated {
-    opacity: 0.4;
-    filter: grayscale(40%);
-    pointer-events: none;
-}
-
-/* Entrance Animations */
-@keyframes slideInLeft {
-    from { transform: translateX(-50px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes slideInRight {
-    from { transform: translateX(50px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
-
-/* Mobile Responsive - Battle Screen */
-@media (max-width: 1100px) {
-    .tournament-battle .battle-arena {
+/* Mobile Responsive - Setup */
+@media (max-width: 700px) {
+    .tournament-setup-body {
         grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto;
-        gap: 20px;
-        padding: 15px 20px;
+        gap: 15px;
     }
     
-    .tournament-battle .fighter-panel {
-        flex-direction: row;
-        gap: 20px;
-        padding: 20px;
-    }
-    
-    .tournament-battle .fighter-image-wrapper {
-        width: 150px;
-        height: 150px;
-        margin-bottom: 0;
-    }
-    
-    .tournament-battle .fighter-name {
-        font-size: 1.8rem;
-    }
-    
-    .tournament-battle .stats-comparison {
-        min-width: unset;
-        order: 3;
-    }
-    
-    .tournament-battle .fighter-panel.left { order: 1; }
-    .tournament-battle .fighter-panel.right { order: 2; }
-    
-    .tournament-battle .vs-badge {
-        display: none;
-    }
-}
-
-@media (max-width: 600px) {
-    .tournament-battle .battle-header {
-        padding: 10px 15px;
-    }
-    
-    .tournament-battle .round-label {
-        font-size: 1rem;
-    }
-    
-    .tournament-battle .progress-track {
-        width: 100px;
-    }
-    
-    .tournament-battle .battle-title h2 {
-        font-size: 1.6rem;
-    }
-    
-    .tournament-battle .fighter-panel {
+    .tournament-setup-footer {
         flex-direction: column;
-        padding: 15px;
+        gap: 15px;
     }
     
-    .tournament-battle .fighter-image-wrapper {
-        width: 120px;
-        height: 120px;
-    }
-    
-    .tournament-battle .fighter-name {
-        font-size: 1.5rem;
-    }
-    
-    .tournament-battle .stats-comparison .stat-bar {
-        width: 70px;
-    }
-    
-    .tournament-battle .stat-val {
-        font-size: 1.2rem;
-        min-width: 30px;
-    }
-    
-    .tournament-battle .stat-row.left-wins .stat-side.left .stat-val,
-    .tournament-battle .stat-row.right-wins .stat-side.right .stat-val {
-        font-size: 1.4rem;
+    .start-tournament-btn {
+        width: 100%;
+        justify-content: center;
     }
 }
