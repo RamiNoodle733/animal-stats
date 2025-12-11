@@ -826,6 +826,7 @@ body {
 
 .bottom-info-bar {
     background: linear-gradient(180deg, rgba(5, 10, 20, 0.9), rgba(10, 15, 25, 0.95));
+    border-top: 2px solid rgba(0, 212, 255, 0.4);
     padding: 5px 12px;
     display: flex;
     align-items: center;
@@ -1376,7 +1377,6 @@ body {
 
 .character-grid-container {
     background: linear-gradient(180deg, rgba(5, 10, 20, 0.98) 0%, rgba(0, 8, 18, 1) 100%);
-    border-top: 2px solid rgba(0, 212, 255, 0.4);
     padding: 8px 0 12px 0;
     height: auto;
     min-height: 190px;
@@ -1396,7 +1396,6 @@ body {
     height: 0;
     min-height: 0;
     padding: 0;
-    border-top-width: 0;
     opacity: 0;
     overflow: hidden;
     pointer-events: none;
