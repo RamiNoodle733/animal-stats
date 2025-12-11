@@ -2096,21 +2096,26 @@ class RankingsManager {
             streakBadge = `<span class="row-streak-badge cold"><i class="fas fa-snowflake"></i>${lossStreak}L</span>`;
         }
         
-        // Status badge based on win rate and battles
-        let statusBadge = '';
+        // Diagonal corner ribbon badge based on status
+        let diagonalBadge = '';
+        let statusBadge = ''; // Keep inline badge as fallback
         if (totalFights >= 5 && winRate >= 80) {
+            diagonalBadge = '<div class="row-diagonal-badge"><div class="ribbon hot"><i class="fas fa-fire"></i>HOT</div></div>';
             statusBadge = '<span class="row-status-badge hot"><i class="fas fa-fire"></i>HOT</span>';
         } else if (totalFights >= 10 && winRate >= 70) {
+            diagonalBadge = '<div class="row-diagonal-badge"><div class="ribbon mvp"><i class="fas fa-star"></i>MVP</div></div>';
             statusBadge = '<span class="row-status-badge mvp"><i class="fas fa-star"></i>MVP</span>';
         } else if (totalFights > 0 && totalFights <= 3) {
+            diagonalBadge = '<div class="row-diagonal-badge"><div class="ribbon rookie"><i class="fas fa-seedling"></i>NEW</div></div>';
             statusBadge = '<span class="row-status-badge rookie"><i class="fas fa-seedling"></i>NEW</span>';
         } else if (rank === 1) {
+            diagonalBadge = '<div class="row-diagonal-badge"><div class="ribbon champion"><i class="fas fa-crown"></i>#1</div></div>';
             statusBadge = '<span class="row-status-badge champion"><i class="fas fa-crown"></i>#1</span>';
         }
         
-        // Win rate mini progress bar
+        // Win rate class for bar color
+        const winRateTier = winRate >= 70 ? 'excellent' : winRate >= 50 ? 'good' : winRate >= 30 ? 'average' : 'poor';
         const winBarWidth = totalFights > 0 ? Math.min(winRate, 100) : 0;
-        const winBarColor = winRate >= 70 ? '#00ff88' : winRate >= 50 ? '#ffd700' : '#ff3366';
         
         // Tournament placement stats (optional fields - graceful degradation)
         const tournamentsFirst = animal.tournamentsFirst || item.tournamentsFirst || 0;
@@ -2127,6 +2132,7 @@ class RankingsManager {
             </div>`;
 
         row.innerHTML = `
+            ${diagonalBadge}
             <div class="row-rank">
                 <span class="row-rank-num">#${rank}</span>
                 ${rank <= 3 ? '<i class="fas fa-crown row-crown"></i>' : ''}
@@ -2149,7 +2155,7 @@ class RankingsManager {
                         ? `<span class="row-winrate-value ${winRateClass}">${winRate}%</span><span class="row-battles">(${totalFights})</span>`
                         : '<span class="row-winrate-value dim">--</span>'}
                 </div>
-                ${totalFights > 0 ? `<div class="winrate-bar"><div class="winrate-fill" style="width: ${winBarWidth}%; background: ${winBarColor}"></div></div>` : ''}
+                ${totalFights > 0 ? `<div class="winrate-bar"><div class="winrate-fill ${winRateTier}" style="width: ${winBarWidth}%"></div></div>` : ''}
             </div>
             <div class="row-votes control-pad">
                 <div class="vote-pad-cluster">
