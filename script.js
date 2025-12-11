@@ -3568,14 +3568,14 @@ class TournamentManager {
      * Re-fetches DOM elements each time to ensure they exist
      */
     updateFighterCard(fighterNum, animal) {
-        // Re-fetch DOM elements to ensure they exist
-        const imgEl = document.getElementById(`fighter-${fighterNum}-img`);
-        const nameEl = document.getElementById(`fighter-${fighterNum}-name`);
-        const rankEl = document.getElementById(`fighter-${fighterNum}-rank`);
-        const winrateEl = document.getElementById(`fighter-${fighterNum}-winrate`);
-        const weightEl = document.getElementById(`fighter-${fighterNum}-weight`);
-        const speedEl = document.getElementById(`fighter-${fighterNum}-speed`);
-        const biteEl = document.getElementById(`fighter-${fighterNum}-bite`);
+        // Re-fetch DOM elements to ensure they exist - use t-fighter prefix for tournament
+        const imgEl = document.getElementById(`t-fighter-${fighterNum}-img`);
+        const nameEl = document.getElementById(`t-fighter-${fighterNum}-name`);
+        const rankEl = document.getElementById(`t-fighter-${fighterNum}-rank`);
+        const winrateEl = document.getElementById(`t-fighter-${fighterNum}-winrate`);
+        const weightEl = document.getElementById(`t-fighter-${fighterNum}-weight`);
+        const speedEl = document.getElementById(`t-fighter-${fighterNum}-speed`);
+        const biteEl = document.getElementById(`t-fighter-${fighterNum}-bite`);
         
         // Image
         if (imgEl) {
@@ -3610,30 +3610,29 @@ class TournamentManager {
         
         // Physical specs (weight, speed, bite force)
         if (weightEl) {
-            const weight = animal.weight || animal.averageWeight;
-            if (weight) {
-                const weightNum = typeof weight === 'number' ? weight : parseFloat(weight);
-                weightEl.innerHTML = `<i class="fas fa-weight-hanging"></i><span>${weightNum.toLocaleString()} lbs</span>`;
+            const weightKg = animal.weight_kg || animal.weight || animal.averageWeight;
+            if (weightKg) {
+                const weightLbs = Math.round(weightKg * 2.20462);
+                weightEl.innerHTML = `<i class="fas fa-weight-hanging"></i><span>${weightLbs.toLocaleString()} lbs</span>`;
             } else {
                 weightEl.innerHTML = `<i class="fas fa-weight-hanging"></i><span>--</span>`;
             }
         }
         
         if (speedEl) {
-            const speed = animal.speed || animal.topSpeed;
-            if (speed) {
-                const speedNum = typeof speed === 'number' ? speed : parseFloat(speed);
-                speedEl.innerHTML = `<i class="fas fa-tachometer-alt"></i><span>${speedNum} km/h</span>`;
+            const speedMps = animal.speed_mps || animal.speed || animal.topSpeed;
+            if (speedMps) {
+                const speedKmh = Math.round(speedMps * 3.6);
+                speedEl.innerHTML = `<i class="fas fa-tachometer-alt"></i><span>${speedKmh} km/h</span>`;
             } else {
                 speedEl.innerHTML = `<i class="fas fa-tachometer-alt"></i><span>--</span>`;
             }
         }
         
         if (biteEl) {
-            const bite = animal.biteForce || animal.bite;
-            if (bite) {
-                const biteNum = typeof bite === 'number' ? bite : parseFloat(bite);
-                biteEl.innerHTML = `<i class="fas fa-teeth"></i><span>${biteNum.toLocaleString()} PSI</span>`;
+            const bitePsi = animal.bite_force_psi || animal.biteForce || animal.bite;
+            if (bitePsi) {
+                biteEl.innerHTML = `<i class="fas fa-teeth"></i><span>${Math.round(bitePsi).toLocaleString()} PSI</span>`;
             } else {
                 biteEl.innerHTML = `<i class="fas fa-teeth"></i><span>--</span>`;
             }
@@ -3645,12 +3644,12 @@ class TournamentManager {
         statKeys.forEach(key => {
             const value = Math.round(animal[key] || 0);
             
-            // Update stat value - use fresh DOM query
-            const statEl = document.getElementById(`fighter-${fighterNum}-${key}`);
+            // Update stat value - use fresh DOM query with t-fighter prefix
+            const statEl = document.getElementById(`t-fighter-${fighterNum}-${key}`);
             if (statEl) statEl.textContent = value;
             
             // Update stat bar
-            const barEl = document.getElementById(`fighter-${fighterNum}-${key}-bar`);
+            const barEl = document.getElementById(`t-fighter-${fighterNum}-${key}-bar`);
             if (barEl) barEl.style.width = `${value}%`;
         });
     }
