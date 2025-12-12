@@ -7150,8 +7150,10 @@ body {
 .row-animal {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     min-width: 0;
+    overflow: visible;
+    position: relative;
 }
 
 .row-animal-info {
@@ -7166,6 +7168,7 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-wrap: wrap;
 }
 
 /* row-animal-img is now defined with new podium system above */
@@ -7179,6 +7182,13 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     transition: font-size 0.3s ease;
+}
+
+.row-animal-name-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
 }
 
 /* Row - Win Rate Cell */
