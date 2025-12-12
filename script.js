@@ -2011,7 +2011,12 @@ class RankingsManager {
      * Load comments for the inline section in detail panel
      */
     async loadInlineComments(animalName) {
-        if (!this.dom.detailCommentsList) return;
+        console.log('[Rankings] loadInlineComments called for:', animalName);
+        console.log('[Rankings] detailCommentsList element:', this.dom.detailCommentsList);
+        if (!this.dom.detailCommentsList) {
+            console.error('[Rankings] detailCommentsList is null!');
+            return;
+        }
         
         // Show/hide input based on login
         if (this.dom.detailCommentInputArea) {
@@ -2506,6 +2511,8 @@ class RankingsManager {
     }
     
     selectRankingRow(index) {
+        console.log('[Rankings] selectRankingRow called, index:', index);
+        
         // Remove previous selection
         this.dom.rankingsList.querySelectorAll('.ranking-row').forEach(r => r.classList.remove('selected'));
         
@@ -2515,10 +2522,13 @@ class RankingsManager {
         
         this.selectedRankIndex = index;
         const item = this.rankings[index];
+        console.log('[Rankings] item:', item);
         if (item) {
             this.updateDetailPanel(item, index + 1);
             // Load inline comments for selected animal
-            this.loadInlineComments(item.animal?.name || item.name);
+            const animalName = item.animal?.name || item.name;
+            console.log('[Rankings] Calling loadInlineComments for:', animalName);
+            this.loadInlineComments(animalName);
         }
     }
     
@@ -2947,12 +2957,10 @@ class RankingsManager {
             image: btn.dataset.animalImage
         };
 
-        // Update modal header
-        this.dom.commentsAnimalName.textContent = this.currentAnimal.name;
-        this.dom.commentsAnimalImage.src = this.currentAnimal.image;
-        this.dom.commentsAnimalImage.onerror = () => {
-            this.dom.commentsAnimalImage.src = FALLBACK_IMAGE;
-        };
+        // Update modal header - just show "Comments" to avoid duplicate animal name
+        this.dom.commentsAnimalName.textContent = 'Comments';
+        // Keep image hidden
+        this.dom.commentsAnimalImage.style.display = 'none';
 
         // Show/hide login prompt vs comment form
         if (Auth.isLoggedIn()) {
