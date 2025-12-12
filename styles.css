@@ -4808,14 +4808,15 @@ body {
     height: 100%;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .rankings-list {
     flex: 1;
     overflow-y: auto;
+    overflow-x: visible;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 20px;
+    padding: 20px 25px 20px 25px;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 215, 0, 0.3) transparent;
 }
@@ -5948,7 +5949,7 @@ body {
     background: rgba(5, 10, 20, 0.85);
     border: 2px solid rgba(255, 45, 45, 0.2);
     border-radius: 4px;
-    overflow: hidden;
+    overflow: visible;
     box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.4);
 }
 
@@ -6133,6 +6134,335 @@ body {
     z-index: 0;
 }
 
+/* ============================================
+   ELO BADGE STYLING
+   ============================================ */
+.row-elo-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 6px;
+    font-weight: 600;
+    transform: skewX(-5deg);
+    display: inline-block;
+}
+
+.row-elo-badge.elite {
+    background: linear-gradient(135deg, #ffd700, #ffaa00);
+    color: #000;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+    animation: eloPulse 2s ease-in-out infinite;
+}
+
+.row-elo-badge.high {
+    background: linear-gradient(135deg, #00ff88, #00cc66);
+    color: #000;
+    box-shadow: 0 0 6px rgba(0, 255, 136, 0.4);
+}
+
+.row-elo-badge.mid {
+    background: rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.row-elo-badge.low {
+    background: rgba(255, 51, 102, 0.2);
+    color: #ff6688;
+    border: 1px solid rgba(255, 51, 102, 0.3);
+}
+
+@keyframes eloPulse {
+    0%, 100% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.5); }
+    50% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
+}
+
+/* ============================================
+   ANIMAL IMAGE CONTAINER - LARGER & BREAKOUT READY
+   ============================================ */
+.row-animal-img-container {
+    position: relative;
+    width: 52px;
+    height: 52px;
+    flex-shrink: 0;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 2;
+}
+
+.row-animal-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(0, 212, 255, 0.25);
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4));
+}
+
+/* ============================================
+   PODIUM CARDS - TOP 3 BREAKOUT DESIGN
+   ============================================ */
+
+/* Container for top 3 needs extra overflow space */
+.rankings-list {
+    overflow: visible;
+    padding-top: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+/* Base podium card styling */
+.ranking-row.podium-card {
+    position: relative;
+    z-index: 10;
+    margin-bottom: 20px;
+    overflow: visible;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* #1 - CHAMPION - Largest, most dynamic */
+.ranking-row.rank-1.podium-card {
+    transform: rotate(-1.5deg) scale(1.08);
+    margin-left: -15px;
+    margin-right: -5px;
+    padding: 16px 20px;
+    z-index: 15;
+    background: linear-gradient(105deg, 
+        rgba(255, 215, 0, 0.2) 0%, 
+        rgba(255, 180, 0, 0.12) 20%,
+        rgba(15, 20, 35, 0.98) 50%);
+    border: 3px solid rgba(255, 215, 0, 0.6);
+    border-left: 6px solid #ffd700;
+    box-shadow: 
+        6px 6px 0 rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(255, 215, 0, 0.25),
+        inset 0 0 30px rgba(255, 215, 0, 0.05);
+    animation: rank1Float 4s ease-in-out infinite;
+}
+
+.ranking-row.rank-1.podium-card::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    background: linear-gradient(135deg, 
+        rgba(255, 215, 0, 0.3) 0%, 
+        transparent 30%,
+        transparent 70%,
+        rgba(255, 215, 0, 0.2) 100%);
+    border-radius: 8px;
+    z-index: -1;
+    opacity: 0.5;
+    animation: rank1Glow 3s ease-in-out infinite alternate;
+}
+
+.ranking-row.rank-1.podium-card .row-animal-img-container {
+    width: 75px;
+    height: 75px;
+    transform: translateY(-12px) translateX(-8px) rotate(3deg);
+    filter: drop-shadow(0 8px 20px rgba(255, 215, 0, 0.4));
+}
+
+.ranking-row.rank-1.podium-card .row-animal-img {
+    border: 3px solid rgba(255, 215, 0, 0.7);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.ranking-row.rank-1.podium-card .row-animal-name {
+    font-size: 1.25rem;
+}
+
+.ranking-row.rank-1.podium-card .row-rank-num {
+    font-size: 2rem;
+}
+
+@keyframes rank1Float {
+    0%, 100% { transform: rotate(-1.5deg) scale(1.08) translateY(0); }
+    50% { transform: rotate(-1.5deg) scale(1.08) translateY(-3px); }
+}
+
+@keyframes rank1Glow {
+    0% { opacity: 0.3; }
+    100% { opacity: 0.6; }
+}
+
+/* #2 - RUNNER UP - Medium size, slight tilt */
+.ranking-row.rank-2.podium-card {
+    transform: rotate(1deg) scale(1.04);
+    margin-left: -8px;
+    margin-right: -8px;
+    padding: 14px 18px;
+    z-index: 12;
+    background: linear-gradient(105deg, 
+        rgba(192, 192, 192, 0.15) 0%, 
+        rgba(192, 192, 192, 0.08) 20%,
+        rgba(15, 20, 35, 0.98) 50%);
+    border: 2px solid rgba(192, 192, 192, 0.5);
+    border-left: 5px solid #c0c0c0;
+    box-shadow: 
+        5px 5px 0 rgba(0, 0, 0, 0.45),
+        0 0 25px rgba(192, 192, 192, 0.15);
+    animation: rank2Float 4.5s ease-in-out infinite;
+}
+
+.ranking-row.rank-2.podium-card .row-animal-img-container {
+    width: 65px;
+    height: 65px;
+    transform: translateY(-8px) translateX(-4px) rotate(-2deg);
+    filter: drop-shadow(0 6px 15px rgba(192, 192, 192, 0.3));
+}
+
+.ranking-row.rank-2.podium-card .row-animal-img {
+    border: 2px solid rgba(192, 192, 192, 0.6);
+    box-shadow: 0 0 15px rgba(192, 192, 192, 0.4);
+}
+
+.ranking-row.rank-2.podium-card .row-animal-name {
+    font-size: 1.15rem;
+}
+
+.ranking-row.rank-2.podium-card .row-rank-num {
+    font-size: 1.8rem;
+}
+
+@keyframes rank2Float {
+    0%, 100% { transform: rotate(1deg) scale(1.04) translateY(0); }
+    50% { transform: rotate(1deg) scale(1.04) translateY(-2px); }
+}
+
+/* #3 - BRONZE - Smaller than #2, opposite tilt */
+.ranking-row.rank-3.podium-card {
+    transform: rotate(-0.8deg) scale(1.02);
+    margin-left: -5px;
+    margin-right: -10px;
+    padding: 12px 16px;
+    z-index: 11;
+    background: linear-gradient(105deg, 
+        rgba(205, 127, 50, 0.12) 0%, 
+        rgba(205, 127, 50, 0.06) 20%,
+        rgba(15, 20, 35, 0.98) 50%);
+    border: 2px solid rgba(205, 127, 50, 0.45);
+    border-left: 5px solid #cd7f32;
+    box-shadow: 
+        4px 4px 0 rgba(0, 0, 0, 0.4),
+        0 0 20px rgba(205, 127, 50, 0.12);
+    animation: rank3Float 5s ease-in-out infinite;
+}
+
+.ranking-row.rank-3.podium-card .row-animal-img-container {
+    width: 60px;
+    height: 60px;
+    transform: translateY(-5px) translateX(-2px) rotate(2deg);
+    filter: drop-shadow(0 5px 12px rgba(205, 127, 50, 0.3));
+}
+
+.ranking-row.rank-3.podium-card .row-animal-img {
+    border: 2px solid rgba(205, 127, 50, 0.6);
+    box-shadow: 0 0 12px rgba(205, 127, 50, 0.35);
+}
+
+.ranking-row.rank-3.podium-card .row-animal-name {
+    font-size: 1.1rem;
+}
+
+.ranking-row.rank-3.podium-card .row-rank-num {
+    font-size: 1.65rem;
+}
+
+@keyframes rank3Float {
+    0%, 100% { transform: rotate(-0.8deg) scale(1.02) translateY(0); }
+    50% { transform: rotate(-0.8deg) scale(1.02) translateY(-1.5px); }
+}
+
+/* ============================================
+   SELECTED/EXPANDED ROW - IMAGE BREAKOUT
+   ============================================ */
+.ranking-row.selected,
+.ranking-row.comments-expanded {
+    transform: scale(1.02) translateX(8px);
+    z-index: 20;
+    background: linear-gradient(95deg, rgba(35, 40, 60, 0.98) 0%, rgba(45, 50, 75, 0.95) 100%);
+    box-shadow: 
+        6px 6px 0 rgba(0, 0, 0, 0.5), 
+        0 0 30px rgba(255, 215, 0, 0.2),
+        0 0 60px rgba(255, 215, 0, 0.1);
+}
+
+.ranking-row.selected .row-animal-img-container,
+.ranking-row.comments-expanded .row-animal-img-container {
+    width: 70px;
+    height: 70px;
+    transform: translateY(-15px) translateX(-12px) rotate(-5deg) scale(1.1);
+    z-index: 25;
+}
+
+.ranking-row.selected .row-animal-img,
+.ranking-row.comments-expanded .row-animal-img {
+    border-color: rgba(255, 215, 0, 0.6);
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.6),
+        0 0 20px rgba(255, 215, 0, 0.3);
+    animation: selectedImagePop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes selectedImagePop {
+    0% { transform: scale(0.8); opacity: 0.5; }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+/* Top 3 selected - even bigger breakout */
+.ranking-row.rank-1.podium-card.selected .row-animal-img-container,
+.ranking-row.rank-1.podium-card.comments-expanded .row-animal-img-container {
+    width: 90px;
+    height: 90px;
+    transform: translateY(-20px) translateX(-15px) rotate(-8deg) scale(1.15);
+}
+
+.ranking-row.rank-2.podium-card.selected .row-animal-img-container,
+.ranking-row.rank-2.podium-card.comments-expanded .row-animal-img-container {
+    width: 80px;
+    height: 80px;
+    transform: translateY(-18px) translateX(-12px) rotate(-6deg) scale(1.12);
+}
+
+.ranking-row.rank-3.podium-card.selected .row-animal-img-container,
+.ranking-row.rank-3.podium-card.comments-expanded .row-animal-img-container {
+    width: 75px;
+    height: 75px;
+    transform: translateY(-15px) translateX(-10px) rotate(-5deg) scale(1.1);
+}
+
+/* ============================================
+   HOVER STATES - SUBTLE PREVIEW
+   ============================================ */
+.ranking-row:hover .row-animal-img-container {
+    transform: translateY(-5px) scale(1.08);
+}
+
+.ranking-row:hover .row-animal-img {
+    border-color: rgba(255, 107, 0, 0.5);
+    box-shadow: 0 5px 15px rgba(255, 107, 0, 0.25);
+}
+
+/* Podium hover overrides */
+.ranking-row.rank-1.podium-card:hover .row-animal-img-container {
+    transform: translateY(-18px) translateX(-10px) rotate(5deg) scale(1.12);
+}
+
+.ranking-row.rank-2.podium-card:hover .row-animal-img-container {
+    transform: translateY(-12px) translateX(-6px) rotate(-4deg) scale(1.1);
+}
+
+.ranking-row.rank-3.podium-card:hover .row-animal-img-container {
+    transform: translateY(-8px) translateX(-4px) rotate(3deg) scale(1.08);
+}
+
 /* Ranking Row - Persona 5 Dynamic Card Style */
 .ranking-row {
     display: grid;
@@ -6174,16 +6504,21 @@ body {
 .ranking-row:hover {
     background: linear-gradient(95deg, rgba(25, 30, 50, 0.98) 0%, rgba(35, 40, 65, 0.95) 100%);
     border-color: rgba(255, 45, 45, 0.6);
-    transform: translateX(6px) skewX(-1deg);
     box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 45, 45, 0.15);
     z-index: 2;
+}
+
+/* Non-podium rows hover - slight movement */
+.ranking-row:not(.podium-card):hover {
+    transform: translateX(6px) skewX(-1deg);
 }
 
 .ranking-row:hover::after {
     background: linear-gradient(135deg, transparent 50%, rgba(255, 45, 45, 0.9) 50%);
 }
 
-.ranking-row.selected {
+/* Selected state - handled in new podium system above */
+.ranking-row.selected:not(.podium-card) {
     background: linear-gradient(95deg, rgba(30, 35, 55, 0.98) 0%, rgba(40, 45, 70, 0.95) 100%);
     border-color: rgba(255, 215, 0, 0.7);
     border-left-color: #ffd700;
@@ -6194,43 +6529,44 @@ body {
     background: linear-gradient(135deg, transparent 50%, rgba(255, 215, 0, 0.8) 50%);
 }
 
-/* Top 3 special styling */
-.ranking-row.top-3 {
+/* Top 3 special styling - legacy, overridden by podium-card system */
+.ranking-row.top-3:not(.podium-card) {
     border-width: 2px;
     border-left-width: 5px;
 }
 
-.ranking-row.rank-1 {
+/* Legacy rank colors - for non-podium fallback only */
+.ranking-row.rank-1:not(.podium-card) {
     border-color: rgba(255, 215, 0, 0.5);
     border-left-color: #ffd700;
     background: linear-gradient(95deg, rgba(255, 215, 0, 0.12) 0%, rgba(15, 20, 35, 0.95) 30%);
 }
 
-.ranking-row.rank-1::after {
+.ranking-row.rank-1:not(.podium-card)::after {
     background: linear-gradient(135deg, transparent 50%, rgba(255, 215, 0, 0.8) 50%);
 }
 
-.ranking-row.rank-1:hover {
+.ranking-row.rank-1:not(.podium-card):hover {
     box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 215, 0, 0.3);
 }
 
-.ranking-row.rank-2 {
+.ranking-row.rank-2:not(.podium-card) {
     border-color: rgba(192, 192, 192, 0.4);
     border-left-color: #c0c0c0;
     background: linear-gradient(95deg, rgba(192, 192, 192, 0.08) 0%, rgba(15, 20, 35, 0.95) 30%);
 }
 
-.ranking-row.rank-2::after {
+.ranking-row.rank-2:not(.podium-card)::after {
     background: linear-gradient(135deg, transparent 50%, rgba(192, 192, 192, 0.7) 50%);
 }
 
-.ranking-row.rank-3 {
+.ranking-row.rank-3:not(.podium-card) {
     border-color: rgba(205, 127, 50, 0.4);
     border-left-color: #cd7f32;
     background: linear-gradient(95deg, rgba(205, 127, 50, 0.08) 0%, rgba(15, 20, 35, 0.95) 30%);
 }
 
-.ranking-row.rank-3::after {
+.ranking-row.rank-3:not(.podium-card)::after {
     background: linear-gradient(135deg, transparent 50%, rgba(205, 127, 50, 0.7) 50%);
 }
 
@@ -6832,15 +7168,7 @@ body {
     gap: 8px;
 }
 
-.row-animal-img {
-    width: 40px;
-    height: 40px;
-    object-fit: contain;
-    border-radius: 6px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(0, 212, 255, 0.2);
-    flex-shrink: 0;
-}
+/* row-animal-img is now defined with new podium system above */
 
 .row-animal-name {
     font-family: 'Bebas Neue', sans-serif;
@@ -6850,6 +7178,7 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    transition: font-size 0.3s ease;
 }
 
 /* Row - Win Rate Cell */

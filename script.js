@@ -2229,9 +2229,11 @@ class RankingsManager {
         const row = document.createElement('div');
         row.className = 'ranking-row';
         row.dataset.index = index;
+        row.dataset.rank = rank;
         
+        // Top 3 get special podium treatment
         if (rank <= 3) {
-            row.classList.add('top-3', `rank-${rank}`);
+            row.classList.add('top-3', `rank-${rank}`, 'podium-card');
         }
 
         const animal = item.animal || item;
@@ -2242,6 +2244,7 @@ class RankingsManager {
         const upvotes = item.upvotes || 0;
         const downvotes = item.downvotes || 0;
         const commentCount = item.commentCount || 0;
+        const eloRating = item.battleRating || 1000;
         
         // Check user's current vote on this animal
         const userVote = this.userVotes[animalId] || 0;
@@ -2296,6 +2299,9 @@ class RankingsManager {
                 <span class="tournament-chip bronze" title="3rd Place"><i class="fas fa-medal"></i><span>${tournamentsThird}</span></span>
             </div>`;
 
+        // ELO badge - color coded
+        const eloClass = eloRating >= 1200 ? 'elite' : eloRating >= 1100 ? 'high' : eloRating >= 1000 ? 'mid' : 'low';
+
         row.innerHTML = `
             ${diagonalBadge}
             <div class="row-rank">
@@ -2306,11 +2312,14 @@ class RankingsManager {
                 ${streakBadge}
             </div>
             <div class="row-animal">
-                <img src="${animal.image}" alt="${animal.name}" class="row-animal-img" 
-                    onerror="this.src=FALLBACK_IMAGE">
+                <div class="row-animal-img-container">
+                    <img src="${animal.image}" alt="${animal.name}" class="row-animal-img" 
+                        onerror="this.src=FALLBACK_IMAGE">
+                </div>
                 <div class="row-animal-info">
                     <div class="row-animal-name-line">
                         <span class="row-animal-name">${animal.name}</span>
+                        <span class="row-elo-badge ${eloClass}" title="ELO Rating">${eloRating}</span>
                         ${statusBadge}
                     </div>
                     ${tournamentBadges}
