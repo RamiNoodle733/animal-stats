@@ -1,23 +1,37 @@
 /**
  * Consolidated Auth API Route
- * Handles: login, signup, and me (get current user)
+ * Handles: login, signup, me, profile, and rewards
  * 
  * POST /api/auth?action=login - Authenticate user
  * POST /api/auth?action=signup - Create new user
  * GET /api/auth?action=me - Get current user from token
+ * GET/POST /api/auth?action=rewards - XP/BP rewards system
  */
 
 const { connectToDatabase } = require('../lib/mongodb');
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const { notifyDiscord } = require('../lib/discord');
+const { verifyToken } = require('../lib/auth');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'animal-stats-secret-key-change-in-production';
+
+// Reward amounts for different actions
+const REWARD_CONFIG = {
+    vote: { xp: 5, bp: 0 },
+    comment: { xp: 10, bp: 0 },
+    reply: { xp: 5, bp: 0 },
+    tournament_win: { xp: 50, bp: 10 },
+    tournament_participate: { xp: 25, bp: 5 },
+    battle_won: { xp: 15, bp: 3 },
+    daily_login: { xp: 20, bp: 2 },
+    first_vote_of_day: { xp: 10, bp: 1 }
+};
 
 module.exports = async function handler(req, res) {
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     if (req.method === 'OPTIONS') {
@@ -56,8 +70,11 @@ module.exports = async function handler(req, res) {
                 }
                 return res.status(405).json({ success: false, error: 'Method not allowed' });
             
+            case 'rewards':
+                return await handleRewards(req, res);
+            
             default:
-                return res.status(400).json({ success: false, error: 'Invalid action. Use ?action=login, signup, me, or profile' });
+                return res.status(400).json({ success: false, error: 'Invalid action. Use ?action=login, signup, me, profile, or rewards' });
         }
     } catch (error) {
         console.error('Auth error:', error);
@@ -442,4 +459,133 @@ function calculateLevelFromXp(xp) {
     if (xp < 100) return 1;
     // Inverse of the XP formula
     return Math.floor(Math.pow(xp / 100, 1/1.5) + 1);
+}
+
+// XP required for each level (exponential growth) - for rewards
+function xpForLevel(level) {
+    return Math.floor(100 * Math.pow(1.5, level - 1));
+}
+
+// Calculate level info from total XP - for rewards
+function calculateLevel(totalXp) {
+    let level = 1;
+    let xpNeeded = xpForLevel(level);
+    let xpAccumulated = 0;
+    
+    while (xpAccumulated + xpNeeded <= totalXp) {
+        xpAccumulated += xpNeeded;
+        level++;
+        xpNeeded = xpForLevel(level);
+    }
+    
+    return {
+        level,
+        currentXp: totalXp - xpAccumulated,
+        xpForNextLevel: xpNeeded,
+        totalXp
+    };
+}
+
+// ==================== REWARDS ====================
+async function handleRewards(req, res) {
+    // Verify authentication
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ success: false, error: 'Authentication required' });
+    }
+
+    const token = authHeader.split(' ')[1];
+    const user = verifyToken(token);
+    if (!user) {
+        return res.status(401).json({ success: false, error: 'Invalid token' });
+    }
+
+    if (req.method === 'GET') {
+        // Get user's current XP, level, and BP
+        const dbUser = await User.findById(user.id);
+        
+        if (!dbUser) {
+            return res.status(404).json({ success: false, error: 'User not found' });
+        }
+
+        const levelInfo = calculateLevel(dbUser.xp || 0);
+
+        return res.status(200).json({
+            success: true,
+            data: {
+                xp: dbUser.xp || 0,
+                level: levelInfo.level,
+                currentLevelXp: levelInfo.currentXp,
+                xpForNextLevel: levelInfo.xpForNextLevel,
+                battlePoints: dbUser.battlePoints || 0,
+                username: dbUser.username
+            }
+        });
+    }
+
+    if (req.method === 'POST') {
+        const { action, customXp, customBp } = req.body;
+
+        // Get reward amounts
+        let xpToAdd = 0;
+        let bpToAdd = 0;
+
+        if (action && REWARD_CONFIG[action]) {
+            xpToAdd = REWARD_CONFIG[action].xp;
+            bpToAdd = REWARD_CONFIG[action].bp;
+        } else if (customXp !== undefined || customBp !== undefined) {
+            xpToAdd = parseInt(customXp) || 0;
+            bpToAdd = parseInt(customBp) || 0;
+        } else {
+            return res.status(400).json({ 
+                success: false, 
+                error: 'Invalid action or reward amount',
+                validActions: Object.keys(REWARD_CONFIG)
+            });
+        }
+
+        // Cap rewards to prevent abuse
+        xpToAdd = Math.min(Math.max(xpToAdd, 0), 500);
+        bpToAdd = Math.min(Math.max(bpToAdd, 0), 100);
+
+        // Update user in database
+        const dbUser = await User.findByIdAndUpdate(
+            user.id,
+            {
+                $inc: {
+                    xp: xpToAdd,
+                    battlePoints: bpToAdd
+                }
+            },
+            { new: true }
+        );
+
+        if (!dbUser) {
+            return res.status(404).json({ success: false, error: 'User not found' });
+        }
+
+        const levelInfo = calculateLevel(dbUser.xp || 0);
+        const oldLevelInfo = calculateLevel((dbUser.xp || 0) - xpToAdd);
+        const leveledUp = levelInfo.level > oldLevelInfo.level;
+
+        return res.status(200).json({
+            success: true,
+            data: {
+                xpAdded: xpToAdd,
+                bpAdded: bpToAdd,
+                totalXp: dbUser.xp,
+                totalBp: dbUser.battlePoints,
+                level: levelInfo.level,
+                currentLevelXp: levelInfo.currentXp,
+                xpForNextLevel: levelInfo.xpForNextLevel,
+                leveledUp,
+                newLevel: leveledUp ? levelInfo.level : null
+            },
+            message: leveledUp 
+                ? `🎉 Level Up! You are now level ${levelInfo.level}!` 
+                : `+${xpToAdd} XP${bpToAdd > 0 ? `, +${bpToAdd} BP` : ''}`
+        });
+    }
+
+    return res.status(405).json({ success: false, error: 'Method not allowed' });
 }

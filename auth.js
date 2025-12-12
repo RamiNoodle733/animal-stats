@@ -463,7 +463,7 @@ const Auth = {
         if (!this.isLoggedIn()) return;
         
         try {
-            const response = await fetch('/api/rewards', {
+            const response = await fetch('/api/auth?action=rewards', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${this.getToken()}`

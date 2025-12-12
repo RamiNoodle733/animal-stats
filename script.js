@@ -3002,7 +3002,7 @@ class RankingsManager {
         if (!Auth.isLoggedIn()) return;
         
         try {
-            const response = await fetch('/api/rewards', {
+            const response = await fetch('/api/auth?action=rewards', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -4192,7 +4192,7 @@ class TournamentManager {
         if (!Auth.isLoggedIn()) return;
         
         try {
-            const response = await fetch('/api/rewards', {
+            const response = await fetch('/api/auth?action=rewards', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -4559,7 +4559,7 @@ class CommunityManager {
         if (!Auth.isLoggedIn()) return;
         
         try {
-            const response = await fetch('/api/rewards', {
+            const response = await fetch('/api/auth?action=rewards', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
