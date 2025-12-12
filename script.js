@@ -4211,6 +4211,9 @@ class TournamentManager {
         }
         
         // Show overlay with animation
+        overlay.style.display = 'flex';
+        // Force reflow for animation
+        void overlay.offsetWidth;
         overlay.classList.add('active');
         
         // Wait for animation to complete, then proceed
@@ -4219,8 +4222,10 @@ class TournamentManager {
         // Hide overlay
         overlay.classList.remove('active');
         
-        // Short delay then proceed to next match
+        // Wait for fade out, then hide completely
         await new Promise(resolve => setTimeout(resolve, 300));
+        overlay.style.display = 'none';
+        
         this.proceedToNextMatch();
     }
     
