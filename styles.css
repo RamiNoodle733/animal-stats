@@ -14308,11 +14308,8 @@ body {
     100% { transform: scale(1) rotate(0deg); }
 }
 
-/* Crown icon for winner */
-.elo-change-card.winner::before {
-    content: '\\f521';
-    font-family: 'Font Awesome 6 Free';
-    font-weight: 900;
+/* Crown icon for winner - using HTML element instead of pseudo-element */
+.elo-winner-crown {
     position: absolute;
     top: -20px;
     left: 50%;
@@ -14320,8 +14317,17 @@ body {
     font-size: 2rem;
     color: #ffd700;
     text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    opacity: 0;
+    transition: none;
+}
+
+.elo-change-card.winner .elo-winner-crown {
     animation: crownDrop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     animation-delay: 0.7s;
+}
+
+.elo-change-card.loser .elo-winner-crown {
+    display: none;
 }
 
 @keyframes crownDrop {
