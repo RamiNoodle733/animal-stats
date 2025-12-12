@@ -2342,10 +2342,16 @@ class RankingsManager {
             </div>
         `;
 
-        // Click on row body (not buttons) to select
+        // Click on row body (not buttons) to select AND auto-open comments
         row.addEventListener('click', (e) => {
             if (!e.target.closest('.row-vote-btn') && !e.target.closest('.row-comments-btn')) {
                 this.selectRankingRow(index);
+                // Auto-open comments when clicking on a row
+                this.toggleInlineComments(row, {
+                    id: animalId,
+                    name: animal.name,
+                    image: animal.image
+                });
             }
         });
         

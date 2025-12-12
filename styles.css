@@ -9481,7 +9481,7 @@ body {
 
 .rankings-preview-section {
     background: rgba(15, 20, 35, 0.8);
-    border: 1px solid rgba(255, 215, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 20px;
 }
@@ -9496,7 +9496,7 @@ body {
 .section-header h3 {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.3rem;
-    color: #ffd700;
+    color: rgba(255, 255, 255, 0.85);
     letter-spacing: 2px;
     margin: 0;
     display: flex;
@@ -9505,13 +9505,13 @@ body {
 }
 
 .section-header h3 i {
-    color: #ffd700;
+    color: rgba(255, 255, 255, 0.6);
 }
 
 .view-all-btn {
     background: transparent;
-    border: 1px solid rgba(255, 215, 0, 0.3);
-    color: #ffd700;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.7);
     padding: 6px 12px;
     border-radius: 15px;
     font-size: 0.8rem;
@@ -9519,11 +9519,12 @@ body {
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: background 0.2s;
+    transition: background 0.2s, color 0.2s;
 }
 
 .view-all-btn:hover {
-    background: rgba(255, 215, 0, 0.1);
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .rankings-preview-list {
