@@ -25,6 +25,9 @@ function formatStat(num, decimals = 1) {
     return parts.length > 1 ? `${intPart}.${parts[1]}` : intPart;
 }
 
+// Fallback placeholder image (inline SVG - always works, no external dependency)
+const FALLBACK_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect fill='%23222' width='100' height='100'/%3E%3Ctext x='50' y='55' text-anchor='middle' fill='%23666' font-size='32' font-family='sans-serif'%3E%3F%3C/text%3E%3C/svg%3E";
+
 // API Configuration
 const API_CONFIG = {
     // Base URL for API - auto-detects local vs production
@@ -936,7 +939,7 @@ class AnimalStatsApp {
 
             card.innerHTML = `
                 <span class="card-tier-badge tier-${tierClass}">${overallTier}</span>
-                <img src="${animal.image}" alt="${animal.name}" class="character-card-image" loading="lazy" onerror="this.src='https://via.placeholder.com/110x80?text=?'">
+                <img src="${animal.image}" alt="${animal.name}" class="character-card-image" loading="lazy" onerror="this.src=FALLBACK_IMAGE">
                 <div class="character-card-name">${animal.name}</div>
                 <div class="card-hover-stats">
                     <div class="hover-stat"><span class="hover-stat-icon">⚔</span>${Math.round(animal.attack || 0)}</div>
@@ -1387,7 +1390,7 @@ class AnimalStatsApp {
         els.placeholder.style.display = 'none';
         els.img.style.display = 'block';
         els.img.src = animal.image;
-        els.img.onerror = () => { els.img.src = 'https://via.placeholder.com/350x350?text=' + animal.name; };
+        els.img.onerror = () => { els.img.src = FALLBACK_IMAGE; };
         
         els.name.textContent = animal.name.toUpperCase();
         
@@ -2303,7 +2306,7 @@ class RankingsManager {
             </div>
             <div class="row-animal">
                 <img src="${animal.image}" alt="${animal.name}" class="row-animal-img" 
-                    onerror="this.src='https://via.placeholder.com/40x40?text=?'">
+                    onerror="this.src=FALLBACK_IMAGE">
                 <div class="row-animal-info">
                     <div class="row-animal-name-line">
                         <span class="row-animal-name">${animal.name}</span>
@@ -2393,7 +2396,7 @@ class RankingsManager {
         panel.innerHTML = `
             <div class="inline-comments-header">
                 <div class="inline-comments-animal">
-                    <img src="${animal.image}" alt="${animal.name}" onerror="this.src='https://via.placeholder.com/30?text=?'">
+                    <img src="${animal.image}" alt="${animal.name}" onerror="this.onerror=null;this.src=FALLBACK_IMAGE">
                     <span>${animal.name}</span>
                     <span class="inline-comments-label">Discussion</span>
                 </div>
@@ -2543,7 +2546,7 @@ class RankingsManager {
         if (this.dom.detailPortrait) {
             this.dom.detailPortrait.style.opacity = '0';
             this.dom.detailPortrait.src = animal.image;
-            this.dom.detailPortrait.onerror = () => { this.dom.detailPortrait.src = 'https://via.placeholder.com/120x120?text=?'; };
+            this.dom.detailPortrait.onerror = () => { this.dom.detailPortrait.src = FALLBACK_IMAGE; };
             setTimeout(() => {
                 this.dom.detailPortrait.style.opacity = '1';
                 this.dom.detailPortrait.style.transition = 'opacity 0.3s ease';
@@ -2948,7 +2951,7 @@ class RankingsManager {
         this.dom.commentsAnimalName.textContent = this.currentAnimal.name;
         this.dom.commentsAnimalImage.src = this.currentAnimal.image;
         this.dom.commentsAnimalImage.onerror = () => {
-            this.dom.commentsAnimalImage.src = 'https://via.placeholder.com/60x60?text=?';
+            this.dom.commentsAnimalImage.src = FALLBACK_IMAGE;
         };
 
         // Show/hide login prompt vs comment form
@@ -3761,7 +3764,7 @@ class TournamentManager {
         if (imgEl) {
             imgEl.src = animal.image || '';
             imgEl.alt = animal.name || 'Unknown';
-            imgEl.onerror = () => { imgEl.src = 'https://via.placeholder.com/200x150?text=?'; };
+            imgEl.onerror = () => { imgEl.src = FALLBACK_IMAGE; };
         }
         
         // Name - IMPORTANT: Set from actual animal data
@@ -3973,7 +3976,7 @@ class TournamentManager {
         
         // Update results screen
         this.dom.championImg.src = champion.image;
-        this.dom.championImg.onerror = () => { this.dom.championImg.src = 'https://via.placeholder.com/180x180?text=?'; };
+        this.dom.championImg.onerror = () => { this.dom.championImg.src = FALLBACK_IMAGE; };
         this.dom.championName.textContent = champion.name;
         this.dom.resultMatches.textContent = this.totalMatches;
         this.dom.resultBracket.textContent = this.bracketSize;
@@ -4002,7 +4005,7 @@ class TournamentManager {
                 runnerUpHtml += `
                     <div class="runner-up-card-v3">
                         <div class="runner-up-position-v3">${posLabel}</div>
-                        <img src="${animal.image}" alt="${animal.name}" class="runner-up-image-v3" onerror="this.src='https://via.placeholder.com/80x80?text=?'">
+                        <img src="${animal.image}" alt="${animal.name}" class="runner-up-image-v3" onerror="this.onerror=null;this.src=FALLBACK_IMAGE">
                         <div class="runner-up-name-v3">${animal.name}</div>
                     </div>
                 `;
@@ -4775,7 +4778,7 @@ class CommunityManager {
         const initial = comment.isAnonymous ? '?' : (comment.authorUsername?.charAt(0).toUpperCase() || '?');
         const authorName = comment.isAnonymous ? 'Anonymous' : comment.authorUsername;
         const time = this.formatTime(comment.createdAt);
-        const animalImage = comment.animalImage || 'https://via.placeholder.com/50x50?text=?';
+        const animalImage = comment.animalImage || FALLBACK_IMAGE;
         const animalId = comment.animalId || '';
         
         // Profile animal for avatar
@@ -4812,7 +4815,7 @@ class CommunityManager {
         return `
             <div class="feed-item" data-id="${comment._id}">
                 <div class="feed-item-header">
-                    <img src="${animalImage}" alt="${comment.animalName}" class="feed-animal-image" onerror="this.src='https://via.placeholder.com/50x50?text=?'">
+                    <img src="${animalImage}" alt="${comment.animalName}" class="feed-animal-image" onerror="this.onerror=null;this.src=FALLBACK_IMAGE">
                     <div class="feed-animal-info">
                         <div class="feed-animal-name" data-animal="${this.escapeHtml(comment.animalName)}">${this.escapeHtml(comment.animalName)}</div>
                         <div class="feed-comment-type">${comment.targetType === 'comparison' ? 'Comparison' : 'Animal Discussion'}</div>
