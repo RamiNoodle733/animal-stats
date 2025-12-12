@@ -7272,10 +7272,8 @@ body {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
     padding-top: 8px;
-    max-height: calc(100vh - 180px);
 }
 
 /* Tournament CTA Banner - Legacy (hidden when using hero banner) */
@@ -7383,9 +7381,8 @@ body {
     border-radius: 12px;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    flex: 1;
-    min-height: 400px;
+    overflow: visible;
+    flex-shrink: 0;
 }
 
 .detail-panel-empty {
@@ -7414,8 +7411,7 @@ body {
     flex-direction: column;
     padding: 12px;
     gap: 10px;
-    overflow-y: auto;
-    flex: 1;
+    overflow: visible;
 }
 
 /* Compact Header with inline portrait */
