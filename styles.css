@@ -7161,6 +7161,125 @@ body {
     border-radius: 6px;
 }
 
+/* Inline avatar with profile animal image */
+.inline-comment-avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.inline-comment-avatar.small {
+    width: 22px;
+    height: 22px;
+    font-size: 0.65rem;
+}
+
+/* Inline replies */
+.inline-comment-replies {
+    margin-top: 8px;
+    padding-left: 10px;
+    border-left: 2px solid rgba(0, 212, 255, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.inline-reply-item {
+    display: flex;
+    gap: 8px;
+    padding: 6px 8px;
+    background: rgba(0, 212, 255, 0.05);
+    border-radius: 6px;
+}
+
+.inline-reply-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.inline-reply-content .inline-comment-author {
+    font-size: 0.7rem;
+}
+
+.inline-reply-content .inline-comment-time {
+    font-size: 0.6rem;
+    margin-left: 6px;
+}
+
+.inline-reply-content .inline-comment-text {
+    font-size: 0.75rem;
+    margin-top: 2px;
+}
+
+.inline-more-replies {
+    font-size: 0.7rem;
+    color: rgba(0, 212, 255, 0.6);
+    padding: 4px 8px;
+}
+
+/* Inline panel comment input */
+.inline-comment-input-row {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.inline-panel-comment-input {
+    flex: 1;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: #fff;
+    font-size: 0.8rem;
+}
+
+.inline-panel-comment-input:focus {
+    outline: none;
+    border-color: #00d4ff;
+    background: rgba(0, 212, 255, 0.05);
+}
+
+.inline-panel-send-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 212, 255, 0.15);
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    border-radius: 6px;
+    color: #00d4ff;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.inline-panel-send-btn:hover {
+    background: rgba(0, 212, 255, 0.3);
+    border-color: #00d4ff;
+}
+
+.inline-panel-send-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.inline-panel-login-prompt {
+    text-align: center;
+    padding: 10px;
+    margin-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.75rem;
+}
+
+.inline-panel-login-prompt i {
+    margin-right: 5px;
+}
+
 /* Right Column - Selected Animal Detail Panel */
 .rankings-right-column {
     width: 320px;
@@ -7847,12 +7966,12 @@ body {
    ================================ */
 .detail-comments-section {
     margin-top: 12px;
-    background: rgba(0, 50, 80, 0.5);
+    background: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
-    border: 2px solid #00d4ff !important;
+    border: 1px solid rgba(0, 212, 255, 0.2);
     padding: 10px;
-    min-height: 120px;
-    display: flex !important;
+    min-height: 100px;
+    display: flex;
     flex-direction: column;
 }
 

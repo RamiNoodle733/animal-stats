@@ -2393,6 +2393,7 @@ class RankingsManager {
         // Create inline comments panel
         const panel = document.createElement('div');
         panel.className = 'inline-comments-panel';
+        const isLoggedIn = Auth.isLoggedIn();
         panel.innerHTML = `
             <div class="inline-comments-header">
                 <div class="inline-comments-animal">
@@ -2401,7 +2402,7 @@ class RankingsManager {
                     <span class="inline-comments-label">Discussion</span>
                 </div>
                 <div class="inline-comments-actions">
-                    <button class="inline-view-all-btn" data-animal-name="${animal.name}" data-animal-id="${animal.id}" data-animal-image="${animal.image}">
+                    <button class="inline-view-all-btn" data-animal-name="${animal.name}" data-animal-id="${animal.id || animal._id}" data-animal-image="${animal.image}">
                         <i class="fas fa-external-link-alt"></i> View All
                     </button>
                     <button class="inline-comments-close"><i class="fas fa-times"></i></button>
@@ -2410,6 +2411,16 @@ class RankingsManager {
             <div class="inline-comments-list">
                 <div class="inline-comments-loading"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
             </div>
+            ${isLoggedIn ? `
+                <div class="inline-comment-input-row">
+                    <input type="text" class="inline-panel-comment-input" placeholder="Add a comment..." maxlength="300">
+                    <button class="inline-panel-send-btn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            ` : `
+                <div class="inline-panel-login-prompt">
+                    <i class="fas fa-lock"></i> Log in to comment
+                </div>
+            `}
         `;
         
         // Insert after the row
@@ -2427,6 +2438,50 @@ class RankingsManager {
             row.classList.remove('comments-expanded');
             this.openCommentsModal({ currentTarget: e.currentTarget });
         });
+        
+        // Bind comment input if logged in
+        const inputEl = panel.querySelector('.inline-panel-comment-input');
+        const sendBtn = panel.querySelector('.inline-panel-send-btn');
+        if (inputEl && sendBtn) {
+            const submitComment = async () => {
+                const content = inputEl.value.trim();
+                if (!content) return;
+                
+                sendBtn.disabled = true;
+                try {
+                    const response = await fetch('/api/comments', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${Auth.getToken()}`
+                        },
+                        body: JSON.stringify({
+                            targetType: 'animal',
+                            animalId: animal.id || animal._id,
+                            animalName: animal.name,
+                            content,
+                            isAnonymous: false
+                        })
+                    });
+                    const result = await response.json();
+                    if (result.success) {
+                        inputEl.value = '';
+                        Auth.showToast('Comment posted!');
+                        // Refresh the inline panel
+                        this.toggleInlineComments(row, animal);
+                        this.toggleInlineComments(row, animal);
+                    } else {
+                        Auth.showToast(result.error || 'Failed to post');
+                    }
+                } catch (err) {
+                    Auth.showToast('Error posting comment');
+                } finally {
+                    sendBtn.disabled = false;
+                }
+            };
+            sendBtn.addEventListener('click', submitComment);
+            inputEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') submitComment(); });
+        }
         
         // Fetch comments
         try {
@@ -2468,20 +2523,53 @@ class RankingsManager {
         const displayName = comment.isAnonymous ? 'Anonymous' : 
             (comment.authorUsername || comment.author?.displayName || 'Unknown');
         const timeAgo = this.getTimeAgo(new Date(comment.createdAt));
+        const profileAnimal = comment.author?.profileAnimal || comment.profileAnimal;
+        
+        // Avatar HTML - profile animal image or initial
+        let avatarHtml;
+        if (comment.isAnonymous) {
+            avatarHtml = '<i class="fas fa-user-secret"></i>';
+        } else if (profileAnimal?.image) {
+            avatarHtml = `<img src="${profileAnimal.image}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span style="display:none">${displayName[0].toUpperCase()}</span>`;
+        } else {
+            avatarHtml = `<span>${displayName[0].toUpperCase()}</span>`;
+        }
+        
+        // Replies HTML
+        let repliesHtml = '';
+        if (comment.replies && comment.replies.length > 0) {
+            repliesHtml = `<div class="inline-comment-replies">
+                ${comment.replies.slice(0, 2).map(r => {
+                    const rName = r.isAnonymous ? 'Anonymous' : (r.authorUsername || 'Unknown');
+                    const rTime = this.getTimeAgo(new Date(r.createdAt));
+                    const rProfile = r.author?.profileAnimal || r.profileAnimal;
+                    let rAvatar = r.isAnonymous ? '<i class="fas fa-user-secret"></i>' : 
+                        (rProfile?.image ? `<img src="${rProfile.image}" alt="">` : `<span>${rName[0].toUpperCase()}</span>`);
+                    return `
+                        <div class="inline-reply-item">
+                            <div class="inline-comment-avatar small">${rAvatar}</div>
+                            <div class="inline-reply-content">
+                                <span class="inline-comment-author">${rName}</span>
+                                <span class="inline-comment-time">${rTime}</span>
+                                <p class="inline-comment-text">${this.escapeHtml(r.content)}</p>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+                ${comment.replies.length > 2 ? `<div class="inline-more-replies">+${comment.replies.length - 2} more replies</div>` : ''}
+            </div>`;
+        }
         
         return `
             <div class="inline-comment-item ${comment.isAnonymous ? 'anonymous' : ''}">
-                <div class="inline-comment-avatar">
-                    ${comment.isAnonymous 
-                        ? '<i class="fas fa-user-secret"></i>' 
-                        : `<span>${displayName[0].toUpperCase()}</span>`}
-                </div>
+                <div class="inline-comment-avatar">${avatarHtml}</div>
                 <div class="inline-comment-content">
                     <div class="inline-comment-meta">
                         <span class="inline-comment-author">${displayName}</span>
                         <span class="inline-comment-time">${timeAgo}</span>
                     </div>
                     <p class="inline-comment-text">${this.escapeHtml(comment.content)}</p>
+                    ${repliesHtml}
                 </div>
             </div>
         `;
