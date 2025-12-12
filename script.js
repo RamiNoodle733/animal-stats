@@ -2300,7 +2300,9 @@ class RankingsManager {
             ${diagonalBadge}
             <div class="row-rank">
                 <span class="row-rank-num">#${rank}</span>
-                ${rank <= 3 ? '<i class="fas fa-crown row-crown"></i>' : ''}
+                ${rank === 1 ? '<i class="fas fa-trophy row-rank-icon gold"></i>' : ''}
+                ${rank === 2 ? '<i class="fas fa-medal row-rank-icon silver"></i>' : ''}
+                ${rank === 3 ? '<i class="fas fa-medal row-rank-icon bronze"></i>' : ''}
                 ${streakBadge}
             </div>
             <div class="row-animal">

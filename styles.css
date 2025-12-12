@@ -4849,22 +4849,19 @@ body {
 
 .rankings-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.2rem;
-    letter-spacing: 4px;
-    background: linear-gradient(135deg, #ffd700, #ff6b00);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+    font-size: 1.4rem;
+    letter-spacing: 3px;
+    color: #ffd700;
     margin: 0 0 8px 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .rankings-title i {
-    -webkit-text-fill-color: #ffd700;
+    color: #ffd700;
+    font-size: 1rem;
 }
 
 .rankings-header h2 {
@@ -6279,6 +6276,29 @@ body {
 .ranking-row.rank-2 .row-rank-num { color: #c0c0c0; }
 .ranking-row.rank-3 .row-rank-num { color: #cd7f32; }
 
+/* Rank icons - Trophy for 1st, Medal for 2nd/3rd */
+.row-rank-icon {
+    font-size: 1rem;
+    position: absolute;
+    top: -8px;
+    left: 25px;
+    transform: rotate(-15deg);
+    filter: drop-shadow(0 0 6px currentColor);
+}
+
+.row-rank-icon.gold {
+    color: #ffd700;
+}
+
+.row-rank-icon.silver {
+    color: #c0c0c0;
+}
+
+.row-rank-icon.bronze {
+    color: #cd7f32;
+}
+
+/* Legacy crown class - keep for compatibility */
 .row-crown {
     font-size: 1rem;
     color: #ffd700;
@@ -14318,7 +14338,7 @@ body {
     color: #ffd700;
     text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
     opacity: 0;
-    transition: none;
+    pointer-events: none;
 }
 
 .elo-change-card.winner .elo-winner-crown {
@@ -14331,8 +14351,14 @@ body {
 }
 
 @keyframes crownDrop {
-    0% { transform: translateX(-50%) translateY(-30px) scale(0); }
-    100% { transform: translateX(-50%) translateY(0) scale(1); }
+    0% { 
+        transform: translateX(-50%) translateY(-30px) scale(0); 
+        opacity: 0;
+    }
+    100% { 
+        transform: translateX(-50%) translateY(0) scale(1); 
+        opacity: 1;
+    }
 }
 
 /* Responsive */
