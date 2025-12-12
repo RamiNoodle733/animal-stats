@@ -2011,12 +2011,7 @@ class RankingsManager {
      * Load comments for the inline section in detail panel
      */
     async loadInlineComments(animalName) {
-        console.log('[Rankings] loadInlineComments called for:', animalName);
-        console.log('[Rankings] detailCommentsList element:', this.dom.detailCommentsList);
-        if (!this.dom.detailCommentsList) {
-            console.error('[Rankings] detailCommentsList is null!');
-            return;
-        }
+        if (!this.dom.detailCommentsList) return;
         
         // Show/hide input based on login
         if (this.dom.detailCommentInputArea) {
