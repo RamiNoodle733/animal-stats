@@ -2390,9 +2390,25 @@ class RankingsManager {
             return;
         }
         
-        // Close any other open inline comments
-        document.querySelectorAll('.inline-comments-panel').forEach(p => p.remove());
+        // Find any open panels ABOVE this row and calculate height offset
+        const rankingsList = this.dom.rankingsList;
+        const rowRect = row.getBoundingClientRect();
+        let heightToRemove = 0;
+        
+        document.querySelectorAll('.inline-comments-panel').forEach(panel => {
+            const panelRect = panel.getBoundingClientRect();
+            // If this panel is above the clicked row
+            if (panelRect.bottom < rowRect.top) {
+                heightToRemove += panel.offsetHeight;
+            }
+            panel.remove();
+        });
         document.querySelectorAll('.ranking-row.comments-expanded').forEach(r => r.classList.remove('comments-expanded'));
+        
+        // Adjust scroll position to keep clicked row in same visual position
+        if (heightToRemove > 0 && rankingsList) {
+            rankingsList.scrollTop -= heightToRemove;
+        }
         
         // Mark this row as expanded
         row.classList.add('comments-expanded');

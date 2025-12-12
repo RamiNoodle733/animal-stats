@@ -5985,14 +5985,15 @@ body {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.2rem;
     letter-spacing: 3px;
-    color: #000;
+    color: rgba(255, 255, 255, 0.85);
     white-space: nowrap;
-    background: linear-gradient(90deg, #ffd700, #ffaa00);
+    background: rgba(255, 255, 255, 0.1);
     padding: 6px 20px 6px 12px;
     transform: skewX(-8deg);
     position: relative;
-    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4);
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
     clip-path: polygon(0 0, 100% 0, 95% 100%, 0 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .rankings-list-title > * {
@@ -6001,7 +6002,7 @@ body {
 
 .rankings-list-title i {
     font-size: 1rem;
-    color: #000;
+    color: rgba(255, 255, 255, 0.6);
 }
 
 /* Decorative burst triangles around title */
@@ -6013,7 +6014,7 @@ body {
     transform: translateY(-50%);
     width: 0;
     height: 0;
-    border-left: 8px solid #ffaa00;
+    border-left: 8px solid rgba(255, 255, 255, 0.15);
     border-top: 6px solid transparent;
     border-bottom: 6px solid transparent;
 }
