@@ -1348,6 +1348,7 @@
                             <h3 class="fighter-name-v3" id="t-fighter-1-name">Loading...</h3>
                             <div class="fighter-badges-v3">
                                 <span class="rank-badge-v3" id="t-fighter-1-rank">#1</span>
+                                <span class="elo-badge-v3" id="t-fighter-1-elo"><i class="fas fa-chart-line"></i> 1000</span>
                                 <span class="winrate-badge-v3" id="t-fighter-1-winrate">0% (0 battles)</span>
                             </div>
                         </div>
@@ -1445,6 +1446,7 @@
                             <h3 class="fighter-name-v3" id="t-fighter-2-name">Loading...</h3>
                             <div class="fighter-badges-v3">
                                 <span class="rank-badge-v3" id="t-fighter-2-rank">#2</span>
+                                <span class="elo-badge-v3" id="t-fighter-2-elo"><i class="fas fa-chart-line"></i> 1000</span>
                                 <span class="winrate-badge-v3" id="t-fighter-2-winrate">0% (0 battles)</span>
                             </div>
                         </div>
@@ -1477,6 +1479,41 @@
                     <div class="fighter-click-zone">
                         <i class="fas fa-hand-pointer"></i>
                         <span>CLICK TO VOTE</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- ELO Change Animation Overlay -->
+            <div class="elo-animation-overlay" id="elo-animation-overlay">
+                <div class="elo-change-card left" id="elo-change-left">
+                    <div class="elo-change-portrait">
+                        <img src="" alt="" id="elo-left-img">
+                    </div>
+                    <div class="elo-change-content">
+                        <div class="elo-change-name" id="elo-left-name">Animal</div>
+                        <div class="elo-change-delta" id="elo-left-delta">+15</div>
+                        <div class="elo-change-calculation">
+                            <span class="elo-old" id="elo-left-old">1000</span>
+                            <i class="fas fa-arrow-right"></i>
+                            <span class="elo-new" id="elo-left-new">1015</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="elo-vs-divider">
+                    <span>VS</span>
+                </div>
+                <div class="elo-change-card right" id="elo-change-right">
+                    <div class="elo-change-portrait">
+                        <img src="" alt="" id="elo-right-img">
+                    </div>
+                    <div class="elo-change-content">
+                        <div class="elo-change-name" id="elo-right-name">Animal</div>
+                        <div class="elo-change-delta" id="elo-right-delta">-12</div>
+                        <div class="elo-change-calculation">
+                            <span class="elo-old" id="elo-right-old">1000</span>
+                            <i class="fas fa-arrow-right"></i>
+                            <span class="elo-new" id="elo-right-new">988</span>
+                        </div>
                     </div>
                 </div>
             </div>

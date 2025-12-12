@@ -11683,6 +11683,36 @@ body {
     color: rgba(255, 215, 0, 0.9);
 }
 
+/* ELO Badge */
+.elo-badge-v3 {
+    padding: 3px 8px;
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(75, 0, 130, 0.2));
+    border: 1px solid rgba(138, 43, 226, 0.5);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #da70d6;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.elo-badge-v3 i {
+    font-size: 0.65rem;
+}
+
+.fighter-card-v3.left .elo-badge-v3 {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 100, 200, 0.15));
+    border-color: rgba(0, 212, 255, 0.5);
+    color: #00d4ff;
+}
+
+.fighter-card-v3.right .elo-badge-v3 {
+    background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(200, 50, 0, 0.15));
+    border-color: rgba(255, 107, 0, 0.5);
+    color: #ff6b00;
+}
+
 /* Fighter Specs Row (Weight, Speed, Bite) */
 .fighter-specs-v3 {
     display: flex;
@@ -14070,4 +14100,251 @@ body {
     opacity: 0.5;
     filter: grayscale(0.5);
     transform: scale(0.97);
+}
+
+/* ==================== ELO Change Animation Overlay ==================== */
+.elo-animation-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    z-index: 10000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.elo-animation-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.elo-change-card {
+    background: linear-gradient(145deg, rgba(20, 25, 35, 0.98), rgba(10, 15, 25, 0.98));
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 24px;
+    min-width: 220px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    transform: translateY(50px) scale(0.8);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.elo-animation-overlay.active .elo-change-card {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.elo-animation-overlay.active .elo-change-card.left {
+    transition-delay: 0.1s;
+}
+
+.elo-animation-overlay.active .elo-change-card.right {
+    transition-delay: 0.2s;
+}
+
+.elo-change-card.left {
+    border-color: rgba(0, 212, 255, 0.4);
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.2), inset 0 0 20px rgba(0, 212, 255, 0.05);
+}
+
+.elo-change-card.right {
+    border-color: rgba(255, 107, 0, 0.4);
+    box-shadow: 0 0 40px rgba(255, 107, 0, 0.2), inset 0 0 20px rgba(255, 107, 0, 0.05);
+}
+
+.elo-change-card.winner {
+    border-color: rgba(46, 204, 64, 0.6) !important;
+    box-shadow: 0 0 60px rgba(46, 204, 64, 0.4), inset 0 0 30px rgba(46, 204, 64, 0.1) !important;
+}
+
+.elo-change-card.loser {
+    border-color: rgba(255, 65, 54, 0.4) !important;
+    box-shadow: 0 0 40px rgba(255, 65, 54, 0.2), inset 0 0 20px rgba(255, 65, 54, 0.05) !important;
+    opacity: 0.8;
+}
+
+.elo-change-portrait {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.elo-change-card.winner .elo-change-portrait {
+    border-color: #2ecc40;
+    animation: winnerGlow 1s ease-in-out infinite alternate;
+}
+
+@keyframes winnerGlow {
+    from { box-shadow: 0 0 20px rgba(46, 204, 64, 0.4); }
+    to { box-shadow: 0 0 40px rgba(46, 204, 64, 0.8); }
+}
+
+.elo-change-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.elo-change-content {
+    text-align: center;
+}
+
+.elo-change-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.elo-change-delta {
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+    text-shadow: 0 0 20px currentColor;
+    transform: scale(0);
+    animation: deltaPopIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: 0.5s;
+}
+
+.elo-change-card.winner .elo-change-delta {
+    color: #2ecc40;
+}
+
+.elo-change-card.loser .elo-change-delta {
+    color: #ff4136;
+}
+
+@keyframes deltaPopIn {
+    0% { transform: scale(0) rotate(-10deg); }
+    50% { transform: scale(1.3) rotate(5deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+.elo-change-calculation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+    opacity: 0;
+    animation: fadeIn 0.4s ease forwards;
+    animation-delay: 0.8s;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; }
+}
+
+.elo-change-calculation .elo-old {
+    color: rgba(255, 255, 255, 0.5);
+    text-decoration: line-through;
+}
+
+.elo-change-calculation .elo-new {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.elo-change-card.winner .elo-change-calculation .elo-new {
+    color: #2ecc40;
+}
+
+.elo-change-card.loser .elo-change-calculation .elo-new {
+    color: #ff4136;
+}
+
+.elo-change-calculation i {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.elo-vs-divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #ff6b00, #ff3366);
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 30px rgba(255, 107, 0, 0.5);
+    transform: scale(0);
+    animation: vsBounce 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: 0.3s;
+}
+
+@keyframes vsBounce {
+    0% { transform: scale(0) rotate(-180deg); }
+    100% { transform: scale(1) rotate(0deg); }
+}
+
+/* Crown icon for winner */
+.elo-change-card.winner::before {
+    content: '\\f521';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%) scale(0);
+    font-size: 2rem;
+    color: #ffd700;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    animation: crownDrop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: 0.7s;
+}
+
+@keyframes crownDrop {
+    0% { transform: translateX(-50%) translateY(-30px) scale(0); }
+    100% { transform: translateX(-50%) translateY(0) scale(1); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .elo-animation-overlay {
+        flex-direction: column;
+        gap: 20px;
+        padding: 20px;
+    }
+    
+    .elo-change-card {
+        min-width: 180px;
+        padding: 20px;
+    }
+    
+    .elo-change-portrait {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .elo-change-delta {
+        font-size: 2rem;
+    }
+    
+    .elo-vs-divider {
+        width: 50px;
+        height: 50px;
+        font-size: 1rem;
+    }
 }

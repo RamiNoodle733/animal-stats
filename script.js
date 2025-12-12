@@ -3563,8 +3563,25 @@ class TournamentManager {
             resultBracket: document.getElementById('result-bracket'),
             runnerUpList: document.getElementById('runner-up-list'),
             playAgainBtn: document.getElementById('play-again-btn'),
-            closeResultsBtn: document.getElementById('close-results-btn')
+            closeResultsBtn: document.getElementById('close-results-btn'),
+            // ELO animation overlay
+            eloOverlay: document.getElementById('elo-animation-overlay'),
+            eloLeftImg: document.getElementById('elo-left-img'),
+            eloLeftName: document.getElementById('elo-left-name'),
+            eloLeftDelta: document.getElementById('elo-left-delta'),
+            eloLeftOld: document.getElementById('elo-left-old'),
+            eloLeftNew: document.getElementById('elo-left-new'),
+            eloLeftCard: document.getElementById('elo-change-left'),
+            eloRightImg: document.getElementById('elo-right-img'),
+            eloRightName: document.getElementById('elo-right-name'),
+            eloRightDelta: document.getElementById('elo-right-delta'),
+            eloRightOld: document.getElementById('elo-right-old'),
+            eloRightNew: document.getElementById('elo-right-new'),
+            eloRightCard: document.getElementById('elo-change-right')
         };
+        
+        // Cache for ELO ratings
+        this.eloCache = {};
     }
 
     init() {
@@ -4023,6 +4040,38 @@ class TournamentManager {
         
         if (upvotesEl) upvotesEl.textContent = animal.upvotes || 0;
         if (downvotesEl) downvotesEl.textContent = animal.downvotes || 0;
+        
+        // ELO Rating - fetch from API and cache
+        this.updateFighterElo(fighterNum, animal.name);
+    }
+    
+    /**
+     * Fetch and display ELO rating for a fighter
+     */
+    async updateFighterElo(fighterNum, animalName) {
+        const eloEl = document.getElementById(`t-fighter-${fighterNum}-elo`);
+        if (!eloEl) return;
+        
+        // Check cache first
+        if (this.eloCache[animalName]) {
+            eloEl.innerHTML = `<i class="fas fa-chart-line"></i> ${this.eloCache[animalName]}`;
+            return;
+        }
+        
+        try {
+            const response = await fetch(`/api/battles?animal=${encodeURIComponent(animalName)}`);
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success && result.data) {
+                    const elo = result.data.battleRating || 1000;
+                    this.eloCache[animalName] = elo;
+                    eloEl.innerHTML = `<i class="fas fa-chart-line"></i> ${elo}`;
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching ELO:', error);
+            eloEl.innerHTML = `<i class="fas fa-chart-line"></i> 1000`;
+        }
     }
 
     updateProgress() {
@@ -4056,9 +4105,6 @@ class TournamentManager {
             loser: loser
         });
         
-        // Record battle to API (updates ELO ratings)
-        this.recordBattle(winner.name, loser.name);
-        
         // Add winner to next round
         this.winners.push(winner);
         this.completedMatches++;
@@ -4070,18 +4116,131 @@ class TournamentManager {
         if (winnerEl) winnerEl.classList.add('selected');
         if (loserEl) loserEl.classList.add('eliminated');
         
-        // Move to next match after brief delay
-        setTimeout(() => {
-            // Reset classes
-            if (winnerEl) winnerEl.classList.remove('selected');
-            if (loserEl) loserEl.classList.remove('eliminated');
+        // Record battle to API and show ELO animation
+        this.recordBattleWithAnimation(winner, loser, fighterIndex);
+    }
+    
+    async recordBattleWithAnimation(winner, loser, winnerIndex) {
+        try {
+            const response = await fetch('/api/battles', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ winner: winner.name, loser: loser.name })
+            });
             
-            this.currentMatch++;
-            this.showCurrentMatch();
-        }, 800);
+            if (!response.ok) {
+                console.error('Failed to record battle');
+                this.proceedToNextMatch();
+                return;
+            }
+            
+            const result = await response.json();
+            
+            if (result.success && result.data) {
+                // Update ELO cache with new values
+                this.eloCache[winner.name] = result.data.winner.newRating;
+                this.eloCache[loser.name] = result.data.loser.newRating;
+                
+                // Show the awesome ELO animation
+                await this.showEloAnimation(winner, loser, result.data, winnerIndex);
+            } else {
+                this.proceedToNextMatch();
+            }
+        } catch (error) {
+            console.error('Error recording battle:', error);
+            this.proceedToNextMatch();
+        }
+    }
+    
+    /**
+     * Show beautiful ELO change animation
+     */
+    async showEloAnimation(winner, loser, battleData, winnerIndex) {
+        const overlay = this.dom.eloOverlay;
+        if (!overlay) {
+            this.proceedToNextMatch();
+            return;
+        }
+        
+        // Determine left/right based on winner index
+        const leftIsWinner = winnerIndex === 0;
+        const leftAnimal = leftIsWinner ? winner : loser;
+        const rightAnimal = leftIsWinner ? loser : winner;
+        const leftData = leftIsWinner ? battleData.winner : battleData.loser;
+        const rightData = leftIsWinner ? battleData.loser : battleData.winner;
+        
+        // Populate left card
+        if (this.dom.eloLeftImg) {
+            this.dom.eloLeftImg.src = leftAnimal.image || '';
+            this.dom.eloLeftImg.onerror = () => { this.dom.eloLeftImg.src = FALLBACK_IMAGE; };
+        }
+        if (this.dom.eloLeftName) this.dom.eloLeftName.textContent = leftAnimal.name;
+        if (this.dom.eloLeftDelta) {
+            const change = leftData.change;
+            this.dom.eloLeftDelta.textContent = change >= 0 ? `+${change}` : `${change}`;
+        }
+        if (this.dom.eloLeftOld) this.dom.eloLeftOld.textContent = leftData.oldRating;
+        if (this.dom.eloLeftNew) this.dom.eloLeftNew.textContent = leftData.newRating;
+        
+        // Populate right card
+        if (this.dom.eloRightImg) {
+            this.dom.eloRightImg.src = rightAnimal.image || '';
+            this.dom.eloRightImg.onerror = () => { this.dom.eloRightImg.src = FALLBACK_IMAGE; };
+        }
+        if (this.dom.eloRightName) this.dom.eloRightName.textContent = rightAnimal.name;
+        if (this.dom.eloRightDelta) {
+            const change = rightData.change;
+            this.dom.eloRightDelta.textContent = change >= 0 ? `+${change}` : `${change}`;
+        }
+        if (this.dom.eloRightOld) this.dom.eloRightOld.textContent = rightData.oldRating;
+        if (this.dom.eloRightNew) this.dom.eloRightNew.textContent = rightData.newRating;
+        
+        // Set winner/loser classes
+        const leftCard = this.dom.eloLeftCard;
+        const rightCard = this.dom.eloRightCard;
+        
+        if (leftCard) {
+            leftCard.classList.remove('winner', 'loser');
+            leftCard.classList.add(leftIsWinner ? 'winner' : 'loser');
+        }
+        if (rightCard) {
+            rightCard.classList.remove('winner', 'loser');
+            rightCard.classList.add(leftIsWinner ? 'loser' : 'winner');
+        }
+        
+        // Show overlay with animation
+        overlay.classList.add('active');
+        
+        // Wait for animation to complete, then proceed
+        await new Promise(resolve => setTimeout(resolve, 2200));
+        
+        // Hide overlay
+        overlay.classList.remove('active');
+        
+        // Short delay then proceed to next match
+        await new Promise(resolve => setTimeout(resolve, 300));
+        this.proceedToNextMatch();
+    }
+    
+    /**
+     * Proceed to the next match after ELO animation
+     */
+    proceedToNextMatch() {
+        // Reset fighter card classes
+        const fighter1Card = this.getFighterCard(1);
+        const fighter2Card = this.getFighterCard(2);
+        
+        if (fighter1Card) fighter1Card.classList.remove('selected', 'eliminated');
+        if (fighter2Card) fighter2Card.classList.remove('selected', 'eliminated');
+        
+        this.currentMatch++;
+        this.showCurrentMatch();
     }
     
     async recordBattle(winnerName, loserName) {
+        // Legacy function - now using recordBattleWithAnimation
         try {
             const response = await fetch('/api/battles', {
                 method: 'POST',
@@ -4099,10 +4258,10 @@ class TournamentManager {
             const result = await response.json();
             console.log('Battle recorded:', result.data);
             
-            // Show rating change (optional visual feedback)
+            // Update ELO cache
             if (result.success && result.data) {
-                const winnerChange = result.data.winner.change;
-                console.log(`${winnerName}: +${winnerChange} rating`);
+                this.eloCache[winnerName] = result.data.winner.newRating;
+                this.eloCache[loserName] = result.data.loser.newRating;
             }
         } catch (error) {
             console.error('Error recording battle:', error);
