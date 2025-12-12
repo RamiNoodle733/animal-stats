@@ -280,11 +280,9 @@ async function handleGetProfile(req, res) {
         return res.status(404).json({ success: false, error: 'User not found' });
     }
 
-    // Calculate XP progress for current level
-    const xpForCurrentLevel = calculateXpForLevel(user.level);
-    const xpForNextLevel = calculateXpForLevel(user.level + 1);
-    const xpProgress = user.xp - xpForCurrentLevel;
-    const xpNeeded = xpForNextLevel - xpForCurrentLevel;
+    // New XP system: xp is already progress toward next level
+    const xpProgress = user.xp || 0;
+    const xpNeeded = xpToNext(user.level || 1);
 
     res.status(200).json({
         success: true,
@@ -300,9 +298,13 @@ async function handleGetProfile(req, res) {
                 level: user.level || 1,
                 battlePoints: user.battlePoints || 0,
                 profileAnimal: user.profileAnimal || null,
+                prestige: user.prestige || 0,
+                lifetimeXp: user.lifetimeXp || 0,
+                xpToNext: xpNeeded,
                 xpProgress,
                 xpNeeded,
                 xpPercentage: Math.min(100, Math.round((xpProgress / xpNeeded) * 100)),
+                isPrestigeReady: (user.level || 1) >= 100,
                 createdAt: user.createdAt,
                 lastLogin: user.lastLogin
             }
@@ -415,11 +417,9 @@ async function handleUpdateProfile(req, res) {
     );
     const usernameChangesRemaining = Math.max(0, 3 - recentChanges.length);
 
-    // Calculate XP progress
-    const xpForCurrentLevel = calculateXpForLevel(user.level);
-    const xpForNextLevel = calculateXpForLevel(user.level + 1);
-    const xpProgress = user.xp - xpForCurrentLevel;
-    const xpNeeded = xpForNextLevel - xpForCurrentLevel;
+    // New XP system: xp is already progress toward next level
+    const xpProgress = user.xp || 0;
+    const xpNeeded = xpToNext(user.level || 1);
 
     res.status(200).json({
         success: true,
@@ -436,60 +436,19 @@ async function handleUpdateProfile(req, res) {
                 level: user.level || 1,
                 battlePoints: user.battlePoints || 0,
                 profileAnimal: user.profileAnimal || null,
+                prestige: user.prestige || 0,
+                lifetimeXp: user.lifetimeXp || 0,
+                xpToNext: xpNeeded,
                 usernameChangesRemaining,
                 xpProgress,
                 xpNeeded,
                 xpPercentage: Math.min(100, Math.round((xpProgress / xpNeeded) * 100)),
+                isPrestigeReady: (user.level || 1) >= 100,
                 createdAt: user.createdAt,
                 lastLogin: user.lastLogin
             }
         }
     });
-}
-
-// ==================== XP CALCULATION HELPERS ====================
-/**
- * Calculate total XP needed to reach a specific level
- * Uses a polynomial curve: Level 1 = 0 XP, Level 2 = 100 XP, scales up
- */
-function calculateXpForLevel(level) {
-    if (level <= 1) return 0;
-    // XP curve: 100 * (level-1)^1.5
-    return Math.floor(100 * Math.pow(level - 1, 1.5));
-}
-
-/**
- * Calculate level from total XP
- */
-function calculateLevelFromXp(xp) {
-    if (xp < 100) return 1;
-    // Inverse of the XP formula
-    return Math.floor(Math.pow(xp / 100, 1/1.5) + 1);
-}
-
-// XP required for each level (exponential growth) - for rewards
-function xpForLevel(level) {
-    return Math.floor(100 * Math.pow(1.5, level - 1));
-}
-
-// Calculate level info from total XP - for rewards
-function calculateLevel(totalXp) {
-    let level = 1;
-    let xpNeeded = xpForLevel(level);
-    let xpAccumulated = 0;
-    
-    while (xpAccumulated + xpNeeded <= totalXp) {
-        xpAccumulated += xpNeeded;
-        level++;
-        xpNeeded = xpForLevel(level);
-    }
-    
-    return {
-        level,
-        currentXp: totalXp - xpAccumulated,
-        xpForNextLevel: xpNeeded,
-        totalXp
-    };
 }
 
 // ==================== REWARDS ====================

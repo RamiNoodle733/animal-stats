@@ -2247,6 +2247,7 @@ class RankingsManager {
         const userVote = this.userVotes[animalId] || 0;
         const upActiveClass = userVote === 1 ? 'active' : '';
         const downActiveClass = userVote === -1 ? 'active' : '';
+        const votedTodayClass = userVote !== 0 ? 'voted-today' : '';
         
         // Win streak calculation (consecutive wins based on recent battles)
         const winStreak = item.winStreak || 0;
@@ -2323,11 +2324,11 @@ class RankingsManager {
             </div>
             <div class="row-votes control-pad">
                 <div class="vote-pad-cluster">
-                    <button class="row-vote-btn row-vote-up ${upActiveClass}" data-animal-id="${animalId}" data-animal-name="${animal.name}" data-vote="up" title="Underrated">
+                    <button class="row-vote-btn row-vote-up ${upActiveClass} ${votedTodayClass}" data-animal-id="${animalId}" data-animal-name="${animal.name}" data-vote="up" title="Underrated">
                         <i class="fas fa-caret-up"></i>
                         <span class="vote-count">${upvotes}</span>
                     </button>
-                    <button class="row-vote-btn row-vote-down ${downActiveClass}" data-animal-id="${animalId}" data-animal-name="${animal.name}" data-vote="down" title="Overrated">
+                    <button class="row-vote-btn row-vote-down ${downActiveClass} ${votedTodayClass}" data-animal-id="${animalId}" data-animal-name="${animal.name}" data-vote="down" title="Overrated">
                         <i class="fas fa-caret-down"></i>
                         <span class="vote-count">${downvotes}</span>
                     </button>
@@ -2677,12 +2678,14 @@ class RankingsManager {
         
         if (this.dom.detailUpvoteBtn) {
             this.dom.detailUpvoteBtn.classList.toggle('active', userVote === 1);
+            this.dom.detailUpvoteBtn.classList.toggle('voted-today', userVote !== 0);
             this.dom.detailUpvoteBtn.disabled = !Auth.isLoggedIn();
             this.dom.detailUpvoteBtn.dataset.animalId = animalId;
             this.dom.detailUpvoteBtn.dataset.animalName = animal.name;
         }
         if (this.dom.detailDownvoteBtn) {
             this.dom.detailDownvoteBtn.classList.toggle('active', userVote === -1);
+            this.dom.detailDownvoteBtn.classList.toggle('voted-today', userVote !== 0);
             this.dom.detailDownvoteBtn.disabled = !Auth.isLoggedIn();
             this.dom.detailDownvoteBtn.dataset.animalId = animalId;
             this.dom.detailDownvoteBtn.dataset.animalName = animal.name;

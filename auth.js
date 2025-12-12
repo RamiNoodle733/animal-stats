@@ -480,14 +480,6 @@ const Auth = {
     },
 
     /**
-     * Calculate XP needed for a level
-     */
-    calculateXpForLevel(level) {
-        if (level <= 1) return 0;
-        return Math.floor(100 * Math.pow(level - 1, 1.5));
-    },
-
-    /**
      * Refresh user stats from the rewards API (call after earning XP/BP)
      */
     async refreshUserStats() {
@@ -757,16 +749,13 @@ const Auth = {
 
         const { 
             username, displayName, level = 1, xp = 0, battlePoints = 0, 
-            profileAnimal, createdAt, xpProgress, xpNeeded, xpPercentage 
+            profileAnimal, createdAt, xpToNext, prestige = 0, lifetimeXp = 0 
         } = this.user;
 
-        // Calculate XP if not provided
-        const calcXpForLevel = this.calculateXpForLevel.bind(this);
-        const currentLevelXp = calcXpForLevel(level);
-        const nextLevelXp = calcXpForLevel(level + 1);
-        const progress = xpProgress ?? (xp - currentLevelXp);
-        const needed = xpNeeded ?? (nextLevelXp - currentLevelXp);
-        const percentage = xpPercentage ?? Math.min(100, Math.round((progress / needed) * 100));
+        // New XP system: xp is progress toward next level, xpToNext is amount needed
+        const needed = xpToNext || this.xpToNextLevel(level);
+        const progress = Math.max(0, xp); // xp is already progress, not cumulative
+        const percentage = level >= 100 ? 100 : Math.min(100, Math.round((progress / needed) * 100));
 
         // Update elements
         if (this.elements.profileUsername) {
@@ -788,10 +777,14 @@ const Auth = {
             this.elements.profileBpValue.textContent = this.formatNumber(battlePoints);
         }
         if (this.elements.profileTotalXp) {
-            this.elements.profileTotalXp.textContent = this.formatNumber(xp);
+            this.elements.profileTotalXp.textContent = this.formatNumber(lifetimeXp);
         }
         if (this.elements.profileLevelValue) {
             this.elements.profileLevelValue.textContent = level;
+        }
+        // Show prestige in profile if > 0
+        if (this.elements.profileLevelBadge && prestige > 0) {
+            this.elements.profileLevelBadge.textContent = `⭐${prestige} LEVEL ${level}`;
         }
         // Display name input (unlimited changes)
         if (this.elements.displayNameInput) {
