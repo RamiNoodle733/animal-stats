@@ -67,7 +67,18 @@ const UserSchema = new mongoose.Schema({
     level: {
         type: Number,
         default: 1,
-        min: 1
+        min: 1,
+        max: 100
+    },
+    prestige: {
+        type: Number,
+        default: 0,
+        min: 0
+    },
+    lifetimeXp: {
+        type: Number,
+        default: 0,
+        min: 0
     },
     // Battle Points (currency)
     battlePoints: {

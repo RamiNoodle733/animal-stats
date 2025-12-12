@@ -399,27 +399,45 @@ const Auth = {
     updateUserStatsBar() {
         if (!this.user) return;
 
-        const { displayName, level = 1, xp = 0, battlePoints = 0, profileAnimal } = this.user;
+        const { 
+            displayName, 
+            level = 1, 
+            xp = 0, 
+            xpToNext,
+            prestige = 0,
+            battlePoints = 0, 
+            profileAnimal,
+            isPrestigeReady = false
+        } = this.user;
 
-        // Calculate XP progress
-        const xpForCurrentLevel = this.calculateXpForLevel(level);
-        const xpForNextLevel = this.calculateXpForLevel(level + 1);
-        const xpProgress = xp - xpForCurrentLevel;
-        const xpNeeded = xpForNextLevel - xpForCurrentLevel;
-        const xpPercentage = Math.min(100, Math.round((xpProgress / xpNeeded) * 100));
+        // Use server-provided xpToNext or calculate it
+        const xpNeeded = xpToNext || this.xpToNextLevel(level);
+        const xpPercentage = Math.min(100, Math.round((xp / xpNeeded) * 100));
 
         // Update mini profile
         if (this.elements.userNameMini) {
             this.elements.userNameMini.textContent = displayName;
         }
         if (this.elements.userLevelBadge) {
-            this.elements.userLevelBadge.textContent = `LV ${level}`;
+            // Show prestige if > 0
+            const prestigeIcon = prestige > 0 ? `⭐${prestige} ` : '';
+            this.elements.userLevelBadge.textContent = `${prestigeIcon}LV ${level}`;
         }
         if (this.elements.xpBarFill) {
             this.elements.xpBarFill.style.width = `${xpPercentage}%`;
+            // Change color if prestige ready
+            if (isPrestigeReady) {
+                this.elements.xpBarFill.classList.add('prestige-ready');
+            } else {
+                this.elements.xpBarFill.classList.remove('prestige-ready');
+            }
         }
         if (this.elements.xpBarText) {
-            this.elements.xpBarText.textContent = `${xpProgress} / ${xpNeeded} XP`;
+            if (isPrestigeReady) {
+                this.elements.xpBarText.textContent = 'PRESTIGE READY!';
+            } else {
+                this.elements.xpBarText.textContent = `${xp} / ${xpNeeded} XP`;
+            }
         }
         if (this.elements.bpAmount) {
             this.elements.bpAmount.textContent = this.formatNumber(battlePoints);
@@ -427,6 +445,19 @@ const Auth = {
 
         // Update avatar
         this.updateAvatarDisplay(this.elements.userAvatarMini, profileAnimal);
+    },
+
+    /**
+     * XP needed to level up (mirrors server-side xpSystem.js)
+     * Formula: 25 + 3*x + 0.03*x^2 rounded to nearest 5
+     */
+    xpToNextLevel(level) {
+        if (level >= 100) return Infinity;
+        if (level < 1) return 25;
+        
+        const x = level - 1;
+        const raw = 25 + 3 * x + 0.03 * x * x;
+        return Math.max(25, Math.round(raw / 5) * 5);
     },
 
     /**
@@ -473,10 +504,14 @@ const Auth = {
             const result = await response.json();
 
             if (result.success) {
-                // Update local user data
+                // Update local user data with all progression fields
                 this.user.xp = result.data.xp;
                 this.user.level = result.data.level;
+                this.user.xpToNext = result.data.xpToNext;
+                this.user.prestige = result.data.prestige || 0;
+                this.user.lifetimeXp = result.data.lifetimeXp || 0;
                 this.user.battlePoints = result.data.battlePoints;
+                this.user.isPrestigeReady = result.data.isPrestigeReady || false;
                 
                 // Save to localStorage
                 localStorage.setItem('user', JSON.stringify(this.user));

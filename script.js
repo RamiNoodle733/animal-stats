@@ -3017,9 +3017,9 @@ class RankingsManager {
                 // Show XP popup with actual amounts from API
                 this.showXpPopup(result.data.xpAdded, result.data.bpAdded);
                 
-                // Check for level up
+                // Check for level up - show BP reward earned
                 if (result.data.leveledUp) {
-                    this.showLevelUpPopup(result.data.newLevel);
+                    this.showLevelUpPopup(result.data.newLevel, result.data.levelUpBpReward || 0);
                 }
                 
                 // Update auth display (XP bar, BP count)
@@ -3048,7 +3048,7 @@ class RankingsManager {
         }, 2000);
     }
     
-    showLevelUpPopup(newLevel) {
+    showLevelUpPopup(newLevel, bpReward = 0) {
         const popup = document.createElement('div');
         popup.className = 'level-up-popup';
         popup.innerHTML = `
@@ -3056,6 +3056,7 @@ class RankingsManager {
                 <i class="fas fa-crown"></i>
                 <span>LEVEL UP!</span>
                 <span class="new-level">Level ${newLevel}</span>
+                ${bpReward > 0 ? `<span class="level-up-reward">+${bpReward} BP</span>` : ''}
             </div>
         `;
         document.body.appendChild(popup);
@@ -4207,7 +4208,7 @@ class TournamentManager {
                 this.showXpPopup(result.data.xpAdded, result.data.bpAdded);
                 
                 if (result.data.leveledUp) {
-                    this.showLevelUpPopup(result.data.newLevel);
+                    this.showLevelUpPopup(result.data.newLevel, result.data.levelUpBpReward || 0);
                 }
                 
                 Auth.refreshUserStats();
@@ -4233,7 +4234,7 @@ class TournamentManager {
         setTimeout(() => popup.remove(), 2000);
     }
     
-    showLevelUpPopup(newLevel) {
+    showLevelUpPopup(newLevel, bpReward = 0) {
         const popup = document.createElement('div');
         popup.className = 'level-up-popup';
         popup.innerHTML = `
@@ -4241,6 +4242,7 @@ class TournamentManager {
                 <i class="fas fa-crown"></i>
                 <span>LEVEL UP!</span>
                 <span class="new-level">Level ${newLevel}</span>
+                ${bpReward > 0 ? `<span class="level-up-reward">+${bpReward} BP</span>` : ''}
             </div>
         `;
         document.body.appendChild(popup);
@@ -4574,7 +4576,7 @@ class CommunityManager {
                 this.showXpPopup(result.data.xpAdded, result.data.bpAdded);
                 
                 if (result.data.leveledUp) {
-                    this.showLevelUpPopup(result.data.newLevel);
+                    this.showLevelUpPopup(result.data.newLevel, result.data.levelUpBpReward || 0);
                 }
                 
                 Auth.refreshUserStats();
