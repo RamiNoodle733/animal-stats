@@ -1,6 +1,8 @@
 /**
  * API Route: /api/votes
  * Handles voting on animals for power rankings
+ * DAILY VOTING: Users can vote once per animal per day
+ * All votes accumulate over time for power rankings
  */
 
 const { connectToDatabase } = require('../lib/mongodb');
@@ -37,11 +39,12 @@ module.exports = async function handler(req, res) {
     }
 };
 
-// GET: Get user's vote for an animal, or all votes
+// GET: Get user's votes for TODAY, or vote counts for an animal
 async function handleGet(req, res) {
     const { animalId, userId, myVotes } = req.query;
+    const today = Vote.getTodayString();
 
-    // If myVotes flag is set, get all votes by current user
+    // If myVotes flag is set, get all TODAY's votes by current user
     if (myVotes) {
         const authHeader = req.headers.authorization;
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -54,36 +57,36 @@ async function handleGet(req, res) {
             return res.status(401).json({ success: false, error: 'Invalid token' });
         }
 
-        const votes = await Vote.find({ votedBy: user.id });
-        const voteMap = {};
-        votes.forEach(v => {
-            voteMap[v.animalId.toString()] = v.voteType === 'up' ? 1 : -1;
-        });
+        // Get only TODAY's votes for the user
+        const voteMap = await Vote.getUserTodayVotes(user.id);
 
         return res.status(200).json({
             success: true,
-            data: voteMap
+            data: voteMap,
+            today: today
         });
     }
 
     if (animalId) {
-        // Get vote counts for specific animal
+        // Get ALL-TIME vote counts for specific animal (for power rankings)
         const votes = await Vote.getVoteCounts(animalId);
         
-        // If userId provided, also get user's vote
+        // If userId provided, get user's vote for TODAY
         let userVote = null;
+        let canVoteToday = true;
         if (userId) {
-            const vote = await Vote.findOne({ animalId, votedBy: userId });
-            userVote = vote?.voteType || null;
+            userVote = await Vote.getTodayVote(animalId, userId);
+            canVoteToday = !userVote; // Can vote if no vote today
         }
 
         return res.status(200).json({
             success: true,
-            data: { ...votes, userVote }
+            data: { ...votes, userVote, canVoteToday },
+            today: today
         });
     }
 
-    // Get all votes summary (for rankings page)
+    // Get all votes summary (for rankings page - ALL TIME)
     const rankings = await Vote.getRankings();
     return res.status(200).json({
         success: true,
@@ -91,7 +94,7 @@ async function handleGet(req, res) {
     });
 }
 
-// POST: Cast or change a vote
+// POST: Cast a vote (once per day per animal)
 async function handlePost(req, res) {
     // Verify authentication
     const authHeader = req.headers.authorization;
@@ -106,63 +109,37 @@ async function handlePost(req, res) {
     }
 
     const { animalId, animalName, voteType } = req.body;
+    const today = Vote.getTodayString();
 
     if (!animalId || !animalName || !['up', 'down'].includes(voteType)) {
         return res.status(400).json({ success: false, error: 'Invalid vote data' });
     }
 
-    // Check for existing vote
-    const existingVote = await Vote.findOne({ animalId, votedBy: user.id });
+    // Check for existing vote TODAY
+    const existingTodayVote = await Vote.findOne({ 
+        animalId, 
+        votedBy: user.id, 
+        voteDate: today 
+    });
 
-    if (existingVote) {
-        if (existingVote.voteType === voteType) {
-            // Same vote - remove it (toggle off)
-            const removedVoteType = existingVote.voteType;
-            await Vote.deleteOne({ _id: existingVote._id });
-
-            // Notify Discord about vote removal
-            notifyDiscord('vote_removed', {
-                user: user.username,
-                animal: animalName,
-                voteType: removedVoteType
-            }, req);
-            
-            const newCounts = await Vote.getVoteCounts(animalId);
-            return res.status(200).json({
-                success: true,
-                action: 'removed',
-                data: { ...newCounts, userVote: null }
-            });
-        } else {
-            // Different vote - change it
-            const oldVoteType = existingVote.voteType;
-            existingVote.voteType = voteType;
-            await existingVote.save();
-            
-            // Notify Discord
-            notifyDiscord('vote_changed', {
-                user: user.username,
-                animal: animalName,
-                oldVoteType: oldVoteType,
-                newVoteType: voteType
-            }, req);
-
-            const newCounts = await Vote.getVoteCounts(animalId);
-            return res.status(200).json({
-                success: true,
-                action: 'changed',
-                data: { ...newCounts, userVote: voteType }
-            });
-        }
+    if (existingTodayVote) {
+        // User already voted on this animal today
+        return res.status(400).json({ 
+            success: false, 
+            error: 'You already voted on this animal today! Come back tomorrow.',
+            alreadyVotedToday: true,
+            votedType: existingTodayVote.voteType
+        });
     }
 
-    // New vote
+    // Create new vote for today
     await Vote.create({
         animalId,
         animalName,
         votedBy: user.id,
         votedByUsername: user.username,
-        voteType
+        voteType,
+        voteDate: today
     });
 
     // Notify Discord
@@ -172,15 +149,19 @@ async function handlePost(req, res) {
         voteType: voteType
     }, req);
 
+    // Get ALL-TIME vote counts (for power rankings)
     const newCounts = await Vote.getVoteCounts(animalId);
+    
     return res.status(200).json({
         success: true,
         action: 'created',
-        data: { ...newCounts, userVote: voteType }
+        data: { ...newCounts, userVote: voteType, canVoteToday: false },
+        message: `Vote recorded! You can vote on ${animalName} again tomorrow.`,
+        xpEarned: 5 // XP reward for voting
     });
 }
 
-// DELETE: Remove a vote
+// DELETE: Remove TODAY's vote (allow changing vote within the day)
 async function handleDelete(req, res) {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -194,16 +175,19 @@ async function handleDelete(req, res) {
     }
 
     const { animalId } = req.query;
+    const today = Vote.getTodayString();
+    
     if (!animalId) {
         return res.status(400).json({ success: false, error: 'Animal ID required' });
     }
 
-    await Vote.deleteOne({ animalId, votedBy: user.id });
+    // Only delete TODAY's vote
+    await Vote.deleteOne({ animalId, votedBy: user.id, voteDate: today });
 
     const newCounts = await Vote.getVoteCounts(animalId);
     return res.status(200).json({
         success: true,
-        data: { ...newCounts, userVote: null }
+        data: { ...newCounts, userVote: null, canVoteToday: true }
     });
 }
 

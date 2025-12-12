@@ -5351,6 +5351,98 @@ body {
     }
 }
 
+/* Level Up Popup */
+.level-up-popup {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10001;
+    animation: levelUpPopup 3s ease-out forwards;
+}
+
+.level-up-content {
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    color: #000;
+    padding: 20px 40px;
+    border-radius: 16px;
+    font-weight: 800;
+    font-size: 1.5rem;
+    box-shadow: 0 8px 40px rgba(255, 215, 0, 0.6), 0 0 60px rgba(255, 140, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.level-up-content i {
+    font-size: 2rem;
+    color: #ff3366;
+    text-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+}
+
+.level-up-content .new-level {
+    font-size: 2rem;
+    color: #ff3366;
+    text-shadow: 0 0 10px rgba(255, 51, 102, 0.5);
+}
+
+@keyframes levelUpPopup {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) scale(0.5);
+    }
+    15% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.1);
+    }
+    25% {
+        transform: translateX(-50%) scale(1);
+    }
+    75% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) scale(0.8) translateY(-30px);
+    }
+}
+
+/* Voted Today State - Buttons locked until tomorrow */
+.row-vote-up.voted-today,
+.row-vote-down.voted-today,
+.vote-button.voted-today {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.row-vote-up.voted-today.active,
+.row-vote-down.voted-today.active,
+.vote-button.voted-today.active {
+    opacity: 1;
+}
+
+.row-vote-up.voted-today::after,
+.row-vote-down.voted-today::after {
+    content: '✓';
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 0.6rem;
+    background: var(--accent);
+    color: #000;
+    border-radius: 50%;
+    width: 14px;
+    height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Ranking card with trend glow */
 .ranking-card.trend-rising {
     border-color: rgba(0, 255, 136, 0.4);

@@ -2463,6 +2463,8 @@ class RankingsManager {
                     const result = await response.json();
                     if (result.success) {
                         inputEl.value = '';
+                        // Award XP for commenting
+                        await this.awardReward('comment');
                         Auth.showToast('Comment posted!');
                         // Refresh the inline panel
                         this.toggleInlineComments(row, animal);
@@ -2764,17 +2766,17 @@ class RankingsManager {
             const result = await response.json();
 
             if (result.success) {
-                // Update local state
-                if (result.action === 'removed') {
-                    delete this.userVotes[animalId];
-                } else {
-                    this.userVotes[animalId] = result.data.userVote === 'up' ? 1 : -1;
-                }
+                // Update local state - daily voting means vote is locked for today
+                this.userVotes[animalId] = result.data.userVote === 'up' ? 1 : -1;
 
-                // Update detail panel buttons
+                // Update detail panel buttons - show voted state, disable further voting
                 const userVote = this.userVotes[animalId] || 0;
                 this.dom.detailUpvoteBtn?.classList.toggle('active', userVote === 1);
                 this.dom.detailDownvoteBtn?.classList.toggle('active', userVote === -1);
+                
+                // Disable buttons for today (can't change vote)
+                if (this.dom.detailUpvoteBtn) this.dom.detailUpvoteBtn.classList.add('voted-today');
+                if (this.dom.detailDownvoteBtn) this.dom.detailDownvoteBtn.classList.add('voted-today');
                 
                 // Update counts
                 if (this.dom.detailUpvotes && result.data.upvotes !== undefined) {
@@ -2788,12 +2790,16 @@ class RankingsManager {
                 const animalId = this.dom.detailUpvoteBtn?.dataset.animalId;
                 this.updateRowVotes(this.selectedRankIndex, result.data.upvotes, result.data.downvotes, animalId);
 
-                // Show XP popup if vote was added
-                if (result.action !== 'removed') {
-                    this.showXpPopup(5, 1);
-                }
+                // Award XP for voting - call the actual rewards API
+                await this.awardReward('vote');
+                Auth.showToast(result.message || 'Vote recorded!');
             } else {
-                Auth.showToast(result.error || 'Failed to vote');
+                // Check if already voted today
+                if (result.alreadyVotedToday) {
+                    Auth.showToast(`Already voted on this animal today! Come back tomorrow.`);
+                } else {
+                    Auth.showToast(result.error || 'Failed to vote');
+                }
             }
         } catch (error) {
             console.error('Vote error:', error);
@@ -2801,7 +2807,7 @@ class RankingsManager {
         }
     }
     
-    updateRowVotes(index, upvotes, downvotes, animalId = null) {
+    updateRowVotes(index, upvotes, downvotes, animalId = null, votedToday = false) {
         const row = this.dom.rankingsList.querySelector(`.ranking-row[data-index="${index}"]`);
         if (row) {
             const upEl = row.querySelector('.row-vote-up');
@@ -2820,6 +2826,12 @@ class RankingsManager {
                 const userVote = this.userVotes[animalId] || 0;
                 upEl?.classList.toggle('active', userVote === 1);
                 downEl?.classList.toggle('active', userVote === -1);
+                
+                // Mark as voted today (can't vote again until tomorrow)
+                if (votedToday) {
+                    upEl?.classList.add('voted-today');
+                    downEl?.classList.add('voted-today');
+                }
             }
         }
     }
@@ -2848,7 +2860,7 @@ class RankingsManager {
     }
     
     /**
-     * Handle voting from the inline row buttons
+     * Handle voting from the inline row buttons (daily voting system)
      */
     async handleRowVote(e, rowIndex) {
         const btn = e.currentTarget;
@@ -2879,31 +2891,33 @@ class RankingsManager {
             const result = await response.json();
 
             if (result.success) {
-                // Update local state
-                if (result.action === 'removed') {
-                    delete this.userVotes[animalId];
-                } else {
-                    this.userVotes[animalId] = result.data.userVote === 'up' ? 1 : -1;
-                }
+                // Update local state - daily voting means vote is locked for today
+                this.userVotes[animalId] = result.data.userVote === 'up' ? 1 : -1;
 
-                // Update row buttons and counts
-                this.updateRowVotes(rowIndex, result.data.upvotes, result.data.downvotes, animalId);
+                // Update row buttons and counts, mark as voted today
+                this.updateRowVotes(rowIndex, result.data.upvotes, result.data.downvotes, animalId, true);
                 
                 // Also update detail panel if same animal is selected
                 if (this.selectedRankIndex === rowIndex) {
                     const userVote = this.userVotes[animalId] || 0;
                     this.dom.detailUpvoteBtn?.classList.toggle('active', userVote === 1);
                     this.dom.detailDownvoteBtn?.classList.toggle('active', userVote === -1);
+                    this.dom.detailUpvoteBtn?.classList.add('voted-today');
+                    this.dom.detailDownvoteBtn?.classList.add('voted-today');
                     if (this.dom.detailUpvotes) this.dom.detailUpvotes.textContent = result.data.upvotes;
                     if (this.dom.detailDownvotes) this.dom.detailDownvotes.textContent = result.data.downvotes;
                 }
 
-                // Show XP popup if vote was added
-                if (result.action !== 'removed') {
-                    this.showXpPopup(5, 1);
-                }
+                // Award XP for voting - call the actual rewards API
+                await this.awardReward('vote');
+                Auth.showToast(result.message || 'Vote recorded!');
             } else {
-                Auth.showToast(result.error || 'Failed to vote');
+                // Check if already voted today
+                if (result.alreadyVotedToday) {
+                    Auth.showToast(`Already voted on this animal today! Come back tomorrow.`);
+                } else {
+                    Auth.showToast(result.error || 'Failed to vote');
+                }
             }
         } catch (error) {
             console.error('Vote error:', error);
@@ -2938,13 +2952,8 @@ class RankingsManager {
             const result = await response.json();
 
             if (result.success) {
-                // Update local state based on response
-                if (result.action === 'removed') {
-                    delete this.userVotes[animalId];
-                } else {
-                    // Store 1 for 'up', -1 for 'down'
-                    this.userVotes[animalId] = result.data.userVote === 'up' ? 1 : -1;
-                }
+                // Update local state - daily voting, vote is locked for today
+                this.userVotes[animalId] = result.data.userVote === 'up' ? 1 : -1;
 
                 // Update the UI
                 const card = btn.closest('.ranking-card');
@@ -2956,6 +2965,10 @@ class RankingsManager {
                 upBtn.classList.toggle('active', this.userVotes[animalId] === 1);
                 downBtn.classList.toggle('active', this.userVotes[animalId] === -1);
                 
+                // Mark as voted today
+                upBtn.classList.add('voted-today');
+                downBtn.classList.add('voted-today');
+                
                 // Update vote counts from response
                 if (upCount && result.data.upvotes !== undefined) {
                     upCount.textContent = `+${result.data.upvotes}`;
@@ -2964,12 +2977,16 @@ class RankingsManager {
                     downCount.textContent = `-${result.data.downvotes}`;
                 }
 
-                // Show XP popup if vote was added (not removed)
-                if (result.action !== 'removed') {
-                    this.showXpPopup(5, 1); // 5 XP, 1 BP
-                }
+                // Award XP for voting via the API
+                await this.awardReward('vote');
+                Auth.showToast(result.message || 'Vote recorded!');
             } else {
-                Auth.showToast(result.error || 'Failed to vote');
+                // Check if already voted today
+                if (result.alreadyVotedToday) {
+                    Auth.showToast(`Already voted on this animal today! Come back tomorrow.`);
+                } else {
+                    Auth.showToast(result.error || 'Failed to vote');
+                }
             }
         } catch (error) {
             console.error('Vote error:', error);
@@ -2977,15 +2994,75 @@ class RankingsManager {
         }
     }
 
+    /**
+     * Award XP/BP rewards via the API (actually adds to user account)
+     * @param {string} action - The action type (vote, comment, reply, tournament_win, etc.)
+     */
+    async awardReward(action) {
+        if (!Auth.isLoggedIn()) return;
+        
+        try {
+            const response = await fetch('/api/rewards', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                },
+                body: JSON.stringify({ action })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Show XP popup with actual amounts from API
+                this.showXpPopup(result.data.xpAdded, result.data.bpAdded);
+                
+                // Check for level up
+                if (result.data.leveledUp) {
+                    this.showLevelUpPopup(result.data.newLevel);
+                }
+                
+                // Update auth display (XP bar, BP count)
+                Auth.refreshUserStats();
+            }
+        } catch (error) {
+            console.error('Error awarding reward:', error);
+        }
+    }
+
     showXpPopup(xp, bp) {
+        if (xp === 0 && bp === 0) return; // Don't show if no rewards
+        
         const popup = document.createElement('div');
         popup.className = 'xp-popup';
-        popup.innerHTML = `<i class="fas fa-star"></i> +${xp} XP, +${bp} BP`;
+        
+        let text = '';
+        if (xp > 0) text += `+${xp} XP`;
+        if (bp > 0) text += (text ? ', ' : '') + `+${bp} BP`;
+        
+        popup.innerHTML = `<i class="fas fa-star"></i> ${text}`;
         document.body.appendChild(popup);
         
         setTimeout(() => {
             popup.remove();
         }, 2000);
+    }
+    
+    showLevelUpPopup(newLevel) {
+        const popup = document.createElement('div');
+        popup.className = 'level-up-popup';
+        popup.innerHTML = `
+            <div class="level-up-content">
+                <i class="fas fa-crown"></i>
+                <span>LEVEL UP!</span>
+                <span class="new-level">Level ${newLevel}</span>
+            </div>
+        `;
+        document.body.appendChild(popup);
+        
+        setTimeout(() => {
+            popup.remove();
+        }, 3000);
     }
 
     async refreshRankingScore(animalId, scoreEl) {
@@ -3229,6 +3306,8 @@ class RankingsManager {
                 // Update comment counts in row and detail panel
                 this.updateCommentCounts(this.comments.length);
 
+                // Award XP for commenting
+                await this.awardReward(wasReply ? 'reply' : 'comment');
                 Auth.showToast(wasReply ? 'Reply posted!' : 'Comment posted!');
             } else {
                 Auth.showToast(result.error || 'Failed to post comment');
@@ -4097,10 +4176,76 @@ class TournamentManager {
         });
         this.dom.runnerUpList.innerHTML = runnerUpHtml;
         
+        // Award XP/BP for completing a tournament
+        this.awardTournamentReward();
+        
         // Switch to results screen
         this.dom.setup.style.display = 'none';
         this.dom.battle.style.display = 'none';
         this.dom.results.style.display = 'flex';
+    }
+    
+    /**
+     * Award XP/BP for completing a tournament
+     */
+    async awardTournamentReward() {
+        if (!Auth.isLoggedIn()) return;
+        
+        try {
+            const response = await fetch('/api/rewards', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                },
+                body: JSON.stringify({ action: 'tournament_participate' })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.showXpPopup(result.data.xpAdded, result.data.bpAdded);
+                
+                if (result.data.leveledUp) {
+                    this.showLevelUpPopup(result.data.newLevel);
+                }
+                
+                Auth.refreshUserStats();
+            }
+        } catch (error) {
+            console.error('Error awarding tournament reward:', error);
+        }
+    }
+    
+    showXpPopup(xp, bp) {
+        if (xp === 0 && bp === 0) return;
+        
+        const popup = document.createElement('div');
+        popup.className = 'xp-popup';
+        
+        let text = '';
+        if (xp > 0) text += `+${xp} XP`;
+        if (bp > 0) text += (text ? ', ' : '') + `+${bp} BP`;
+        
+        popup.innerHTML = `<i class="fas fa-star"></i> ${text}`;
+        document.body.appendChild(popup);
+        
+        setTimeout(() => popup.remove(), 2000);
+    }
+    
+    showLevelUpPopup(newLevel) {
+        const popup = document.createElement('div');
+        popup.className = 'level-up-popup';
+        popup.innerHTML = `
+            <div class="level-up-content">
+                <i class="fas fa-crown"></i>
+                <span>LEVEL UP!</span>
+                <span class="new-level">Level ${newLevel}</span>
+            </div>
+        `;
+        document.body.appendChild(popup);
+        
+        setTimeout(() => popup.remove(), 3000);
     }
 
     getFinalFour() {
@@ -4404,8 +4549,39 @@ class CommunityManager {
         }
         
         this.renderDailyMatchup();
-        this.showXpPopup(10, 2); // More XP for daily matchup
+        
+        // Award XP for daily matchup voting
+        this.awardMatchupReward();
         Auth.showToast('Vote recorded!');
+    }
+    
+    async awardMatchupReward() {
+        if (!Auth.isLoggedIn()) return;
+        
+        try {
+            const response = await fetch('/api/rewards', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                },
+                body: JSON.stringify({ customXp: 10, customBp: 2 })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.showXpPopup(result.data.xpAdded, result.data.bpAdded);
+                
+                if (result.data.leveledUp) {
+                    this.showLevelUpPopup(result.data.newLevel);
+                }
+                
+                Auth.refreshUserStats();
+            }
+        } catch (error) {
+            console.error('Error awarding matchup reward:', error);
+        }
     }
     
     startMatchupCountdown() {

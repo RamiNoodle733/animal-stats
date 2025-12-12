@@ -457,6 +457,39 @@ const Auth = {
     },
 
     /**
+     * Refresh user stats from the rewards API (call after earning XP/BP)
+     */
+    async refreshUserStats() {
+        if (!this.isLoggedIn()) return;
+        
+        try {
+            const response = await fetch('/api/rewards', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${this.getToken()}`
+                }
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Update local user data
+                this.user.xp = result.data.xp;
+                this.user.level = result.data.level;
+                this.user.battlePoints = result.data.battlePoints;
+                
+                // Save to localStorage
+                localStorage.setItem('user', JSON.stringify(this.user));
+                
+                // Update UI
+                this.updateUserStatsBar();
+            }
+        } catch (error) {
+            console.error('Error refreshing user stats:', error);
+        }
+    },
+
+    /**
      * Format number with commas
      */
     formatNumber(num) {
