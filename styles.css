@@ -7847,12 +7847,12 @@ body {
    ================================ */
 .detail-comments-section {
     margin-top: 12px;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 50, 80, 0.5);
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    border: 2px solid #00d4ff !important;
     padding: 10px;
-    max-height: 250px;
-    display: flex;
+    min-height: 120px;
+    display: flex !important;
     flex-direction: column;
 }
 
