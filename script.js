@@ -1994,8 +1994,6 @@ class RankingsManager {
             if (result.success) {
                 this.dom.detailCommentInput.value = '';
                 Auth.showToast('Comment posted!');
-                // Refresh inline comments
-                this.loadInlineComments(this.currentAnimal.name);
             } else {
                 Auth.showToast(result.error || 'Failed to post comment');
             }
@@ -2396,10 +2394,9 @@ class RankingsManager {
         const isLoggedIn = Auth.isLoggedIn();
         panel.innerHTML = `
             <div class="inline-comments-header">
-                <div class="inline-comments-animal">
-                    <img src="${animal.image}" alt="${animal.name}" onerror="this.onerror=null;this.src=FALLBACK_IMAGE">
-                    <span>${animal.name}</span>
-                    <span class="inline-comments-label">Discussion</span>
+                <div class="inline-comments-title">
+                    <i class="fas fa-comments"></i>
+                    <span>Discussion</span>
                 </div>
                 <div class="inline-comments-actions">
                     <button class="inline-view-all-btn" data-animal-name="${animal.name}" data-animal-id="${animal.id || animal._id}" data-animal-image="${animal.image}">
@@ -2605,13 +2602,8 @@ class RankingsManager {
         
         this.selectedRankIndex = index;
         const item = this.rankings[index];
-        console.log('[Rankings] item:', item);
         if (item) {
             this.updateDetailPanel(item, index + 1);
-            // Load inline comments for selected animal
-            const animalName = item.animal?.name || item.name;
-            console.log('[Rankings] Calling loadInlineComments for:', animalName);
-            this.loadInlineComments(animalName);
         }
     }
     

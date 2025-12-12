@@ -6990,33 +6990,18 @@ body {
     margin-bottom: 10px;
 }
 
-.inline-comments-animal {
+.inline-comments-title {
     display: flex;
     align-items: center;
     gap: 8px;
-}
-
-.inline-comments-animal img {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    object-fit: contain;
-    background: rgba(0, 0, 0, 0.3);
-}
-
-.inline-comments-animal span:first-of-type {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1rem;
     letter-spacing: 1px;
-    color: #fff;
+    color: #00d4ff;
 }
 
-.inline-comments-label {
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.4);
-    background: rgba(0, 212, 255, 0.1);
-    padding: 2px 8px;
-    border-radius: 4px;
+.inline-comments-title i {
+    font-size: 0.9rem;
 }
 
 .inline-comments-actions {
