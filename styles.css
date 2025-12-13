@@ -6249,7 +6249,7 @@ body {
 .ranking-row.rank-1.podium-card {
     transform: rotate(-1.5deg) scale(1.06);
     transform-origin: center center;
-    margin-left: 5px;
+    margin-left: 12px;
     margin-right: 5px;
     padding: 16px 20px;
     z-index: 15;
