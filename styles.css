@@ -6231,7 +6231,7 @@ body {
 .rankings-list {
     overflow-y: auto;
     overflow-x: visible;
-    padding: 30px 20px 30px 45px;
+    padding: 30px 15px 30px 25px;
     position: relative;
 }
 
@@ -6247,7 +6247,8 @@ body {
 /* #1 - CHAMPION - Largest, most dynamic */
 .ranking-row.rank-1.podium-card {
     transform: rotate(-1.5deg) scale(1.06);
-    margin-left: 0;
+    transform-origin: right center;
+    margin-left: 10px;
     margin-right: 0;
     padding: 16px 20px;
     z-index: 15;
@@ -6310,7 +6311,8 @@ body {
 /* #2 - RUNNER UP - Medium size, slight tilt */
 .ranking-row.rank-2.podium-card {
     transform: rotate(1deg) scale(1.03);
-    margin-left: 0;
+    transform-origin: right center;
+    margin-left: 10px;
     margin-right: 0;
     padding: 14px 18px;
     z-index: 12;
@@ -6354,7 +6356,8 @@ body {
 /* #3 - BRONZE - Smaller than #2, opposite tilt */
 .ranking-row.rank-3.podium-card {
     transform: rotate(-0.8deg) scale(1.01);
-    margin-left: 0;
+    transform-origin: right center;
+    margin-left: 10px;
     margin-right: 0;
     padding: 12px 16px;
     z-index: 11;
@@ -6505,9 +6508,9 @@ body {
 /* Ranking Row - Persona 5 Dynamic Card Style */
 .ranking-row {
     display: grid;
-    grid-template-columns: 70px 1fr 110px 160px;
-    gap: 10px;
-    padding: 10px 14px 10px 16px;
+    grid-template-columns: 60px 1fr 90px 130px;
+    gap: 8px;
+    padding: 10px 12px 10px 14px;
     background: linear-gradient(95deg, rgb(15, 20, 35) 0%, rgb(20, 25, 45) 100%);
     border: 2px solid rgba(255, 45, 45, 0.25);
     border-left: 4px solid #ff2d2d;
@@ -6520,6 +6523,9 @@ body {
     overflow: visible;
     box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4);
     z-index: 1;
+    transform-origin: right center;
+    max-width: calc(100% - 20px);
+    margin-left: 10px;
 }
 
 /* Chamfered corner accent */
