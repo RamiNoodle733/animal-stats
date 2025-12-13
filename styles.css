@@ -6219,7 +6219,7 @@ body {
 .rankings-list {
     overflow-y: auto;
     overflow-x: clip;
-    padding: 20px;
+    padding: 25px 35px 25px 40px;
     position: relative;
 }
 
@@ -6240,9 +6240,9 @@ body {
     padding: 16px 20px;
     z-index: 15;
     background: linear-gradient(105deg, 
-        rgba(255, 215, 0, 0.2) 0%, 
-        rgba(255, 180, 0, 0.12) 20%,
-        rgba(15, 20, 35, 0.98) 50%);
+        rgb(45, 40, 15) 0%, 
+        rgb(35, 32, 12) 20%,
+        rgb(15, 20, 35) 50%);
     border: 3px solid rgba(255, 215, 0, 0.6);
     border-left: 6px solid #ffd700;
     box-shadow: 
@@ -6303,9 +6303,9 @@ body {
     padding: 14px 18px;
     z-index: 12;
     background: linear-gradient(105deg, 
-        rgba(192, 192, 192, 0.15) 0%, 
-        rgba(192, 192, 192, 0.08) 20%,
-        rgba(15, 20, 35, 0.98) 50%);
+        rgb(38, 38, 42) 0%, 
+        rgb(30, 30, 35) 20%,
+        rgb(15, 20, 35) 50%);
     border: 2px solid rgba(192, 192, 192, 0.5);
     border-left: 5px solid #c0c0c0;
     box-shadow: 
@@ -6347,9 +6347,9 @@ body {
     padding: 12px 16px;
     z-index: 11;
     background: linear-gradient(105deg, 
-        rgba(205, 127, 50, 0.12) 0%, 
-        rgba(205, 127, 50, 0.06) 20%,
-        rgba(15, 20, 35, 0.98) 50%);
+        rgb(40, 30, 18) 0%, 
+        rgb(32, 25, 15) 20%,
+        rgb(15, 20, 35) 50%);
     border: 2px solid rgba(205, 127, 50, 0.45);
     border-left: 5px solid #cd7f32;
     box-shadow: 
@@ -6388,8 +6388,8 @@ body {
    ============================================ */
 .ranking-row.selected,
 .ranking-row.comments-expanded {
-    z-index: 50;
-    background: linear-gradient(95deg, rgba(35, 40, 60, 0.98) 0%, rgba(45, 50, 75, 0.95) 100%);
+    z-index: 100 !important;
+    background: linear-gradient(95deg, rgb(35, 40, 60) 0%, rgb(45, 50, 75) 100%);
     box-shadow: 
         6px 6px 0 rgba(0, 0, 0, 0.5), 
         0 0 30px rgba(255, 215, 0, 0.2),
@@ -6496,7 +6496,7 @@ body {
     grid-template-columns: 70px 1fr 110px 160px;
     gap: 10px;
     padding: 10px 14px 10px 16px;
-    background: linear-gradient(95deg, rgba(15, 20, 35, 0.95) 0%, rgba(20, 25, 45, 0.9) 100%);
+    background: linear-gradient(95deg, rgb(15, 20, 35) 0%, rgb(20, 25, 45) 100%);
     border: 2px solid rgba(255, 45, 45, 0.25);
     border-left: 4px solid #ff2d2d;
     border-radius: 4px 0 0 4px;
@@ -6528,7 +6528,7 @@ body {
 }
 
 .ranking-row:hover {
-    background: linear-gradient(95deg, rgba(25, 30, 50, 0.98) 0%, rgba(35, 40, 65, 0.95) 100%);
+    background: linear-gradient(95deg, rgb(25, 30, 50) 0%, rgb(35, 40, 65) 100%);
     border-color: rgba(255, 45, 45, 0.6);
     box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 45, 45, 0.15);
     z-index: 2;
@@ -6545,7 +6545,7 @@ body {
 
 /* Selected state - handled in new podium system above */
 .ranking-row.selected:not(.podium-card) {
-    background: linear-gradient(95deg, rgba(30, 35, 55, 0.98) 0%, rgba(40, 45, 70, 0.95) 100%);
+    background: linear-gradient(95deg, rgb(30, 35, 55) 0%, rgb(40, 45, 70) 100%);
     border-color: rgba(255, 215, 0, 0.7);
     border-left-color: #ffd700;
     box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.5), 0 0 25px rgba(255, 215, 0, 0.2);
