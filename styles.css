@@ -5956,6 +5956,7 @@ body {
     box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.4);
     position: relative;
     z-index: 1;
+    padding-left: 10px;
 }
 
 /* Integrated Toolbar with title & search */
@@ -6218,9 +6219,10 @@ body {
 /* Container needs overflow visible for breakout effect */
 .rankings-list {
     overflow-y: auto;
-    overflow-x: clip;
-    padding: 25px 35px 25px 40px;
+    overflow-x: visible;
+    padding: 25px 30px 25px 50px;
     position: relative;
+    margin-left: -10px;
 }
 
 /* Base podium card styling */
@@ -6235,7 +6237,7 @@ body {
 /* #1 - CHAMPION - Largest, most dynamic */
 .ranking-row.rank-1.podium-card {
     transform: rotate(-1.5deg) scale(1.08);
-    margin-left: -15px;
+    margin-left: -5px;
     margin-right: -5px;
     padding: 16px 20px;
     z-index: 15;
@@ -6298,8 +6300,8 @@ body {
 /* #2 - RUNNER UP - Medium size, slight tilt */
 .ranking-row.rank-2.podium-card {
     transform: rotate(1deg) scale(1.04);
-    margin-left: -8px;
-    margin-right: -8px;
+    margin-left: 0px;
+    margin-right: -5px;
     padding: 14px 18px;
     z-index: 12;
     background: linear-gradient(105deg, 
@@ -6342,8 +6344,8 @@ body {
 /* #3 - BRONZE - Smaller than #2, opposite tilt */
 .ranking-row.rank-3.podium-card {
     transform: rotate(-0.8deg) scale(1.02);
-    margin-left: -5px;
-    margin-right: -10px;
+    margin-left: -2px;
+    margin-right: -5px;
     padding: 12px 16px;
     z-index: 11;
     background: linear-gradient(105deg, 
