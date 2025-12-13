@@ -5948,14 +5948,26 @@ body {
     display: flex;
     flex-direction: column;
     min-width: 0;
+    position: relative;
+    z-index: 1;
+    overflow: visible;
+    margin-left: 25px;
+}
+
+/* Background pseudo-element that doesn't clip content */
+.rankings-list-column::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -25px;
+    right: 0;
+    bottom: 0;
     background: rgba(5, 10, 20, 0.85);
     border: 2px solid rgba(255, 45, 45, 0.2);
     border-radius: 4px;
-    overflow: visible;
     box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.4);
-    position: relative;
-    z-index: 1;
-    padding-left: 10px;
+    z-index: -1;
+    pointer-events: none;
 }
 
 /* Integrated Toolbar with title & search */
@@ -6219,7 +6231,7 @@ body {
 .rankings-list {
     overflow-y: auto;
     overflow-x: visible;
-    padding: 25px 25px 25px 60px;
+    padding: 30px 20px 30px 45px;
     position: relative;
 }
 
@@ -6234,9 +6246,9 @@ body {
 
 /* #1 - CHAMPION - Largest, most dynamic */
 .ranking-row.rank-1.podium-card {
-    transform: rotate(-1.5deg) scale(1.08);
-    margin-left: -5px;
-    margin-right: -5px;
+    transform: rotate(-1.5deg) scale(1.06);
+    margin-left: 0;
+    margin-right: 0;
     padding: 16px 20px;
     z-index: 15;
     background: linear-gradient(105deg, 
@@ -6291,15 +6303,15 @@ body {
 }
 
 @keyframes rank1Float {
-    0%, 100% { transform: rotate(-1.5deg) scale(1.08) translateY(0); }
-    50% { transform: rotate(-1.5deg) scale(1.08) translateY(-3px); }
+    0%, 100% { transform: rotate(-1.5deg) scale(1.06) translateY(0); }
+    50% { transform: rotate(-1.5deg) scale(1.06) translateY(-3px); }
 }
 
 /* #2 - RUNNER UP - Medium size, slight tilt */
 .ranking-row.rank-2.podium-card {
-    transform: rotate(1deg) scale(1.04);
-    margin-left: 0px;
-    margin-right: -5px;
+    transform: rotate(1deg) scale(1.03);
+    margin-left: 0;
+    margin-right: 0;
     padding: 14px 18px;
     z-index: 12;
     background: linear-gradient(105deg, 
@@ -6335,15 +6347,15 @@ body {
 }
 
 @keyframes rank2Float {
-    0%, 100% { transform: rotate(1deg) scale(1.04) translateY(0); }
-    50% { transform: rotate(1deg) scale(1.04) translateY(-2px); }
+    0%, 100% { transform: rotate(1deg) scale(1.03) translateY(0); }
+    50% { transform: rotate(1deg) scale(1.03) translateY(-2px); }
 }
 
 /* #3 - BRONZE - Smaller than #2, opposite tilt */
 .ranking-row.rank-3.podium-card {
-    transform: rotate(-0.8deg) scale(1.02);
-    margin-left: -2px;
-    margin-right: -5px;
+    transform: rotate(-0.8deg) scale(1.01);
+    margin-left: 0;
+    margin-right: 0;
     padding: 12px 16px;
     z-index: 11;
     background: linear-gradient(105deg, 
@@ -6379,8 +6391,8 @@ body {
 }
 
 @keyframes rank3Float {
-    0%, 100% { transform: rotate(-0.8deg) scale(1.02) translateY(0); }
-    50% { transform: rotate(-0.8deg) scale(1.02) translateY(-1.5px); }
+    0%, 100% { transform: rotate(-0.8deg) scale(1.01) translateY(0); }
+    50% { transform: rotate(-0.8deg) scale(1.01) translateY(-1.5px); }
 }
 
 /* ============================================
