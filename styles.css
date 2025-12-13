@@ -6248,7 +6248,7 @@ body {
 /* #1 - CHAMPION - Largest, most dynamic */
 .ranking-row.rank-1.podium-card {
     transform: rotate(-1.5deg) scale(1.06);
-    transform-origin: center center;
+    transform-origin: left center;
     margin-left: 12px;
     margin-right: 5px;
     padding: 16px 20px;
