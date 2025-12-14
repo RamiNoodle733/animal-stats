@@ -30,6 +30,24 @@ module.exports = async function handler(req, res) {
     if (req.method === 'POST' && req.query.action === 'fight') {
         const { animal1, animal2, user } = req.body;
         await notifyDiscord('fight', { animal1, animal2, user: user || 'Anonymous' }, req);
+        
+        // Increment comparison count for both animals
+        try {
+            await connectToDatabase();
+            await BattleStats.updateOne(
+                { animalName: animal1 },
+                { $inc: { comparisonCount: 1 } },
+                { upsert: true }
+            );
+            await BattleStats.updateOne(
+                { animalName: animal2 },
+                { $inc: { comparisonCount: 1 } },
+                { upsert: true }
+            );
+        } catch (e) {
+            console.error('Error updating comparison counts:', e);
+        }
+        
         return res.status(200).json({ success: true });
     }
 
@@ -89,7 +107,8 @@ module.exports = async function handler(req, res) {
                 tournamentsPlayed: b.tournamentsPlayed || 0,
                 tournamentsFirst: b.tournamentsFirst || 0,
                 tournamentsSecond: b.tournamentsSecond || 0,
-                tournamentsThird: b.tournamentsThird || 0
+                tournamentsThird: b.tournamentsThird || 0,
+                comparisonCount: b.comparisonCount || 0
             };
         });
         
@@ -180,6 +199,8 @@ module.exports = async function handler(req, res) {
                 tournamentsFirst: battle.tournamentsFirst,
                 tournamentsSecond: battle.tournamentsSecond,
                 tournamentsThird: battle.tournamentsThird,
+                // Comparison count for community favorites
+                comparisonCount: battle.comparisonCount,
                 // Power ranking fields
                 powerScore,
                 attackScore,

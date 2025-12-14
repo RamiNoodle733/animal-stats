@@ -869,12 +869,20 @@ class AnimalStatsApp {
 
         // Sort
         this.state.filteredAnimals.sort((a, b) => {
-            // Power Rank: sort by powerRank if available, otherwise by attack stat
+            // Stat Rank: sort by weighted stat score (same as fight prediction)
             if (sort === 'rank') {
-                // If rankings are loaded, use netScore, otherwise use attack
-                const aRank = a.powerRank ?? a.attack;
-                const bRank = b.powerRank ?? b.attack;
-                return bRank - aRank;
+                const aScore = (a.attack || 0) * 0.35 + (a.defense || 0) * 0.23 + (a.agility || 0) * 0.15 + 
+                               (a.stamina || 0) * 0.02 + (a.intelligence || 0) * 0.10 + (a.special || 0) * 0.15;
+                const bScore = (b.attack || 0) * 0.35 + (b.defense || 0) * 0.23 + (b.agility || 0) * 0.15 + 
+                               (b.stamina || 0) * 0.02 + (b.intelligence || 0) * 0.10 + (b.special || 0) * 0.15;
+                return bScore - aScore;
+            }
+            
+            // Community Favorites: 50% comparison count + 50% net votes
+            if (sort === 'community') {
+                const aFavorite = (a.comparisonCount || 0) * 0.5 + (a.netVotes || 0) * 0.5;
+                const bFavorite = (b.comparisonCount || 0) * 0.5 + (b.netVotes || 0) * 0.5;
+                return bFavorite - aFavorite;
             }
             
             if (sort === 'name') return a.name.localeCompare(b.name);
@@ -1673,37 +1681,10 @@ class AnimalStatsApp {
         
         if (!left || !right) return;
 
-        // Fetch battle stats (PowerScores) for both animals
-        let leftStats = { battleRating: 1000 };
-        let rightStats = { battleRating: 1000 };
-        
-        try {
-            const [leftRes, rightRes] = await Promise.all([
-                fetch(`/api/battles?animal=${encodeURIComponent(left.name)}`),
-                fetch(`/api/battles?animal=${encodeURIComponent(right.name)}`)
-            ]);
-            
-            if (leftRes.ok) {
-                const data = await leftRes.json();
-                if (data.success && data.data) {
-                    leftStats = data.data;
-                }
-            }
-            if (rightRes.ok) {
-                const data = await rightRes.json();
-                if (data.success && data.data) {
-                    rightStats = data.data;
-                }
-            }
-        } catch (e) {
-            console.warn('Could not fetch battle stats, using defaults');
-        }
-
-        // Calculate fight scores using PowerScore formula
-        // PowerScore = 0.60 * TournamentScore + 0.25 * VoteScore + 0.15 * AttackScore
-        // For fight prediction, we use battleRating as the primary indicator
-        const score1 = this.calculateFightScore(left, leftStats.battleRating);
-        const score2 = this.calculateFightScore(right, rightStats.battleRating);
+        // Calculate fight scores using weighted stats formula
+        // Weights: Attack 35%, Defense 23%, Agility 15%, Stamina 2%, Intelligence 10%, Special 15%
+        const score1 = this.calculateFightScore(left);
+        const score2 = this.calculateFightScore(right);
         
         // Calculate win probability: probA = scoreA / (scoreA + scoreB)
         const prob1 = score1 / (score1 + score2);
@@ -1763,18 +1744,20 @@ class AnimalStatsApp {
     }
 
     /**
-     * Calculate fight score using battle rating (ELO) and raw stats
-     * FightScore = battleRating * (1 + statsBonus)
-     * where statsBonus comes from raw attack/defense/agility
+     * Calculate fight score using weighted stats only
+     * Weights: Attack 35%, Defense 23%, Agility 15%, Stamina 2%, Intelligence 10%, Special 15%
      */
-    calculateFightScore(animal, battleRating = 1000) {
-        // Stats bonus: weighted combination normalized to 0-0.3 range
-        const rawScore = (animal.attack * 2) + (animal.defense * 1.5) + (animal.agility * 1.2) + animal.stamina;
-        const maxPossible = 100 * 2 + 100 * 1.5 + 100 * 1.2 + 100; // 570
-        const statsBonus = (rawScore / maxPossible) * 0.3; // 0 to 0.3 bonus
+    calculateFightScore(animal) {
+        // Weighted stat formula (weights sum to 100%)
+        const score = 
+            (animal.attack || 0) * 0.35 +
+            (animal.defense || 0) * 0.23 +
+            (animal.agility || 0) * 0.15 +
+            (animal.stamina || 0) * 0.02 +
+            (animal.intelligence || 0) * 0.10 +
+            (animal.special || 0) * 0.15;
         
-        // FightScore = battleRating * (1 + statsBonus)
-        return battleRating * (1 + statsBonus);
+        return score;
     }
 }
 
@@ -2138,27 +2121,29 @@ class RankingsManager {
     }
 
     /**
-     * Update the main app's animals with power rank data for sorting
+     * Update the main app's animals with community data for sorting
      */
     updateAnimalPowerRanks() {
         if (!this.app || !this.app.state.animals) return;
         
-        // Create a lookup map: name -> rank info
-        const rankMap = {};
+        // Create a lookup map: name -> community data
+        const communityMap = {};
         this.rankings.forEach((item, index) => {
-            // powerRank = netScore (votes), or if no votes, use attack as tiebreaker
-            // Higher is better, so we use a composite score
-            const powerRank = item.netScore * 1000 + (item.animal.attack || 0);
-            rankMap[item.animal.name] = powerRank;
+            communityMap[item.animal.name] = {
+                netVotes: item.netScore || 0,
+                comparisonCount: item.comparisonCount || 0
+            };
         });
         
-        // Update each animal with its power rank
+        // Update each animal with community data
         this.app.state.animals.forEach(animal => {
-            animal.powerRank = rankMap[animal.name] ?? animal.attack;
+            const data = communityMap[animal.name] || { netVotes: 0, comparisonCount: 0 };
+            animal.netVotes = data.netVotes;
+            animal.comparisonCount = data.comparisonCount;
         });
         
-        // Trigger re-render if current sort is 'rank'
-        if (this.app.state.filters.sort === 'rank') {
+        // Trigger re-render if current sort is 'rank' or 'community'
+        if (this.app.state.filters.sort === 'rank' || this.app.state.filters.sort === 'community') {
             this.app.applyFilters();
         }
     }
