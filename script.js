@@ -341,70 +341,63 @@ class AnimalStatsApp {
     }
 
     /**
-     * Fetch animal data from API or fallback to local data
+     * Fetch animal data from MongoDB API
+     * This is the single source of truth - no local fallbacks
      */
     async fetchData() {
-        // First, check if API is available
-        const apiHealthy = await this.checkApiHealth();
-        
-        if (apiHealthy) {
-            try {
-                // Add cache-busting timestamp to always get fresh data from MongoDB
-                const cacheBuster = `?_t=${Date.now()}`;
-                const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.animals}${cacheBuster}`, {
-                    method: 'GET',
-                    headers: { 
-                        'Accept': 'application/json',
-                        'Cache-Control': 'no-cache'
-                    },
-                    signal: AbortSignal.timeout(10000) // 10 second timeout
-                });
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    if (result.success && result.data) {
-                        this.state.animals = result.data;
-                        this.state.filteredAnimals = [...result.data];
-                        this.state.apiAvailable = true;
-                        console.log(`Loaded ${result.data.length} animals from MongoDB API`);
-                        return;
-                    }
-                }
-                throw new Error('Invalid API response');
-            } catch (error) {
-                console.warn('API fetch failed, falling back to local data:', error.message);
-            }
-        }
-
-        // Fallback to local data
-        await this.loadLocalData();
-    }
-
-    /**
-     * Load data from local sources (window.animalData or animal_stats.json)
-     */
-    async loadLocalData() {
-        // Check for global data first (from data.js)
-        if (window.animalData) {
-            this.state.animals = window.animalData;
-            this.state.filteredAnimals = [...window.animalData];
-            this.state.apiAvailable = false;
-            console.log(`Loaded ${window.animalData.length} animals from local data.js`);
-            return;
-        }
-
-        // Fallback to fetch JSON file
         try {
-            const response = await fetch('animal_stats.json');
-            if (!response.ok) throw new Error('Network response was not ok');
-            const data = await response.json();
-            this.state.animals = data;
-            this.state.filteredAnimals = [...data];
-            this.state.apiAvailable = false;
-            console.log(`Loaded ${data.length} animals from animal_stats.json`);
+            // Add cache-busting timestamp to always get fresh data from MongoDB
+            const cacheBuster = `?_t=${Date.now()}`;
+            const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.animals}${cacheBuster}`, {
+                method: 'GET',
+                headers: { 
+                    'Accept': 'application/json',
+                    'Cache-Control': 'no-cache'
+                },
+                signal: AbortSignal.timeout(15000) // 15 second timeout
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const result = await response.json();
+            
+            if (!result.success || !result.data) {
+                throw new Error('Invalid API response format');
+            }
+            
+            this.state.animals = result.data;
+            this.state.filteredAnimals = [...result.data];
+            this.state.apiAvailable = true;
+            console.log(`Loaded ${result.data.length} animals from MongoDB API`);
+            
         } catch (error) {
-            console.error('Error loading local data:', error);
+            console.error('Failed to load animal data:', error.message);
+            this.state.apiAvailable = false;
+            
+            // Show user-friendly error
+            this.showLoadError(error.message);
             throw error;
+        }
+    }
+    
+    /**
+     * Show a loading error to the user
+     */
+    showLoadError(message) {
+        const gridContainer = document.getElementById('character-grid');
+        if (gridContainer) {
+            gridContainer.innerHTML = `
+                <div class="load-error">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Failed to Load Data</h3>
+                    <p>Could not connect to the database. Please try refreshing the page.</p>
+                    <button onclick="location.reload()" class="retry-btn">
+                        <i class="fas fa-redo"></i> Retry
+                    </button>
+                </div>
+            `;
         }
     }
 
@@ -2664,8 +2657,6 @@ class RankingsManager {
         // Look up full animal data from app.state.animals (has scientific_name, etc.)
         const fullAnimal = this.app.state.animals.find(a => a.name === animal.name) || animal;
         
-        console.log('[Rankings] updateDetailPanel:', animal.name, 'scientific_name:', fullAnimal.scientific_name);
-        
         // Show content, hide empty state
         if (this.dom.detailEmpty) this.dom.detailEmpty.style.display = 'none';
         if (this.dom.detailContent) this.dom.detailContent.style.display = 'flex';
@@ -2675,11 +2666,7 @@ class RankingsManager {
         if (this.dom.detailAnimalName) this.dom.detailAnimalName.textContent = animal.name;
         if (this.dom.detailScientific) {
             // Use scientific_name from full animal data (same as stats page)
-            const sciName = fullAnimal.scientific_name || 'Unknown Species';
-            this.dom.detailScientific.textContent = sciName;
-            console.log('[Rankings] Set scientific name to:', sciName);
-        } else {
-            console.warn('[Rankings] detailScientific element not found!');
+            this.dom.detailScientific.textContent = fullAnimal.scientific_name || 'Unknown Species';
         }
         
         // Grade badge

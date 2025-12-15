@@ -14359,3 +14359,59 @@ body {
         font-size: 1rem;
     }
 }
+
+/* ================================
+   LOAD ERROR STATE
+   ================================ */
+.load-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.load-error i {
+    font-size: 4rem;
+    color: #ff6b6b;
+    margin-bottom: 20px;
+    opacity: 0.8;
+}
+
+.load-error h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    letter-spacing: 2px;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.load-error p {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 25px;
+    max-width: 400px;
+}
+
+.retry-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #00d4ff, #0099cc);
+    border: none;
+    border-radius: 8px;
+    color: #000;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.retry-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
