@@ -871,10 +871,18 @@ class AnimalStatsApp {
         this.state.filteredAnimals.sort((a, b) => {
             // Stat Rank: sort by weighted stat score (same as fight prediction)
             if (sort === 'rank') {
-                const aScore = (a.attack || 0) * 0.35 + (a.defense || 0) * 0.23 + (a.agility || 0) * 0.15 + 
-                               (a.stamina || 0) * 0.02 + (a.intelligence || 0) * 0.10 + (a.special || 0) * 0.15;
-                const bScore = (b.attack || 0) * 0.35 + (b.defense || 0) * 0.23 + (b.agility || 0) * 0.15 + 
-                               (b.stamina || 0) * 0.02 + (b.intelligence || 0) * 0.10 + (b.special || 0) * 0.15;
+                // Normalize weight to 0-100 scale using log scale
+                const aWeight = a.weight_kg || a.weight || a.averageWeight || 50;
+                const bWeight = b.weight_kg || b.weight || b.averageWeight || 50;
+                const aNormWeight = Math.min(100, Math.max(0, (Math.log10(aWeight) + 2) * 16.67));
+                const bNormWeight = Math.min(100, Math.max(0, (Math.log10(bWeight) + 2) * 16.67));
+                
+                const aScore = (a.attack || 0) * 0.50 + (a.defense || 0) * 0.13 + (a.agility || 0) * 0.04 + 
+                               (a.stamina || 0) * 0.01 + (a.intelligence || 0) * 0.02 + (a.special || 0) * 0.10 +
+                               aNormWeight * 0.20;
+                const bScore = (b.attack || 0) * 0.50 + (b.defense || 0) * 0.13 + (b.agility || 0) * 0.04 + 
+                               (b.stamina || 0) * 0.01 + (b.intelligence || 0) * 0.02 + (b.special || 0) * 0.10 +
+                               bNormWeight * 0.20;
                 return bScore - aScore;
             }
             
@@ -1744,18 +1752,24 @@ class AnimalStatsApp {
     }
 
     /**
-     * Calculate fight score using weighted stats only
-     * Weights: Attack 35%, Defense 23%, Agility 15%, Stamina 2%, Intelligence 10%, Special 15%
+     * Calculate fight score using weighted stats
+     * Weights: Attack 50%, Defense 13%, Agility 4%, Stamina 1%, Intelligence 2%, Special 10%, Weight 20%
      */
     calculateFightScore(animal) {
+        // Normalize weight to 0-100 scale using log scale
+        // Log scale: tiny animals (0.01kg) = ~0, huge animals (10000kg) = ~100
+        const weightKg = animal.weight_kg || animal.weight || animal.averageWeight || 50;
+        const normalizedWeight = Math.min(100, Math.max(0, (Math.log10(weightKg) + 2) * 16.67));
+        
         // Weighted stat formula (weights sum to 100%)
         const score = 
-            (animal.attack || 0) * 0.35 +
-            (animal.defense || 0) * 0.23 +
-            (animal.agility || 0) * 0.15 +
-            (animal.stamina || 0) * 0.02 +
-            (animal.intelligence || 0) * 0.10 +
-            (animal.special || 0) * 0.15;
+            (animal.attack || 0) * 0.50 +
+            (animal.defense || 0) * 0.13 +
+            (animal.agility || 0) * 0.04 +
+            (animal.stamina || 0) * 0.01 +
+            (animal.intelligence || 0) * 0.02 +
+            (animal.special || 0) * 0.10 +
+            normalizedWeight * 0.20;
         
         return score;
     }
