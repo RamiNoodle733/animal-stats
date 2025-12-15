@@ -5550,16 +5550,9 @@ body {
     100% { left: 150%; opacity: 0; }
 }
 
-/* Angled accent bars breaking out of banner */
+/* Angled accent bars breaking out of banner - HIDDEN */
 .hero-accent-bar {
-    position: absolute;
-    width: 8px;
-    height: 60px;
-    background: linear-gradient(180deg, #ffd700, #ff6b00);
-    transform: skewX(-15deg);
-    pointer-events: none;
-    z-index: 2;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+    display: none;
 }
 
 .hero-accent-bar.left {
@@ -5964,18 +5957,9 @@ body {
     position: relative;
 }
 
-/* Accent triangles in toolbar */
+/* Accent triangles in toolbar - REMOVED */
 .rankings-list-toolbar::after {
-    content: '';
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%) rotate(15deg);
-    width: 0;
-    height: 0;
-    border-left: 12px solid rgba(255, 45, 45, 0.2);
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
+    display: none;
 }
 
 .rankings-list-title {
@@ -6149,21 +6133,14 @@ body {
     align-items: center;
     position: relative;
     overflow: visible;
-    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+    border-radius: 4px;
     box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4);
     z-index: 1;
 }
 
-/* Chamfered corner accent */
+/* Chamfered corner accent - REMOVED */
 .ranking-row::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 17px;
-    height: 17px;
-    background: linear-gradient(135deg, transparent 50%, rgba(255, 45, 45, 0.6) 50%);
-    pointer-events: none;
+    display: none;
 }
 
 /* Left accent bar removed - using border-left instead */

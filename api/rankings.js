@@ -182,7 +182,8 @@ module.exports = async function handler(req, res) {
                     agility: animal.agility,
                     stamina: animal.stamina,
                     intelligence: animal.intelligence,
-                    special: animal.special
+                    special: animal.special,
+                    scientific_name: animal.scientific_name
                 },
                 upvotes: votes.upvotes,
                 downvotes: votes.downvotes,
