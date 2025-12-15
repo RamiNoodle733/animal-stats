@@ -7392,8 +7392,10 @@ body {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
     padding-top: 8px;
+    padding-bottom: 12px;
 }
 
 /* Tournament CTA Banner - Legacy (hidden when using hero banner) */
