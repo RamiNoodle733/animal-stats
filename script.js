@@ -2668,7 +2668,11 @@ class RankingsManager {
         // Header
         if (this.dom.detailRankBadge) this.dom.detailRankBadge.textContent = `#${rank}`;
         if (this.dom.detailAnimalName) this.dom.detailAnimalName.textContent = animal.name;
-        if (this.dom.detailScientific) this.dom.detailScientific.textContent = animal.scientific_name || animal.scientificName || '';
+        if (this.dom.detailScientific) {
+            const sciName = animal.scientific_name || animal.scientificName || '';
+            this.dom.detailScientific.textContent = sciName;
+            this.dom.detailScientific.style.display = sciName ? 'block' : 'none';
+        }
         
         // Grade badge
         if (this.dom.detailGradeBadge) {

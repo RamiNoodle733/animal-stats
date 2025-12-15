@@ -6230,7 +6230,7 @@ body {
     text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.5);
 }
 
-/* Yellow slash behind rank number */
+/* Yellow slash behind rank number - REMOVED */
 .ranking-row.rank-1 .row-rank-num,
 .ranking-row.rank-2 .row-rank-num,
 .ranking-row.rank-3 .row-rank-num {
@@ -6238,16 +6238,7 @@ body {
 }
 
 .ranking-row.rank-1 .row-rank-num::before {
-    content: '';
-    position: absolute;
-    left: -5px;
-    top: 50%;
-    transform: translateY(-50%) skewX(-15deg);
-    width: 45px;
-    height: 22px;
-    background: linear-gradient(90deg, rgba(255, 215, 0, 0.3), rgba(255, 215, 0, 0.1));
-    z-index: -1;
-    border-left: 3px solid #ffd700;
+    display: none;
 }
 
 .ranking-row.rank-1 .row-rank-num { color: #ffd700; }
