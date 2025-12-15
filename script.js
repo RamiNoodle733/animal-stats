@@ -2661,6 +2661,9 @@ class RankingsManager {
         const animal = item.animal || item;
         this.currentAnimal = animal;
         
+        // Look up full animal data from app.state.animals (has scientific_name, etc.)
+        const fullAnimal = this.app.state.animals.find(a => a.name === animal.name) || animal;
+        
         // Show content, hide empty state
         if (this.dom.detailEmpty) this.dom.detailEmpty.style.display = 'none';
         if (this.dom.detailContent) this.dom.detailContent.style.display = 'flex';
@@ -2669,9 +2672,8 @@ class RankingsManager {
         if (this.dom.detailRankBadge) this.dom.detailRankBadge.textContent = `#${rank}`;
         if (this.dom.detailAnimalName) this.dom.detailAnimalName.textContent = animal.name;
         if (this.dom.detailScientific) {
-            const sciName = animal.scientific_name || animal.scientificName || '';
-            this.dom.detailScientific.textContent = sciName;
-            this.dom.detailScientific.style.display = sciName ? 'block' : 'none';
+            // Use scientific_name from full animal data (same as stats page)
+            this.dom.detailScientific.textContent = fullAnimal.scientific_name || 'Unknown Species';
         }
         
         // Grade badge
