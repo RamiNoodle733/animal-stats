@@ -98,14 +98,11 @@ body {
     background: linear-gradient(180deg, rgba(5, 15, 30, 0.98) 0%, rgba(0, 10, 20, 0.95) 100%);
     border-bottom: 1px solid rgba(0, 212, 255, 0.4);
     padding: 6px 15px;
-    text-align: center;
     box-shadow: 0 2px 15px rgba(0, 212, 255, 0.2);
     flex-shrink: 0;
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 280px 1fr 280px;
     align-items: center;
-    justify-content: center;
-    gap: 15px;
     z-index: 50;
     position: relative;
 }
@@ -117,6 +114,7 @@ body {
     gap: 10px;
     cursor: pointer;
     transition: transform 0.2s ease;
+    justify-self: start;
 }
 
 .header-brand:hover {
@@ -160,6 +158,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    justify-self: center;
     gap: 4px;
     background: rgba(0, 10, 20, 0.8);
     padding: 3px 6px;
@@ -2184,6 +2183,8 @@ body {
 .auth-area {
     display: flex;
     align-items: center;
+    justify-self: end;
+    gap: 12px;
 }
 
 .auth-login-btn {
@@ -3237,10 +3238,10 @@ body {
     /* --- HEADER - Compact mobile layout --- */
     .game-header {
         padding: 8px 12px;
-        gap: 6px;
+        grid-template-columns: auto 1fr auto;
+        gap: 8px;
         flex-shrink: 0;
         min-height: auto;
-        padding-right: 60px; /* Space for auth button */
     }
 
     .header-brand {
@@ -4241,8 +4242,7 @@ body {
     /* Header stays compact */
     .game-header {
         padding: 6px 10px;
-        gap: 4px;
-        padding-right: 50px;
+        gap: 6px;
     }
 
     .header-logo {
