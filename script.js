@@ -1807,15 +1807,15 @@ class RankingsManager {
             rankingsSearch: document.getElementById('rankings-search'),
             loginPrompt: document.getElementById('rankings-login-prompt'),
             
-            // Detail Panel Elements
+            // Detail Panel Elements (use rankings- prefix to avoid ID conflicts with stats page)
             detailPanel: document.getElementById('rankings-detail-panel'),
             detailEmpty: document.getElementById('detail-panel-empty'),
             detailContent: document.getElementById('detail-panel-content'),
-            detailRankBadge: document.getElementById('detail-rank-badge'),
-            detailAnimalName: document.getElementById('detail-animal-name'),
-            detailScientific: document.getElementById('detail-scientific'),
-            detailGradeBadge: document.getElementById('detail-grade-badge'),
-            detailPortrait: document.getElementById('detail-portrait'),
+            detailRankBadge: document.getElementById('rankings-detail-rank'),
+            detailAnimalName: document.getElementById('rankings-detail-name'),
+            detailScientific: document.getElementById('rankings-detail-scientific'),
+            detailGradeBadge: document.getElementById('rankings-detail-grade'),
+            detailPortrait: document.getElementById('rankings-detail-portrait'),
             detailAtkBar: document.getElementById('detail-atk-bar'),
             detailDefBar: document.getElementById('detail-def-bar'),
             detailAgiBar: document.getElementById('detail-agi-bar'),
