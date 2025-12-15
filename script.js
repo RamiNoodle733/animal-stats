@@ -1834,6 +1834,11 @@ class RankingsManager {
             detailStaVal: document.getElementById('detail-sta-val'),
             detailIntVal: document.getElementById('detail-int-val'),
             detailSpeVal: document.getElementById('detail-spe-val'),
+            detailWeight: document.getElementById('rankings-detail-weight'),
+            detailSpeed: document.getElementById('rankings-detail-speed'),
+            detailBite: document.getElementById('rankings-detail-bite'),
+            detailAbilities: document.getElementById('rankings-detail-abilities'),
+            detailTraits: document.getElementById('rankings-detail-traits'),
             detailWinrate: document.getElementById('detail-winrate'),
             detailBattles: document.getElementById('detail-battles'),
             detailScore: document.getElementById('detail-score'),
@@ -1843,6 +1848,7 @@ class RankingsManager {
             detailDownvoteBtn: document.getElementById('detail-downvote'),
             detailViewStats: document.getElementById('detail-view-stats'),
             detailViewAllComments: document.getElementById('detail-view-all-comments'),
+            detailMoreDetails: document.getElementById('detail-more-details'),
             
             // Inline Comments in Detail Panel
             detailCommentsSection: document.getElementById('detail-comments-section'),
@@ -1958,6 +1964,24 @@ class RankingsManager {
                             }
                         }
                     });
+                }
+            }
+        });
+        
+        // More details button - opens full stats with More Details expanded
+        this.dom.detailMoreDetails?.addEventListener('click', () => {
+            if (this.currentAnimal) {
+                const fullAnimal = this.app.state.animals.find(a => a.name === this.currentAnimal.name);
+                if (fullAnimal) {
+                    this.app.selectAnimal(fullAnimal);
+                    this.app.switchView('stats');
+                    // Auto-open more details panel after a brief delay
+                    setTimeout(() => {
+                        const detailsBtn = document.getElementById('more-details-btn');
+                        if (detailsBtn && !document.querySelector('.full-details-panel.visible')) {
+                            detailsBtn.click();
+                        }
+                    }, 300);
                 }
             }
         });
@@ -2264,6 +2288,10 @@ class RankingsManager {
         const upvotes = item.upvotes || 0;
         const downvotes = item.downvotes || 0;
         const commentCount = item.commentCount || 0;
+        const battleRating = item.battleRating || 1000;
+        
+        // ELO tier coloring
+        const eloTier = battleRating >= 1200 ? 'elite' : battleRating >= 1100 ? 'high' : battleRating >= 1000 ? 'mid' : 'low';
         
         // Check user's current vote on this animal
         const userVote = this.userVotes[animalId] || 0;
@@ -2333,6 +2361,7 @@ class RankingsManager {
                 <div class="row-animal-info">
                     <div class="row-animal-name-line">
                         <span class="row-animal-name">${animal.name}</span>
+                        <span class="row-elo-badge ${eloTier}" title="Battle Rating">${battleRating}</span>
                         ${statusBadge}
                     </div>
                     ${tournamentBadges}
@@ -2711,6 +2740,45 @@ class RankingsManager {
             }
             if (val) val.textContent = value;
         });
+        
+        // Physical stats (weight, speed, bite force)
+        if (this.dom.detailWeight) {
+            const weight = fullAnimal.weight_kg || 0;
+            this.dom.detailWeight.textContent = weight >= 1000 ? `${(weight / 1000).toFixed(1)}t` : `${weight.toLocaleString()} kg`;
+        }
+        if (this.dom.detailSpeed) {
+            const speedMps = fullAnimal.speed_mps || 0;
+            const speedMph = (speedMps * 2.237).toFixed(1);
+            this.dom.detailSpeed.textContent = `${speedMph} mph`;
+        }
+        if (this.dom.detailBite) {
+            const bite = fullAnimal.bite_force_psi || 0;
+            this.dom.detailBite.textContent = bite > 0 ? `${bite.toLocaleString()} PSI` : 'N/A';
+        }
+        
+        // Abilities
+        if (this.dom.detailAbilities) {
+            const abilities = fullAnimal.special_abilities || [];
+            if (abilities.length > 0) {
+                this.dom.detailAbilities.innerHTML = abilities.slice(0, 3).map(a => 
+                    `<span class="ability-tag-sm"><i class="fas fa-bolt"></i> ${a}</span>`
+                ).join('');
+            } else {
+                this.dom.detailAbilities.innerHTML = '<span class="ability-tag-sm dim">None</span>';
+            }
+        }
+        
+        // Traits
+        if (this.dom.detailTraits) {
+            const traits = fullAnimal.unique_traits || [];
+            if (traits.length > 0) {
+                this.dom.detailTraits.innerHTML = traits.slice(0, 3).map(t => 
+                    `<span class="trait-tag-sm"><i class="fas fa-star"></i> ${t}</span>`
+                ).join('');
+            } else {
+                this.dom.detailTraits.innerHTML = '<span class="trait-tag-sm dim">None</span>';
+            }
+        }
         
         // Battle stats
         if (this.dom.detailWinrate) {

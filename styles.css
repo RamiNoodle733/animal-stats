@@ -673,6 +673,8 @@ body {
     padding: 4px 10px;
     margin-top: 4px;
     flex-shrink: 0;
+    position: relative;
+    z-index: 10;
 }
 
 .quick-info-item {
@@ -730,10 +732,9 @@ body {
     font-size: 1rem;
 }
 
+/* Remove the divider lines */
 .quick-info-divider {
-    width: 1px;
-    height: 20px;
-    background: rgba(255, 255, 255, 0.15);
+    display: none;
 }
 
 /* ========================================
@@ -6616,6 +6617,44 @@ body {
     flex-wrap: wrap;
 }
 
+/* ELO Rating Badge on Ranking Rows */
+.row-elo-badge {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(100, 100, 100, 0.4);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.row-elo-badge.elite {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 165, 0, 0.15));
+    border-color: rgba(255, 215, 0, 0.5);
+    color: #ffd700;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.3);
+}
+
+.row-elo-badge.high {
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 212, 255, 0.1));
+    border-color: rgba(0, 255, 136, 0.4);
+    color: #00ff88;
+}
+
+.row-elo-badge.mid {
+    background: rgba(0, 100, 150, 0.2);
+    border-color: rgba(0, 212, 255, 0.3);
+    color: rgba(0, 212, 255, 0.9);
+}
+
+.row-elo-badge.low {
+    background: rgba(255, 50, 50, 0.15);
+    border-color: rgba(255, 100, 100, 0.3);
+    color: rgba(255, 150, 150, 0.9);
+}
+
 /* Tournament Chips - Angled Pennant/Flag Style */
 .row-tournament-chips {
     display: flex;
@@ -7640,6 +7679,117 @@ body {
     color: #fff;
 }
 
+/* Physical Stats Row (Weight, Speed, Bite) */
+.detail-physical-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 6px 4px;
+    background: rgba(0, 20, 40, 0.5);
+    border-radius: 6px;
+    margin: 4px 0;
+}
+
+.physical-stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.85);
+    font-family: var(--font-body);
+    font-weight: 600;
+}
+
+.physical-stat i {
+    color: var(--primary-color);
+    font-size: 0.75rem;
+    width: 14px;
+    text-align: center;
+}
+
+/* Abilities & Traits Section in Detail Panel */
+.detail-abilities-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 6px 0;
+    border-top: 1px solid rgba(0, 212, 255, 0.1);
+}
+
+.detail-abilities-row,
+.detail-traits-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.abilities-label,
+.traits-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.5);
+    min-width: 60px;
+    flex-shrink: 0;
+}
+
+.abilities-label i {
+    color: #ffcc00;
+    margin-right: 3px;
+}
+
+.traits-label i {
+    color: #00ff88;
+    margin-right: 3px;
+}
+
+.abilities-tags-compact,
+.traits-tags-compact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    flex: 1;
+}
+
+.ability-tag-sm,
+.trait-tag-sm {
+    font-size: 0.55rem;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    white-space: nowrap;
+}
+
+.ability-tag-sm {
+    background: rgba(255, 204, 0, 0.15);
+    border: 1px solid rgba(255, 204, 0, 0.3);
+    color: #ffcc00;
+}
+
+.ability-tag-sm i {
+    font-size: 0.5rem;
+}
+
+.trait-tag-sm {
+    background: rgba(0, 255, 136, 0.1);
+    border: 1px solid rgba(0, 255, 136, 0.25);
+    color: #00ff88;
+}
+
+.trait-tag-sm i {
+    font-size: 0.5rem;
+}
+
+.ability-tag-sm.dim,
+.trait-tag-sm.dim {
+    background: rgba(100, 100, 100, 0.1);
+    border-color: rgba(100, 100, 100, 0.2);
+    color: rgba(255, 255, 255, 0.3);
+}
+
 /* Battle Stats Row */
 .detail-battle-row {
     display: flex;
@@ -8068,6 +8218,17 @@ body {
 .action-btn-sm:hover {
     background: rgba(0, 212, 255, 0.2);
     border-color: #00d4ff;
+}
+
+.action-btn-sm.details-btn {
+    background: rgba(0, 255, 136, 0.1);
+    border-color: rgba(0, 255, 136, 0.25);
+    color: #00ff88;
+}
+
+.action-btn-sm.details-btn:hover {
+    background: rgba(0, 255, 136, 0.2);
+    border-color: #00ff88;
 }
 
 /* ================================
