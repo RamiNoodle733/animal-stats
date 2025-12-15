@@ -485,6 +485,12 @@ class AnimalStatsApp {
         this.dom.navBtns.rankings?.addEventListener('click', () => this.switchView('rankings'));
         this.dom.navBtns.community?.addEventListener('click', () => this.switchView('community'));
         
+        // Logo click goes to stats (home)
+        const headerLogo = document.getElementById('header-logo');
+        if (headerLogo) {
+            headerLogo.addEventListener('click', () => this.switchView('stats'));
+        }
+        
         // Compare View Interactions
         this.dom.fighter1.display.addEventListener('click', () => this.setSelectingSide('left'));
         this.dom.fighter2.display.addEventListener('click', () => this.setSelectingSide('right'));

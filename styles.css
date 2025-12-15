@@ -110,6 +110,32 @@ body {
     position: relative;
 }
 
+/* Header Brand (Logo + Title) */
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.header-brand:hover {
+    transform: scale(1.02);
+}
+
+.header-logo {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.5));
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.header-logo:hover {
+    filter: drop-shadow(0 0 12px rgba(0, 212, 255, 0.8)) drop-shadow(0 0 20px rgba(255, 0, 51, 0.4));
+    transform: rotate(-5deg) scale(1.1);
+}
+
 .game-header h1 {
     font-family: var(--font-display);
     font-size: 1.2rem;
@@ -3217,6 +3243,15 @@ body {
         padding-right: 60px; /* Space for auth button */
     }
 
+    .header-brand {
+        gap: 6px;
+    }
+
+    .header-logo {
+        width: 28px;
+        height: 28px;
+    }
+
     .game-header h1 {
         font-size: 0.85rem;
         letter-spacing: 2px;
@@ -4208,6 +4243,11 @@ body {
         padding: 6px 10px;
         gap: 4px;
         padding-right: 50px;
+    }
+
+    .header-logo {
+        width: 24px;
+        height: 24px;
     }
 
     .game-header h1 {

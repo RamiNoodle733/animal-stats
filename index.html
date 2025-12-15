@@ -6,12 +6,28 @@
     <meta name="description" content="Explore scientifically accurate animal statistics presented like video game characters with detailed stats, abilities, and comparisons! Discover fascinating facts about wildlife.">
     <meta name="keywords" content="animal stats, wildlife facts, animal comparison, nature education, animal abilities, scientific data">
     <meta name="author" content="Animal Stats">
-    <meta property="og:title" content="Animal Stats - Scientifically Accurate Wildlife Data">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Animal Battle Stats - Scientifically Accurate Wildlife Data">
     <meta property="og:description" content="Explore fascinating animal statistics with accurate scientific data presented in an engaging, game-like interface.">
     <meta property="og:type" content="website">
+    <meta property="og:image" content="/images/og-image.png">
+    <meta property="og:url" content="https://animal-battle-stats.vercel.app">
     <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="/images/og-image.png">
+    
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#ff0033">
+    <meta name="msapplication-TileColor" content="#ff0033">
+    
     <title>Animal Battle Stats - Scientifically Accurate Wildlife Data</title>
-    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous">
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -24,7 +40,10 @@
     <div class="game-screen">
         <!-- Header -->
         <header class="game-header">
-            <h1 id="main-title">ANIMAL BATTLE <span class="title-mode">STATS</span></h1>
+            <div class="header-brand">
+                <img src="/images/logo.png" alt="Animal Battle Stats" class="header-logo" id="header-logo">
+                <h1 id="main-title">ANIMAL BATTLE <span class="title-mode">STATS</span></h1>
+            </div>
             <nav class="nav-tabs">
                 <button class="mode-btn active" id="stats-mode-btn" data-mode="stats">
                     <i class="fas fa-chart-bar"></i> <span class="mode-text">STATS</span>
