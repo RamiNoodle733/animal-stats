@@ -58,8 +58,8 @@ module.exports = async function handler(req, res) {
     try {
         await connectToDatabase();
 
-        // Get all animals
-        const animals = await Animal.find({}).select('name image attack defense agility stamina intelligence special').lean();
+        // Get all animals with scientific_name included
+        const animals = await Animal.find({}).select('name image attack defense agility stamina intelligence special scientific_name').lean();
         
         // Get vote aggregations
         const voteAggregations = await Vote.aggregate([

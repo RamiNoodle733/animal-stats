@@ -1936,8 +1936,12 @@ class RankingsManager {
         // View full stats button
         this.dom.detailViewStats?.addEventListener('click', () => {
             if (this.currentAnimal) {
-                this.app.selectAnimal(this.currentAnimal);
-                this.app.switchView('stats');
+                // Find the full animal object from app.state.animals (has all fields like traits, abilities, etc.)
+                const fullAnimal = this.app.state.animals.find(a => a.name === this.currentAnimal.name);
+                if (fullAnimal) {
+                    this.app.selectAnimal(fullAnimal);
+                    this.app.switchView('stats');
+                }
             }
         });
         
@@ -2664,7 +2668,7 @@ class RankingsManager {
         // Header
         if (this.dom.detailRankBadge) this.dom.detailRankBadge.textContent = `#${rank}`;
         if (this.dom.detailAnimalName) this.dom.detailAnimalName.textContent = animal.name;
-        if (this.dom.detailScientific) this.dom.detailScientific.textContent = animal.scientificName || '';
+        if (this.dom.detailScientific) this.dom.detailScientific.textContent = animal.scientific_name || animal.scientificName || '';
         
         // Grade badge
         if (this.dom.detailGradeBadge) {
