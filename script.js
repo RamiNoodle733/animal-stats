@@ -993,9 +993,18 @@ class AnimalStatsApp {
      * Select an animal in Stats view
      */
     selectAnimal(animal) {
+        const prevSelected = this.state.selectedAnimal;
         this.state.selectedAnimal = animal;
         this.updateStatsView(animal);
-        this.renderGrid(); // Re-render to update selection highlight
+        
+        // Update only affected cards instead of full re-render
+        if (prevSelected) {
+            const prevCard = this.dom.gridContainer.querySelector(`.character-card[data-id="${prevSelected.id || prevSelected.name}"]`);
+            if (prevCard) prevCard.classList.remove('selected');
+        }
+        const newCard = this.dom.gridContainer.querySelector(`.character-card[data-id="${animal.id || animal.name}"]`);
+        if (newCard) newCard.classList.add('selected');
+        
         this.updateStatsCommentsBtn(animal);
     }
 
@@ -1297,9 +1306,21 @@ class AnimalStatsApp {
         const side = this.state.compare.selectingSide;
         if (!side) return;
 
+        const prevAnimal = this.state.compare[side];
         this.state.compare[side] = animal;
         this.updateFighterCard(side, animal);
         this.updateRadarChart(); // Update chart whenever a fighter changes
+        
+        // Update only affected cards instead of full re-render
+        const otherSide = side === 'left' ? 'right' : 'left';
+        const selectedClass = side === 'left' ? 'selected-fighter1' : 'selected-fighter2';
+        
+        if (prevAnimal) {
+            const prevCard = this.dom.gridContainer.querySelector(`.character-card[data-id="${prevAnimal.id || prevAnimal.name}"]`);
+            if (prevCard) prevCard.classList.remove(selectedClass);
+        }
+        const newCard = this.dom.gridContainer.querySelector(`.character-card[data-id="${animal.id || animal.name}"]`);
+        if (newCard) newCard.classList.add(selectedClass);
         
         // Auto-switch to other side if empty
         if (side === 'left' && !this.state.compare.right) {
@@ -1311,7 +1332,6 @@ class AnimalStatsApp {
         }
 
         this.updateFightButton();
-        this.renderGrid();
     }
 
     /**
@@ -3397,6 +3417,13 @@ class RankingsManager {
 
         if (!confirm('Are you sure you want to delete this comment?')) return;
 
+        // Optimistically remove from DOM immediately for better perceived performance
+        const commentEl = e.currentTarget.closest('.comment-item');
+        if (commentEl) {
+            commentEl.style.opacity = '0.5';
+            commentEl.style.pointerEvents = 'none';
+        }
+
         try {
             const response = await fetch(`/api/comments?id=${commentId}`, {
                 method: 'DELETE',
@@ -3406,11 +3433,35 @@ class RankingsManager {
             });
 
             if (response.ok) {
-                await this.fetchComments();
+                // Remove from local array and DOM instead of re-fetching
+                this.comments = this.comments.filter(c => c._id !== commentId);
+                if (commentEl) commentEl.remove();
+                this.dom.commentsCount.textContent = this.comments.length;
+                
+                // Show empty state if no comments left
+                if (this.comments.length === 0) {
+                    this.dom.commentsList.innerHTML = `
+                        <div class="no-comments">
+                            <i class="fas fa-comment-slash"></i>
+                            <p>No comments yet. Be the first to share your thoughts!</p>
+                        </div>
+                    `;
+                }
                 Auth.showToast('Comment deleted');
+            } else {
+                // Restore on failure
+                if (commentEl) {
+                    commentEl.style.opacity = '1';
+                    commentEl.style.pointerEvents = '';
+                }
+                Auth.showToast('Failed to delete comment');
             }
         } catch (error) {
             console.error('Error deleting comment:', error);
+            if (commentEl) {
+                commentEl.style.opacity = '1';
+                commentEl.style.pointerEvents = '';
+            }
             Auth.showToast('Error deleting comment');
         }
     }
