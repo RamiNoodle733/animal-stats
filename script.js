@@ -1936,7 +1936,7 @@ class RankingsManager {
         // View full stats button
         this.dom.detailViewStats?.addEventListener('click', () => {
             if (this.currentAnimal) {
-                this.app.selectAnimal(this.currentAnimal.name);
+                this.app.selectAnimal(this.currentAnimal);
                 this.app.switchView('stats');
             }
         });
