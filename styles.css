@@ -108,9 +108,6 @@ body {
     gap: 15px;
     z-index: 50;
     position: relative;
-    /* Performance: isolate paint layer */
-    contain: layout style;
-    transform: translateZ(0);
 }
 
 .game-header h1 {
@@ -1812,8 +1809,6 @@ body {
     /* Native scrollbar styling */
     scrollbar-width: auto;
     scrollbar-color: rgba(0, 212, 255, 0.7) rgba(0, 0, 0, 0.4);
-    /* Performance: contain scroll context */
-    contain: strict;
 }
 
 .character-grid::-webkit-scrollbar {
@@ -1927,17 +1922,13 @@ body {
     border: 2px solid rgba(0, 212, 255, 0.25);
     border-radius: 8px;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
     padding: 0;
     flex-shrink: 0;
-    /* Performance optimizations */
-    contain: layout style paint;
-    will-change: transform;
-    transform: translateZ(0);
 }
 
 .character-card:hover {
@@ -2022,9 +2013,7 @@ body {
     background: rgba(0, 0, 0, 0.85);
     opacity: 0;
     transform: translateY(10px);
-    transition: opacity 0.25s ease, transform 0.25s ease;
-    pointer-events: none;
-    will-change: opacity, transform;
+    transition: all 0.25s ease;
 }
 
 .character-card:hover .card-hover-stats {
@@ -2068,9 +2057,6 @@ body {
     object-fit: cover;
     object-position: center;
     flex-shrink: 0;
-    /* Performance: prevent layout shift */
-    aspect-ratio: 95 / 75;
-    background: rgba(0, 0, 0, 0.3);
 }
 
 .character-card-name {
@@ -2103,14 +2089,12 @@ body {
     border: none;
     color: rgba(255, 255, 255, 0.5);
     cursor: pointer;
-    transition: color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    transition: all var(--transition-fast);
     border-radius: 15px;
     white-space: nowrap;
     display: flex;
     align-items: center;
     gap: 4px;
-    /* Performance */
-    contain: layout style;
 }
 
 .mode-btn:hover {
@@ -5704,8 +5688,6 @@ body {
     position: relative;
     z-index: 1;
     text-align: center;
-    /* Performance */
-    contain: layout style;
 }
 
 .hero-top-row {
@@ -6163,16 +6145,13 @@ body {
     border-radius: 4px 0 0 4px;
     margin-bottom: 6px;
     cursor: pointer;
-    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     align-items: center;
     position: relative;
     overflow: visible;
     clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
     box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.4);
     z-index: 1;
-    /* Performance optimizations */
-    contain: layout style;
-    will-change: transform;
 }
 
 /* Chamfered corner accent */
@@ -8543,8 +8522,6 @@ body {
     align-items: center;
     justify-content: center;
     backdrop-filter: blur(5px);
-    /* Performance: GPU accelerate */
-    transform: translateZ(0);
 }
 
 .comments-modal.show {
@@ -8562,8 +8539,6 @@ body {
     flex-direction: column;
     box-shadow: 0 0 40px rgba(0, 212, 255, 0.3);
     position: relative;
-    /* Performance: contain paint */
-    contain: layout style paint;
 }
 
 .comments-modal-close {
@@ -8729,8 +8704,6 @@ body {
     border-radius: 10px;
     padding: 15px;
     margin-bottom: 12px;
-    /* Performance: isolate each comment */
-    contain: layout style paint;
 }
 
 .comment-header {
