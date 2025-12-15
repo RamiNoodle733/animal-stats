@@ -7391,11 +7391,9 @@ body {
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding-top: 8px;
-    padding-bottom: 12px;
+    gap: 8px;
+    overflow: hidden;
+    padding-top: 4px;
 }
 
 /* Tournament CTA Banner - Legacy (hidden when using hero banner) */
@@ -7531,8 +7529,8 @@ body {
 .detail-panel-content {
     display: flex;
     flex-direction: column;
-    padding: 12px;
-    gap: 10px;
+    padding: 10px;
+    gap: 6px;
     overflow: visible;
 }
 
@@ -7540,14 +7538,14 @@ body {
 .detail-header-compact {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding-bottom: 10px;
+    gap: 8px;
+    padding-bottom: 6px;
     border-bottom: 1px solid rgba(0, 212, 255, 0.15);
 }
 
 .detail-portrait-sm {
-    width: 50px;
-    height: 50px;
+    width: 44px;
+    height: 44px;
     object-fit: contain;
     border-radius: 8px;
     background: rgba(0, 0, 0, 0.4);
@@ -7573,7 +7571,7 @@ body {
 
 .detail-identity .detail-animal-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     letter-spacing: 1px;
     color: #fff;
     margin: 0;
@@ -7604,21 +7602,21 @@ body {
 .detail-stats-compact {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
+    gap: 4px;
 }
 
 .stat-mini {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 8px 6px;
+    gap: 5px;
+    padding: 5px 4px;
     background: rgba(0, 0, 0, 0.3);
-    border-radius: 6px;
+    border-radius: 5px;
 }
 
 .stat-mini i {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
 }
 
 .stat-mini[data-stat="attack"] i { color: #ff4444; }
@@ -7638,7 +7636,7 @@ body {
 .detail-battle-row {
     display: flex;
     justify-content: space-around;
-    padding: 10px 0;
+    padding: 6px 0;
     border-top: 1px solid rgba(0, 212, 255, 0.1);
     border-bottom: 1px solid rgba(0, 212, 255, 0.1);
 }
@@ -7649,7 +7647,7 @@ body {
 
 .battle-metric .metric-value {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #00d4ff;
     display: block;
 }
@@ -7667,16 +7665,16 @@ body {
 
 /* Legacy selector for backwards compatibility */
 .detail-tournament-history {
-    padding: 10px 0;
+    padding: 4px 0;
     border-bottom: 1px solid rgba(0, 212, 255, 0.1);
 }
 
 /* New Persona-style Tournament Dashboard */
 .detail-tournament-dashboard {
-    margin: 10px 0;
+    margin: 4px 0;
     background: linear-gradient(135deg, rgba(20, 25, 45, 0.9), rgba(10, 15, 30, 0.95));
     border: 2px solid rgba(255, 215, 0, 0.3);
-    border-radius: 10px;
+    border-radius: 8px;
     overflow: hidden;
     position: relative;
 }
@@ -7695,8 +7693,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: 8px 12px;
+    gap: 8px;
+    padding: 5px 10px;
     background: rgba(255, 215, 0, 0.08);
     border-bottom: 1px solid rgba(255, 215, 0, 0.2);
 }
@@ -7714,24 +7712,24 @@ body {
 
 .dashboard-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     letter-spacing: 2px;
     color: #ffd700;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
 }
 
 .dashboard-title i {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
 }
 
 .dashboard-content {
-    padding: 12px;
+    padding: 8px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 6px;
 }
 
 .medal-row {
@@ -7744,11 +7742,11 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 8px 10px;
-    border-radius: 8px;
+    padding: 5px 8px;
+    border-radius: 6px;
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    min-width: 50px;
+    min-width: 45px;
     transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
@@ -7803,13 +7801,13 @@ body {
 }
 
 .medal-icon-wrap {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .medal-card.gold .medal-icon-wrap {
@@ -7848,7 +7846,7 @@ body {
 
 .medal-card .medal-count {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: #fff;
     line-height: 1;
 }
@@ -7864,21 +7862,21 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 6px 10px;
+    gap: 5px;
+    padding: 4px 8px;
     background: rgba(0, 212, 255, 0.08);
     border: 1px solid rgba(0, 212, 255, 0.2);
-    border-radius: 6px;
+    border-radius: 5px;
 }
 
 .total-icon {
     color: #00d4ff;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
 }
 
 .total-count {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #00d4ff;
 }
 
