@@ -664,9 +664,17 @@ body {
     font-weight: 500;
 }
 
-/* Quick Info Bar (Weight, Speed, Bite) - HIDDEN */
+/* Quick Info Bar (Weight, Speed, Bite) */
 .quick-info-bar {
-    display: none !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 4px 10px;
+    margin-top: 4px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 10;
 }
 
 .quick-info-item {
@@ -844,7 +852,6 @@ body {
 
 .bottom-info-bar {
     background: linear-gradient(180deg, rgba(5, 10, 20, 0.9), rgba(10, 15, 25, 0.95));
-    border-top: 2px solid rgba(0, 212, 255, 0.4);
     padding: 5px 12px;
     display: flex;
     align-items: center;
