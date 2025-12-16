@@ -2,7 +2,7 @@
 
 **Interactive Fighting Game-Style Animal Statistics Webapp** 
 
-[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](https://animal-battle-stats.vercel.app)
+[![Live Demo](https://img.shields.io/badge/Live-Demo-brightgreen)](animalbattlestats.com)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Animals](https://img.shields.io/badge/Animals-225-orange)](#)
 [![API](https://img.shields.io/badge/API-MongoDB-green)](DEPLOYMENT.md)
