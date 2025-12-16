@@ -2277,6 +2277,7 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
+    white-space: nowrap;
 }
 
 .user-name-mini {
@@ -2296,6 +2297,7 @@ body {
     font-weight: bold;
     letter-spacing: 0.5px;
     box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+    white-space: nowrap;
 }
 
 .xp-bar-container {
