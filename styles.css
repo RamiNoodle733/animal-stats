@@ -191,8 +191,6 @@ body {
     z-index: 5;
     transition: all 0.4s ease;
     overflow: hidden;
-    border-bottom: none !important;
-    box-shadow: none !important;
 }
 
 .character-display-area.compact-mode {
@@ -854,7 +852,6 @@ body {
 
 .bottom-info-bar {
     background: linear-gradient(180deg, rgba(5, 10, 20, 0.9), rgba(10, 15, 25, 0.95));
-    border-top: 2px solid rgba(0, 212, 255, 0.4);
     padding: 5px 12px;
     display: flex;
     align-items: center;
