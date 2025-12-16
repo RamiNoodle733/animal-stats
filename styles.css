@@ -664,17 +664,9 @@ body {
     font-weight: 500;
 }
 
-/* Quick Info Bar (Weight, Speed, Bite) */
+/* Quick Info Bar (Weight, Speed, Bite) - HIDDEN */
 .quick-info-bar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 4px 10px;
-    margin-top: 4px;
-    flex-shrink: 0;
-    position: relative;
-    z-index: 10;
+    display: none !important;
 }
 
 .quick-info-item {
@@ -7576,8 +7568,8 @@ body {
 .detail-panel-content {
     display: flex;
     flex-direction: column;
-    padding: 10px;
-    gap: 6px;
+    padding: 8px;
+    gap: 4px;
     overflow: visible;
 }
 
@@ -7585,16 +7577,16 @@ body {
 .detail-header-compact {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding-bottom: 6px;
+    gap: 6px;
+    padding-bottom: 4px;
     border-bottom: 1px solid rgba(0, 212, 255, 0.15);
 }
 
 .detail-portrait-sm {
-    width: 44px;
-    height: 44px;
+    width: 38px;
+    height: 38px;
     object-fit: contain;
-    border-radius: 8px;
+    border-radius: 6px;
     background: rgba(0, 0, 0, 0.4);
     border: 2px solid rgba(0, 212, 255, 0.3);
     flex-shrink: 0;
@@ -7607,18 +7599,18 @@ body {
 
 .detail-identity .detail-rank-badge {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: #ffd700;
     background: rgba(255, 215, 0, 0.15);
-    padding: 2px 8px;
-    border-radius: 4px;
+    padding: 1px 6px;
+    border-radius: 3px;
     display: inline-block;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
 }
 
 .detail-identity .detail-animal-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
+    font-size: 1rem;
     letter-spacing: 1px;
     color: #fff;
     margin: 0;
@@ -7628,7 +7620,7 @@ body {
 }
 
 .detail-identity .detail-scientific {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: rgba(255, 255, 255, 0.4);
     font-style: italic;
     display: block;
@@ -7636,8 +7628,8 @@ body {
 
 .detail-header-compact .detail-grade-badge {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    padding: 4px 10px;
+    font-size: 1rem;
+    padding: 3px 8px;
     border-radius: 4px;
     background: #ffd700;
     color: #000;
@@ -7649,21 +7641,21 @@ body {
 .detail-stats-compact {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 4px;
+    gap: 3px;
 }
 
 .stat-mini {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
-    padding: 5px 4px;
+    gap: 4px;
+    padding: 3px 4px;
     background: rgba(0, 0, 0, 0.3);
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
 .stat-mini i {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
 }
 
 .stat-mini[data-stat="attack"] i { color: #ff4444; }
@@ -7675,7 +7667,7 @@ body {
 
 .stat-mini .stat-val {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #fff;
 }
 
@@ -7684,10 +7676,10 @@ body {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 6px 4px;
+    padding: 4px 4px;
     background: rgba(0, 20, 40, 0.5);
-    border-radius: 6px;
-    margin: 4px 0;
+    border-radius: 5px;
+    margin: 2px 0;
 }
 
 .physical-stat {
@@ -7711,8 +7703,8 @@ body {
 .detail-abilities-section {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    padding: 6px 0;
+    gap: 4px;
+    padding: 4px 0;
     border-top: 1px solid rgba(0, 212, 255, 0.1);
 }
 
@@ -7794,7 +7786,7 @@ body {
 .detail-battle-row {
     display: flex;
     justify-content: space-around;
-    padding: 6px 0;
+    padding: 4px 0;
     border-top: 1px solid rgba(0, 212, 255, 0.1);
     border-bottom: 1px solid rgba(0, 212, 255, 0.1);
 }
@@ -7805,13 +7797,13 @@ body {
 
 .battle-metric .metric-value {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #00d4ff;
     display: block;
 }
 
 .battle-metric .metric-label {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     color: rgba(255, 255, 255, 0.4);
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -7823,16 +7815,16 @@ body {
 
 /* Legacy selector for backwards compatibility */
 .detail-tournament-history {
-    padding: 4px 0;
+    padding: 2px 0;
     border-bottom: 1px solid rgba(0, 212, 255, 0.1);
 }
 
 /* New Persona-style Tournament Dashboard */
 .detail-tournament-dashboard {
-    margin: 4px 0;
+    margin: 2px 0;
     background: linear-gradient(135deg, rgba(20, 25, 45, 0.9), rgba(10, 15, 30, 0.95));
-    border: 2px solid rgba(255, 215, 0, 0.3);
-    border-radius: 8px;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+    border-radius: 6px;
     overflow: hidden;
     position: relative;
 }
@@ -7851,8 +7843,8 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 5px 10px;
+    gap: 6px;
+    padding: 3px 8px;
     background: rgba(255, 215, 0, 0.08);
     border-bottom: 1px solid rgba(255, 215, 0, 0.2);
 }
@@ -7884,27 +7876,27 @@ body {
 }
 
 .dashboard-content {
-    padding: 8px;
+    padding: 6px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
 }
 
 .medal-row {
     display: flex;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
 }
 
 .medal-card {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 5px 8px;
-    border-radius: 6px;
+    padding: 4px 6px;
+    border-radius: 5px;
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    min-width: 45px;
+    min-width: 42px;
     transition: all 0.2s ease;
     position: relative;
     overflow: hidden;
@@ -7959,13 +7951,13 @@ body {
 }
 
 .medal-icon-wrap {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    margin-bottom: 2px;
+    margin-bottom: 1px;
 }
 
 .medal-card.gold .medal-icon-wrap {
@@ -7999,18 +7991,18 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1px;
+    gap: 0px;
 }
 
 .medal-card .medal-count {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #fff;
     line-height: 1;
 }
 
 .medal-card .medal-label {
-    font-size: 0.55rem;
+    font-size: 0.5rem;
     font-weight: 700;
     letter-spacing: 1px;
     color: rgba(255, 255, 255, 0.5);
@@ -8020,26 +8012,26 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
-    padding: 4px 8px;
+    gap: 4px;
+    padding: 3px 6px;
     background: rgba(0, 212, 255, 0.08);
     border: 1px solid rgba(0, 212, 255, 0.2);
-    border-radius: 5px;
+    border-radius: 4px;
 }
 
 .total-icon {
     color: #00d4ff;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
 }
 
 .total-count {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #00d4ff;
 }
 
 .total-label {
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     font-weight: 600;
     letter-spacing: 1px;
     color: rgba(255, 255, 255, 0.5);
@@ -8049,14 +8041,14 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
-    padding: 15px;
+    gap: 4px;
+    padding: 10px;
     color: rgba(255, 255, 255, 0.35);
-    font-size: 0.75rem;
+    font-size: 0.7rem;
 }
 
 .dashboard-empty i {
-    font-size: 1.2rem;
+    font-size: 1rem;
     opacity: 0.5;
 }
 
@@ -8159,22 +8151,23 @@ body {
 .detail-actions-row {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     margin-top: auto;
+    padding-top: 4px;
 }
 
 .vote-btns {
     display: flex;
-    gap: 6px;
+    gap: 4px;
 }
 
 .vote-btn {
     display: flex;
     align-items: center;
-    gap: 4px;
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 0.8rem;
+    gap: 3px;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 0.75rem;
     cursor: pointer;
     transition: all 0.2s ease;
 }
@@ -8202,17 +8195,17 @@ body {
 }
 
 .action-btn-sm {
-    padding: 6px 10px;
+    padding: 4px 8px;
     background: rgba(0, 212, 255, 0.1);
     border: 1px solid rgba(0, 212, 255, 0.25);
-    border-radius: 6px;
+    border-radius: 5px;
     color: #00d4ff;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 3px;
 }
 
 .action-btn-sm:hover {
