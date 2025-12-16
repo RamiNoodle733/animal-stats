@@ -867,6 +867,8 @@ body {
     white-space: nowrap;
     min-height: 32px;
     max-height: 32px;
+    border: none;
+    box-shadow: none;
 }
 
 /* Keep buttons centered when toggle-grid-btn is hidden */
@@ -1409,6 +1411,7 @@ body {
     flex-direction: column;
     gap: 6px;
     box-shadow: none;
+    border: none;
     transition: all 0.4s ease;
     overflow: visible;
     position: relative;
