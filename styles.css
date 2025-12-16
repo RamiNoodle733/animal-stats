@@ -3512,7 +3512,6 @@ body {
         overflow: visible;
         min-height: auto;
         background: rgba(0, 20, 40, 0.9);
-        border-top: 1px solid rgba(0, 212, 255, 0.3);
     }
 
     .info-separator { display: none; }
@@ -3556,7 +3555,6 @@ body {
         display: flex;
         flex-direction: column;
         background: rgba(0, 10, 20, 0.95);
-        border-top: 1px solid rgba(0, 212, 255, 0.2);
         transition: all 0.3s ease;
     }
     
