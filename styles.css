@@ -867,7 +867,7 @@ body {
     white-space: nowrap;
     min-height: 32px;
     max-height: 32px;
-    border: none;
+    border-top: 2px solid rgba(0, 212, 255, 0.4);
     box-shadow: none;
 }
 
