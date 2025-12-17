@@ -4,10 +4,15 @@
  * Handles all animal-related API requests:
  * - GET: Fetch all animals (with optional filters)
  * - POST: Create a new animal
+ * 
+ * Also handles health check and site notifications (consolidated from health.js):
+ * - GET ?action=health - Health check endpoint
+ * - POST ?action=notify - Site visit/leave/logout notifications
  */
 
 const { connectToDatabase } = require('../lib/mongodb');
 const Animal = require('../lib/models/Animal');
+const { notifyDiscord } = require('../lib/discord');
 
 module.exports = async function handler(req, res) {
     // Set CORS headers
@@ -26,6 +31,18 @@ module.exports = async function handler(req, res) {
     }
 
     try {
+        const { action } = req.query;
+
+        // Health check action (consolidated from health.js)
+        if (action === 'health') {
+            return await handleHealthCheck(req, res);
+        }
+
+        // Notification action (site_visit, logout, site_leave)
+        if (action === 'notify' && req.method === 'POST') {
+            return await handleNotification(req, res);
+        }
+
         await connectToDatabase();
 
         switch (req.method) {
@@ -49,6 +66,55 @@ module.exports = async function handler(req, res) {
         });
     }
 };
+
+// ============================================
+// HEALTH CHECK (consolidated from health.js)
+// ============================================
+
+async function handleHealthCheck(req, res) {
+    const startTime = Date.now();
+    try {
+        await connectToDatabase();
+        const count = await Animal.countDocuments();
+        const dbLatency = Date.now() - startTime;
+        return res.status(200).json({
+            success: true,
+            status: 'healthy',
+            timestamp: new Date().toISOString(),
+            database: { connected: true, latencyMs: dbLatency, animalCount: count },
+            environment: process.env.NODE_ENV || 'development'
+        });
+    } catch (error) {
+        console.error('Health check failed:', error);
+        return res.status(503).json({
+            success: false,
+            status: 'unhealthy',
+            timestamp: new Date().toISOString(),
+            error: 'Database connection failed'
+        });
+    }
+}
+
+async function handleNotification(req, res) {
+    try {
+        let body = req.body;
+        if (typeof body === 'string') {
+            try { body = JSON.parse(body); } catch (e) { body = {}; }
+        }
+        const { type, username } = body || {};
+        if (type === 'logout') {
+            notifyDiscord('logout', { username: username || 'Unknown' }, req);
+        } else if (type === 'site_leave') {
+            notifyDiscord('site_leave', { username: username || 'Anonymous' }, req);
+        } else {
+            notifyDiscord('site_visit', { username: username || 'Anonymous' }, req);
+        }
+        return res.status(200).json({ success: true });
+    } catch (error) {
+        console.error('Notification error:', error);
+        return res.status(200).json({ success: true }); // Silent fail
+    }
+}
 
 /**
  * GET /api/animals

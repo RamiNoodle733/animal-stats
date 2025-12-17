@@ -2,15 +2,47 @@
  * API Route: /api/battles
  * Records tournament battle results and updates ELO ratings
  * Also handles tournament completion/quit notifications
+ * AND matchup vote tracking (consolidated from matchup-votes.js)
+ * 
+ * Actions via query param:
+ * - ?action=tournament_complete - Record tournament finish
+ * - ?action=tournament_quit - Record tournament quit  
+ * - ?action=matchup_votes - Get/record matchup vote stats (GET/POST)
  */
 
 const { connectToDatabase } = require('../lib/mongodb');
 const BattleStats = require('../lib/models/BattleStats');
 const { verifyToken } = require('../lib/auth');
 const { notifyDiscord } = require('../lib/discord');
+const mongoose = require('mongoose');
 
 // ELO K-factor (how much ratings change per battle)
 const K_FACTOR = 20;
+
+// ============================================
+// Matchup Vote Schema (for "Guess the Majority")
+// ============================================
+const MatchupVoteSchema = new mongoose.Schema({
+    matchupKey: { type: String, required: true, unique: true, index: true },
+    animal1Name: { type: String, required: true },
+    animal2Name: { type: String, required: true },
+    animal1Votes: { type: Number, default: 0 },
+    animal2Votes: { type: Number, default: 0 },
+    totalVotes: { type: Number, default: 0 },
+    lastVoteAt: { type: Date, default: Date.now }
+}, { timestamps: true });
+
+let MatchupVote;
+try {
+    MatchupVote = mongoose.model('MatchupVote');
+} catch {
+    MatchupVote = mongoose.model('MatchupVote', MatchupVoteSchema);
+}
+
+function generateMatchupKey(animal1, animal2) {
+    const sorted = [animal1, animal2].sort();
+    return `${sorted[0]}::${sorted[1]}`;
+}
 
 module.exports = async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -25,12 +57,18 @@ module.exports = async function handler(req, res) {
     try {
         await connectToDatabase();
 
-        // Handle tournament notifications via query param
-        if (req.method === 'POST' && req.query.action === 'tournament_complete') {
+        const { action } = req.query;
+
+        // Route by action
+        if (action === 'tournament_complete' && req.method === 'POST') {
             return await handleTournamentComplete(req, res);
         }
-        if (req.method === 'POST' && req.query.action === 'tournament_quit') {
+        if (action === 'tournament_quit' && req.method === 'POST') {
             return await handleTournamentQuit(req, res);
+        }
+        if (action === 'matchup_votes') {
+            if (req.method === 'GET') return await getMatchupVotes(req, res);
+            if (req.method === 'POST') return await recordMatchupVote(req, res);
         }
 
         switch (req.method) {
@@ -46,6 +84,75 @@ module.exports = async function handler(req, res) {
         return res.status(500).json({ success: false, error: 'Internal server error' });
     }
 };
+
+// ============================================
+// MATCHUP VOTES (consolidated from matchup-votes.js)
+// ============================================
+
+async function getMatchupVotes(req, res) {
+    const { animal1, animal2 } = req.query;
+    if (!animal1 || !animal2) {
+        return res.status(400).json({ success: false, error: 'Both animal1 and animal2 required' });
+    }
+    try {
+        const matchupKey = generateMatchupKey(animal1, animal2);
+        const matchup = await MatchupVote.findOne({ matchupKey });
+        if (!matchup) {
+            return res.status(200).json({
+                success: true,
+                data: { animal1Name: animal1, animal2Name: animal2, animal1Votes: 0, animal2Votes: 0, totalVotes: 0, animal1Percentage: 50, animal2Percentage: 50, hasVotes: false }
+            });
+        }
+        const sorted = [animal1, animal2].sort();
+        const isOriginalOrder = sorted[0] === animal1;
+        const leftVotes = isOriginalOrder ? matchup.animal1Votes : matchup.animal2Votes;
+        const rightVotes = isOriginalOrder ? matchup.animal2Votes : matchup.animal1Votes;
+        const total = matchup.totalVotes || (leftVotes + rightVotes);
+        const leftPct = total > 0 ? Math.round((leftVotes / total) * 100) : 50;
+        return res.status(200).json({
+            success: true,
+            data: { animal1Name: animal1, animal2Name: animal2, animal1Votes: leftVotes, animal2Votes: rightVotes, totalVotes: total, animal1Percentage: leftPct, animal2Percentage: 100 - leftPct, hasVotes: total > 0 }
+        });
+    } catch (error) {
+        console.error('Error getting matchup votes:', error);
+        return res.status(500).json({ success: false, error: 'Failed to get matchup votes' });
+    }
+}
+
+async function recordMatchupVote(req, res) {
+    const { animal1, animal2, votedFor } = req.body;
+    if (!animal1 || !animal2 || !votedFor) {
+        return res.status(400).json({ success: false, error: 'animal1, animal2, and votedFor required' });
+    }
+    if (votedFor !== animal1 && votedFor !== animal2) {
+        return res.status(400).json({ success: false, error: 'votedFor must match animal1 or animal2' });
+    }
+    try {
+        const matchupKey = generateMatchupKey(animal1, animal2);
+        const sorted = [animal1, animal2].sort();
+        const isVotedForFirst = votedFor === sorted[0];
+        let matchup = await MatchupVote.findOne({ matchupKey });
+        if (!matchup) {
+            matchup = new MatchupVote({ matchupKey, animal1Name: sorted[0], animal2Name: sorted[1], animal1Votes: 0, animal2Votes: 0, totalVotes: 0 });
+        }
+        if (isVotedForFirst) matchup.animal1Votes += 1;
+        else matchup.animal2Votes += 1;
+        matchup.totalVotes = matchup.animal1Votes + matchup.animal2Votes;
+        matchup.lastVoteAt = new Date();
+        await matchup.save();
+        const isOriginalOrder = sorted[0] === animal1;
+        const leftVotes = isOriginalOrder ? matchup.animal1Votes : matchup.animal2Votes;
+        const rightVotes = isOriginalOrder ? matchup.animal2Votes : matchup.animal1Votes;
+        const leftPct = matchup.totalVotes > 0 ? Math.round((leftVotes / matchup.totalVotes) * 100) : 50;
+        return res.status(200).json({
+            success: true,
+            data: { animal1Name: animal1, animal2Name: animal2, animal1Votes: leftVotes, animal2Votes: rightVotes, totalVotes: matchup.totalVotes, animal1Percentage: leftPct, animal2Percentage: 100 - leftPct, votedFor, majorityWinner: leftVotes > rightVotes ? animal1 : (rightVotes > leftVotes ? animal2 : null) }
+        });
+    } catch (error) {
+        console.error('Error recording matchup vote:', error);
+        return res.status(500).json({ success: false, error: 'Failed to record matchup vote' });
+    }
+}
 
 /**
  * Handle tournament completion notification

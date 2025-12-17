@@ -354,7 +354,7 @@ const Auth = {
      */
     logout() {
         const username = this.user?.username || this.user?.displayName || 'Unknown';
-        fetch('/api/health', {
+        fetch('/api/animals?action=notify', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ type: 'logout', username })

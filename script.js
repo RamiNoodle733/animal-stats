@@ -39,7 +39,7 @@ const API_CONFIG = {
         search: '/api/search',
         random: '/api/random',
         stats: '/api/stats',
-        health: '/api/health'
+        health: '/api/animals?action=health'
     },
     // Fallback to local data if API fails
     useFallback: true
@@ -302,7 +302,7 @@ class AnimalStatsApp {
                     username = payload.username || 'Anonymous';
                 } catch (e) { }
             }
-            fetch(API_CONFIG.baseUrl + '/api/health', {
+            fetch(API_CONFIG.baseUrl + '/api/animals?action=notify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username })
@@ -311,7 +311,7 @@ class AnimalStatsApp {
             // Set up site leave tracking
             window.addEventListener('beforeunload', () => {
                 const data = JSON.stringify({ type: 'site_leave', username });
-                navigator.sendBeacon(API_CONFIG.baseUrl + '/api/health', data);
+                navigator.sendBeacon(API_CONFIG.baseUrl + '/api/animals?action=notify', data);
             });
         } catch (error) { }
     }
@@ -4094,11 +4094,12 @@ class TournamentManager {
     async loadMatchupVotes(animal1Name, animal2Name) {
         try {
             const params = new URLSearchParams({
+                action: 'matchup_votes',
                 animal1: animal1Name,
                 animal2: animal2Name
             });
             
-            const response = await fetch(`/api/matchup-votes?${params}`);
+            const response = await fetch(`/api/battles?${params}`);
             if (!response.ok) return;
             
             const result = await response.json();
@@ -4510,11 +4511,11 @@ class TournamentManager {
     }
     
     /**
-     * Record vote to matchup-votes API
+     * Record vote to matchup-votes API (consolidated into battles)
      */
     async recordMatchupVote(animal1, animal2, winner) {
         try {
-            await fetch('/api/matchup-votes', {
+            await fetch('/api/battles?action=matchup_votes', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
