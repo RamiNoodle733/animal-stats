@@ -3654,7 +3654,13 @@ class TournamentManager {
         this.matchHistory = [];
         this.isActive = false;
         
-        // DOM Elements
+        // Guess the majority feature
+        this.guessModeEnabled = false;
+        this.currentGuess = null;  // 0 = left, 1 = right, null = no guess
+        this.correctGuesses = 0;
+        this.totalGuesses = 0;
+        
+        // DOM Elements - V4 Tournament UI
         this.dom = {
             modal: document.getElementById('tournament-modal'),
             setup: document.getElementById('tournament-setup'),
@@ -3662,11 +3668,12 @@ class TournamentManager {
             results: document.getElementById('tournament-results'),
             closeBtn: document.getElementById('tournament-close'),
             quitBtn: document.getElementById('tournament-quit'),
-            bracketOptions: document.querySelectorAll('.bracket-option'),
+            bracketOptions: document.querySelectorAll('.t-bracket-card'),
             openBtn: document.getElementById('open-tournament-btn'),
             startBtn: document.getElementById('start-tournament-btn'),
             loginNote: document.getElementById('tournament-login-note'),
-            typeFilters: document.getElementById('tournament-type-filters'),
+            filterSearch: document.getElementById('t-filter-search'),
+            filterChips: document.getElementById('t-filter-chips'),
             previewAnimalCount: document.getElementById('preview-animal-count'),
             previewBracketSize: document.getElementById('preview-bracket-size'),
             // Battle elements
@@ -3675,64 +3682,32 @@ class TournamentManager {
             matchText: document.getElementById('tournament-match-text'),
             fighter1: document.getElementById('tournament-fighter-1'),
             fighter2: document.getElementById('tournament-fighter-2'),
-            fighter1Img: document.getElementById('fighter-1-img'),
-            fighter1Name: document.getElementById('fighter-1-name'),
-            fighter1Rank: document.getElementById('fighter-1-rank'),
-            fighter1Winrate: document.getElementById('fighter-1-winrate'),
-            fighter1Attack: document.getElementById('fighter-1-attack'),
-            fighter1Defense: document.getElementById('fighter-1-defense'),
-            fighter1Agility: document.getElementById('fighter-1-agility'),
-            fighter1Stamina: document.getElementById('fighter-1-stamina'),
-            fighter1Intelligence: document.getElementById('fighter-1-intelligence'),
-            fighter1Special: document.getElementById('fighter-1-special'),
-            fighter1AttackBar: document.getElementById('fighter-1-attack-bar'),
-            fighter1DefenseBar: document.getElementById('fighter-1-defense-bar'),
-            fighter1AgilityBar: document.getElementById('fighter-1-agility-bar'),
-            fighter1StaminaBar: document.getElementById('fighter-1-stamina-bar'),
-            fighter1IntelligenceBar: document.getElementById('fighter-1-intelligence-bar'),
-            fighter1SpecialBar: document.getElementById('fighter-1-special-bar'),
-            fighter2Img: document.getElementById('fighter-2-img'),
-            fighter2Name: document.getElementById('fighter-2-name'),
-            fighter2Rank: document.getElementById('fighter-2-rank'),
-            fighter2Winrate: document.getElementById('fighter-2-winrate'),
-            fighter2Attack: document.getElementById('fighter-2-attack'),
-            fighter2Defense: document.getElementById('fighter-2-defense'),
-            fighter2Agility: document.getElementById('fighter-2-agility'),
-            fighter2Stamina: document.getElementById('fighter-2-stamina'),
-            fighter2Intelligence: document.getElementById('fighter-2-intelligence'),
-            fighter2Special: document.getElementById('fighter-2-special'),
-            fighter2AttackBar: document.getElementById('fighter-2-attack-bar'),
-            fighter2DefenseBar: document.getElementById('fighter-2-defense-bar'),
-            fighter2AgilityBar: document.getElementById('fighter-2-agility-bar'),
-            fighter2StaminaBar: document.getElementById('fighter-2-stamina-bar'),
-            fighter2IntelligenceBar: document.getElementById('fighter-2-intelligence-bar'),
-            fighter2SpecialBar: document.getElementById('fighter-2-special-bar'),
+            // Guess elements
+            guessToggle: document.getElementById('t-guess-toggle'),
+            guessPrompt: document.getElementById('t-guess-prompt'),
+            // Majority vote elements
+            majorityBarLeft: document.getElementById('t-majority-left'),
+            majorityBarRight: document.getElementById('t-majority-right'),
+            majorityPctLeft: document.getElementById('t-majority-pct-left'),
+            majorityPctRight: document.getElementById('t-majority-pct-right'),
+            majorityTotal: document.getElementById('t-majority-total'),
             // Results elements
             championImg: document.getElementById('champion-img'),
             championName: document.getElementById('champion-name'),
             resultMatches: document.getElementById('result-matches'),
             resultBracket: document.getElementById('result-bracket'),
-            runnerUpList: document.getElementById('runner-up-list'),
+            podiumGrid: document.getElementById('t-podium-grid'),
             playAgainBtn: document.getElementById('play-again-btn'),
             closeResultsBtn: document.getElementById('close-results-btn'),
-            // ELO animation overlay
-            eloOverlay: document.getElementById('elo-animation-overlay'),
-            eloLeftImg: document.getElementById('elo-left-img'),
-            eloLeftName: document.getElementById('elo-left-name'),
-            eloLeftDelta: document.getElementById('elo-left-delta'),
-            eloLeftOld: document.getElementById('elo-left-old'),
-            eloLeftNew: document.getElementById('elo-left-new'),
-            eloLeftCard: document.getElementById('elo-change-left'),
-            eloRightImg: document.getElementById('elo-right-img'),
-            eloRightName: document.getElementById('elo-right-name'),
-            eloRightDelta: document.getElementById('elo-right-delta'),
-            eloRightOld: document.getElementById('elo-right-old'),
-            eloRightNew: document.getElementById('elo-right-new'),
-            eloRightCard: document.getElementById('elo-change-right')
+            // Bonus display
+            bonusXp: document.getElementById('t-bonus-xp'),
+            bonusBp: document.getElementById('t-bonus-bp'),
+            bonusGuess: document.getElementById('t-bonus-guess')
         };
         
-        // Cache for ELO ratings
+        // Cache for ELO ratings and matchup votes
         this.eloCache = {};
+        this.matchupVoteCache = {};
     }
 
     init() {
@@ -3760,10 +3735,10 @@ class TournamentManager {
             }
         });
         
-        // Bracket size options - now just selects, doesn't start
+        // Bracket size options - V4 uses t-bracket-card class
         this.dom.bracketOptions.forEach(option => {
             option.addEventListener('click', (e) => {
-                const size = parseInt(e.currentTarget.dataset.rounds);
+                const size = parseInt(e.currentTarget.dataset.size);
                 this.selectBracketSize(size, e.currentTarget);
             });
         });
@@ -3775,6 +3750,12 @@ class TournamentManager {
         // Results buttons
         this.dom.playAgainBtn?.addEventListener('click', () => this.showSetup());
         this.dom.closeResultsBtn?.addEventListener('click', () => this.hideModal());
+        
+        // Guess mode toggle
+        this.dom.guessToggle?.addEventListener('click', () => this.toggleGuessMode());
+        
+        // Filter search input
+        this.dom.filterSearch?.addEventListener('input', (e) => this.filterChips(e.target.value));
         
         // Escape key closes modal
         document.addEventListener('keydown', (e) => {
@@ -3791,20 +3772,69 @@ class TournamentManager {
     }
     
     /**
-     * Populate type filter buttons from animal data
+     * Toggle guess-the-majority mode
+     */
+    toggleGuessMode() {
+        this.guessModeEnabled = !this.guessModeEnabled;
+        this.dom.guessToggle?.classList.toggle('active', this.guessModeEnabled);
+        
+        if (this.dom.guessPrompt) {
+            this.dom.guessPrompt.style.display = this.guessModeEnabled ? 'block' : 'none';
+        }
+        
+        // Reset current guess when toggling
+        this.currentGuess = null;
+        this.updateGuessHighlight();
+    }
+    
+    /**
+     * Set guess for current matchup (called when clicking a fighter in guess mode)
+     */
+    setGuess(fighterIndex) {
+        if (!this.guessModeEnabled) return;
+        
+        this.currentGuess = fighterIndex;
+        this.updateGuessHighlight();
+    }
+    
+    /**
+     * Update visual highlight for guess selection
+     */
+    updateGuessHighlight() {
+        const f1 = this.getFighterCard(1);
+        const f2 = this.getFighterCard(2);
+        
+        f1?.classList.remove('guess-selected');
+        f2?.classList.remove('guess-selected');
+        
+        if (this.currentGuess === 0) {
+            f1?.classList.add('guess-selected');
+        } else if (this.currentGuess === 1) {
+            f2?.classList.add('guess-selected');
+        }
+    }
+    
+    /**
+     * Filter type chips based on search input
+     */
+    filterChips(query) {
+        const chips = this.dom.filterChips?.querySelectorAll('.t-chip');
+        if (!chips) return;
+        
+        const q = query.toLowerCase();
+        chips.forEach(chip => {
+            const text = chip.textContent.toLowerCase();
+            chip.style.display = text.includes(q) ? '' : 'none';
+        });
+    }
+    
+    /**
+     * Populate type filter chips from animal data
      */
     populateTypeFilters() {
-        if (!this.dom.typeFilters) return;
+        if (!this.dom.filterChips) return;
         
         const types = [...new Set(this.app.state.animals.map(a => a.type).filter(Boolean))].sort();
-        
-        // Keep the "All Animals" button, add type buttons
-        let html = `
-            <button class="type-filter-btn active" data-type="all">
-                <i class="fas fa-globe"></i>
-                <span>All Animals</span>
-            </button>
-        `;
         
         const typeIcons = {
             'Mammal': 'fa-paw',
@@ -3818,25 +3848,23 @@ class TournamentManager {
             'Mollusk': 'fa-shell'
         };
         
+        // Build chip HTML - All first, then types
+        let html = `<button class="t-chip active" data-type="all"><i class="fas fa-globe"></i> All</button>`;
+        
         types.forEach(type => {
             const icon = typeIcons[type] || 'fa-paw';
-            html += `
-                <button class="type-filter-btn" data-type="${type}">
-                    <i class="fas ${icon}"></i>
-                    <span>${type}</span>
-                </button>
-            `;
+            html += `<button class="t-chip" data-type="${type}"><i class="fas ${icon}"></i> ${type}</button>`;
         });
         
-        this.dom.typeFilters.innerHTML = html;
+        this.dom.filterChips.innerHTML = html;
         
         // Bind click events
-        this.dom.typeFilters.querySelectorAll('.type-filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
+        this.dom.filterChips.querySelectorAll('.t-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
                 // Remove active from all
-                this.dom.typeFilters.querySelectorAll('.type-filter-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                this.selectedType = btn.dataset.type;
+                this.dom.filterChips.querySelectorAll('.t-chip').forEach(c => c.classList.remove('active'));
+                chip.classList.add('active');
+                this.selectedType = chip.dataset.type;
                 this.updateFilteredAnimals();
                 this.updatePreview();
             });
@@ -3940,12 +3968,18 @@ class TournamentManager {
         this.isActive = false;
         this.currentAnimal1 = null;
         this.currentAnimal2 = null;
+        // Reset guess mode tracking
+        this.currentGuess = null;
+        this.correctGuesses = 0;
+        this.totalGuesses = 0;
+        this.currentMatchupVotes = null;
     }
     
     reset() {
         this.resetTournamentState();
         this.selectedBracketSize = 0;
         this.selectedType = 'all';
+        this.guessModeEnabled = false;
     }
     
     startTournament() {
@@ -4013,6 +4047,10 @@ class TournamentManager {
         this.currentAnimal1 = animal1;
         this.currentAnimal2 = animal2;
         
+        // Reset guess for new match
+        this.currentGuess = null;
+        this.updateGuessHighlight();
+        
         // Update progress
         this.updateProgress();
         
@@ -4021,8 +4059,11 @@ class TournamentManager {
         const fighter2Card = this.getFighterCard(2);
         
         // Reset any previous selection styling
-        if (fighter1Card) fighter1Card.classList.remove('selected', 'eliminated');
-        if (fighter2Card) fighter2Card.classList.remove('selected', 'eliminated');
+        if (fighter1Card) fighter1Card.classList.remove('selected', 'eliminated', 'winner', 'loser');
+        if (fighter2Card) fighter2Card.classList.remove('selected', 'eliminated', 'winner', 'loser');
+        
+        // Hide rating change displays
+        this.hideRatingChanges();
         
         // Update fighter 1
         this.updateFighterCard(1, animal1);
@@ -4032,6 +4073,9 @@ class TournamentManager {
         
         // Highlight stat winners for each row
         this.highlightStatWinners(animal1, animal2);
+        
+        // Load majority vote data for this matchup
+        this.loadMatchupVotes(animal1.name, animal2.name);
         
         // Add entrance animation
         if (fighter1Card) fighter1Card.style.animation = 'none';
@@ -4045,14 +4089,95 @@ class TournamentManager {
     }
     
     /**
+     * Load majority vote data for a matchup
+     */
+    async loadMatchupVotes(animal1Name, animal2Name) {
+        try {
+            const params = new URLSearchParams({
+                animal1: animal1Name,
+                animal2: animal2Name
+            });
+            
+            const response = await fetch(`/api/matchup-votes?${params}`);
+            if (!response.ok) return;
+            
+            const result = await response.json();
+            if (!result.success) return;
+            
+            const { animal1Votes, animal2Votes, totalVotes, animal1Percentage, animal2Percentage } = result.data;
+            
+            // Update majority bar
+            if (this.dom.majorityBarLeft) {
+                this.dom.majorityBarLeft.style.width = `${animal1Percentage}%`;
+            }
+            if (this.dom.majorityBarRight) {
+                this.dom.majorityBarRight.style.width = `${animal2Percentage}%`;
+            }
+            if (this.dom.majorityPctLeft) {
+                this.dom.majorityPctLeft.textContent = `${animal1Percentage}%`;
+            }
+            if (this.dom.majorityPctRight) {
+                this.dom.majorityPctRight.textContent = `${animal2Percentage}%`;
+            }
+            if (this.dom.majorityTotal) {
+                this.dom.majorityTotal.textContent = `${totalVotes.toLocaleString()} votes`;
+            }
+            
+            // Cache for guess evaluation
+            this.currentMatchupVotes = {
+                animal1Votes,
+                animal2Votes,
+                totalVotes
+            };
+        } catch (error) {
+            console.error('Error loading matchup votes:', error);
+        }
+    }
+    
+    /**
+     * Hide rating change displays on fighter cards
+     */
+    hideRatingChanges() {
+        document.getElementById('t-rating-change-1')?.classList.remove('show');
+        document.getElementById('t-rating-change-2')?.classList.remove('show');
+    }
+    
+    /**
+     * Show in-card rating change (replaces overlay animation)
+     */
+    showInCardRatingChange(fighterNum, oldRating, newRating, isWinner) {
+        const container = document.getElementById(`t-rating-change-${fighterNum}`);
+        if (!container) return;
+        
+        const deltaEl = container.querySelector('.t-rating-delta');
+        const calcEl = container.querySelector('.t-rating-calc');
+        
+        const change = newRating - oldRating;
+        
+        if (deltaEl) {
+            deltaEl.textContent = change >= 0 ? `+${change}` : `${change}`;
+            deltaEl.classList.remove('positive', 'negative');
+            deltaEl.classList.add(change >= 0 ? 'positive' : 'negative');
+        }
+        
+        if (calcEl) {
+            calcEl.innerHTML = `<span class="old">${oldRating}</span> → <span class="new">${newRating}</span>`;
+        }
+        
+        container.classList.add('show');
+    }
+    
+    /**
      * Highlight which fighter wins each stat category
      */
     highlightStatWinners(animal1, animal2) {
         const stats = ['attack', 'defense', 'agility', 'stamina', 'intelligence', 'special'];
         
         stats.forEach(stat => {
-            // Try v3 selector first, then v2, then v1
-            let row = document.querySelector(`.stat-row-v3[data-stat="${stat}"]`);
+            // V4 selector uses t-stat-row class
+            let row = document.querySelector(`.t-stat-row[data-stat="${stat}"]`);
+            // Fallback to older selectors
+            if (!row) row = document.querySelector(`.stat-row-v3[data-stat="${stat}"]`);
             if (!row) row = document.querySelector(`.stat-row-v2[data-stat="${stat}"]`);
             if (!row) row = document.querySelector(`.stat-row[data-stat="${stat}"]`);
             if (!row) return;
@@ -4192,8 +4317,46 @@ class TournamentManager {
         if (upvotesEl) upvotesEl.textContent = animal.upvotes || 0;
         if (downvotesEl) downvotesEl.textContent = animal.downvotes || 0;
         
+        // Abilities and Traits tags
+        this.updateFighterTags(fighterNum, animal);
+        
         // ELO Rating - fetch from API and cache
         this.updateFighterElo(fighterNum, animal.name);
+    }
+    
+    /**
+     * Update abilities and traits tags for a fighter
+     */
+    updateFighterTags(fighterNum, animal) {
+        const abilitiesEl = document.getElementById(`t-fighter-${fighterNum}-abilities`);
+        const traitsEl = document.getElementById(`t-fighter-${fighterNum}-traits`);
+        
+        // Abilities (up to 3)
+        if (abilitiesEl) {
+            const abilities = animal.abilities || animal.special_abilities || [];
+            const abilityList = Array.isArray(abilities) ? abilities : [abilities].filter(Boolean);
+            abilitiesEl.innerHTML = abilityList.slice(0, 3).map(a => 
+                `<span class="t-tag ability">${this.truncateTag(a)}</span>`
+            ).join('');
+        }
+        
+        // Traits (up to 3)
+        if (traitsEl) {
+            const traits = animal.traits || animal.characteristics || [];
+            const traitList = Array.isArray(traits) ? traits : [traits].filter(Boolean);
+            traitsEl.innerHTML = traitList.slice(0, 3).map(t => 
+                `<span class="t-tag trait">${this.truncateTag(t)}</span>`
+            ).join('');
+        }
+    }
+    
+    /**
+     * Truncate a tag to fit in the compact UI
+     */
+    truncateTag(text) {
+        if (!text) return '';
+        const str = String(text);
+        return str.length > 12 ? str.substring(0, 10) + '…' : str;
     }
     
     /**
@@ -4249,6 +4412,16 @@ class TournamentManager {
         const winner = match[fighterIndex];
         const loser = match[1 - fighterIndex];
         
+        // If guess mode is active, check guess before recording battle
+        if (this.guessModeEnabled && this.currentGuess !== null) {
+            this.totalGuesses++;
+            // Check if user guessed the majority choice
+            const majorityIndex = this.getMajorityWinner();
+            if (this.currentGuess === majorityIndex) {
+                this.correctGuesses++;
+            }
+        }
+        
         // Record match locally
         this.matchHistory.push({
             round: this.currentRound,
@@ -4264,15 +4437,28 @@ class TournamentManager {
         const winnerEl = this.getFighterCard(fighterIndex === 0 ? 1 : 2);
         const loserEl = this.getFighterCard(fighterIndex === 0 ? 2 : 1);
         
-        if (winnerEl) winnerEl.classList.add('selected');
-        if (loserEl) loserEl.classList.add('eliminated');
+        if (winnerEl) winnerEl.classList.add('winner');
+        if (loserEl) loserEl.classList.add('loser');
         
-        // Record battle to API and show ELO animation
-        this.recordBattleWithAnimation(winner, loser, fighterIndex);
+        // Record battle to API and show in-card animation
+        this.recordBattleWithInCardAnimation(winner, loser, fighterIndex);
     }
     
-    async recordBattleWithAnimation(winner, loser, winnerIndex) {
+    /**
+     * Get the majority winner index based on cached votes
+     */
+    getMajorityWinner() {
+        if (!this.currentMatchupVotes) return null;
+        const { animal1Votes, animal2Votes } = this.currentMatchupVotes;
+        if (animal1Votes === animal2Votes) return null;
+        return animal1Votes > animal2Votes ? 0 : 1;
+    }
+    
+    async recordBattleWithInCardAnimation(winner, loser, winnerIndex) {
         try {
+            // Record vote to matchup-votes API
+            this.recordMatchupVote(winner.name, loser.name, winner.name);
+            
             const response = await fetch('/api/battles', {
                 method: 'POST',
                 headers: {
@@ -4294,8 +4480,26 @@ class TournamentManager {
                 this.eloCache[winner.name] = result.data.winner.newRating;
                 this.eloCache[loser.name] = result.data.loser.newRating;
                 
-                // Show the awesome ELO animation
-                await this.showEloAnimation(winner, loser, result.data, winnerIndex);
+                // Show in-card rating changes (replacing overlay)
+                const winnerFighterNum = winnerIndex === 0 ? 1 : 2;
+                const loserFighterNum = winnerIndex === 0 ? 2 : 1;
+                
+                this.showInCardRatingChange(
+                    winnerFighterNum,
+                    result.data.winner.oldRating,
+                    result.data.winner.newRating,
+                    true
+                );
+                this.showInCardRatingChange(
+                    loserFighterNum,
+                    result.data.loser.oldRating,
+                    result.data.loser.newRating,
+                    false
+                );
+                
+                // Wait for animation then proceed
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                this.proceedToNextMatch();
             } else {
                 this.proceedToNextMatch();
             }
@@ -4306,90 +4510,32 @@ class TournamentManager {
     }
     
     /**
-     * Show beautiful ELO change animation
+     * Record vote to matchup-votes API
      */
-    async showEloAnimation(winner, loser, battleData, winnerIndex) {
-        const overlay = this.dom.eloOverlay;
-        if (!overlay) {
-            this.proceedToNextMatch();
-            return;
+    async recordMatchupVote(animal1, animal2, winner) {
+        try {
+            await fetch('/api/matchup-votes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ animal1, animal2, winner })
+            });
+        } catch (error) {
+            console.error('Error recording matchup vote:', error);
         }
-        
-        // Determine left/right based on winner index
-        const leftIsWinner = winnerIndex === 0;
-        const leftAnimal = leftIsWinner ? winner : loser;
-        const rightAnimal = leftIsWinner ? loser : winner;
-        const leftData = leftIsWinner ? battleData.winner : battleData.loser;
-        const rightData = leftIsWinner ? battleData.loser : battleData.winner;
-        
-        // Populate left card
-        if (this.dom.eloLeftImg) {
-            this.dom.eloLeftImg.src = leftAnimal.image || '';
-            this.dom.eloLeftImg.onerror = () => { this.dom.eloLeftImg.src = FALLBACK_IMAGE; };
-        }
-        if (this.dom.eloLeftName) this.dom.eloLeftName.textContent = leftAnimal.name;
-        if (this.dom.eloLeftDelta) {
-            const change = leftData.change;
-            this.dom.eloLeftDelta.textContent = change >= 0 ? `+${change}` : `${change}`;
-        }
-        if (this.dom.eloLeftOld) this.dom.eloLeftOld.textContent = leftData.oldRating;
-        if (this.dom.eloLeftNew) this.dom.eloLeftNew.textContent = leftData.newRating;
-        
-        // Populate right card
-        if (this.dom.eloRightImg) {
-            this.dom.eloRightImg.src = rightAnimal.image || '';
-            this.dom.eloRightImg.onerror = () => { this.dom.eloRightImg.src = FALLBACK_IMAGE; };
-        }
-        if (this.dom.eloRightName) this.dom.eloRightName.textContent = rightAnimal.name;
-        if (this.dom.eloRightDelta) {
-            const change = rightData.change;
-            this.dom.eloRightDelta.textContent = change >= 0 ? `+${change}` : `${change}`;
-        }
-        if (this.dom.eloRightOld) this.dom.eloRightOld.textContent = rightData.oldRating;
-        if (this.dom.eloRightNew) this.dom.eloRightNew.textContent = rightData.newRating;
-        
-        // Set winner/loser classes
-        const leftCard = this.dom.eloLeftCard;
-        const rightCard = this.dom.eloRightCard;
-        
-        if (leftCard) {
-            leftCard.classList.remove('winner', 'loser');
-            leftCard.classList.add(leftIsWinner ? 'winner' : 'loser');
-        }
-        if (rightCard) {
-            rightCard.classList.remove('winner', 'loser');
-            rightCard.classList.add(leftIsWinner ? 'loser' : 'winner');
-        }
-        
-        // Show overlay with animation
-        overlay.style.display = 'flex';
-        // Force reflow for animation
-        void overlay.offsetWidth;
-        overlay.classList.add('active');
-        
-        // Wait for animation to complete, then proceed
-        await new Promise(resolve => setTimeout(resolve, 2200));
-        
-        // Hide overlay
-        overlay.classList.remove('active');
-        
-        // Wait for fade out, then hide completely
-        await new Promise(resolve => setTimeout(resolve, 300));
-        overlay.style.display = 'none';
-        
-        this.proceedToNextMatch();
     }
     
     /**
-     * Proceed to the next match after ELO animation
+     * Proceed to the next match after rating animation
      */
     proceedToNextMatch() {
         // Reset fighter card classes
         const fighter1Card = this.getFighterCard(1);
         const fighter2Card = this.getFighterCard(2);
         
-        if (fighter1Card) fighter1Card.classList.remove('selected', 'eliminated');
-        if (fighter2Card) fighter2Card.classList.remove('selected', 'eliminated');
+        if (fighter1Card) fighter1Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected');
+        if (fighter2Card) fighter2Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected');
         
         this.currentMatch++;
         this.showCurrentMatch();
@@ -4455,7 +4601,7 @@ class TournamentManager {
         // Send tournament completion to Discord
         this.notifyTournamentComplete(champion, finalFour);
         
-        // Update results screen
+        // Update champion card
         this.dom.championImg.src = champion.image;
         this.dom.championImg.onerror = () => { this.dom.championImg.src = FALLBACK_IMAGE; };
         this.dom.championName.textContent = champion.name;
@@ -4477,26 +4623,37 @@ class TournamentManager {
             statAvgRating.textContent = avgRating;
         }
         
-        // Show runner-ups with Persona 5 style
-        let runnerUpHtml = '';
-        let position = 2; // Start at 2nd place
-        finalFour.forEach(animal => {
-            if (animal.name !== champion.name) {
-                const posLabel = position === 2 ? '2ND PLACE' : position === 3 ? '3RD PLACE' : '4TH PLACE';
-                runnerUpHtml += `
-                    <div class="runner-up-card-v3">
-                        <div class="runner-up-position-v3">${posLabel}</div>
-                        <img src="${animal.image}" alt="${animal.name}" class="runner-up-image-v3" onerror="this.onerror=null;this.src=FALLBACK_IMAGE">
-                        <div class="runner-up-name-v3">${animal.name}</div>
-                    </div>
-                `;
-                position++;
-            }
-        });
-        this.dom.runnerUpList.innerHTML = runnerUpHtml;
+        // Update podium grid (2nd, 3rd, 4th place)
+        if (this.dom.podiumGrid) {
+            const positions = ['2ND', '3RD', '4TH'];
+            let podiumHtml = '';
+            let posIdx = 0;
+            
+            finalFour.forEach(animal => {
+                if (animal.name !== champion.name && posIdx < 3) {
+                    podiumHtml += `
+                        <div class="t-podium-card">
+                            <div class="t-podium-pos">${positions[posIdx]} PLACE</div>
+                            <img src="${animal.image}" alt="${animal.name}" class="t-podium-img" 
+                                onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'">
+                            <div class="t-podium-name">${animal.name}</div>
+                        </div>
+                    `;
+                    posIdx++;
+                }
+            });
+            
+            this.dom.podiumGrid.innerHTML = podiumHtml;
+        }
         
-        // Award XP/BP for completing a tournament
+        // Award XP/BP for completing a tournament (with guess bonus)
         this.awardTournamentReward();
+        
+        // Switch to results screen
+        this.dom.setup.style.display = 'none';
+        this.dom.battle.style.display = 'none';
+        this.dom.results.style.display = 'flex';
+    }
         
         // Switch to results screen
         this.dom.setup.style.display = 'none';
@@ -4505,9 +4662,26 @@ class TournamentManager {
     }
     
     /**
-     * Award XP/BP for completing a tournament
+     * Award XP/BP for completing a tournament (including guess bonus)
      */
     async awardTournamentReward() {
+        // Calculate guess bonus XP
+        let guessBonus = 0;
+        if (this.guessModeEnabled && this.totalGuesses > 0) {
+            // 5 XP per correct guess
+            guessBonus = this.correctGuesses * 5;
+        }
+        
+        // Update bonus display
+        if (this.dom.bonusGuess) {
+            if (guessBonus > 0) {
+                this.dom.bonusGuess.textContent = `+${guessBonus} XP (${this.correctGuesses}/${this.totalGuesses} guesses)`;
+                this.dom.bonusGuess.parentElement.style.display = 'flex';
+            } else {
+                this.dom.bonusGuess.parentElement.style.display = 'none';
+            }
+        }
+        
         if (!Auth.isLoggedIn()) return;
         
         try {
@@ -4517,12 +4691,23 @@ class TournamentManager {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${Auth.getToken()}`
                 },
-                body: JSON.stringify({ action: 'tournament_participate' })
+                body: JSON.stringify({ 
+                    action: 'tournament_participate',
+                    bonusXp: guessBonus 
+                })
             });
 
             const result = await response.json();
 
             if (result.success) {
+                // Update bonus display
+                if (this.dom.bonusXp) {
+                    this.dom.bonusXp.textContent = `+${result.data.xpAdded} XP`;
+                }
+                if (this.dom.bonusBp) {
+                    this.dom.bonusBp.textContent = `+${result.data.bpAdded} BP`;
+                }
+                
                 this.showXpPopup(result.data.xpAdded, result.data.bpAdded);
                 
                 if (result.data.leveledUp) {
