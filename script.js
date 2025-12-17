@@ -4655,12 +4655,6 @@ class TournamentManager {
         this.dom.battle.style.display = 'none';
         this.dom.results.style.display = 'flex';
     }
-        
-        // Switch to results screen
-        this.dom.setup.style.display = 'none';
-        this.dom.battle.style.display = 'none';
-        this.dom.results.style.display = 'flex';
-    }
     
     /**
      * Award XP/BP for completing a tournament (including guess bonus)
