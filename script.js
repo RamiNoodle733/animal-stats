@@ -4320,51 +4320,59 @@ class TournamentManager {
         const rankingItem = rankings.find(r => r.animal?.name === animal.name);
         const rankIndex = rankings.findIndex(r => r.animal?.name === animal.name);
         
-        // Rank badge (reuses .rank-badge from Stats page)
+        // Rank (now inside .record-value span)
         if (rankEl) {
             rankEl.textContent = rankIndex >= 0 ? `#${rankIndex + 1}` : '#--';
         }
         
-        // Win rate badge (reuses .winrate-badge from Stats page) - compact format
+        // Win rate (now inside .record-value span)
         if (winrateEl) {
             const winRate = rankingItem?.winRate || 0;
             winrateEl.textContent = `${winRate}%`;
         }
         
-        // Battles count (reuses .tournament-chip from Stats page)
+        // Battles count (now inside .record-value span)
         if (battlesEl) {
-            const totalBattles = rankingItem?.wins + rankingItem?.losses || animal.totalBattles || 0;
-            const spanEl = battlesEl.querySelector('span');
-            if (spanEl) spanEl.textContent = totalBattles;
+            const totalBattles = (rankingItem?.wins || 0) + (rankingItem?.losses || 0) || animal.totalBattles || 0;
+            battlesEl.textContent = totalBattles;
         }
         
-        // Physical specs (reuses .physical-stat from Stats page)
+        // Physical specs - now use quick-info-item with span child
         if (weightEl) {
             const weightKg = animal.weight_kg || animal.weight || animal.averageWeight;
-            if (weightKg) {
-                const weightLbs = Math.round(weightKg * 2.20462);
-                weightEl.innerHTML = `<i class="fas fa-weight-hanging"></i> ${weightLbs.toLocaleString()} lbs`;
-            } else {
-                weightEl.innerHTML = `<i class="fas fa-weight-hanging"></i> --`;
+            const spanEl = weightEl.querySelector('span');
+            if (spanEl) {
+                if (weightKg) {
+                    const weightLbs = Math.round(weightKg * 2.20462);
+                    spanEl.textContent = `${weightLbs.toLocaleString()} lbs`;
+                } else {
+                    spanEl.textContent = '--';
+                }
             }
         }
         
         if (speedEl) {
             const speedMps = animal.speed_mps || animal.speed || animal.topSpeed;
-            if (speedMps) {
-                const speedKmh = Math.round(speedMps * 3.6);
-                speedEl.innerHTML = `<i class="fas fa-tachometer-alt"></i> ${speedKmh} km/h`;
-            } else {
-                speedEl.innerHTML = `<i class="fas fa-tachometer-alt"></i> --`;
+            const spanEl = speedEl.querySelector('span');
+            if (spanEl) {
+                if (speedMps) {
+                    const speedKmh = Math.round(speedMps * 3.6);
+                    spanEl.textContent = `${speedKmh} km/h`;
+                } else {
+                    spanEl.textContent = '--';
+                }
             }
         }
         
         if (biteEl) {
             const bitePsi = animal.bite_force_psi || animal.biteForce || animal.bite;
-            if (bitePsi) {
-                biteEl.innerHTML = `<i class="fas fa-teeth"></i> ${Math.round(bitePsi).toLocaleString()} PSI`;
-            } else {
-                biteEl.innerHTML = `<i class="fas fa-teeth"></i> --`;
+            const spanEl = biteEl.querySelector('span');
+            if (spanEl) {
+                if (bitePsi) {
+                    spanEl.textContent = `${Math.round(bitePsi).toLocaleString()} PSI`;
+                } else {
+                    spanEl.textContent = '--';
+                }
             }
         }
         
@@ -4415,7 +4423,9 @@ class TournamentManager {
         statKeys.forEach(key => {
             const stat1El = document.getElementById(`t-fighter-1-${key}`);
             const stat2El = document.getElementById(`t-fighter-2-${key}`);
-            const compareRow = document.querySelector(`.t-stat-compare[data-stat="${key}"]`);
+            // Support both old class name and new class name for stat rows
+            const compareRow = document.querySelector(`.t-stat-row[data-stat="${key}"]`) 
+                            || document.querySelector(`.t-stat-compare[data-stat="${key}"]`);
             
             if (stat1El && stat2El && compareRow) {
                 const val1 = parseInt(stat1El.textContent) || 0;

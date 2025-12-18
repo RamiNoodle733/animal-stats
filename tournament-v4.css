@@ -398,7 +398,7 @@
     margin-right: 4px;
 }
 
-/* ========== BATTLE SCREEN ========== */
+/* ========== BATTLE SCREEN - Sketch Layout ========== */
 .tournament-battle {
     width: 100%;
     height: 100%;
@@ -473,29 +473,27 @@
     border-color: #ff6666;
 }
 
-/* Battle Arena - 3 Column Grid - Fits 1366x768 */
-.t-battle-arena {
+/* ========== MAIN BATTLE AREA - Upper Section ========== */
+.t-battle-main {
     flex: 1;
     display: grid;
-    grid-template-columns: 1fr minmax(200px, 260px) 1fr;
-    gap: clamp(8px, 1vw, 16px);
-    padding: clamp(6px, 1vh, 12px) clamp(12px, 2vw, 24px);
+    grid-template-columns: 1fr auto 1fr;
+    gap: clamp(10px, 1.5vw, 20px);
+    padding: clamp(8px, 1vh, 16px) clamp(12px, 2vw, 24px);
     min-height: 0;
-    align-items: stretch;
     max-width: 1400px;
     margin: 0 auto;
     width: 100%;
-    max-height: calc(100vh - 44px); /* Subtract header height */
 }
 
-/* Fighter Cards - New Sketch Layout */
+/* Fighter Cards */
 .t-fighter-card {
     display: flex;
     flex-direction: column;
     background: linear-gradient(135deg, rgba(15, 20, 35, 0.95), rgba(10, 15, 25, 0.98));
     border: 2px solid rgba(0, 212, 255, 0.35);
     border-radius: 8px;
-    padding: clamp(10px, 1.2vh, 16px);
+    padding: clamp(10px, 1.5vh, 16px);
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
@@ -576,65 +574,51 @@
 .t-identity-top {
     text-align: center;
     padding-bottom: clamp(6px, 1vh, 10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     flex-shrink: 0;
 }
 
 .t-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(1.1rem, 2vh, 1.5rem);
-    letter-spacing: 1px;
+    font-size: clamp(1.2rem, 2.2vh, 1.6rem);
+    letter-spacing: 2px;
     color: #fff;
     margin: 0 0 2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    text-transform: uppercase;
 }
 
 .t-scientific {
     display: block;
     font-family: 'Inter', sans-serif;
-    font-size: clamp(0.6rem, 1vh, 0.75rem);
+    font-size: clamp(0.65rem, 1vh, 0.8rem);
     font-style: italic;
     color: rgba(255, 255, 255, 0.5);
-    margin-bottom: clamp(4px, 0.8vh, 8px);
+    margin-bottom: clamp(6px, 1vh, 10px);
 }
 
-.t-badges {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    flex-wrap: wrap;
+/* Battle Record Badge - REUSE Stats Page Component */
+.t-record-badge {
+    max-width: 220px;
+    margin: 0 auto;
 }
 
-/* Reuse Stats Page Badge Styles - Override sizes for tournament */
-.t-fighter-card .rank-badge {
-    padding: 2px 8px;
-    font-size: 0.7rem;
+.t-record-badge .record-item {
+    padding: 4px 10px;
 }
 
-.t-fighter-card .tournament-chip {
-    padding: 2px 6px;
-    font-size: 0.6rem;
-    background: rgba(0, 212, 255, 0.15);
-    border-color: rgba(0, 212, 255, 0.3);
-    color: rgba(0, 212, 255, 0.9);
+.t-record-badge .record-value {
+    font-size: 0.8rem;
 }
 
-.t-fighter-card .tournament-chip i {
-    font-size: 0.5rem;
+.t-record-badge .record-label {
+    font-size: 0.4rem;
 }
 
-.t-fighter-card .winrate-badge {
-    padding: 2px 8px;
-    font-size: 0.65rem;
-}
-
-/* Hero Image - LARGE & Central (main focus per sketch) */
+/* Hero Image */
 .t-hero-image {
     position: relative;
     flex: 1;
-    min-height: clamp(160px, 35vh, 280px);
+    min-height: clamp(100px, 20vh, 180px);
+    max-height: clamp(140px, 25vh, 220px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -646,8 +630,8 @@
 }
 
 .t-hero-image img {
-    max-width: 95%;
-    max-height: 95%;
+    max-width: 90%;
+    max-height: 90%;
     object-fit: contain;
     filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.6));
     transition: transform 0.3s ease;
@@ -694,23 +678,21 @@
     gap: clamp(4px, 0.6vh, 8px);
 }
 
-/* Physical Stats Row */
-.t-physical-stats {
-    display: flex;
-    justify-content: center;
-    gap: clamp(8px, 1vw, 14px);
-    padding: 4px 0;
-    background: rgba(0, 20, 40, 0.5);
-    border-radius: 4px;
+/* Quick Info Bar - REUSE Stats Page Component */
+.t-quick-info {
+    gap: 6px;
+    padding: 4px;
+    margin: 0;
 }
 
-.t-physical-stats .physical-stat {
+.t-quick-info .quick-info-item {
+    padding: 3px 6px;
     font-size: 0.65rem;
-    gap: 3px;
+    min-width: auto;
 }
 
-.t-physical-stats .physical-stat i {
-    font-size: 0.6rem;
+.t-quick-info .quick-info-item i {
+    font-size: 0.7rem;
 }
 
 /* Tags Area */
@@ -718,7 +700,7 @@
     display: flex;
     flex-direction: column;
     gap: 3px;
-    max-height: 48px;
+    max-height: 44px;
     overflow: hidden;
 }
 
@@ -743,6 +725,7 @@
     padding: 6px;
     background: rgba(0, 0, 0, 0.4);
     border-radius: 4px;
+    margin-top: 6px;
 }
 
 .t-rating-change.show {
@@ -786,26 +769,20 @@
     color: #fff;
 }
 
-/* ========== BATTLE CENTER - Sketch Layout: Guess → Vote → VS → Stats ========== */
+/* ========== BATTLE CENTER - Guess → Vote → VS ========== */
 .t-battle-center {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: clamp(8px, 1.2vh, 14px);
-    padding: clamp(10px, 1.2vh, 16px);
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 8px;
-    border: 1px solid var(--t-border);
-    min-height: 0;
-    overflow-y: auto;
-    justify-content: flex-start;
+    justify-content: center;
+    gap: clamp(10px, 1.5vh, 16px);
+    padding: clamp(10px, 1.5vh, 16px);
+    min-width: clamp(160px, 18vw, 220px);
 }
 
-/* Guess Section - At TOP */
+/* Guess Section */
 .t-guess-section {
-    width: 100%;
     text-align: center;
-    flex-shrink: 0;
 }
 
 .t-guess-toggle {
@@ -878,20 +855,18 @@
     50% { opacity: 1; }
 }
 
-/* Community Vote Section - Below Guess */
+/* Community Vote Section */
 .t-community-vote {
     width: 100%;
     padding: clamp(8px, 1vh, 12px);
     background: rgba(0, 0, 0, 0.3);
     border-radius: 6px;
     border: 1px solid var(--t-border);
-    transition: all 0.3s ease;
-    flex-shrink: 0;
 }
 
 .t-community-vote.guess-mode-active {
     border-color: rgba(255, 215, 0, 0.5);
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3), inset 0 0 20px rgba(255, 215, 0, 0.05);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
     background: rgba(255, 215, 0, 0.08);
 }
 
@@ -941,72 +916,58 @@
     background: linear-gradient(90deg, #cc5500, var(--t-orange));
 }
 
-/* VS Badge - Center, Below Vote */
+/* VS Badge */
 .t-vs-badge {
-    width: clamp(48px, 7vh, 64px);
-    height: clamp(48px, 7vh, 64px);
+    width: clamp(50px, 8vh, 70px);
+    height: clamp(50px, 8vh, 70px);
     display: flex;
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, var(--t-orange), #ff4400);
     border-radius: 50%;
     box-shadow: 0 0 30px rgba(255, 107, 0, 0.5);
-    flex-shrink: 0;
 }
 
 .t-vs-badge span {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(1.1rem, 1.8vh, 1.5rem);
+    font-size: clamp(1.2rem, 2vh, 1.6rem);
     color: #fff;
     font-weight: bold;
 }
 
-/* Stats Grid - Vertical Stack Below VS */
-.t-stats-grid {
-    width: 100%;
+/* ========== BOTTOM STATS SECTION - Full Width Horizontal Bars ========== */
+.t-stats-section {
+    flex-shrink: 0;
+    padding: clamp(8px, 1vh, 14px) clamp(20px, 4vw, 60px);
+    background: rgba(0, 0, 0, 0.4);
+    border-top: 1px solid rgba(255, 215, 0, 0.15);
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    flex: 1;
-    min-height: 0;
+    gap: clamp(4px, 0.6vh, 8px);
 }
 
-.t-stat-compare {
+.t-stat-row {
     display: grid;
-    grid-template-columns: 32px 1fr 50px 1fr 32px;
-    gap: 6px;
+    grid-template-columns: 40px 1fr 60px 1fr 40px;
+    gap: clamp(8px, 1vw, 14px);
     align-items: center;
-    padding: 4px 6px;
-    border-radius: 4px;
-    transition: background 0.2s;
-}
-    border-radius: 4px;
-    transition: background 0.2s;
+    padding: clamp(3px, 0.5vh, 6px) 0;
 }
 
-.t-stat-compare.left-wins {
-    background: linear-gradient(90deg, rgba(0, 212, 255, 0.12), transparent 60%);
+.t-stat-row.left-wins .t-stat-num.left,
+.t-stat-row.left-wins .t-stat-bar-left .stat-bar-fill {
+    filter: brightness(1.2);
 }
 
-.t-stat-compare.right-wins {
-    background: linear-gradient(90deg, transparent 40%, rgba(255, 107, 0, 0.12));
+.t-stat-row.right-wins .t-stat-num.right,
+.t-stat-row.right-wins .t-stat-bar-right .stat-bar-fill {
+    filter: brightness(1.2);
 }
 
-.t-stat-left {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-}
-
-.t-stat-right {
-    display: flex;
-    align-items: center;
-}
-
+/* Stat Numbers */
 .t-stat-num {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.85rem;
-    min-width: 32px;
+    font-size: clamp(0.9rem, 1.4vh, 1.1rem);
     font-weight: 600;
 }
 
@@ -1020,59 +981,64 @@
     text-align: left;
 }
 
-/* Stat label with icon AND text abbreviation */
-.t-stat-label {
-    width: 50px;
-    height: 24px;
+/* Stat Center - Icon above, Label below */
+.t-stat-center {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    background: rgba(255, 215, 0, 0.12);
+    gap: 0;
+    background: rgba(255, 215, 0, 0.1);
     border-radius: 4px;
+    padding: clamp(2px, 0.4vh, 4px) 0;
+}
+
+.t-stat-center i {
+    font-size: clamp(0.7rem, 1.1vh, 0.85rem);
     color: var(--t-gold);
-    font-size: 0.6rem;
 }
 
-.t-stat-label i {
-    font-size: 0.65rem;
-}
-
-.t-stat-label span {
+.t-stat-center span {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.55rem;
-    letter-spacing: 0.5px;
+    font-size: clamp(0.5rem, 0.8vh, 0.6rem);
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.6);
 }
 
-/* Stat bars in tournament - simplified horizontal */
-.t-stats-grid .stat-bar-wrapper {
-    height: 12px;
-    width: 100%;
+/* Stat Bars - REUSE Stats Page .stat-bar Component */
+.t-stat-bar-left,
+.t-stat-bar-right {
+    height: clamp(14px, 2vh, 20px);
 }
 
-.t-stats-grid .stat-bar {
+.t-stat-bar-left .stat-bar,
+.t-stat-bar-right .stat-bar {
     height: 100%;
 }
 
-/* Left stat bars fill from right to left */
-.t-stat-left .stat-bar-wrapper {
+/* Left bars fill from right to left */
+.t-stat-bar-left {
     transform: scaleX(-1);
 }
 
-.t-stat-left .stat-bar-fill {
+/* Left fighter color */
+.t-stat-bar-left .stat-bar-fill {
     background: linear-gradient(180deg, 
         rgba(255, 255, 255, 0.3) 0%, 
         var(--t-cyan) 15%, 
         #0099cc 85%, 
         rgba(0, 0, 0, 0.3) 100%) !important;
+    box-shadow: 0 0 12px var(--t-cyan);
 }
 
-.t-stat-right .stat-bar-fill {
+/* Right fighter color */
+.t-stat-bar-right .stat-bar-fill {
     background: linear-gradient(180deg, 
         rgba(255, 255, 255, 0.3) 0%, 
         var(--t-orange) 15%, 
         #cc5500 85%, 
         rgba(0, 0, 0, 0.3) 100%) !important;
+    box-shadow: 0 0 12px var(--t-orange);
 }
 
 /* Guess Result Overlay */
