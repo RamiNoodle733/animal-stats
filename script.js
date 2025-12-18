@@ -4105,20 +4105,23 @@ class TournamentManager {
         this.hasVotedOnMatchup = false;
         
         // Show ?% initially (hide until user votes)
-        if (this.dom.majorityPctLeft) {
-            this.dom.majorityPctLeft.textContent = '?%';
-        }
-        if (this.dom.majorityPctRight) {
-            this.dom.majorityPctRight.textContent = '?%';
-        }
+        const pctLeft = document.getElementById('t-majority-pct-left');
+        const pctRight = document.getElementById('t-majority-pct-right');
+        const barLeft = document.getElementById('t-majority-left');
+        const barRight = document.getElementById('t-majority-right');
+        const totalEl = document.getElementById('t-majority-total');
+        
+        if (pctLeft) pctLeft.textContent = '?%';
+        if (pctRight) pctRight.textContent = '?%';
+        
         // Set bars to 50% as placeholder
-        if (this.dom.majorityBarLeft) {
-            this.dom.majorityBarLeft.style.width = '50%';
-            this.dom.majorityBarLeft.style.transition = 'none';
+        if (barLeft) {
+            barLeft.style.transition = 'none';
+            barLeft.style.width = '50%';
         }
-        if (this.dom.majorityBarRight) {
-            this.dom.majorityBarRight.style.width = '50%';
-            this.dom.majorityBarRight.style.transition = 'none';
+        if (barRight) {
+            barRight.style.transition = 'none';
+            barRight.style.width = '50%';
         }
         
         try {
@@ -4136,9 +4139,9 @@ class TournamentManager {
             
             const { animal1Votes, animal2Votes, totalVotes, animal1Percentage, animal2Percentage } = result.data;
             
-            // Show vote count but keep ?% until user votes
-            if (this.dom.majorityTotal) {
-                this.dom.majorityTotal.textContent = `${totalVotes.toLocaleString()} votes`;
+            // Show vote count
+            if (totalEl) {
+                totalEl.textContent = totalVotes === 0 ? 'No votes yet' : `${totalVotes.toLocaleString()} votes`;
             }
             
             // Cache for guess evaluation and reveal after voting
@@ -4162,28 +4165,35 @@ class TournamentManager {
         
         this.hasVotedOnMatchup = true;
         
-        // User's vote has been added, so increment and recalculate
-        // The server will have the updated count, but we'll optimistically update UI
+        // Get elements directly for reliability
+        const barLeft = document.getElementById('t-majority-left');
+        const barRight = document.getElementById('t-majority-right');
+        const pctLeft = document.getElementById('t-majority-pct-left');
+        const pctRight = document.getElementById('t-majority-pct-right');
+        const totalEl = document.getElementById('t-majority-total');
+        
         let { animal1Votes, animal2Votes, totalVotes, animal1Percentage, animal2Percentage } = this.currentMatchupVotes;
         
-        // Enable transitions for smooth animation
-        if (this.dom.majorityBarLeft) {
-            this.dom.majorityBarLeft.style.transition = 'width 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-            this.dom.majorityBarLeft.style.width = `${animal1Percentage}%`;
+        // User just voted, so add 1 to total for display
+        const newTotal = totalVotes + 1;
+        if (totalEl) {
+            totalEl.textContent = `${newTotal.toLocaleString()} votes`;
         }
-        if (this.dom.majorityBarRight) {
-            this.dom.majorityBarRight.style.transition = 'width 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-            this.dom.majorityBarRight.style.width = `${animal2Percentage}%`;
+        
+        // Enable transitions for smooth animation
+        if (barLeft) {
+            barLeft.style.transition = 'width 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            barLeft.style.width = `${animal1Percentage}%`;
+        }
+        if (barRight) {
+            barRight.style.transition = 'width 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            barRight.style.width = `${animal2Percentage}%`;
         }
         
         // Reveal percentages with slight delay for effect
         setTimeout(() => {
-            if (this.dom.majorityPctLeft) {
-                this.dom.majorityPctLeft.textContent = `${animal1Percentage}%`;
-            }
-            if (this.dom.majorityPctRight) {
-                this.dom.majorityPctRight.textContent = `${animal2Percentage}%`;
-            }
+            if (pctLeft) pctLeft.textContent = `${animal1Percentage}%`;
+            if (pctRight) pctRight.textContent = `${animal2Percentage}%`;
         }, 200);
     }
     

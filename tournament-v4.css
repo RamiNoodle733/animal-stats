@@ -738,7 +738,6 @@
 
 /* Fighter Tags (Abilities & Traits) */
 .t-fighter-tags {
-    flex: 1;
     min-height: 0;
     overflow: hidden;
     margin-bottom: clamp(4px, 0.8vh, 8px);
@@ -842,7 +841,6 @@
     font-weight: 600;
     letter-spacing: 1px;
     transition: all 0.2s;
-    margin-top: auto;
 }
 
 .t-fighter-card:hover .t-vote-zone {
