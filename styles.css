@@ -5990,14 +5990,14 @@ body {
     box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.4);
 }
 
-/* Integrated Toolbar with title & search */
+/* Integrated Toolbar with title - COMPACT */
 .rankings-list-toolbar {
     display: flex;
     align-items: center;
     gap: 15px;
-    padding: 12px 15px;
+    padding: 6px 15px;
     background: linear-gradient(95deg, rgba(20, 25, 40, 0.95) 0%, rgba(30, 35, 55, 0.9) 100%);
-    border-bottom: 2px solid rgba(255, 45, 45, 0.3);
+    border-bottom: 1px solid rgba(255, 45, 45, 0.2);
     flex-shrink: 0;
     position: relative;
 }
@@ -6096,7 +6096,7 @@ body {
 
 .rankings-list-header {
     display: grid;
-    grid-template-columns: 70px 1fr 110px 160px;
+    grid-template-columns: 70px 1fr 90px 90px minmax(100px, 130px);
     gap: 10px;
     padding: 8px 15px 8px 20px;
     background: linear-gradient(95deg, rgba(255, 45, 45, 0.1) 0%, rgba(15, 20, 35, 0.95) 30%);
@@ -6107,6 +6107,17 @@ body {
     color: rgba(255, 255, 255, 0.6);
     flex-shrink: 0;
     text-transform: uppercase;
+    align-items: center;
+}
+
+.rankings-list-header .header-search {
+    max-width: none;
+    flex: none;
+}
+
+.rankings-list-header .rankings-search-inline {
+    padding: 4px 10px 4px 28px;
+    font-size: 0.75rem;
 }
 
 .rankings-list-header span {
@@ -6165,7 +6176,7 @@ body {
 /* Ranking Row - Persona 5 Dynamic Card Style */
 .ranking-row {
     display: grid;
-    grid-template-columns: 70px 1fr 110px 160px;
+    grid-template-columns: 70px 1fr 90px 220px;
     gap: 10px;
     padding: 10px 14px 10px 16px;
     background: linear-gradient(95deg, rgba(15, 20, 35, 0.95) 0%, rgba(20, 25, 45, 0.9) 100%);
@@ -11753,11 +11764,11 @@ body {
 .battle-arena-v3 {
     flex: 1;
     display: grid;
-    grid-template-columns: 1fr 320px 1fr;
-    gap: 16px;
-    padding: 12px 24px;
+    grid-template-columns: 1fr 380px 1fr;
+    gap: 20px;
+    padding: 16px 30px;
     align-items: stretch;
-    max-width: 1300px;
+    max-width: 1500px;
     margin: 0 auto;
     width: 100%;
     min-height: 0;
@@ -11771,7 +11782,7 @@ body {
     background: linear-gradient(135deg, rgba(10, 15, 30, 0.95), rgba(5, 10, 25, 0.98));
     border: 2px solid rgba(0, 212, 255, 0.35);
     border-radius: 12px;
-    padding: 16px;
+    padding: 20px;
     cursor: pointer;
     transition: all 0.25s ease;
     position: relative;
@@ -11821,8 +11832,8 @@ body {
 }
 
 .fighter-portrait-v3 {
-    width: 100px;
-    height: 80px;
+    width: 130px;
+    height: 110px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -11830,8 +11841,8 @@ body {
 }
 
 .fighter-portrait-v3 img {
-    max-height: 75px;
-    max-width: 95px;
+    max-height: 100px;
+    max-width: 125px;
     object-fit: contain;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
     transition: transform 0.3s ease;

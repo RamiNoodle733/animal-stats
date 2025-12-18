@@ -191,8 +191,8 @@ async function handlePost(req, res) {
         commentData.animalName = parent.animalName;
         commentData.comparisonKey = parent.comparisonKey;
         
-        // Notify Discord about reply
-        const displayName = isAnonymous ? 'Anonymous' : user.username;
+        // Notify Discord about reply (show actual username even for anonymous, for moderation)
+        const displayName = isAnonymous ? `Anonymous (${user.username})` : user.username;
         const parentAuthor = parent.isAnonymous ? 'Anonymous' : parent.authorUsername;
         await notifyDiscord('comment_reply', {
             user: displayName,
@@ -220,8 +220,8 @@ async function handlePost(req, res) {
             commentData.comparisonKey = comparisonKey;
         }
         
-        // Notify Discord about new comment
-        const displayName = isAnonymous ? 'Anonymous' : user.username;
+        // Notify Discord about new comment (show actual username even for anonymous, for moderation)
+        const displayName = isAnonymous ? `Anonymous (${user.username})` : user.username;
         await notifyDiscord('comment', {
             user: displayName,
             target: targetType === 'animal' ? animalName : comparisonKey,

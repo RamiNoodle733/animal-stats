@@ -3260,7 +3260,8 @@ class RankingsManager {
 
     hideCommentsModal() {
         this.dom.commentsModal.classList.remove('show');
-        this.currentAnimal = null;
+        // Don't clear currentAnimal here - it's needed for the detail panel's comment button
+        // It gets updated when selecting a different animal anyway
     }
 
     async fetchComments() {
@@ -3659,6 +3660,7 @@ class TournamentManager {
         this.currentGuess = null;  // 0 = left, 1 = right, null = no guess
         this.correctGuesses = 0;
         this.totalGuesses = 0;
+        this.hasVotedOnMatchup = false;  // Track if user has voted on current matchup
         
         // DOM Elements - V4 Tournament UI
         this.dom = {
@@ -3780,6 +3782,12 @@ class TournamentManager {
         
         if (this.dom.guessPrompt) {
             this.dom.guessPrompt.style.display = this.guessModeEnabled ? 'block' : 'none';
+        }
+        
+        // Highlight majority section when guess mode is active
+        const majoritySection = document.querySelector('.t-majority-section');
+        if (majoritySection) {
+            majoritySection.classList.toggle('guess-mode-active', this.guessModeEnabled);
         }
         
         // Reset current guess when toggling
@@ -4090,8 +4098,29 @@ class TournamentManager {
     
     /**
      * Load majority vote data for a matchup
+     * Shows ?% until user votes, then reveals percentages with animation
      */
     async loadMatchupVotes(animal1Name, animal2Name) {
+        // Reset voted state for new matchup
+        this.hasVotedOnMatchup = false;
+        
+        // Show ?% initially (hide until user votes)
+        if (this.dom.majorityPctLeft) {
+            this.dom.majorityPctLeft.textContent = '?%';
+        }
+        if (this.dom.majorityPctRight) {
+            this.dom.majorityPctRight.textContent = '?%';
+        }
+        // Set bars to 50% as placeholder
+        if (this.dom.majorityBarLeft) {
+            this.dom.majorityBarLeft.style.width = '50%';
+            this.dom.majorityBarLeft.style.transition = 'none';
+        }
+        if (this.dom.majorityBarRight) {
+            this.dom.majorityBarRight.style.width = '50%';
+            this.dom.majorityBarRight.style.transition = 'none';
+        }
+        
         try {
             const params = new URLSearchParams({
                 action: 'matchup_votes',
@@ -4107,32 +4136,55 @@ class TournamentManager {
             
             const { animal1Votes, animal2Votes, totalVotes, animal1Percentage, animal2Percentage } = result.data;
             
-            // Update majority bar
-            if (this.dom.majorityBarLeft) {
-                this.dom.majorityBarLeft.style.width = `${animal1Percentage}%`;
+            // Show vote count but keep ?% until user votes
+            if (this.dom.majorityTotal) {
+                this.dom.majorityTotal.textContent = `${totalVotes.toLocaleString()} votes`;
             }
-            if (this.dom.majorityBarRight) {
-                this.dom.majorityBarRight.style.width = `${animal2Percentage}%`;
-            }
+            
+            // Cache for guess evaluation and reveal after voting
+            this.currentMatchupVotes = {
+                animal1Votes,
+                animal2Votes,
+                totalVotes,
+                animal1Percentage,
+                animal2Percentage
+            };
+        } catch (error) {
+            console.error('Error loading matchup votes:', error);
+        }
+    }
+    
+    /**
+     * Reveal community vote percentages with animation (called after user votes)
+     */
+    revealCommunityVote() {
+        if (!this.currentMatchupVotes || this.hasVotedOnMatchup) return;
+        
+        this.hasVotedOnMatchup = true;
+        
+        // User's vote has been added, so increment and recalculate
+        // The server will have the updated count, but we'll optimistically update UI
+        let { animal1Votes, animal2Votes, totalVotes, animal1Percentage, animal2Percentage } = this.currentMatchupVotes;
+        
+        // Enable transitions for smooth animation
+        if (this.dom.majorityBarLeft) {
+            this.dom.majorityBarLeft.style.transition = 'width 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            this.dom.majorityBarLeft.style.width = `${animal1Percentage}%`;
+        }
+        if (this.dom.majorityBarRight) {
+            this.dom.majorityBarRight.style.transition = 'width 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+            this.dom.majorityBarRight.style.width = `${animal2Percentage}%`;
+        }
+        
+        // Reveal percentages with slight delay for effect
+        setTimeout(() => {
             if (this.dom.majorityPctLeft) {
                 this.dom.majorityPctLeft.textContent = `${animal1Percentage}%`;
             }
             if (this.dom.majorityPctRight) {
                 this.dom.majorityPctRight.textContent = `${animal2Percentage}%`;
             }
-            if (this.dom.majorityTotal) {
-                this.dom.majorityTotal.textContent = `${totalVotes.toLocaleString()} votes`;
-            }
-            
-            // Cache for guess evaluation
-            this.currentMatchupVotes = {
-                animal1Votes,
-                animal2Votes,
-                totalVotes
-            };
-        } catch (error) {
-            console.error('Error loading matchup votes:', error);
-        }
+        }, 200);
     }
     
     /**
@@ -4414,7 +4466,8 @@ class TournamentManager {
         const loser = match[1 - fighterIndex];
         
         // If guess mode is active, check guess before recording battle
-        if (this.guessModeEnabled && this.currentGuess !== null) {
+        // Only count guesses if there were prior votes (can't guess majority of nothing)
+        if (this.guessModeEnabled && this.currentGuess !== null && this.currentMatchupVotes && this.currentMatchupVotes.totalVotes > 0) {
             this.totalGuesses++;
             // Check if user guessed the majority choice
             const majorityIndex = this.getMajorityWinner();
@@ -4422,6 +4475,9 @@ class TournamentManager {
                 this.correctGuesses++;
             }
         }
+        
+        // Reveal community vote percentages with animation
+        this.revealCommunityVote();
         
         // Record match locally
         this.matchHistory.push({
