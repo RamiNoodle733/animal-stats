@@ -1402,7 +1402,7 @@
             </div>
         </div>
         
-        <!-- Battle Screen - Premium VS Layout -->
+        <!-- Battle Screen - Stats Page Consistent Layout -->
         <div class="tournament-battle" id="tournament-battle" style="display: none;">
             <!-- Compact Header -->
             <div class="t-battle-header">
@@ -1416,56 +1416,54 @@
                 <button class="t-quit-btn" id="tournament-quit"><i class="fas fa-times"></i> QUIT</button>
             </div>
             
-            <!-- Battle Arena - 3 Column Grid -->
+            <!-- Battle Arena - Responsive 3 Column -->
             <div class="t-battle-arena">
-                <!-- Left Fighter -->
+                <!-- Left Fighter Card -->
                 <div class="t-fighter-card left" id="tournament-fighter-1">
-                    <div class="t-fighter-main">
-                        <div class="t-fighter-img-wrap">
-                            <img src="" alt="" id="t-fighter-1-img">
-                        </div>
-                        <div class="t-fighter-info">
-                            <h3 class="t-fighter-name" id="t-fighter-1-name">Loading...</h3>
-                            <div class="t-fighter-badges">
-                                <span class="t-badge rank" id="t-fighter-1-rank">#1</span>
-                                <span class="t-badge elo" id="t-fighter-1-elo"><i class="fas fa-chart-line"></i> 1000</span>
-                            </div>
-                            <div class="t-winrate" id="t-fighter-1-winrate">0% (0 battles)</div>
-                        </div>
+                    <!-- Hero Image - Dominant Element -->
+                    <div class="t-hero-image">
+                        <img src="" alt="" id="t-fighter-1-img">
+                        <div class="t-click-hint"><i class="fas fa-hand-pointer"></i> CLICK TO VOTE</div>
                     </div>
-                    <div class="t-fighter-specs">
-                        <div class="t-spec" id="t-fighter-1-weight"><i class="fas fa-weight-hanging"></i><span>--</span></div>
-                        <div class="t-spec" id="t-fighter-1-speed"><i class="fas fa-tachometer-alt"></i><span>--</span></div>
-                        <div class="t-spec" id="t-fighter-1-bite"><i class="fas fa-teeth"></i><span>--</span></div>
-                    </div>
-                    <div class="t-fighter-record">
-                        <div class="t-medals">
-                            <span class="t-medal gold"><i class="fas fa-trophy"></i><span id="t-fighter-1-gold">0</span></span>
-                            <span class="t-medal silver"><i class="fas fa-medal"></i><span id="t-fighter-1-silver">0</span></span>
-                            <span class="t-medal bronze"><i class="fas fa-award"></i><span id="t-fighter-1-bronze">0</span></span>
-                        </div>
-                        <div class="t-votes">
-                            <span class="t-vote up"><i class="fas fa-thumbs-up"></i><span id="t-fighter-1-upvotes">0</span></span>
-                            <span class="t-vote down"><i class="fas fa-thumbs-down"></i><span id="t-fighter-1-downvotes">0</span></span>
+                    
+                    <!-- Fighter Identity -->
+                    <div class="t-identity">
+                        <h3 class="t-name" id="t-fighter-1-name">Loading...</h3>
+                        <div class="t-badges">
+                            <span class="rank-badge" id="t-fighter-1-rank">#1</span>
+                            <span class="row-elo-badge" id="t-fighter-1-elo">1000</span>
+                            <span class="winrate-badge" id="t-fighter-1-winrate">0%</span>
                         </div>
                     </div>
-                    <!-- Abilities & Traits -->
-                    <div class="t-fighter-tags">
-                        <div class="t-tag-row" id="t-fighter-1-abilities"></div>
-                        <div class="t-tag-row traits" id="t-fighter-1-traits"></div>
+                    
+                    <!-- Physical Stats Row - Reuse Stats Page Component -->
+                    <div class="t-physical-stats">
+                        <div class="physical-stat" id="t-fighter-1-weight"><i class="fas fa-weight-hanging"></i> --</div>
+                        <div class="physical-stat" id="t-fighter-1-speed"><i class="fas fa-tachometer-alt"></i> --</div>
+                        <div class="physical-stat" id="t-fighter-1-bite"><i class="fas fa-teeth"></i> --</div>
                     </div>
-                    <!-- Rating Change Display (inline) -->
+                    
+                    <!-- Tournament Record - Reuse tournament-chip -->
+                    <div class="t-record">
+                        <span class="tournament-chip gold"><i class="fas fa-trophy"></i><span id="t-fighter-1-gold">0</span></span>
+                        <span class="tournament-chip silver"><i class="fas fa-medal"></i><span id="t-fighter-1-silver">0</span></span>
+                        <span class="tournament-chip bronze"><i class="fas fa-award"></i><span id="t-fighter-1-bronze">0</span></span>
+                    </div>
+                    
+                    <!-- Abilities & Traits - Reuse ability-tag-sm/trait-tag-sm -->
+                    <div class="t-tags">
+                        <div class="abilities-tags-compact" id="t-fighter-1-abilities"></div>
+                        <div class="traits-tags-compact" id="t-fighter-1-traits"></div>
+                    </div>
+                    
+                    <!-- Rating Change (shown after vote) -->
                     <div class="t-rating-change" id="t-rating-change-1">
                         <span class="t-rating-delta">+0</span>
                         <span class="t-rating-calc"><span class="old">1000</span> → <span class="new">1000</span></span>
                     </div>
-                    <div class="t-vote-zone">
-                        <i class="fas fa-hand-pointer"></i>
-                        <span>CLICK TO VOTE</span>
-                    </div>
                 </div>
                 
-                <!-- Center: VS + Stats + Majority Vote -->
+                <!-- Center Column: VS Badge + Stat Comparison -->
                 <div class="t-battle-center">
                     <div class="t-vs-badge"><span>VS</span></div>
                     
@@ -1481,111 +1479,133 @@
                         </div>
                     </div>
                     
-                    <!-- Stat Comparison -->
-                    <div class="t-stats-compare">
-                        <div class="t-stat-row" data-stat="attack">
-                            <div class="t-stat-bar left"><div class="t-bar-fill" id="t-fighter-1-attack-bar"></div></div>
-                            <span class="t-stat-val left" id="t-fighter-1-attack">0</span>
-                            <div class="t-stat-icon"><i class="fas fa-fist-raised"></i></div>
-                            <span class="t-stat-val right" id="t-fighter-2-attack">0</span>
-                            <div class="t-stat-bar right"><div class="t-bar-fill" id="t-fighter-2-attack-bar"></div></div>
+                    <!-- Stat Bars - Reuse Stats Page stat-bar component -->
+                    <div class="t-stats-grid">
+                        <div class="t-stat-compare" data-stat="attack">
+                            <div class="t-stat-left">
+                                <span class="t-stat-num" id="t-fighter-1-attack">0</span>
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-attack-bar"></div></div></div>
+                            </div>
+                            <div class="t-stat-label"><i class="fas fa-fist-raised"></i></div>
+                            <div class="t-stat-right">
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-attack-bar"></div></div></div>
+                                <span class="t-stat-num" id="t-fighter-2-attack">0</span>
+                            </div>
                         </div>
-                        <div class="t-stat-row" data-stat="defense">
-                            <div class="t-stat-bar left"><div class="t-bar-fill" id="t-fighter-1-defense-bar"></div></div>
-                            <span class="t-stat-val left" id="t-fighter-1-defense">0</span>
-                            <div class="t-stat-icon"><i class="fas fa-shield-alt"></i></div>
-                            <span class="t-stat-val right" id="t-fighter-2-defense">0</span>
-                            <div class="t-stat-bar right"><div class="t-bar-fill" id="t-fighter-2-defense-bar"></div></div>
+                        <div class="t-stat-compare" data-stat="defense">
+                            <div class="t-stat-left">
+                                <span class="t-stat-num" id="t-fighter-1-defense">0</span>
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-defense-bar"></div></div></div>
+                            </div>
+                            <div class="t-stat-label"><i class="fas fa-shield-alt"></i></div>
+                            <div class="t-stat-right">
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-defense-bar"></div></div></div>
+                                <span class="t-stat-num" id="t-fighter-2-defense">0</span>
+                            </div>
                         </div>
-                        <div class="t-stat-row" data-stat="agility">
-                            <div class="t-stat-bar left"><div class="t-bar-fill" id="t-fighter-1-agility-bar"></div></div>
-                            <span class="t-stat-val left" id="t-fighter-1-agility">0</span>
-                            <div class="t-stat-icon"><i class="fas fa-wind"></i></div>
-                            <span class="t-stat-val right" id="t-fighter-2-agility">0</span>
-                            <div class="t-stat-bar right"><div class="t-bar-fill" id="t-fighter-2-agility-bar"></div></div>
+                        <div class="t-stat-compare" data-stat="agility">
+                            <div class="t-stat-left">
+                                <span class="t-stat-num" id="t-fighter-1-agility">0</span>
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-agility-bar"></div></div></div>
+                            </div>
+                            <div class="t-stat-label"><i class="fas fa-wind"></i></div>
+                            <div class="t-stat-right">
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-agility-bar"></div></div></div>
+                                <span class="t-stat-num" id="t-fighter-2-agility">0</span>
+                            </div>
                         </div>
-                        <div class="t-stat-row" data-stat="stamina">
-                            <div class="t-stat-bar left"><div class="t-bar-fill" id="t-fighter-1-stamina-bar"></div></div>
-                            <span class="t-stat-val left" id="t-fighter-1-stamina">0</span>
-                            <div class="t-stat-icon"><i class="fas fa-heart"></i></div>
-                            <span class="t-stat-val right" id="t-fighter-2-stamina">0</span>
-                            <div class="t-stat-bar right"><div class="t-bar-fill" id="t-fighter-2-stamina-bar"></div></div>
+                        <div class="t-stat-compare" data-stat="stamina">
+                            <div class="t-stat-left">
+                                <span class="t-stat-num" id="t-fighter-1-stamina">0</span>
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-stamina-bar"></div></div></div>
+                            </div>
+                            <div class="t-stat-label"><i class="fas fa-heart"></i></div>
+                            <div class="t-stat-right">
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-stamina-bar"></div></div></div>
+                                <span class="t-stat-num" id="t-fighter-2-stamina">0</span>
+                            </div>
                         </div>
-                        <div class="t-stat-row" data-stat="intelligence">
-                            <div class="t-stat-bar left"><div class="t-bar-fill" id="t-fighter-1-intelligence-bar"></div></div>
-                            <span class="t-stat-val left" id="t-fighter-1-intelligence">0</span>
-                            <div class="t-stat-icon"><i class="fas fa-brain"></i></div>
-                            <span class="t-stat-val right" id="t-fighter-2-intelligence">0</span>
-                            <div class="t-stat-bar right"><div class="t-bar-fill" id="t-fighter-2-intelligence-bar"></div></div>
+                        <div class="t-stat-compare" data-stat="intelligence">
+                            <div class="t-stat-left">
+                                <span class="t-stat-num" id="t-fighter-1-intelligence">0</span>
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-intelligence-bar"></div></div></div>
+                            </div>
+                            <div class="t-stat-label"><i class="fas fa-brain"></i></div>
+                            <div class="t-stat-right">
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-intelligence-bar"></div></div></div>
+                                <span class="t-stat-num" id="t-fighter-2-intelligence">0</span>
+                            </div>
                         </div>
-                        <div class="t-stat-row" data-stat="special">
-                            <div class="t-stat-bar left"><div class="t-bar-fill" id="t-fighter-1-special-bar"></div></div>
-                            <span class="t-stat-val left" id="t-fighter-1-special">0</span>
-                            <div class="t-stat-icon"><i class="fas fa-bolt"></i></div>
-                            <span class="t-stat-val right" id="t-fighter-2-special">0</span>
-                            <div class="t-stat-bar right"><div class="t-bar-fill" id="t-fighter-2-special-bar"></div></div>
+                        <div class="t-stat-compare" data-stat="special">
+                            <div class="t-stat-left">
+                                <span class="t-stat-num" id="t-fighter-1-special">0</span>
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-special-bar"></div></div></div>
+                            </div>
+                            <div class="t-stat-label"><i class="fas fa-bolt"></i></div>
+                            <div class="t-stat-right">
+                                <div class="stat-bar-wrapper"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-special-bar"></div></div></div>
+                                <span class="t-stat-num" id="t-fighter-2-special">0</span>
+                            </div>
                         </div>
                     </div>
                     
-                    <!-- Majority Vote Bar -->
-                    <div class="t-majority-section">
-                        <div class="t-majority-label">COMMUNITY VOTE</div>
-                        <div class="t-majority-bar">
-                            <div class="t-majority-fill left" id="t-majority-left" style="width: 50%;"></div>
-                            <div class="t-majority-fill right" id="t-majority-right" style="width: 50%;"></div>
+                    <!-- Community Vote Bar -->
+                    <div class="t-community-vote">
+                        <div class="t-vote-label">COMMUNITY VOTE</div>
+                        <div class="t-vote-bar">
+                            <div class="t-vote-fill left" id="t-majority-left" style="width: 50%;"></div>
+                            <div class="t-vote-fill right" id="t-majority-right" style="width: 50%;"></div>
                         </div>
-                        <div class="t-majority-stats">
-                            <span class="t-majority-pct left" id="t-majority-pct-left">50%</span>
-                            <span class="t-majority-total" id="t-majority-total">0 votes</span>
-                            <span class="t-majority-pct right" id="t-majority-pct-right">50%</span>
+                        <div class="t-vote-stats">
+                            <span class="t-vote-pct" id="t-majority-pct-left">50%</span>
+                            <span class="t-vote-total" id="t-majority-total">0 votes</span>
+                            <span class="t-vote-pct" id="t-majority-pct-right">50%</span>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Right Fighter -->
+                <!-- Right Fighter Card -->
                 <div class="t-fighter-card right" id="tournament-fighter-2">
-                    <div class="t-fighter-main">
-                        <div class="t-fighter-img-wrap">
-                            <img src="" alt="" id="t-fighter-2-img">
-                        </div>
-                        <div class="t-fighter-info">
-                            <h3 class="t-fighter-name" id="t-fighter-2-name">Loading...</h3>
-                            <div class="t-fighter-badges">
-                                <span class="t-badge rank" id="t-fighter-2-rank">#2</span>
-                                <span class="t-badge elo" id="t-fighter-2-elo"><i class="fas fa-chart-line"></i> 1000</span>
-                            </div>
-                            <div class="t-winrate" id="t-fighter-2-winrate">0% (0 battles)</div>
+                    <!-- Hero Image - Dominant Element -->
+                    <div class="t-hero-image">
+                        <img src="" alt="" id="t-fighter-2-img">
+                        <div class="t-click-hint"><i class="fas fa-hand-pointer"></i> CLICK TO VOTE</div>
+                    </div>
+                    
+                    <!-- Fighter Identity -->
+                    <div class="t-identity">
+                        <h3 class="t-name" id="t-fighter-2-name">Loading...</h3>
+                        <div class="t-badges">
+                            <span class="rank-badge" id="t-fighter-2-rank">#2</span>
+                            <span class="row-elo-badge" id="t-fighter-2-elo">1000</span>
+                            <span class="winrate-badge" id="t-fighter-2-winrate">0%</span>
                         </div>
                     </div>
-                    <div class="t-fighter-specs">
-                        <div class="t-spec" id="t-fighter-2-weight"><i class="fas fa-weight-hanging"></i><span>--</span></div>
-                        <div class="t-spec" id="t-fighter-2-speed"><i class="fas fa-tachometer-alt"></i><span>--</span></div>
-                        <div class="t-spec" id="t-fighter-2-bite"><i class="fas fa-teeth"></i><span>--</span></div>
+                    
+                    <!-- Physical Stats Row -->
+                    <div class="t-physical-stats">
+                        <div class="physical-stat" id="t-fighter-2-weight"><i class="fas fa-weight-hanging"></i> --</div>
+                        <div class="physical-stat" id="t-fighter-2-speed"><i class="fas fa-tachometer-alt"></i> --</div>
+                        <div class="physical-stat" id="t-fighter-2-bite"><i class="fas fa-teeth"></i> --</div>
                     </div>
-                    <div class="t-fighter-record">
-                        <div class="t-medals">
-                            <span class="t-medal gold"><i class="fas fa-trophy"></i><span id="t-fighter-2-gold">0</span></span>
-                            <span class="t-medal silver"><i class="fas fa-medal"></i><span id="t-fighter-2-silver">0</span></span>
-                            <span class="t-medal bronze"><i class="fas fa-award"></i><span id="t-fighter-2-bronze">0</span></span>
-                        </div>
-                        <div class="t-votes">
-                            <span class="t-vote up"><i class="fas fa-thumbs-up"></i><span id="t-fighter-2-upvotes">0</span></span>
-                            <span class="t-vote down"><i class="fas fa-thumbs-down"></i><span id="t-fighter-2-downvotes">0</span></span>
-                        </div>
+                    
+                    <!-- Tournament Record -->
+                    <div class="t-record">
+                        <span class="tournament-chip gold"><i class="fas fa-trophy"></i><span id="t-fighter-2-gold">0</span></span>
+                        <span class="tournament-chip silver"><i class="fas fa-medal"></i><span id="t-fighter-2-silver">0</span></span>
+                        <span class="tournament-chip bronze"><i class="fas fa-award"></i><span id="t-fighter-2-bronze">0</span></span>
                     </div>
+                    
                     <!-- Abilities & Traits -->
-                    <div class="t-fighter-tags">
-                        <div class="t-tag-row" id="t-fighter-2-abilities"></div>
-                        <div class="t-tag-row traits" id="t-fighter-2-traits"></div>
+                    <div class="t-tags">
+                        <div class="abilities-tags-compact" id="t-fighter-2-abilities"></div>
+                        <div class="traits-tags-compact" id="t-fighter-2-traits"></div>
                     </div>
-                    <!-- Rating Change Display (inline) -->
+                    
+                    <!-- Rating Change (shown after vote) -->
                     <div class="t-rating-change" id="t-rating-change-2">
                         <span class="t-rating-delta">+0</span>
                         <span class="t-rating-calc"><span class="old">1000</span> → <span class="new">1000</span></span>
-                    </div>
-                    <div class="t-vote-zone">
-                        <i class="fas fa-hand-pointer"></i>
-                        <span>CLICK TO VOTE</span>
                     </div>
                 </div>
             </div>

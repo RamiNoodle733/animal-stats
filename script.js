@@ -4284,6 +4284,7 @@ class TournamentManager {
     /**
      * Update a fighter card with animal data and stat bars
      * Re-fetches DOM elements each time to ensure they exist
+     * Updated to use Stats page consistent components
      */
     updateFighterCard(fighterNum, animal) {
         // Re-fetch DOM elements to ensure they exist - use t-fighter prefix for tournament
@@ -4291,6 +4292,7 @@ class TournamentManager {
         const nameEl = document.getElementById(`t-fighter-${fighterNum}-name`);
         const rankEl = document.getElementById(`t-fighter-${fighterNum}-rank`);
         const winrateEl = document.getElementById(`t-fighter-${fighterNum}-winrate`);
+        const eloEl = document.getElementById(`t-fighter-${fighterNum}-elo`);
         const weightEl = document.getElementById(`t-fighter-${fighterNum}-weight`);
         const speedEl = document.getElementById(`t-fighter-${fighterNum}-speed`);
         const biteEl = document.getElementById(`t-fighter-${fighterNum}-bite`);
@@ -4312,60 +4314,34 @@ class TournamentManager {
         const rankingItem = rankings.find(r => r.animal?.name === animal.name);
         const rankIndex = rankings.findIndex(r => r.animal?.name === animal.name);
         
-        // Rank badge
+        // Rank badge (reuses .rank-badge from Stats page)
         if (rankEl) {
             rankEl.textContent = rankIndex >= 0 ? `#${rankIndex + 1}` : '#--';
         }
         
-        // Win rate badge
+        // Win rate badge (reuses .winrate-badge from Stats page) - compact format
         if (winrateEl) {
-            if (rankingItem && rankingItem.totalFights > 0) {
-                winrateEl.textContent = `${rankingItem.winRate || 0}% (${rankingItem.totalFights} battles)`;
-            } else {
-                winrateEl.textContent = '0% (0 battles)';
-            }
+            const winRate = rankingItem?.winRate || 0;
+            winrateEl.textContent = `${winRate}%`;
         }
         
-        // Update vote counts and medals from ranking data
-        const upvotesEl = document.getElementById(`t-fighter-${fighterNum}-upvotes`);
-        const downvotesEl = document.getElementById(`t-fighter-${fighterNum}-downvotes`);
+        // Tournament medals (reuses .tournament-chip from Stats page)
         const goldEl = document.getElementById(`t-fighter-${fighterNum}-gold`);
         const silverEl = document.getElementById(`t-fighter-${fighterNum}-silver`);
         const bronzeEl = document.getElementById(`t-fighter-${fighterNum}-bronze`);
         
-        if (upvotesEl) upvotesEl.textContent = rankingItem?.upvotes || animal.upvotes || 0;
-        if (downvotesEl) downvotesEl.textContent = rankingItem?.downvotes || animal.downvotes || 0;
         if (goldEl) goldEl.textContent = animal.tournamentsFirst || 0;
         if (silverEl) silverEl.textContent = animal.tournamentsSecond || 0;
         if (bronzeEl) bronzeEl.textContent = animal.tournamentsThird || 0;
         
-        // Add click handlers to vote buttons
-        const upvoteBtn = document.querySelector(`#t-fighter-${fighterNum}-upvotes`)?.parentElement;
-        const downvoteBtn = document.querySelector(`#t-fighter-${fighterNum}-downvotes`)?.parentElement;
-        
-        if (upvoteBtn) {
-            upvoteBtn.style.cursor = 'pointer';
-            upvoteBtn.onclick = (e) => {
-                e.stopPropagation();
-                this.handleTournamentVote(animal, 'up', fighterNum);
-            };
-        }
-        if (downvoteBtn) {
-            downvoteBtn.style.cursor = 'pointer';
-            downvoteBtn.onclick = (e) => {
-                e.stopPropagation();
-                this.handleTournamentVote(animal, 'down', fighterNum);
-            };
-        }
-        
-        // Physical specs (weight, speed, bite force)
+        // Physical specs (reuses .physical-stat from Stats page)
         if (weightEl) {
             const weightKg = animal.weight_kg || animal.weight || animal.averageWeight;
             if (weightKg) {
                 const weightLbs = Math.round(weightKg * 2.20462);
-                weightEl.innerHTML = `<i class="fas fa-weight-hanging"></i><span>${weightLbs.toLocaleString()} lbs</span>`;
+                weightEl.innerHTML = `<i class="fas fa-weight-hanging"></i> ${weightLbs.toLocaleString()} lbs`;
             } else {
-                weightEl.innerHTML = `<i class="fas fa-weight-hanging"></i><span>--</span>`;
+                weightEl.innerHTML = `<i class="fas fa-weight-hanging"></i> --`;
             }
         }
         
@@ -4373,37 +4349,44 @@ class TournamentManager {
             const speedMps = animal.speed_mps || animal.speed || animal.topSpeed;
             if (speedMps) {
                 const speedKmh = Math.round(speedMps * 3.6);
-                speedEl.innerHTML = `<i class="fas fa-tachometer-alt"></i><span>${speedKmh} km/h</span>`;
+                speedEl.innerHTML = `<i class="fas fa-tachometer-alt"></i> ${speedKmh} km/h`;
             } else {
-                speedEl.innerHTML = `<i class="fas fa-tachometer-alt"></i><span>--</span>`;
+                speedEl.innerHTML = `<i class="fas fa-tachometer-alt"></i> --`;
             }
         }
         
         if (biteEl) {
             const bitePsi = animal.bite_force_psi || animal.biteForce || animal.bite;
             if (bitePsi) {
-                biteEl.innerHTML = `<i class="fas fa-teeth"></i><span>${Math.round(bitePsi).toLocaleString()} PSI</span>`;
+                biteEl.innerHTML = `<i class="fas fa-teeth"></i> ${Math.round(bitePsi).toLocaleString()} PSI`;
             } else {
-                biteEl.innerHTML = `<i class="fas fa-teeth"></i><span>--</span>`;
+                biteEl.innerHTML = `<i class="fas fa-teeth"></i> --`;
             }
         }
         
-        // Stats
+        // Stats - update both value text and stat bar fill (reuses .stat-bar from Stats page)
         const statKeys = ['attack', 'defense', 'agility', 'stamina', 'intelligence', 'special'];
         
         statKeys.forEach(key => {
             const value = Math.round(animal[key] || 0);
             
-            // Update stat value - use fresh DOM query with t-fighter prefix
+            // Update stat value text
             const statEl = document.getElementById(`t-fighter-${fighterNum}-${key}`);
             if (statEl) statEl.textContent = value;
             
-            // Update stat bar
+            // Update stat bar fill and tier class
             const barEl = document.getElementById(`t-fighter-${fighterNum}-${key}-bar`);
-            if (barEl) barEl.style.width = `${value}%`;
+            if (barEl) {
+                barEl.style.width = `${value}%`;
+                // Apply tier coloring from Stats page
+                barEl.className = 'stat-bar-fill ' + this.getStatTierClass(value);
+            }
         });
         
-        // Abilities and Traits tags
+        // Highlight which stat wins
+        this.updateStatComparison();
+        
+        // Abilities and Traits tags (reuses .ability-tag-sm / .trait-tag-sm from Stats page)
         this.updateFighterTags(fighterNum, animal);
         
         // ELO Rating - fetch from API and cache
@@ -4411,27 +4394,65 @@ class TournamentManager {
     }
     
     /**
+     * Get the tier class for a stat value (reuses Stats page tier system)
+     */
+    getStatTierClass(value) {
+        if (value >= 90) return 'stat-bar-tier-s';
+        if (value >= 75) return 'stat-bar-tier-a';
+        if (value >= 60) return 'stat-bar-tier-b';
+        if (value >= 40) return 'stat-bar-tier-c';
+        if (value >= 20) return 'stat-bar-tier-d';
+        return 'stat-bar-tier-f';
+    }
+    
+    /**
+     * Update stat comparison highlighting
+     */
+    updateStatComparison() {
+        const statKeys = ['attack', 'defense', 'agility', 'stamina', 'intelligence', 'special'];
+        
+        statKeys.forEach(key => {
+            const stat1El = document.getElementById(`t-fighter-1-${key}`);
+            const stat2El = document.getElementById(`t-fighter-2-${key}`);
+            const compareRow = document.querySelector(`.t-stat-compare[data-stat="${key}"]`);
+            
+            if (stat1El && stat2El && compareRow) {
+                const val1 = parseInt(stat1El.textContent) || 0;
+                const val2 = parseInt(stat2El.textContent) || 0;
+                
+                compareRow.classList.remove('left-wins', 'right-wins');
+                if (val1 > val2) {
+                    compareRow.classList.add('left-wins');
+                } else if (val2 > val1) {
+                    compareRow.classList.add('right-wins');
+                }
+            }
+        });
+    }
+    
+    /**
      * Update abilities and traits tags for a fighter
+     * Uses Stats page .ability-tag-sm and .trait-tag-sm classes
      */
     updateFighterTags(fighterNum, animal) {
         const abilitiesEl = document.getElementById(`t-fighter-${fighterNum}-abilities`);
         const traitsEl = document.getElementById(`t-fighter-${fighterNum}-traits`);
         
-        // Abilities (up to 3)
+        // Abilities (up to 2 for compact display) - use Stats page ability-tag-sm
         if (abilitiesEl) {
             const abilities = animal.abilities || animal.special_abilities || [];
             const abilityList = Array.isArray(abilities) ? abilities : [abilities].filter(Boolean);
-            abilitiesEl.innerHTML = abilityList.slice(0, 3).map(a => 
-                `<span class="t-tag ability">${this.truncateTag(a)}</span>`
+            abilitiesEl.innerHTML = abilityList.slice(0, 2).map(a => 
+                `<span class="ability-tag-sm"><i class="fas fa-star"></i>${this.truncateTag(a)}</span>`
             ).join('');
         }
         
-        // Traits (up to 3)
+        // Traits (up to 2 for compact display) - use Stats page trait-tag-sm
         if (traitsEl) {
             const traits = animal.traits || animal.characteristics || [];
             const traitList = Array.isArray(traits) ? traits : [traits].filter(Boolean);
-            traitsEl.innerHTML = traitList.slice(0, 3).map(t => 
-                `<span class="t-tag trait">${this.truncateTag(t)}</span>`
+            traitsEl.innerHTML = traitList.slice(0, 2).map(t => 
+                `<span class="trait-tag-sm"><i class="fas fa-tag"></i>${this.truncateTag(t)}</span>`
             ).join('');
         }
     }
@@ -4447,6 +4468,7 @@ class TournamentManager {
     
     /**
      * Fetch and display ELO rating for a fighter
+     * Uses Stats page .row-elo-badge with tier classes
      */
     async updateFighterElo(fighterNum, animalName) {
         const eloEl = document.getElementById(`t-fighter-${fighterNum}-elo`);
@@ -4454,7 +4476,9 @@ class TournamentManager {
         
         // Check cache first
         if (this.eloCache[animalName]) {
-            eloEl.innerHTML = `<i class="fas fa-chart-line"></i> ${this.eloCache[animalName]}`;
+            const elo = this.eloCache[animalName];
+            eloEl.textContent = elo;
+            this.applyEloBadgeTier(eloEl, elo);
             return;
         }
         
@@ -4465,12 +4489,30 @@ class TournamentManager {
                 if (result.success && result.data) {
                     const elo = result.data.battleRating || 1000;
                     this.eloCache[animalName] = elo;
-                    eloEl.innerHTML = `<i class="fas fa-chart-line"></i> ${elo}`;
+                    eloEl.textContent = elo;
+                    this.applyEloBadgeTier(eloEl, elo);
                 }
             }
         } catch (error) {
             console.error('Error fetching ELO:', error);
-            eloEl.innerHTML = `<i class="fas fa-chart-line"></i> 1000`;
+            eloEl.textContent = '1000';
+            this.applyEloBadgeTier(eloEl, 1000);
+        }
+    }
+    
+    /**
+     * Apply ELO tier class to badge (reuses Stats page .row-elo-badge tiers)
+     */
+    applyEloBadgeTier(el, elo) {
+        el.classList.remove('elite', 'high', 'mid', 'low');
+        if (elo >= 1200) {
+            el.classList.add('elite');
+        } else if (elo >= 1100) {
+            el.classList.add('high');
+        } else if (elo >= 1000) {
+            el.classList.add('mid');
+        } else {
+            el.classList.add('low');
         }
     }
 
