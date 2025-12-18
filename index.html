@@ -1484,6 +1484,11 @@
                         </div>
                     </div>
                     
+                    <!-- Radar Chart - Compact Version from Compare Page -->
+                    <div class="t-radar-container">
+                        <canvas id="tournament-radar-chart"></canvas>
+                    </div>
+                    
                     <div class="t-vs-badge"><span>VS</span></div>
                 </div>
                 
@@ -1544,15 +1549,21 @@
                             <span>--</span>
                         </div>
                         <div class="quick-info-item" id="t-fighter-1-bite">
-                            <i class="fas fa-teeth"></i>
+                            <i class="fas fa-tooth"></i>
                             <span>--</span>
                         </div>
                     </div>
                     
-                    <!-- Abilities & Traits -->
+                    <!-- Abilities & Traits - Matching Stats Page Format -->
                     <div class="t-tags">
-                        <div class="abilities-tags-compact" id="t-fighter-1-abilities"></div>
-                        <div class="traits-tags-compact" id="t-fighter-1-traits"></div>
+                        <div class="t-abilities-section">
+                            <span class="abilities-label"><i class="fas fa-bolt"></i> ABILITIES</span>
+                            <div class="abilities-tags-compact" id="t-fighter-1-abilities"></div>
+                        </div>
+                        <div class="t-traits-section">
+                            <span class="traits-label"><i class="fas fa-star"></i> TRAITS</span>
+                            <div class="traits-tags-compact" id="t-fighter-1-traits"></div>
+                        </div>
                     </div>
                     
                     <!-- Tournament Record - EXACT Rankings Page Format -->
@@ -1615,7 +1626,10 @@
                         <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-attack-bar"></div></div></div>
                         <div class="t-stat-center-cluster">
                             <span class="t-val left" id="t-fighter-1-attack">0</span>
-                            <i class="fas fa-fist-raised"></i>
+                            <div class="t-stat-icon-label">
+                                <i class="fas fa-fist-raised"></i>
+                                <span class="t-stat-abbr">ATK</span>
+                            </div>
                             <span class="t-val right" id="t-fighter-2-attack">0</span>
                         </div>
                         <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-attack-bar"></div></div></div>
@@ -1624,7 +1638,10 @@
                         <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-defense-bar"></div></div></div>
                         <div class="t-stat-center-cluster">
                             <span class="t-val left" id="t-fighter-1-defense">0</span>
-                            <i class="fas fa-shield-alt"></i>
+                            <div class="t-stat-icon-label">
+                                <i class="fas fa-shield-alt"></i>
+                                <span class="t-stat-abbr">DEF</span>
+                            </div>
                             <span class="t-val right" id="t-fighter-2-defense">0</span>
                         </div>
                         <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-defense-bar"></div></div></div>
@@ -1633,7 +1650,10 @@
                         <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-agility-bar"></div></div></div>
                         <div class="t-stat-center-cluster">
                             <span class="t-val left" id="t-fighter-1-agility">0</span>
-                            <i class="fas fa-wind"></i>
+                            <div class="t-stat-icon-label">
+                                <i class="fas fa-wind"></i>
+                                <span class="t-stat-abbr">AGI</span>
+                            </div>
                             <span class="t-val right" id="t-fighter-2-agility">0</span>
                         </div>
                         <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-agility-bar"></div></div></div>
@@ -1642,7 +1662,10 @@
                         <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-stamina-bar"></div></div></div>
                         <div class="t-stat-center-cluster">
                             <span class="t-val left" id="t-fighter-1-stamina">0</span>
-                            <i class="fas fa-heart"></i>
+                            <div class="t-stat-icon-label">
+                                <i class="fas fa-heart"></i>
+                                <span class="t-stat-abbr">STA</span>
+                            </div>
                             <span class="t-val right" id="t-fighter-2-stamina">0</span>
                         </div>
                         <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-stamina-bar"></div></div></div>
@@ -1651,7 +1674,10 @@
                         <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-intelligence-bar"></div></div></div>
                         <div class="t-stat-center-cluster">
                             <span class="t-val left" id="t-fighter-1-intelligence">0</span>
-                            <i class="fas fa-brain"></i>
+                            <div class="t-stat-icon-label">
+                                <i class="fas fa-brain"></i>
+                                <span class="t-stat-abbr">INT</span>
+                            </div>
                             <span class="t-val right" id="t-fighter-2-intelligence">0</span>
                         </div>
                         <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-intelligence-bar"></div></div></div>
@@ -1660,7 +1686,10 @@
                         <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-special-bar"></div></div></div>
                         <div class="t-stat-center-cluster">
                             <span class="t-val left" id="t-fighter-1-special">0</span>
-                            <i class="fas fa-bolt"></i>
+                            <div class="t-stat-icon-label">
+                                <i class="fas fa-bolt"></i>
+                                <span class="t-stat-abbr">SPL</span>
+                            </div>
                             <span class="t-val right" id="t-fighter-2-special">0</span>
                         </div>
                         <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-special-bar"></div></div></div>
@@ -1680,15 +1709,21 @@
                             <span>--</span>
                         </div>
                         <div class="quick-info-item" id="t-fighter-2-bite">
-                            <i class="fas fa-teeth"></i>
+                            <i class="fas fa-tooth"></i>
                             <span>--</span>
                         </div>
                     </div>
                     
-                    <!-- Abilities & Traits -->
+                    <!-- Abilities & Traits - Matching Stats Page Format -->
                     <div class="t-tags">
-                        <div class="abilities-tags-compact" id="t-fighter-2-abilities"></div>
-                        <div class="traits-tags-compact" id="t-fighter-2-traits"></div>
+                        <div class="t-abilities-section">
+                            <span class="abilities-label"><i class="fas fa-bolt"></i> ABILITIES</span>
+                            <div class="abilities-tags-compact" id="t-fighter-2-abilities"></div>
+                        </div>
+                        <div class="t-traits-section">
+                            <span class="traits-label"><i class="fas fa-star"></i> TRAITS</span>
+                            <div class="traits-tags-compact" id="t-fighter-2-traits"></div>
+                        </div>
                     </div>
                     
                     <!-- Tournament Record - EXACT Rankings Page Format -->

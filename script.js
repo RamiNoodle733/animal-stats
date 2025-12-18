@@ -3710,6 +3710,12 @@ class TournamentManager {
         // Cache for ELO ratings and matchup votes
         this.eloCache = {};
         this.matchupVoteCache = {};
+        
+        // Cache for ranking data (votes, tournament records, etc.)
+        this.rankingDataCache = {};
+        
+        // Reference to radar chart instance
+        this.tournamentRadarChart = null;
     }
 
     init() {
@@ -4082,6 +4088,9 @@ class TournamentManager {
         // Highlight stat winners for each row
         this.highlightStatWinners(animal1, animal2);
         
+        // Update radar chart with both fighters
+        this.updateTournamentRadarChart(animal1, animal2);
+        
         // Load majority vote data for this matchup
         this.loadMatchupVotes(animal1.name, animal2.name);
         
@@ -4275,6 +4284,92 @@ class TournamentManager {
     }
     
     /**
+     * Update Tournament Radar Chart
+     * Reuses logic from CompareManager.updateRadarChart() with tournament colors
+     */
+    updateTournamentRadarChart(animal1, animal2) {
+        const canvas = document.getElementById('tournament-radar-chart');
+        if (!canvas) return;
+
+        // Destroy existing chart if it exists
+        if (this.tournamentRadarChart) {
+            this.tournamentRadarChart.destroy();
+            this.tournamentRadarChart = null;
+        }
+
+        // If no animals, don't render
+        if (!animal1 && !animal2) return;
+
+        const ctx = canvas.getContext('2d');
+        
+        const data = {
+            labels: ['ATK', 'DEF', 'AGI', 'STA', 'INT', 'SPL'],
+            datasets: []
+        };
+
+        // Left fighter - cyan color (tournament theme)
+        if (animal1) {
+            data.datasets.push({
+                label: animal1.name,
+                data: [animal1.attack, animal1.defense, animal1.agility, animal1.stamina, animal1.intelligence, animal1.special],
+                fill: true,
+                backgroundColor: 'rgba(0, 212, 255, 0.2)',
+                borderColor: '#00d4ff',
+                pointBackgroundColor: '#00d4ff',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#00d4ff',
+                borderWidth: 2
+            });
+        }
+
+        // Right fighter - orange color (tournament theme)
+        if (animal2) {
+            data.datasets.push({
+                label: animal2.name,
+                data: [animal2.attack, animal2.defense, animal2.agility, animal2.stamina, animal2.intelligence, animal2.special],
+                fill: true,
+                backgroundColor: 'rgba(255, 107, 0, 0.2)',
+                borderColor: '#ff6b00',
+                pointBackgroundColor: '#ff6b00',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: '#ff6b00',
+                borderWidth: 2
+            });
+        }
+
+        this.tournamentRadarChart = new Chart(ctx, {
+            type: 'radar',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                elements: {
+                    line: { borderWidth: 2 },
+                    point: { radius: 2, hoverRadius: 4 }
+                },
+                scales: {
+                    r: {
+                        angleLines: { color: 'rgba(255, 255, 255, 0.15)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.15)' },
+                        pointLabels: {
+                            color: 'rgba(255, 255, 255, 0.8)',
+                            font: { family: 'Bebas Neue', size: 9 }
+                        },
+                        ticks: { display: false, backdropColor: 'transparent' },
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    }
+    
+    /**
      * Get fighter card element (refreshed from DOM)
      */
     getFighterCard(fighterNum) {
@@ -4401,11 +4496,104 @@ class TournamentManager {
         // Abilities and Traits tags (reuses .ability-tag-sm / .trait-tag-sm from Stats page)
         this.updateFighterTags(fighterNum, animal);
         
-        // Tournament Record (medals)
-        this.updateFighterTournamentRecord(fighterNum, animal);
+        // Fetch ranking data (votes, tournament records) and update UI
+        this.fetchAndUpdateRankingData(fighterNum, animal);
         
         // Action buttons (upvote/downvote/comments/details)
         this.setupFighterActionButtons(fighterNum, animal);
+    }
+    
+    /**
+     * Fetch ranking data for an animal and update tournament record + vote counts
+     * Uses cached data if available, otherwise fetches from /api/rankings
+     */
+    async fetchAndUpdateRankingData(fighterNum, animal) {
+        const animalName = animal.name;
+        
+        // Check cache first
+        if (this.rankingDataCache[animalName]) {
+            const data = this.rankingDataCache[animalName];
+            this.applyRankingDataToUI(fighterNum, data);
+            return;
+        }
+        
+        // Try to get from RankingsManager cache first (faster)
+        const rankingsManager = this.app.rankingsManager;
+        if (rankingsManager?.rankings?.length > 0) {
+            const rankingItem = rankingsManager.rankings.find(r => 
+                (r.animal?.name || r.name) === animalName
+            );
+            if (rankingItem) {
+                const data = {
+                    upvotes: rankingItem.upvotes || 0,
+                    downvotes: rankingItem.downvotes || 0,
+                    commentCount: rankingItem.commentCount || 0,
+                    tournamentsFirst: rankingItem.tournamentsFirst || rankingItem.animal?.tournamentsFirst || 0,
+                    tournamentsSecond: rankingItem.tournamentsSecond || rankingItem.animal?.tournamentsSecond || 0,
+                    tournamentsThird: rankingItem.tournamentsThird || rankingItem.animal?.tournamentsThird || 0,
+                    tournamentsPlayed: rankingItem.tournamentsPlayed || rankingItem.animal?.tournamentsPlayed || 0
+                };
+                this.rankingDataCache[animalName] = data;
+                this.applyRankingDataToUI(fighterNum, data);
+                return;
+            }
+        }
+        
+        // Fetch from API if not in cache
+        try {
+            const response = await fetch('/api/rankings', {
+                headers: { 'Accept': 'application/json' }
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success && result.data) {
+                    // Cache all ranking data
+                    result.data.forEach(item => {
+                        const name = item.animal?.name || item.name;
+                        this.rankingDataCache[name] = {
+                            upvotes: item.upvotes || 0,
+                            downvotes: item.downvotes || 0,
+                            commentCount: item.commentCount || 0,
+                            tournamentsFirst: item.tournamentsFirst || 0,
+                            tournamentsSecond: item.tournamentsSecond || 0,
+                            tournamentsThird: item.tournamentsThird || 0,
+                            tournamentsPlayed: item.tournamentsPlayed || 0
+                        };
+                    });
+                    
+                    // Apply to UI
+                    if (this.rankingDataCache[animalName]) {
+                        this.applyRankingDataToUI(fighterNum, this.rankingDataCache[animalName]);
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching ranking data:', error);
+        }
+    }
+    
+    /**
+     * Apply ranking data to the tournament UI
+     */
+    applyRankingDataToUI(fighterNum, data) {
+        // Update tournament record medals
+        const goldEl = document.getElementById(`t-fighter-${fighterNum}-gold`);
+        const silverEl = document.getElementById(`t-fighter-${fighterNum}-silver`);
+        const bronzeEl = document.getElementById(`t-fighter-${fighterNum}-bronze`);
+        
+        if (goldEl) goldEl.textContent = data.tournamentsFirst || 0;
+        if (silverEl) silverEl.textContent = data.tournamentsSecond || 0;
+        if (bronzeEl) bronzeEl.textContent = data.tournamentsThird || 0;
+        
+        // Update vote counts
+        const upvotesEl = document.getElementById(`t-fighter-${fighterNum}-upvotes`);
+        const downvotesEl = document.getElementById(`t-fighter-${fighterNum}-downvotes`);
+        const commentCountEl = document.getElementById(`t-fighter-${fighterNum}-comment-count`);
+        
+        if (upvotesEl) upvotesEl.textContent = data.upvotes || 0;
+        if (downvotesEl) downvotesEl.textContent = data.downvotes || 0;
+        if (commentCountEl) commentCountEl.textContent = data.commentCount || 0;
     }
     
     /**
@@ -4451,39 +4639,39 @@ class TournamentManager {
     /**
      * Update abilities and traits tags for a fighter
      * Uses Stats page .ability-tag-sm and .trait-tag-sm classes
+     * Shows full text, no truncation
      */
     updateFighterTags(fighterNum, animal) {
         const abilitiesEl = document.getElementById(`t-fighter-${fighterNum}-abilities`);
         const traitsEl = document.getElementById(`t-fighter-${fighterNum}-traits`);
         
-        // Abilities (up to 2 for compact display) - use Stats page ability-tag-sm
+        // Abilities (up to 3 for display) - use Stats page ability-tag-sm
         // Prefer special_abilities (DB field name) over abilities
         if (abilitiesEl) {
             const abilities = animal.special_abilities || animal.abilities || [];
             const abilityList = Array.isArray(abilities) ? abilities : [abilities].filter(Boolean);
-            abilitiesEl.innerHTML = abilityList.slice(0, 2).map(a => 
-                `<span class="ability-tag-sm"><i class="fas fa-star"></i>${this.truncateTag(a)}</span>`
-            ).join('');
+            if (abilityList.length > 0) {
+                abilitiesEl.innerHTML = abilityList.slice(0, 3).map(a => 
+                    `<span class="ability-tag-sm"><i class="fas fa-star"></i>${a}</span>`
+                ).join('');
+            } else {
+                abilitiesEl.innerHTML = '<span class="ability-tag-sm placeholder">None</span>';
+            }
         }
         
-        // Traits (up to 2 for compact display) - use Stats page trait-tag-sm
+        // Traits (up to 3 for display) - use Stats page trait-tag-sm
         // Prefer unique_traits (DB field name) over traits
         if (traitsEl) {
             const traits = animal.unique_traits || animal.traits || animal.characteristics || [];
             const traitList = Array.isArray(traits) ? traits : [traits].filter(Boolean);
-            traitsEl.innerHTML = traitList.slice(0, 2).map(t => 
-                `<span class="trait-tag-sm"><i class="fas fa-tag"></i>${this.truncateTag(t)}</span>`
-            ).join('');
+            if (traitList.length > 0) {
+                traitsEl.innerHTML = traitList.slice(0, 3).map(t => 
+                    `<span class="trait-tag-sm"><i class="fas fa-tag"></i>${t}</span>`
+                ).join('');
+            } else {
+                traitsEl.innerHTML = '<span class="trait-tag-sm placeholder">None</span>';
+            }
         }
-    }
-    
-    /**
-     * Truncate a tag to fit in the compact UI
-     */
-    truncateTag(text) {
-        if (!text) return '';
-        const str = String(text);
-        return str.length > 12 ? str.substring(0, 10) + '…' : str;
     }
     
     /**
@@ -4507,6 +4695,7 @@ class TournamentManager {
     
     /**
      * Setup action button handlers for a fighter panel
+     * Reuses RankingsManager methods for comments and details
      */
     setupFighterActionButtons(fighterNum, animal) {
         const upvoteBtn = document.getElementById(`t-fighter-${fighterNum}-upvote`);
@@ -4514,11 +4703,16 @@ class TournamentManager {
         const commentsBtn = document.getElementById(`t-fighter-${fighterNum}-comments`);
         const detailsBtn = document.getElementById(`t-fighter-${fighterNum}-details`);
         
+        const animalId = animal._id || animal.id || '';
+        const animalName = animal.name || '';
+        const animalImage = animal.image || '';
+        
         // Store animal data on buttons for click handlers
         [upvoteBtn, downvoteBtn, commentsBtn, detailsBtn].forEach(btn => {
             if (btn) {
-                btn.dataset.animalId = animal._id || animal.id;
-                btn.dataset.animalName = animal.name;
+                btn.dataset.animalId = animalId;
+                btn.dataset.animalName = animalName;
+                btn.dataset.animalImage = animalImage;
             }
         });
         
@@ -4530,7 +4724,7 @@ class TournamentManager {
                     Auth.showModal('login');
                     return;
                 }
-                await this.handleTournamentVote(animal, 'up', upvoteBtn, downvoteBtn);
+                await this.handleTournamentVote(animal, 'up', upvoteBtn, downvoteBtn, fighterNum);
             };
         }
         
@@ -4542,29 +4736,40 @@ class TournamentManager {
                     Auth.showModal('login');
                     return;
                 }
-                await this.handleTournamentVote(animal, 'down', upvoteBtn, downvoteBtn);
+                await this.handleTournamentVote(animal, 'down', upvoteBtn, downvoteBtn, fighterNum);
             };
         }
         
-        // Comments handler - scroll to comments in rankings or open detail
+        // Comments handler - use RankingsManager openCommentsModal
         if (commentsBtn) {
             commentsBtn.onclick = () => {
-                // Navigate to rankings page and open this animal's detail with comments
-                this.app.rankingsManager?.openAnimalDetail(animal);
-                // Scroll to comments section after a short delay
-                setTimeout(() => {
-                    const commentsSection = document.getElementById('detail-comments-section');
-                    if (commentsSection) {
-                        commentsSection.scrollIntoView({ behavior: 'smooth' });
-                    }
-                }, 300);
+                const rankingsManager = this.app.rankingsManager;
+                if (rankingsManager && rankingsManager.openCommentsModal) {
+                    // Create a fake event with the button as currentTarget
+                    rankingsManager.openCommentsModal({ currentTarget: commentsBtn });
+                } else {
+                    // Fallback: Navigate to rankings tab and show comments
+                    this.app.showTab?.('rankings');
+                    Auth.showToast('View comments on the Rankings page');
+                }
             };
         }
         
-        // Details handler - open animal detail modal
+        // Details handler - show Stats page with this animal selected
         if (detailsBtn) {
             detailsBtn.onclick = () => {
-                this.app.rankingsManager?.openAnimalDetail(animal);
+                // Switch to stats tab and select this animal
+                this.app.showTab?.('stats');
+                // Find and select the animal in the stats list
+                setTimeout(() => {
+                    const animalCards = document.querySelectorAll('.animal-card');
+                    animalCards.forEach(card => {
+                        if (card.dataset.name === animalName) {
+                            card.click();
+                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                    });
+                }, 100);
             };
         }
     }
@@ -4572,7 +4777,7 @@ class TournamentManager {
     /**
      * Handle vote from tournament action buttons
      */
-    async handleTournamentVote(animal, voteType, upvoteBtn, downvoteBtn) {
+    async handleTournamentVote(animal, voteType, upvoteBtn, downvoteBtn, fighterNum) {
         try {
             const response = await fetch('/api/votes', {
                 method: 'POST',
@@ -4599,6 +4804,21 @@ class TournamentManager {
                 if (downvoteBtn) {
                     downvoteBtn.classList.toggle('active', userVote === 'down');
                     downvoteBtn.classList.add('voted-today');
+                }
+                
+                // Update vote counts in UI (optimistic update)
+                const animalName = animal.name;
+                if (this.rankingDataCache[animalName]) {
+                    // Increment the appropriate counter
+                    if (voteType === 'up') {
+                        this.rankingDataCache[animalName].upvotes++;
+                    } else {
+                        this.rankingDataCache[animalName].downvotes++;
+                    }
+                    // Re-apply to UI
+                    if (fighterNum) {
+                        this.applyRankingDataToUI(fighterNum, this.rankingDataCache[animalName]);
+                    }
                 }
                 
                 Auth.showToast(`Vote recorded for ${animal.name}!`);
