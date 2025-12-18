@@ -4326,6 +4326,38 @@ class TournamentManager {
             }
         }
         
+        // Update vote counts and medals from ranking data
+        const upvotesEl = document.getElementById(`t-fighter-${fighterNum}-upvotes`);
+        const downvotesEl = document.getElementById(`t-fighter-${fighterNum}-downvotes`);
+        const goldEl = document.getElementById(`t-fighter-${fighterNum}-gold`);
+        const silverEl = document.getElementById(`t-fighter-${fighterNum}-silver`);
+        const bronzeEl = document.getElementById(`t-fighter-${fighterNum}-bronze`);
+        
+        if (upvotesEl) upvotesEl.textContent = rankingItem?.upvotes || animal.upvotes || 0;
+        if (downvotesEl) downvotesEl.textContent = rankingItem?.downvotes || animal.downvotes || 0;
+        if (goldEl) goldEl.textContent = animal.tournamentsFirst || 0;
+        if (silverEl) silverEl.textContent = animal.tournamentsSecond || 0;
+        if (bronzeEl) bronzeEl.textContent = animal.tournamentsThird || 0;
+        
+        // Add click handlers to vote buttons
+        const upvoteBtn = document.querySelector(`#t-fighter-${fighterNum}-upvotes`)?.parentElement;
+        const downvoteBtn = document.querySelector(`#t-fighter-${fighterNum}-downvotes`)?.parentElement;
+        
+        if (upvoteBtn) {
+            upvoteBtn.style.cursor = 'pointer';
+            upvoteBtn.onclick = (e) => {
+                e.stopPropagation();
+                this.handleTournamentVote(animal, 'up', fighterNum);
+            };
+        }
+        if (downvoteBtn) {
+            downvoteBtn.style.cursor = 'pointer';
+            downvoteBtn.onclick = (e) => {
+                e.stopPropagation();
+                this.handleTournamentVote(animal, 'down', fighterNum);
+            };
+        }
+        
         // Physical specs (weight, speed, bite force)
         if (weightEl) {
             const weightKg = animal.weight_kg || animal.weight || animal.averageWeight;
@@ -4532,6 +4564,61 @@ class TournamentManager {
         const { animal1Votes, animal2Votes } = this.currentMatchupVotes;
         if (animal1Votes === animal2Votes) return null;
         return animal1Votes > animal2Votes ? 0 : 1;
+    }
+    
+    /**
+     * Handle voting on animals in tournament battle screen
+     */
+    async handleTournamentVote(animal, voteType, fighterNum) {
+        if (!Auth.isLoggedIn()) {
+            Auth.showToast('Please log in to vote!');
+            Auth.showModal('login');
+            return;
+        }
+        
+        try {
+            const response = await fetch('/api/votes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                },
+                body: JSON.stringify({ 
+                    animalId: animal._id || animal.id, 
+                    animalName: animal.name, 
+                    voteType 
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Update vote counts in the UI
+                const upvotesEl = document.getElementById(`t-fighter-${fighterNum}-upvotes`);
+                const downvotesEl = document.getElementById(`t-fighter-${fighterNum}-downvotes`);
+                
+                if (upvotesEl) upvotesEl.textContent = result.data.upvotes;
+                if (downvotesEl) downvotesEl.textContent = result.data.downvotes;
+                
+                // Visual feedback
+                const btn = voteType === 'up' ? upvotesEl?.parentElement : downvotesEl?.parentElement;
+                if (btn) {
+                    btn.style.transform = 'scale(1.2)';
+                    setTimeout(() => btn.style.transform = 'scale(1)', 200);
+                }
+                
+                Auth.showToast(result.message || 'Vote recorded!');
+            } else {
+                if (result.alreadyVotedToday) {
+                    Auth.showToast('Already voted on this animal today!');
+                } else {
+                    Auth.showToast(result.error || 'Failed to vote');
+                }
+            }
+        } catch (error) {
+            console.error('Tournament vote error:', error);
+            Auth.showToast('Error voting. Please try again.');
+        }
     }
     
     async recordBattleWithInCardAnimation(winner, loser, winnerIndex) {

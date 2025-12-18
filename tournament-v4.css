@@ -729,10 +729,20 @@
     padding: 2px 4px;
     border-radius: 2px;
     font-size: 0.55rem;
+    transition: all 0.2s ease;
+    user-select: none;
 }
 
 .t-vote.up { background: rgba(0, 255, 136, 0.1); color: var(--t-green); }
 .t-vote.down { background: rgba(255, 100, 100, 0.1); color: #ff6666; }
+
+.t-vote:hover {
+    transform: scale(1.1);
+    filter: brightness(1.3);
+}
+
+.t-vote.up:hover { background: rgba(0, 255, 136, 0.2); }
+.t-vote.down:hover { background: rgba(255, 100, 100, 0.2); }
 
 .t-vote i {
     font-size: 0.5rem;
