@@ -4284,15 +4284,16 @@ class TournamentManager {
     /**
      * Update a fighter card with animal data and stat bars
      * Re-fetches DOM elements each time to ensure they exist
-     * Updated to use Stats page consistent components
+     * Updated to use Stats page consistent components - Sketch Layout
      */
     updateFighterCard(fighterNum, animal) {
         // Re-fetch DOM elements to ensure they exist - use t-fighter prefix for tournament
         const imgEl = document.getElementById(`t-fighter-${fighterNum}-img`);
         const nameEl = document.getElementById(`t-fighter-${fighterNum}-name`);
+        const scientificEl = document.getElementById(`t-fighter-${fighterNum}-scientific`);
         const rankEl = document.getElementById(`t-fighter-${fighterNum}-rank`);
         const winrateEl = document.getElementById(`t-fighter-${fighterNum}-winrate`);
-        const eloEl = document.getElementById(`t-fighter-${fighterNum}-elo`);
+        const battlesEl = document.getElementById(`t-fighter-${fighterNum}-battles`);
         const weightEl = document.getElementById(`t-fighter-${fighterNum}-weight`);
         const speedEl = document.getElementById(`t-fighter-${fighterNum}-speed`);
         const biteEl = document.getElementById(`t-fighter-${fighterNum}-bite`);
@@ -4307,6 +4308,11 @@ class TournamentManager {
         // Name - IMPORTANT: Set from actual animal data
         if (nameEl) {
             nameEl.textContent = animal.name || 'Unknown Animal';
+        }
+        
+        // Scientific Name
+        if (scientificEl) {
+            scientificEl.textContent = animal.scientific_name || animal.scientificName || 'Unknown species';
         }
         
         // Get ranking data from RankingsManager
@@ -4325,14 +4331,12 @@ class TournamentManager {
             winrateEl.textContent = `${winRate}%`;
         }
         
-        // Tournament medals (reuses .tournament-chip from Stats page)
-        const goldEl = document.getElementById(`t-fighter-${fighterNum}-gold`);
-        const silverEl = document.getElementById(`t-fighter-${fighterNum}-silver`);
-        const bronzeEl = document.getElementById(`t-fighter-${fighterNum}-bronze`);
-        
-        if (goldEl) goldEl.textContent = animal.tournamentsFirst || 0;
-        if (silverEl) silverEl.textContent = animal.tournamentsSecond || 0;
-        if (bronzeEl) bronzeEl.textContent = animal.tournamentsThird || 0;
+        // Battles count (reuses .tournament-chip from Stats page)
+        if (battlesEl) {
+            const totalBattles = rankingItem?.wins + rankingItem?.losses || animal.totalBattles || 0;
+            const spanEl = battlesEl.querySelector('span');
+            if (spanEl) spanEl.textContent = totalBattles;
+        }
         
         // Physical specs (reuses .physical-stat from Stats page)
         if (weightEl) {
@@ -4388,9 +4392,6 @@ class TournamentManager {
         
         // Abilities and Traits tags (reuses .ability-tag-sm / .trait-tag-sm from Stats page)
         this.updateFighterTags(fighterNum, animal);
-        
-        // ELO Rating - fetch from API and cache
-        this.updateFighterElo(fighterNum, animal.name);
     }
     
     /**
