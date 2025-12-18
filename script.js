@@ -4592,14 +4592,14 @@ class TournamentManager {
     /**
      * Record vote to matchup-votes API (consolidated into battles)
      */
-    async recordMatchupVote(animal1, animal2, winner) {
+    async recordMatchupVote(animal1, animal2, votedFor) {
         try {
             await fetch('/api/battles?action=matchup_votes', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ animal1, animal2, winner })
+                body: JSON.stringify({ animal1, animal2, votedFor })
             });
         } catch (error) {
             console.error('Error recording matchup vote:', error);
