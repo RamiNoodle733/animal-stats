@@ -4403,28 +4403,6 @@ class TournamentManager {
             if (barEl) barEl.style.width = `${value}%`;
         });
         
-        // Tournament record (medals) - from rankings data
-        const goldEl = document.getElementById(`t-fighter-${fighterNum}-gold`);
-        const silverEl = document.getElementById(`t-fighter-${fighterNum}-silver`);
-        const bronzeEl = document.getElementById(`t-fighter-${fighterNum}-bronze`);
-        
-        if (rankingItem) {
-            if (goldEl) goldEl.textContent = rankingItem.goldMedals || 0;
-            if (silverEl) silverEl.textContent = rankingItem.silverMedals || 0;
-            if (bronzeEl) bronzeEl.textContent = rankingItem.bronzeMedals || 0;
-        } else {
-            if (goldEl) goldEl.textContent = '0';
-            if (silverEl) silverEl.textContent = '0';
-            if (bronzeEl) bronzeEl.textContent = '0';
-        }
-        
-        // Voting score (upvotes/downvotes)
-        const upvotesEl = document.getElementById(`t-fighter-${fighterNum}-upvotes`);
-        const downvotesEl = document.getElementById(`t-fighter-${fighterNum}-downvotes`);
-        
-        if (upvotesEl) upvotesEl.textContent = animal.upvotes || 0;
-        if (downvotesEl) downvotesEl.textContent = animal.downvotes || 0;
-        
         // Abilities and Traits tags
         this.updateFighterTags(fighterNum, animal);
         
