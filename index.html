@@ -1452,28 +1452,6 @@
                         <div class="t-click-hint"><i class="fas fa-hand-pointer"></i> CLICK TO VOTE</div>
                     </div>
                     
-                    <!-- Bottom Info: Physical + Abilities + Traits -->
-                    <div class="t-bottom-info">
-                        <div class="quick-info-bar t-quick-info">
-                            <div class="quick-info-item" id="t-fighter-1-weight">
-                                <i class="fas fa-weight-hanging"></i>
-                                <span>--</span>
-                            </div>
-                            <div class="quick-info-item" id="t-fighter-1-speed">
-                                <i class="fas fa-tachometer-alt"></i>
-                                <span>--</span>
-                            </div>
-                            <div class="quick-info-item" id="t-fighter-1-bite">
-                                <i class="fas fa-teeth"></i>
-                                <span>--</span>
-                            </div>
-                        </div>
-                        <div class="t-tags">
-                            <div class="abilities-tags-compact" id="t-fighter-1-abilities"></div>
-                            <div class="traits-tags-compact" id="t-fighter-1-traits"></div>
-                        </div>
-                    </div>
-                    
                     <!-- Rating Change (shown after vote) -->
                     <div class="t-rating-change" id="t-rating-change-1">
                         <span class="t-rating-delta">+0</span>
@@ -1543,28 +1521,6 @@
                         <div class="t-click-hint"><i class="fas fa-hand-pointer"></i> CLICK TO VOTE</div>
                     </div>
                     
-                    <!-- Bottom Info: Physical + Abilities + Traits -->
-                    <div class="t-bottom-info">
-                        <div class="quick-info-bar t-quick-info">
-                            <div class="quick-info-item" id="t-fighter-2-weight">
-                                <i class="fas fa-weight-hanging"></i>
-                                <span>--</span>
-                            </div>
-                            <div class="quick-info-item" id="t-fighter-2-speed">
-                                <i class="fas fa-tachometer-alt"></i>
-                                <span>--</span>
-                            </div>
-                            <div class="quick-info-item" id="t-fighter-2-bite">
-                                <i class="fas fa-teeth"></i>
-                                <span>--</span>
-                            </div>
-                        </div>
-                        <div class="t-tags">
-                            <div class="abilities-tags-compact" id="t-fighter-2-abilities"></div>
-                            <div class="traits-tags-compact" id="t-fighter-2-traits"></div>
-                        </div>
-                    </div>
-                    
                     <!-- Rating Change (shown after vote) -->
                     <div class="t-rating-change" id="t-rating-change-2">
                         <span class="t-rating-delta">+0</span>
@@ -1573,67 +1529,220 @@
                 </div>
             </div>
             
-            <!-- Bottom Stat Comparison Section - Full Width -->
-            <div class="t-stats-section">
-                <div class="t-stat-row" data-stat="attack">
-                    <span class="t-stat-num left" id="t-fighter-1-attack">0</span>
-                    <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-attack-bar"></div></div></div>
-                    <div class="t-stat-center">
-                        <i class="fas fa-fist-raised"></i>
-                        <span>ATK</span>
+            <!-- Bottom Section: Info Panels + Stat Bars -->
+            <div class="t-bottom-band">
+                <!-- Left Info Panel -->
+                <div class="t-info-panel left" id="t-info-panel-1">
+                    <!-- Physical Stats -->
+                    <div class="quick-info-bar t-quick-info">
+                        <div class="quick-info-item" id="t-fighter-1-weight">
+                            <i class="fas fa-weight-hanging"></i>
+                            <span>--</span>
+                        </div>
+                        <div class="quick-info-item" id="t-fighter-1-speed">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>--</span>
+                        </div>
+                        <div class="quick-info-item" id="t-fighter-1-bite">
+                            <i class="fas fa-teeth"></i>
+                            <span>--</span>
+                        </div>
                     </div>
-                    <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-attack-bar"></div></div></div>
-                    <span class="t-stat-num right" id="t-fighter-2-attack">0</span>
+                    
+                    <!-- Abilities & Traits -->
+                    <div class="t-tags">
+                        <div class="abilities-tags-compact" id="t-fighter-1-abilities"></div>
+                        <div class="traits-tags-compact" id="t-fighter-1-traits"></div>
+                    </div>
+                    
+                    <!-- Tournament Record - EXACT Rankings Page Format -->
+                    <div class="detail-tournament-dashboard t-tournament-dashboard" id="t-tournament-record-1">
+                        <div class="dashboard-header">
+                            <div class="dashboard-accent-left"></div>
+                            <span class="dashboard-title"><i class="fas fa-trophy"></i> TOURNAMENT RECORD</span>
+                            <div class="dashboard-accent-right"></div>
+                        </div>
+                        <div class="dashboard-content">
+                            <div class="medal-row">
+                                <div class="medal-card gold">
+                                    <div class="medal-icon-wrap"><i class="fas fa-trophy"></i></div>
+                                    <div class="medal-info">
+                                        <span class="medal-count" id="t-fighter-1-gold">0</span>
+                                        <span class="medal-label">1ST</span>
+                                    </div>
+                                </div>
+                                <div class="medal-card silver">
+                                    <div class="medal-icon-wrap"><i class="fas fa-medal"></i></div>
+                                    <div class="medal-info">
+                                        <span class="medal-count" id="t-fighter-1-silver">0</span>
+                                        <span class="medal-label">2ND</span>
+                                    </div>
+                                </div>
+                                <div class="medal-card bronze">
+                                    <div class="medal-icon-wrap"><i class="fas fa-medal"></i></div>
+                                    <div class="medal-info">
+                                        <span class="medal-count" id="t-fighter-1-bronze">0</span>
+                                        <span class="medal-label">3RD</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons - EXACT Rankings Page Format -->
+                    <div class="t-action-row">
+                        <button class="row-vote-btn row-vote-up" id="t-fighter-1-upvote" title="Underrated">
+                            <i class="fas fa-arrow-up"></i>
+                            <span class="vote-count" id="t-fighter-1-upvotes">0</span>
+                        </button>
+                        <button class="row-vote-btn row-vote-down" id="t-fighter-1-downvote" title="Overrated">
+                            <i class="fas fa-arrow-down"></i>
+                            <span class="vote-count" id="t-fighter-1-downvotes">0</span>
+                        </button>
+                        <button class="row-comments-btn" id="t-fighter-1-comments">
+                            <i class="fas fa-comment"></i>
+                            <span class="comment-count" id="t-fighter-1-comment-count">0</span>
+                        </button>
+                        <button class="row-comments-btn t-details-btn" id="t-fighter-1-details">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
+                    </div>
                 </div>
-                <div class="t-stat-row" data-stat="defense">
-                    <span class="t-stat-num left" id="t-fighter-1-defense">0</span>
-                    <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-defense-bar"></div></div></div>
-                    <div class="t-stat-center">
-                        <i class="fas fa-shield-alt"></i>
-                        <span>DEF</span>
+                
+                <!-- Center Stat Bars - Compact -->
+                <div class="t-stats-compact">
+                    <div class="t-stat-row-compact" data-stat="attack">
+                        <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-attack-bar"></div></div></div>
+                        <div class="t-stat-center-cluster">
+                            <span class="t-val left" id="t-fighter-1-attack">0</span>
+                            <i class="fas fa-fist-raised"></i>
+                            <span class="t-val right" id="t-fighter-2-attack">0</span>
+                        </div>
+                        <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-attack-bar"></div></div></div>
                     </div>
-                    <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-defense-bar"></div></div></div>
-                    <span class="t-stat-num right" id="t-fighter-2-defense">0</span>
+                    <div class="t-stat-row-compact" data-stat="defense">
+                        <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-defense-bar"></div></div></div>
+                        <div class="t-stat-center-cluster">
+                            <span class="t-val left" id="t-fighter-1-defense">0</span>
+                            <i class="fas fa-shield-alt"></i>
+                            <span class="t-val right" id="t-fighter-2-defense">0</span>
+                        </div>
+                        <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-defense-bar"></div></div></div>
+                    </div>
+                    <div class="t-stat-row-compact" data-stat="agility">
+                        <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-agility-bar"></div></div></div>
+                        <div class="t-stat-center-cluster">
+                            <span class="t-val left" id="t-fighter-1-agility">0</span>
+                            <i class="fas fa-wind"></i>
+                            <span class="t-val right" id="t-fighter-2-agility">0</span>
+                        </div>
+                        <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-agility-bar"></div></div></div>
+                    </div>
+                    <div class="t-stat-row-compact" data-stat="stamina">
+                        <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-stamina-bar"></div></div></div>
+                        <div class="t-stat-center-cluster">
+                            <span class="t-val left" id="t-fighter-1-stamina">0</span>
+                            <i class="fas fa-heart"></i>
+                            <span class="t-val right" id="t-fighter-2-stamina">0</span>
+                        </div>
+                        <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-stamina-bar"></div></div></div>
+                    </div>
+                    <div class="t-stat-row-compact" data-stat="intelligence">
+                        <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-intelligence-bar"></div></div></div>
+                        <div class="t-stat-center-cluster">
+                            <span class="t-val left" id="t-fighter-1-intelligence">0</span>
+                            <i class="fas fa-brain"></i>
+                            <span class="t-val right" id="t-fighter-2-intelligence">0</span>
+                        </div>
+                        <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-intelligence-bar"></div></div></div>
+                    </div>
+                    <div class="t-stat-row-compact" data-stat="special">
+                        <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-special-bar"></div></div></div>
+                        <div class="t-stat-center-cluster">
+                            <span class="t-val left" id="t-fighter-1-special">0</span>
+                            <i class="fas fa-bolt"></i>
+                            <span class="t-val right" id="t-fighter-2-special">0</span>
+                        </div>
+                        <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-special-bar"></div></div></div>
+                    </div>
                 </div>
-                <div class="t-stat-row" data-stat="agility">
-                    <span class="t-stat-num left" id="t-fighter-1-agility">0</span>
-                    <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-agility-bar"></div></div></div>
-                    <div class="t-stat-center">
-                        <i class="fas fa-wind"></i>
-                        <span>AGI</span>
+                
+                <!-- Right Info Panel -->
+                <div class="t-info-panel right" id="t-info-panel-2">
+                    <!-- Physical Stats -->
+                    <div class="quick-info-bar t-quick-info">
+                        <div class="quick-info-item" id="t-fighter-2-weight">
+                            <i class="fas fa-weight-hanging"></i>
+                            <span>--</span>
+                        </div>
+                        <div class="quick-info-item" id="t-fighter-2-speed">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>--</span>
+                        </div>
+                        <div class="quick-info-item" id="t-fighter-2-bite">
+                            <i class="fas fa-teeth"></i>
+                            <span>--</span>
+                        </div>
                     </div>
-                    <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-agility-bar"></div></div></div>
-                    <span class="t-stat-num right" id="t-fighter-2-agility">0</span>
-                </div>
-                <div class="t-stat-row" data-stat="stamina">
-                    <span class="t-stat-num left" id="t-fighter-1-stamina">0</span>
-                    <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-stamina-bar"></div></div></div>
-                    <div class="t-stat-center">
-                        <i class="fas fa-heart"></i>
-                        <span>STA</span>
+                    
+                    <!-- Abilities & Traits -->
+                    <div class="t-tags">
+                        <div class="abilities-tags-compact" id="t-fighter-2-abilities"></div>
+                        <div class="traits-tags-compact" id="t-fighter-2-traits"></div>
                     </div>
-                    <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-stamina-bar"></div></div></div>
-                    <span class="t-stat-num right" id="t-fighter-2-stamina">0</span>
-                </div>
-                <div class="t-stat-row" data-stat="intelligence">
-                    <span class="t-stat-num left" id="t-fighter-1-intelligence">0</span>
-                    <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-intelligence-bar"></div></div></div>
-                    <div class="t-stat-center">
-                        <i class="fas fa-brain"></i>
-                        <span>INT</span>
+                    
+                    <!-- Tournament Record - EXACT Rankings Page Format -->
+                    <div class="detail-tournament-dashboard t-tournament-dashboard" id="t-tournament-record-2">
+                        <div class="dashboard-header">
+                            <div class="dashboard-accent-left"></div>
+                            <span class="dashboard-title"><i class="fas fa-trophy"></i> TOURNAMENT RECORD</span>
+                            <div class="dashboard-accent-right"></div>
+                        </div>
+                        <div class="dashboard-content">
+                            <div class="medal-row">
+                                <div class="medal-card gold">
+                                    <div class="medal-icon-wrap"><i class="fas fa-trophy"></i></div>
+                                    <div class="medal-info">
+                                        <span class="medal-count" id="t-fighter-2-gold">0</span>
+                                        <span class="medal-label">1ST</span>
+                                    </div>
+                                </div>
+                                <div class="medal-card silver">
+                                    <div class="medal-icon-wrap"><i class="fas fa-medal"></i></div>
+                                    <div class="medal-info">
+                                        <span class="medal-count" id="t-fighter-2-silver">0</span>
+                                        <span class="medal-label">2ND</span>
+                                    </div>
+                                </div>
+                                <div class="medal-card bronze">
+                                    <div class="medal-icon-wrap"><i class="fas fa-medal"></i></div>
+                                    <div class="medal-info">
+                                        <span class="medal-count" id="t-fighter-2-bronze">0</span>
+                                        <span class="medal-label">3RD</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-intelligence-bar"></div></div></div>
-                    <span class="t-stat-num right" id="t-fighter-2-intelligence">0</span>
-                </div>
-                <div class="t-stat-row" data-stat="special">
-                    <span class="t-stat-num left" id="t-fighter-1-special">0</span>
-                    <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-1-special-bar"></div></div></div>
-                    <div class="t-stat-center">
-                        <i class="fas fa-bolt"></i>
-                        <span>SPL</span>
+                    
+                    <!-- Action Buttons - EXACT Rankings Page Format -->
+                    <div class="t-action-row">
+                        <button class="row-vote-btn row-vote-up" id="t-fighter-2-upvote" title="Underrated">
+                            <i class="fas fa-arrow-up"></i>
+                            <span class="vote-count" id="t-fighter-2-upvotes">0</span>
+                        </button>
+                        <button class="row-vote-btn row-vote-down" id="t-fighter-2-downvote" title="Overrated">
+                            <i class="fas fa-arrow-down"></i>
+                            <span class="vote-count" id="t-fighter-2-downvotes">0</span>
+                        </button>
+                        <button class="row-comments-btn" id="t-fighter-2-comments">
+                            <i class="fas fa-comment"></i>
+                            <span class="comment-count" id="t-fighter-2-comment-count">0</span>
+                        </button>
+                        <button class="row-comments-btn t-details-btn" id="t-fighter-2-details">
+                            <i class="fas fa-info-circle"></i>
+                        </button>
                     </div>
-                    <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="t-fighter-2-special-bar"></div></div></div>
-                    <span class="t-stat-num right" id="t-fighter-2-special">0</span>
                 </div>
             </div>
         </div>

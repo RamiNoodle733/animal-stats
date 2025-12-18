@@ -4400,6 +4400,12 @@ class TournamentManager {
         
         // Abilities and Traits tags (reuses .ability-tag-sm / .trait-tag-sm from Stats page)
         this.updateFighterTags(fighterNum, animal);
+        
+        // Tournament Record (medals)
+        this.updateFighterTournamentRecord(fighterNum, animal);
+        
+        // Action buttons (upvote/downvote/comments/details)
+        this.setupFighterActionButtons(fighterNum, animal);
     }
     
     /**
@@ -4423,8 +4429,9 @@ class TournamentManager {
         statKeys.forEach(key => {
             const stat1El = document.getElementById(`t-fighter-1-${key}`);
             const stat2El = document.getElementById(`t-fighter-2-${key}`);
-            // Support both old class name and new class name for stat rows
-            const compareRow = document.querySelector(`.t-stat-row[data-stat="${key}"]`) 
+            // Support multiple class names for stat rows (old and new layouts)
+            const compareRow = document.querySelector(`.t-stat-row-compact[data-stat="${key}"]`)
+                            || document.querySelector(`.t-stat-row[data-stat="${key}"]`) 
                             || document.querySelector(`.t-stat-compare[data-stat="${key}"]`);
             
             if (stat1El && stat2El && compareRow) {
@@ -4450,8 +4457,9 @@ class TournamentManager {
         const traitsEl = document.getElementById(`t-fighter-${fighterNum}-traits`);
         
         // Abilities (up to 2 for compact display) - use Stats page ability-tag-sm
+        // Prefer special_abilities (DB field name) over abilities
         if (abilitiesEl) {
-            const abilities = animal.abilities || animal.special_abilities || [];
+            const abilities = animal.special_abilities || animal.abilities || [];
             const abilityList = Array.isArray(abilities) ? abilities : [abilities].filter(Boolean);
             abilitiesEl.innerHTML = abilityList.slice(0, 2).map(a => 
                 `<span class="ability-tag-sm"><i class="fas fa-star"></i>${this.truncateTag(a)}</span>`
@@ -4459,8 +4467,9 @@ class TournamentManager {
         }
         
         // Traits (up to 2 for compact display) - use Stats page trait-tag-sm
+        // Prefer unique_traits (DB field name) over traits
         if (traitsEl) {
-            const traits = animal.traits || animal.characteristics || [];
+            const traits = animal.unique_traits || animal.traits || animal.characteristics || [];
             const traitList = Array.isArray(traits) ? traits : [traits].filter(Boolean);
             traitsEl.innerHTML = traitList.slice(0, 2).map(t => 
                 `<span class="trait-tag-sm"><i class="fas fa-tag"></i>${this.truncateTag(t)}</span>`
@@ -4477,6 +4486,131 @@ class TournamentManager {
         return str.length > 12 ? str.substring(0, 10) + '…' : str;
     }
     
+    /**
+     * Update tournament record medals for a fighter
+     * Shows gold/silver/bronze medal counts from tournament history
+     */
+    updateFighterTournamentRecord(fighterNum, animal) {
+        const goldEl = document.getElementById(`t-fighter-${fighterNum}-gold`);
+        const silverEl = document.getElementById(`t-fighter-${fighterNum}-silver`);
+        const bronzeEl = document.getElementById(`t-fighter-${fighterNum}-bronze`);
+        
+        // Get tournament stats from animal data
+        const gold = animal.tournamentsFirst || 0;
+        const silver = animal.tournamentsSecond || 0;
+        const bronze = animal.tournamentsThird || 0;
+        
+        if (goldEl) goldEl.textContent = gold;
+        if (silverEl) silverEl.textContent = silver;
+        if (bronzeEl) bronzeEl.textContent = bronze;
+    }
+    
+    /**
+     * Setup action button handlers for a fighter panel
+     */
+    setupFighterActionButtons(fighterNum, animal) {
+        const upvoteBtn = document.getElementById(`t-fighter-${fighterNum}-upvote`);
+        const downvoteBtn = document.getElementById(`t-fighter-${fighterNum}-downvote`);
+        const commentsBtn = document.getElementById(`t-fighter-${fighterNum}-comments`);
+        const detailsBtn = document.getElementById(`t-fighter-${fighterNum}-details`);
+        
+        // Store animal data on buttons for click handlers
+        [upvoteBtn, downvoteBtn, commentsBtn, detailsBtn].forEach(btn => {
+            if (btn) {
+                btn.dataset.animalId = animal._id || animal.id;
+                btn.dataset.animalName = animal.name;
+            }
+        });
+        
+        // Upvote handler
+        if (upvoteBtn) {
+            upvoteBtn.onclick = async () => {
+                if (!Auth.isLoggedIn()) {
+                    Auth.showToast('Please log in to vote!');
+                    Auth.showModal('login');
+                    return;
+                }
+                await this.handleTournamentVote(animal, 'up', upvoteBtn, downvoteBtn);
+            };
+        }
+        
+        // Downvote handler
+        if (downvoteBtn) {
+            downvoteBtn.onclick = async () => {
+                if (!Auth.isLoggedIn()) {
+                    Auth.showToast('Please log in to vote!');
+                    Auth.showModal('login');
+                    return;
+                }
+                await this.handleTournamentVote(animal, 'down', upvoteBtn, downvoteBtn);
+            };
+        }
+        
+        // Comments handler - scroll to comments in rankings or open detail
+        if (commentsBtn) {
+            commentsBtn.onclick = () => {
+                // Navigate to rankings page and open this animal's detail with comments
+                this.app.rankingsManager?.openAnimalDetail(animal);
+                // Scroll to comments section after a short delay
+                setTimeout(() => {
+                    const commentsSection = document.getElementById('detail-comments-section');
+                    if (commentsSection) {
+                        commentsSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }, 300);
+            };
+        }
+        
+        // Details handler - open animal detail modal
+        if (detailsBtn) {
+            detailsBtn.onclick = () => {
+                this.app.rankingsManager?.openAnimalDetail(animal);
+            };
+        }
+    }
+    
+    /**
+     * Handle vote from tournament action buttons
+     */
+    async handleTournamentVote(animal, voteType, upvoteBtn, downvoteBtn) {
+        try {
+            const response = await fetch('/api/votes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                },
+                body: JSON.stringify({ 
+                    animalId: animal._id || animal.id, 
+                    animalName: animal.name, 
+                    voteType 
+                })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Update button states
+                const userVote = result.data.userVote;
+                if (upvoteBtn) {
+                    upvoteBtn.classList.toggle('active', userVote === 'up');
+                    upvoteBtn.classList.add('voted-today');
+                }
+                if (downvoteBtn) {
+                    downvoteBtn.classList.toggle('active', userVote === 'down');
+                    downvoteBtn.classList.add('voted-today');
+                }
+                
+                Auth.showToast(`Vote recorded for ${animal.name}!`);
+            } else {
+                Auth.showToast(result.message || 'Failed to vote');
+            }
+        } catch (error) {
+            console.error('Vote error:', error);
+            Auth.showToast('Failed to vote. Please try again.');
+        }
+    }
+
     /**
      * Fetch and display ELO rating for a fighter
      * Uses Stats page .row-elo-badge with tier classes

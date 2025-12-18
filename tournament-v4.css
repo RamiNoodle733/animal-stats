@@ -935,110 +935,263 @@
     font-weight: bold;
 }
 
-/* ========== BOTTOM STATS SECTION - Full Width Horizontal Bars ========== */
-.t-stats-section {
+/* ========== BOTTOM BAND - Info Panels + Stat Bars Side by Side ========== */
+.t-bottom-band {
     flex-shrink: 0;
-    padding: clamp(8px, 1vh, 14px) clamp(20px, 4vw, 60px);
-    background: rgba(0, 0, 0, 0.4);
-    border-top: 1px solid rgba(255, 215, 0, 0.15);
-    display: flex;
-    flex-direction: column;
-    gap: clamp(4px, 0.6vh, 8px);
-}
-
-.t-stat-row {
     display: grid;
-    grid-template-columns: 40px 1fr 60px 1fr 40px;
-    gap: clamp(8px, 1vw, 14px);
-    align-items: center;
-    padding: clamp(3px, 0.5vh, 6px) 0;
+    grid-template-columns: 1fr minmax(280px, 400px) 1fr;
+    gap: clamp(10px, 1.5vw, 20px);
+    padding: clamp(8px, 1vh, 12px) clamp(12px, 2vw, 24px);
+    background: rgba(0, 0, 0, 0.5);
+    border-top: 1px solid rgba(255, 215, 0, 0.15);
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
 }
 
-.t-stat-row.left-wins .t-stat-num.left,
-.t-stat-row.left-wins .t-stat-bar-left .stat-bar-fill {
-    filter: brightness(1.2);
-}
-
-.t-stat-row.right-wins .t-stat-num.right,
-.t-stat-row.right-wins .t-stat-bar-right .stat-bar-fill {
-    filter: brightness(1.2);
-}
-
-/* Stat Numbers */
-.t-stat-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(0.9rem, 1.4vh, 1.1rem);
-    font-weight: 600;
-}
-
-.t-stat-num.left {
-    color: var(--t-cyan);
-    text-align: right;
-}
-
-.t-stat-num.right {
-    color: var(--t-orange);
-    text-align: left;
-}
-
-/* Stat Center - Icon above, Label below */
-.t-stat-center {
+/* Info Panels - Left and Right */
+.t-info-panel {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    gap: clamp(6px, 0.8vh, 10px);
+    padding: clamp(8px, 1vh, 12px);
+    background: linear-gradient(135deg, rgba(15, 20, 35, 0.9), rgba(10, 15, 25, 0.95));
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.t-info-panel.left {
+    border-color: rgba(0, 212, 255, 0.3);
+}
+
+.t-info-panel.right {
+    border-color: rgba(255, 107, 0, 0.3);
+}
+
+/* Quick Info Bar in Info Panel */
+.t-info-panel .t-quick-info {
+    gap: 4px;
+    padding: 4px;
+    margin: 0;
+    background: rgba(0, 20, 40, 0.4);
+    border-radius: 4px;
+}
+
+.t-info-panel .quick-info-item {
+    padding: 3px 6px;
+    font-size: 0.6rem;
+    min-width: auto;
+}
+
+.t-info-panel .quick-info-item i {
+    font-size: 0.65rem;
+}
+
+/* Tags in Info Panel */
+.t-info-panel .t-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.t-info-panel .abilities-tags-compact,
+.t-info-panel .traits-tags-compact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    justify-content: flex-start;
+}
+
+.t-info-panel .ability-tag-sm,
+.t-info-panel .trait-tag-sm {
+    font-size: 0.55rem;
+    padding: 2px 6px;
+}
+
+/* Tournament Dashboard in Info Panel */
+.t-tournament-dashboard {
+    margin: 0;
+    background: linear-gradient(135deg, rgba(20, 25, 45, 0.95), rgba(10, 15, 30, 0.98));
+}
+
+.t-tournament-dashboard .dashboard-header {
+    padding: 2px 6px;
+}
+
+.t-tournament-dashboard .dashboard-title {
+    font-size: 0.65rem;
+}
+
+.t-tournament-dashboard .dashboard-content {
+    padding: 4px;
+}
+
+.t-tournament-dashboard .medal-row {
+    gap: 4px;
+}
+
+.t-tournament-dashboard .medal-card {
+    min-width: 36px;
+    padding: 3px 4px;
+}
+
+.t-tournament-dashboard .medal-icon-wrap {
+    width: 14px;
+    height: 14px;
+}
+
+.t-tournament-dashboard .medal-icon-wrap i {
+    font-size: 0.55rem;
+}
+
+.t-tournament-dashboard .medal-count {
+    font-size: 0.75rem;
+}
+
+.t-tournament-dashboard .medal-label {
+    font-size: 0.4rem;
+}
+
+/* Action Row - Reuses Rankings Page Button Styles */
+.t-action-row {
+    display: flex;
+    gap: 4px;
     justify-content: center;
-    gap: 0;
+    flex-wrap: wrap;
+}
+
+.t-action-row .row-vote-btn,
+.t-action-row .row-comments-btn {
+    padding: 3px 6px;
+    font-size: 0.65rem;
+}
+
+.t-action-row .row-vote-btn i,
+.t-action-row .row-comments-btn i {
+    font-size: 0.6rem;
+}
+
+.t-action-row .vote-count,
+.t-action-row .comment-count {
+    font-size: 0.7rem;
+}
+
+.t-details-btn {
+    background: rgba(0, 212, 255, 0.1) !important;
+    border-color: rgba(0, 212, 255, 0.3) !important;
+}
+
+.t-details-btn:hover {
+    background: rgba(0, 212, 255, 0.2) !important;
+    border-color: rgba(0, 212, 255, 0.5) !important;
+}
+
+/* ========== COMPACT STAT BARS - Center Column ========== */
+.t-stats-compact {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(4px, 0.5vh, 6px);
+    padding: clamp(6px, 0.8vh, 10px) clamp(8px, 1vw, 12px);
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.t-stat-row-compact {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: clamp(4px, 0.6vw, 8px);
+    align-items: center;
+}
+
+.t-stat-row-compact.left-wins .t-val.left,
+.t-stat-row-compact.left-wins .t-stat-bar-left .stat-bar-fill {
+    filter: brightness(1.3);
+}
+
+.t-stat-row-compact.right-wins .t-val.right,
+.t-stat-row-compact.right-wins .t-stat-bar-right .stat-bar-fill {
+    filter: brightness(1.3);
+}
+
+/* Center Cluster - Values + Icon */
+.t-stat-center-cluster {
+    display: flex;
+    align-items: center;
+    gap: clamp(4px, 0.5vw, 8px);
+    padding: 2px 6px;
     background: rgba(255, 215, 0, 0.1);
     border-radius: 4px;
-    padding: clamp(2px, 0.4vh, 4px) 0;
+    min-width: 70px;
+    justify-content: center;
 }
 
-.t-stat-center i {
-    font-size: clamp(0.7rem, 1.1vh, 0.85rem);
+.t-stat-center-cluster i {
+    font-size: clamp(0.65rem, 1vh, 0.8rem);
     color: var(--t-gold);
 }
 
-.t-stat-center span {
+.t-stat-center-cluster .t-val {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(0.5rem, 0.8vh, 0.6rem);
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.6);
+    font-size: clamp(0.75rem, 1.1vh, 0.9rem);
+    font-weight: 600;
+    min-width: 22px;
+    text-align: center;
 }
 
-/* Stat Bars - REUSE Stats Page .stat-bar Component */
-.t-stat-bar-left,
-.t-stat-bar-right {
-    height: clamp(14px, 2vh, 20px);
+.t-stat-center-cluster .t-val.left {
+    color: var(--t-cyan);
 }
 
-.t-stat-bar-left .stat-bar,
-.t-stat-bar-right .stat-bar {
+.t-stat-center-cluster .t-val.right {
+    color: var(--t-orange);
+}
+
+/* Stat Bars - Compact Version */
+.t-stats-compact .t-stat-bar-left,
+.t-stats-compact .t-stat-bar-right {
+    height: clamp(12px, 1.6vh, 16px);
+}
+
+.t-stats-compact .t-stat-bar-left .stat-bar,
+.t-stats-compact .t-stat-bar-right .stat-bar {
     height: 100%;
 }
 
-/* Left bars fill from right to left */
-.t-stat-bar-left {
+/* Left bars fill from right to left (toward center) */
+.t-stats-compact .t-stat-bar-left {
     transform: scaleX(-1);
 }
 
+/* Bar fill aligns toward center */
+.t-stats-compact .t-stat-bar-left .stat-bar {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.t-stats-compact .t-stat-bar-right .stat-bar {
+    display: flex;
+    justify-content: flex-start;
+}
+
 /* Left fighter color */
-.t-stat-bar-left .stat-bar-fill {
+.t-stats-compact .t-stat-bar-left .stat-bar-fill {
     background: linear-gradient(180deg, 
         rgba(255, 255, 255, 0.3) 0%, 
         var(--t-cyan) 15%, 
         #0099cc 85%, 
         rgba(0, 0, 0, 0.3) 100%) !important;
-    box-shadow: 0 0 12px var(--t-cyan);
+    box-shadow: 0 0 8px var(--t-cyan);
 }
 
 /* Right fighter color */
-.t-stat-bar-right .stat-bar-fill {
+.t-stats-compact .t-stat-bar-right .stat-bar-fill {
     background: linear-gradient(180deg, 
         rgba(255, 255, 255, 0.3) 0%, 
         var(--t-orange) 15%, 
         #cc5500 85%, 
         rgba(0, 0, 0, 0.3) 100%) !important;
-    box-shadow: 0 0 12px var(--t-orange);
+    box-shadow: 0 0 8px var(--t-orange);
 }
 
 /* Guess Result Overlay */
