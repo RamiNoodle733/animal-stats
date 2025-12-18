@@ -493,12 +493,14 @@
     background: linear-gradient(135deg, rgba(15, 20, 35, 0.95), rgba(10, 15, 25, 0.98));
     border: 2px solid rgba(0, 212, 255, 0.35);
     border-radius: var(--t-radius);
-    padding: clamp(10px, 1.5vh, 16px);
+    padding: clamp(8px, 1.2vh, 12px);
     cursor: pointer;
     transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
     min-height: 0;
+    justify-content: flex-start;
+    gap: 0;
 }
 
 .t-fighter-card.left {
@@ -575,7 +577,7 @@
     display: flex;
     align-items: center;
     gap: clamp(8px, 1.5vw, 14px);
-    margin-bottom: clamp(6px, 1vh, 12px);
+    margin-bottom: clamp(4px, 0.6vh, 8px);
 }
 
 .t-fighter-img-wrap {
@@ -658,10 +660,10 @@
     display: flex;
     justify-content: center;
     gap: clamp(6px, 1vw, 10px);
-    padding: clamp(6px, 1vh, 10px) 0;
+    padding: clamp(4px, 0.6vh, 6px) 0;
     border-top: 1px solid var(--t-border);
     border-bottom: 1px solid var(--t-border);
-    margin-bottom: clamp(6px, 1vh, 10px);
+    margin-bottom: clamp(4px, 0.6vh, 6px);
 }
 
 .t-spec {
@@ -689,7 +691,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: clamp(4px, 0.8vh, 8px);
+    margin-bottom: clamp(2px, 0.4vh, 4px);
 }
 
 .t-medals {
@@ -740,7 +742,7 @@
 .t-fighter-tags {
     min-height: 0;
     overflow: hidden;
-    margin-bottom: clamp(4px, 0.8vh, 8px);
+    margin-bottom: clamp(2px, 0.4vh, 4px);
 }
 
 .t-tag-row {
@@ -832,7 +834,7 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    padding: clamp(8px, 1.2vh, 12px);
+    padding: clamp(6px, 0.8vh, 10px);
     background: rgba(255, 215, 0, 0.08);
     border: 1px dashed rgba(255, 215, 0, 0.3);
     border-radius: 6px;
@@ -1181,6 +1183,9 @@
 
 /* Champion Section */
 .t-champion-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     text-align: center;
 }
 

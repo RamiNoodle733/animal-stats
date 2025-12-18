@@ -4159,9 +4159,10 @@ class TournamentManager {
     
     /**
      * Reveal community vote percentages with animation (called after user votes)
+     * @param {number} votedForIndex - 0 for left fighter, 1 for right fighter
      */
-    revealCommunityVote() {
-        if (!this.currentMatchupVotes || this.hasVotedOnMatchup) return;
+    revealCommunityVote(votedForIndex) {
+        if (this.hasVotedOnMatchup) return;
         
         this.hasVotedOnMatchup = true;
         
@@ -4172,12 +4173,24 @@ class TournamentManager {
         const pctRight = document.getElementById('t-majority-pct-right');
         const totalEl = document.getElementById('t-majority-total');
         
-        let { animal1Votes, animal2Votes, totalVotes, animal1Percentage, animal2Percentage } = this.currentMatchupVotes;
+        // Get cached votes (or default to 0)
+        let animal1Votes = this.currentMatchupVotes?.animal1Votes || 0;
+        let animal2Votes = this.currentMatchupVotes?.animal2Votes || 0;
         
-        // User just voted, so add 1 to total for display
-        const newTotal = totalVotes + 1;
+        // Add user's vote to the appropriate side
+        if (votedForIndex === 0) {
+            animal1Votes++;
+        } else {
+            animal2Votes++;
+        }
+        
+        // Calculate new totals and percentages
+        const newTotal = animal1Votes + animal2Votes;
+        const animal1Percentage = newTotal > 0 ? Math.round((animal1Votes / newTotal) * 100) : 50;
+        const animal2Percentage = newTotal > 0 ? 100 - animal1Percentage : 50;
+        
         if (totalEl) {
-            totalEl.textContent = `${newTotal.toLocaleString()} votes`;
+            totalEl.textContent = `${newTotal.toLocaleString()} vote${newTotal !== 1 ? 's' : ''}`;
         }
         
         // Enable transitions for smooth animation
@@ -4486,8 +4499,8 @@ class TournamentManager {
             }
         }
         
-        // Reveal community vote percentages with animation
-        this.revealCommunityVote();
+        // Reveal community vote percentages with animation (pass which fighter was selected)
+        this.revealCommunityVote(fighterIndex);
         
         // Record match locally
         this.matchHistory.push({
