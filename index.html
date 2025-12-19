@@ -1316,6 +1316,46 @@
     
     <!-- Tournament Modal - Premium Game UI -->
     <div class="tournament-modal" id="tournament-modal">
+        <!-- Match Intro Overlay - Fighting Game Style -->
+        <div class="match-intro-overlay" id="match-intro-overlay">
+            <div class="intro-speed-lines"></div>
+            <div class="intro-sparks" id="intro-sparks"></div>
+            
+            <div class="intro-content">
+                <!-- Left Fighter Plate -->
+                <div class="intro-fighter-plate left" id="intro-plate-left">
+                    <div class="intro-fighter-image-wrap">
+                        <div class="intro-fighter-glow left"></div>
+                        <img src="" alt="" class="intro-fighter-image" id="intro-image-left">
+                    </div>
+                    <div class="intro-fighter-info">
+                        <div class="intro-fighter-name" id="intro-name-left">ANIMAL NAME</div>
+                        <div class="intro-fighter-scientific" id="intro-scientific-left">Scientific name</div>
+                    </div>
+                </div>
+                
+                <!-- VS Badge Center -->
+                <div class="intro-vs-container" id="intro-vs-container">
+                    <div class="intro-vs-burst"></div>
+                    <div class="intro-vs-badge">
+                        <span>VS</span>
+                    </div>
+                </div>
+                
+                <!-- Right Fighter Plate -->
+                <div class="intro-fighter-plate right" id="intro-plate-right">
+                    <div class="intro-fighter-image-wrap">
+                        <div class="intro-fighter-glow right"></div>
+                        <img src="" alt="" class="intro-fighter-image" id="intro-image-right">
+                    </div>
+                    <div class="intro-fighter-info">
+                        <div class="intro-fighter-name" id="intro-name-right">ANIMAL NAME</div>
+                        <div class="intro-fighter-scientific" id="intro-scientific-right">Scientific name</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- Setup Screen - Compact wizard that fits viewport -->
         <div class="tournament-setup" id="tournament-setup">
             <div class="t-setup-container">
@@ -1484,12 +1524,18 @@
                         </div>
                     </div>
                     
-                    <!-- Radar Chart - Compact Version from Compare Page -->
+                    <!-- VS Badge - Premium Anime Style -->
+                    <div class="t-vs-section">
+                        <div class="t-vs-burst"></div>
+                        <div class="t-vs-diamond-outer"></div>
+                        <div class="t-vs-badge"><span>VS</span></div>
+                        <div class="t-vs-stripes"></div>
+                    </div>
+                    
+                    <!-- Radar Chart - Below VS Block -->
                     <div class="t-radar-container">
                         <canvas id="tournament-radar-chart"></canvas>
                     </div>
-                    
-                    <div class="t-vs-badge"><span>VS</span></div>
                 </div>
                 
                 <!-- Right Fighter Card -->

@@ -1,12 +1,16 @@
 /**
  * API Route: /api/votes
  * Handles voting on animals for power rankings
- * DAILY VOTING: Users can vote once per animal per day
- * All votes accumulate over time for power rankings
+ * 
+ * NEW BEHAVIOR:
+ * - Users can change their vote (up/down/clear) multiple times per day
+ * - XP is awarded ONLY ONCE per animal per day per user
+ * - dayKey is computed using the user's local timezone
  */
 
 const { connectToDatabase } = require('../lib/mongodb');
 const Vote = require('../lib/models/Vote');
+const XpClaim = require('../lib/models/XpClaim');
 const { verifyToken } = require('../lib/auth');
 const { notifyDiscord } = require('../lib/discord');
 
@@ -41,7 +45,7 @@ module.exports = async function handler(req, res) {
 
 // GET: Get user's votes for TODAY, or vote counts for an animal
 async function handleGet(req, res) {
-    const { animalId, userId, myVotes } = req.query;
+    const { animalId, userId, myVotes, timeZone } = req.query;
     const today = Vote.getTodayString();
 
     // If myVotes flag is set, get all TODAY's votes by current user
@@ -59,11 +63,21 @@ async function handleGet(req, res) {
 
         // Get only TODAY's votes for the user
         const voteMap = await Vote.getUserTodayVotes(user.id);
+        
+        // Also get XP claims for today (in user's timezone)
+        const dayKey = timeZone ? XpClaim.getDayKey(timeZone) : today;
+        const xpClaims = await XpClaim.getUserDayClaims(user.id, dayKey);
+        const xpClaimedMap = {};
+        xpClaims.forEach(claim => {
+            xpClaimedMap[claim.animalId.toString()] = true;
+        });
 
         return res.status(200).json({
             success: true,
             data: voteMap,
-            today: today
+            xpClaimed: xpClaimedMap,
+            today: today,
+            dayKey: dayKey
         });
     }
 
@@ -73,15 +87,18 @@ async function handleGet(req, res) {
         
         // If userId provided, get user's vote for TODAY
         let userVote = null;
-        let canVoteToday = true;
+        let xpClaimedToday = false;
         if (userId) {
             userVote = await Vote.getTodayVote(animalId, userId);
-            canVoteToday = !userVote; // Can vote if no vote today
+            
+            // Check if XP was claimed today (in user's timezone)
+            const dayKey = timeZone ? XpClaim.getDayKey(timeZone) : today;
+            xpClaimedToday = await XpClaim.hasClaimedXp(userId, animalId, dayKey);
         }
 
         return res.status(200).json({
             success: true,
-            data: { ...votes, userVote, canVoteToday },
+            data: { ...votes, userVote, xpClaimedToday },
             today: today
         });
     }
@@ -94,7 +111,7 @@ async function handleGet(req, res) {
     });
 }
 
-// POST: Cast a vote (once per day per animal)
+// POST: Cast or update a vote (can change anytime, XP only once per day)
 async function handlePost(req, res) {
     // Verify authentication
     const authHeader = req.headers.authorization;
@@ -108,13 +125,21 @@ async function handlePost(req, res) {
         return res.status(401).json({ success: false, error: 'Invalid token' });
     }
 
-    const { animalId, animalName, voteType } = req.body;
+    const { animalId, animalName, voteType, timeZone } = req.body;
     const today = Vote.getTodayString();
 
-    if (!animalId || !animalName || !['up', 'down'].includes(voteType)) {
-        return res.status(400).json({ success: false, error: 'Invalid vote data' });
+    if (!animalId || !animalName) {
+        return res.status(400).json({ success: false, error: 'Animal ID and name required' });
     }
 
+    // voteType can be 'up', 'down', or 'clear' (to remove vote)
+    if (voteType && !['up', 'down', 'clear'].includes(voteType)) {
+        return res.status(400).json({ success: false, error: 'Invalid vote type' });
+    }
+
+    // Compute dayKey using user's timezone
+    const dayKey = timeZone ? XpClaim.getDayKey(timeZone) : today;
+    
     // Check for existing vote TODAY
     const existingTodayVote = await Vote.findOne({ 
         animalId, 
@@ -122,46 +147,78 @@ async function handlePost(req, res) {
         voteDate: today 
     });
 
-    if (existingTodayVote) {
-        // User already voted on this animal today
-        return res.status(400).json({ 
-            success: false, 
-            error: 'You already voted on this animal today! Come back tomorrow.',
-            alreadyVotedToday: true,
-            votedType: existingTodayVote.voteType
-        });
+    let action = 'none';
+    let xpAwarded = false;
+    let xpAmount = 0;
+
+    // Handle vote clear
+    if (voteType === 'clear') {
+        if (existingTodayVote) {
+            await Vote.deleteOne({ _id: existingTodayVote._id });
+            action = 'cleared';
+        }
+    } else if (voteType) {
+        // Handle vote create or update
+        if (existingTodayVote) {
+            // Update existing vote if different
+            if (existingTodayVote.voteType !== voteType) {
+                existingTodayVote.voteType = voteType;
+                await existingTodayVote.save();
+                action = 'updated';
+            } else {
+                action = 'unchanged';
+            }
+        } else {
+            // Create new vote
+            await Vote.create({
+                animalId,
+                animalName,
+                votedBy: user.id,
+                votedByUsername: user.username,
+                voteType,
+                voteDate: today
+            });
+            action = 'created';
+            
+            // Notify Discord only for new votes
+            notifyDiscord('vote', {
+                user: user.username,
+                animal: animalName,
+                voteType: voteType
+            }, req);
+        }
+        
+        // Award XP if not already claimed today (in user's timezone)
+        const alreadyClaimedXp = await XpClaim.hasClaimedXp(user.id, animalId, dayKey);
+        if (!alreadyClaimedXp) {
+            const claim = await XpClaim.recordClaim(user.id, animalId, animalName, dayKey, 5);
+            if (claim) {
+                xpAwarded = true;
+                xpAmount = 5;
+            }
+        }
     }
-
-    // Create new vote for today
-    await Vote.create({
-        animalId,
-        animalName,
-        votedBy: user.id,
-        votedByUsername: user.username,
-        voteType,
-        voteDate: today
-    });
-
-    // Notify Discord
-    notifyDiscord('vote', {
-        user: user.username,
-        animal: animalName,
-        voteType: voteType
-    }, req);
 
     // Get ALL-TIME vote counts (for power rankings)
     const newCounts = await Vote.getVoteCounts(animalId);
+    const newUserVote = voteType === 'clear' ? null : voteType;
     
     return res.status(200).json({
         success: true,
-        action: 'created',
-        data: { ...newCounts, userVote: voteType, canVoteToday: false },
-        message: `Vote recorded! You can vote on ${animalName} again tomorrow.`,
-        xpEarned: 5 // XP reward for voting
+        action: action,
+        data: { 
+            ...newCounts, 
+            userVote: newUserVote
+        },
+        xpAwarded: xpAwarded,
+        xpAmount: xpAmount,
+        message: xpAwarded 
+            ? `Vote recorded! +${xpAmount} XP earned!` 
+            : (action === 'created' || action === 'updated' ? 'Vote updated!' : 'Vote cleared!')
     });
 }
 
-// DELETE: Remove TODAY's vote (allow changing vote within the day)
+// DELETE: Remove TODAY's vote (legacy endpoint, now also supports POST with clear)
 async function handleDelete(req, res) {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -187,7 +244,7 @@ async function handleDelete(req, res) {
     const newCounts = await Vote.getVoteCounts(animalId);
     return res.status(200).json({
         success: true,
-        data: { ...newCounts, userVote: null, canVoteToday: true }
+        data: { ...newCounts, userVote: null }
     });
 }
 

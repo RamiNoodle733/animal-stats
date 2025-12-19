@@ -9584,13 +9584,47 @@ body {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    position: relative;
+    width: 70px;
+    height: 70px;
+}
+
+/* Anime-style VS badge for daily matchup */
+.matchup-vs::before {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #ff4400 0%, #ff6b00 50%, #ffd700 100%);
+    transform: rotate(45deg);
+    box-shadow: 
+        0 4px 0 rgba(200, 50, 0, 0.7),
+        0 0 25px rgba(255, 107, 0, 0.5),
+        inset 0 -2px 8px rgba(0, 0, 0, 0.3);
+    animation: matchupVsPulse 2s ease-in-out infinite;
+}
+
+@keyframes matchupVsPulse {
+    0%, 100% { box-shadow: 0 4px 0 rgba(200, 50, 0, 0.7), 0 0 25px rgba(255, 107, 0, 0.5), inset 0 -2px 8px rgba(0, 0, 0, 0.3); }
+    50% { box-shadow: 0 4px 0 rgba(200, 50, 0, 0.7), 0 0 40px rgba(255, 107, 0, 0.7), inset 0 -2px 8px rgba(0, 0, 0, 0.3); }
 }
 
 .matchup-vs span {
+    position: relative;
+    z-index: 2;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    color: #ff6b00;
-    text-shadow: 0 0 20px rgba(255, 107, 0, 0.5);
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+    color: #fff;
+    text-shadow: 
+        2px 2px 0 rgba(0, 0, 0, 0.5),
+        0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .matchup-vs::before {
+        animation: none;
+    }
 }
 
 /* Matchup Comments Preview */

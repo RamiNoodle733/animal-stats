@@ -2875,6 +2875,14 @@ class RankingsManager {
             Auth.showModal('login');
             return;
         }
+        
+        // Check if clicking same vote to clear it
+        const currentVote = this.userVotes[animalId];
+        const isToggle = (value === 1 && currentVote === 1) || (value === -1 && currentVote === -1);
+        const finalVoteType = isToggle ? 'clear' : voteType;
+        
+        // Get user's timezone
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         try {
             const response = await fetch('/api/votes', {
@@ -2883,23 +2891,25 @@ class RankingsManager {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${Auth.getToken()}`
                 },
-                body: JSON.stringify({ animalId, animalName, voteType })
+                body: JSON.stringify({ animalId, animalName, voteType: finalVoteType, timeZone })
             });
 
             const result = await response.json();
 
             if (result.success) {
-                // Update local state - daily voting means vote is locked for today
-                this.userVotes[animalId] = result.data.userVote === 'up' ? 1 : -1;
+                // Update local state
+                if (result.data.userVote === 'up') {
+                    this.userVotes[animalId] = 1;
+                } else if (result.data.userVote === 'down') {
+                    this.userVotes[animalId] = -1;
+                } else {
+                    delete this.userVotes[animalId];
+                }
 
-                // Update detail panel buttons - show voted state, disable further voting
+                // Update detail panel buttons
                 const userVote = this.userVotes[animalId] || 0;
                 this.dom.detailUpvoteBtn?.classList.toggle('active', userVote === 1);
                 this.dom.detailDownvoteBtn?.classList.toggle('active', userVote === -1);
-                
-                // Disable buttons for today (can't change vote)
-                if (this.dom.detailUpvoteBtn) this.dom.detailUpvoteBtn.classList.add('voted-today');
-                if (this.dom.detailDownvoteBtn) this.dom.detailDownvoteBtn.classList.add('voted-today');
                 
                 // Update counts
                 if (this.dom.detailUpvotes && result.data.upvotes !== undefined) {
@@ -2910,19 +2920,15 @@ class RankingsManager {
                 }
                 
                 // Update the row in the list (including active states)
-                const animalId = this.dom.detailUpvoteBtn?.dataset.animalId;
-                this.updateRowVotes(this.selectedRankIndex, result.data.upvotes, result.data.downvotes, animalId);
+                this.updateRowVotes(this.selectedRankIndex, result.data.upvotes, result.data.downvotes, animalId, false);
 
-                // Award XP for voting - call the actual rewards API
-                await this.awardReward('vote');
+                // Award XP only if xpAwarded is true (first vote of the day for this animal)
+                if (result.xpAwarded) {
+                    await this.awardReward('vote');
+                }
                 Auth.showToast(result.message || 'Vote recorded!');
             } else {
-                // Check if already voted today
-                if (result.alreadyVotedToday) {
-                    Auth.showToast(`Already voted on this animal today! Come back tomorrow.`);
-                } else {
-                    Auth.showToast(result.error || 'Failed to vote');
-                }
+                Auth.showToast(result.error || 'Failed to vote');
             }
         } catch (error) {
             console.error('Vote error:', error);
@@ -2984,6 +2990,7 @@ class RankingsManager {
     
     /**
      * Handle voting from the inline row buttons (daily voting system)
+     * Users can change their vote anytime, but XP is only awarded once per day
      */
     async handleRowVote(e, rowIndex) {
         const btn = e.currentTarget;
@@ -2997,9 +3004,17 @@ class RankingsManager {
             return;
         }
         
+        // Check if clicking same vote to clear it
+        const currentVote = this.userVotes[animalId];
+        const isToggle = (voteType === 'up' && currentVote === 1) || (voteType === 'down' && currentVote === -1);
+        const finalVoteType = isToggle ? 'clear' : voteType;
+        
         // Add click animation
         btn.classList.add('vote-clicked');
         setTimeout(() => btn.classList.remove('vote-clicked'), 200);
+        
+        // Get user's timezone
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
         
         try {
             const response = await fetch('/api/votes', {
@@ -3008,39 +3023,40 @@ class RankingsManager {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${Auth.getToken()}`
                 },
-                body: JSON.stringify({ animalId, animalName, voteType })
+                body: JSON.stringify({ animalId, animalName, voteType: finalVoteType, timeZone })
             });
 
             const result = await response.json();
 
             if (result.success) {
-                // Update local state - daily voting means vote is locked for today
-                this.userVotes[animalId] = result.data.userVote === 'up' ? 1 : -1;
+                // Update local state
+                if (result.data.userVote === 'up') {
+                    this.userVotes[animalId] = 1;
+                } else if (result.data.userVote === 'down') {
+                    this.userVotes[animalId] = -1;
+                } else {
+                    delete this.userVotes[animalId];
+                }
 
-                // Update row buttons and counts, mark as voted today
-                this.updateRowVotes(rowIndex, result.data.upvotes, result.data.downvotes, animalId, true);
+                // Update row buttons and counts
+                this.updateRowVotes(rowIndex, result.data.upvotes, result.data.downvotes, animalId, false);
                 
                 // Also update detail panel if same animal is selected
                 if (this.selectedRankIndex === rowIndex) {
                     const userVote = this.userVotes[animalId] || 0;
                     this.dom.detailUpvoteBtn?.classList.toggle('active', userVote === 1);
                     this.dom.detailDownvoteBtn?.classList.toggle('active', userVote === -1);
-                    this.dom.detailUpvoteBtn?.classList.add('voted-today');
-                    this.dom.detailDownvoteBtn?.classList.add('voted-today');
                     if (this.dom.detailUpvotes) this.dom.detailUpvotes.textContent = result.data.upvotes;
                     if (this.dom.detailDownvotes) this.dom.detailDownvotes.textContent = result.data.downvotes;
                 }
 
-                // Award XP for voting - call the actual rewards API
-                await this.awardReward('vote');
+                // Award XP only if xpAwarded is true (first vote of the day for this animal)
+                if (result.xpAwarded) {
+                    await this.awardReward('vote');
+                }
                 Auth.showToast(result.message || 'Vote recorded!');
             } else {
-                // Check if already voted today
-                if (result.alreadyVotedToday) {
-                    Auth.showToast(`Already voted on this animal today! Come back tomorrow.`);
-                } else {
-                    Auth.showToast(result.error || 'Failed to vote');
-                }
+                Auth.showToast(result.error || 'Failed to vote');
             }
         } catch (error) {
             console.error('Vote error:', error);
@@ -3061,6 +3077,14 @@ class RankingsManager {
             Auth.showModal('login');
             return;
         }
+        
+        // Check if clicking same vote to clear it
+        const currentVote = this.userVotes[animalId];
+        const isToggle = (value === 1 && currentVote === 1) || (value === -1 && currentVote === -1);
+        const finalVoteType = isToggle ? 'clear' : voteType;
+        
+        // Get user's timezone
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         try {
             const response = await fetch('/api/votes', {
@@ -3069,14 +3093,20 @@ class RankingsManager {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${Auth.getToken()}`
                 },
-                body: JSON.stringify({ animalId, animalName, voteType })
+                body: JSON.stringify({ animalId, animalName, voteType: finalVoteType, timeZone })
             });
 
             const result = await response.json();
 
             if (result.success) {
-                // Update local state - daily voting, vote is locked for today
-                this.userVotes[animalId] = result.data.userVote === 'up' ? 1 : -1;
+                // Update local state
+                if (result.data.userVote === 'up') {
+                    this.userVotes[animalId] = 1;
+                } else if (result.data.userVote === 'down') {
+                    this.userVotes[animalId] = -1;
+                } else {
+                    delete this.userVotes[animalId];
+                }
 
                 // Update the UI
                 const card = btn.closest('.ranking-card');
@@ -3085,12 +3115,9 @@ class RankingsManager {
                 const upCount = card.querySelector('.vote-count.up');
                 const downCount = card.querySelector('.vote-count.down');
 
-                upBtn.classList.toggle('active', this.userVotes[animalId] === 1);
-                downBtn.classList.toggle('active', this.userVotes[animalId] === -1);
-                
-                // Mark as voted today
-                upBtn.classList.add('voted-today');
-                downBtn.classList.add('voted-today');
+                const userVote = this.userVotes[animalId] || 0;
+                upBtn.classList.toggle('active', userVote === 1);
+                downBtn.classList.toggle('active', userVote === -1);
                 
                 // Update vote counts from response
                 if (upCount && result.data.upvotes !== undefined) {
@@ -3100,16 +3127,13 @@ class RankingsManager {
                     downCount.textContent = `-${result.data.downvotes}`;
                 }
 
-                // Award XP for voting via the API
-                await this.awardReward('vote');
+                // Award XP only if xpAwarded is true (first vote of the day for this animal)
+                if (result.xpAwarded) {
+                    await this.awardReward('vote');
+                }
                 Auth.showToast(result.message || 'Vote recorded!');
             } else {
-                // Check if already voted today
-                if (result.alreadyVotedToday) {
-                    Auth.showToast(`Already voted on this animal today! Come back tomorrow.`);
-                } else {
-                    Auth.showToast(result.error || 'Failed to vote');
-                }
+                Auth.showToast(result.error || 'Failed to vote');
             }
         } catch (error) {
             console.error('Vote error:', error);
@@ -4061,6 +4085,124 @@ class TournamentManager {
         this.currentAnimal1 = animal1;
         this.currentAnimal2 = animal2;
         
+        // Play intro animation for first match or when advancing rounds
+        // Skip intro if user prefers reduced motion or it's mid-round
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const shouldPlayIntro = this.currentMatch === 0 || this.justAdvancedRound;
+        this.justAdvancedRound = false;
+        
+        if (shouldPlayIntro) {
+            this.playMatchIntro(animal1, animal2, () => {
+                this.displayMatch(animal1, animal2);
+            });
+        } else {
+            this.displayMatch(animal1, animal2);
+        }
+    }
+    
+    /**
+     * Play the fighting game style match intro animation
+     */
+    playMatchIntro(animal1, animal2, callback) {
+        const overlay = document.getElementById('match-intro-overlay');
+        if (!overlay) {
+            callback();
+            return;
+        }
+        
+        // Check for reduced motion preference
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        
+        // Populate intro data
+        const imageLeft = document.getElementById('intro-image-left');
+        const imageRight = document.getElementById('intro-image-right');
+        const nameLeft = document.getElementById('intro-name-left');
+        const nameRight = document.getElementById('intro-name-right');
+        const scientificLeft = document.getElementById('intro-scientific-left');
+        const scientificRight = document.getElementById('intro-scientific-right');
+        
+        if (imageLeft) {
+            imageLeft.src = animal1.image || '';
+            imageLeft.onerror = () => { imageLeft.src = 'images/fallback.png'; };
+        }
+        if (imageRight) {
+            imageRight.src = animal2.image || '';
+            imageRight.onerror = () => { imageRight.src = 'images/fallback.png'; };
+        }
+        if (nameLeft) nameLeft.textContent = (animal1.name || 'FIGHTER 1').toUpperCase();
+        if (nameRight) nameRight.textContent = (animal2.name || 'FIGHTER 2').toUpperCase();
+        if (scientificLeft) scientificLeft.textContent = animal1.scientific_name || '';
+        if (scientificRight) scientificRight.textContent = animal2.scientific_name || '';
+        
+        // Reset animation states
+        overlay.classList.remove('fade-out', 'shake');
+        
+        // Show overlay
+        overlay.classList.add('active');
+        
+        // Spawn sparks after VS appears
+        if (!prefersReducedMotion) {
+            setTimeout(() => {
+                this.spawnIntroSparks();
+            }, 800);
+            
+            // Add screen shake when VS appears
+            setTimeout(() => {
+                overlay.classList.add('shake');
+            }, 750);
+        }
+        
+        // Duration before fade out (shorter for reduced motion)
+        const introDuration = prefersReducedMotion ? 800 : 2000;
+        const fadeOutDuration = prefersReducedMotion ? 200 : 500;
+        
+        setTimeout(() => {
+            overlay.classList.add('fade-out');
+            
+            setTimeout(() => {
+                overlay.classList.remove('active', 'fade-out', 'shake');
+                callback();
+            }, fadeOutDuration);
+        }, introDuration);
+    }
+    
+    /**
+     * Spawn particle sparks for intro animation
+     */
+    spawnIntroSparks() {
+        const container = document.getElementById('intro-sparks');
+        if (!container) return;
+        
+        // Clear previous sparks
+        container.innerHTML = '';
+        
+        // Spawn 15-20 sparks around center
+        const sparkCount = 15 + Math.floor(Math.random() * 6);
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+        
+        for (let i = 0; i < sparkCount; i++) {
+            const spark = document.createElement('div');
+            spark.className = 'intro-spark';
+            
+            // Random position around center
+            const angle = (Math.PI * 2 * i) / sparkCount + (Math.random() * 0.5);
+            const distance = 50 + Math.random() * 100;
+            const x = centerX + Math.cos(angle) * distance;
+            const y = centerY + Math.sin(angle) * distance;
+            
+            spark.style.left = `${x}px`;
+            spark.style.top = `${y}px`;
+            spark.style.animationDelay = `${Math.random() * 0.2}s`;
+            
+            container.appendChild(spark);
+        }
+    }
+    
+    /**
+     * Display the actual match UI (called after intro)
+     */
+    displayMatch(animal1, animal2) {
         // Reset guess for new match
         this.currentGuess = null;
         this.updateGuessHighlight();
@@ -4828,8 +4970,12 @@ class TournamentManager {
     
     /**
      * Handle vote from tournament action buttons
+     * Users can change their vote anytime, but XP is only awarded once per day
      */
     async handleTournamentVote(animal, voteType, upvoteBtn, downvoteBtn, fighterNum) {
+        // Get user's timezone
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        
         try {
             const response = await fetch('/api/votes', {
                 method: 'POST',
@@ -4840,7 +4986,8 @@ class TournamentManager {
                 body: JSON.stringify({ 
                     animalId: animal._id || animal.id, 
                     animalName: animal.name, 
-                    voteType 
+                    voteType,
+                    timeZone
                 })
             });
 
@@ -4851,29 +4998,23 @@ class TournamentManager {
                 const userVote = result.data.userVote;
                 if (upvoteBtn) {
                     upvoteBtn.classList.toggle('active', userVote === 'up');
-                    upvoteBtn.classList.add('voted-today');
                 }
                 if (downvoteBtn) {
                     downvoteBtn.classList.toggle('active', userVote === 'down');
-                    downvoteBtn.classList.add('voted-today');
                 }
                 
-                // Update vote counts in UI (optimistic update)
+                // Update vote counts from server response
                 const animalName = animal.name;
                 if (this.rankingDataCache[animalName]) {
-                    // Increment the appropriate counter
-                    if (voteType === 'up') {
-                        this.rankingDataCache[animalName].upvotes++;
-                    } else {
-                        this.rankingDataCache[animalName].downvotes++;
-                    }
+                    this.rankingDataCache[animalName].upvotes = result.data.upvotes;
+                    this.rankingDataCache[animalName].downvotes = result.data.downvotes;
                     // Re-apply to UI
                     if (fighterNum) {
                         this.applyRankingDataToUI(fighterNum, this.rankingDataCache[animalName]);
                     }
                 }
                 
-                Auth.showToast(`Vote recorded for ${animal.name}!`);
+                Auth.showToast(result.message || `Vote recorded for ${animal.name}!`);
             } else {
                 Auth.showToast(result.message || 'Failed to vote');
             }
@@ -5190,6 +5331,9 @@ class TournamentManager {
         this.winners = [];
         this.currentRound++;
         this.currentMatch = 0;
+        
+        // Flag to play intro for new round
+        this.justAdvancedRound = true;
         
         // Show next match
         this.showCurrentMatch();
