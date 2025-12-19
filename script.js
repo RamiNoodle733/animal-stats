@@ -4734,22 +4734,95 @@ class TournamentManager {
             };
         }
         
-        // Details handler - show Stats page with this animal selected
+        // Details handler - show in-tournament details overlay
         if (detailsBtn) {
             detailsBtn.onclick = () => {
-                // Hide tournament modal first
-                const modal = document.getElementById('tournament-modal');
-                if (modal) modal.classList.remove('show');
-                
-                // Switch to stats tab and select this animal
-                this.app.switchView('stats');
-                
-                // Select the animal directly
-                const animalObj = this.app.state.animals.find(a => a.name === animalName);
-                if (animalObj) {
-                    this.app.selectAnimal(animalObj);
-                }
+                this.toggleDetailsOverlay(fighterNum, animal);
             };
+        }
+        
+        // Setup close button for details overlay
+        const detailsCloseBtn = document.getElementById(`t-details-close-${fighterNum}`);
+        if (detailsCloseBtn) {
+            detailsCloseBtn.onclick = () => {
+                const overlay = document.getElementById(`t-details-overlay-${fighterNum}`);
+                if (overlay) overlay.classList.remove('show');
+            };
+        }
+    }
+    
+    /**
+     * Toggle and populate the in-tournament details overlay
+     */
+    toggleDetailsOverlay(fighterNum, animal) {
+        const overlay = document.getElementById(`t-details-overlay-${fighterNum}`);
+        if (!overlay) return;
+        
+        // If already showing, just hide it
+        if (overlay.classList.contains('show')) {
+            overlay.classList.remove('show');
+            return;
+        }
+        
+        // Populate the overlay with animal data
+        this.populateDetailsOverlay(fighterNum, animal);
+        
+        // Show the overlay
+        overlay.classList.add('show');
+    }
+    
+    /**
+     * Populate the details overlay with animal information
+     */
+    populateDetailsOverlay(fighterNum, animal) {
+        // Description
+        const descEl = document.getElementById(`t-details-desc-${fighterNum}`);
+        if (descEl) {
+            descEl.textContent = animal.description || 'No description available.';
+        }
+        
+        // Type
+        const typeEl = document.getElementById(`t-details-type-${fighterNum}`);
+        if (typeEl) {
+            typeEl.textContent = animal.type || 'Unknown';
+        }
+        
+        // Habitat
+        const habitatEl = document.getElementById(`t-details-habitat-${fighterNum}`);
+        if (habitatEl) {
+            const habitat = Array.isArray(animal.habitat) ? animal.habitat.join(', ') : (animal.habitat || 'Unknown');
+            habitatEl.textContent = habitat;
+        }
+        
+        // Diet
+        const dietEl = document.getElementById(`t-details-diet-${fighterNum}`);
+        if (dietEl) {
+            const diet = Array.isArray(animal.diet) ? animal.diet.join(', ') : (animal.diet || 'Unknown');
+            dietEl.textContent = diet;
+        }
+        
+        // Size
+        const sizeEl = document.getElementById(`t-details-size-${fighterNum}`);
+        if (sizeEl) {
+            sizeEl.textContent = animal.size || 'Unknown';
+        }
+        
+        // Lifespan
+        const lifespanEl = document.getElementById(`t-details-lifespan-${fighterNum}`);
+        if (lifespanEl) {
+            lifespanEl.textContent = animal.lifespan_years ? `${animal.lifespan_years} years` : 'Unknown';
+        }
+        
+        // Social
+        const socialEl = document.getElementById(`t-details-social-${fighterNum}`);
+        if (socialEl) {
+            socialEl.textContent = animal.isSocial === true ? 'Yes' : (animal.isSocial === false ? 'No' : 'Unknown');
+        }
+        
+        // Combat Style
+        const combatEl = document.getElementById(`t-details-combat-${fighterNum}`);
+        if (combatEl) {
+            combatEl.textContent = animal.battle_profile?.combat_style || animal.combat_style || 'Adaptive';
         }
     }
     

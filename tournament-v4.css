@@ -636,30 +636,11 @@
     object-fit: contain;
     filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.7));
     transition: transform 0.3s ease, filter 0.3s ease;
-    /* Make images appear to face off toward center */
-}
-
-/* Left fighter faces right (toward center) */
-.t-fighter-card.left .t-hero-image img {
-    transform: scaleX(1);
-}
-
-/* Right fighter faces left (toward center) - flip if needed */
-.t-fighter-card.right .t-hero-image img {
-    transform: scaleX(-1);
 }
 
 .t-fighter-card:hover .t-hero-image img {
-    transform: scale(1.08);
+    transform: scale(1.05);
     filter: drop-shadow(0 12px 30px rgba(0, 0, 0, 0.8)) brightness(1.1);
-}
-
-.t-fighter-card.left:hover .t-hero-image img {
-    transform: scale(1.08) scaleX(1);
-}
-
-.t-fighter-card.right:hover .t-hero-image img {
-    transform: scale(1.08) scaleX(-1);
 }
 
 /* Click hint - subtle, doesn't block the animal */
@@ -1027,6 +1008,7 @@
 
 /* Info Panels - Left and Right */
 .t-info-panel {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: clamp(6px, 0.8vh, 10px);
@@ -1034,6 +1016,7 @@
     background: linear-gradient(135deg, rgba(15, 20, 35, 0.9), rgba(10, 15, 25, 0.95));
     border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.1);
+    overflow: visible;
 }
 
 .t-info-panel.left {
@@ -1160,6 +1143,186 @@
 .t-details-btn:hover {
     background: rgba(0, 212, 255, 0.2) !important;
     border-color: rgba(0, 212, 255, 0.5) !important;
+}
+
+/* ========== DETAILS OVERLAY PANEL ========== */
+.t-details-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(10, 15, 30, 0.98), rgba(5, 10, 20, 0.99));
+    border-radius: 8px;
+    z-index: 50;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.95);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.t-details-overlay.show {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1);
+}
+
+.t-info-panel.left .t-details-overlay {
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.2), inset 0 0 60px rgba(0, 212, 255, 0.05);
+}
+
+.t-info-panel.right .t-details-overlay {
+    border: 1px solid rgba(255, 107, 0, 0.4);
+    box-shadow: 0 0 30px rgba(255, 107, 0, 0.2), inset 0 0 60px rgba(255, 107, 0, 0.05);
+}
+
+.t-details-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+}
+
+.t-info-panel.left .t-details-header {
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.15), transparent);
+}
+
+.t-info-panel.right .t-details-header {
+    background: linear-gradient(90deg, rgba(255, 107, 0, 0.15), transparent);
+}
+
+.t-details-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    color: #fff;
+}
+
+.t-info-panel.left .t-details-title {
+    color: var(--t-cyan);
+}
+
+.t-info-panel.right .t-details-title {
+    color: var(--t-orange);
+}
+
+.t-details-close {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.t-details-close:hover {
+    background: rgba(255, 100, 100, 0.3);
+    border-color: rgba(255, 100, 100, 0.5);
+    color: #ff6666;
+    transform: rotate(90deg);
+}
+
+.t-details-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.t-details-description {
+    font-size: 0.7rem;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 8px 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    border-left: 2px solid rgba(255, 215, 0, 0.5);
+}
+
+.t-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+}
+
+.t-detail-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 4px;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s;
+}
+
+.t-detail-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.t-detail-item i {
+    font-size: 0.75rem;
+    color: var(--t-gold);
+    opacity: 0.8;
+}
+
+.t-detail-label {
+    font-size: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.t-detail-value {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+}
+
+.t-details-combat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 8px 10px;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(255, 107, 0, 0.05));
+    border-radius: 6px;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.t-combat-label {
+    font-size: 0.55rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--t-gold);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.t-combat-label i {
+    font-size: 0.6rem;
+}
+
+.t-combat-value {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.4;
 }
 
 /* ========== COMPACT STAT BARS - Center Column ========== */
