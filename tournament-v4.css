@@ -686,9 +686,6 @@
 
 .t-fighter-card:hover .t-click-hint {
     opacity: 1;
-    background: rgba(255, 215, 0, 0.25);
-.t-fighter-card:hover .t-click-hint {
-    opacity: 1;
     background: rgba(0, 0, 0, 0.8);
     border-color: var(--t-gold);
     color: var(--t-gold);
