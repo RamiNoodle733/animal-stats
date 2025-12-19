@@ -4512,34 +4512,11 @@ class TournamentManager {
         
         // Check cache first
         if (this.rankingDataCache[animalName]) {
-            const data = this.rankingDataCache[animalName];
-            this.applyRankingDataToUI(fighterNum, data);
+            this.applyRankingDataToUI(fighterNum, this.rankingDataCache[animalName]);
             return;
         }
         
-        // Try to get from RankingsManager cache first (faster)
-        const rankingsManager = this.app.rankingsManager;
-        if (rankingsManager?.rankings?.length > 0) {
-            const rankingItem = rankingsManager.rankings.find(r => 
-                (r.animal?.name || r.name) === animalName
-            );
-            if (rankingItem) {
-                const data = {
-                    upvotes: rankingItem.upvotes || 0,
-                    downvotes: rankingItem.downvotes || 0,
-                    commentCount: rankingItem.commentCount || 0,
-                    tournamentsFirst: rankingItem.tournamentsFirst || rankingItem.animal?.tournamentsFirst || 0,
-                    tournamentsSecond: rankingItem.tournamentsSecond || rankingItem.animal?.tournamentsSecond || 0,
-                    tournamentsThird: rankingItem.tournamentsThird || rankingItem.animal?.tournamentsThird || 0,
-                    tournamentsPlayed: rankingItem.tournamentsPlayed || rankingItem.animal?.tournamentsPlayed || 0
-                };
-                this.rankingDataCache[animalName] = data;
-                this.applyRankingDataToUI(fighterNum, data);
-                return;
-            }
-        }
-        
-        // Fetch from API if not in cache
+        // Fetch from API
         try {
             const response = await fetch('/api/rankings', {
                 headers: { 'Accept': 'application/json' }
@@ -4551,18 +4528,20 @@ class TournamentManager {
                     // Cache all ranking data
                     result.data.forEach(item => {
                         const name = item.animal?.name || item.name;
-                        this.rankingDataCache[name] = {
-                            upvotes: item.upvotes || 0,
-                            downvotes: item.downvotes || 0,
-                            commentCount: item.commentCount || 0,
-                            tournamentsFirst: item.tournamentsFirst || 0,
-                            tournamentsSecond: item.tournamentsSecond || 0,
-                            tournamentsThird: item.tournamentsThird || 0,
-                            tournamentsPlayed: item.tournamentsPlayed || 0
-                        };
+                        if (name) {
+                            this.rankingDataCache[name] = {
+                                upvotes: item.upvotes || 0,
+                                downvotes: item.downvotes || 0,
+                                commentCount: item.commentCount || 0,
+                                tournamentsFirst: item.tournamentsFirst || 0,
+                                tournamentsSecond: item.tournamentsSecond || 0,
+                                tournamentsThird: item.tournamentsThird || 0,
+                                tournamentsPlayed: item.tournamentsPlayed || 0
+                            };
+                        }
                     });
                     
-                    // Apply to UI
+                    // Apply to UI if we got data for this animal
                     if (this.rankingDataCache[animalName]) {
                         this.applyRankingDataToUI(fighterNum, this.rankingDataCache[animalName]);
                     }
@@ -4749,7 +4728,7 @@ class TournamentManager {
                     rankingsManager.openCommentsModal({ currentTarget: commentsBtn });
                 } else {
                     // Fallback: Navigate to rankings tab and show comments
-                    this.app.showTab?.('rankings');
+                    this.app.switchView('rankings');
                     Auth.showToast('View comments on the Rankings page');
                 }
             };
@@ -4758,18 +4737,18 @@ class TournamentManager {
         // Details handler - show Stats page with this animal selected
         if (detailsBtn) {
             detailsBtn.onclick = () => {
+                // Hide tournament modal first
+                const modal = document.getElementById('tournament-modal');
+                if (modal) modal.classList.remove('show');
+                
                 // Switch to stats tab and select this animal
-                this.app.showTab?.('stats');
-                // Find and select the animal in the stats list
-                setTimeout(() => {
-                    const animalCards = document.querySelectorAll('.animal-card');
-                    animalCards.forEach(card => {
-                        if (card.dataset.name === animalName) {
-                            card.click();
-                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        }
-                    });
-                }, 100);
+                this.app.switchView('stats');
+                
+                // Select the animal directly
+                const animalObj = this.app.state.animals.find(a => a.name === animalName);
+                if (animalObj) {
+                    this.app.selectAnimal(animalObj);
+                }
             };
         }
     }
