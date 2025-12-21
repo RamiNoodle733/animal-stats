@@ -4085,19 +4085,10 @@ class TournamentManager {
         this.currentAnimal1 = animal1;
         this.currentAnimal2 = animal2;
         
-        // Play intro animation for first match or when advancing rounds
-        // Skip intro if user prefers reduced motion or it's mid-round
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const shouldPlayIntro = this.currentMatch === 0 || this.justAdvancedRound;
-        this.justAdvancedRound = false;
-        
-        if (shouldPlayIntro) {
-            this.playMatchIntro(animal1, animal2, () => {
-                this.displayMatch(animal1, animal2);
-            });
-        } else {
+        // Play intro animation for EVERY match
+        this.playMatchIntro(animal1, animal2, () => {
             this.displayMatch(animal1, animal2);
-        }
+        });
     }
     
     /**
@@ -5331,9 +5322,6 @@ class TournamentManager {
         this.winners = [];
         this.currentRound++;
         this.currentMatch = 0;
-        
-        // Flag to play intro for new round
-        this.justAdvancedRound = true;
         
         // Show next match
         this.showCurrentMatch();
