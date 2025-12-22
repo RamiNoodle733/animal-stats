@@ -9536,6 +9536,15 @@ body {
     font-size: 1rem;
     color: #fff;
     flex-shrink: 0;
+    overflow: hidden;
+}
+
+.compose-avatar img,
+.compose-avatar .user-avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .compose-input {
@@ -9691,10 +9700,20 @@ body {
     font-size: 1rem;
     color: #fff;
     flex-shrink: 0;
+    overflow: hidden;
 }
 
 .feed-post-avatar.anonymous {
     background: linear-gradient(135deg, #444, #666);
+}
+
+/* Avatar images inside feed post avatars */
+.feed-post-avatar img,
+.feed-post-avatar .user-avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .feed-post-meta {
@@ -10201,6 +10220,15 @@ body {
     font-size: 0.8rem;
     color: #fff;
     flex-shrink: 0;
+    overflow: hidden;
+}
+
+.leaderboard-avatar img,
+.leaderboard-avatar .user-avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 .leaderboard-info {
