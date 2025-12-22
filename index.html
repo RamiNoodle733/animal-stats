@@ -730,187 +730,139 @@
         
         <!-- Community View -->
         <div id="community-view" class="view-container">
-            <div class="community-container community-hub-layout">
-                <!-- Left Column: Hub Modules -->
-                <div class="community-hub-column">
-                    <!-- ========================================
-                         DAILY MATCHUP - Top Section
-                         ======================================== -->
-                    <div class="daily-matchup-section" id="daily-matchup-section">
-                        <div class="daily-matchup-header">
-                            <div class="daily-matchup-badge">
-                                <i class="fas fa-fire"></i> DAILY MATCHUP
-                            </div>
-                            <div class="daily-matchup-timer" id="daily-matchup-timer">
-                                <i class="fas fa-clock"></i> Resets in <span id="matchup-countdown">--:--:--</span>
-                            </div>
-                        </div>
-                        
-                        <div class="daily-matchup-arena">
-                            <div class="matchup-fighter" id="fighter-1">
-                                <div class="fighter-image-container">
-                                    <img src="" alt="" class="fighter-image" id="fighter-1-image">
-                                </div>
-                                <div class="fighter-name" id="fighter-1-name">Loading...</div>
-                                <div class="fighter-stats" id="fighter-1-stats"></div>
-                                <button class="vote-fighter-btn" id="vote-fighter-1" data-fighter="1">
-                                    <i class="fas fa-crown"></i> VOTE TO WIN
-                                </button>
-                                <div class="fighter-votes">
-                                    <div class="vote-bar" id="fighter-1-bar" style="width: 50%;"></div>
-                                    <span class="vote-percent" id="fighter-1-percent">50%</span>
-                                </div>
-                            </div>
-                            
-                            <div class="matchup-vs">
-                                <span>VS</span>
-                            </div>
-                            
-                            <div class="matchup-fighter" id="fighter-2">
-                                <div class="fighter-image-container">
-                                    <img src="" alt="" class="fighter-image" id="fighter-2-image">
-                                </div>
-                                <div class="fighter-name" id="fighter-2-name">Loading...</div>
-                                <div class="fighter-stats" id="fighter-2-stats"></div>
-                                <button class="vote-fighter-btn" id="vote-fighter-2" data-fighter="2">
-                                    <i class="fas fa-crown"></i> VOTE TO WIN
-                                </button>
-                                <div class="fighter-votes">
-                                    <div class="vote-bar" id="fighter-2-bar" style="width: 50%;"></div>
-                                    <span class="vote-percent" id="fighter-2-percent">50%</span>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="matchup-comments-preview" id="matchup-comments-preview">
-                            <div class="matchup-comments-header">
-                                <i class="fas fa-comments"></i> Discussion
-                                <span class="matchup-comments-count" id="matchup-comments-count">0</span>
-                            </div>
-                            <div class="matchup-comments-list" id="matchup-comments-list">
-                                <!-- Comments loaded by JS -->
-                            </div>
-                            <div class="matchup-comment-input" id="matchup-comment-input-container">
-                                <input type="text" id="matchup-comment-input" placeholder="Share your take..." maxlength="300" autocomplete="off" data-lpignore="true" data-1p-ignore="true" data-form-type="other" name="matchup-comment-field">
-                                <button id="matchup-comment-send"><i class="fas fa-paper-plane"></i></button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ========================================
-                         LEADERBOARD - Top Players
-                         ======================================== -->
-                    <div class="hub-leaderboard-section" id="hub-leaderboard-section">
-                        <div class="hub-section-header">
-                            <h3><i class="fas fa-trophy"></i> Top Players</h3>
-                        </div>
-                        <div class="hub-leaderboard-list" id="hub-leaderboard-list">
-                            <div class="hub-loading">
-                                <i class="fas fa-spinner fa-spin"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ========================================
-                         SITE STATS CARDS
-                         ======================================== -->
-                    <div class="hub-stats-section" id="hub-stats-section">
-                        <div class="hub-section-header">
-                            <h3><i class="fas fa-chart-bar"></i> Community Stats</h3>
-                        </div>
-                        <div class="hub-stats-grid">
-                            <div class="hub-stat-card">
-                                <div class="hub-stat-icon"><i class="fas fa-users"></i></div>
-                                <div class="hub-stat-value" id="stat-total-users">--</div>
-                                <div class="hub-stat-label">Members</div>
-                            </div>
-                            <div class="hub-stat-card">
-                                <div class="hub-stat-icon"><i class="fas fa-balance-scale"></i></div>
-                                <div class="hub-stat-value" id="stat-total-votes">--</div>
-                                <div class="hub-stat-label">Total Votes</div>
-                            </div>
-                            <div class="hub-stat-card">
-                                <div class="hub-stat-icon"><i class="fas fa-comment-dots"></i></div>
-                                <div class="hub-stat-value" id="stat-total-comments">--</div>
-                                <div class="hub-stat-label">Comments</div>
-                            </div>
-                            <div class="hub-stat-card">
-                                <div class="hub-stat-icon"><i class="fas fa-trophy"></i></div>
-                                <div class="hub-stat-value" id="stat-total-tournaments">--</div>
-                                <div class="hub-stat-label">Tournaments</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- ========================================
-                         ONLINE NOW - Presence
-                         ======================================== -->
-                    <div class="hub-online-section" id="hub-online-section">
-                        <div class="hub-section-header">
-                            <h3><i class="fas fa-circle online-pulse"></i> Online Now</h3>
-                            <span class="hub-online-count" id="hub-online-count">0</span>
-                        </div>
-                        <div class="hub-online-list" id="hub-online-list">
-                            <div class="hub-no-online">No users online</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right Column: Chat & Comments -->
-                <div class="community-chat-column">
-                    <div class="community-chat-section">
-                        <div class="community-tabs">
-                            <button class="community-tab active" data-tab="chat">
+            <div class="community-feed-layout">
+                <!-- Main Feed Column (Center) -->
+                <div class="community-feed-column">
+                    <!-- Compose Box + Tabs -->
+                    <div class="feed-header-card">
+                        <div class="community-tabs-unified">
+                            <button class="community-tab-btn active" data-tab="chat">
                                 <i class="fas fa-comments"></i> General Chat
                             </button>
-                            <button class="community-tab" data-tab="feed">
+                            <button class="community-tab-btn" data-tab="feed">
                                 <i class="fas fa-stream"></i> All Comments
                             </button>
                         </div>
                         
-                        <!-- Chat Section -->
-                        <div class="community-section active" id="community-chat-section">
-                            <div class="chat-container">
-                                <div class="chat-messages" id="chat-messages">
-                                    <div class="chat-loading">
-                                        <i class="fas fa-spinner fa-spin"></i> Loading messages...
-                                    </div>
-                                </div>
-                                <div class="chat-input-container" id="chat-input-container">
-                                    <div class="chat-reply-preview" id="chat-reply-preview" style="display: none;">
-                                        <span class="reply-label">Replying to <span id="reply-to-username"></span></span>
-                                        <button class="cancel-reply-btn" id="cancel-reply-btn"><i class="fas fa-times"></i></button>
-                                    </div>
-                                    <div class="chat-input-wrapper" id="chat-input-wrapper" style="display: none;">
-                                        <input type="text" id="chat-input" placeholder="Type a message..." maxlength="500" autocomplete="off">
-                                        <button id="chat-send-btn" class="chat-send-btn">
-                                            <i class="fas fa-paper-plane"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                        <!-- Compose Box (Chat only) -->
+                        <div class="feed-compose-box" id="feed-compose-box">
+                            <div class="compose-reply-preview" id="compose-reply-preview" style="display: none;">
+                                <span class="reply-indicator"><i class="fas fa-reply"></i> Replying to <span id="compose-reply-username"></span></span>
+                                <button class="compose-cancel-reply" id="compose-cancel-reply"><i class="fas fa-times"></i></button>
                             </div>
-                        </div>
-                        
-                        <!-- Comments Feed Section -->
-                        <div class="community-section" id="community-feed-section">
-                            <div class="feed-container">
-                                <div class="feed-list" id="feed-list">
-                                    <div class="feed-loading">
-                                        <i class="fas fa-spinner fa-spin"></i> Loading comments...
-                                    </div>
-                                </div>
-                                <button class="load-more-btn" id="feed-load-more" style="display: none;">
-                                    <i class="fas fa-chevron-down"></i> Load More Comments
+                            <div class="compose-input-row">
+                                <div class="compose-avatar" id="compose-avatar">?</div>
+                                <input type="text" id="compose-input" class="compose-input" placeholder="Share your thoughts..." maxlength="500" autocomplete="off">
+                                <button id="compose-send-btn" class="compose-send-btn">
+                                    <i class="fas fa-paper-plane"></i>
                                 </button>
+                            </div>
+                            <div class="compose-login-prompt" id="compose-login-prompt" style="display: none;">
+                                <i class="fas fa-lock"></i> <a href="#" id="compose-login-link">Log in</a> to post
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Login Prompt (shown when needed) -->
-                    <div class="community-login-prompt" id="community-login-prompt" style="display: none;">
-                        <i class="fas fa-info-circle"></i> <span>Log in to vote, chat and earn XP!</span>
+                    <!-- Feed Posts Container -->
+                    <div class="feed-posts-container" id="feed-posts-container">
+                        <div class="feed-loading-indicator">
+                            <i class="fas fa-spinner fa-spin"></i> Loading...
+                        </div>
+                    </div>
+                    
+                    <!-- Load More Button -->
+                    <button class="feed-load-more-btn" id="feed-load-more-btn" style="display: none;">
+                        <i class="fas fa-chevron-down"></i> Load More
+                    </button>
+                </div>
+
+                <!-- Sidebar Column (Right) -->
+                <div class="community-sidebar-column">
+                    <!-- Community HUD Module -->
+                    <div class="community-hud-module">
+                        <div class="hud-header">
+                            <span class="hud-title"><i class="fas fa-gamepad"></i> COMMUNITY HUD</span>
+                            <div class="hud-live-stats">
+                                <span class="hud-online-badge" id="hud-online-badge">
+                                    <i class="fas fa-circle online-dot"></i> <span id="hud-online-count">0</span> Online
+                                </span>
+                                <span class="hud-visits-badge" id="hud-visits-badge">
+                                    <i class="fas fa-eye"></i> <span id="hud-total-visits">0</span> Visits
+                                </span>
+                            </div>
+                        </div>
+                        <div class="hud-stats-row">
+                            <div class="hud-stat-chip">
+                                <span class="hud-stat-value" id="hud-stat-members">--</span>
+                                <span class="hud-stat-label">Members</span>
+                            </div>
+                            <div class="hud-stat-chip">
+                                <span class="hud-stat-value" id="hud-stat-votes">--</span>
+                                <span class="hud-stat-label">Votes</span>
+                            </div>
+                            <div class="hud-stat-chip">
+                                <span class="hud-stat-value" id="hud-stat-comments">--</span>
+                                <span class="hud-stat-label">Comments</span>
+                            </div>
+                            <div class="hud-stat-chip">
+                                <span class="hud-stat-value" id="hud-stat-tournaments">--</span>
+                                <span class="hud-stat-label">Tournaments</span>
+                            </div>
+                            <div class="hud-stat-chip">
+                                <span class="hud-stat-value" id="hud-stat-matches">--</span>
+                                <span class="hud-stat-label">Matches</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Daily Matchup Module -->
+                    <div class="sidebar-module daily-matchup-module" id="daily-matchup-module">
+                        <div class="module-header">
+                            <span class="module-title"><i class="fas fa-fire"></i> DAILY MATCHUP</span>
+                            <span class="matchup-timer" id="matchup-timer">--:--:--</span>
+                        </div>
+                        <div class="matchup-compact-arena">
+                            <div class="matchup-compact-fighter" id="matchup-fighter-1">
+                                <img src="" alt="" class="matchup-compact-img" id="matchup-img-1">
+                                <span class="matchup-compact-name" id="matchup-name-1">...</span>
+                                <div class="matchup-compact-bar">
+                                    <div class="matchup-bar-fill" id="matchup-bar-1" style="width: 50%;"></div>
+                                    <span class="matchup-bar-pct" id="matchup-pct-1">50%</span>
+                                </div>
+                                <button class="matchup-vote-btn" id="matchup-vote-1" data-fighter="1">
+                                    <i class="fas fa-crown"></i> Vote
+                                </button>
+                            </div>
+                            <div class="matchup-vs-badge">VS</div>
+                            <div class="matchup-compact-fighter" id="matchup-fighter-2">
+                                <img src="" alt="" class="matchup-compact-img" id="matchup-img-2">
+                                <span class="matchup-compact-name" id="matchup-name-2">...</span>
+                                <div class="matchup-compact-bar">
+                                    <div class="matchup-bar-fill" id="matchup-bar-2" style="width: 50%;"></div>
+                                    <span class="matchup-bar-pct" id="matchup-pct-2">50%</span>
+                                </div>
+                                <button class="matchup-vote-btn" id="matchup-vote-2" data-fighter="2">
+                                    <i class="fas fa-crown"></i> Vote
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Players Module -->
+                    <div class="sidebar-module leaderboard-module" id="leaderboard-module">
+                        <div class="module-header">
+                            <span class="module-title"><i class="fas fa-trophy"></i> TOP PLAYERS</span>
+                        </div>
+                        <div class="leaderboard-list" id="leaderboard-list">
+                            <div class="module-loading"><i class="fas fa-spinner fa-spin"></i></div>
+                        </div>
                     </div>
                 </div>
+
+                <!-- Mobile Sidebar Toggle (for small screens) -->
+                <button class="mobile-sidebar-toggle" id="mobile-sidebar-toggle">
+                    <i class="fas fa-bars"></i> Community Hub
+                </button>
             </div>
         </div>
         
