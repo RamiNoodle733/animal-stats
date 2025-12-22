@@ -730,9 +730,9 @@
         
         <!-- Community View -->
         <div id="community-view" class="view-container">
-            <div class="community-container">
-                <!-- Left/Center Column: Features -->
-                <div class="community-main-column">
+            <div class="community-container community-hub-layout">
+                <!-- Left Column: Hub Modules -->
+                <div class="community-hub-column">
                     <!-- ========================================
                          DAILY MATCHUP - Top Section
                          ======================================== -->
@@ -798,58 +798,60 @@
                     </div>
 
                     <!-- ========================================
-                         POWER RANKINGS PREVIEW
+                         LEADERBOARD - Top Players
                          ======================================== -->
-                    <div class="rankings-preview-section">
-                        <div class="section-header">
-                            <h3><i class="fas fa-crown"></i> Power Rankings</h3>
-                            <button class="view-all-btn" id="view-full-rankings">
-                                View All <i class="fas fa-arrow-right"></i>
-                            </button>
+                    <div class="hub-leaderboard-section" id="hub-leaderboard-section">
+                        <div class="hub-section-header">
+                            <h3><i class="fas fa-trophy"></i> Top Players</h3>
                         </div>
-                        <div class="rankings-preview-list" id="rankings-preview-list">
-                            <!-- Top 5 rankings loaded by JS -->
-                            <div class="rankings-loading">
+                        <div class="hub-leaderboard-list" id="hub-leaderboard-list">
+                            <div class="hub-loading">
                                 <i class="fas fa-spinner fa-spin"></i>
                             </div>
                         </div>
                     </div>
 
                     <!-- ========================================
-                         TOURNAMENTS BLOCK
+                         SITE STATS CARDS
                          ======================================== -->
-                    <div class="tournaments-section">
-                        <div class="section-header">
-                            <h3><i class="fas fa-trophy"></i> Tournaments</h3>
+                    <div class="hub-stats-section" id="hub-stats-section">
+                        <div class="hub-section-header">
+                            <h3><i class="fas fa-chart-bar"></i> Community Stats</h3>
                         </div>
-                        <div class="tournament-content" id="tournament-content">
-                            <div class="tournament-start-options">
-                                <p class="tournament-prompt">Compete animals in bracket-style tournaments!</p>
-                                <div class="bracket-size-options">
-                                    <button class="bracket-size-btn" data-size="8">
-                                        <span class="size-number">8</span>
-                                        <span class="size-label">Quick</span>
-                                    </button>
-                                    <button class="bracket-size-btn" data-size="16">
-                                        <span class="size-number">16</span>
-                                        <span class="size-label">Standard</span>
-                                    </button>
-                                    <button class="bracket-size-btn" data-size="32">
-                                        <span class="size-number">32</span>
-                                        <span class="size-label">Epic</span>
-                                    </button>
-                                </div>
+                        <div class="hub-stats-grid">
+                            <div class="hub-stat-card">
+                                <div class="hub-stat-icon"><i class="fas fa-users"></i></div>
+                                <div class="hub-stat-value" id="stat-total-users">--</div>
+                                <div class="hub-stat-label">Members</div>
                             </div>
-                            <!-- Active tournament shown here when in progress -->
-                            <div class="active-tournament-card" id="active-tournament-card" style="display: none;">
-                                <div class="active-tournament-info">
-                                    <span class="tournament-round" id="tournament-round">Quarter Finals</span>
-                                    <span class="tournament-progress" id="tournament-progress">Match 2 of 4</span>
-                                </div>
-                                <button class="continue-tournament-btn" id="continue-tournament-btn">
-                                    <i class="fas fa-play"></i> Continue Tournament
-                                </button>
+                            <div class="hub-stat-card">
+                                <div class="hub-stat-icon"><i class="fas fa-balance-scale"></i></div>
+                                <div class="hub-stat-value" id="stat-total-votes">--</div>
+                                <div class="hub-stat-label">Total Votes</div>
                             </div>
+                            <div class="hub-stat-card">
+                                <div class="hub-stat-icon"><i class="fas fa-comment-dots"></i></div>
+                                <div class="hub-stat-value" id="stat-total-comments">--</div>
+                                <div class="hub-stat-label">Comments</div>
+                            </div>
+                            <div class="hub-stat-card">
+                                <div class="hub-stat-icon"><i class="fas fa-trophy"></i></div>
+                                <div class="hub-stat-value" id="stat-total-tournaments">--</div>
+                                <div class="hub-stat-label">Tournaments</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ========================================
+                         ONLINE NOW - Presence
+                         ======================================== -->
+                    <div class="hub-online-section" id="hub-online-section">
+                        <div class="hub-section-header">
+                            <h3><i class="fas fa-circle online-pulse"></i> Online Now</h3>
+                            <span class="hub-online-count" id="hub-online-count">0</span>
+                        </div>
+                        <div class="hub-online-list" id="hub-online-list">
+                            <div class="hub-no-online">No users online</div>
                         </div>
                     </div>
                 </div>
@@ -875,6 +877,10 @@
                                     </div>
                                 </div>
                                 <div class="chat-input-container" id="chat-input-container">
+                                    <div class="chat-reply-preview" id="chat-reply-preview" style="display: none;">
+                                        <span class="reply-label">Replying to <span id="reply-to-username"></span></span>
+                                        <button class="cancel-reply-btn" id="cancel-reply-btn"><i class="fas fa-times"></i></button>
+                                    </div>
                                     <div class="chat-input-wrapper" id="chat-input-wrapper" style="display: none;">
                                         <input type="text" id="chat-input" placeholder="Type a message..." maxlength="500" autocomplete="off">
                                         <button id="chat-send-btn" class="chat-send-btn">

@@ -1,10 +1,12 @@
 /**
  * API Route: /api/chat
  * Handles community general chat messages AND community feed
+ * Now supports replies, voting, and proper threading like comments
  * 
- * GET /api/chat - Get chat messages
+ * GET /api/chat - Get chat messages (with replies nested)
  * GET /api/chat?feed=true - Get all comments feed
- * POST /api/chat - Send chat message
+ * POST /api/chat - Send chat message or reply
+ * PATCH /api/chat - Vote on a message (up/down)
  * DELETE /api/chat - Delete chat message
  */
 
@@ -17,7 +19,7 @@ const { notifyDiscord } = require('../lib/discord');
 
 module.exports = async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
 
@@ -38,6 +40,8 @@ module.exports = async function handler(req, res) {
                 return await handleGet(req, res);
             case 'POST':
                 return await handlePost(req, res);
+            case 'PATCH':
+                return await handlePatch(req, res);
             case 'DELETE':
                 return await handleDelete(req, res);
             default:
@@ -48,6 +52,51 @@ module.exports = async function handler(req, res) {
         return res.status(500).json({ success: false, error: 'Internal server error' });
     }
 };
+
+// Helper: Build message tree with replies
+function buildMessageTree(messages, userMap) {
+    const messageMap = {};
+    const rootMessages = [];
+    
+    // First pass: create map and update user data
+    messages.forEach(m => {
+        const message = m.toObject ? m.toObject() : { ...m };
+        message.replies = [];
+        message.score = (message.upvotes?.length || 0) - (message.downvotes?.length || 0);
+        
+        // Update with current user data
+        const authorId = message.authorId?.toString();
+        const currentUser = authorId ? userMap[authorId] : null;
+        if (currentUser) {
+            message.authorUsername = currentUser.displayName || message.authorUsername;
+            message.profileAnimal = currentUser.profileAnimal ?? message.profileAnimal;
+        }
+        
+        messageMap[message._id.toString()] = message;
+    });
+    
+    // Second pass: build tree
+    messages.forEach(m => {
+        const message = messageMap[m._id.toString()];
+        if (message.parentId) {
+            const parent = messageMap[message.parentId.toString()];
+            if (parent) {
+                parent.replies.push(message);
+            }
+        } else {
+            rootMessages.push(message);
+        }
+    });
+    
+    // Sort replies by createdAt ascending
+    Object.values(messageMap).forEach(msg => {
+        if (msg.replies.length > 0) {
+            msg.replies.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        }
+    });
+    
+    return rootMessages;
+}
 
 // GET: Get community feed (all comments)
 async function handleGetFeed(req, res) {
@@ -156,25 +205,39 @@ async function handleGetFeed(req, res) {
     });
 }
 
-// GET: Get recent chat messages
+// GET: Get recent chat messages with nested replies
 async function handleGet(req, res) {
     const { limit = 50, before } = req.query;
     const User = require('../models/User');
 
-    let query = {};
+    let query = { parentId: null }; // Only get root messages
     
     // For pagination - get messages before a certain timestamp
     if (before) {
         query.createdAt = { $lt: new Date(before) };
     }
 
-    const messages = await ChatMessage.find(query)
+    // Get root messages
+    const rootMessages = await ChatMessage.find(query)
         .sort({ createdAt: -1 })
         .limit(parseInt(limit))
         .lean();
 
+    // Get all message IDs to fetch replies
+    const rootIds = rootMessages.map(m => m._id);
+    
+    // Fetch all replies for these root messages
+    const replies = await ChatMessage.find({
+        parentId: { $in: rootIds }
+    })
+        .sort({ createdAt: 1 })
+        .lean();
+
+    // Combine all messages
+    const allMessages = [...rootMessages, ...replies];
+
     // Fetch current user data for all message authors
-    const authorIds = [...new Set(messages.map(m => m.authorId?.toString()).filter(Boolean))];
+    const authorIds = [...new Set(allMessages.map(m => m.authorId?.toString()).filter(Boolean))];
     const users = await User.find({ _id: { $in: authorIds } })
         .select('_id displayName username profileAnimal')
         .lean();
@@ -188,28 +251,20 @@ async function handleGet(req, res) {
         };
     });
 
-    // Update messages with current user data
-    const updatedMessages = messages.map(m => {
-        const authorId = m.authorId?.toString();
-        const currentUser = authorId ? userMap[authorId] : null;
-        return {
-            ...m,
-            authorUsername: currentUser?.displayName || m.authorUsername,
-            profileAnimal: currentUser?.profileAnimal ?? m.profileAnimal
-        };
-    });
+    // Build tree structure
+    const tree = buildMessageTree(allMessages, userMap);
 
-    // Reverse to get chronological order (oldest first)
-    updatedMessages.reverse();
+    // Reverse to get chronological order (oldest first for chat)
+    tree.reverse();
 
     return res.status(200).json({
         success: true,
-        count: updatedMessages.length,
-        data: updatedMessages
+        count: tree.length,
+        data: tree
     });
 }
 
-// POST: Send a new chat message
+// POST: Send a new chat message or reply
 async function handlePost(req, res) {
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -222,7 +277,7 @@ async function handlePost(req, res) {
         return res.status(401).json({ success: false, error: 'Invalid token' });
     }
 
-    const { content } = req.body;
+    const { content, parentId } = req.body;
 
     if (!content || content.trim().length === 0) {
         return res.status(400).json({ success: false, error: 'Message content required' });
@@ -236,15 +291,27 @@ async function handlePost(req, res) {
     const User = require('../models/User');
     const userDoc = await User.findById(user.id).select('displayName profileAnimal');
 
+    // If this is a reply, verify parent exists
+    if (parentId) {
+        const parent = await ChatMessage.findById(parentId);
+        if (!parent) {
+            return res.status(404).json({ success: false, error: 'Parent message not found' });
+        }
+    }
+
     const message = await ChatMessage.create({
         content: content.trim(),
         authorId: user.id,
         authorUsername: userDoc?.displayName || user.username,
-        profileAnimal: userDoc?.profileAnimal || null
+        profileAnimal: userDoc?.profileAnimal || null,
+        parentId: parentId || null,
+        upvotes: [],
+        downvotes: []
     });
 
     // Notify Discord about the chat message
-    notifyDiscord('chat_message', {
+    const msgType = parentId ? 'chat_reply' : 'chat_message';
+    notifyDiscord(msgType, {
         user: userDoc?.displayName || user.username,
         content: content.trim()
     }, req);
@@ -257,7 +324,70 @@ async function handlePost(req, res) {
             authorId: message.authorId,
             authorUsername: message.authorUsername,
             profileAnimal: message.profileAnimal,
+            parentId: message.parentId,
+            upvotes: [],
+            downvotes: [],
+            score: 0,
+            replies: [],
             createdAt: message.createdAt
+        }
+    });
+}
+
+// PATCH: Vote on a message (up/down)
+async function handlePatch(req, res) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ success: false, error: 'Authentication required' });
+    }
+
+    const token = authHeader.split(' ')[1];
+    const user = verifyToken(token);
+    if (!user) {
+        return res.status(401).json({ success: false, error: 'Invalid token' });
+    }
+
+    const { messageId, voteType } = req.body;
+
+    if (!messageId) {
+        return res.status(400).json({ success: false, error: 'Message ID required' });
+    }
+
+    if (!['up', 'down', 'clear'].includes(voteType)) {
+        return res.status(400).json({ success: false, error: 'Invalid vote type' });
+    }
+
+    const message = await ChatMessage.findById(messageId);
+    if (!message) {
+        return res.status(404).json({ success: false, error: 'Message not found' });
+    }
+
+    const userId = user.id;
+
+    // Remove existing votes
+    message.upvotes = message.upvotes.filter(id => id.toString() !== userId);
+    message.downvotes = message.downvotes.filter(id => id.toString() !== userId);
+
+    // Add new vote
+    if (voteType === 'up') {
+        message.upvotes.push(userId);
+    } else if (voteType === 'down') {
+        message.downvotes.push(userId);
+    }
+    // 'clear' just removes existing vote
+
+    await message.save();
+
+    const score = message.upvotes.length - message.downvotes.length;
+
+    return res.status(200).json({
+        success: true,
+        data: {
+            _id: message._id,
+            upvotes: message.upvotes.length,
+            downvotes: message.downvotes.length,
+            score,
+            userVote: voteType === 'clear' ? null : voteType
         }
     });
 }

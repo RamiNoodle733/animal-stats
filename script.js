@@ -5580,15 +5580,23 @@ class CommunityManager {
         // Daily Matchup
         this.dailyMatchup = null;
         this.userMatchupVote = null;
+        
+        // Hub features
+        this.presenceInterval = null;
+        this.hubRefreshInterval = null;
+        this.replyingTo = null; // For chat replies
     }
 
     init() {
         this.setupEventListeners();
         this.updateLoginState();
         this.loadDailyMatchup();
-        this.loadRankingsPreview();
-        this.setupTournamentSection();
         this.startMatchupCountdown();
+        
+        // Load hub data
+        this.loadLeaderboard();
+        this.loadSiteStats();
+        this.loadOnlineUsers();
         
         // Listen for auth changes
         window.addEventListener('authChange', () => this.updateLoginState());
@@ -5617,6 +5625,9 @@ class CommunityManager {
             chatSendBtn.addEventListener('click', () => this.sendChatMessage());
         }
 
+        // Cancel reply button
+        document.getElementById('cancel-reply-btn')?.addEventListener('click', () => this.cancelReply());
+
         // Chat login link
         const chatLoginLink = document.getElementById('chat-login-link');
         if (chatLoginLink) {
@@ -5644,24 +5655,6 @@ class CommunityManager {
             if (e.key === 'Enter') this.sendMatchupComment();
         });
         matchupCommentSend?.addEventListener('click', () => this.sendMatchupComment());
-        
-        // View full rankings button
-        document.getElementById('view-full-rankings')?.addEventListener('click', () => {
-            this.app.showView('rankings');
-        });
-        
-        // Tournament bracket buttons
-        document.querySelectorAll('.bracket-size-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const size = parseInt(btn.dataset.size);
-                this.startTournament(size);
-            });
-        });
-        
-        document.getElementById('continue-tournament-btn')?.addEventListener('click', () => {
-            this.app.showView('rankings');
-            // TODO: Show tournament modal
-        });
     }
 
     // ==================== DAILY MATCHUP ====================
@@ -5856,81 +5849,159 @@ class CommunityManager {
         input.value = '';
     }
     
-    // ==================== RANKINGS PREVIEW ====================
+    // ==================== HUB LEADERBOARD ====================
     
-    async loadRankingsPreview() {
-        const container = document.getElementById('rankings-preview-list');
+    async loadLeaderboard() {
+        const container = document.getElementById('hub-leaderboard-list');
         if (!container) return;
         
         try {
-            const response = await fetch('/api/rankings');
-            if (!response.ok) throw new Error('Failed to load rankings');
+            const response = await fetch('/api/community?action=leaderboard&limit=10');
+            if (!response.ok) throw new Error('Failed to load leaderboard');
             
             const result = await response.json();
-            const top5 = (result.data || []).slice(0, 5);
+            const users = result.data || [];
             
-            container.innerHTML = top5.map((item, index) => {
-                const animal = item.animal;
-                const rankClass = index === 0 ? 'gold' : index === 1 ? 'silver' : index === 2 ? 'bronze' : '';
-                const trend = item.trend || 0;
-                const trendClass = trend > 0 ? 'rising' : trend < 0 ? 'falling' : 'stable';
-                const trendIcon = trend > 0 ? 'fa-arrow-up' : trend < 0 ? 'fa-arrow-down' : 'fa-minus';
-                const trendText = trend > 0 ? `+${trend}` : trend < 0 ? `${trend}` : '';
+            if (users.length === 0) {
+                container.innerHTML = '<div class="hub-loading">No users yet</div>';
+                return;
+            }
+            
+            container.innerHTML = users.map((user, index) => {
+                const rank = index + 1;
+                const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : '';
+                const topClass = rank <= 3 ? `top-${rank}` : '';
+                const avatarHtml = this.getHubAvatarHtml(user.profileAnimal, user.displayName?.charAt(0) || '?');
                 
                 return `
-                    <div class="rankings-preview-item">
-                        <span class="preview-rank ${rankClass}">#${index + 1}</span>
-                        <img src="${animal.image}" alt="${animal.name}" class="preview-animal-img">
-                        <div class="preview-animal-info">
-                            <div class="preview-animal-name">${animal.name}</div>
+                    <div class="hub-leaderboard-item ${topClass}">
+                        <span class="hub-rank ${rankClass}">#${rank}</span>
+                        <div class="hub-user-avatar">${avatarHtml}</div>
+                        <div class="hub-user-info">
+                            <div class="hub-user-name">${this.escapeHtml(user.displayName || user.username)}</div>
+                            <div class="hub-user-level">Level <span>${user.level || 1}</span></div>
                         </div>
-                        <div class="preview-trend ${trendClass}">
-                            <i class="fas ${trendIcon}"></i>
-                            ${trendText}
-                        </div>
+                        <div class="hub-user-xp">${this.formatNumber(user.xp || 0)} XP</div>
                     </div>
                 `;
             }).join('');
             
         } catch (error) {
-            console.error('Error loading rankings preview:', error);
-            container.innerHTML = '<div class="rankings-loading">Failed to load</div>';
+            console.error('Error loading leaderboard:', error);
+            container.innerHTML = '<div class="hub-loading">Failed to load</div>';
         }
     }
     
-    // ==================== TOURNAMENTS ====================
-    
-    setupTournamentSection() {
-        // Check for active tournament in localStorage
-        const activeTournament = localStorage.getItem('activeTournament');
-        const activeCard = document.getElementById('active-tournament-card');
-        const startOptions = document.querySelector('.tournament-start-options');
-        
-        if (activeTournament && activeCard && startOptions) {
-            try {
-                const tournament = JSON.parse(activeTournament);
-                if (tournament.bracket && tournament.bracket.length > 0) {
-                    activeCard.style.display = 'flex';
-                    startOptions.style.display = 'none';
-                    
-                    const roundNames = ['Finals', 'Semi-Finals', 'Quarter-Finals', 'Round of 16', 'Round of 32'];
-                    const roundIndex = Math.log2(tournament.bracketSize) - Math.log2(tournament.bracket.length * 2);
-                    document.getElementById('tournament-round').textContent = roundNames[roundIndex] || 'Tournament';
-                    document.getElementById('tournament-progress').textContent = `${tournament.bracket.length} matches remaining`;
-                }
-            } catch (e) {
-                console.error('Error parsing tournament:', e);
+    getHubAvatarHtml(profileAnimal, fallback) {
+        if (profileAnimal && this.app?.state?.animals) {
+            const animal = this.app.state.animals.find(a => 
+                a.name.toLowerCase() === profileAnimal.toLowerCase()
+            );
+            if (animal?.image) {
+                return `<img src="${animal.image}" alt="${profileAnimal}">`;
             }
         }
+        return fallback;
     }
     
-    startTournament(size) {
-        // Navigate to rankings and open tournament modal
-        this.app.showView('rankings');
-        // Trigger tournament start
-        setTimeout(() => {
-            document.getElementById('start-tournament-btn')?.click();
-        }, 100);
+    // ==================== HUB SITE STATS ====================
+    
+    async loadSiteStats() {
+        try {
+            const response = await fetch('/api/community?action=stats');
+            if (!response.ok) throw new Error('Failed to load stats');
+            
+            const result = await response.json();
+            const stats = result.data || {};
+            
+            // Update stat cards
+            document.getElementById('stat-total-users').textContent = this.formatNumber(stats.totalUsers || 0);
+            document.getElementById('stat-total-votes').textContent = this.formatNumber(stats.totalVotes || 0);
+            document.getElementById('stat-total-comments').textContent = this.formatNumber(stats.totalComments || 0);
+            document.getElementById('stat-total-tournaments').textContent = this.formatNumber(stats.totalTournaments || 0);
+            
+        } catch (error) {
+            console.error('Error loading site stats:', error);
+        }
+    }
+    
+    // ==================== HUB ONLINE USERS ====================
+    
+    async loadOnlineUsers() {
+        const container = document.getElementById('hub-online-list');
+        const countEl = document.getElementById('hub-online-count');
+        if (!container) return;
+        
+        try {
+            const response = await fetch('/api/community?action=presence');
+            if (!response.ok) throw new Error('Failed to load presence');
+            
+            const result = await response.json();
+            const users = result.data || [];
+            
+            if (countEl) countEl.textContent = users.length;
+            
+            if (users.length === 0) {
+                container.innerHTML = '<div class="hub-no-online">No users online</div>';
+                return;
+            }
+            
+            container.innerHTML = users.map(user => `
+                <div class="hub-online-user">${this.escapeHtml(user.displayName || user.username)}</div>
+            `).join('');
+            
+        } catch (error) {
+            console.error('Error loading online users:', error);
+        }
+    }
+    
+    // Send presence ping
+    async sendPresencePing() {
+        if (!Auth.isLoggedIn()) return;
+        
+        try {
+            await fetch('/api/community?action=ping', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                }
+            });
+        } catch (error) {
+            // Silent fail for presence
+        }
+    }
+    
+    startPresencePing() {
+        this.stopPresencePing();
+        
+        // Send initial ping
+        this.sendPresencePing();
+        
+        // Ping every 25 seconds
+        this.presenceInterval = setInterval(() => this.sendPresencePing(), 25000);
+        
+        // Refresh online list every 30 seconds
+        this.hubRefreshInterval = setInterval(() => {
+            this.loadOnlineUsers();
+        }, 30000);
+    }
+    
+    stopPresencePing() {
+        if (this.presenceInterval) {
+            clearInterval(this.presenceInterval);
+            this.presenceInterval = null;
+        }
+        if (this.hubRefreshInterval) {
+            clearInterval(this.hubRefreshInterval);
+            this.hubRefreshInterval = null;
+        }
+    }
+    
+    formatNumber(num) {
+        if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+        if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+        return num.toString();
     }
     
     showXpPopup(xp, bp) {
@@ -5976,6 +6047,13 @@ class CommunityManager {
     onViewEnter() {
         // Called when entering community view
         this.updateLoginState();
+        this.startPresencePing();
+        
+        // Refresh hub data
+        this.loadLeaderboard();
+        this.loadSiteStats();
+        this.loadOnlineUsers();
+        
         if (this.currentTab === 'chat') {
             this.loadChat();
             this.startChatPolling();
@@ -5986,6 +6064,7 @@ class CommunityManager {
 
     onViewLeave() {
         this.stopChatPolling();
+        this.stopPresencePing();
     }
 
     // ==================== CHAT ====================
@@ -6035,9 +6114,46 @@ class CommunityManager {
         }
 
         container.innerHTML = this.chatMessages.map(msg => this.renderChatMessage(msg)).join('');
+        
+        // Add event listeners for chat actions
+        this.setupChatActionListeners(container);
+    }
+    
+    setupChatActionListeners(container) {
+        // Reply buttons
+        container.querySelectorAll('.chat-action-btn.reply-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const msgId = e.currentTarget.dataset.msgId;
+                const username = e.currentTarget.dataset.username;
+                this.startReply(msgId, username);
+            });
+        });
+        
+        // Vote buttons
+        container.querySelectorAll('.chat-action-btn.vote-up').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const msgId = e.currentTarget.dataset.msgId;
+                this.voteChatMessage(msgId, 'up');
+            });
+        });
+        
+        container.querySelectorAll('.chat-action-btn.vote-down').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const msgId = e.currentTarget.dataset.msgId;
+                this.voteChatMessage(msgId, 'down');
+            });
+        });
+        
+        // Delete buttons
+        container.querySelectorAll('.chat-action-btn.delete-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const msgId = e.currentTarget.dataset.msgId;
+                this.deleteChatMessage(msgId);
+            });
+        });
     }
 
-    renderChatMessage(msg) {
+    renderChatMessage(msg, isReply = false) {
         const initial = msg.authorUsername ? msg.authorUsername.charAt(0).toUpperCase() : '?';
         const time = this.formatTime(msg.createdAt);
         const profileAnimal = msg.author?.profileAnimal || msg.profileAnimal;
@@ -6045,18 +6161,149 @@ class CommunityManager {
         const authorId = msg.authorId || msg.author?._id;
         const userIdAttr = authorId ? `data-user-id="${authorId}"` : '';
         
+        // Score calculation
+        const score = msg.score || 0;
+        const scoreClass = score > 0 ? 'positive' : score < 0 ? 'negative' : '';
+        
+        // Check if user has voted
+        const userId = Auth.user?.id;
+        const hasUpvoted = userId && msg.upvotes?.some(id => id.toString() === userId);
+        const hasDownvoted = userId && msg.downvotes?.some(id => id.toString() === userId);
+        
+        // Can delete if owner or admin
+        const isOwner = userId && authorId === userId;
+        const isAdmin = Auth.user?.role === 'admin' || Auth.user?.role === 'moderator';
+        const canDelete = isOwner || isAdmin;
+        
+        // Render replies
+        let repliesHtml = '';
+        if (msg.replies && msg.replies.length > 0) {
+            repliesHtml = `
+                <div class="chat-replies">
+                    ${msg.replies.map(reply => this.renderChatMessage(reply, true)).join('')}
+                </div>
+            `;
+        }
+        
         return `
-            <div class="chat-message" data-id="${msg._id}" ${userIdAttr}>
+            <div class="chat-message ${isReply ? 'is-reply' : ''}" data-id="${msg._id}" ${userIdAttr}>
                 <div class="chat-message-avatar">${avatarHtml}</div>
                 <div class="chat-message-content">
                     <div class="chat-message-header">
-                        <span class="chat-message-author">${this.escapeHtml(msg.authorUsername)}</span>
+                        <span class="chat-message-author chat-username">${this.escapeHtml(msg.authorUsername)}</span>
                         <span class="chat-message-time">${time}</span>
                     </div>
                     <div class="chat-message-text">${this.escapeHtml(msg.content)}</div>
+                    <div class="chat-message-actions">
+                        <button class="chat-action-btn vote-up ${hasUpvoted ? 'active' : ''}" data-msg-id="${msg._id}" title="Upvote">
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
+                        <span class="chat-message-score ${scoreClass}">${score}</span>
+                        <button class="chat-action-btn vote-down ${hasDownvoted ? 'active' : ''}" data-msg-id="${msg._id}" title="Downvote">
+                            <i class="fas fa-arrow-down"></i>
+                        </button>
+                        ${!isReply ? `
+                            <button class="chat-action-btn reply-btn" data-msg-id="${msg._id}" data-username="${this.escapeHtml(msg.authorUsername)}" title="Reply">
+                                <i class="fas fa-reply"></i>
+                            </button>
+                        ` : ''}
+                        ${canDelete ? `
+                            <button class="chat-action-btn delete-btn" data-msg-id="${msg._id}" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        ` : ''}
+                    </div>
                 </div>
             </div>
+            ${repliesHtml}
         `;
+    }
+    
+    startReply(messageId, username) {
+        if (!Auth.isLoggedIn()) {
+            Auth.showToast('Please log in to reply');
+            Auth.showModal('login');
+            return;
+        }
+        
+        this.replyingTo = messageId;
+        
+        const replyPreview = document.getElementById('chat-reply-preview');
+        const replyUsername = document.getElementById('reply-to-username');
+        
+        if (replyPreview && replyUsername) {
+            replyUsername.textContent = username;
+            replyPreview.style.display = 'flex';
+        }
+        
+        document.getElementById('chat-input')?.focus();
+    }
+    
+    cancelReply() {
+        this.replyingTo = null;
+        
+        const replyPreview = document.getElementById('chat-reply-preview');
+        if (replyPreview) {
+            replyPreview.style.display = 'none';
+        }
+    }
+    
+    async voteChatMessage(messageId, voteType) {
+        if (!Auth.isLoggedIn()) {
+            Auth.showToast('Please log in to vote');
+            Auth.showModal('login');
+            return;
+        }
+        
+        try {
+            const response = await fetch('/api/chat', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                },
+                body: JSON.stringify({ messageId, voteType })
+            });
+            
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to vote');
+            }
+            
+            // Reload chat to reflect new vote
+            await this.loadChat();
+            
+        } catch (error) {
+            console.error('Vote error:', error);
+            Auth.showToast(error.message || 'Failed to vote');
+        }
+    }
+    
+    async deleteChatMessage(messageId) {
+        if (!confirm('Delete this message?')) return;
+        
+        try {
+            const response = await fetch(`/api/chat?messageId=${messageId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                }
+            });
+            
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Failed to delete');
+            }
+            
+            // Remove from local array and re-render
+            this.chatMessages = this.chatMessages.filter(m => m._id !== messageId);
+            this.renderChat();
+            Auth.showToast('Message deleted');
+            
+        } catch (error) {
+            console.error('Delete error:', error);
+            Auth.showToast(error.message || 'Failed to delete');
+        }
     }
 
     async sendChatMessage() {
@@ -6073,13 +6320,20 @@ class CommunityManager {
         }
 
         try {
+            const body = { content };
+            
+            // Include parentId if replying
+            if (this.replyingTo) {
+                body.parentId = this.replyingTo;
+            }
+            
             const response = await fetch('/api/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ content })
+                body: JSON.stringify(body)
             });
 
             if (!response.ok) {
@@ -6087,14 +6341,14 @@ class CommunityManager {
                 throw new Error(error.error || 'Failed to send message');
             }
 
-            const result = await response.json();
-            
-            // Add message to list and render
-            this.chatMessages.push(result.data);
-            this.renderChat();
-            
-            // Clear input and scroll to bottom
+            // Clear input and cancel reply
             input.value = '';
+            this.cancelReply();
+            
+            // Reload chat to show new message with proper threading
+            await this.loadChat();
+            
+            // Scroll to bottom
             const container = document.getElementById('chat-messages');
             if (container) container.scrollTop = container.scrollHeight;
 

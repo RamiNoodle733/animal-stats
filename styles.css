@@ -9942,6 +9942,459 @@ body {
 }
 
 /* ========================================
+   COMMUNITY HUB LAYOUT (New 2-Column)
+   ======================================== */
+
+.community-hub-layout {
+    grid-template-columns: 380px 1fr;
+}
+
+/* Hub column (left) with scrollable content */
+.community-hub-column {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+    padding-right: 8px;
+}
+
+.community-hub-column::-webkit-scrollbar {
+    width: 6px;
+}
+
+.community-hub-column::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+}
+
+.community-hub-column::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.4);
+    border-radius: 3px;
+}
+
+/* Hub section common styles */
+.hub-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.hub-section-header h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: 2px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.hub-section-header h3 i {
+    color: var(--primary-color);
+}
+
+.hub-loading {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}
+
+/* ========================================
+   HUB LEADERBOARD SECTION
+   ======================================== */
+
+.hub-leaderboard-section {
+    background: rgba(15, 20, 35, 0.85);
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    border-radius: 12px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hub-leaderboard-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #ffd700, transparent);
+}
+
+.hub-leaderboard-section .hub-section-header h3 i {
+    color: #ffd700;
+}
+
+.hub-leaderboard-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.hub-leaderboard-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background 0.2s, transform 0.15s;
+    cursor: default;
+}
+
+.hub-leaderboard-item:hover {
+    background: rgba(0, 0, 0, 0.45);
+    transform: translateX(3px);
+}
+
+.hub-leaderboard-item.top-1 {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 107, 0, 0.1));
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.hub-leaderboard-item.top-2 {
+    background: linear-gradient(135deg, rgba(192, 192, 192, 0.12), rgba(150, 150, 150, 0.08));
+    border: 1px solid rgba(192, 192, 192, 0.2);
+}
+
+.hub-leaderboard-item.top-3 {
+    background: linear-gradient(135deg, rgba(205, 127, 50, 0.12), rgba(180, 100, 30, 0.08));
+    border: 1px solid rgba(205, 127, 50, 0.2);
+}
+
+.hub-rank {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    min-width: 28px;
+    text-align: center;
+    color: #666;
+}
+
+.hub-rank.gold { color: #ffd700; text-shadow: 0 0 8px rgba(255, 215, 0, 0.5); }
+.hub-rank.silver { color: #c0c0c0; }
+.hub-rank.bronze { color: #cd7f32; }
+
+.hub-user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #333, #555);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    color: #888;
+    overflow: hidden;
+}
+
+.hub-user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.hub-user-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.hub-user-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hub-user-level {
+    font-size: 0.7rem;
+    color: #888;
+}
+
+.hub-user-level span {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.hub-user-xp {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.95rem;
+    color: #00ff88;
+    letter-spacing: 1px;
+}
+
+/* ========================================
+   HUB STATS SECTION
+   ======================================== */
+
+.hub-stats-section {
+    background: rgba(15, 20, 35, 0.85);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.hub-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.hub-stat-card {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+    transition: border-color 0.2s, transform 0.2s;
+}
+
+.hub-stat-card:hover {
+    border-color: rgba(0, 212, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.hub-stat-icon {
+    font-size: 1.3rem;
+    color: var(--primary-color);
+    margin-bottom: 6px;
+    opacity: 0.8;
+}
+
+.hub-stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: #fff;
+    letter-spacing: 1px;
+    line-height: 1;
+    margin-bottom: 2px;
+}
+
+.hub-stat-label {
+    font-size: 0.7rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* ========================================
+   HUB ONLINE NOW SECTION
+   ======================================== */
+
+.hub-online-section {
+    background: rgba(15, 20, 35, 0.85);
+    border: 1px solid rgba(0, 255, 136, 0.2);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.hub-online-section .hub-section-header h3 i {
+    color: #00ff88;
+}
+
+.online-pulse {
+    animation: onlinePulse 2s ease-in-out infinite;
+}
+
+@keyframes onlinePulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; text-shadow: 0 0 8px rgba(0, 255, 136, 0.8); }
+}
+
+.hub-online-count {
+    background: rgba(0, 255, 136, 0.2);
+    color: #00ff88;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.hub-online-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-height: 120px;
+    overflow-y: auto;
+}
+
+.hub-online-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.hub-online-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 136, 0.3);
+    border-radius: 2px;
+}
+
+.hub-online-user {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    color: #fff;
+    border: 1px solid rgba(0, 255, 136, 0.2);
+}
+
+.hub-online-user::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #00ff88;
+    border-radius: 50%;
+    box-shadow: 0 0 6px rgba(0, 255, 136, 0.6);
+}
+
+.hub-no-online {
+    color: #666;
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 10px;
+}
+
+/* ========================================
+   CHAT REPLY PREVIEW
+   ======================================== */
+
+.chat-reply-preview {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 212, 255, 0.1);
+    border-left: 3px solid var(--primary-color);
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    border-radius: 0 6px 6px 0;
+}
+
+.reply-label {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.reply-label span {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.cancel-reply-btn {
+    background: transparent;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 4px;
+    font-size: 0.9rem;
+    transition: color 0.2s;
+}
+
+.cancel-reply-btn:hover {
+    color: #ff3366;
+}
+
+/* ========================================
+   CHAT MESSAGE WITH REPLIES & VOTING
+   ======================================== */
+
+.chat-message {
+    position: relative;
+}
+
+.chat-message-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.chat-message:hover .chat-message-actions {
+    opacity: 1;
+}
+
+.chat-action-btn {
+    background: transparent;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 0.75rem;
+    padding: 3px 6px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.2s, background 0.2s;
+}
+
+.chat-action-btn:hover {
+    color: #888;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.chat-action-btn.vote-up:hover,
+.chat-action-btn.vote-up.active {
+    color: #00ff88;
+}
+
+.chat-action-btn.vote-down:hover,
+.chat-action-btn.vote-down.active {
+    color: #ff3366;
+}
+
+.chat-action-btn.reply-btn:hover {
+    color: var(--primary-color);
+}
+
+.chat-action-btn.delete-btn:hover {
+    color: #ff3366;
+}
+
+.chat-message-score {
+    font-size: 0.75rem;
+    color: #888;
+    min-width: 20px;
+    text-align: center;
+}
+
+.chat-message-score.positive {
+    color: #00ff88;
+}
+
+.chat-message-score.negative {
+    color: #ff3366;
+}
+
+/* Replies container */
+.chat-replies {
+    margin-left: 20px;
+    padding-left: 12px;
+    border-left: 2px solid rgba(255, 255, 255, 0.1);
+    margin-top: 8px;
+}
+
+.chat-replies .chat-message {
+    margin-bottom: 8px;
+}
+
+.chat-replies .chat-message:last-child {
+    margin-bottom: 0;
+}
+
+/* Reply indicator */
+.chat-message.is-reply .chat-username::before {
+    content: '↳ ';
+    color: #666;
+}
+
+/* ========================================
    COMMUNITY CHAT SECTION (Updated)
    ======================================== */
 
@@ -10601,7 +11054,12 @@ body {
         overflow-y: auto;
     }
     
-    .community-main-column {
+    .community-hub-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .community-main-column,
+    .community-hub-column {
         overflow-y: visible;
         padding-right: 0;
     }
@@ -10609,6 +11067,14 @@ body {
     .community-chat-column {
         height: auto;
         min-height: 500px;
+    }
+    
+    .hub-stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+    
+    .hub-online-list {
+        max-height: none;
     }
 }
 
@@ -10634,6 +11100,27 @@ body {
     .community-tab {
         padding: 10px 16px;
         font-size: 0.8rem;
+    }
+    
+    .hub-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .hub-leaderboard-item {
+        padding: 6px 10px;
+    }
+    
+    .hub-user-avatar {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .hub-stat-card {
+        padding: 10px;
+    }
+    
+    .hub-stat-value {
+        font-size: 1.2rem;
     }
     
     .chat-message {
