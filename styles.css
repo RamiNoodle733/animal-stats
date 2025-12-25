@@ -9346,25 +9346,25 @@ body {
 }
 
 /* ========================================
-   COMMUNITY PAGE - COMPLETE OVERHAUL V3
-   Full-width, properly styled community hub
+   COMMUNITY PAGE - FIXED V4
+   Proper widths, all elements visible
    ======================================== */
 
-/* Main Layout - FULL WIDTH like other pages */
+/* Main Layout - Balanced columns */
 .community-feed-layout {
     display: grid;
-    grid-template-columns: 380px 1fr;
+    grid-template-columns: 380px minmax(400px, 700px);
     gap: 30px;
     width: 100%;
-    max-width: none;
-    margin: 0;
+    max-width: 1200px;
+    margin: 0 auto;
     padding: 24px 40px;
     height: calc(100vh - 120px);
     position: relative;
     box-sizing: border-box;
 }
 
-/* Sidebar Column (LEFT) - Wider and better styled */
+/* Sidebar Column (LEFT) */
 .community-sidebar-column {
     display: flex;
     flex-direction: column;
@@ -9393,7 +9393,7 @@ body {
     background: rgba(0, 212, 255, 0.5);
 }
 
-/* Feed/Chat Column (RIGHT) */
+/* Feed/Chat Column (RIGHT) - Constrained width */
 .community-feed-column {
     display: flex;
     flex-direction: column;
@@ -9402,6 +9402,7 @@ body {
     padding-right: 10px;
     padding-bottom: 40px;
     max-height: calc(100vh - 140px);
+    max-width: 700px;
 }
 
 .community-feed-column::-webkit-scrollbar {
@@ -9423,7 +9424,7 @@ body {
 }
 
 /* ========================================
-   TAB BAR - Clean Two-Tab Design
+   TAB BAR - Simple Two Tabs
    ======================================== */
 
 .community-tab-bar {
@@ -10010,24 +10011,26 @@ body {
     margin-top: 6px;
 }
 
-/* Stats Grid - New Structure (used in HTML) */
+/* Stats Grid - Used in HTML for 5 stats */
 .hud-stats-grid {
-    display: grid;
+    display: grid !important;
     grid-template-columns: repeat(5, 1fr);
-    gap: 4px;
-    padding: 12px;
-    background: rgba(0, 0, 0, 0.15);
+    gap: 6px;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.2);
 }
 
 .hud-stat-item {
-    display: flex;
+    display: flex !important;
     flex-direction: column;
     align-items: center;
-    padding: 14px 8px;
+    justify-content: center;
+    padding: 16px 8px;
     background: rgba(255, 255, 255, 0.03);
     border-radius: 10px;
     transition: all 0.2s ease;
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    min-height: 60px;
 }
 
 .hud-stat-item:hover {
@@ -10035,22 +10038,22 @@ body {
     border-color: rgba(0, 212, 255, 0.2);
 }
 
-/* Direct children selectors for stat values/labels */
-.hud-stat-item .hud-stat-value,
-.hud-stat-item > span:first-child {
+/* Stat values and labels - use class names from HTML */
+.hud-stat-item .hud-stat-value {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.6rem;
     color: #fff;
     line-height: 1;
+    display: block;
 }
 
-.hud-stat-item .hud-stat-label,
-.hud-stat-item > span:last-child {
-    font-size: 0.7rem;
+.hud-stat-item .hud-stat-label {
+    font-size: 0.65rem;
     color: #888;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-top: 6px;
+    margin-top: 8px;
+    display: block;
 }
 
 /* ========================================
@@ -10135,14 +10138,15 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     text-align: center;
+    min-width: 100px;
 }
 
 .matchup-fighter-img {
-    width: 80px;
-    height: 80px;
-    border-radius: 14px;
+    width: 70px;
+    height: 70px;
+    border-radius: 12px;
     object-fit: cover;
     border: 2px solid rgba(255, 255, 255, 0.15);
     background: rgba(0, 0, 0, 0.4);
@@ -10152,74 +10156,77 @@ body {
 
 .matchup-fighter:hover .matchup-fighter-img {
     border-color: rgba(255, 215, 0, 0.6);
-    transform: scale(1.08);
-    box-shadow: 0 6px 20px rgba(255, 215, 0, 0.2);
+    transform: scale(1.05);
 }
 
 .matchup-fighter-name {
     font-family: 'Rajdhani', sans-serif;
     font-weight: 700;
-    color: #fff;
-    font-size: 0.9rem;
+    color: #fff !important;
+    font-size: 0.85rem;
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    display: block !important;
+    min-height: 1.2em;
 }
 
 .matchup-vote-bar {
     width: 100%;
-    height: 8px;
+    height: 6px;
     background: rgba(0, 0, 0, 0.5);
-    border-radius: 4px;
+    border-radius: 3px;
     position: relative;
     overflow: hidden;
+    display: block !important;
 }
 
 .matchup-vote-bar .fill,
 .matchup-bar-fill {
     height: 100%;
     background: linear-gradient(90deg, #00d4ff, #00ff88);
-    border-radius: 4px;
+    border-radius: 3px;
     transition: width 0.5s ease;
+    min-width: 2px;
 }
 
 .matchup-pct {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 700;
-    color: #00d4ff;
+    color: #00d4ff !important;
     letter-spacing: 1px;
+    display: block !important;
 }
 
 .matchup-vote-btn {
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 107, 0, 0.2));
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 107, 0, 0.25));
     border: 1px solid rgba(255, 215, 0, 0.4);
-    border-radius: 8px;
-    padding: 10px 16px;
-    color: #ffd700;
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: #ffd700 !important;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.3s ease;
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 5px;
     width: 100%;
     margin-top: 4px;
 }
 
 .matchup-vote-btn:hover {
-    background: linear-gradient(135deg, rgba(255, 215, 0, 0.35), rgba(255, 107, 0, 0.35));
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.25);
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.4), rgba(255, 107, 0, 0.4));
+    transform: translateY(-1px);
 }
 
 .matchup-vote-btn.voted {
     background: linear-gradient(135deg, #ffd700, #ff8c00);
-    color: #000;
+    color: #000 !important;
     border-color: #ffd700;
 }
 
@@ -10231,13 +10238,13 @@ body {
 
 .matchup-vs {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     color: #ff6b00;
     background: linear-gradient(135deg, rgba(255, 107, 0, 0.2), rgba(255, 215, 0, 0.1));
-    padding: 8px 14px;
-    border-radius: 10px;
+    padding: 6px 12px;
+    border-radius: 8px;
     flex-shrink: 0;
-    margin-top: 20px;
+    align-self: center;
     letter-spacing: 2px;
     border: 1px solid rgba(255, 107, 0, 0.2);
 }
@@ -10470,9 +10477,10 @@ body {
 
 @media (min-width: 1600px) {
     .community-feed-layout {
-        grid-template-columns: 420px 1fr;
+        grid-template-columns: 420px minmax(400px, 750px);
         gap: 40px;
         padding: 30px 60px;
+        max-width: 1300px;
     }
 }
 
@@ -10482,9 +10490,10 @@ body {
 
 @media (max-width: 1200px) {
     .community-feed-layout {
-        grid-template-columns: 320px 1fr;
+        grid-template-columns: 320px minmax(300px, 600px);
         gap: 20px;
         padding: 20px 24px;
+        max-width: 1000px;
     }
     
     .hud-stats-grid,
