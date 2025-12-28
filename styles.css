@@ -9688,6 +9688,288 @@ body {
 }
 
 /* ========================================
+   FEED ITEM - Original Comment Card Style
+   For "All Comments" tab showing animal comments
+   ======================================== */
+
+.feed-item {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+}
+
+.feed-item:hover {
+    border-color: rgba(0, 212, 255, 0.3);
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.feed-item-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.feed-animal-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid rgba(0, 212, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.feed-animal-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.feed-animal-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem;
+    color: #00d4ff;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    letter-spacing: 1px;
+}
+
+.feed-animal-name:hover {
+    color: #66e0ff;
+    text-decoration: underline;
+}
+
+.feed-comment-type {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+.feed-view-btn {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #00d4ff;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.feed-view-btn:hover {
+    background: rgba(0, 212, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+.feed-comment-main {
+    display: flex;
+    gap: 12px;
+}
+
+.feed-comment-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00d4ff, #0066cc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #fff;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.feed-comment-avatar img,
+.feed-comment-avatar .user-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.feed-comment-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.feed-comment-author {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.feed-comment-author-name {
+    font-weight: 600;
+    color: #ff9500;
+    font-size: 0.9rem;
+}
+
+.feed-comment-time {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.feed-comment-content {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+}
+
+.feed-comment-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.feed-upvote-btn,
+.feed-downvote-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    font-size: 0.85rem;
+}
+
+.feed-upvote-btn:hover {
+    color: #44ff88;
+    background: rgba(68, 255, 136, 0.1);
+}
+
+.feed-downvote-btn:hover {
+    color: #ff4444;
+    background: rgba(255, 68, 68, 0.1);
+}
+
+.feed-upvote-btn.active {
+    color: #44ff88;
+}
+
+.feed-downvote-btn.active {
+    color: #ff4444;
+}
+
+.feed-vote-score {
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    min-width: 20px;
+    text-align: center;
+}
+
+.feed-vote-score.positive {
+    color: #44ff88;
+}
+
+.feed-vote-score.negative {
+    color: #ff4444;
+}
+
+.feed-reply-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    font-size: 0.8rem;
+    margin-left: 8px;
+}
+
+.feed-reply-btn:hover {
+    color: #00d4ff;
+    background: rgba(0, 212, 255, 0.1);
+}
+
+/* Feed Replies */
+.feed-replies {
+    margin-top: 12px;
+    padding-left: 52px;
+    border-left: 2px solid rgba(0, 212, 255, 0.2);
+}
+
+.feed-reply {
+    padding: 10px 0 10px 12px;
+    display: flex;
+    gap: 10px;
+}
+
+.feed-reply-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #666, #444);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: #fff;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.feed-reply-avatar img,
+.feed-reply-avatar .user-avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.feed-reply-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.feed-reply-author {
+    font-weight: 600;
+    color: #ff9500;
+    font-size: 0.8rem;
+    margin-right: 8px;
+}
+
+.feed-reply-time {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.feed-reply-content {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin-top: 4px;
+}
+
+.feed-more-replies {
+    color: #00d4ff;
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 8px 12px;
+    margin-top: 8px;
+    transition: color 0.2s ease;
+}
+
+.feed-more-replies:hover {
+    color: #66e0ff;
+    text-decoration: underline;
+}
+
+/* ========================================
    FEED POST CARD - Enhanced Design
    ======================================== */
 

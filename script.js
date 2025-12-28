@@ -6523,11 +6523,59 @@ class CommunityManager {
             return;
         }
 
-        // Use the unified post card renderer for comments
-        container.innerHTML = this.feedComments.map(comment => this.renderFeedPostCard(comment, 'comment')).join('');
+        // Use the ORIGINAL feed item format (with animal header, not unified cards)
+        container.innerHTML = this.feedComments.map(comment => this.renderFeedItem(comment)).join('');
         
-        // Add event listeners
-        this.setupPostActionListeners(container);
+        // Add click handlers for animal names
+        container.querySelectorAll('.feed-animal-name').forEach(el => {
+            el.addEventListener('click', (e) => {
+                const animalName = e.target.dataset.animal;
+                if (animalName && this.app) {
+                    this.app.selectAnimalByName(animalName);
+                }
+            });
+        });
+
+        // Add click handlers for view comment button
+        container.querySelectorAll('.feed-view-btn').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const animalName = e.currentTarget.dataset.animal;
+                const animalId = e.currentTarget.dataset.animalId;
+                const animalImage = e.currentTarget.dataset.animalImage;
+                this.openAnimalComments(animalName, animalId, animalImage);
+            });
+        });
+
+        // Add click handlers for upvote
+        container.querySelectorAll('.feed-upvote-btn').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const commentId = e.currentTarget.dataset.commentId;
+                this.voteComment(commentId, 'up');
+            });
+        });
+
+        // Add click handlers for downvote
+        container.querySelectorAll('.feed-downvote-btn').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const commentId = e.currentTarget.dataset.commentId;
+                this.voteComment(commentId, 'down');
+            });
+        });
+
+        // Add click handlers for reply
+        container.querySelectorAll('.feed-reply-btn').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const commentId = e.currentTarget.dataset.commentId;
+                const animalName = e.currentTarget.dataset.animal;
+                const animalId = e.currentTarget.dataset.animalId;
+                const animalImage = e.currentTarget.dataset.animalImage;
+                this.openAnimalComments(animalName, animalId, animalImage, commentId);
+            });
+        });
     }
 
     renderFeedItem(comment) {
