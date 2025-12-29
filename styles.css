@@ -9348,35 +9348,48 @@ body {
 /* ========================================
    COMMUNITY PAGE - FIXED V4
    Proper widths, all elements visible
+   Fixed for 100% zoom on 1366x768 and up
    ======================================== */
 
-/* Main Layout - Balanced columns */
+/* Community View - uses flexbox layout, full height minus header */
+#community-view.active-view {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* Main Layout - Two-column grid with proper height management */
 .community-feed-layout {
     display: grid;
-    grid-template-columns: 380px minmax(400px, 700px);
-    gap: 30px;
+    grid-template-columns: clamp(280px, 30%, 380px) minmax(400px, 1fr);
+    gap: clamp(16px, 2vw, 30px);
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 24px 40px;
-    height: calc(100vh - 120px);
-    position: relative;
+    padding: clamp(12px, 2vw, 24px) clamp(16px, 3vw, 40px);
+    /* Use flex: 1 and min-height: 0 to allow proper scrolling */
+    flex: 1;
+    min-height: 0;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
-/* Sidebar Column (LEFT) */
+/* Sidebar Column (LEFT) - Scrollable independently */
 .community-sidebar-column {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: clamp(12px, 1.5vw, 20px);
     overflow-y: auto;
-    padding-bottom: 40px;
-    padding-right: 10px;
-    max-height: calc(100vh - 140px);
+    overflow-x: hidden;
+    padding-bottom: 20px;
+    padding-right: 8px;
+    min-height: 0; /* Critical for proper scroll behavior in flex/grid */
 }
 
 .community-sidebar-column::-webkit-scrollbar {
-    width: 6px;
+    width: 5px;
 }
 
 .community-sidebar-column::-webkit-scrollbar-track {
@@ -9393,20 +9406,20 @@ body {
     background: rgba(0, 212, 255, 0.5);
 }
 
-/* Feed/Chat Column (RIGHT) - Constrained width */
+/* Feed/Chat Column (RIGHT) - Scrollable independently */
 .community-feed-column {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: clamp(10px, 1.2vw, 16px);
     overflow-y: auto;
-    padding-right: 10px;
-    padding-bottom: 40px;
-    max-height: calc(100vh - 140px);
-    max-width: 700px;
+    overflow-x: hidden;
+    padding-right: 8px;
+    padding-bottom: 20px;
+    min-height: 0; /* Critical for proper scroll behavior in flex/grid */
 }
 
 .community-feed-column::-webkit-scrollbar {
-    width: 6px;
+    width: 5px;
 }
 
 .community-feed-column::-webkit-scrollbar-track {
@@ -9424,7 +9437,7 @@ body {
 }
 
 /* ========================================
-   TAB BAR - Simple Two Tabs
+   TAB BAR - Identical Width Two Tabs
    ======================================== */
 
 .community-tab-bar {
@@ -9442,22 +9455,25 @@ body {
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+/* Both tabs are identical - flex: 1 ensures equal width */
 .community-tab-btn {
-    flex: 1;
-    padding: 16px 24px;
+    flex: 1 1 0; /* Equal width for all tabs */
+    min-width: 0; /* Allow shrinking */
+    padding: clamp(10px, 1.2vw, 16px) clamp(12px, 2vw, 24px);
     background: transparent;
     border: none;
     color: #666;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
+    font-size: clamp(0.85rem, 1vw, 1.1rem);
     letter-spacing: 2px;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: clamp(6px, 0.8vw, 10px);
     position: relative;
+    white-space: nowrap;
 }
 
 .community-tab-btn:hover {
@@ -9492,28 +9508,28 @@ body {
 .feed-header-card {
     background: linear-gradient(135deg, rgba(20, 25, 35, 0.95), rgba(15, 20, 30, 0.98));
     border: 1px solid rgba(0, 212, 255, 0.2);
-    border-radius: 16px;
+    border-radius: 12px;
     overflow: hidden;
 }
 
 .feed-compose-box {
-    padding: 20px;
+    padding: clamp(12px, 1.5vw, 20px);
     background: linear-gradient(135deg, rgba(15, 20, 30, 0.98), rgba(10, 15, 25, 0.99));
     border: 1px solid rgba(0, 212, 255, 0.15);
-    border-radius: 14px;
+    border-radius: 12px;
     flex-shrink: 0;
 }
 
 .compose-reply-preview {
     background: rgba(0, 212, 255, 0.1);
     border: 1px solid rgba(0, 212, 255, 0.25);
-    border-radius: 10px;
-    padding: 10px 14px;
-    margin-bottom: 14px;
+    border-radius: 8px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .reply-indicator {
@@ -9546,12 +9562,12 @@ body {
 .compose-input-row {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: clamp(8px, 1vw, 12px);
 }
 
 .compose-avatar {
-    width: 40px;
-    height: 40px;
+    width: clamp(32px, 3vw, 40px);
+    height: clamp(32px, 3vw, 40px);
     border-radius: 50%;
     background: linear-gradient(135deg, #00d4ff, #0066cc);
     display: flex;
@@ -9605,7 +9621,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
+    font-size: 0.95rem;
     transition: all 0.3s ease;
     flex-shrink: 0;
 }
@@ -9624,8 +9640,8 @@ body {
 .compose-login-prompt {
     text-align: center;
     color: #666;
-    font-size: 0.9rem;
-    padding: 8px;
+    font-size: clamp(0.8rem, 0.85vw, 0.9rem);
+    padding: 6px;
 }
 
 .compose-login-prompt a {
@@ -9644,40 +9660,134 @@ body {
 .feed-posts-container {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: clamp(10px, 1.2vw, 16px);
     flex: 1;
-    overflow-y: auto;
+    min-height: 0;
+    /* No nested scrollbar - the parent column scrolls */
 }
 
 .feed-loading-indicator {
     text-align: center;
     color: #666;
-    padding: 60px 40px;
-    font-size: 1.1rem;
+    padding: clamp(30px, 4vw, 60px) clamp(20px, 3vw, 40px);
+    font-size: clamp(0.9rem, 1vw, 1.1rem);
 }
 
 .feed-loading-indicator i {
-    margin-right: 10px;
+    margin-right: 8px;
     color: #00d4ff;
+}
+
+/* Empty State */
+.feed-empty-state {
+    text-align: center;
+    padding: clamp(40px, 5vw, 80px) clamp(20px, 3vw, 40px);
+    color: #666;
+}
+
+.feed-empty-state i {
+    font-size: clamp(2rem, 2.5vw, 3rem);
+    color: rgba(0, 212, 255, 0.3);
+    margin-bottom: 16px;
+    display: block;
+}
+
+.feed-empty-state h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.1rem, 1.3vw, 1.4rem);
+    letter-spacing: 2px;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.feed-empty-state p {
+    font-size: clamp(0.85rem, 0.9vw, 0.95rem);
+    color: #666;
+}
+
+/* Skeleton Loading Cards */
+.feed-skeleton-card {
+    background: linear-gradient(135deg, rgba(15, 20, 30, 0.95), rgba(10, 15, 25, 0.98));
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: clamp(14px, 1.5vw, 20px);
+    animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.feed-skeleton-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.feed-skeleton-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.feed-skeleton-meta {
+    flex: 1;
+}
+
+.feed-skeleton-name {
+    width: 120px;
+    height: 14px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    margin-bottom: 6px;
+}
+
+.feed-skeleton-time {
+    width: 80px;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+.feed-skeleton-content {
+    height: 60px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.feed-skeleton-actions {
+    display: flex;
+    gap: 16px;
+}
+
+.feed-skeleton-action {
+    width: 60px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
 }
 
 /* Load More Button */
 .feed-load-more-btn {
     background: rgba(0, 212, 255, 0.1);
     border: 1px solid rgba(0, 212, 255, 0.3);
-    border-radius: 12px;
-    padding: 14px 28px;
+    border-radius: 10px;
+    padding: clamp(10px, 1.2vw, 14px) clamp(20px, 2vw, 28px);
     color: #00d4ff;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
+    font-size: clamp(0.85rem, 0.95vw, 1rem);
     letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    margin: 12px auto;
+    gap: 8px;
+    margin: 10px auto;
     flex-shrink: 0;
 }
 
@@ -9970,14 +10080,14 @@ body {
 }
 
 /* ========================================
-   FEED POST CARD - Enhanced Design
+   FEED POST CARD - Compact Design
    ======================================== */
 
 .feed-post-card {
     background: linear-gradient(135deg, rgba(15, 20, 30, 0.95), rgba(10, 15, 25, 0.98));
     border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 14px;
-    padding: 20px;
+    border-radius: 12px;
+    padding: clamp(12px, 1.5vw, 20px);
     transition: all 0.3s ease;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
@@ -9997,20 +10107,20 @@ body {
 .feed-post-header {
     display: flex;
     align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 12px;
+    gap: clamp(8px, 1vw, 12px);
+    margin-bottom: clamp(8px, 1vw, 12px);
 }
 
 .feed-post-avatar {
-    width: 42px;
-    height: 42px;
+    width: clamp(34px, 3.5vw, 42px);
+    height: clamp(34px, 3.5vw, 42px);
     border-radius: 50%;
     background: linear-gradient(135deg, #00d4ff, #0066cc);
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 1rem;
+    font-size: clamp(0.85rem, 0.95vw, 1rem);
     color: #fff;
     flex-shrink: 0;
     overflow: hidden;
@@ -10037,14 +10147,14 @@ body {
 .feed-post-author {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     flex-wrap: wrap;
 }
 
 .feed-post-username {
     font-weight: 700;
     color: #fff;
-    font-size: 0.95rem;
+    font-size: clamp(0.85rem, 0.9vw, 0.95rem);
 }
 
 .feed-post-username.anonymous {
@@ -10064,23 +10174,23 @@ body {
 
 .feed-post-time {
     color: #666;
-    font-size: 0.8rem;
-    margin-top: 2px;
+    font-size: clamp(0.7rem, 0.75vw, 0.8rem);
+    margin-top: 1px;
 }
 
 /* Animal Context Chip (for comments on animals) */
 .feed-animal-context {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     background: rgba(0, 212, 255, 0.1);
     border: 1px solid rgba(0, 212, 255, 0.2);
-    border-radius: 20px;
-    padding: 4px 12px 4px 4px;
-    margin-top: 6px;
+    border-radius: 16px;
+    padding: 3px 10px 3px 3px;
+    margin-top: 4px;
     cursor: pointer;
     transition: all 0.2s ease;
-    font-size: 0.8rem;
+    font-size: clamp(0.7rem, 0.75vw, 0.8rem);
 }
 
 .feed-animal-context:hover {
@@ -10089,8 +10199,8 @@ body {
 }
 
 .feed-animal-context img {
-    width: 24px;
-    height: 24px;
+    width: clamp(20px, 2vw, 24px);
+    height: clamp(20px, 2vw, 24px);
     border-radius: 50%;
     object-fit: cover;
 }
@@ -10103,9 +10213,9 @@ body {
 /* Post Content */
 .feed-post-content {
     color: #ddd;
-    font-size: 0.95rem;
+    font-size: clamp(0.85rem, 0.9vw, 0.95rem);
     line-height: 1.5;
-    margin-bottom: 12px;
+    margin-bottom: clamp(8px, 1vw, 12px);
     word-wrap: break-word;
 }
 
@@ -10113,22 +10223,22 @@ body {
 .feed-reply-context {
     background: rgba(0, 0, 0, 0.2);
     border-left: 2px solid rgba(0, 212, 255, 0.4);
-    padding: 8px 12px;
-    margin-bottom: 10px;
-    border-radius: 0 8px 8px 0;
-    font-size: 0.85rem;
+    padding: 6px 10px;
+    margin-bottom: 8px;
+    border-radius: 0 6px 6px 0;
+    font-size: clamp(0.75rem, 0.8vw, 0.85rem);
 }
 
 .feed-reply-context-author {
     color: #00d4ff;
     font-weight: 600;
-    font-size: 0.8rem;
-    margin-bottom: 4px;
+    font-size: clamp(0.7rem, 0.75vw, 0.8rem);
+    margin-bottom: 3px;
 }
 
 .feed-reply-context-text {
     color: #888;
-    font-size: 0.85rem;
+    font-size: clamp(0.75rem, 0.8vw, 0.85rem);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -10138,8 +10248,8 @@ body {
 .feed-post-actions {
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding-top: 8px;
+    gap: clamp(10px, 1.2vw, 16px);
+    padding-top: clamp(6px, 0.7vw, 8px);
     border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
@@ -10148,13 +10258,13 @@ body {
     border: none;
     color: #666;
     font-family: 'Rajdhani', sans-serif;
-    font-size: 0.85rem;
+    font-size: clamp(0.75rem, 0.8vw, 0.85rem);
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 6px 10px;
-    border-radius: 8px;
+    gap: 5px;
+    padding: clamp(4px, 0.5vw, 6px) clamp(6px, 0.8vw, 10px);
+    border-radius: 6px;
     transition: all 0.2s ease;
 }
 
@@ -10176,20 +10286,20 @@ body {
 }
 
 /* ========================================
-   COMMUNITY HUD MODULE - Enhanced
+   COMMUNITY HUD MODULE - Compact Design
    ======================================== */
 
 .community-hud-module {
     background: linear-gradient(135deg, rgba(15, 20, 30, 0.98), rgba(10, 15, 25, 0.99));
     border: 1px solid rgba(0, 212, 255, 0.3);
-    border-radius: 16px;
+    border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .hud-header {
     background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 100, 200, 0.15));
-    padding: 16px 20px;
+    padding: clamp(10px, 1.2vw, 16px) clamp(12px, 1.5vw, 20px);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -10198,24 +10308,24 @@ body {
 
 .hud-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 3px;
+    font-size: clamp(0.95rem, 1.1vw, 1.2rem);
+    letter-spacing: 2px;
     color: #00d4ff;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .hud-title i {
-    font-size: 1rem;
+    font-size: 0.9rem;
 }
 
-/* Live Badges Row - Better spacing */
+/* Live Badges Row - Compact */
 .hud-live-stats,
 .hud-live-badges {
     display: flex;
-    gap: 12px;
-    padding: 14px 16px;
+    gap: clamp(8px, 1vw, 12px);
+    padding: clamp(10px, 1.2vw, 14px) clamp(12px, 1.5vw, 16px);
     background: rgba(0, 0, 0, 0.2);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -10224,11 +10334,11 @@ body {
 .hud-visits-badge {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 0.9rem;
+    gap: 6px;
+    font-size: clamp(0.75rem, 0.85vw, 0.9rem);
     font-weight: 600;
-    padding: 8px 14px;
-    border-radius: 20px;
+    padding: clamp(5px, 0.6vw, 8px) clamp(10px, 1.2vw, 14px);
+    border-radius: 16px;
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -10239,7 +10349,7 @@ body {
 }
 
 .hud-online-badge .online-dot {
-    font-size: 0.6rem;
+    font-size: 0.5rem;
     animation: pulse-dot 2s infinite;
 }
 
@@ -10253,12 +10363,12 @@ body {
     border-color: rgba(167, 139, 250, 0.2);
 }
 
-/* Stats Row - Original */
+/* Stats Row - Compact */
 .hud-stats-row {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 4px;
-    padding: 12px;
+    gap: 3px;
+    padding: clamp(8px, 1vw, 12px);
     background: rgba(0, 0, 0, 0.15);
 }
 
@@ -10266,9 +10376,9 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 14px 8px;
+    padding: clamp(8px, 1vw, 14px) clamp(4px, 0.5vw, 8px);
     background: rgba(255, 255, 255, 0.03);
-    border-radius: 10px;
+    border-radius: 8px;
     transition: all 0.2s ease;
     border: 1px solid rgba(255, 255, 255, 0.03);
 }
@@ -10280,25 +10390,25 @@ body {
 
 .hud-stat-value {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
+    font-size: clamp(1.1rem, 1.3vw, 1.5rem);
     color: #fff;
     line-height: 1;
 }
 
 .hud-stat-label {
-    font-size: 0.7rem;
+    font-size: clamp(0.55rem, 0.65vw, 0.7rem);
     color: #888;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-top: 6px;
+    margin-top: 4px;
 }
 
-/* Stats Grid - Used in HTML for 5 stats */
+/* Stats Grid - Used in HTML for 5 stats - Compact */
 .hud-stats-grid {
     display: grid !important;
     grid-template-columns: repeat(5, 1fr);
-    gap: 6px;
-    padding: 16px;
+    gap: clamp(3px, 0.4vw, 6px);
+    padding: clamp(10px, 1.2vw, 16px);
     background: rgba(0, 0, 0, 0.2);
 }
 
@@ -10307,12 +10417,12 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 16px 8px;
+    padding: clamp(10px, 1.2vw, 16px) clamp(4px, 0.5vw, 8px);
     background: rgba(255, 255, 255, 0.03);
-    border-radius: 10px;
+    border-radius: 8px;
     transition: all 0.2s ease;
     border: 1px solid rgba(255, 255, 255, 0.05);
-    min-height: 60px;
+    min-height: auto;
 }
 
 .hud-stat-item:hover {
@@ -10323,35 +10433,35 @@ body {
 /* Stat values and labels - use class names from HTML */
 .hud-stat-item .hud-stat-value {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem;
+    font-size: clamp(1.2rem, 1.4vw, 1.6rem);
     color: #fff;
     line-height: 1;
     display: block;
 }
 
 .hud-stat-item .hud-stat-label {
-    font-size: 0.65rem;
+    font-size: clamp(0.5rem, 0.6vw, 0.65rem);
     color: #888;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    margin-top: 8px;
+    margin-top: clamp(4px, 0.5vw, 8px);
     display: block;
 }
 
 /* ========================================
-   SIDEBAR MODULES - Enhanced Styling
+   SIDEBAR MODULES - Compact Styling
    ======================================== */
 
 .sidebar-module {
     background: linear-gradient(135deg, rgba(15, 20, 30, 0.98), rgba(10, 15, 25, 0.99));
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
+    border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
 .module-header {
-    padding: 16px 20px;
+    padding: clamp(10px, 1.2vw, 16px) clamp(12px, 1.5vw, 20px);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -10361,27 +10471,27 @@ body {
 
 .module-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
+    font-size: clamp(0.9rem, 1vw, 1.1rem);
     letter-spacing: 2px;
     color: #fff;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .module-title i {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #ffd700;
 }
 
 .module-loading {
     text-align: center;
     color: #666;
-    padding: 40px;
+    padding: clamp(20px, 2.5vw, 40px);
 }
 
 /* ========================================
-   DAILY MATCHUP MODULE - Full Design
+   DAILY MATCHUP MODULE - Compact Design
    ======================================== */
 
 .daily-matchup-module {
@@ -10398,21 +10508,21 @@ body {
 
 .matchup-timer {
     font-family: 'Orbitron', monospace;
-    font-size: 0.85rem;
+    font-size: clamp(0.7rem, 0.8vw, 0.85rem);
     color: #ff6b00;
     background: rgba(255, 107, 0, 0.15);
-    padding: 6px 12px;
-    border-radius: 8px;
+    padding: clamp(4px, 0.5vw, 6px) clamp(8px, 1vw, 12px);
+    border-radius: 6px;
     border: 1px solid rgba(255, 107, 0, 0.2);
 }
 
-/* New Matchup Arena Structure - Complete */
+/* Matchup Arena Structure - Compact */
 .matchup-arena {
-    padding: 20px;
+    padding: clamp(12px, 1.5vw, 20px);
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 16px;
+    gap: clamp(8px, 1vw, 16px);
 }
 
 .matchup-fighter {
@@ -10420,15 +10530,15 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: clamp(4px, 0.5vw, 8px);
     text-align: center;
-    min-width: 100px;
+    min-width: 80px;
 }
 
 .matchup-fighter-img {
-    width: 70px;
-    height: 70px;
-    border-radius: 12px;
+    width: clamp(50px, 6vw, 70px);
+    height: clamp(50px, 6vw, 70px);
+    border-radius: 10px;
     object-fit: cover;
     border: 2px solid rgba(255, 255, 255, 0.15);
     background: rgba(0, 0, 0, 0.4);
@@ -10445,7 +10555,7 @@ body {
     font-family: 'Rajdhani', sans-serif;
     font-weight: 700;
     color: #fff !important;
-    font-size: 0.85rem;
+    font-size: clamp(0.7rem, 0.8vw, 0.85rem);
     max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -10456,7 +10566,7 @@ body {
 
 .matchup-vote-bar {
     width: 100%;
-    height: 6px;
+    height: clamp(4px, 0.5vw, 6px);
     background: rgba(0, 0, 0, 0.5);
     border-radius: 3px;
     position: relative;
@@ -10475,7 +10585,7 @@ body {
 
 .matchup-pct {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.95rem;
+    font-size: clamp(0.8rem, 0.9vw, 0.95rem);
     font-weight: 700;
     color: #00d4ff !important;
     letter-spacing: 1px;
@@ -10485,20 +10595,20 @@ body {
 .matchup-vote-btn {
     background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 107, 0, 0.25));
     border: 1px solid rgba(255, 215, 0, 0.4);
-    border-radius: 6px;
-    padding: 8px 12px;
+    border-radius: 5px;
+    padding: clamp(5px, 0.6vw, 8px) clamp(8px, 1vw, 12px);
     color: #ffd700 !important;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.8rem;
+    font-size: clamp(0.65rem, 0.75vw, 0.8rem);
     letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex !important;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 4px;
     width: 100%;
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
 .matchup-vote-btn:hover {
@@ -10520,11 +10630,11 @@ body {
 
 .matchup-vs {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
+    font-size: clamp(1rem, 1.2vw, 1.3rem);
     color: #ff6b00;
     background: linear-gradient(135deg, rgba(255, 107, 0, 0.2), rgba(255, 215, 0, 0.1));
-    padding: 6px 12px;
-    border-radius: 8px;
+    padding: clamp(4px, 0.5vw, 6px) clamp(8px, 1vw, 12px);
+    border-radius: 6px;
     flex-shrink: 0;
     align-self: center;
     letter-spacing: 2px;
@@ -10533,11 +10643,11 @@ body {
 
 /* Compact Arena - Legacy Support */
 .matchup-compact-arena {
-    padding: 20px;
+    padding: clamp(12px, 1.5vw, 20px);
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 16px;
+    gap: clamp(10px, 1.2vw, 16px);
 }
 
 .matchup-compact-fighter {
@@ -10588,17 +10698,17 @@ body {
 
 .matchup-vs-badge {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.4rem;
+    font-size: clamp(1.1rem, 1.3vw, 1.4rem);
     color: #ff6b00;
     background: rgba(255, 107, 0, 0.2);
-    padding: 8px 14px;
-    border-radius: 10px;
+    padding: clamp(6px, 0.7vw, 8px) clamp(10px, 1.2vw, 14px);
+    border-radius: 8px;
     flex-shrink: 0;
-    margin-top: 20px;
+    margin-top: clamp(10px, 1.5vw, 20px);
 }
 
 /* ========================================
-   LEADERBOARD MODULE - Enhanced
+   LEADERBOARD MODULE - Compact Design
    ======================================== */
 
 .leaderboard-module {
@@ -10610,17 +10720,32 @@ body {
 }
 
 .leaderboard-list {
-    padding: 12px;
+    padding: clamp(8px, 1vw, 12px);
+    max-height: 220px; /* Limit height to show ~4-5 players */
+    overflow-y: auto;
+}
+
+.leaderboard-list::-webkit-scrollbar {
+    width: 4px;
+}
+
+.leaderboard-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.leaderboard-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 215, 0, 0.3);
+    border-radius: 2px;
 }
 
 .leaderboard-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 14px;
-    border-radius: 12px;
+    gap: clamp(8px, 1vw, 12px);
+    padding: clamp(8px, 1vw, 12px) clamp(10px, 1.2vw, 14px);
+    border-radius: 10px;
     background: rgba(255, 255, 255, 0.02);
-    margin-bottom: 6px;
+    margin-bottom: clamp(4px, 0.5vw, 6px);
     transition: all 0.2s ease;
     cursor: pointer;
     border: 1px solid transparent;
@@ -10637,14 +10762,14 @@ body {
 }
 
 .leaderboard-rank {
-    width: 28px;
-    height: 28px;
+    width: clamp(22px, 2.5vw, 28px);
+    height: clamp(22px, 2.5vw, 28px);
     display: flex;
     align-items: center;
     justify-content: center;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    border-radius: 8px;
+    font-size: clamp(0.8rem, 0.9vw, 1rem);
+    border-radius: 6px;
     flex-shrink: 0;
 }
 
@@ -10670,15 +10795,15 @@ body {
 }
 
 .leaderboard-avatar {
-    width: 36px;
-    height: 36px;
+    width: clamp(28px, 3vw, 36px);
+    height: clamp(28px, 3vw, 36px);
     border-radius: 50%;
     background: linear-gradient(135deg, #00d4ff, #0066cc);
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: 0.9rem;
+    font-size: clamp(0.75rem, 0.85vw, 0.9rem);
     color: #fff;
     flex-shrink: 0;
     overflow: hidden;
@@ -10701,19 +10826,19 @@ body {
 .leaderboard-name {
     font-weight: 600;
     color: #fff;
-    font-size: 0.95rem;
+    font-size: clamp(0.8rem, 0.9vw, 0.95rem);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 
 .leaderboard-xp {
-    font-size: 0.8rem;
+    font-size: clamp(0.7rem, 0.75vw, 0.8rem);
     color: #888;
     display: flex;
     align-items: center;
-    gap: 6px;
-    margin-top: 2px;
+    gap: 5px;
+    margin-top: 1px;
 }
 
 .leaderboard-xp i {
@@ -10756,13 +10881,52 @@ body {
 /* ========================================
    COMMUNITY RESPONSIVE - LARGE SCREENS
    ======================================== */
+/* ========================================
+   COMMUNITY RESPONSIVE - LARGE SCREENS
+   ======================================== */
 
 @media (min-width: 1600px) {
     .community-feed-layout {
-        grid-template-columns: 420px minmax(400px, 750px);
-        gap: 40px;
-        padding: 30px 60px;
-        max-width: 1300px;
+        grid-template-columns: 400px minmax(500px, 800px);
+        gap: 35px;
+        padding: 28px 50px;
+        max-width: 1350px;
+    }
+}
+
+/* ========================================
+   COMMUNITY RESPONSIVE - MEDIUM LAPTOPS (1366x768)
+   ======================================== */
+
+@media (max-width: 1400px) and (min-width: 1201px) {
+    .community-feed-layout {
+        grid-template-columns: clamp(260px, 28%, 340px) minmax(350px, 1fr);
+        gap: 20px;
+        padding: 16px 24px;
+    }
+    
+    .hud-stats-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 3px;
+        padding: 10px;
+    }
+    
+    .hud-stat-item {
+        padding: 10px 4px;
+    }
+    
+    .matchup-arena {
+        padding: 14px;
+        gap: 10px;
+    }
+    
+    .matchup-fighter-img {
+        width: 55px;
+        height: 55px;
+    }
+    
+    .leaderboard-list {
+        max-height: 180px;
     }
 }
 
@@ -10772,22 +10936,37 @@ body {
 
 @media (max-width: 1200px) {
     .community-feed-layout {
-        grid-template-columns: 320px minmax(300px, 600px);
-        gap: 20px;
-        padding: 20px 24px;
-        max-width: 1000px;
+        grid-template-columns: clamp(240px, 30%, 300px) minmax(300px, 1fr);
+        gap: 16px;
+        padding: 14px 20px;
     }
     
     .hud-stats-grid,
     .hud-stats-row {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(5, 1fr);
+        gap: 2px;
+        padding: 8px;
     }
     
-    .hud-stat-item:nth-child(4),
-    .hud-stat-item:nth-child(5),
-    .hud-stat-chip:nth-child(4),
-    .hud-stat-chip:nth-child(5) {
-        grid-column: span 1;
+    .hud-stat-item {
+        padding: 8px 2px;
+    }
+    
+    .hud-stat-item .hud-stat-value {
+        font-size: 1rem;
+    }
+    
+    .hud-stat-item .hud-stat-label {
+        font-size: 0.5rem;
+    }
+    
+    .matchup-fighter-img {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .leaderboard-list {
+        max-height: 160px;
     }
 }
 
@@ -10798,24 +10977,23 @@ body {
 @media (max-width: 900px) {
     .community-feed-layout {
         grid-template-columns: 1fr;
-        gap: 16px;
-        padding: 16px;
+        gap: 14px;
+        padding: 12px;
     }
     
     .community-sidebar-column {
         display: none;
         position: fixed;
-        top: 60px;
+        top: 55px;
         left: 0;
-        bottom: 60px;
-        width: 340px;
+        bottom: 0;
+        width: 320px;
         max-width: 90vw;
         background: rgba(10, 12, 18, 0.98);
         border-right: 1px solid rgba(0, 212, 255, 0.2);
         z-index: 200;
-        padding: 16px;
+        padding: 14px;
         overflow-y: auto;
-        max-height: none;
     }
     
     .community-sidebar-column.mobile-visible {
@@ -10832,7 +11010,7 @@ body {
     }
     
     .feed-header-card {
-        border-radius: 12px;
+        border-radius: 10px;
     }
     
     .community-tabs-unified {
@@ -10840,25 +11018,18 @@ body {
     }
     
     .community-tab-btn {
-        padding: 12px 10px;
-        font-size: 0.85rem;
+        padding: 10px 8px;
+        font-size: 0.8rem;
     }
     
+    .hud-stats-grid,
     .hud-stats-row {
-        grid-template-columns: repeat(3, 1fr);
-    }
-    
-    .hud-stat-chip:nth-child(4) {
-        grid-column: 1 / 2;
-    }
-    
-    .hud-stat-chip:nth-child(5) {
-        grid-column: 2 / 3;
+        grid-template-columns: repeat(5, 1fr);
     }
     
     .matchup-compact-arena {
         flex-direction: column;
-        gap: 16px;
+        gap: 12px;
     }
     
     .matchup-compact-fighter {
@@ -10875,26 +11046,26 @@ body {
 
 @media (max-width: 480px) {
     .community-feed-layout {
-        padding: 10px;
+        padding: 8px;
     }
     
     .feed-post-card {
-        padding: 12px;
-        border-radius: 10px;
+        padding: 10px;
+        border-radius: 8px;
     }
     
     .feed-post-header {
-        gap: 10px;
+        gap: 8px;
     }
     
     .feed-post-avatar {
-        width: 36px;
-        height: 36px;
-        font-size: 0.85rem;
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
     }
     
     .feed-post-username {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
     
     .feed-post-actions {

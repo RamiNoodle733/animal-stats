@@ -6103,11 +6103,8 @@ class CommunityManager {
         const container = document.getElementById('feed-posts-container');
         if (!container) return;
 
-        container.innerHTML = `
-            <div class="feed-loading-indicator">
-                <i class="fas fa-spinner fa-spin"></i> Loading chat...
-            </div>
-        `;
+        // Show skeleton loading state
+        container.innerHTML = this.renderSkeletonCards(3);
 
         try {
             const response = await fetch('/api/chat?limit=50');
@@ -6125,11 +6122,33 @@ class CommunityManager {
         } catch (error) {
             console.error('Error loading chat:', error);
             container.innerHTML = `
-                <div class="feed-loading-indicator">
-                    <i class="fas fa-exclamation-circle"></i> Failed to load chat. Please try again.
+                <div class="feed-empty-state">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>FAILED TO LOAD CHAT</h3>
+                    <p>Please check your connection and try again.</p>
                 </div>
             `;
         }
+    }
+
+    renderSkeletonCards(count = 3) {
+        return Array(count).fill('').map(() => `
+            <div class="feed-skeleton-card">
+                <div class="feed-skeleton-header">
+                    <div class="feed-skeleton-avatar"></div>
+                    <div class="feed-skeleton-meta">
+                        <div class="feed-skeleton-name"></div>
+                        <div class="feed-skeleton-time"></div>
+                    </div>
+                </div>
+                <div class="feed-skeleton-content"></div>
+                <div class="feed-skeleton-actions">
+                    <div class="feed-skeleton-action"></div>
+                    <div class="feed-skeleton-action"></div>
+                    <div class="feed-skeleton-action"></div>
+                </div>
+            </div>
+        `).join('');
     }
 
     renderChat() {
@@ -6138,8 +6157,10 @@ class CommunityManager {
 
         if (this.chatMessages.length === 0) {
             container.innerHTML = `
-                <div class="feed-loading-indicator">
-                    <i class="fas fa-comments"></i> No messages yet. Be the first to say hello!
+                <div class="feed-empty-state">
+                    <i class="fas fa-comments"></i>
+                    <h3>NO MESSAGES YET</h3>
+                    <p>Be the first to say hello to the community!</p>
                 </div>
             `;
             return;
@@ -6472,11 +6493,7 @@ class CommunityManager {
         if (!container) return;
 
         if (reset) {
-            container.innerHTML = `
-                <div class="feed-loading-indicator">
-                    <i class="fas fa-spinner fa-spin"></i> Loading comments...
-                </div>
-            `;
+            container.innerHTML = this.renderSkeletonCards(3);
         }
 
         try {
@@ -6499,8 +6516,10 @@ class CommunityManager {
         } catch (error) {
             console.error('Error loading feed:', error);
             container.innerHTML = `
-                <div class="feed-loading-indicator">
-                    <i class="fas fa-exclamation-circle"></i> Failed to load comments. Please try again.
+                <div class="feed-empty-state">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>FAILED TO LOAD COMMENTS</h3>
+                    <p>Please check your connection and try again.</p>
                 </div>
             `;
         }
@@ -6516,8 +6535,10 @@ class CommunityManager {
 
         if (this.feedComments.length === 0) {
             container.innerHTML = `
-                <div class="feed-loading-indicator">
-                    <i class="fas fa-comments"></i> No comments yet. Be the first to comment on an animal!
+                <div class="feed-empty-state">
+                    <i class="fas fa-comments"></i>
+                    <h3>NO COMMENTS YET</h3>
+                    <p>Be the first to comment on an animal!</p>
                 </div>
             `;
             return;
