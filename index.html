@@ -816,7 +816,7 @@
 
                 <!-- Main Chat/Feed Column (RIGHT) -->
                 <div class="community-feed-column">
-                    <!-- Tab Bar -->
+                    <!-- Sticky Tab Bar at Top -->
                     <div class="community-tab-bar">
                         <button class="community-tab-btn active" data-tab="chat">
                             <i class="fas fa-comments"></i> General Chat
@@ -826,7 +826,22 @@
                         </button>
                     </div>
                     
-                    <!-- Compose Box (Chat only) -->
+                    <!-- Scrollable Feed Area (middle region) -->
+                    <div class="feed-scroll-region" id="feed-scroll-region">
+                        <!-- Feed Posts Container -->
+                        <div class="feed-posts-container" id="feed-posts-container">
+                            <div class="feed-loading-indicator">
+                                <i class="fas fa-spinner fa-spin"></i> Loading...
+                            </div>
+                        </div>
+                        
+                        <!-- Load More Button -->
+                        <button class="feed-load-more-btn" id="feed-load-more-btn" style="display: none;">
+                            <i class="fas fa-chevron-down"></i> Load More
+                        </button>
+                    </div>
+                    
+                    <!-- Sticky Compose Box at Bottom (Chat only) -->
                     <div class="feed-compose-box" id="feed-compose-box">
                         <div class="compose-reply-preview" id="compose-reply-preview" style="display: none;">
                             <span class="reply-indicator"><i class="fas fa-reply"></i> Replying to <span id="compose-reply-username"></span></span>
@@ -843,18 +858,6 @@
                             <i class="fas fa-lock"></i> <a href="#" id="compose-login-link">Log in</a> to post
                         </div>
                     </div>
-                    
-                    <!-- Feed Posts Container -->
-                    <div class="feed-posts-container" id="feed-posts-container">
-                        <div class="feed-loading-indicator">
-                            <i class="fas fa-spinner fa-spin"></i> Loading...
-                        </div>
-                    </div>
-                    
-                    <!-- Load More Button -->
-                    <button class="feed-load-more-btn" id="feed-load-more-btn" style="display: none;">
-                        <i class="fas fa-chevron-down"></i> Load More
-                    </button>
                 </div>
             </div>
         </div>

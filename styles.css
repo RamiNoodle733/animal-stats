@@ -9349,6 +9349,12 @@ body {
    COMMUNITY PAGE - FIXED V4
    Proper widths, all elements visible
    Fixed for 100% zoom on 1366x768 and up
+   
+   WHY min-height: 0 IS REQUIRED:
+   In CSS Grid and Flexbox, children have an implicit min-height: auto which
+   prevents them from shrinking below their content size. This breaks scrolling
+   because the child expands to fit all content instead of showing a scrollbar.
+   Setting min-height: 0 allows the child to shrink and enables overflow scroll.
    ======================================== */
 
 /* Community View - uses flexbox layout, full height minus header */
@@ -9356,7 +9362,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
-    min-height: 0;
+    min-height: 0; /* Required for scroll to work in flex children */
     overflow: hidden;
 }
 
@@ -9369,9 +9375,9 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: clamp(12px, 2vw, 24px) clamp(16px, 3vw, 40px);
-    /* Use flex: 1 and min-height: 0 to allow proper scrolling */
+    /* flex: 1 fills remaining space, min-height: 0 enables child scrolling */
     flex: 1;
-    min-height: 0;
+    min-height: 0; /* CRITICAL: allows grid children to scroll */
     box-sizing: border-box;
     overflow: hidden;
 }
@@ -9385,7 +9391,7 @@ body {
     overflow-x: hidden;
     padding-bottom: 20px;
     padding-right: 8px;
-    min-height: 0; /* Critical for proper scroll behavior in flex/grid */
+    min-height: 0; /* CRITICAL: enables overflow scroll in grid/flex child */
 }
 
 .community-sidebar-column::-webkit-scrollbar {
@@ -9406,47 +9412,32 @@ body {
     background: rgba(0, 212, 255, 0.5);
 }
 
-/* Feed/Chat Column (RIGHT) - Scrollable independently */
+/* Feed/Chat Column (RIGHT) - Flex column with sticky header/footer */
 .community-feed-column {
     display: flex;
     flex-direction: column;
-    gap: clamp(10px, 1.2vw, 16px);
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding-right: 8px;
-    padding-bottom: 20px;
-    min-height: 0; /* Critical for proper scroll behavior in flex/grid */
-}
-
-.community-feed-column::-webkit-scrollbar {
-    width: 5px;
-}
-
-.community-feed-column::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 3px;
-}
-
-.community-feed-column::-webkit-scrollbar-thumb {
-    background: rgba(0, 212, 255, 0.4);
-    border-radius: 3px;
-}
-
-.community-feed-column::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 212, 255, 0.6);
+    min-height: 0; /* CRITICAL: enables proper height calculation for children */
+    overflow: hidden; /* Column itself doesn't scroll; the scroll region inside does */
 }
 
 /* ========================================
-   TAB BAR - Identical Width Two Tabs
+   TAB BAR - Sticky at top of feed column
    ======================================== */
 
 .community-tab-bar {
     display: flex;
-    background: linear-gradient(135deg, rgba(20, 25, 35, 0.95), rgba(15, 20, 30, 0.98));
-    border: 1px solid rgba(0, 212, 255, 0.2);
+    background: linear-gradient(135deg, rgba(20, 25, 35, 0.98), rgba(15, 20, 30, 0.99));
+    border: 1px solid rgba(0, 212, 255, 0.25);
     border-radius: 12px;
     overflow: hidden;
-    flex-shrink: 0;
+    flex-shrink: 0; /* Don't shrink - stay at natural size */
+    position: relative;
+    z-index: 10;
+    /* Glassmorphism effect */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 212, 255, 0.1);
+    margin-bottom: 0; /* Remove gap - scroll region handles spacing */
 }
 
 .community-tabs-unified {
@@ -9502,7 +9493,44 @@ body {
 }
 
 /* ========================================
-   COMPOSE BOX - Enhanced Chat Input
+   FEED SCROLL REGION - The actual scrollable area
+   Contains feed posts and load-more button
+   ======================================== */
+
+.feed-scroll-region {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0; /* CRITICAL: enables scroll in flex child */
+    padding: clamp(10px, 1.2vw, 16px) 8px;
+    padding-bottom: 0; /* Compose box handles bottom spacing */
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1.2vw, 16px);
+}
+
+/* Custom scrollbar for feed region */
+.feed-scroll-region::-webkit-scrollbar {
+    width: 5px;
+}
+
+.feed-scroll-region::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.feed-scroll-region::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.4);
+    border-radius: 3px;
+}
+
+.feed-scroll-region::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 212, 255, 0.6);
+}
+
+/* ========================================
+   COMPOSE BOX - Pinned at bottom of feed column
+   Only visible for General Chat tab
    ======================================== */
 
 .feed-header-card {
@@ -9518,6 +9546,14 @@ body {
     border: 1px solid rgba(0, 212, 255, 0.15);
     border-radius: 12px;
     flex-shrink: 0;
+    /* Pinned at bottom - sits after the scroll region */
+    margin-top: 0;
+    position: relative;
+    z-index: 10;
+    /* Subtle top shadow for separation */
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(0, 212, 255, 0.05);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
 .compose-reply-preview {
@@ -9654,16 +9690,16 @@ body {
 }
 
 /* ========================================
-   FEED POSTS CONTAINER - Enhanced
+   FEED POSTS CONTAINER - Inside scroll region
    ======================================== */
 
 .feed-posts-container {
     display: flex;
     flex-direction: column;
     gap: clamp(10px, 1.2vw, 16px);
+    /* Takes up remaining space within scroll region */
     flex: 1;
     min-height: 0;
-    /* No nested scrollbar - the parent column scrolls */
 }
 
 .feed-loading-indicator {
