@@ -1,0 +1,887 @@
+/**
+ * ============================================
+ * COMMUNITY PAGE ENHANCEMENTS - community-page.css
+ * ============================================
+ * 
+ * Responsive fixes and HUD polish for the Community page.
+ * All styles are scoped to #community-view to avoid affecting other pages.
+ * 
+ * TESTED VIEWPORT SIZES:
+ * - 1366x768 (common laptop)
+ * - 1440x900 (MacBook)
+ * - 1920x1080 (FHD)
+ * 
+ * KEY FIXES:
+ * 1. CSS Grid with proper minmax() to prevent overflow at 100% zoom
+ * 2. Sticky tab bar within feed column
+ * 3. Pinned composer at bottom
+ * 4. Sidebar scroll independent of main feed
+ * 5. HUD corner brackets and visual polish
+ */
+
+/* ========================================
+   BASE LAYOUT FIX - Proper Grid Constraints
+   ======================================== */
+
+/* Override the main layout to fix responsiveness */
+#community-view.active-view {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--header-height, 56px));
+    max-height: calc(100vh - var(--header-height, 56px));
+    min-height: 0;
+    overflow: hidden;
+}
+
+#community-view .community-feed-layout {
+    display: grid;
+    /* Sidebar: min 220px, max 320px, prefers 25% */
+    /* Feed: at least 300px, grows to fill */
+    grid-template-columns: minmax(220px, min(320px, 28%)) minmax(300px, 1fr);
+    gap: clamp(12px, 2vw, 24px);
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: clamp(8px, 1.5vh, 16px) clamp(12px, 2vw, 24px);
+    flex: 1;
+    min-height: 0; /* Critical for proper scrolling */
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* ========================================
+   SIDEBAR COLUMN - Scrollable Widget Stack
+   ======================================== */
+
+#community-view .community-sidebar-column {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1.5vh, 16px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 8px;
+    padding-bottom: 16px;
+    min-height: 0; /* Critical for scroll */
+    max-height: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
+}
+
+#community-view .community-sidebar-column::-webkit-scrollbar {
+    width: 6px;
+}
+
+#community-view .community-sidebar-column::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+#community-view .community-sidebar-column::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.3);
+    border-radius: 3px;
+}
+
+#community-view .community-sidebar-column::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 212, 255, 0.5);
+}
+
+/* ========================================
+   FEED COLUMN - Flex Layout with Sticky Elements
+   ======================================== */
+
+#community-view .community-feed-column {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Tab bar - sticky at top of feed column */
+#community-view .community-tab-bar {
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: linear-gradient(135deg, rgba(20, 25, 35, 0.99), rgba(15, 20, 30, 1));
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    border-radius: 10px;
+    margin-bottom: clamp(8px, 1vh, 12px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Tab buttons - equal width, consistent style */
+#community-view .community-tab-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: clamp(10px, 1.5vh, 14px) clamp(12px, 2vw, 20px);
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(0.85rem, 1vw, 1rem);
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    white-space: nowrap;
+}
+
+#community-view .community-tab-btn:hover {
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(0, 212, 255, 0.05);
+}
+
+#community-view .community-tab-btn.active {
+    color: #00d4ff;
+    background: rgba(0, 212, 255, 0.1);
+}
+
+#community-view .community-tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    right: 20%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+    border-radius: 2px;
+}
+
+#community-view .community-tab-btn i {
+    font-size: 0.9rem;
+}
+
+/* ========================================
+   FEED SCROLL REGION - Main Scrollable Area
+   ======================================== */
+
+#community-view .feed-scroll-region {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    padding: clamp(8px, 1vh, 12px);
+    /* Leave room for composer */
+    padding-bottom: clamp(8px, 1vh, 12px);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
+}
+
+#community-view .feed-scroll-region::-webkit-scrollbar {
+    width: 6px;
+}
+
+#community-view .feed-scroll-region::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+#community-view .feed-scroll-region::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.3);
+    border-radius: 3px;
+}
+
+#community-view .feed-scroll-region::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 212, 255, 0.5);
+}
+
+/* ========================================
+   COMPOSE BOX - Pinned at Bottom
+   ======================================== */
+
+#community-view .feed-compose-box {
+    flex-shrink: 0;
+    position: relative;
+    z-index: 15;
+    background: linear-gradient(135deg, rgba(15, 20, 30, 0.99), rgba(10, 15, 25, 1));
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    border-radius: 10px;
+    padding: clamp(10px, 1.5vh, 16px);
+    margin-top: clamp(8px, 1vh, 12px);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Composer input row */
+#community-view .compose-input-row {
+    display: flex;
+    align-items: center;
+    gap: clamp(8px, 1vw, 12px);
+}
+
+#community-view .compose-avatar {
+    width: clamp(32px, 4vw, 40px);
+    height: clamp(32px, 4vw, 40px);
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00d4ff, #0066cc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: clamp(0.85rem, 1vw, 1rem);
+    color: #fff;
+    flex-shrink: 0;
+}
+
+#community-view .compose-input {
+    flex: 1;
+    min-width: 0;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: clamp(10px, 1.2vh, 14px) clamp(16px, 2vw, 20px);
+    color: #fff;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(0.85rem, 1vw, 0.95rem);
+    transition: all 0.3s ease;
+}
+
+#community-view .compose-input:focus {
+    outline: none;
+    border-color: rgba(0, 212, 255, 0.4);
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.15);
+}
+
+#community-view .compose-send-btn {
+    width: clamp(38px, 5vw, 44px);
+    height: clamp(38px, 5vw, 44px);
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00d4ff, #0066cc);
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: clamp(0.85rem, 1vw, 0.95rem);
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+}
+
+#community-view .compose-send-btn:hover:not(:disabled) {
+    transform: scale(1.05);
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+}
+
+#community-view .compose-send-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Login prompt styling */
+#community-view .compose-login-prompt {
+    text-align: center;
+    color: #666;
+    font-size: clamp(0.8rem, 0.9vw, 0.9rem);
+    padding: clamp(8px, 1vh, 12px);
+}
+
+#community-view .compose-login-prompt a {
+    color: #00d4ff;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+#community-view .compose-login-prompt a:hover {
+    text-decoration: underline;
+}
+
+/* ========================================
+   COMMUNITY HUD MODULE - Enhanced
+   ======================================== */
+
+#community-view .community-hud-module {
+    background: linear-gradient(135deg, rgba(15, 20, 30, 0.99), rgba(10, 15, 25, 1));
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* HUD corner brackets */
+#community-view .community-hud-module::before,
+#community-view .community-hud-module::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(0, 212, 255, 0.4);
+    pointer-events: none;
+    z-index: 5;
+}
+
+#community-view .community-hud-module::before {
+    top: 8px;
+    left: 8px;
+    border-right: none;
+    border-bottom: none;
+}
+
+#community-view .community-hud-module::after {
+    bottom: 8px;
+    right: 8px;
+    border-left: none;
+    border-top: none;
+}
+
+/* HUD header with glow effect */
+#community-view .hud-header {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 100, 200, 0.1));
+    padding: clamp(10px, 1.2vh, 14px) clamp(12px, 1.5vw, 18px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+#community-view .hud-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(0.9rem, 1.1vw, 1.15rem);
+    letter-spacing: 2px;
+    color: #00d4ff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+}
+
+/* Live badges row */
+#community-view .hud-live-badges {
+    display: flex;
+    gap: clamp(8px, 1vw, 12px);
+    padding: clamp(8px, 1vh, 12px) clamp(12px, 1.5vw, 16px);
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#community-view .hud-online-badge,
+#community-view .hud-visits-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: clamp(0.75rem, 0.85vw, 0.85rem);
+    font-weight: 600;
+    padding: clamp(5px, 0.6vh, 8px) clamp(10px, 1.2vw, 14px);
+    border-radius: 16px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#community-view .hud-online-badge {
+    color: #4ade80;
+    border-color: rgba(74, 222, 128, 0.25);
+}
+
+#community-view .hud-visits-badge {
+    color: #a78bfa;
+    border-color: rgba(167, 139, 250, 0.25);
+}
+
+#community-view .hud-online-badge .online-dot {
+    font-size: 0.5rem;
+    animation: communityPulseDot 2s infinite;
+}
+
+@keyframes communityPulseDot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Stats grid - 5 equal columns */
+#community-view .hud-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: clamp(3px, 0.5vw, 6px);
+    padding: clamp(8px, 1vh, 12px);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+#community-view .hud-stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(8px, 1vh, 12px) clamp(4px, 0.5vw, 8px);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    transition: all 0.2s ease;
+}
+
+#community-view .hud-stat-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(0, 212, 255, 0.2);
+}
+
+#community-view .hud-stat-item .hud-stat-value {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1rem, 1.3vw, 1.4rem);
+    color: #fff;
+    line-height: 1;
+}
+
+#community-view .hud-stat-item .hud-stat-label {
+    font-size: clamp(0.5rem, 0.6vw, 0.65rem);
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: clamp(4px, 0.5vh, 6px);
+    text-align: center;
+}
+
+/* ========================================
+   SIDEBAR MODULES - Consistent Styling
+   ======================================== */
+
+#community-view .sidebar-module {
+    background: linear-gradient(135deg, rgba(15, 20, 30, 0.99), rgba(10, 15, 25, 1));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* Module header */
+#community-view .module-header {
+    padding: clamp(10px, 1.2vh, 14px) clamp(12px, 1.5vw, 18px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.3);
+}
+
+#community-view .module-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(0.85rem, 1vw, 1rem);
+    letter-spacing: 2px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#community-view .module-title i {
+    font-size: 0.85rem;
+    color: #ffd700;
+}
+
+/* ========================================
+   DAILY MATCHUP - Compact Design
+   ======================================== */
+
+#community-view .daily-matchup-module {
+    border-color: rgba(255, 215, 0, 0.2);
+}
+
+#community-view .daily-matchup-module .module-header {
+    background: linear-gradient(135deg, rgba(255, 107, 0, 0.12), rgba(255, 215, 0, 0.06));
+}
+
+#community-view .daily-matchup-module .module-title i {
+    color: #ff6b00;
+}
+
+#community-view .matchup-timer {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(0.7rem, 0.8vw, 0.85rem);
+    color: #ff6b00;
+    background: rgba(255, 107, 0, 0.12);
+    padding: clamp(4px, 0.5vh, 6px) clamp(8px, 1vw, 12px);
+    border-radius: 6px;
+    border: 1px solid rgba(255, 107, 0, 0.2);
+}
+
+/* Matchup arena */
+#community-view .matchup-arena {
+    padding: clamp(10px, 1.2vh, 16px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: clamp(6px, 0.8vw, 12px);
+}
+
+#community-view .matchup-fighter {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(4px, 0.5vh, 8px);
+    text-align: center;
+    min-width: 0;
+}
+
+#community-view .matchup-fighter-img {
+    width: clamp(45px, 6vw, 65px);
+    height: clamp(45px, 6vw, 65px);
+    border-radius: 10px;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    background: rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+
+#community-view .matchup-fighter:hover .matchup-fighter-img {
+    border-color: rgba(255, 215, 0, 0.6);
+    transform: scale(1.05);
+}
+
+#community-view .matchup-fighter-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    color: #fff;
+    font-size: clamp(0.65rem, 0.75vw, 0.8rem);
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#community-view .matchup-vote-bar {
+    width: 100%;
+    height: clamp(4px, 0.5vh, 6px);
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+#community-view .matchup-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00d4ff, #00ff88);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+#community-view .matchup-pct {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(0.75rem, 0.85vw, 0.9rem);
+    color: #00d4ff;
+}
+
+#community-view .matchup-vote-btn {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 107, 0, 0.2));
+    border: 1px solid rgba(255, 215, 0, 0.35);
+    border-radius: 5px;
+    padding: clamp(4px, 0.5vh, 7px) clamp(6px, 0.8vw, 10px);
+    color: #ffd700;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(0.6rem, 0.7vw, 0.75rem);
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+}
+
+#community-view .matchup-vote-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.35), rgba(255, 107, 0, 0.35));
+    transform: translateY(-1px);
+}
+
+#community-view .matchup-vote-btn.voted {
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    color: #000;
+    border-color: #ffd700;
+}
+
+#community-view .matchup-vote-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#community-view .matchup-vs {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(0.9rem, 1.1vw, 1.2rem);
+    color: #ff6b00;
+    background: linear-gradient(135deg, rgba(255, 107, 0, 0.15), rgba(255, 215, 0, 0.08));
+    padding: clamp(4px, 0.5vh, 6px) clamp(6px, 0.8vw, 10px);
+    border-radius: 6px;
+    flex-shrink: 0;
+    align-self: center;
+    letter-spacing: 2px;
+    border: 1px solid rgba(255, 107, 0, 0.2);
+}
+
+/* ========================================
+   LEADERBOARD - Compact Design
+   ======================================== */
+
+#community-view .leaderboard-list {
+    padding: clamp(6px, 0.8vh, 10px);
+    max-height: clamp(160px, 20vh, 220px);
+    overflow-y: auto;
+}
+
+#community-view .leaderboard-item {
+    display: flex;
+    align-items: center;
+    gap: clamp(6px, 0.8vw, 10px);
+    padding: clamp(6px, 0.8vh, 10px) clamp(8px, 1vw, 12px);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    margin-bottom: clamp(4px, 0.5vh, 6px);
+    transition: all 0.2s ease;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+
+#community-view .leaderboard-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateX(4px);
+    border-color: rgba(255, 215, 0, 0.15);
+}
+
+#community-view .leaderboard-rank {
+    width: clamp(20px, 2.5vw, 26px);
+    height: clamp(20px, 2.5vw, 26px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(0.75rem, 0.85vw, 0.95rem);
+    border-radius: 5px;
+    flex-shrink: 0;
+}
+
+#community-view .leaderboard-rank.gold {
+    background: linear-gradient(135deg, #ffd700, #ff8c00);
+    color: #000;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.3);
+}
+
+#community-view .leaderboard-rank.silver {
+    background: linear-gradient(135deg, #c0c0c0, #a0a0a0);
+    color: #000;
+}
+
+#community-view .leaderboard-rank.bronze {
+    background: linear-gradient(135deg, #cd7f32, #a0522d);
+    color: #fff;
+}
+
+#community-view .leaderboard-rank.default {
+    background: rgba(255, 255, 255, 0.1);
+    color: #888;
+}
+
+#community-view .leaderboard-avatar {
+    width: clamp(26px, 3vw, 34px);
+    height: clamp(26px, 3vw, 34px);
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00d4ff, #0066cc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: clamp(0.7rem, 0.8vw, 0.85rem);
+    color: #fff;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+#community-view .leaderboard-info {
+    flex: 1;
+    min-width: 0;
+}
+
+#community-view .leaderboard-name {
+    font-weight: 600;
+    color: #fff;
+    font-size: clamp(0.75rem, 0.85vw, 0.9rem);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#community-view .leaderboard-xp {
+    font-size: clamp(0.65rem, 0.7vw, 0.75rem);
+    color: #888;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+#community-view .leaderboard-xp i {
+    color: #ffd700;
+    font-size: 0.65rem;
+}
+
+/* ========================================
+   FEED POST CARDS - Consistent Styling
+   ======================================== */
+
+#community-view .feed-post-card {
+    background: linear-gradient(135deg, rgba(15, 20, 30, 0.96), rgba(10, 15, 25, 0.98));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: clamp(12px, 1.5vh, 18px);
+    margin-bottom: clamp(8px, 1vh, 12px);
+    transition: all 0.2s ease;
+}
+
+#community-view .feed-post-card:hover {
+    border-color: rgba(0, 212, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+#community-view .feed-post-card.has-animal-context {
+    border-left: 3px solid rgba(0, 212, 255, 0.5);
+}
+
+/* Post action buttons - consistent sizing */
+#community-view .feed-post-actions {
+    display: flex;
+    align-items: center;
+    gap: clamp(8px, 1vw, 14px);
+    padding-top: clamp(8px, 1vh, 12px);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#community-view .feed-action-btn {
+    background: transparent;
+    border: none;
+    color: #666;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(0.75rem, 0.85vw, 0.85rem);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: clamp(4px, 0.5vh, 6px) clamp(8px, 1vw, 12px);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    min-width: 0;
+}
+
+#community-view .feed-action-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #aaa;
+}
+
+#community-view .feed-action-btn.voted {
+    color: #00d4ff;
+}
+
+#community-view .feed-action-btn i {
+    font-size: 0.85rem;
+}
+
+/* ========================================
+   RESPONSIVE - SHORT SCREENS (1366x768)
+   ======================================== */
+
+@media (max-height: 800px) {
+    #community-view .community-feed-layout {
+        padding: 8px 12px;
+        gap: 12px;
+    }
+    
+    #community-view .community-sidebar-column {
+        gap: 10px;
+    }
+    
+    #community-view .hud-stats-grid {
+        padding: 8px;
+        gap: 3px;
+    }
+    
+    #community-view .hud-stat-item {
+        padding: 6px 3px;
+    }
+    
+    #community-view .hud-stat-item .hud-stat-value {
+        font-size: 1rem;
+    }
+    
+    #community-view .hud-stat-item .hud-stat-label {
+        font-size: 0.5rem;
+    }
+    
+    #community-view .matchup-arena {
+        padding: 10px;
+        gap: 6px;
+    }
+    
+    #community-view .matchup-fighter-img {
+        width: 45px;
+        height: 45px;
+    }
+    
+    #community-view .leaderboard-list {
+        max-height: 140px;
+    }
+    
+    #community-view .community-tab-bar {
+        margin-bottom: 8px;
+    }
+    
+    #community-view .community-tab-btn {
+        padding: 10px 12px;
+    }
+    
+    #community-view .feed-compose-box {
+        padding: 10px;
+        margin-top: 8px;
+    }
+}
+
+/* ========================================
+   RESPONSIVE - NARROW SCREENS
+   ======================================== */
+
+@media (max-width: 1200px) {
+    #community-view .community-feed-layout {
+        grid-template-columns: minmax(200px, 260px) minmax(280px, 1fr);
+        gap: 12px;
+        padding: 10px 14px;
+    }
+}
+
+@media (max-width: 900px) {
+    #community-view .community-feed-layout {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+    }
+    
+    #community-view .community-sidebar-column {
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        max-height: none;
+        padding-bottom: 10px;
+        padding-right: 0;
+        gap: 12px;
+    }
+    
+    #community-view .community-sidebar-column > * {
+        flex-shrink: 0;
+        min-width: 220px;
+        max-width: 280px;
+    }
+    
+    /* Hide some modules on mobile to save space */
+    #community-view .leaderboard-module {
+        display: none;
+    }
+}
+
+/* ========================================
+   LARGE SCREENS
+   ======================================== */
+
+@media (min-width: 1600px) {
+    #community-view .community-feed-layout {
+        grid-template-columns: 360px minmax(500px, 900px);
+        gap: 28px;
+        padding: 20px 36px;
+        max-width: 1500px;
+    }
+}

@@ -1,0 +1,687 @@
+/**
+ * ============================================
+ * COMPARE PAGE ENHANCEMENTS - compare-page.css
+ * ============================================
+ * 
+ * PS3-era fighting game HUD upgrades for the Compare page.
+ * All styles are scoped to #compare-view to avoid affecting other pages.
+ * 
+ * REPLACEABLE SLOT SYSTEM:
+ * -------------------------
+ * The VS badge is designed as a swappable slot. To replace it:
+ * 
+ * 1. Via External SVG File:
+ *    - Place your custom SVG at: /assets/ui/vs-badge.svg
+ *    - The default placeholder will automatically be hidden when the slot
+ *      detects the external asset (implemented in compare-page.js)
+ *    - Or manually set: document.getElementById('vsBadgeExternal').src = '/path/to/your-badge.svg'
+ * 
+ * 2. Via Inline SVG:
+ *    - Replace the contents inside #vsBadgeSlot > .vs-badge-default
+ *    - Or inject your SVG directly into #vsBadgeSlot
+ * 
+ * 3. Via CSS background:
+ *    - Set background-image on #vsBadgeSlot and hide .vs-badge-default
+ * 
+ * The slot maintains these guarantees:
+ * - Fixed dimensions: 120x120px (scalable via CSS)
+ * - Centered in .fight-center area
+ * - Z-index above radar chart
+ * - Auto-animates with pulse on new matchup
+ */
+
+/* ========================================
+   VS BADGE SLOT SYSTEM
+   ======================================== */
+
+#compare-view .fight-center {
+    position: relative;
+    z-index: 1;
+}
+
+/* VS Badge Container - the replaceable slot */
+#vsBadgeSlot,
+[data-ui-slot="vs-badge"] {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    /* Smooth size transitions for different badge designs */
+    transition: width 0.3s ease, height 0.3s ease;
+}
+
+/* External SVG loader (hidden by default) */
+#vsBadgeExternal {
+    display: none;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+#vsBadgeExternal.loaded {
+    display: block;
+}
+
+#vsBadgeExternal.loaded + .vs-badge-default {
+    display: none;
+}
+
+/* Default VS Badge Placeholder - PS3 Fighting Game Style */
+#vsBadgeSlot .vs-badge-default {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#vsBadgeSlot .vs-badge-default svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 0 20px rgba(255, 107, 0, 0.8))
+            drop-shadow(0 0 40px rgba(255, 107, 0, 0.4));
+}
+
+/* VS Badge pulse animation on new matchup */
+#vsBadgeSlot.vs-active {
+    animation: vsBadgePulse 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes vsBadgePulse {
+    0% { 
+        transform: translate(-50%, -50%) scale(0.3);
+        opacity: 0;
+    }
+    50% { 
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 1;
+    }
+    100% { 
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+    }
+}
+
+/* Idle glow animation */
+#vsBadgeSlot .vs-badge-default {
+    animation: vsIdleGlow 2s ease-in-out infinite;
+}
+
+@keyframes vsIdleGlow {
+    0%, 100% { 
+        filter: drop-shadow(0 0 15px rgba(255, 107, 0, 0.6));
+    }
+    50% { 
+        filter: drop-shadow(0 0 30px rgba(255, 107, 0, 1))
+                drop-shadow(0 0 60px rgba(255, 215, 0, 0.4));
+    }
+}
+
+/* ========================================
+   MATCHUP INTRO ANIMATION OVERLAY
+   ======================================== */
+
+#matchupIntroOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    background: radial-gradient(ellipse at center, rgba(5, 10, 20, 0.98) 0%, rgba(0, 0, 0, 0.99) 100%);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+#matchupIntroOverlay.active {
+    display: flex;
+}
+
+/* Skip hint */
+#matchupIntroOverlay .intro-skip-hint {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255, 255, 255, 0.4);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    animation: fadeInUp 0.5s ease 0.8s both;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* Intro content wrapper */
+#matchupIntroOverlay .intro-matchup-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 60px;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 40px;
+}
+
+/* Fighter intro cards */
+#matchupIntroOverlay .intro-fighter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    opacity: 0;
+    transform: translateX(-100px);
+}
+
+#matchupIntroOverlay .intro-fighter.right {
+    transform: translateX(100px);
+}
+
+#matchupIntroOverlay .intro-fighter.animate-in {
+    animation: fighterSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+#matchupIntroOverlay .intro-fighter.right.animate-in {
+    animation: fighterSlideInRight 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes fighterSlideIn {
+    0% {
+        opacity: 0;
+        transform: translateX(-100px) scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+@keyframes fighterSlideInRight {
+    0% {
+        opacity: 0;
+        transform: translateX(100px) scale(0.8);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) scale(1);
+    }
+}
+
+#matchupIntroOverlay .intro-fighter-image {
+    width: 200px;
+    height: 200px;
+    border-radius: 20px;
+    object-fit: contain;
+    background: rgba(0, 0, 0, 0.5);
+    border: 4px solid rgba(0, 212, 255, 0.6);
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.4),
+                inset 0 0 30px rgba(0, 212, 255, 0.1);
+}
+
+#matchupIntroOverlay .intro-fighter.right .intro-fighter-image {
+    border-color: rgba(255, 0, 153, 0.6);
+    box-shadow: 0 0 40px rgba(255, 0, 153, 0.4),
+                inset 0 0 30px rgba(255, 0, 153, 0.1);
+}
+
+#matchupIntroOverlay .intro-fighter-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 4px;
+    color: #fff;
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+    text-transform: uppercase;
+}
+
+#matchupIntroOverlay .intro-fighter.right .intro-fighter-name {
+    text-shadow: 0 0 20px rgba(255, 0, 153, 0.8);
+}
+
+/* Intro VS badge */
+#matchupIntroOverlay .intro-vs-badge {
+    opacity: 0;
+    transform: scale(0);
+}
+
+#matchupIntroOverlay .intro-vs-badge.animate-in {
+    animation: introVsBurst 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes introVsBurst {
+    0% {
+        opacity: 0;
+        transform: scale(0) rotate(-180deg);
+    }
+    60% {
+        opacity: 1;
+        transform: scale(1.3) rotate(10deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+#matchupIntroOverlay .intro-vs-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    letter-spacing: 10px;
+    color: #ff6b00;
+    text-shadow: 0 0 40px rgba(255, 107, 0, 1),
+                 0 0 80px rgba(255, 107, 0, 0.6),
+                 0 0 120px rgba(255, 215, 0, 0.3);
+}
+
+/* Light sweep effect */
+#matchupIntroOverlay .intro-light-sweep {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 255, 255, 0.05) 50%, 
+        transparent 100%);
+    transform: skewX(-20deg);
+    pointer-events: none;
+}
+
+#matchupIntroOverlay .intro-light-sweep.animate {
+    animation: lightSweep 0.8s ease-out forwards;
+}
+
+@keyframes lightSweep {
+    0% { left: -100%; }
+    100% { left: 200%; }
+}
+
+/* ========================================
+   HUD CHROME AND DEPTH ELEMENTS
+   ======================================== */
+
+/* Subtle noise overlay for texture */
+#compare-view::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.015;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* HUD corner brackets for panels */
+#compare-view .hud-corner-bracket {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+}
+
+#compare-view .hud-corner-bracket::before,
+#compare-view .hud-corner-bracket::after {
+    content: '';
+    position: absolute;
+    background: var(--primary-color, #00d4ff);
+}
+
+#compare-view .hud-corner-bracket.top-left::before {
+    top: 0; left: 0; width: 100%; height: 2px;
+}
+#compare-view .hud-corner-bracket.top-left::after {
+    top: 0; left: 0; width: 2px; height: 100%;
+}
+
+#compare-view .hud-corner-bracket.top-right::before {
+    top: 0; right: 0; width: 100%; height: 2px;
+}
+#compare-view .hud-corner-bracket.top-right::after {
+    top: 0; right: 0; width: 2px; height: 100%;
+}
+
+#compare-view .hud-corner-bracket.bottom-left::before {
+    bottom: 0; left: 0; width: 100%; height: 2px;
+}
+#compare-view .hud-corner-bracket.bottom-left::after {
+    bottom: 0; left: 0; width: 2px; height: 100%;
+}
+
+#compare-view .hud-corner-bracket.bottom-right::before {
+    bottom: 0; right: 0; width: 100%; height: 2px;
+}
+#compare-view .hud-corner-bracket.bottom-right::after {
+    bottom: 0; right: 0; width: 2px; height: 100%;
+}
+
+/* Fighter display HUD chrome upgrade */
+#compare-view .fighter-display {
+    position: relative;
+}
+
+#compare-view .fighter-display .hud-bracket-tl,
+#compare-view .fighter-display .hud-bracket-tr,
+#compare-view .fighter-display .hud-bracket-bl,
+#compare-view .fighter-display .hud-bracket-br {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    pointer-events: none;
+    z-index: 20;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+#compare-view .fighter-display:hover .hud-bracket-tl,
+#compare-view .fighter-display:hover .hud-bracket-tr,
+#compare-view .fighter-display:hover .hud-bracket-bl,
+#compare-view .fighter-display:hover .hud-bracket-br {
+    opacity: 1;
+}
+
+#compare-view .hud-bracket-tl { top: 8px; left: 8px; }
+#compare-view .hud-bracket-tr { top: 8px; right: 8px; }
+#compare-view .hud-bracket-bl { bottom: 60px; left: 8px; }
+#compare-view .hud-bracket-br { bottom: 60px; right: 8px; }
+
+#compare-view .hud-bracket-tl::before, #compare-view .hud-bracket-tl::after,
+#compare-view .hud-bracket-tr::before, #compare-view .hud-bracket-tr::after,
+#compare-view .hud-bracket-bl::before, #compare-view .hud-bracket-bl::after,
+#compare-view .hud-bracket-br::before, #compare-view .hud-bracket-br::after {
+    content: '';
+    position: absolute;
+    background: currentColor;
+}
+
+#compare-view .hud-bracket-tl { color: #00ff88; }
+#compare-view .hud-bracket-tl::before { top: 0; left: 0; width: 100%; height: 2px; }
+#compare-view .hud-bracket-tl::after { top: 0; left: 0; width: 2px; height: 100%; }
+
+#compare-view .hud-bracket-tr { color: #00ff88; }
+#compare-view .hud-bracket-tr::before { top: 0; right: 0; width: 100%; height: 2px; }
+#compare-view .hud-bracket-tr::after { top: 0; right: 0; width: 2px; height: 100%; }
+
+#compare-view .hud-bracket-bl { color: #00ff88; }
+#compare-view .hud-bracket-bl::before { bottom: 0; left: 0; width: 100%; height: 2px; }
+#compare-view .hud-bracket-bl::after { bottom: 0; left: 0; width: 2px; height: 100%; }
+
+#compare-view .hud-bracket-br { color: #00ff88; }
+#compare-view .hud-bracket-br::before { bottom: 0; right: 0; width: 100%; height: 2px; }
+#compare-view .hud-bracket-br::after { bottom: 0; right: 0; width: 2px; height: 100%; }
+
+/* Right fighter brackets - different color */
+#compare-view .fighter-right .hud-bracket-tl,
+#compare-view .fighter-right .hud-bracket-tr,
+#compare-view .fighter-right .hud-bracket-bl,
+#compare-view .fighter-right .hud-bracket-br {
+    color: #ff0099;
+}
+
+/* Enhanced fighter name typography */
+#compare-view .fighter-name {
+    font-size: 1.4rem;
+    letter-spacing: 4px;
+    text-shadow: 0 0 15px rgba(0, 212, 255, 0.8),
+                 0 2px 4px rgba(0, 0, 0, 0.8);
+    position: relative;
+}
+
+/* Name underline accent */
+#compare-view .fighter-name::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, currentColor, transparent);
+    opacity: 0.6;
+}
+
+#compare-view .fighter-left .fighter-name {
+    color: #00ff88;
+    text-shadow: 0 0 15px rgba(0, 255, 136, 0.8),
+                 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+#compare-view .fighter-right .fighter-name {
+    color: #ff0099;
+    text-shadow: 0 0 15px rgba(255, 0, 153, 0.8),
+                 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Stats panel HUD upgrade */
+#compare-view .compare-stats-panel {
+    position: relative;
+    background: linear-gradient(135deg, rgba(0, 14, 26, 0.98) 0%, rgba(5, 20, 35, 0.95) 100%);
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+#compare-view .compare-stats-panel::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+    opacity: 0.6;
+}
+
+/* Divider line between stat rows */
+#compare-view .compare-stat-row {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+#compare-view .compare-stat-row:last-child {
+    border-bottom: none;
+}
+
+#compare-view .compare-stat-row:hover {
+    background: rgba(0, 212, 255, 0.05);
+}
+
+/* Enhanced stat values */
+#compare-view .compare-stat-value {
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+/* Fight center radar container upgrade */
+#compare-view .radar-chart-container {
+    position: relative;
+    background: radial-gradient(ellipse at center, rgba(0, 20, 40, 0.8) 0%, transparent 70%);
+    border-radius: 12px;
+    padding: 20px;
+}
+
+/* Thin border ring around radar */
+#compare-view .radar-chart-container::before {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+/* ========================================
+   COMPARE CONTROLS BAR UPGRADE
+   ======================================== */
+
+#compare-view .compare-controls-bar {
+    position: relative;
+    background: linear-gradient(180deg, rgba(5, 10, 20, 0.98) 0%, rgba(0, 5, 15, 1) 100%);
+    border-top: 1px solid rgba(0, 212, 255, 0.2);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* FIGHT button enhanced glow */
+#compare-view .fight-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+#compare-view .fight-btn::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, 
+        transparent 30%, 
+        rgba(255, 255, 255, 0.1) 50%, 
+        transparent 70%);
+    transform: rotate(45deg);
+    animation: fightBtnShine 3s ease-in-out infinite;
+}
+
+@keyframes fightBtnShine {
+    0%, 100% { transform: translateX(-100%) rotate(45deg); }
+    50% { transform: translateX(100%) rotate(45deg); }
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+
+@media (max-width: 1200px) {
+    .intro-matchup-stage {
+        gap: 40px;
+    }
+    
+    .intro-fighter-image {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .intro-fighter-name {
+        font-size: 2rem;
+    }
+    
+    .intro-vs-text {
+        font-size: 4rem;
+    }
+    
+    #vsBadgeSlot {
+        width: 100px;
+        height: 100px;
+    }
+}
+
+@media (max-width: 900px) {
+    .intro-matchup-stage {
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    .intro-fighter {
+        transform: translateY(-50px);
+    }
+    
+    .intro-fighter.right {
+        transform: translateY(50px);
+    }
+    
+    .intro-fighter.animate-in {
+        animation-name: fighterSlideInMobile;
+    }
+    
+    .intro-fighter.right.animate-in {
+        animation-name: fighterSlideInMobileRight;
+    }
+    
+    @keyframes fighterSlideInMobile {
+        0% {
+            opacity: 0;
+            transform: translateY(-50px) scale(0.8);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+    
+    @keyframes fighterSlideInMobileRight {
+        0% {
+            opacity: 0;
+            transform: translateY(50px) scale(0.8);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+    
+    .intro-fighter-image {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .intro-fighter-name {
+        font-size: 1.5rem;
+    }
+    
+    .intro-vs-text {
+        font-size: 3rem;
+    }
+    
+    #vsBadgeSlot {
+        width: 80px;
+        height: 80px;
+    }
+    
+    #compare-view .fighter-name {
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+    }
+}
+
+/* Short screens (1366x768) */
+@media (max-height: 800px) {
+    #vsBadgeSlot {
+        width: 90px;
+        height: 90px;
+    }
+    
+    .intro-fighter-image {
+        width: 140px;
+        height: 140px;
+    }
+    
+    .intro-vs-text {
+        font-size: 3.5rem;
+    }
+}

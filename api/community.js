@@ -6,6 +6,7 @@
  * GET /api/community?action=presence - Get online users list
  * GET /api/community?action=stats - Get site statistics
  * POST /api/community?action=ping - Update user presence (heartbeat)
+ * POST /api/community?action=visit - Increment site visit counter
  */
 
 const { connectToDatabase } = require('../lib/mongodb');
@@ -52,6 +53,11 @@ module.exports = async function handler(req, res) {
                     return res.status(405).json({ success: false, error: 'Method not allowed' });
                 }
                 return await handlePing(req, res);
+            case 'visit':
+                if (req.method !== 'POST') {
+                    return res.status(405).json({ success: false, error: 'Method not allowed' });
+                }
+                return await handleVisit(req, res);
             default:
                 return res.status(400).json({ success: false, error: 'Invalid action' });
         }
@@ -243,4 +249,44 @@ async function handleStats(req, res) {
             onlineNow: presenceStore.size
         }
     });
+}
+
+/**
+ * POST /api/community?action=visit
+ * Increment site visit counter (rate limited on client side)
+ * Returns the new total visits count
+ */
+async function handleVisit(req, res) {
+    const SiteStats = require('../lib/models/SiteStats');
+    
+    try {
+        // Atomically increment the visit counter
+        const result = await SiteStats.findOneAndUpdate(
+            { key: 'global' },
+            { 
+                $inc: { totalVisits: 1 },
+                $setOnInsert: { 
+                    totalComparisons: 0,
+                    totalTournaments: 0
+                }
+            },
+            { 
+                upsert: true, 
+                new: true,
+                setDefaultsOnInsert: true
+            }
+        );
+        
+        return res.status(200).json({
+            success: true,
+            totalVisits: result.totalVisits || 1
+        });
+    } catch (error) {
+        console.error('Error incrementing visit count:', error);
+        // Return success anyway - visit counting is not critical
+        return res.status(200).json({
+            success: true,
+            totalVisits: null // Indicate we couldn't get the count
+        });
+    }
 }
