@@ -9350,6 +9350,11 @@ body {
    Proper widths, all elements visible
    Fixed for 100% zoom on 1366x768 and up
    
+   HEIGHT CONSTRAINT MODEL:
+   The Community page must fit within viewport - header height.
+   We use height: calc(100vh - var(--header-height)) on the view,
+   then flex: 1 + min-height: 0 on children to enable scroll.
+   
    WHY min-height: 0 IS REQUIRED:
    In CSS Grid and Flexbox, children have an implicit min-height: auto which
    prevents them from shrinking below their content size. This breaks scrolling
@@ -9357,25 +9362,27 @@ body {
    Setting min-height: 0 allows the child to shrink and enables overflow scroll.
    ======================================== */
 
-/* Community View - uses flexbox layout, full height minus header */
+/* Community View - FIXED HEIGHT = viewport minus header */
 #community-view.active-view {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    min-height: 0; /* Required for scroll to work in flex children */
+    /* Constrain to viewport - this is the key fix */
+    height: calc(100vh - var(--header-height));
+    max-height: calc(100vh - var(--header-height));
+    min-height: 0;
     overflow: hidden;
 }
 
-/* Main Layout - Two-column grid with proper height management */
+/* Main Layout - Two-column grid fills the constrained parent */
 .community-feed-layout {
     display: grid;
-    grid-template-columns: clamp(280px, 30%, 380px) minmax(400px, 1fr);
-    gap: clamp(16px, 2vw, 30px);
+    grid-template-columns: clamp(260px, 28%, 360px) minmax(320px, 1fr);
+    gap: clamp(12px, 1.5vw, 24px);
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: clamp(12px, 2vw, 24px) clamp(16px, 3vw, 40px);
-    /* flex: 1 fills remaining space, min-height: 0 enables child scrolling */
+    padding: clamp(8px, 1.5vw, 20px) clamp(12px, 2vw, 32px);
+    /* Fill remaining height, enable child scrolling */
     flex: 1;
     min-height: 0; /* CRITICAL: allows grid children to scroll */
     box-sizing: border-box;
@@ -9386,12 +9393,14 @@ body {
 .community-sidebar-column {
     display: flex;
     flex-direction: column;
-    gap: clamp(12px, 1.5vw, 20px);
+    gap: clamp(10px, 1.2vw, 16px);
     overflow-y: auto;
     overflow-x: hidden;
-    padding-bottom: 20px;
-    padding-right: 8px;
+    padding-bottom: 16px;
+    padding-right: 6px;
     min-height: 0; /* CRITICAL: enables overflow scroll in grid/flex child */
+    /* Ensure it doesn't exceed parent height */
+    max-height: 100%;
 }
 
 .community-sidebar-column::-webkit-scrollbar {
@@ -9502,11 +9511,12 @@ body {
     overflow-y: auto;
     overflow-x: hidden;
     min-height: 0; /* CRITICAL: enables scroll in flex child */
-    padding: clamp(10px, 1.2vw, 16px) 8px;
-    padding-bottom: 0; /* Compose box handles bottom spacing */
+    padding: clamp(8px, 1vw, 14px) 6px;
+    /* Extra padding at bottom so last message isn't covered by composer */
+    padding-bottom: clamp(60px, 8vh, 80px);
     display: flex;
     flex-direction: column;
-    gap: clamp(10px, 1.2vw, 16px);
+    gap: clamp(8px, 1vw, 14px);
 }
 
 /* Custom scrollbar for feed region */
@@ -10917,52 +10927,176 @@ body {
 /* ========================================
    COMMUNITY RESPONSIVE - LARGE SCREENS
    ======================================== */
-/* ========================================
-   COMMUNITY RESPONSIVE - LARGE SCREENS
-   ======================================== */
 
 @media (min-width: 1600px) {
     .community-feed-layout {
-        grid-template-columns: 400px minmax(500px, 800px);
-        gap: 35px;
-        padding: 28px 50px;
-        max-width: 1350px;
+        grid-template-columns: 380px minmax(500px, 900px);
+        gap: 30px;
+        padding: 24px 40px;
+        max-width: 1500px;
     }
 }
 
 /* ========================================
-   COMMUNITY RESPONSIVE - MEDIUM LAPTOPS (1366x768)
+   COMMUNITY RESPONSIVE - MEDIUM LAPTOPS (1366x768, 1440x900)
    ======================================== */
 
-@media (max-width: 1400px) and (min-width: 1201px) {
+@media (max-width: 1500px) and (min-width: 1201px) {
     .community-feed-layout {
-        grid-template-columns: clamp(260px, 28%, 340px) minmax(350px, 1fr);
-        gap: 20px;
-        padding: 16px 24px;
+        grid-template-columns: clamp(240px, 26%, 320px) minmax(300px, 1fr);
+        gap: 16px;
+        padding: 12px 20px;
     }
     
     .hud-stats-grid {
         grid-template-columns: repeat(5, 1fr);
-        gap: 3px;
-        padding: 10px;
+        gap: 2px;
+        padding: 8px;
     }
     
     .hud-stat-item {
-        padding: 10px 4px;
+        padding: 8px 3px;
+    }
+    
+    .hud-stat-item .hud-stat-value {
+        font-size: 1.1rem;
+    }
+    
+    .hud-stat-item .hud-stat-label {
+        font-size: 0.5rem;
     }
     
     .matchup-arena {
-        padding: 14px;
-        gap: 10px;
+        padding: 10px;
+        gap: 8px;
     }
     
     .matchup-fighter-img {
-        width: 55px;
-        height: 55px;
+        width: 50px;
+        height: 50px;
+    }
+    
+    .matchup-fighter-name {
+        font-size: 0.7rem;
+    }
+    
+    .matchup-vote-btn {
+        padding: 4px 6px;
+        font-size: 0.6rem;
     }
     
     .leaderboard-list {
-        max-height: 180px;
+        max-height: 150px;
+    }
+    
+    .leaderboard-item {
+        padding: 6px 10px;
+        gap: 8px;
+    }
+}
+
+/* ========================================
+   COMMUNITY RESPONSIVE - SHORT SCREENS (height < 800px)
+   Critical for 1366x768 and similar
+   ======================================== */
+
+@media (max-height: 800px) {
+    .community-feed-layout {
+        padding: 8px 16px;
+        gap: 12px;
+    }
+    
+    .community-sidebar-column {
+        gap: 10px;
+    }
+    
+    .hud-header {
+        padding: 8px 12px;
+    }
+    
+    .hud-live-badges {
+        padding: 8px 10px;
+    }
+    
+    .hud-stats-grid {
+        padding: 8px;
+        gap: 2px;
+    }
+    
+    .hud-stat-item {
+        padding: 6px 2px;
+    }
+    
+    .hud-stat-item .hud-stat-value {
+        font-size: 1rem;
+    }
+    
+    .hud-stat-item .hud-stat-label {
+        font-size: 0.45rem;
+        margin-top: 2px;
+    }
+    
+    .module-header {
+        padding: 8px 12px;
+    }
+    
+    .matchup-arena {
+        padding: 8px;
+        gap: 6px;
+    }
+    
+    .matchup-fighter-img {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .matchup-fighter-name {
+        font-size: 0.65rem;
+    }
+    
+    .matchup-vote-btn {
+        padding: 3px 5px;
+        font-size: 0.55rem;
+    }
+    
+    .matchup-vs {
+        font-size: 0.9rem;
+        padding: 3px 6px;
+    }
+    
+    .leaderboard-list {
+        max-height: 120px;
+        padding: 6px;
+    }
+    
+    .leaderboard-item {
+        padding: 5px 8px;
+        gap: 6px;
+        margin-bottom: 3px;
+    }
+    
+    .leaderboard-rank {
+        width: 20px;
+        height: 20px;
+        font-size: 0.75rem;
+    }
+    
+    .leaderboard-avatar {
+        width: 26px;
+        height: 26px;
+    }
+    
+    .feed-scroll-region {
+        padding-bottom: 50px;
+    }
+    
+    .community-tab-btn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .feed-compose-box {
+        padding: 10px 14px;
     }
 }
 
@@ -10972,9 +11106,9 @@ body {
 
 @media (max-width: 1200px) {
     .community-feed-layout {
-        grid-template-columns: clamp(240px, 30%, 300px) minmax(300px, 1fr);
-        gap: 16px;
-        padding: 14px 20px;
+        grid-template-columns: clamp(220px, 28%, 280px) minmax(280px, 1fr);
+        gap: 14px;
+        padding: 12px 16px;
     }
     
     .hud-stats-grid,
@@ -10997,12 +11131,12 @@ body {
     }
     
     .matchup-fighter-img {
-        width: 50px;
-        height: 50px;
+        width: 45px;
+        height: 45px;
     }
     
     .leaderboard-list {
-        max-height: 160px;
+        max-height: 140px;
     }
 }
 
@@ -11011,24 +11145,29 @@ body {
    ======================================== */
 
 @media (max-width: 900px) {
+    #community-view.active-view {
+        height: calc(100vh - var(--header-height));
+        height: calc(100dvh - var(--header-height)); /* Dynamic viewport height for mobile */
+    }
+    
     .community-feed-layout {
         grid-template-columns: 1fr;
-        gap: 14px;
-        padding: 12px;
+        gap: 12px;
+        padding: 10px;
     }
     
     .community-sidebar-column {
         display: none;
         position: fixed;
-        top: 55px;
+        top: var(--header-height);
         left: 0;
         bottom: 0;
-        width: 320px;
-        max-width: 90vw;
+        width: 300px;
+        max-width: 85vw;
         background: rgba(10, 12, 18, 0.98);
         border-right: 1px solid rgba(0, 212, 255, 0.2);
         z-index: 200;
-        padding: 14px;
+        padding: 12px;
         overflow-y: auto;
     }
     
