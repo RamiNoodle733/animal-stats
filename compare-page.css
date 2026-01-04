@@ -1,999 +1,1011 @@
 /**
  * ============================================
- * COMPARE PAGE ENHANCEMENTS - compare-page.css
+ * COMPARE PAGE TOURNAMENT-STYLE CSS
  * ============================================
  * 
- * PS3-era fighting game HUD upgrades for the Compare page.
- * All styles are scoped to #compare-view to avoid affecting other pages.
+ * All styles scoped to #compare-view
+ * Matches the visual style of tournament-v4.css
  * 
- * REPLACEABLE SLOT SYSTEM:
- * -------------------------
- * The VS badge is designed as a swappable slot. To replace it:
- * 
- * 1. Via External SVG File:
- *    - Place your custom SVG at: /assets/ui/vs-badge.svg
- *    - The default placeholder will automatically be hidden when the slot
- *      detects the external asset (implemented in compare-page.js)
- *    - Or manually set: document.getElementById('vsBadgeExternal').src = '/path/to/your-badge.svg'
- * 
- * 2. Via Inline SVG:
- *    - Replace the contents inside #vsBadgeSlot > .vs-badge-default
- *    - Or inject your SVG directly into #vsBadgeSlot
- * 
- * 3. Via CSS background:
- *    - Set background-image on #vsBadgeSlot and hide .vs-badge-default
- * 
- * The slot maintains these guarantees:
- * - Fixed dimensions: 120x120px (scalable via CSS)
- * - Centered in .fight-center area
- * - Z-index above radar chart
- * - Auto-animates with pulse on new matchup
+ * STRUCTURE:
+ * - Fighter card layout (identity, hero image, bottom info)
+ * - Fight center (VS section, stat bars)
+ * - Intro overlay
+ * - Result overlay (sticky header, scrollable content)
+ * - Responsive breakpoints for all screen sizes
  */
 
-/* ========================================
-   VS BADGE SLOT SYSTEM
-   ======================================== */
-
-#compare-view .fight-center {
-    position: relative;
-    z-index: 1;
+/* ==========================
+   CSS VARIABLES
+   ========================== */
+#compare-view {
+    --c-gold: #ffd700;
+    --c-cyan: #00d4ff;
+    --c-orange: #ff6b00;
+    --c-green: #00ff88;
+    --c-purple: #9966ff;
+    --c-dark-bg: #0a0a12;
+    --c-panel-bg: rgba(20, 20, 35, 0.95);
+    --c-glass: rgba(255, 255, 255, 0.05);
+    --c-glass-border: rgba(255, 255, 255, 0.1);
+    --c-text-primary: #ffffff;
+    --c-text-secondary: rgba(255, 255, 255, 0.7);
+    --c-text-muted: rgba(255, 255, 255, 0.5);
 }
 
-/* VS Badge Container - the replaceable slot */
-#vsBadgeSlot,
-[data-ui-slot="vs-badge"] {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 50;
-    width: 120px;
-    height: 120px;
+/* ==========================
+   COMPARE VIEW LAYOUT
+   ========================== */
+#compare-view .fight-screen {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0;
+    padding: 1rem 1.5rem;
+    align-items: stretch;
+    min-height: 480px;
+    max-height: calc(100vh - 200px);
+}
+
+#compare-view .compare-controls-bar {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    margin-bottom: 0;
+    border-top: 2px solid var(--c-gold);
+    background: linear-gradient(180deg, rgba(26,26,46,0.98) 0%, rgba(10,10,18,0.98) 100%);
+}
+
+/* ==========================
+   FIGHTER SECTION (CARD)
+   ========================== */
+#compare-view .fighter-section {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    pointer-events: none;
-    /* Smooth size transitions for different badge designs */
-    transition: width 0.3s ease, height 0.3s ease;
+    flex-direction: column;
+    background: var(--c-panel-bg);
+    border-radius: 16px;
+    border: 1px solid var(--c-glass-border);
+    padding: 0;
+    overflow: hidden;
+    position: relative;
 }
 
-/* External SVG loader (hidden by default) */
-#vsBadgeExternal {
-    display: none;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+/* Hide old elements that are kept for script.js DOM references */
+#compare-view .fighter-info-overlay,
+#compare-view .compare-stats-panel {
+    display: none !important;
 }
 
-#vsBadgeExternal.loaded {
+#compare-view .fighter-section.fighter-left {
+    border-left: 3px solid var(--c-cyan);
+}
+
+#compare-view .fighter-section.fighter-right {
+    border-right: 3px solid var(--c-orange);
+}
+
+/* ==========================
+   IDENTITY TOP SECTION
+   ========================== */
+#compare-view .c-identity-top {
+    padding: 0.75rem 1rem;
+    text-align: center;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 100%);
+    border-bottom: 1px solid var(--c-glass-border);
+}
+
+#compare-view .c-fighter-name {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--c-text-primary);
+    margin: 0 0 0.25rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+#compare-view .fighter-left .c-fighter-name {
+    color: var(--c-cyan);
+}
+
+#compare-view .fighter-right .c-fighter-name {
+    color: var(--c-orange);
+}
+
+#compare-view .c-scientific {
+    font-size: 0.7rem;
+    color: var(--c-text-muted);
+    font-style: italic;
     display: block;
+    margin-bottom: 0.5rem;
 }
 
-#vsBadgeExternal.loaded + .vs-badge-default {
-    display: none;
+/* Battle Record Badge */
+#compare-view .c-record-badge {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    padding: 0.4rem 0.5rem;
 }
 
-/* Default VS Badge Placeholder - PS3 Fighting Game Style */
-#vsBadgeSlot .vs-badge-default {
-    width: 100%;
-    height: 100%;
-    position: relative;
+#compare-view .c-record-badge .record-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+}
+
+#compare-view .c-record-badge .record-item i {
+    font-size: 0.65rem;
+    color: var(--c-gold);
+}
+
+#compare-view .c-record-badge .record-value {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--c-text-primary);
+}
+
+#compare-view .c-record-badge .record-label {
+    font-size: 0.55rem;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+#compare-view .c-record-badge .record-divider {
+    width: 1px;
+    background: var(--c-glass-border);
+}
+
+/* ==========================
+   HERO SECTION (ANIMAL IMAGE)
+   ========================== */
+#compare-view .c-hero-section {
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    padding: 0.5rem;
+    min-height: 150px;
+    background: radial-gradient(ellipse at center, rgba(255,255,255,0.02) 0%, transparent 70%);
 }
 
-#vsBadgeSlot .vs-badge-default svg {
+#compare-view .fighter-display {
     width: 100%;
     height: 100%;
-    filter: drop-shadow(0 0 20px rgba(255, 107, 0, 0.8))
-            drop-shadow(0 0 40px rgba(255, 107, 0, 0.4));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    cursor: pointer;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* VS Badge pulse animation on new matchup */
-#vsBadgeSlot.vs-active {
-    animation: vsBadgePulse 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+#compare-view .fighter-display:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 30px rgba(0,212,255,0.2);
 }
 
-@keyframes vsBadgePulse {
-    0% { 
-        transform: translate(-50%, -50%) scale(0.3);
-        opacity: 0;
-    }
-    50% { 
-        transform: translate(-50%, -50%) scale(1.2);
-        opacity: 1;
-    }
-    100% { 
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 1;
-    }
+#compare-view .fighter-right .fighter-display:hover {
+    box-shadow: 0 8px 30px rgba(255,107,0,0.2);
 }
 
-/* Idle glow animation */
-#vsBadgeSlot .vs-badge-default {
-    animation: vsIdleGlow 2s ease-in-out infinite;
+#compare-view .fighter-image {
+    max-width: 100%;
+    max-height: 160px;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 20px rgba(0,0,0,0.5));
+    transition: transform 0.3s ease;
 }
 
-@keyframes vsIdleGlow {
-    0%, 100% { 
-        filter: drop-shadow(0 0 15px rgba(255, 107, 0, 0.6));
-    }
-    50% { 
-        filter: drop-shadow(0 0 30px rgba(255, 107, 0, 1))
-                drop-shadow(0 0 60px rgba(255, 215, 0, 0.4));
-    }
+#compare-view .fighter-display:hover .fighter-image {
+    transform: scale(1.05);
 }
 
-/* ========================================
-   MATCHUP INTRO ANIMATION OVERLAY
-   ======================================== */
+#compare-view .fighter-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: var(--c-text-muted);
+    padding: 2rem;
+}
 
+#compare-view .fighter-placeholder i {
+    font-size: 2rem;
+    opacity: 0.5;
+}
+
+/* Click hint */
+#compare-view .c-click-hint {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.7);
+    color: var(--c-text-secondary);
+    font-size: 0.65rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+#compare-view .fighter-display:hover .c-click-hint {
+    opacity: 1;
+}
+
+/* ==========================
+   BOTTOM INFO SECTION
+   ========================== */
+#compare-view .c-bottom-info {
+    padding: 0.75rem;
+    background: rgba(0,0,0,0.2);
+    border-top: 1px solid var(--c-glass-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* Quick Info */
+#compare-view .c-quick-info {
+    display: flex;
+    justify-content: space-around;
+    gap: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--c-glass-border);
+}
+
+#compare-view .quick-info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+}
+
+#compare-view .quick-info-item i {
+    font-size: 0.75rem;
+    color: var(--c-gold);
+}
+
+#compare-view .quick-info-item span {
+    font-size: 0.65rem;
+    color: var(--c-text-secondary);
+    font-weight: 500;
+}
+
+/* Tags Section */
+#compare-view .c-tags {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+#compare-view .c-abilities-section,
+#compare-view .c-traits-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+#compare-view .abilities-label,
+#compare-view .traits-label {
+    font-size: 0.55rem;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+#compare-view .abilities-label i {
+    color: var(--c-cyan);
+}
+
+#compare-view .traits-label i {
+    color: var(--c-purple);
+}
+
+#compare-view .abilities-tags-compact,
+#compare-view .traits-tags-compact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+}
+
+#compare-view .ability-tag-sm {
+    background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(0,212,255,0.1));
+    color: var(--c-cyan);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.55rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border: 1px solid rgba(0,212,255,0.3);
+}
+
+#compare-view .trait-tag-sm {
+    background: linear-gradient(135deg, rgba(153,102,255,0.2), rgba(153,102,255,0.1));
+    color: var(--c-purple);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.55rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    border: 1px solid rgba(153,102,255,0.3);
+}
+
+/* Tournament Dashboard */
+#compare-view .c-tournament-dashboard {
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    padding: 0.4rem;
+}
+
+#compare-view .dashboard-header {
+    margin-bottom: 0.3rem;
+}
+
+#compare-view .dashboard-title {
+    font-size: 0.55rem;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+#compare-view .dashboard-title i {
+    color: var(--c-gold);
+}
+
+#compare-view .medal-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+#compare-view .medal-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.1rem;
+    padding: 0.3rem 0.5rem;
+    border-radius: 6px;
+    background: rgba(0,0,0,0.3);
+    min-width: 40px;
+}
+
+#compare-view .medal-icon-wrap {
+    font-size: 0.8rem;
+}
+
+#compare-view .medal-card.gold .medal-icon-wrap i { color: #ffd700; }
+#compare-view .medal-card.silver .medal-icon-wrap i { color: #c0c0c0; }
+#compare-view .medal-card.bronze .medal-icon-wrap i { color: #cd7f32; }
+
+#compare-view .medal-count {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--c-text-primary);
+}
+
+#compare-view .medal-label {
+    font-size: 0.5rem;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+}
+
+/* Action Row */
+#compare-view .c-action-row {
+    padding-top: 0.5rem;
+    display: flex;
+    justify-content: center;
+}
+
+#compare-view .view-stats-btn {
+    background: linear-gradient(135deg, var(--c-cyan), #0099cc);
+    color: white;
+    border: none;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+#compare-view .view-stats-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,212,255,0.4);
+}
+
+#compare-view .fighter-right .view-stats-btn {
+    background: linear-gradient(135deg, var(--c-orange), #cc5500);
+}
+
+#compare-view .fighter-right .view-stats-btn:hover {
+    box-shadow: 0 4px 15px rgba(255,107,0,0.4);
+}
+
+/* ==========================
+   FIGHT CENTER
+   ========================== */
+#compare-view .fight-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0.5rem;
+    gap: 0.5rem;
+    min-width: 200px;
+    max-width: 260px;
+}
+
+/* VS Section */
+#compare-view .c-vs-section {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+#compare-view .c-vs-burst {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 70%);
+    animation: vsBurstPulse 2s ease-in-out infinite;
+}
+
+#compare-view .c-vs-diamond {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,107,0,0.3));
+    transform: rotate(45deg);
+    border-radius: 6px;
+    animation: diamondRotate 8s linear infinite;
+}
+
+#compare-view .c-vs-badge {
+    position: relative;
+    z-index: 2;
+    background: linear-gradient(135deg, var(--c-gold), var(--c-orange));
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 
+        0 0 20px rgba(255,215,0,0.5),
+        inset 0 2px 4px rgba(255,255,255,0.3);
+    animation: vsFloat 3s ease-in-out infinite;
+}
+
+#compare-view .c-vs-badge span {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #1a1a2e;
+    text-shadow: 0 1px 2px rgba(255,255,255,0.3);
+}
+
+/* Radar Chart Container */
+#compare-view .radar-chart-container {
+    width: 100%;
+    max-width: 200px;
+    aspect-ratio: 1;
+    flex-shrink: 0;
+}
+
+/* ==========================
+   STAT BARS (CENTER)
+   ========================== */
+#compare-view .c-stats-compact {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+#compare-view .c-stat-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0.3rem;
+    align-items: center;
+}
+
+#compare-view .c-stat-bar-left,
+#compare-view .c-stat-bar-right {
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+#compare-view .c-stat-bar-left {
+    background: rgba(0,212,255,0.2);
+}
+
+#compare-view .c-stat-bar-right {
+    background: rgba(255,107,0,0.2);
+}
+
+#compare-view .c-stat-bar-left .stat-bar {
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#compare-view .c-stat-bar-right .stat-bar {
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+#compare-view .c-stat-bar-left .stat-bar-fill {
+    background: linear-gradient(90deg, transparent, var(--c-cyan));
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+#compare-view .c-stat-bar-right .stat-bar-fill {
+    background: linear-gradient(90deg, var(--c-orange), transparent);
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+}
+
+#compare-view .c-stat-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    min-width: 80px;
+}
+
+#compare-view .c-val {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--c-text-secondary);
+    min-width: 20px;
+    text-align: center;
+}
+
+#compare-view .c-val.left {
+    color: var(--c-cyan);
+}
+
+#compare-view .c-val.right {
+    color: var(--c-orange);
+}
+
+#compare-view .c-stat-icon-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+#compare-view .c-stat-icon-label i {
+    font-size: 0.65rem;
+    color: var(--c-gold);
+}
+
+#compare-view .c-stat-abbr {
+    font-size: 0.5rem;
+    color: var(--c-text-muted);
+    text-transform: uppercase;
+}
+
+/* Winner highlighting */
+#compare-view .c-stat-row.left-wins .c-val.left {
+    color: var(--c-green);
+    text-shadow: 0 0 8px var(--c-green);
+}
+
+#compare-view .c-stat-row.right-wins .c-val.right {
+    color: var(--c-green);
+    text-shadow: 0 0 8px var(--c-green);
+}
+
+/* ==========================
+   INTRO OVERLAY
+   ========================== */
 #matchupIntroOverlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    background: rgba(0, 0, 0, 0.95);
     z-index: 10000;
-    background: radial-gradient(ellipse at center, rgba(5, 10, 20, 0.98) 0%, rgba(0, 0, 0, 0.99) 100%);
     display: none;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    overflow: hidden;
+    flex-direction: column;
 }
 
 #matchupIntroOverlay.active {
     display: flex;
 }
 
-/* Skip hint */
-#matchupIntroOverlay .intro-skip-hint {
+.intro-light-sweep {
     position: absolute;
-    bottom: 30px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: rgba(255, 255, 255, 0.4);
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    animation: fadeInUp 0.5s ease 0.8s both;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent);
+    opacity: 0;
 }
 
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateX(-50%) translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-    }
+.intro-light-sweep.animate {
+    animation: lightSweep 0.6s ease-out forwards;
 }
 
-/* Intro content wrapper */
-#matchupIntroOverlay .intro-matchup-stage {
+.intro-matchup-stage {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 60px;
-    width: 100%;
-    max-width: 1200px;
-    padding: 0 40px;
+    gap: 2rem;
+    padding: 2rem;
 }
 
-/* Fighter intro cards */
-#matchupIntroOverlay .intro-fighter {
+.intro-fighter {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 1rem;
     opacity: 0;
     transform: translateX(-100px);
 }
 
-#matchupIntroOverlay .intro-fighter.right {
+.intro-fighter.right {
     transform: translateX(100px);
 }
 
-#matchupIntroOverlay .intro-fighter.animate-in {
-    animation: fighterSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+.intro-fighter.animate-in {
+    animation: fighterSlideIn 0.4s ease-out forwards;
 }
 
-#matchupIntroOverlay .intro-fighter.right.animate-in {
-    animation: fighterSlideInRight 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+.intro-fighter.right.animate-in {
+    animation: fighterSlideInRight 0.4s ease-out forwards;
 }
 
-@keyframes fighterSlideIn {
-    0% {
-        opacity: 0;
-        transform: translateX(-100px) scale(0.8);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0) scale(1);
-    }
-}
-
-@keyframes fighterSlideInRight {
-    0% {
-        opacity: 0;
-        transform: translateX(100px) scale(0.8);
-    }
-    100% {
-        opacity: 1;
-        transform: translateX(0) scale(1);
-    }
-}
-
-#matchupIntroOverlay .intro-fighter-image {
-    width: 200px;
-    height: 200px;
-    border-radius: 20px;
+.intro-fighter-image {
+    width: 180px;
+    height: 180px;
     object-fit: contain;
-    background: rgba(0, 0, 0, 0.5);
-    border: 4px solid rgba(0, 212, 255, 0.6);
-    box-shadow: 0 0 40px rgba(0, 212, 255, 0.4),
-                inset 0 0 30px rgba(0, 212, 255, 0.1);
+    filter: drop-shadow(0 0 30px rgba(255,215,0,0.5));
 }
 
-#matchupIntroOverlay .intro-fighter.right .intro-fighter-image {
-    border-color: rgba(255, 0, 153, 0.6);
-    box-shadow: 0 0 40px rgba(255, 0, 153, 0.4),
-                inset 0 0 30px rgba(255, 0, 153, 0.1);
-}
-
-#matchupIntroOverlay .intro-fighter-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.5rem;
-    letter-spacing: 4px;
-    color: #fff;
-    text-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
+.intro-fighter-name {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--c-text-primary);
     text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 20px rgba(255,215,0,0.5);
 }
 
-#matchupIntroOverlay .intro-fighter.right .intro-fighter-name {
-    text-shadow: 0 0 20px rgba(255, 0, 153, 0.8);
+.intro-fighter.left .intro-fighter-name {
+    color: var(--c-cyan);
 }
 
-/* Intro VS badge */
-#matchupIntroOverlay .intro-vs-badge {
+.intro-fighter.right .intro-fighter-name {
+    color: var(--c-orange);
+}
+
+.intro-vs-badge {
     opacity: 0;
     transform: scale(0);
 }
 
-#matchupIntroOverlay .intro-vs-badge.animate-in {
-    animation: introVsBurst 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+.intro-vs-badge.animate-in {
+    animation: vsPop 0.3s ease-out forwards;
 }
 
-@keyframes introVsBurst {
-    0% {
-        opacity: 0;
-        transform: scale(0) rotate(-180deg);
-    }
-    60% {
-        opacity: 1;
-        transform: scale(1.3) rotate(10deg);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1) rotate(0deg);
-    }
+.intro-vs-text {
+    font-size: 3rem;
+    font-weight: 900;
+    color: var(--c-gold);
+    text-shadow: 0 0 30px rgba(255,215,0,0.8);
 }
 
-#matchupIntroOverlay .intro-vs-text {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 5rem;
-    letter-spacing: 10px;
-    color: #ff6b00;
-    text-shadow: 0 0 40px rgba(255, 107, 0, 1),
-                 0 0 80px rgba(255, 107, 0, 0.6),
-                 0 0 120px rgba(255, 215, 0, 0.3);
-}
-
-/* Light sweep effect */
-#matchupIntroOverlay .intro-light-sweep {
+.intro-skip-hint {
     position: absolute;
+    bottom: 2rem;
+    color: var(--c-text-muted);
+    font-size: 0.75rem;
+}
+
+/* ==========================
+   RESULT OVERLAY
+   ========================== */
+#fightResultOverlay {
+    position: fixed;
     top: 0;
-    left: -100%;
-    width: 50%;
+    left: 0;
+    width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, 
-        transparent 0%, 
-        rgba(255, 255, 255, 0.05) 50%, 
-        transparent 100%);
-    transform: skewX(-20deg);
-    pointer-events: none;
+    z-index: 10001;
+    display: none;
+    align-items: center;
+    justify-content: center;
 }
 
-#matchupIntroOverlay .intro-light-sweep.animate {
-    animation: lightSweep 0.8s ease-out forwards;
+#fightResultOverlay.active {
+    display: flex;
 }
 
-@keyframes lightSweep {
-    0% { left: -100%; }
-    100% { left: 200%; }
-}
-
-/* ========================================
-   HUD CHROME AND DEPTH ELEMENTS
-   ======================================== */
-
-/* Subtle noise overlay for texture */
-#compare-view::before {
-    content: '';
+.result-backdrop {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    opacity: 0.015;
-    pointer-events: none;
-    z-index: 0;
-}
-
-/* HUD corner brackets for panels */
-#compare-view .hud-corner-bracket {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    pointer-events: none;
-}
-
-#compare-view .hud-corner-bracket::before,
-#compare-view .hud-corner-bracket::after {
-    content: '';
-    position: absolute;
-    background: var(--primary-color, #00d4ff);
-}
-
-#compare-view .hud-corner-bracket.top-left::before {
-    top: 0; left: 0; width: 100%; height: 2px;
-}
-#compare-view .hud-corner-bracket.top-left::after {
-    top: 0; left: 0; width: 2px; height: 100%;
-}
-
-#compare-view .hud-corner-bracket.top-right::before {
-    top: 0; right: 0; width: 100%; height: 2px;
-}
-#compare-view .hud-corner-bracket.top-right::after {
-    top: 0; right: 0; width: 2px; height: 100%;
-}
-
-#compare-view .hud-corner-bracket.bottom-left::before {
-    bottom: 0; left: 0; width: 100%; height: 2px;
-}
-#compare-view .hud-corner-bracket.bottom-left::after {
-    bottom: 0; left: 0; width: 2px; height: 100%;
-}
-
-#compare-view .hud-corner-bracket.bottom-right::before {
-    bottom: 0; right: 0; width: 100%; height: 2px;
-}
-#compare-view .hud-corner-bracket.bottom-right::after {
-    bottom: 0; right: 0; width: 2px; height: 100%;
-}
-
-/* Fighter display HUD chrome upgrade */
-#compare-view .fighter-display {
-    position: relative;
-}
-
-#compare-view .fighter-display .hud-bracket-tl,
-#compare-view .fighter-display .hud-bracket-tr,
-#compare-view .fighter-display .hud-bracket-bl,
-#compare-view .fighter-display .hud-bracket-br {
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    pointer-events: none;
-    z-index: 20;
-    opacity: 0.7;
+    background: rgba(0, 0, 0, 0.9);
+    opacity: 0;
     transition: opacity 0.3s ease;
-}
-
-#compare-view .fighter-display:hover .hud-bracket-tl,
-#compare-view .fighter-display:hover .hud-bracket-tr,
-#compare-view .fighter-display:hover .hud-bracket-bl,
-#compare-view .fighter-display:hover .hud-bracket-br {
-    opacity: 1;
-}
-
-#compare-view .hud-bracket-tl { top: 8px; left: 8px; }
-#compare-view .hud-bracket-tr { top: 8px; right: 8px; }
-#compare-view .hud-bracket-bl { bottom: 60px; left: 8px; }
-#compare-view .hud-bracket-br { bottom: 60px; right: 8px; }
-
-#compare-view .hud-bracket-tl::before, #compare-view .hud-bracket-tl::after,
-#compare-view .hud-bracket-tr::before, #compare-view .hud-bracket-tr::after,
-#compare-view .hud-bracket-bl::before, #compare-view .hud-bracket-bl::after,
-#compare-view .hud-bracket-br::before, #compare-view .hud-bracket-br::after {
-    content: '';
-    position: absolute;
-    background: currentColor;
-}
-
-#compare-view .hud-bracket-tl { color: #00ff88; }
-#compare-view .hud-bracket-tl::before { top: 0; left: 0; width: 100%; height: 2px; }
-#compare-view .hud-bracket-tl::after { top: 0; left: 0; width: 2px; height: 100%; }
-
-#compare-view .hud-bracket-tr { color: #00ff88; }
-#compare-view .hud-bracket-tr::before { top: 0; right: 0; width: 100%; height: 2px; }
-#compare-view .hud-bracket-tr::after { top: 0; right: 0; width: 2px; height: 100%; }
-
-#compare-view .hud-bracket-bl { color: #00ff88; }
-#compare-view .hud-bracket-bl::before { bottom: 0; left: 0; width: 100%; height: 2px; }
-#compare-view .hud-bracket-bl::after { bottom: 0; left: 0; width: 2px; height: 100%; }
-
-#compare-view .hud-bracket-br { color: #00ff88; }
-#compare-view .hud-bracket-br::before { bottom: 0; right: 0; width: 100%; height: 2px; }
-#compare-view .hud-bracket-br::after { bottom: 0; right: 0; width: 2px; height: 100%; }
-
-/* Right fighter brackets - different color */
-#compare-view .fighter-right .hud-bracket-tl,
-#compare-view .fighter-right .hud-bracket-tr,
-#compare-view .fighter-right .hud-bracket-bl,
-#compare-view .fighter-right .hud-bracket-br {
-    color: #ff0099;
-}
-
-/* Enhanced fighter name typography */
-#compare-view .fighter-name {
-    font-size: 1.4rem;
-    letter-spacing: 4px;
-    text-shadow: 0 0 15px rgba(0, 212, 255, 0.8),
-                 0 2px 4px rgba(0, 0, 0, 0.8);
-    position: relative;
-}
-
-/* Name underline accent */
-#compare-view .fighter-name::after {
-    content: '';
-    position: absolute;
-    bottom: -4px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60%;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, currentColor, transparent);
-    opacity: 0.6;
-}
-
-#compare-view .fighter-left .fighter-name {
-    color: #00ff88;
-    text-shadow: 0 0 15px rgba(0, 255, 136, 0.8),
-                 0 2px 4px rgba(0, 0, 0, 0.8);
-}
-
-#compare-view .fighter-right .fighter-name {
-    color: #ff0099;
-    text-shadow: 0 0 15px rgba(255, 0, 153, 0.8),
-                 0 2px 4px rgba(0, 0, 0, 0.8);
-}
-
-/* Stats panel HUD upgrade */
-#compare-view .compare-stats-panel {
-    position: relative;
-    background: linear-gradient(135deg, rgba(0, 14, 26, 0.98) 0%, rgba(5, 20, 35, 0.95) 100%);
-    border: 1px solid rgba(0, 212, 255, 0.25);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.05);
-}
-
-#compare-view .compare-stats-panel::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
-    opacity: 0.6;
-}
-
-/* Divider line between stat rows */
-#compare-view .compare-stat-row {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-#compare-view .compare-stat-row:last-child {
-    border-bottom: none;
-}
-
-#compare-view .compare-stat-row:hover {
-    background: rgba(0, 212, 255, 0.05);
-}
-
-/* Enhanced stat values */
-#compare-view .compare-stat-value {
-    font-size: 1.3rem;
-    font-weight: 700;
-}
-
-/* Fight center radar container upgrade */
-#compare-view .radar-chart-container {
-    position: relative;
-    background: radial-gradient(ellipse at center, rgba(0, 20, 40, 0.8) 0%, transparent 70%);
-    border-radius: 12px;
-    padding: 20px;
-}
-
-/* Thin border ring around radar */
-#compare-view .radar-chart-container::before {
-    content: '';
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    right: 10px;
-    bottom: 10px;
-    border: 1px solid rgba(0, 212, 255, 0.15);
-    border-radius: 50%;
-    pointer-events: none;
-}
-
-/* ========================================
-   COMPARE CONTROLS BAR UPGRADE
-   ======================================== */
-
-#compare-view .compare-controls-bar {
-    position: relative;
-    background: linear-gradient(180deg, rgba(5, 10, 20, 0.98) 0%, rgba(0, 5, 15, 1) 100%);
-    border-top: 1px solid rgba(0, 212, 255, 0.2);
-    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
-}
-
-/* FIGHT button enhanced glow */
-#compare-view .fight-btn {
-    position: relative;
-    overflow: hidden;
-}
-
-#compare-view .fight-btn::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(45deg, 
-        transparent 30%, 
-        rgba(255, 255, 255, 0.1) 50%, 
-        transparent 70%);
-    transform: rotate(45deg);
-    animation: fightBtnShine 3s ease-in-out infinite;
-}
-
-@keyframes fightBtnShine {
-    0%, 100% { transform: translateX(-100%) rotate(45deg); }
-    50% { transform: translateX(100%) rotate(45deg); }
-}
-
-/* ========================================
-   RESPONSIVE ADJUSTMENTS
-   ======================================== */
-
-@media (max-width: 1200px) {
-    .intro-matchup-stage {
-        gap: 40px;
-    }
-    
-    .intro-fighter-image {
-        width: 150px;
-        height: 150px;
-    }
-    
-    .intro-fighter-name {
-        font-size: 2rem;
-    }
-    
-    .intro-vs-text {
-        font-size: 4rem;
-    }
-    
-    #vsBadgeSlot {
-        width: 100px;
-        height: 100px;
-    }
-}
-
-@media (max-width: 900px) {
-    .intro-matchup-stage {
-        flex-direction: column;
-        gap: 20px;
-    }
-    
-    .intro-fighter {
-        transform: translateY(-50px);
-    }
-    
-    .intro-fighter.right {
-        transform: translateY(50px);
-    }
-    
-    .intro-fighter.animate-in {
-        animation-name: fighterSlideInMobile;
-    }
-    
-    .intro-fighter.right.animate-in {
-        animation-name: fighterSlideInMobileRight;
-    }
-    
-    @keyframes fighterSlideInMobile {
-        0% {
-            opacity: 0;
-            transform: translateY(-50px) scale(0.8);
-        }
-        100% {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-    }
-    
-    @keyframes fighterSlideInMobileRight {
-        0% {
-            opacity: 0;
-            transform: translateY(50px) scale(0.8);
-        }
-        100% {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-    }
-    
-    .intro-fighter-image {
-        width: 120px;
-        height: 120px;
-    }
-    
-    .intro-fighter-name {
-        font-size: 1.5rem;
-    }
-    
-    .intro-vs-text {
-        font-size: 3rem;
-    }
-    
-    #vsBadgeSlot {
-        width: 80px;
-        height: 80px;
-    }
-    
-    #compare-view .fighter-name {
-        font-size: 1.1rem;
-        letter-spacing: 2px;
-    }
-}
-
-/* Short screens (1366x768) */
-@media (max-height: 800px) {
-    #vsBadgeSlot {
-        width: 90px;
-        height: 90px;
-    }
-    
-    .intro-fighter-image {
-        width: 140px;
-        height: 140px;
-    }
-    
-    .intro-vs-text {
-        font-size: 3.5rem;
-    }
-}
-
-/* ========================================
-   RESULT OVERLAY SYSTEM
-   ======================================== */
-
-#fightResultOverlay {
-    position: fixed;
-    inset: 0;
-    z-index: 10000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-}
-
-#fightResultOverlay.active {
-    display: flex;
-    pointer-events: auto;
-}
-
-#fightResultOverlay.reveal {
-    opacity: 1;
-}
-
-/* Animated backdrop */
-.result-backdrop {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.95) 100%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
 }
 
 #fightResultOverlay.reveal .result-backdrop {
     opacity: 1;
 }
 
-/* Main container */
 .result-container {
     position: relative;
     width: 90%;
-    max-width: 500px;
-    background: linear-gradient(180deg, rgba(30, 30, 35, 0.98) 0%, rgba(20, 20, 25, 0.98) 100%);
-    border: 2px solid #ff6b00;
+    max-width: 420px;
+    max-height: calc(100vh - 24px);
+    background: linear-gradient(180deg, #1a1a2e 0%, #0d0d1a 100%);
     border-radius: 16px;
-    padding: 24px;
+    border: 1px solid var(--c-glass-border);
     box-shadow: 
-        0 0 60px rgba(255, 107, 0, 0.4),
-        0 0 120px rgba(255, 107, 0, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    transform: scale(0.8) translateY(20px);
+        0 0 60px rgba(255,215,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
     opacity: 0;
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform: scale(0.8) translateY(20px);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 #fightResultOverlay.reveal .result-container {
-    transform: scale(1) translateY(0);
     opacity: 1;
+    transform: scale(1) translateY(0);
 }
 
-/* Close button */
+/* Sticky Header */
+.result-header-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: linear-gradient(180deg, #1a1a2e 0%, rgba(26,26,46,0.98) 100%);
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--c-glass-border);
+    flex-shrink: 0;
+}
+
 .result-close-btn {
     position: absolute;
-    top: 12px;
-    right: 12px;
+    top: 0.5rem;
+    right: 0.5rem;
     width: 32px;
     height: 32px;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-    color: rgba(255, 255, 255, 0.6);
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--c-text-secondary);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.2s ease;
-    z-index: 10;
+    transition: all 0.3s ease;
+    z-index: 11;
 }
 
 .result-close-btn:hover {
-    background: rgba(255, 107, 0, 0.3);
-    border-color: #ff6b00;
-    color: #fff;
+    background: rgba(255,107,0,0.3);
+    color: white;
+    transform: rotate(90deg);
 }
 
-/* Winner banner slot */
 .result-banner-slot {
     text-align: center;
-    margin-bottom: 16px;
 }
 
 .result-banner-default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 4px;
 }
 
 .result-crown {
-    font-size: 2.5rem;
-    color: #ffd700;
-    text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-    animation: crownBounce 1s ease-out infinite;
-}
-
-@keyframes crownBounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
+    font-size: 2rem;
+    color: var(--c-gold);
+    animation: crownBounce 1s ease-in-out infinite;
 }
 
 .result-title {
-    font-family: 'Bebas Neue', 'Arial Black', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 8px;
-    background: linear-gradient(180deg, #ffd700 0%, #ff8c00 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: none;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--c-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    text-shadow: 0 0 20px rgba(255,215,0,0.5);
 }
 
-/* Winner section */
+/* Scrollable Content */
+.result-content-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+/* Winner Section */
 .result-winner-section {
     position: relative;
-    text-align: center;
-    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
 }
 
 .result-winner-glow {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     width: 200px;
     height: 200px;
-    background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
-    pointer-events: none;
-    animation: glowPulse 2s ease-in-out infinite;
-}
-
-@keyframes glowPulse {
-    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+    background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 70%);
+    animation: winnerGlow 2s ease-in-out infinite;
 }
 
 .result-winner-image {
-    width: 140px;
-    height: 140px;
+    width: 150px;
+    height: 150px;
     object-fit: contain;
-    border-radius: 50%;
-    border: 4px solid #ffd700;
-    box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-    background: rgba(0, 0, 0, 0.5);
     position: relative;
-    animation: winnerReveal 0.6s ease-out 0.3s both;
-}
-
-@keyframes winnerReveal {
-    0% { transform: scale(0) rotate(-15deg); opacity: 0; }
-    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    z-index: 1;
+    filter: drop-shadow(0 0 30px rgba(255,215,0,0.5));
+    animation: winnerPulse 1.5s ease-in-out infinite;
 }
 
 .result-winner-name {
-    font-family: 'Bebas Neue', 'Arial Black', sans-serif;
-    font-size: 1.8rem;
-    color: #fff;
-    letter-spacing: 3px;
-    margin-top: 12px;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-    animation: nameSlide 0.5s ease-out 0.5s both;
-}
-
-@keyframes nameSlide {
-    0% { transform: translateY(20px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: var(--c-gold);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 15px rgba(255,215,0,0.5);
+    margin-top: 0.5rem;
 }
 
 .result-probability-badge {
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
-    background: linear-gradient(135deg, #ff6b00 0%, #ff8c00 100%);
-    padding: 8px 20px;
-    border-radius: 20px;
-    margin-top: 10px;
-    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
-    animation: badgePop 0.4s ease-out 0.7s both;
-}
-
-@keyframes badgePop {
-    0% { transform: scale(0); }
-    70% { transform: scale(1.1); }
-    100% { transform: scale(1); }
+    background: linear-gradient(135deg, rgba(0,255,136,0.2), rgba(0,255,136,0.1));
+    border: 1px solid rgba(0,255,136,0.3);
+    border-radius: 8px;
+    padding: 0.4rem 0.75rem;
+    margin-top: 0.5rem;
 }
 
 .result-probability-badge .prob-value {
-    font-family: 'Bebas Neue', 'Arial Black', sans-serif;
-    font-size: 1.5rem;
-    color: #fff;
-    line-height: 1;
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: var(--c-green);
 }
 
 .result-probability-badge .prob-label {
-    font-size: 0.65rem;
-    color: rgba(255, 255, 255, 0.8);
-    letter-spacing: 1px;
+    font-size: 0.55rem;
+    color: var(--c-text-muted);
     text-transform: uppercase;
+    letter-spacing: 0.1em;
 }
 
-/* VS divider */
+/* VS Divider */
 .result-vs-divider {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin: 16px 0;
+    gap: 0.75rem;
+    padding: 0 1rem;
 }
 
 .result-vs-line {
     flex: 1;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, rgba(255, 107, 0, 0.5), transparent);
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--c-glass-border), transparent);
 }
 
 .result-vs-text {
-    font-family: 'Bebas Neue', 'Arial Black', sans-serif;
-    font-size: 1rem;
-    color: #ff6b00;
-    letter-spacing: 2px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--c-text-muted);
 }
 
-/* Loser section */
+/* Loser Section */
 .result-loser-section {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 16px;
-    padding: 12px;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 12px;
-    opacity: 0;
-    animation: fadeIn 0.4s ease-out 0.8s forwards;
-}
-
-@keyframes fadeIn {
-    to { opacity: 1; }
+    gap: 1rem;
+    padding: 0.75rem;
+    background: rgba(0,0,0,0.2);
+    border-radius: 8px;
+    opacity: 0.7;
 }
 
 .result-loser-image {
     width: 60px;
     height: 60px;
     object-fit: contain;
-    border-radius: 50%;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    background: rgba(0, 0, 0, 0.3);
     filter: grayscale(30%);
 }
 
 .result-loser-info {
-    text-align: left;
+    display: flex;
+    flex-direction: column;
 }
 
 .result-loser-name {
-    font-family: 'Bebas Neue', 'Arial Black', sans-serif;
-    font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.7);
-    letter-spacing: 1px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--c-text-secondary);
 }
 
 .result-loser-prob {
-    font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.7rem;
+    color: var(--c-text-muted);
 }
 
-/* Breakdown section */
+/* Breakdown Section */
 .result-breakdown {
-    margin-top: 20px;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0,0,0,0.3);
     border-radius: 12px;
-    padding: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    opacity: 0;
-    animation: fadeSlideUp 0.5s ease-out 1s forwards;
-}
-
-@keyframes fadeSlideUp {
-    0% { opacity: 0; transform: translateY(10px); }
-    100% { opacity: 1; transform: translateY(0); }
+    padding: 0.75rem;
 }
 
 .breakdown-header {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 2px;
-    margin-bottom: 12px;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--c-text-secondary);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
 }
 
 .breakdown-header i {
-    color: #ff6b00;
+    color: var(--c-gold);
 }
 
 .breakdown-scores {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: 0.5rem;
 }
 
 .score-item {
@@ -1003,139 +1015,405 @@
 }
 
 .score-item.winner {
-    color: #ffd700;
+    color: var(--c-green);
 }
 
 .score-item.loser {
-    color: rgba(255, 255, 255, 0.5);
+    color: var(--c-text-muted);
 }
 
 .score-name {
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 4px;
-}
-
-.score-value {
-    font-family: 'Bebas Neue', 'Arial Black', sans-serif;
-    font-size: 1.8rem;
-}
-
-/* Score bar */
-.breakdown-bar {
-    display: flex;
-    height: 8px;
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 16px;
-}
-
-.breakdown-bar-fill {
-    height: 100%;
-    transition: width 1s ease-out 1.2s;
-}
-
-.breakdown-bar-fill.winner {
-    background: linear-gradient(90deg, #ffd700, #ff8c00);
-}
-
-.breakdown-bar-fill.loser {
-    background: rgba(255, 255, 255, 0.2);
-}
-
-/* Stat comparison grid */
-.stat-comparison-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.stat-row {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    gap: 12px;
-    align-items: center;
-    font-size: 0.8rem;
-}
-
-.stat-row .stat-val {
-    color: rgba(255, 255, 255, 0.5);
-}
-
-.stat-row .stat-val:first-child {
-    text-align: right;
-}
-
-.stat-row .stat-val:last-child {
-    text-align: left;
-}
-
-.stat-row .stat-val.higher {
-    color: #4ade80;
+    font-size: 0.65rem;
     font-weight: 600;
 }
 
-.stat-row .stat-name {
-    color: rgba(255, 255, 255, 0.4);
-    text-transform: uppercase;
-    font-size: 0.7rem;
-    letter-spacing: 1px;
-    text-align: center;
+.score-value {
+    font-size: 1.25rem;
+    font-weight: 900;
 }
 
-/* Action buttons */
+.breakdown-bar {
+    display: flex;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    background: rgba(0,0,0,0.3);
+    margin-bottom: 0.75rem;
+}
+
+.breakdown-bar-fill.winner {
+    background: linear-gradient(90deg, var(--c-green), var(--c-cyan));
+    transition: width 0.5s ease;
+}
+
+.breakdown-bar-fill.loser {
+    background: rgba(255,255,255,0.2);
+    transition: width 0.5s ease;
+}
+
+/* Stat Comparison Grid */
+.stat-comparison-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.stat-comparison-grid .stat-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 0.5rem;
+    align-items: center;
+    font-size: 0.7rem;
+}
+
+.stat-comparison-grid .stat-name {
+    text-align: center;
+    color: var(--c-text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stat-comparison-grid .stat-val {
+    text-align: center;
+    font-weight: 700;
+    color: var(--c-text-secondary);
+}
+
+.stat-comparison-grid .stat-val:first-child {
+    text-align: right;
+}
+
+.stat-comparison-grid .stat-val:last-child {
+    text-align: left;
+}
+
+.stat-comparison-grid .stat-val.higher {
+    color: var(--c-green);
+}
+
+/* Action Buttons */
 .result-actions {
     display: flex;
-    gap: 12px;
-    margin-top: 20px;
-    opacity: 0;
-    animation: fadeSlideUp 0.4s ease-out 1.2s forwards;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-top: 1px solid var(--c-glass-border);
+    flex-shrink: 0;
+    background: rgba(0,0,0,0.2);
 }
 
 .result-btn {
     flex: 1;
-    padding: 14px 20px;
-    border: none;
+    padding: 0.6rem 1rem;
     border-radius: 8px;
-    font-family: 'Bebas Neue', 'Arial Black', sans-serif;
-    font-size: 1rem;
-    letter-spacing: 2px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    transition: all 0.2s ease;
+    gap: 0.4rem;
+    transition: all 0.3s ease;
+    border: none;
 }
 
 .result-btn.primary {
-    background: linear-gradient(135deg, #ff6b00 0%, #ff8c00 100%);
-    color: #fff;
-    box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
+    background: linear-gradient(135deg, var(--c-gold), var(--c-orange));
+    color: #1a1a2e;
 }
 
 .result-btn.primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 107, 0, 0.5);
+    box-shadow: 0 4px 20px rgba(255,215,0,0.4);
 }
 
 .result-btn.secondary {
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255,255,255,0.1);
+    color: var(--c-text-secondary);
+    border: 1px solid var(--c-glass-border);
 }
 
 .result-btn.secondary:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255,255,255,0.15);
+    color: white;
 }
 
-/* Result overlay responsive */
-@media (max-width: 500px) {
+/* ==========================
+   ANIMATIONS
+   ========================== */
+@keyframes vsBurstPulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+@keyframes diamondRotate {
+    0% { transform: rotate(45deg); }
+    100% { transform: rotate(405deg); }
+}
+
+@keyframes vsFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+@keyframes lightSweep {
+    0% { left: -100%; opacity: 0; }
+    50% { opacity: 1; }
+    100% { left: 100%; opacity: 0; }
+}
+
+@keyframes fighterSlideIn {
+    0% { opacity: 0; transform: translateX(-100px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fighterSlideInRight {
+    0% { opacity: 0; transform: translateX(100px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes vsPop {
+    0% { opacity: 0; transform: scale(0); }
+    50% { transform: scale(1.3); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes winnerPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+}
+
+@keyframes winnerGlow {
+    0%, 100% { opacity: 0.5; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.1); }
+}
+
+@keyframes crownBounce {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50% { transform: translateY(-8px) rotate(5deg); }
+}
+
+/* ==========================
+   RESPONSIVE BREAKPOINTS
+   ========================== */
+
+/* Large Desktop (1920x1080) */
+@media (min-width: 1600px) {
+    #compare-view .fight-screen {
+        max-height: calc(100vh - 180px);
+    }
+    
+    #compare-view .c-fighter-name {
+        font-size: 1.4rem;
+    }
+    
+    #compare-view .fighter-image {
+        max-height: 200px;
+    }
+}
+
+/* Medium Desktop (1536x864, 1440x900) */
+@media (max-width: 1599px) and (min-width: 1200px) {
+    #compare-view .fight-screen {
+        gap: 0;
+        padding: 0.75rem 1rem;
+    }
+    
+    #compare-view .fight-center {
+        max-width: 220px;
+    }
+}
+
+/* Small Desktop (1366x768) */
+@media (max-width: 1199px) and (min-width: 1024px) {
+    #compare-view .fight-screen {
+        gap: 0;
+        padding: 0.5rem;
+        min-height: 400px;
+    }
+    
+    #compare-view .c-identity-top {
+        padding: 0.5rem 0.75rem;
+    }
+    
+    #compare-view .c-fighter-name {
+        font-size: 1.1rem;
+    }
+    
+    #compare-view .c-hero-section {
+        min-height: 120px;
+    }
+    
+    #compare-view .fighter-image {
+        max-height: 120px;
+    }
+    
+    #compare-view .fight-center {
+        min-width: 180px;
+        max-width: 200px;
+    }
+    
+    #compare-view .c-vs-section {
+        width: 60px;
+        height: 60px;
+    }
+    
+    #compare-view .c-vs-badge {
+        width: 40px;
+        height: 40px;
+    }
+    
+    #compare-view .c-vs-badge span {
+        font-size: 1rem;
+    }
+    
+    #compare-view .radar-chart-container {
+        max-width: 160px;
+    }
+    
+    #compare-view .c-bottom-info {
+        padding: 0.5rem;
+        gap: 0.35rem;
+    }
+    
+    #compare-view .c-tags {
+        gap: 0.25rem;
+    }
+    
+    #compare-view .medal-row {
+        gap: 0.3rem;
+    }
+    
+    #compare-view .medal-card {
+        padding: 0.2rem 0.4rem;
+        min-width: 35px;
+    }
+}
+
+/* Tablet */
+@media (max-width: 1023px) and (min-width: 768px) {
+    #compare-view .fight-screen {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 0.5rem;
+        padding: 0.5rem;
+    }
+    
+    #compare-view .fight-center {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        justify-content: center;
+        gap: 1rem;
+        max-width: none;
+        order: -1;
+    }
+    
+    #compare-view .c-stats-compact {
+        max-width: 300px;
+    }
+}
+
+/* Mobile (390x844) */
+@media (max-width: 767px) {
+    #compare-view .fight-screen {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.5rem;
+        min-height: auto;
+        max-height: none;
+    }
+    
+    #compare-view .fighter-section {
+        flex-direction: row;
+        padding: 0;
+    }
+    
+    #compare-view .fighter-section.fighter-left,
+    #compare-view .fighter-section.fighter-right {
+        border-left: none;
+        border-right: none;
+        border-top: 2px solid var(--c-cyan);
+    }
+    
+    #compare-view .fighter-section.fighter-right {
+        border-top-color: var(--c-orange);
+    }
+    
+    #compare-view .c-identity-top {
+        display: none;
+    }
+    
+    #compare-view .c-hero-section {
+        width: 100px;
+        min-height: 100px;
+        padding: 0.5rem;
+    }
+    
+    #compare-view .fighter-image {
+        max-height: 80px;
+    }
+    
+    #compare-view .c-bottom-info {
+        flex: 1;
+        padding: 0.5rem;
+    }
+    
+    /* Show name in bottom info on mobile */
+    #compare-view .c-bottom-info::before {
+        content: attr(data-name);
+        font-size: 0.9rem;
+        font-weight: 700;
+        color: var(--c-text-primary);
+        display: block;
+        margin-bottom: 0.25rem;
+    }
+    
+    #compare-view .c-tournament-dashboard {
+        display: none;
+    }
+    
+    #compare-view .c-action-row {
+        padding-top: 0.25rem;
+    }
+    
+    #compare-view .fight-center {
+        order: -1;
+        padding: 0.5rem;
+        flex-direction: row;
+        gap: 0.5rem;
+        min-width: auto;
+        max-width: none;
+    }
+    
+    #compare-view .c-vs-section {
+        width: 50px;
+        height: 50px;
+    }
+    
+    #compare-view .c-vs-badge {
+        width: 35px;
+        height: 35px;
+    }
+    
+    #compare-view .c-vs-badge span {
+        font-size: 0.9rem;
+    }
+    
+    #compare-view .radar-chart-container {
+        max-width: 100px;
+    }
+    
+    #compare-view .c-stats-compact {
+        display: none;
+    }
+    
+    /* Result overlay mobile */
     .result-container {
-        padding: 20px 16px;
+        width: 95%;
+        max-height: calc(100vh - 16px);
     }
     
     .result-winner-image {
@@ -1144,33 +1422,92 @@
     }
     
     .result-winner-name {
-        font-size: 1.4rem;
+        font-size: 1rem;
     }
     
-    .result-crown {
+    .intro-fighter-image {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .intro-fighter-name {
+        font-size: 1rem;
+    }
+    
+    .intro-vs-text {
         font-size: 2rem;
     }
-    
-    .result-title {
-        font-size: 1.5rem;
-        letter-spacing: 4px;
+}
+
+/* Very small screens */
+@media (max-width: 400px) {
+    #compare-view .c-hero-section {
+        width: 80px;
     }
     
-    .score-value {
-        font-size: 1.4rem;
+    #compare-view .fighter-image {
+        max-height: 60px;
+    }
+    
+    .result-container {
+        max-width: 100%;
+        border-radius: 12px 12px 0 0;
+        max-height: calc(100vh - 8px);
     }
 }
 
-/* ========================================
-   COMPARE CONTROLS GAP FIX
-   ======================================== */
-
-#compare-view .compare-controls-bar {
-    margin-bottom: 0;
-    padding-bottom: 0;
+/* Height-constrained screens (like 1366x768) */
+@media (max-height: 800px) {
+    #compare-view .fight-screen {
+        max-height: calc(100vh - 160px);
+    }
+    
+    #compare-view .c-hero-section {
+        min-height: 100px;
+    }
+    
+    #compare-view .fighter-image {
+        max-height: 100px;
+    }
+    
+    #compare-view .c-bottom-info {
+        padding: 0.4rem;
+        gap: 0.25rem;
+    }
+    
+    #compare-view .c-tags {
+        display: none;
+    }
+    
+    #compare-view .medal-card {
+        padding: 0.15rem 0.35rem;
+    }
+    
+    .result-container {
+        max-height: calc(100vh - 20px);
+    }
+    
+    .result-winner-image {
+        width: 100px;
+        height: 100px;
+    }
 }
 
-#compare-view .fight-btn-container {
-    margin-bottom: 0;
+@media (max-height: 700px) {
+    #compare-view .c-tournament-dashboard {
+        display: none;
+    }
+    
+    #compare-view .c-quick-info {
+        display: none;
+    }
+    
+    #compare-view .c-hero-section {
+        min-height: 80px;
+    }
+    
+    #compare-view .fighter-image {
+        max-height: 80px;
+    }
 }
 

@@ -3,17 +3,14 @@
  * COMPARE PAGE ENHANCEMENTS - compare-page.js
  * ============================================
  * 
- * PS3-era fighting game intro animation, VS badge system, and result overlay.
+ * Tournament-style matchup layout for the Compare page.
+ * Builds fighter cards with abilities, traits, tournament record.
+ * Handles intro animation and results overlay.
  * 
  * TRIGGER RULES:
  * - Intro animation ONLY triggers when FIGHT button is pressed
  * - NO intro on animal selection
  * - After intro completes, result overlay is shown
- * 
- * PUBLIC API:
- * - ComparePageEnhancements.playFightSequence(left, right, result) - Call from FIGHT handler
- * - ComparePageEnhancements.setCustomVsBadge(content) - Custom VS badge
- * - ComparePageEnhancements.loadExternalVsBadge(url) - Load external VS badge
  */
 
 (function() {
@@ -25,19 +22,426 @@
         introTimeout: null,
         resultOverlayActive: false,
         _pendingResult: null,
+        initialized: false,
 
         /**
          * Initialize compare page enhancements
          */
         init() {
+            if (this.initialized) return;
+            this.initialized = true;
+            
             this.injectIntroOverlay();
             this.injectResultOverlay();
-            this.injectHudBrackets();
-            this.setupVsBadgeSlot();
+            this.setupTournamentLayout();
             this.setupEventListeners();
-            this.tryLoadExternalVsBadge();
             
-            console.log('[Compare] Enhancements initialized - intro triggers on FIGHT only');
+            console.log('[Compare] Tournament-style enhancements initialized');
+        },
+
+        /**
+         * Setup tournament-style layout elements
+         */
+        setupTournamentLayout() {
+            // Observe when Compare view becomes active to rebuild layout
+            const compareView = document.getElementById('compare-view');
+            if (!compareView) return;
+
+            // Create mutation observer to detect when animals are set
+            this.setupAnimalObserver();
+            
+            // Initial layout setup
+            this.rebuildFighterCards();
+        },
+
+        /**
+         * Watch for animal changes in the fighter cards
+         */
+        setupAnimalObserver() {
+            // Hook into app state changes
+            const self = this;
+            
+            // Watch for fighter image changes as proxy for animal selection
+            const img1 = document.getElementById('animal-1-image');
+            const img2 = document.getElementById('animal-2-image');
+            
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'src') {
+                        self.updateFighterInfo(mutation.target);
+                    }
+                });
+            });
+            
+            if (img1) observer.observe(img1, { attributes: true });
+            if (img2) observer.observe(img2, { attributes: true });
+        },
+
+        /**
+         * Rebuild fighter cards with tournament-style info
+         */
+        rebuildFighterCards() {
+            const fighterSections = document.querySelectorAll('#compare-view .fighter-section');
+            
+            fighterSections.forEach((section, index) => {
+                const side = index === 0 ? 'left' : 'right';
+                const num = index + 1;
+                
+                // Skip if already rebuilt
+                if (section.querySelector('.c-identity-top')) return;
+                
+                // Get existing elements - these must be preserved for script.js DOM references
+                const fighterDisplay = section.querySelector('.fighter-display');
+                const oldStatsPanel = section.querySelector('.compare-stats-panel');
+                const fighterInfoOverlay = fighterDisplay?.querySelector('.fighter-info-overlay');
+                
+                // Hide old stats panel (it's still in DOM for script.js references but hidden)
+                if (oldStatsPanel) {
+                    oldStatsPanel.style.display = 'none';
+                }
+                
+                // Create new tournament-style structure
+                const identityTop = document.createElement('div');
+                identityTop.className = 'c-identity-top';
+                identityTop.innerHTML = `
+                    <h3 class="c-fighter-name" id="c-name-${num}">SELECT ANIMAL</h3>
+                    <span class="c-scientific" id="c-scientific-${num}"></span>
+                    <div class="battle-record-badge c-record-badge">
+                        <div class="record-item rank">
+                            <i class="fas fa-crown"></i>
+                            <span class="record-value" id="c-rank-${num}">#--</span>
+                            <span class="record-label">RANK</span>
+                        </div>
+                        <div class="record-divider"></div>
+                        <div class="record-item battles">
+                            <i class="fas fa-swords"></i>
+                            <span class="record-value" id="c-battles-${num}">0</span>
+                            <span class="record-label">BATTLES</span>
+                        </div>
+                        <div class="record-divider"></div>
+                        <div class="record-item winrate">
+                            <i class="fas fa-trophy"></i>
+                            <span class="record-value" id="c-winrate-${num}">--%</span>
+                            <span class="record-label">WIN %</span>
+                        </div>
+                    </div>
+                `;
+                
+                // Create hero section wrapper
+                const heroSection = document.createElement('div');
+                heroSection.className = 'c-hero-section';
+                
+                // Create bottom info section
+                const bottomInfo = document.createElement('div');
+                bottomInfo.className = 'c-bottom-info';
+                bottomInfo.id = `c-bottom-info-${num}`;
+                bottomInfo.innerHTML = `
+                    <div class="c-quick-info">
+                        <div class="quick-info-item" id="c-weight-${num}">
+                            <i class="fas fa-weight-hanging"></i>
+                            <span>--</span>
+                        </div>
+                        <div class="quick-info-item" id="c-speed-${num}">
+                            <i class="fas fa-tachometer-alt"></i>
+                            <span>--</span>
+                        </div>
+                        <div class="quick-info-item" id="c-bite-${num}">
+                            <i class="fas fa-tooth"></i>
+                            <span>--</span>
+                        </div>
+                    </div>
+                    <div class="c-tags">
+                        <div class="c-abilities-section">
+                            <span class="abilities-label"><i class="fas fa-bolt"></i> ABILITIES</span>
+                            <div class="abilities-tags-compact" id="c-abilities-${num}"></div>
+                        </div>
+                        <div class="c-traits-section">
+                            <span class="traits-label"><i class="fas fa-star"></i> TRAITS</span>
+                            <div class="traits-tags-compact" id="c-traits-${num}"></div>
+                        </div>
+                    </div>
+                    <div class="c-tournament-dashboard">
+                        <div class="dashboard-header">
+                            <span class="dashboard-title"><i class="fas fa-trophy"></i> TOURNAMENT</span>
+                        </div>
+                        <div class="medal-row">
+                            <div class="medal-card gold">
+                                <div class="medal-icon-wrap"><i class="fas fa-trophy"></i></div>
+                                <span class="medal-count" id="c-gold-${num}">0</span>
+                                <span class="medal-label">1ST</span>
+                            </div>
+                            <div class="medal-card silver">
+                                <div class="medal-icon-wrap"><i class="fas fa-medal"></i></div>
+                                <span class="medal-count" id="c-silver-${num}">0</span>
+                                <span class="medal-label">2ND</span>
+                            </div>
+                            <div class="medal-card bronze">
+                                <div class="medal-icon-wrap"><i class="fas fa-medal"></i></div>
+                                <span class="medal-count" id="c-bronze-${num}">0</span>
+                                <span class="medal-label">3RD</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="c-action-row">
+                        <button class="view-stats-btn c-view-stats-btn" id="c-view-stats-${num}">
+                            <i class="fas fa-chart-bar"></i> VIEW STATS
+                        </button>
+                    </div>
+                `;
+                
+                // Add click hint to fighter display
+                if (fighterDisplay && !fighterDisplay.querySelector('.c-click-hint')) {
+                    const clickHint = document.createElement('div');
+                    clickHint.className = 'c-click-hint';
+                    clickHint.innerHTML = '<i class="fas fa-hand-pointer"></i> CLICK TO SELECT';
+                    fighterDisplay.appendChild(clickHint);
+                    
+                    // Hide the old fighter-info-overlay
+                    if (fighterInfoOverlay) {
+                        fighterInfoOverlay.style.display = 'none';
+                    }
+                }
+                
+                // Insert new elements into section
+                // We insert AT the beginning, leaving fighter-display and old panel in place
+                section.insertBefore(identityTop, section.firstChild);
+                
+                // Wrap fighter-display in hero section
+                if (fighterDisplay) {
+                    section.insertBefore(heroSection, fighterDisplay);
+                    heroSection.appendChild(fighterDisplay);
+                }
+                
+                // Add bottom info after hero section
+                section.insertBefore(bottomInfo, oldStatsPanel);
+                
+                // Wire up view stats button
+                const viewStatsBtn = section.querySelector(`#c-view-stats-${num}`);
+                if (viewStatsBtn) {
+                    viewStatsBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const animal = num === 1 
+                            ? window.app?.state?.compare?.left 
+                            : window.app?.state?.compare?.right;
+                        if (animal && window.app) {
+                            window.app.setSelectedAnimal(animal);
+                            window.app.switchView('stats');
+                        }
+                    });
+                }
+            });
+            
+            // Setup fight center with VS badge and stat bars
+            this.setupFightCenter();
+        },
+
+        /**
+         * Setup the fight center area with VS badge and stat bars
+         */
+        setupFightCenter() {
+            const fightCenter = document.querySelector('#compare-view .fight-center');
+            if (!fightCenter || fightCenter.querySelector('.c-vs-section')) return;
+            
+            // Get radar chart - we'll preserve this element
+            const radarContainer = fightCenter.querySelector('.radar-chart-container');
+            
+            // Add VS section at the beginning
+            const vsSection = document.createElement('div');
+            vsSection.className = 'c-vs-section';
+            vsSection.innerHTML = `
+                <div class="c-vs-burst"></div>
+                <div class="c-vs-diamond"></div>
+                <div class="c-vs-badge"><span>VS</span></div>
+            `;
+            fightCenter.insertBefore(vsSection, fightCenter.firstChild);
+            
+            // Add stat bars after radar chart
+            const statsCompact = document.createElement('div');
+            statsCompact.className = 'c-stats-compact';
+            statsCompact.id = 'c-stats-compact';
+            statsCompact.innerHTML = this.generateStatBarsHTML();
+            
+            if (radarContainer) {
+                radarContainer.after(statsCompact);
+            } else {
+                fightCenter.appendChild(statsCompact);
+            }
+        },
+
+        /**
+         * Generate HTML for stat comparison bars
+         */
+        generateStatBarsHTML() {
+            const stats = [
+                { key: 'attack', icon: 'fa-fist-raised', abbr: 'ATK' },
+                { key: 'defense', icon: 'fa-shield-alt', abbr: 'DEF' },
+                { key: 'agility', icon: 'fa-running', abbr: 'AGI' },
+                { key: 'stamina', icon: 'fa-heart', abbr: 'STA' },
+                { key: 'intelligence', icon: 'fa-brain', abbr: 'INT' },
+                { key: 'special', icon: 'fa-bolt', abbr: 'SPL' }
+            ];
+            
+            return stats.map(stat => `
+                <div class="c-stat-row" data-stat="${stat.key}" id="c-stat-row-${stat.key}">
+                    <div class="c-stat-bar-left">
+                        <div class="stat-bar">
+                            <div class="stat-bar-fill" id="c-bar-1-${stat.key}" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="c-stat-center">
+                        <span class="c-val left" id="c-val-1-${stat.key}">0</span>
+                        <div class="c-stat-icon-label">
+                            <i class="fas ${stat.icon}"></i>
+                            <span class="c-stat-abbr">${stat.abbr}</span>
+                        </div>
+                        <span class="c-val right" id="c-val-2-${stat.key}">0</span>
+                    </div>
+                    <div class="c-stat-bar-right">
+                        <div class="stat-bar">
+                            <div class="stat-bar-fill" id="c-bar-2-${stat.key}" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        },
+
+        /**
+         * Update fighter info when animal is selected
+         */
+        updateFighterInfo(imgElement) {
+            if (!imgElement?.src || imgElement.src === '' || imgElement.style.display === 'none') return;
+            
+            const isLeft = imgElement.id === 'animal-1-image';
+            const num = isLeft ? 1 : 2;
+            const side = isLeft ? 'left' : 'right';
+            const animal = isLeft 
+                ? window.app?.state?.compare?.left 
+                : window.app?.state?.compare?.right;
+            
+            if (animal) {
+                this.updateFighterDisplay(side, animal);
+            }
+        },
+
+        /**
+         * Update fighter display with animal data (called directly or via observer)
+         */
+        updateFighterDisplay(side, animal) {
+            if (!animal) return;
+            
+            const num = side === 'left' ? 1 : 2;
+            
+            // Update name
+            const nameEl = document.getElementById(`c-name-${num}`);
+            if (nameEl) nameEl.textContent = animal.name.toUpperCase();
+            
+            // Update scientific name
+            const sciEl = document.getElementById(`c-scientific-${num}`);
+            if (sciEl) sciEl.textContent = animal.scientific_name || animal.latinName || '';
+            
+            // Update battle record
+            const rankEl = document.getElementById(`c-rank-${num}`);
+            const battlesEl = document.getElementById(`c-battles-${num}`);
+            const winrateEl = document.getElementById(`c-winrate-${num}`);
+            
+            if (rankEl) rankEl.textContent = animal.rank ? `#${animal.rank}` : '#--';
+            if (battlesEl) battlesEl.textContent = animal.battles || animal.totalBattles || '0';
+            
+            const winrate = animal.win_rate || animal.winRate || 
+                (animal.wins && animal.battles ? Math.round((animal.wins / animal.battles) * 100) : null);
+            if (winrateEl) winrateEl.textContent = winrate !== null ? `${winrate}%` : '--%';
+            
+            // Update quick info
+            const weightEl = document.getElementById(`c-weight-${num}`);
+            const speedEl = document.getElementById(`c-speed-${num}`);
+            const biteEl = document.getElementById(`c-bite-${num}`);
+            
+            if (weightEl) {
+                const weight = animal.avg_weight_lbs || animal.weight || animal.averageWeight;
+                weightEl.querySelector('span').textContent = weight 
+                    ? `${Math.round(weight).toLocaleString()} lbs` 
+                    : '--';
+            }
+            
+            if (speedEl) {
+                const speed = animal.top_speed_mph || animal.speed || animal.topSpeed;
+                speedEl.querySelector('span').textContent = speed 
+                    ? `${Math.round(speed)} mph` 
+                    : '--';
+            }
+            
+            if (biteEl) {
+                const bite = animal.bite_force_psi || animal.biteForce;
+                biteEl.querySelector('span').textContent = bite 
+                    ? `${Math.round(bite).toLocaleString()} PSI` 
+                    : '--';
+            }
+            
+            // Update abilities
+            const abilitiesEl = document.getElementById(`c-abilities-${num}`);
+            if (abilitiesEl) {
+                const abilities = animal.abilities || [];
+                abilitiesEl.innerHTML = abilities.slice(0, 3).map(a => 
+                    `<span class="ability-tag-sm">${a}</span>`
+                ).join('') || '<span class="ability-tag-sm">None</span>';
+            }
+            
+            // Update traits
+            const traitsEl = document.getElementById(`c-traits-${num}`);
+            if (traitsEl) {
+                const traits = animal.traits || [];
+                traitsEl.innerHTML = traits.slice(0, 3).map(t => 
+                    `<span class="trait-tag-sm">${t}</span>`
+                ).join('') || '<span class="trait-tag-sm">None</span>';
+            }
+            
+            // Update tournament record
+            const goldEl = document.getElementById(`c-gold-${num}`);
+            const silverEl = document.getElementById(`c-silver-${num}`);
+            const bronzeEl = document.getElementById(`c-bronze-${num}`);
+            
+            const tournamentWins = animal.tournament_wins || animal.tournamentWins || {};
+            if (goldEl) goldEl.textContent = tournamentWins.first || tournamentWins['1st'] || 0;
+            if (silverEl) silverEl.textContent = tournamentWins.second || tournamentWins['2nd'] || 0;
+            if (bronzeEl) bronzeEl.textContent = tournamentWins.third || tournamentWins['3rd'] || 0;
+            
+            // Update stat bars
+            this.updateStatBars();
+        },
+
+        /**
+         * Update the stat comparison bars
+         */
+        updateStatBars() {
+            const left = window.app?.state?.compare?.left;
+            const right = window.app?.state?.compare?.right;
+            
+            const stats = ['attack', 'defense', 'agility', 'stamina', 'intelligence', 'special'];
+            
+            stats.forEach(stat => {
+                const leftVal = left?.[stat] || 0;
+                const rightVal = right?.[stat] || 0;
+                
+                // Update values
+                const val1El = document.getElementById(`c-val-1-${stat}`);
+                const val2El = document.getElementById(`c-val-2-${stat}`);
+                if (val1El) val1El.textContent = leftVal.toFixed ? leftVal.toFixed(0) : leftVal;
+                if (val2El) val2El.textContent = rightVal.toFixed ? rightVal.toFixed(0) : rightVal;
+                
+                // Update bars (assuming 0-100 scale)
+                const bar1El = document.getElementById(`c-bar-1-${stat}`);
+                const bar2El = document.getElementById(`c-bar-2-${stat}`);
+                if (bar1El) bar1El.style.width = `${Math.min(100, leftVal)}%`;
+                if (bar2El) bar2El.style.width = `${Math.min(100, rightVal)}%`;
+                
+                // Highlight winner
+                const rowEl = document.getElementById(`c-stat-row-${stat}`);
+                if (rowEl) {
+                    rowEl.classList.remove('left-wins', 'right-wins');
+                    if (leftVal > rightVal) rowEl.classList.add('left-wins');
+                    else if (rightVal > leftVal) rowEl.classList.add('right-wins');
+                }
+            });
         },
 
         /**
@@ -67,8 +471,6 @@
             `;
 
             document.body.appendChild(overlay);
-
-            // Click to skip
             overlay.addEventListener('click', () => this.skipIntro());
         },
 
@@ -83,67 +485,70 @@
             overlay.innerHTML = `
                 <div class="result-backdrop"></div>
                 <div class="result-container">
-                    <button class="result-close-btn" id="resultCloseBtn"><i class="fas fa-times"></i></button>
-                    
-                    <div class="result-banner-slot" data-ui-slot="result-banner">
-                        <div class="result-banner-default">
-                            <div class="result-crown"><i class="fas fa-crown"></i></div>
-                            <div class="result-title">WINNER</div>
-                        </div>
-                    </div>
-                    
-                    <div class="result-winner-section">
-                        <div class="result-winner-glow"></div>
-                        <img class="result-winner-image" id="resultWinnerImg" src="" alt="">
-                        <div class="result-winner-name" id="resultWinnerName">???</div>
-                        <div class="result-probability-badge" id="resultProbBadge">
-                            <span class="prob-value">50%</span>
-                            <span class="prob-label">WIN CHANCE</span>
-                        </div>
-                    </div>
-                    
-                    <div class="result-vs-divider">
-                        <div class="result-vs-line"></div>
-                        <span class="result-vs-text">VS</span>
-                        <div class="result-vs-line"></div>
-                    </div>
-                    
-                    <div class="result-loser-section">
-                        <img class="result-loser-image" id="resultLoserImg" src="" alt="">
-                        <div class="result-loser-info">
-                            <div class="result-loser-name" id="resultLoserName">???</div>
-                            <div class="result-loser-prob" id="resultLoserProb">50% chance</div>
-                        </div>
-                    </div>
-                    
-                    <div class="result-breakdown">
-                        <div class="breakdown-header">
-                            <i class="fas fa-chart-bar"></i>
-                            <span>FIGHT BREAKDOWN</span>
-                        </div>
-                        <div class="breakdown-scores">
-                            <div class="score-item winner">
-                                <span class="score-name" id="breakdownWinnerName">Winner</span>
-                                <span class="score-value" id="breakdownWinnerScore">0.0</span>
-                            </div>
-                            <div class="score-item loser">
-                                <span class="score-name" id="breakdownLoserName">Loser</span>
-                                <span class="score-value" id="breakdownLoserScore">0.0</span>
+                    <div class="result-header-sticky">
+                        <button class="result-close-btn" id="resultCloseBtn"><i class="fas fa-times"></i></button>
+                        <div class="result-banner-slot">
+                            <div class="result-banner-default">
+                                <div class="result-crown"><i class="fas fa-crown"></i></div>
+                                <div class="result-title">WINNER</div>
                             </div>
                         </div>
-                        <div class="breakdown-bar">
-                            <div class="breakdown-bar-fill winner" id="breakdownBarWinner"></div>
-                            <div class="breakdown-bar-fill loser" id="breakdownBarLoser"></div>
+                    </div>
+                    
+                    <div class="result-content-scroll">
+                        <div class="result-winner-section">
+                            <div class="result-winner-glow"></div>
+                            <img class="result-winner-image" id="resultWinnerImg" src="" alt="">
+                            <div class="result-winner-name" id="resultWinnerName">???</div>
+                            <div class="result-probability-badge" id="resultProbBadge">
+                                <span class="prob-value">50%</span>
+                                <span class="prob-label">WIN CHANCE</span>
+                            </div>
                         </div>
-                        <div class="breakdown-stats" id="breakdownStats"></div>
+                        
+                        <div class="result-vs-divider">
+                            <div class="result-vs-line"></div>
+                            <span class="result-vs-text">VS</span>
+                            <div class="result-vs-line"></div>
+                        </div>
+                        
+                        <div class="result-loser-section">
+                            <img class="result-loser-image" id="resultLoserImg" src="" alt="">
+                            <div class="result-loser-info">
+                                <div class="result-loser-name" id="resultLoserName">???</div>
+                                <div class="result-loser-prob" id="resultLoserProb">50% chance</div>
+                            </div>
+                        </div>
+                        
+                        <div class="result-breakdown">
+                            <div class="breakdown-header">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>FIGHT BREAKDOWN</span>
+                            </div>
+                            <div class="breakdown-scores">
+                                <div class="score-item winner">
+                                    <span class="score-name" id="breakdownWinnerName">Winner</span>
+                                    <span class="score-value" id="breakdownWinnerScore">0.0</span>
+                                </div>
+                                <div class="score-item loser">
+                                    <span class="score-name" id="breakdownLoserName">Loser</span>
+                                    <span class="score-value" id="breakdownLoserScore">0.0</span>
+                                </div>
+                            </div>
+                            <div class="breakdown-bar">
+                                <div class="breakdown-bar-fill winner" id="breakdownBarWinner"></div>
+                                <div class="breakdown-bar-fill loser" id="breakdownBarLoser"></div>
+                            </div>
+                            <div class="breakdown-stats" id="breakdownStats"></div>
+                        </div>
                     </div>
                     
                     <div class="result-actions">
                         <button class="result-btn primary" id="resultRunAgainBtn">
-                            <i class="fas fa-redo"></i> RUN AGAIN
+                            <i class="fas fa-redo"></i> REMATCH
                         </button>
                         <button class="result-btn secondary" id="resultCloseBtn2">
-                            <i class="fas fa-check"></i> CLOSE
+                            <i class="fas fa-arrow-left"></i> BACK
                         </button>
                     </div>
                 </div>
@@ -164,160 +569,6 @@
         },
 
         /**
-         * Inject HUD corner brackets into fighter displays
-         */
-        injectHudBrackets() {
-            const fighterDisplays = document.querySelectorAll('#compare-view .fighter-display');
-            fighterDisplays.forEach(display => {
-                if (display.querySelector('.hud-bracket-tl')) return;
-                
-                display.insertAdjacentHTML('beforeend', `
-                    <div class="hud-bracket-tl"></div>
-                    <div class="hud-bracket-tr"></div>
-                    <div class="hud-bracket-bl"></div>
-                    <div class="hud-bracket-br"></div>
-                `);
-            });
-        },
-
-        /**
-         * Setup the VS badge slot with default placeholder
-         */
-        setupVsBadgeSlot() {
-            const fightCenter = document.querySelector('#compare-view .fight-center');
-            if (!fightCenter || document.getElementById('vsBadgeSlot')) return;
-
-            // Create the replaceable slot
-            const slot = document.createElement('div');
-            slot.id = 'vsBadgeSlot';
-            slot.setAttribute('data-ui-slot', 'vs-badge');
-            slot.innerHTML = `
-                <!-- External badge loader (set src to use custom badge) -->
-                <img id="vsBadgeExternal" src="" alt="VS" style="display:none;">
-                
-                <!-- Default VS badge placeholder - replace this with your own design -->
-                <div class="vs-badge-default">
-                    <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Outer glow ring -->
-                        <defs>
-                            <filter id="vsGlow" x="-50%" y="-50%" width="200%" height="200%">
-                                <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="blur"/>
-                                <feMerge>
-                                    <feMergeNode in="blur"/>
-                                    <feMergeNode in="SourceGraphic"/>
-                                </feMerge>
-                            </filter>
-                            <linearGradient id="vsGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#ff6b00"/>
-                                <stop offset="50%" style="stop-color:#ff3300"/>
-                                <stop offset="100%" style="stop-color:#ff8800"/>
-                            </linearGradient>
-                            <linearGradient id="vsBorderGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#ffd700"/>
-                                <stop offset="100%" style="stop-color:#ff6b00"/>
-                            </linearGradient>
-                        </defs>
-                        
-                        <!-- Background hexagon -->
-                        <polygon points="60,5 110,32.5 110,87.5 60,115 10,87.5 10,32.5" 
-                                 fill="rgba(0,0,0,0.8)" 
-                                 stroke="url(#vsBorderGradient)" 
-                                 stroke-width="3"
-                                 filter="url(#vsGlow)"/>
-                        
-                        <!-- Inner accent ring -->
-                        <polygon points="60,15 100,37.5 100,82.5 60,105 20,82.5 20,37.5" 
-                                 fill="none" 
-                                 stroke="rgba(255,107,0,0.4)" 
-                                 stroke-width="1"/>
-                        
-                        <!-- VS Text -->
-                        <text x="60" y="72" 
-                              text-anchor="middle" 
-                              font-family="Bebas Neue, sans-serif" 
-                              font-size="48" 
-                              font-weight="bold"
-                              fill="url(#vsGradient)"
-                              filter="url(#vsGlow)">VS</text>
-                        
-                        <!-- Top accent -->
-                        <line x1="35" y1="25" x2="85" y2="25" 
-                              stroke="#ffd700" 
-                              stroke-width="2" 
-                              opacity="0.6"/>
-                        
-                        <!-- Bottom accent -->
-                        <line x1="35" y1="95" x2="85" y2="95" 
-                              stroke="#ffd700" 
-                              stroke-width="2" 
-                              opacity="0.6"/>
-                    </svg>
-                </div>
-            `;
-
-            fightCenter.appendChild(slot);
-        },
-
-        /**
-         * Try to load external VS badge if exists
-         */
-        tryLoadExternalVsBadge() {
-            // Check if custom asset exists at default path
-            const img = new Image();
-            img.onload = () => {
-                this.loadExternalVsBadge('/assets/ui/vs-badge.svg');
-            };
-            img.onerror = () => {
-                // No external badge, use default
-                console.log('[Compare] Using default VS badge. Place custom at /assets/ui/vs-badge.svg');
-            };
-            img.src = '/assets/ui/vs-badge.svg';
-        },
-
-        /**
-         * Load an external VS badge SVG/image
-         * @param {string} url - Path to the badge asset
-         */
-        loadExternalVsBadge(url) {
-            const external = document.getElementById('vsBadgeExternal');
-            if (!external) return;
-
-            external.onload = () => {
-                external.classList.add('loaded');
-            };
-            external.onerror = () => {
-                console.warn('[Compare] Failed to load external VS badge:', url);
-                external.classList.remove('loaded');
-            };
-            external.src = url;
-        },
-
-        /**
-         * Set a custom VS badge via HTML string or element
-         * @param {string|HTMLElement} content - SVG string or element
-         */
-        setCustomVsBadge(content) {
-            const slot = document.getElementById('vsBadgeSlot');
-            if (!slot) return;
-
-            const defaultBadge = slot.querySelector('.vs-badge-default');
-            const external = slot.querySelector('#vsBadgeExternal');
-
-            if (external) external.style.display = 'none';
-            
-            if (typeof content === 'string') {
-                if (defaultBadge) {
-                    defaultBadge.innerHTML = content;
-                }
-            } else if (content instanceof HTMLElement) {
-                if (defaultBadge) {
-                    defaultBadge.innerHTML = '';
-                    defaultBadge.appendChild(content);
-                }
-            }
-        },
-
-        /**
          * Setup event listeners
          */
         setupEventListeners() {
@@ -332,15 +583,32 @@
                     }
                 }
             });
+
+            // Watch for view changes to rebuild cards
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.target.id === 'compare-view' && 
+                        mutation.target.classList.contains('active-view')) {
+                        this.rebuildFighterCards();
+                    }
+                });
+            });
+
+            const compareView = document.getElementById('compare-view');
+            if (compareView) {
+                observer.observe(compareView, { attributes: true, attributeFilter: ['class'] });
+                
+                // Check if Compare view is already active on load
+                if (compareView.classList.contains('active-view')) {
+                    this.rebuildFighterCards();
+                }
+            }
         },
 
         /**
-         * Trigger the matchup intro animation - only called via playFightSequence
-         * @param {Object} left - Left animal data
-         * @param {Object} right - Right animal data
+         * Trigger the matchup intro animation
          */
         triggerMatchupIntro(left, right) {
-            // Don't play if already playing
             if (this.introPlaying) return;
 
             const overlay = document.getElementById('matchupIntroOverlay');
@@ -371,40 +639,24 @@
             overlay.classList.add('active');
 
             // Animate sequence
-            setTimeout(() => {
-                fighters[0]?.classList.add('animate-in');
-            }, 100);
-
-            setTimeout(() => {
-                fighters[1]?.classList.add('animate-in');
-            }, 250);
-
+            setTimeout(() => fighters[0]?.classList.add('animate-in'), 100);
+            setTimeout(() => fighters[1]?.classList.add('animate-in'), 250);
             setTimeout(() => {
                 if (vsBadge) vsBadge.classList.add('animate-in');
                 if (lightSweep) lightSweep.classList.add('animate');
-                
-                // Pulse the main VS badge slot
-                const slot = document.getElementById('vsBadgeSlot');
-                if (slot) {
-                    slot.classList.remove('vs-active');
-                    void slot.offsetWidth; // Force reflow
-                    slot.classList.add('vs-active');
-                }
             }, 500);
 
-            // Auto-hide after animation completes, then show result if pending
+            // Auto-hide and show result
             this.introTimeout = setTimeout(() => {
                 this.hideIntro();
-                // Show result if we have one pending
                 if (this._pendingResult) {
                     setTimeout(() => this.showResult(this._pendingResult), 100);
                 }
             }, 1200);
             
-            // Safety timeout - ensure intro never blocks for more than 3 seconds
+            // Safety timeout
             setTimeout(() => {
                 if (this.introPlaying) {
-                    console.warn('[Compare] Safety timeout - forcing intro hide');
                     this.hideIntro();
                     if (this._pendingResult) {
                         setTimeout(() => this.showResult(this._pendingResult), 100);
@@ -426,7 +678,6 @@
             
             this.hideIntro();
             
-            // Show result immediately if pending
             if (this._pendingResult) {
                 setTimeout(() => this.showResult(this._pendingResult), 100);
             }
@@ -445,26 +696,14 @@
 
         /**
          * PUBLIC API: Play the full fight sequence (intro → result)
-         * Called from script.js startFight() instead of alert()
-         * @param {Object} left - Left animal data
-         * @param {Object} right - Right animal data  
-         * @param {Object} result - Fight result { winner, loser, winnerScore, loserScore, winnerProb, loserProb }
          */
         playFightSequence(left, right, result) {
-            // Store the result to show after intro
-            this._pendingResult = {
-                left,
-                right,
-                ...result
-            };
-
-            // Play intro animation first
+            this._pendingResult = { left, right, ...result };
             this.triggerMatchupIntro(left, right);
         },
 
         /**
          * Show the result overlay
-         * @param {Object} result - { winner, loser, winnerScore, loserScore, winnerProb, loserProb, left, right }
          */
         showResult(result) {
             const overlay = document.getElementById('fightResultOverlay');
@@ -512,48 +751,38 @@
 
             // Show overlay with animation
             overlay.classList.add('active');
-            
-            // Trigger reveal animations
-            requestAnimationFrame(() => {
-                overlay.classList.add('reveal');
-            });
+            requestAnimationFrame(() => overlay.classList.add('reveal'));
         },
 
         /**
          * Generate the detailed stat breakdown
-         * @param {Object} result - Fight result data
          */
         generateStatBreakdown(result) {
             const container = document.getElementById('breakdownStats');
             if (!container) return;
 
             const stats = [
-                { name: 'Attack', key: 'attack_ability', weight: 50 },
-                { name: 'Defense', key: 'defensive_ability', weight: 13 },
-                { name: 'Agility', key: 'agility', weight: 4 },
-                { name: 'Intelligence', key: 'intelligence', weight: 2 },
-                { name: 'Special', key: 'special_ability', weight: 10 },
-                { name: 'Weight', key: 'avg_weight_lbs', weight: 20, isWeight: true }
+                { name: 'Attack', key: 'attack' },
+                { name: 'Defense', key: 'defense' },
+                { name: 'Agility', key: 'agility' },
+                { name: 'Stamina', key: 'stamina' },
+                { name: 'Intelligence', key: 'intelligence' },
+                { name: 'Special', key: 'special' }
             ];
 
             let html = '<div class="stat-comparison-grid">';
 
             stats.forEach(stat => {
-                const winnerVal = stat.isWeight 
-                    ? (result.winner[stat.key] || 0)
-                    : (result.winner[stat.key] || 0);
-                const loserVal = stat.isWeight
-                    ? (result.loser[stat.key] || 0)
-                    : (result.loser[stat.key] || 0);
-
+                const winnerVal = result.winner[stat.key] || 0;
+                const loserVal = result.loser[stat.key] || 0;
                 const winnerHigher = winnerVal > loserVal;
                 const loserHigher = loserVal > winnerVal;
 
                 html += `
                     <div class="stat-row">
-                        <span class="stat-val ${winnerHigher ? 'higher' : ''}">${stat.isWeight ? Math.round(winnerVal).toLocaleString() : winnerVal}</span>
+                        <span class="stat-val ${winnerHigher ? 'higher' : ''}">${winnerVal.toFixed ? winnerVal.toFixed(0) : winnerVal}</span>
                         <span class="stat-name">${stat.name}</span>
-                        <span class="stat-val ${loserHigher ? 'higher' : ''}">${stat.isWeight ? Math.round(loserVal).toLocaleString() : loserVal}</span>
+                        <span class="stat-val ${loserHigher ? 'higher' : ''}">${loserVal.toFixed ? loserVal.toFixed(0) : loserVal}</span>
                     </div>
                 `;
             });

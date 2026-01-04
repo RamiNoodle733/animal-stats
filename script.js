@@ -1422,12 +1422,14 @@ class AnimalStatsApp {
     updateFighterCard(side, animal) {
         const els = side === 'left' ? this.dom.fighter1 : this.dom.fighter2;
         
-        els.placeholder.style.display = 'none';
-        els.img.style.display = 'block';
-        els.img.src = animal.image;
-        els.img.onerror = () => { els.img.src = FALLBACK_IMAGE; };
+        if (els.placeholder) els.placeholder.style.display = 'none';
+        if (els.img) {
+            els.img.style.display = 'block';
+            els.img.src = animal.image;
+            els.img.onerror = () => { els.img.src = FALLBACK_IMAGE; };
+        }
         
-        els.name.textContent = animal.name.toUpperCase();
+        if (els.name) els.name.textContent = animal.name.toUpperCase();
         
         // Update hidden stats
         const statsMap = {
@@ -1445,6 +1447,14 @@ class AnimalStatsApp {
         
         // Update comparison highlighting
         this.updateCompareHighlights();
+        
+        // Trigger ComparePageEnhancements to update tournament-style info
+        if (window.ComparePageEnhancements && typeof window.ComparePageEnhancements.updateFighterInfo === 'function') {
+            // Trigger via image change - the observer will pick it up
+            // Or directly call update
+            const num = side === 'left' ? 1 : 2;
+            window.ComparePageEnhancements.updateFighterDisplay?.(side, animal);
+        }
     }
 
     /**
