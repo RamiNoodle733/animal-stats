@@ -1749,9 +1749,24 @@ class AnimalStatsApp {
         // Notify Discord about the fight
         await this.notifyFight(left.name, right.name);
 
-        // Display result with win probability
-        const probPercent = Math.round(winnerProb * 100);
-        alert(`FIGHT PREDICTION:\n\n🏆 ${winner.name} wins!\n\n${winner.name}: ${probPercent}% chance\n${loser.name}: ${100 - probPercent}% chance\n\nFight Score:\n${winner.name}: ${winnerScore.toFixed(1)}\n${loser.name}: ${loserScore.toFixed(1)}`);
+        // Calculate loser probability
+        const loserProb = winner === left ? prob2 : prob1;
+
+        // Use ComparePageEnhancements for animated result display
+        if (window.ComparePageEnhancements && typeof window.ComparePageEnhancements.playFightSequence === 'function') {
+            window.ComparePageEnhancements.playFightSequence(left, right, {
+                winner,
+                loser,
+                winnerScore,
+                loserScore,
+                winnerProb: winnerProb * 100,
+                loserProb: loserProb * 100
+            });
+        } else {
+            // Fallback to alert if enhancements not loaded
+            const probPercent = Math.round(winnerProb * 100);
+            alert(`FIGHT PREDICTION:\n\n🏆 ${winner.name} wins!\n\n${winner.name}: ${probPercent}% chance\n${loser.name}: ${100 - probPercent}% chance\n\nFight Score:\n${winner.name}: ${winnerScore.toFixed(1)}\n${loser.name}: ${loserScore.toFixed(1)}`);
+        }
     }
 
     /**
