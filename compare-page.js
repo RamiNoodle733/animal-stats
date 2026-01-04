@@ -23,6 +23,7 @@
         resultOverlayActive: false,
         _pendingResult: null,
         initialized: false,
+        menuCollapsed: false,
 
         /**
          * Initialize compare page enhancements
@@ -34,9 +35,53 @@
             this.injectIntroOverlay();
             this.injectResultOverlay();
             this.setupTournamentLayout();
+            this.setupMenuToggle();
             this.setupEventListeners();
             
             console.log('[Compare] Tournament-style enhancements initialized');
+        },
+
+        /**
+         * Setup the menu toggle controller
+         */
+        setupMenuToggle() {
+            const compareView = document.getElementById('compare-view');
+            const toggleBtn = document.getElementById('c-menu-toggle-btn');
+            
+            if (!compareView || !toggleBtn) return;
+            
+            // Load saved state from localStorage
+            const savedState = localStorage.getItem('abs_compare_menu_collapsed');
+            this.menuCollapsed = savedState === '1';
+            
+            // Apply initial state
+            this.applyMenuState(compareView, toggleBtn);
+            
+            // Toggle on click
+            toggleBtn.addEventListener('click', () => {
+                this.menuCollapsed = !this.menuCollapsed;
+                localStorage.setItem('abs_compare_menu_collapsed', this.menuCollapsed ? '1' : '0');
+                this.applyMenuState(compareView, toggleBtn);
+                
+                // Also sync with main app's grid state if available
+                if (window.app && window.app.dom && window.app.dom.gridWrapper) {
+                    window.app.state.isGridVisible = !this.menuCollapsed;
+                    window.app.dom.gridWrapper.classList.toggle('hidden', this.menuCollapsed);
+                }
+            });
+        },
+
+        /**
+         * Apply the menu collapsed/expanded state
+         */
+        applyMenuState(compareView, toggleBtn) {
+            if (this.menuCollapsed) {
+                compareView.classList.add('is-menu-collapsed');
+                toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> <span>SHOW MENU</span>';
+            } else {
+                compareView.classList.remove('is-menu-collapsed');
+                toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i> <span>HIDE MENU</span>';
+            }
         },
 
         /**
