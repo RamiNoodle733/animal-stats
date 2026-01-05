@@ -210,11 +210,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="c-action-row">
-                        <button class="view-stats-btn c-view-stats-btn" id="c-view-stats-${num}">
-                            <i class="fas fa-chart-bar"></i> VIEW STATS
-                        </button>
-                    </div>
                 `;
                 
                 // Add click hint to fighter display
@@ -242,21 +237,6 @@
                 
                 // Add bottom info after hero section
                 section.insertBefore(bottomInfo, oldStatsPanel);
-                
-                // Wire up view stats button
-                const viewStatsBtn = section.querySelector(`#c-view-stats-${num}`);
-                if (viewStatsBtn) {
-                    viewStatsBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        const animal = num === 1 
-                            ? window.app?.state?.compare?.left 
-                            : window.app?.state?.compare?.right;
-                        if (animal && window.app) {
-                            window.app.setSelectedAnimal(animal);
-                            window.app.switchView('stats');
-                        }
-                    });
-                }
             });
             
             // Setup fight center with VS badge and stat bars
@@ -385,16 +365,20 @@
             const biteEl = document.getElementById(`c-bite-${num}`);
             
             if (weightEl) {
-                const weight = animal.avg_weight_lbs || animal.weight || animal.averageWeight;
-                weightEl.querySelector('span').textContent = weight 
-                    ? `${Math.round(weight).toLocaleString()} lbs` 
+                // weight_kg is in data, convert to lbs (1 kg = 2.205 lbs)
+                const weightKg = animal.weight_kg || animal.avg_weight_lbs || animal.weight;
+                const weightLbs = weightKg ? Math.round(weightKg * 2.205) : null;
+                weightEl.querySelector('span').textContent = weightLbs 
+                    ? `${weightLbs.toLocaleString()} lbs` 
                     : '--';
             }
             
             if (speedEl) {
-                const speed = animal.top_speed_mph || animal.speed || animal.topSpeed;
-                speedEl.querySelector('span').textContent = speed 
-                    ? `${Math.round(speed)} mph` 
+                // speed_mps is in data, convert to mph (1 m/s = 2.237 mph)
+                const speedMps = animal.speed_mps || animal.top_speed_mph || animal.speed;
+                const speedMph = speedMps ? Math.round(speedMps * 2.237) : null;
+                speedEl.querySelector('span').textContent = speedMph 
+                    ? `${speedMph} mph` 
                     : '--';
             }
             
@@ -405,19 +389,19 @@
                     : '--';
             }
             
-            // Update abilities
+            // Update abilities - data uses special_abilities
             const abilitiesEl = document.getElementById(`c-abilities-${num}`);
             if (abilitiesEl) {
-                const abilities = animal.abilities || [];
+                const abilities = animal.special_abilities || animal.abilities || [];
                 abilitiesEl.innerHTML = abilities.slice(0, 3).map(a => 
                     `<span class="ability-tag-sm">${a}</span>`
                 ).join('') || '<span class="ability-tag-sm">None</span>';
             }
             
-            // Update traits
+            // Update traits - data uses unique_traits
             const traitsEl = document.getElementById(`c-traits-${num}`);
             if (traitsEl) {
-                const traits = animal.traits || [];
+                const traits = animal.unique_traits || animal.traits || [];
                 traitsEl.innerHTML = traits.slice(0, 3).map(t => 
                     `<span class="trait-tag-sm">${t}</span>`
                 ).join('') || '<span class="trait-tag-sm">None</span>';
