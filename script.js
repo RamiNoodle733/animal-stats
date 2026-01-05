@@ -208,7 +208,7 @@ class AnimalStatsApp {
             communityView: document.getElementById('community-view'),
             
             // New Compare Controls
-            compareToggleGridBtn: document.getElementById('compare-toggle-grid-btn')
+            compareToggleGridBtn: document.getElementById('c-menu-toggle-btn')
         };
 
         // Rankings Manager

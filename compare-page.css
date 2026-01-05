@@ -41,32 +41,18 @@
 }
 
 /* ==========================
-   VIEWPORT SHELL - 100vh CONTAINED
+   VIEWPORT SHELL - Flex-based containment
    ========================== */
 #compare-view.active-view {
     display: flex;
     flex-direction: column;
-    height: calc(100vh - var(--c-header-h));
-    height: calc(100svh - var(--c-header-h));
-    max-height: calc(100vh - var(--c-header-h));
-    overflow: hidden;
-}
-
-/* When compare view is active, control the shared grid container */
-#compare-view.active-view ~ .character-grid-container {
-    height: var(--c-menu-expanded);
-    max-height: var(--c-menu-expanded);
+    flex: 1;
     min-height: 0;
     overflow: hidden;
-    transition: height 0.3s ease, max-height 0.3s ease, opacity 0.3s ease;
 }
 
-#compare-view.active-view.is-menu-collapsed ~ .character-grid-container {
-    height: var(--c-menu-collapsed);
-    max-height: var(--c-menu-collapsed);
-    opacity: 0;
-    pointer-events: none;
-}
+/* Grid container height is controlled by the shared .hidden class from script.js toggleGrid() */
+/* No custom height overrides needed - reuse the Stats page mechanism */
 
 /* ==========================
    MATCHUP ZONE (Main fight area)

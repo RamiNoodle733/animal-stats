@@ -42,45 +42,28 @@
         },
 
         /**
-         * Setup the menu toggle controller
+         * Setup the menu toggle controller - button is already wired by script.js toggleGrid()
+         * This just ensures the button text is correct when Compare view loads
          */
         setupMenuToggle() {
-            const compareView = document.getElementById('compare-view');
             const toggleBtn = document.getElementById('c-menu-toggle-btn');
+            if (!toggleBtn) return;
             
-            if (!compareView || !toggleBtn) return;
-            
-            // Load saved state from localStorage
-            const savedState = localStorage.getItem('abs_compare_menu_collapsed');
-            this.menuCollapsed = savedState === '1';
-            
-            // Apply initial state
-            this.applyMenuState(compareView, toggleBtn);
-            
-            // Toggle on click
-            toggleBtn.addEventListener('click', () => {
-                this.menuCollapsed = !this.menuCollapsed;
-                localStorage.setItem('abs_compare_menu_collapsed', this.menuCollapsed ? '1' : '0');
-                this.applyMenuState(compareView, toggleBtn);
-                
-                // Also sync with main app's grid state if available
-                if (window.app && window.app.dom && window.app.dom.gridWrapper) {
-                    window.app.state.isGridVisible = !this.menuCollapsed;
-                    window.app.dom.gridWrapper.classList.toggle('hidden', this.menuCollapsed);
-                }
-            });
+            // Set initial button text based on current grid state
+            // The click handler is already attached by script.js
+            this.updateToggleBtnText(toggleBtn);
         },
 
         /**
-         * Apply the menu collapsed/expanded state
+         * Update toggle button text based on app's grid visibility state
          */
-        applyMenuState(compareView, toggleBtn) {
-            if (this.menuCollapsed) {
-                compareView.classList.add('is-menu-collapsed');
-                toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> <span>SHOW MENU</span>';
-            } else {
-                compareView.classList.remove('is-menu-collapsed');
+        updateToggleBtnText(toggleBtn) {
+            if (!toggleBtn || !window.app) return;
+            const isVisible = window.app.state.isGridVisible;
+            if (isVisible) {
                 toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i> <span>HIDE MENU</span>';
+            } else {
+                toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> <span>SHOW MENU</span>';
             }
         },
 
