@@ -241,6 +241,9 @@
             
             // Setup fight center with VS badge and stat bars
             this.setupFightCenter();
+            
+            // Re-bind unit toggle click handlers after elements are created
+            this.setupUnitToggles();
         },
 
         /**
@@ -263,9 +266,9 @@
             `;
             fightCenter.insertBefore(vsSection, fightCenter.firstChild);
             
-            // Add stat bars after radar chart
+            // Add stat bars after radar chart - use Tournament's t-stats-compact for identical styling
             const statsCompact = document.createElement('div');
-            statsCompact.className = 'c-stats-compact';
+            statsCompact.className = 't-stats-compact';
             statsCompact.id = 'c-stats-compact';
             statsCompact.innerHTML = this.generateStatBarsHTML();
             
@@ -278,37 +281,31 @@
 
         /**
          * Generate HTML for stat comparison bars
+         * Uses same structure as Tournament's t-stat-row-compact for visual consistency
          */
         generateStatBarsHTML() {
             const stats = [
                 { key: 'attack', icon: 'fa-fist-raised', abbr: 'ATK' },
                 { key: 'defense', icon: 'fa-shield-alt', abbr: 'DEF' },
-                { key: 'agility', icon: 'fa-running', abbr: 'AGI' },
+                { key: 'agility', icon: 'fa-wind', abbr: 'AGI' },
                 { key: 'stamina', icon: 'fa-heart', abbr: 'STA' },
                 { key: 'intelligence', icon: 'fa-brain', abbr: 'INT' },
                 { key: 'special', icon: 'fa-bolt', abbr: 'SPL' }
             ];
             
+            // Use Tournament's t-stat-row-compact structure exactly
             return stats.map(stat => `
-                <div class="c-stat-row" data-stat="${stat.key}" id="c-stat-row-${stat.key}">
-                    <div class="c-stat-bar-left">
-                        <div class="stat-bar">
-                            <div class="stat-bar-fill" id="c-bar-1-${stat.key}" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    <div class="c-stat-center">
-                        <span class="c-val left" id="c-val-1-${stat.key}">0</span>
-                        <div class="c-stat-icon-label">
+                <div class="t-stat-row-compact" data-stat="${stat.key}" id="c-stat-row-${stat.key}">
+                    <div class="t-stat-bar-left"><div class="stat-bar"><div class="stat-bar-fill" id="c-bar-1-${stat.key}" style="width: 0%"></div></div></div>
+                    <div class="t-stat-center-cluster">
+                        <span class="t-val left" id="c-val-1-${stat.key}">0</span>
+                        <div class="t-stat-icon-label">
                             <i class="fas ${stat.icon}"></i>
-                            <span class="c-stat-abbr">${stat.abbr}</span>
+                            <span class="t-stat-abbr">${stat.abbr}</span>
                         </div>
-                        <span class="c-val right" id="c-val-2-${stat.key}">0</span>
+                        <span class="t-val right" id="c-val-2-${stat.key}">0</span>
                     </div>
-                    <div class="c-stat-bar-right">
-                        <div class="stat-bar">
-                            <div class="stat-bar-fill" id="c-bar-2-${stat.key}" style="width: 0%"></div>
-                        </div>
-                    </div>
+                    <div class="t-stat-bar-right"><div class="stat-bar"><div class="stat-bar-fill" id="c-bar-2-${stat.key}" style="width: 0%"></div></div></div>
                 </div>
             `).join('');
         },
@@ -332,6 +329,29 @@
         },
 
         /**
+         * Get ranking data for an animal from rankingsManager
+         */
+        getRankingData(animalName) {
+            const rankings = window.rankingsManager?.rankings || [];
+            if (!rankings.length || !animalName) return null;
+            
+            const name = animalName.toLowerCase();
+            const rankIndex = rankings.findIndex((item) => {
+                const itemAnimal = item.animal || item;
+                return itemAnimal.name && itemAnimal.name.toLowerCase() === name;
+            });
+            
+            if (rankIndex === -1) return null;
+            
+            const rankData = rankings[rankIndex];
+            return {
+                rank: rankIndex + 1,
+                battles: rankData.totalFights || 0,
+                winRate: rankData.winRate || 0
+            };
+        },
+
+        /**
          * Update fighter display with animal data (called directly or via observer)
          */
         updateFighterDisplay(side, animal) {
@@ -347,39 +367,58 @@
             const sciEl = document.getElementById(`c-scientific-${num}`);
             if (sciEl) sciEl.textContent = animal.scientific_name || animal.latinName || '';
             
-            // Update battle record
+            // Update battle record - lookup from rankings like Stats page does
             const rankEl = document.getElementById(`c-rank-${num}`);
             const battlesEl = document.getElementById(`c-battles-${num}`);
             const winrateEl = document.getElementById(`c-winrate-${num}`);
             
-            if (rankEl) rankEl.textContent = animal.rank ? `#${animal.rank}` : '#--';
-            if (battlesEl) battlesEl.textContent = animal.battles || animal.totalBattles || '0';
+            const rankingData = this.getRankingData(animal.name);
+            if (rankingData) {
+                if (rankEl) rankEl.textContent = `#${rankingData.rank}`;
+                if (battlesEl) battlesEl.textContent = rankingData.battles;
+                if (winrateEl) winrateEl.textContent = rankingData.battles > 0 ? `${Math.round(rankingData.winRate)}%` : '--%';
+            } else {
+                if (rankEl) rankEl.textContent = '#--';
+                if (battlesEl) battlesEl.textContent = '0';
+                if (winrateEl) winrateEl.textContent = '--%';
+            }
             
-            const winrate = animal.win_rate || animal.winRate || 
-                (animal.wins && animal.battles ? Math.round((animal.wins / animal.battles) * 100) : null);
-            if (winrateEl) winrateEl.textContent = winrate !== null ? `${winrate}%` : '--%';
-            
-            // Update quick info
+            // Update quick info - use app's unit preferences like Stats page
             const weightEl = document.getElementById(`c-weight-${num}`);
             const speedEl = document.getElementById(`c-speed-${num}`);
             const biteEl = document.getElementById(`c-bite-${num}`);
             
+            // Weight - use app's unit preference (same as Stats)
             if (weightEl) {
-                // weight_kg is in data, convert to lbs (1 kg = 2.205 lbs)
-                const weightKg = animal.weight_kg || animal.avg_weight_lbs || animal.weight;
-                const weightLbs = weightKg ? Math.round(weightKg * 2.205) : null;
-                weightEl.querySelector('span').textContent = weightLbs 
-                    ? `${weightLbs.toLocaleString()} lbs` 
-                    : '--';
+                const weightKg = animal.weight_kg;
+                if (!weightKg) {
+                    weightEl.querySelector('span').textContent = '--';
+                } else {
+                    const unit = window.app?.state?.weightUnit || 'kg';
+                    if (unit === 'lbs') {
+                        const lbs = (weightKg * 2.20462).toFixed(0);
+                        weightEl.querySelector('span').textContent = `${Number(lbs).toLocaleString()} lbs`;
+                    } else {
+                        weightEl.querySelector('span').textContent = `${Number(weightKg.toFixed(0)).toLocaleString()} kg`;
+                    }
+                }
             }
             
+            // Speed - use app's unit preference (same as Stats)
             if (speedEl) {
-                // speed_mps is in data, convert to mph (1 m/s = 2.237 mph)
-                const speedMps = animal.speed_mps || animal.top_speed_mph || animal.speed;
-                const speedMph = speedMps ? Math.round(speedMps * 2.237) : null;
-                speedEl.querySelector('span').textContent = speedMph 
-                    ? `${speedMph} mph` 
-                    : '--';
+                const speedMps = animal.speed_mps;
+                if (!speedMps) {
+                    speedEl.querySelector('span').textContent = '--';
+                } else {
+                    const unit = window.app?.state?.speedUnit || 'kmh';
+                    if (unit === 'mph') {
+                        const mph = (speedMps * 2.23694).toFixed(0);
+                        speedEl.querySelector('span').textContent = `${mph} mph`;
+                    } else {
+                        const kmh = (speedMps * 3.6).toFixed(0);
+                        speedEl.querySelector('span').textContent = `${kmh} km/h`;
+                    }
+                }
             }
             
             if (biteEl) {
@@ -615,6 +654,51 @@
                     this.rebuildFighterCards();
                 }
             }
+            
+            // Setup unit toggle click handlers for weight/speed
+            this.setupUnitToggles();
+        },
+
+        /**
+         * Setup click handlers for weight/speed unit toggles
+         */
+        setupUnitToggles() {
+            // Weight toggles (click to switch kg/lbs)
+            ['c-weight-1', 'c-weight-2'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('click', () => {
+                        if (window.app?.toggleWeightUnit) {
+                            window.app.toggleWeightUnit();
+                            this.refreshUnitDisplays();
+                        }
+                    });
+                }
+            });
+            
+            // Speed toggles (click to switch km/h / mph)
+            ['c-speed-1', 'c-speed-2'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('click', () => {
+                        if (window.app?.toggleSpeedUnit) {
+                            window.app.toggleSpeedUnit();
+                            this.refreshUnitDisplays();
+                        }
+                    });
+                }
+            });
+        },
+
+        /**
+         * Refresh weight/speed displays with current unit preferences
+         */
+        refreshUnitDisplays() {
+            const left = window.app?.state?.compare?.left;
+            const right = window.app?.state?.compare?.right;
+            
+            if (left) this.updateFighterDisplay('left', left);
+            if (right) this.updateFighterDisplay('right', right);
         },
 
         /**

@@ -33,6 +33,12 @@
     --c-text-secondary: rgba(255, 255, 255, 0.7);
     --c-text-muted: rgba(255, 255, 255, 0.5);
     
+    /* Map to Tournament CSS variables so t-* classes work correctly */
+    --t-gold: #ffd700;
+    --t-cyan: #00d4ff;
+    --t-orange: #ff6b00;
+    --t-green: #00ff88;
+    
     /* Layout height variables */
     --c-header-h: 56px;
     --c-action-h: clamp(50px, 7vh, 70px);
@@ -99,6 +105,8 @@
     position: relative;
     min-height: 0;
     max-height: 100%;
+    /* Ensure cards fit within available space */
+    flex: 1 1 auto;
 }
 
 /* Hide old elements that are kept for script.js DOM references */
@@ -195,18 +203,19 @@
    HERO SECTION (ANIMAL IMAGE)
    ========================== */
 #compare-view .c-hero-section {
-    flex: 0 0 auto;
+    flex: 0 1 auto;  /* Allow shrinking when space is limited */
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     padding: 0.5rem;
     background: radial-gradient(ellipse at center, rgba(255,255,255,0.02) 0%, transparent 70%);
+    min-height: 0;
 }
 
 #compare-view .fighter-display {
-    /* Consistent square container */
-    width: clamp(120px, 18vw, 200px);
+    /* Consistent square container - responsive sizing */
+    width: clamp(100px, 15vw, 180px);
     aspect-ratio: 1 / 1;
     display: flex;
     align-items: center;
@@ -319,6 +328,23 @@
     flex-direction: column;
     align-items: center;
     gap: 0.15rem;
+}
+
+/* Weight and Speed are clickable to toggle units */
+#compare-view .quick-info-item[id^="c-weight-"],
+#compare-view .quick-info-item[id^="c-speed-"] {
+    cursor: pointer;
+    transition: transform 0.15s ease, color 0.15s ease;
+}
+
+#compare-view .quick-info-item[id^="c-weight-"]:hover,
+#compare-view .quick-info-item[id^="c-speed-"]:hover {
+    transform: scale(1.05);
+}
+
+#compare-view .quick-info-item[id^="c-weight-"]:hover i,
+#compare-view .quick-info-item[id^="c-speed-"]:hover i {
+    color: var(--c-cyan);
 }
 
 #compare-view .quick-info-item i {
@@ -488,7 +514,7 @@
     width: 100%;
     height: 100%;
     background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 70%);
-    animation: vsBurstPulse 2s ease-in-out infinite;
+    animation: c-vsBurstPulse 2s ease-in-out infinite;
 }
 
 #compare-view .c-vs-diamond {
@@ -498,7 +524,7 @@
     background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,107,0,0.3));
     transform: rotate(45deg);
     border-radius: 6px;
-    animation: diamondRotate 8s linear infinite;
+    animation: c-diamondRotate 8s linear infinite;
 }
 
 #compare-view .c-vs-badge {
@@ -514,7 +540,7 @@
     box-shadow: 
         0 0 20px rgba(255,215,0,0.5),
         inset 0 2px 4px rgba(255,255,255,0.3);
-    animation: vsFloat 3s ease-in-out infinite;
+    animation: c-vsFloat 3s ease-in-out infinite;
 }
 
 #compare-view .c-vs-badge span {
@@ -1160,19 +1186,19 @@
 }
 
 /* ==========================
-   ANIMATIONS
+   ANIMATIONS - Prefixed with 'c-' to avoid conflicts with tournament-v4.css
    ========================== */
-@keyframes vsBurstPulse {
+@keyframes c-vsBurstPulse {
     0%, 100% { transform: scale(1); opacity: 0.5; }
     50% { transform: scale(1.2); opacity: 0.8; }
 }
 
-@keyframes diamondRotate {
+@keyframes c-diamondRotate {
     0% { transform: rotate(45deg); }
     100% { transform: rotate(405deg); }
 }
 
-@keyframes vsFloat {
+@keyframes c-vsFloat {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-5px); }
 }
