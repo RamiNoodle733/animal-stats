@@ -41,7 +41,7 @@
     
     /* Layout height variables */
     --c-header-h: 56px;
-    --c-action-h: clamp(44px, 6vh, 60px);
+    --c-action-h: clamp(38px, 5vh, 52px);
     --c-menu-expanded: clamp(180px, 26vh, 280px);
     --c-menu-collapsed: 0px;
 }
@@ -66,12 +66,13 @@
 #compare-view .fight-screen {
     flex: 1;
     display: grid;
-    grid-template-columns: minmax(200px, 1fr) minmax(180px, auto) minmax(200px, 1fr);
-    gap: clamp(4px, 0.5vw, 10px);
-    padding: clamp(4px, 0.8vh, 10px) clamp(6px, 1vw, 12px);
+    grid-template-columns: minmax(180px, 1fr) minmax(200px, auto) minmax(180px, 1fr);
+    gap: clamp(4px, 0.5vw, 8px);
+    padding: clamp(2px, 0.5vh, 6px) clamp(4px, 0.8vw, 10px);
     align-items: stretch;
     min-height: 0;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 /* ==========================
@@ -210,7 +211,7 @@
 
 #compare-view .fighter-display {
     /* Consistent square container - responsive sizing */
-    width: clamp(70px, 10vw, 130px);
+    width: clamp(60px, 9vw, 110px);
     aspect-ratio: 1 / 1;
     display: flex;
     align-items: center;
@@ -507,10 +508,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: clamp(4px, 0.5vh, 8px);
-    gap: clamp(4px, 0.5vh, 8px);
-    min-width: clamp(160px, 18vw, 240px);
-    max-width: 280px;
+    padding: clamp(2px, 0.3vh, 6px);
+    gap: clamp(2px, 0.3vh, 4px);
+    min-width: clamp(180px, 20vw, 260px);
+    max-width: 300px;
     min-height: 0;
     overflow: visible;
 }
@@ -518,8 +519,8 @@
 /* VS Section */
 #compare-view .c-vs-section {
     position: relative;
-    width: clamp(40px, 6vh, 60px);
-    height: clamp(40px, 6vh, 60px);
+    width: clamp(28px, 4vh, 40px);
+    height: clamp(28px, 4vh, 40px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -548,8 +549,8 @@
     position: relative;
     z-index: 2;
     background: linear-gradient(135deg, var(--c-gold), var(--c-orange));
-    width: clamp(30px, 5vh, 45px);
-    height: clamp(30px, 5vh, 45px);
+    width: clamp(22px, 3.5vh, 32px);
+    height: clamp(22px, 3.5vh, 32px);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -570,7 +571,7 @@
 /* Radar Chart Container */
 #compare-view .radar-chart-container {
     width: 100%;
-    max-width: clamp(100px, 12vh, 140px);
+    max-width: clamp(80px, 10vh, 110px);
     aspect-ratio: 1;
     flex-shrink: 1;
 }
@@ -684,6 +685,41 @@
 #compare-view .c-stat-row.right-wins .c-val.right {
     color: var(--c-green);
     text-shadow: 0 0 8px var(--c-green);
+}
+
+/* Override Tournament stat bar styles for Compare view - more compact */
+#compare-view .t-stats-compact {
+    padding: clamp(3px, 0.4vh, 6px) clamp(4px, 0.6vw, 8px);
+    gap: clamp(2px, 0.3vh, 4px);
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+}
+
+#compare-view .t-stat-row-compact {
+    gap: clamp(2px, 0.4vw, 4px);
+}
+
+#compare-view .t-stat-center-cluster {
+    padding: clamp(2px, 0.3vh, 4px) clamp(4px, 0.6vw, 8px);
+    min-width: clamp(70px, 10vw, 100px);
+    gap: clamp(3px, 0.5vw, 6px);
+}
+
+#compare-view .t-stat-center-cluster .t-val {
+    font-size: clamp(0.75rem, 1.1vh, 0.9rem);
+}
+
+#compare-view .t-stat-center-cluster .t-stat-icon-label i {
+    font-size: clamp(0.6rem, 1vh, 0.8rem);
+}
+
+#compare-view .t-stat-abbr {
+    font-size: clamp(0.4rem, 0.6vh, 0.5rem);
+}
+
+#compare-view .t-stat-bar-left,
+#compare-view .t-stat-bar-right {
+    height: 5px;
 }
 
 /* ==========================
