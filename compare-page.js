@@ -349,7 +349,11 @@
             return {
                 rank: rankIndex + 1,
                 battles: rankData.totalFights || 0,
-                winRate: rankData.winRate || 0
+                winRate: rankData.winRate || 0,
+                // Tournament medal data - same fields used by Tournament page
+                tournamentsFirst: rankData.tournamentsFirst || 0,
+                tournamentsSecond: rankData.tournamentsSecond || 0,
+                tournamentsThird: rankData.tournamentsThird || 0
             };
         },
 
@@ -448,15 +452,15 @@
                 ).join('') || '<span class="trait-tag-sm">None</span>';
             }
             
-            // Update tournament record
+            // Update tournament record - get from rankings data (same source as Tournament page)
             const goldEl = document.getElementById(`c-gold-${num}`);
             const silverEl = document.getElementById(`c-silver-${num}`);
             const bronzeEl = document.getElementById(`c-bronze-${num}`);
             
-            const tournamentWins = animal.tournament_wins || animal.tournamentWins || {};
-            if (goldEl) goldEl.textContent = tournamentWins.first || tournamentWins['1st'] || 0;
-            if (silverEl) silverEl.textContent = tournamentWins.second || tournamentWins['2nd'] || 0;
-            if (bronzeEl) bronzeEl.textContent = tournamentWins.third || tournamentWins['3rd'] || 0;
+            // Use ranking data for tournament medals - same fields as Tournament page
+            if (goldEl) goldEl.textContent = rankingData?.tournamentsFirst || 0;
+            if (silverEl) silverEl.textContent = rankingData?.tournamentsSecond || 0;
+            if (bronzeEl) bronzeEl.textContent = rankingData?.tournamentsThird || 0;
             
             // Update stat bars
             this.updateStatBars();
