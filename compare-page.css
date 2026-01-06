@@ -75,20 +75,79 @@
 }
 
 /* ==========================
-   ACTION ZONE (Menu toggle bar)
+   ACTION ZONE (Controls bar - matches Stats page)
    ========================== */
 #compare-view .compare-controls-bar {
-    height: 36px;
-    min-height: 36px;
-    max-height: 36px;
+    height: 32px;
+    min-height: 32px;
+    max-height: 32px;
     margin: 0 !important;
-    padding: 0 1rem !important;
+    padding: 5px 12px !important;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    border-top: 1px solid var(--c-glass-border);
-    background: linear-gradient(180deg, rgba(26,26,46,0.95) 0%, rgba(10,10,18,0.95) 100%);
+    justify-content: center;
+    gap: 10px;
+    border-top: 2px solid rgba(0, 212, 255, 0.4);
+    background: linear-gradient(180deg, rgba(5, 10, 20, 0.9), rgba(10, 15, 25, 0.95));
     flex-shrink: 0;
+    position: relative;
+    z-index: 5;
+}
+
+/* Use the same button styling as Stats page */
+#compare-view .compare-controls-bar .c-menu-toggle-btn {
+    padding: 4px 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    border-radius: 4px;
+    color: var(--c-cyan);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+#compare-view .compare-controls-bar .c-menu-toggle-btn:hover {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(0, 212, 255, 0.15));
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+    transform: translateY(-1px);
+}
+
+/* Disabled placeholder buttons styling */
+#compare-view .compare-controls-bar .c-comments-btn,
+#compare-view .compare-controls-bar .c-details-btn {
+    padding: 4px 10px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: not-allowed;
+}
+
+#compare-view .compare-controls-bar .c-comments-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.4);
+}
+
+#compare-view .compare-controls-bar .c-details-btn {
+    background: rgba(0, 212, 255, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    color: rgba(0, 212, 255, 0.4);
+}
+
+#compare-view .compare-controls-bar .info-separator {
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 1rem;
 }
 
 /* ==========================
@@ -198,52 +257,84 @@
     background: var(--c-glass-border);
 }
 
-/* ==========================\n   HERO SECTION (ANIMAL IMAGE)\n   ==========================*/
+/* ==========================
+   HERO SECTION (ANIMAL IMAGE) - Trading card overflow effect
+   ========================== */
 #compare-view .c-hero-section {
     flex: 0 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    padding: clamp(6px, 1vh, 12px);
+    padding: clamp(8px, 1.5vh, 16px);
     background: transparent;
+    overflow: visible; /* Allow image to pop out */
+    z-index: 1;
 }
 
 #compare-view .fighter-display {
-    /* Responsive sizing that fits the viewport */
-    width: clamp(100px, 15vw, 160px);
-    height: clamp(100px, 15vw, 160px);
+    /* Larger responsive sizing for trading card effect */
+    width: clamp(120px, 18vw, 200px);
+    height: clamp(120px, 18vw, 200px);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     cursor: pointer;
-    border-radius: 8px;
-    overflow: hidden;
+    border-radius: 12px;
+    overflow: visible; /* Allow image to extend outside */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background: rgba(0,0,0,0.2);
+    background: linear-gradient(145deg, rgba(0,20,40,0.6), rgba(0,10,20,0.8));
     border: 2px solid var(--c-glass-border);
+    box-shadow: 
+        inset 0 0 20px rgba(0,0,0,0.5),
+        0 4px 20px rgba(0,0,0,0.3);
+}
+
+#compare-view .fighter-left .fighter-display {
+    border-color: rgba(0, 212, 255, 0.4);
+    box-shadow: 
+        inset 0 0 20px rgba(0,0,0,0.5),
+        0 4px 20px rgba(0, 212, 255, 0.15);
+}
+
+#compare-view .fighter-right .fighter-display {
+    border-color: rgba(255, 107, 0, 0.4);
+    box-shadow: 
+        inset 0 0 20px rgba(0,0,0,0.5),
+        0 4px 20px rgba(255, 107, 0, 0.15);
 }
 
 #compare-view .fighter-display:hover {
     transform: scale(1.02);
-    box-shadow: 0 8px 30px rgba(0,212,255,0.2);
+}
+
+#compare-view .fighter-left .fighter-display:hover {
+    box-shadow: 
+        inset 0 0 20px rgba(0,0,0,0.5),
+        0 8px 30px rgba(0, 212, 255, 0.3);
 }
 
 #compare-view .fighter-right .fighter-display:hover {
-    box-shadow: 0 8px 30px rgba(255,107,0,0.2);
+    box-shadow: 
+        inset 0 0 20px rgba(0,0,0,0.5),
+        0 8px 30px rgba(255, 107, 0, 0.3);
 }
 
+/* Animal image - enlarged with overflow effect */
 #compare-view .fighter-image {
-    max-width: 90%;
-    max-height: 90%;
+    /* Allow image to be larger than container for trading card pop effect */
+    max-width: 130%;
+    max-height: 130%;
     object-fit: contain;
-    filter: drop-shadow(0 4px 20px rgba(0,0,0,0.5));
+    filter: drop-shadow(0 8px 25px rgba(0,0,0,0.6));
     transition: transform 0.3s ease;
+    position: relative;
+    z-index: 2;
 }
 
 #compare-view .fighter-display:hover .fighter-image {
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
 
 #compare-view .fighter-placeholder {
@@ -502,45 +593,57 @@
 }
 
 /* ==========================
-   FIGHT CENTER
+   FIGHT CENTER - Vertical layout with FIGHT button near top
    ========================== */
 #compare-view .fight-center {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    padding: clamp(10px, 1.5vh, 16px);
-    gap: clamp(8px, 1.2vh, 14px);
-    width: clamp(260px, 28vw, 340px);
+    justify-content: flex-start;
+    padding: clamp(12px, 2vh, 20px) clamp(10px, 1.5vw, 16px);
+    gap: clamp(10px, 1.5vh, 16px);
+    width: clamp(280px, 30vw, 380px);
     min-height: 0;
     overflow: visible;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.15));
+    border-radius: 12px;
     border: 1px solid var(--c-glass-border);
 }
 
-/* Fight button in center column */
+/* Fight button - positioned near top after VS badge */
 #compare-view .c-fight-btn {
-    padding: clamp(10px, 1.4vh, 14px) clamp(24px, 4vw, 40px);
-    font-size: clamp(1rem, 2vh, 1.4rem);
+    padding: clamp(12px, 1.8vh, 18px) clamp(28px, 5vw, 50px);
+    font-size: clamp(1.1rem, 2.5vh, 1.5rem);
     font-weight: 800;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
     background: linear-gradient(135deg, var(--c-gold), var(--c-orange));
     color: #1a1a2e;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.6rem;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.4);
+    box-shadow: 
+        0 4px 20px rgba(255, 215, 0, 0.5),
+        0 0 30px rgba(255, 107, 0, 0.3);
     flex-shrink: 0;
+    animation: fightButtonPulse 2s ease-in-out infinite;
+}
+
+@keyframes fightButtonPulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(255, 215, 0, 0.5), 0 0 30px rgba(255, 107, 0, 0.3); }
+    50% { box-shadow: 0 6px 30px rgba(255, 215, 0, 0.7), 0 0 40px rgba(255, 107, 0, 0.5); }
 }
 
 #compare-view .c-fight-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 30px rgba(255, 215, 0, 0.6);
+    transform: scale(1.08);
+    box-shadow: 
+        0 8px 40px rgba(255, 215, 0, 0.7),
+        0 0 50px rgba(255, 107, 0, 0.5);
+    animation: none;
 }
 
 #compare-view .c-fight-btn i {
@@ -1800,47 +1903,22 @@
 }
 
 /* ==========================
-   MENU TOGGLE BUTTON STYLES
+   RESPONSIVE: Height-constrained screens - FIGHT button
    ========================== */
-#compare-view .c-menu-toggle-btn {
-    background: rgba(255, 215, 0, 0.15);
-    border: 1px solid var(--c-gold);
-    color: var(--c-gold);
-    padding: 0.4rem 0.8rem;
-    border-radius: 6px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    transition: all 0.2s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-#compare-view .c-menu-toggle-btn:hover {
-    background: rgba(255, 215, 0, 0.25);
-    transform: translateY(-1px);
-}
-
-#compare-view .c-menu-toggle-btn i {
-    transition: transform 0.3s ease;
-}
-
-#compare-view.is-menu-collapsed .c-menu-toggle-btn i {
-    transform: rotate(180deg);
-}
-
 @media (max-height: 800px) {
-    #compare-view .c-menu-toggle-btn {
-        padding: 0.3rem 0.6rem;
-        font-size: 0.65rem;
-    }
-    
     #compare-view .c-fight-btn {
         padding: clamp(8px, 1.2vh, 12px) clamp(20px, 3.5vw, 32px);
         font-size: clamp(0.9rem, 1.8vh, 1.2rem);
+    }
+    
+    #compare-view .fighter-display {
+        width: clamp(100px, 15vw, 150px);
+        height: clamp(100px, 15vw, 150px);
+    }
+    
+    #compare-view .fighter-image {
+        max-width: 120%;
+        max-height: 120%;
     }
 }
 
@@ -1848,6 +1926,16 @@
     #compare-view .c-fight-btn {
         padding: clamp(6px, 1vh, 10px) clamp(16px, 3vw, 28px);
         font-size: clamp(0.85rem, 1.6vh, 1rem);
+    }
+    
+    #compare-view .fighter-display {
+        width: clamp(80px, 12vw, 120px);
+        height: clamp(80px, 12vw, 120px);
+    }
+    
+    #compare-view .fighter-image {
+        max-width: 115%;
+        max-height: 115%;
     }
 }
 

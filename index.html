@@ -480,10 +480,18 @@
                 </div>
             </div>
 
-            <!-- Compare Controls Bar - Only menu toggle, fight button is in center column -->
+            <!-- Compare Controls Bar - Same layout as Stats page -->
             <div class="bottom-info-bar compare-controls-bar">
-                <button class="c-menu-toggle-btn" id="c-menu-toggle-btn">
-                    <i class="fas fa-chevron-down"></i> <span>HIDE MENU</span>
+                <button class="toggle-grid-btn c-menu-toggle-btn" id="c-menu-toggle-btn">
+                    <i class="fas fa-chevron-down"></i> HIDE MENU
+                </button>
+                <div class="info-separator">•</div>
+                <button class="stats-comments-btn c-comments-btn" id="c-comments-btn" disabled title="Coming soon">
+                    <i class="fas fa-comment"></i> COMMENTS <span class="stats-comment-count">0</span>
+                </button>
+                <div class="info-separator">•</div>
+                <button class="expand-details-btn c-details-btn" id="c-details-btn" disabled title="Coming soon">
+                    <i class="fas fa-info-circle"></i> MORE DETAILS
                 </button>
             </div>
         </div>

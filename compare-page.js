@@ -61,9 +61,9 @@
             if (!toggleBtn || !window.app) return;
             const isVisible = window.app.state.isGridVisible;
             if (isVisible) {
-                toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i> <span>HIDE MENU</span>';
+                toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE MENU';
             } else {
-                toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> <span>SHOW MENU</span>';
+                toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> SHOW MENU';
             }
         },
 
@@ -268,6 +268,13 @@
             `;
             fightCenter.insertBefore(vsSection, fightCenter.firstChild);
             
+            // Add FIGHT button immediately after VS section (near top)
+            const fightBtn = document.createElement('button');
+            fightBtn.className = 'fight-btn c-fight-btn';
+            fightBtn.id = 'fight-btn';
+            fightBtn.innerHTML = '<i class="fas fa-bolt"></i> FIGHT <i class="fas fa-bolt"></i>';
+            vsSection.after(fightBtn);
+            
             // Add stat bars after radar chart - use Tournament's t-stats-compact for identical styling
             const statsCompact = document.createElement('div');
             statsCompact.className = 't-stats-compact';
@@ -279,13 +286,6 @@
             } else {
                 fightCenter.appendChild(statsCompact);
             }
-            
-            // Add FIGHT button after stat bars
-            const fightBtn = document.createElement('button');
-            fightBtn.className = 'fight-btn c-fight-btn';
-            fightBtn.id = 'fight-btn';
-            fightBtn.innerHTML = '<i class="fas fa-bolt"></i> FIGHT <i class="fas fa-bolt"></i>';
-            fightCenter.appendChild(fightBtn);
         },
 
         /**
