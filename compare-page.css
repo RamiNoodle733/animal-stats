@@ -75,80 +75,9 @@
 }
 
 /* ==========================
-   ACTION ZONE (Controls bar - matches Stats page)
+   BOTTOM INFO BAR - Uses styles.css .bottom-info-bar directly
+   No custom overrides needed - the bar inherits all Stats page styling
    ========================== */
-#compare-view .compare-controls-bar {
-    height: 32px;
-    min-height: 32px;
-    max-height: 32px;
-    margin: 0 !important;
-    padding: 5px 12px !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    border-top: 2px solid rgba(0, 212, 255, 0.4);
-    background: linear-gradient(180deg, rgba(5, 10, 20, 0.9), rgba(10, 15, 25, 0.95));
-    flex-shrink: 0;
-    position: relative;
-    z-index: 5;
-}
-
-/* Use the same button styling as Stats page */
-#compare-view .compare-controls-bar .c-menu-toggle-btn {
-    padding: 4px 10px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 1px;
-    background: rgba(0, 212, 255, 0.1);
-    border: 1px solid rgba(0, 212, 255, 0.4);
-    border-radius: 4px;
-    color: var(--c-cyan);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-}
-
-#compare-view .compare-controls-bar .c-menu-toggle-btn:hover {
-    background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(0, 212, 255, 0.15));
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
-    transform: translateY(-1px);
-}
-
-/* Disabled placeholder buttons styling */
-#compare-view .compare-controls-bar .c-comments-btn,
-#compare-view .compare-controls-bar .c-details-btn {
-    padding: 4px 10px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.7rem;
-    letter-spacing: 1px;
-    border-radius: 4px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    cursor: not-allowed;
-}
-
-#compare-view .compare-controls-bar .c-comments-btn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: rgba(255, 255, 255, 0.4);
-}
-
-#compare-view .compare-controls-bar .c-details-btn {
-    background: rgba(0, 212, 255, 0.05);
-    border: 1px solid rgba(0, 212, 255, 0.2);
-    color: rgba(0, 212, 255, 0.4);
-}
-
-#compare-view .compare-controls-bar .info-separator {
-    color: rgba(255, 255, 255, 0.2);
-    font-size: 1rem;
-}
 
 /* ==========================
    FIGHTER SECTION (CARD)
