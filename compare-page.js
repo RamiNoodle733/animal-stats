@@ -165,13 +165,15 @@
                 bottomInfo.id = `c-bottom-info-${num}`;
                 bottomInfo.innerHTML = `
                     <div class="c-quick-info">
-                        <div class="quick-info-item" id="c-weight-${num}">
+                        <div class="quick-info-item clickable" id="c-weight-${num}" title="Click to switch kg/lbs">
                             <i class="fas fa-weight-hanging"></i>
                             <span>--</span>
+                            <i class="fas fa-sync-alt toggle-icon"></i>
                         </div>
-                        <div class="quick-info-item" id="c-speed-${num}">
+                        <div class="quick-info-item clickable" id="c-speed-${num}" title="Click to switch km/h / mph">
                             <i class="fas fa-tachometer-alt"></i>
                             <span>--</span>
+                            <i class="fas fa-sync-alt toggle-icon"></i>
                         </div>
                         <div class="quick-info-item" id="c-bite-${num}">
                             <i class="fas fa-tooth"></i>
