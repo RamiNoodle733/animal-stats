@@ -279,6 +279,13 @@
             } else {
                 fightCenter.appendChild(statsCompact);
             }
+            
+            // Add FIGHT button after stat bars
+            const fightBtn = document.createElement('button');
+            fightBtn.className = 'fight-btn c-fight-btn';
+            fightBtn.id = 'fight-btn';
+            fightBtn.innerHTML = '<i class="fas fa-bolt"></i> FIGHT <i class="fas fa-bolt"></i>';
+            fightCenter.appendChild(fightBtn);
         },
 
         /**
