@@ -1239,17 +1239,22 @@ class AnimalStatsApp {
         this.dom.navBtns.rankings?.classList.toggle('active', viewName === 'rankings');
         this.dom.navBtns.community?.classList.toggle('active', viewName === 'community');
 
-        // Grid visibility logic
+        // Grid visibility logic - preserve user's hidden/shown preference across stats/compare
         if (viewName === 'compare') {
-            this.dom.gridWrapper.classList.remove('hidden');
+            // Show compare toggle, hide stats toggle
             this.dom.toggleGridBtn.style.display = 'none';
+            
+            // Apply current grid visibility state (preserved from previous view)
+            this.dom.gridWrapper.classList.toggle('hidden', !this.state.isGridVisible);
             
             // Reset selection state if entering compare mode
             if (!this.state.compare.selectingSide) {
                 if (!this.state.compare.left) this.setSelectingSide('left');
             }
+            
+            this.renderGrid();
         } else if (viewName === 'rankings') {
-            // Hide grid in rankings view
+            // Hide grid in rankings view (always hidden)
             this.dom.gridWrapper.classList.add('hidden');
             this.dom.toggleGridBtn.style.display = 'none';
             
@@ -1258,7 +1263,7 @@ class AnimalStatsApp {
                 this.rankingsManager.fetchRankings();
             }
         } else if (viewName === 'community') {
-            // Hide grid in community view
+            // Hide grid in community view (always hidden)
             this.dom.gridWrapper.classList.add('hidden');
             this.dom.toggleGridBtn.style.display = 'none';
             
@@ -1267,23 +1272,27 @@ class AnimalStatsApp {
                 this.communityManager.onViewEnter();
             }
         } else {
+            // Stats view - show stats toggle, hide compare toggle
             this.dom.toggleGridBtn.style.display = 'flex';
-            this.dom.gridWrapper.classList.remove('hidden');
-        }
-
-        // Ensure grid state is synced for stats/compare views only
-        if (viewName !== 'rankings' && viewName !== 'community') {
-            this.state.isGridVisible = true;
-            this.dom.gridWrapper.classList.remove('hidden');
             
-            // Update buttons text
+            // Apply current grid visibility state (preserved from previous view)
+            this.dom.gridWrapper.classList.toggle('hidden', !this.state.isGridVisible);
+            
+            this.renderGrid();
+        }
+        
+        // Update button text to match current state (for stats/compare only)
+        if (viewName === 'stats' || viewName === 'compare') {
             const updateBtn = (btn) => {
-                if (btn) btn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE MENU';
+                if (!btn) return;
+                if (this.state.isGridVisible) {
+                    btn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE MENU';
+                } else {
+                    btn.innerHTML = '<i class="fas fa-chevron-up"></i> SHOW MENU';
+                }
             };
             updateBtn(this.dom.toggleGridBtn);
             updateBtn(this.dom.compareToggleGridBtn);
-
-            this.renderGrid();
         }
     }
 
