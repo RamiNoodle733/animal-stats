@@ -1246,6 +1246,10 @@ class AnimalStatsApp {
 
         // Grid visibility logic - preserve user's hidden/shown preference across stats/compare
         if (viewName === 'compare') {
+            // Show bottom bar for Compare view
+            if (this.dom.toggleGridBtn) this.dom.toggleGridBtn.style.display = 'flex';
+            if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'flex';
+            
             // Apply current grid visibility state (preserved from previous view)
             this.dom.gridWrapper.classList.toggle('hidden', !this.state.isGridVisible);
             
