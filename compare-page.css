@@ -73,7 +73,8 @@
     padding: clamp(8px, 1.2vh, 14px) clamp(12px, 2vw, 24px);
     align-items: stretch;
     min-height: 0;
-    overflow: visible;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 /* ==========================
@@ -197,16 +198,16 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    padding: clamp(8px, 1.5vh, 16px);
+    padding: clamp(4px, 1vh, 12px);
     background: transparent;
     overflow: visible; /* Allow image to pop out */
     z-index: 1;
 }
 
 #compare-view .fighter-display {
-    /* Larger responsive sizing for trading card effect */
-    width: clamp(120px, 18vw, 200px);
-    height: clamp(120px, 18vw, 200px);
+    /* Responsive sizing for trading card effect */
+    width: clamp(100px, 15vw, 180px);
+    height: clamp(100px, 15vw, 180px);
     display: flex;
     align-items: center;
     justify-content: center;
