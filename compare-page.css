@@ -306,17 +306,19 @@
 }
 
 /* ==========================
-   BOTTOM INFO SECTION - Compact mode for Compare
+   BOTTOM INFO SECTION - Scrollable to fit all content
    ========================== */
 #compare-view .c-bottom-info {
-    flex: 0 0 auto;
+    flex: 1 1 0;
+    min-height: 0;
     padding: clamp(4px, 0.5vh, 6px) clamp(6px, 0.8vw, 10px);
     background: rgba(0,0,0,0.2);
     border-top: 1px solid var(--c-glass-border);
     display: flex;
     flex-direction: column;
     gap: clamp(3px, 0.4vh, 5px);
-    overflow: hidden;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 /* Scrollbar styling for bottom-info */
@@ -339,8 +341,8 @@
     justify-content: center;
     flex-wrap: wrap;
     gap: 0.3rem;
-    padding-bottom: 0;
-    border-bottom: none;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--c-glass-border);
 }
 
 /* Match Stats page quick-info-item styling exactly */
@@ -399,14 +401,18 @@
     font-size: 0.9rem;
 }
 
-/* Tags Section - Hidden on Compare for cleaner layout */
+/* Tags Section */
 #compare-view .c-tags {
-    display: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
 }
 
 #compare-view .c-abilities-section,
 #compare-view .c-traits-section {
-    display: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
 }
 
 #compare-view .abilities-label,
@@ -457,9 +463,11 @@
     border: 1px solid rgba(153,102,255,0.3);
 }
 
-/* Tournament Dashboard - Hidden on Compare for cleaner layout */
+/* Tournament Dashboard */
 #compare-view .c-tournament-dashboard {
-    display: none;
+    background: rgba(0,0,0,0.2);
+    border-radius: 6px;
+    padding: 0.3rem;
 }
 
 #compare-view .dashboard-header {
