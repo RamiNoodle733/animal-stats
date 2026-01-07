@@ -938,21 +938,6 @@ body {
 .expand-details-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    position: relative;
-}
-
-.expand-details-btn:disabled:hover::after {
-    content: '×';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 2rem;
-    color: rgba(255, 50, 50, 0.9);
-    font-weight: bold;
-    pointer-events: none;
-    z-index: 10;
-    text-shadow: 0 0 8px rgba(255, 0, 0, 0.8);
 }
 
 .expand-details-btn:not(:disabled):hover {
@@ -990,21 +975,6 @@ body {
 .stats-comments-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    position: relative;
-}
-
-.stats-comments-btn:disabled:hover::after {
-    content: '×';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 2rem;
-    color: rgba(255, 50, 50, 0.9);
-    font-weight: bold;
-    pointer-events: none;
-    z-index: 10;
-    text-shadow: 0 0 8px rgba(255, 0, 0, 0.8);
 }
 
 .stats-comments-btn:not(:disabled):hover {

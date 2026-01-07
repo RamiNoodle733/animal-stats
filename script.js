@@ -1290,11 +1290,12 @@ class AnimalStatsApp {
         if (viewName === 'stats' || viewName === 'compare') {
             this.updateGridVisibility();
             
-            // Disable "More Details" button on Compare page (not yet implemented)
+            // Disable Comments and More Details buttons on Compare page (not yet implemented)
+            const isCompare = (viewName === 'compare');
             const expandDetailsBtn = document.getElementById('expand-details-btn');
-            if (expandDetailsBtn) {
-                expandDetailsBtn.disabled = (viewName === 'compare');
-            }
+            const statsCommentsBtn = document.getElementById('stats-comments-btn');
+            if (expandDetailsBtn) expandDetailsBtn.disabled = isCompare;
+            if (statsCommentsBtn) statsCommentsBtn.disabled = isCompare;
         }
     }
 
