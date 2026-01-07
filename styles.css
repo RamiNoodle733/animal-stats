@@ -853,8 +853,12 @@ body {
     font-style: italic;
 }
 
+/* ========================================
+   SHARED BOTTOM ACTION BAR
+   Now positioned outside view containers for consistent behavior
+   ======================================== */
 .bottom-info-bar {
-    background: linear-gradient(180deg, rgba(5, 10, 20, 0.9), rgba(10, 15, 25, 0.95));
+    background: linear-gradient(180deg, rgba(5, 10, 20, 0.95), rgba(10, 15, 25, 0.98));
     padding: 5px 12px;
     display: flex;
     align-items: center;
@@ -865,13 +869,13 @@ body {
     color: var(--text-light);
     flex-wrap: nowrap;
     position: relative;
-    z-index: 5;
+    z-index: 25; /* Above carousel (z-index: 20) */
     overflow: hidden;
     white-space: nowrap;
     min-height: 32px;
     max-height: 32px;
     border-top: 2px solid rgba(0, 212, 255, 0.4);
-    box-shadow: none;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
 }
 
 /* Keep buttons centered when toggle-grid-btn is hidden */

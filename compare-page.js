@@ -35,37 +35,9 @@
             this.injectIntroOverlay();
             this.injectResultOverlay();
             this.setupTournamentLayout();
-            this.setupMenuToggle();
             this.setupEventListeners();
             
             console.log('[Compare] Tournament-style enhancements initialized');
-        },
-
-        /**
-         * Setup the menu toggle controller - button uses same class as Stats page
-         * The click handler is already attached by script.js via compareToggleGridBtn
-         * This just ensures the button text is synced when Compare view loads
-         */
-        setupMenuToggle() {
-            const toggleBtn = document.getElementById('c-menu-toggle-btn');
-            if (!toggleBtn) return;
-            
-            // Sync button text with current grid state (handled by script.js toggleGrid)
-            this.updateToggleBtnText(toggleBtn);
-        },
-
-        /**
-         * Update toggle button text based on app's grid visibility state
-         * Uses same text format as Stats page toggle-grid-btn
-         */
-        updateToggleBtnText(toggleBtn) {
-            if (!toggleBtn || !window.app) return;
-            const isVisible = window.app.state.isGridVisible;
-            if (isVisible) {
-                toggleBtn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE MENU';
-            } else {
-                toggleBtn.innerHTML = '<i class="fas fa-chevron-up"></i> SHOW MENU';
-            }
         },
 
         /**

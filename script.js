@@ -207,8 +207,8 @@ class AnimalStatsApp {
             // Community View
             communityView: document.getElementById('community-view'),
             
-            // New Compare Controls
-            compareToggleGridBtn: document.getElementById('c-menu-toggle-btn')
+            // Shared bottom bar (now outside view containers)
+            sharedBottomBar: document.getElementById('shared-bottom-bar')
         };
 
         // Rankings Manager
@@ -438,11 +438,16 @@ class AnimalStatsApp {
         if (this.dom.expandDetailsBtn) {
             this.dom.expandDetailsBtn.addEventListener('click', this.toggleDetails);
         }
+        // Shared toggle button for grid (works for both Stats and Compare views)
         if (this.dom.toggleGridBtn) {
             this.dom.toggleGridBtn.addEventListener('click', this.toggleGrid);
         }
-        if (this.dom.compareToggleGridBtn) {
-            this.dom.compareToggleGridBtn.addEventListener('click', this.toggleGrid);
+        
+        // Load saved grid visibility state from localStorage
+        const savedGridVisible = localStorage.getItem('isGridVisible');
+        if (savedGridVisible !== null) {
+            this.state.isGridVisible = savedGridVisible === 'true';
+            this.updateGridVisibility();
         }
         
         // Weight unit toggle
@@ -1254,26 +1259,29 @@ class AnimalStatsApp {
             
             this.renderGrid();
         } else if (viewName === 'rankings') {
-            // Hide grid in rankings view (always hidden)
+            // Hide grid and bottom bar in rankings view (always hidden)
             this.dom.gridWrapper.classList.add('hidden');
-            this.dom.toggleGridBtn.style.display = 'none';
+            if (this.dom.toggleGridBtn) this.dom.toggleGridBtn.style.display = 'none';
+            if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'none';
             
             // Fetch rankings when entering rankings view
             if (this.rankingsManager) {
                 this.rankingsManager.fetchRankings();
             }
         } else if (viewName === 'community') {
-            // Hide grid in community view (always hidden)
+            // Hide grid and bottom bar in community view (always hidden)
             this.dom.gridWrapper.classList.add('hidden');
-            this.dom.toggleGridBtn.style.display = 'none';
+            if (this.dom.toggleGridBtn) this.dom.toggleGridBtn.style.display = 'none';
+            if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'none';
             
             // Load community content when entering
             if (this.communityManager) {
                 this.communityManager.onViewEnter();
             }
         } else {
-            // Stats view - show stats toggle, hide compare toggle
-            this.dom.toggleGridBtn.style.display = 'flex';
+            // Stats or Compare view - show bottom bar
+            if (this.dom.toggleGridBtn) this.dom.toggleGridBtn.style.display = 'flex';
+            if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'flex';
             
             // Apply current grid visibility state (preserved from previous view)
             this.dom.gridWrapper.classList.toggle('hidden', !this.state.isGridVisible);
@@ -1283,16 +1291,7 @@ class AnimalStatsApp {
         
         // Update button text to match current state (for stats/compare only)
         if (viewName === 'stats' || viewName === 'compare') {
-            const updateBtn = (btn) => {
-                if (!btn) return;
-                if (this.state.isGridVisible) {
-                    btn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE MENU';
-                } else {
-                    btn.innerHTML = '<i class="fas fa-chevron-up"></i> SHOW MENU';
-                }
-            };
-            updateBtn(this.dom.toggleGridBtn);
-            updateBtn(this.dom.compareToggleGridBtn);
+            this.updateGridVisibility();
         }
     }
 
@@ -1703,20 +1702,27 @@ class AnimalStatsApp {
      */
     toggleGrid() {
         this.state.isGridVisible = !this.state.isGridVisible;
+        
+        // Persist state to localStorage
+        localStorage.setItem('isGridVisible', this.state.isGridVisible);
+        
+        this.updateGridVisibility();
+    }
+    
+    /**
+     * Update grid visibility based on current state
+     */
+    updateGridVisibility() {
         this.dom.gridWrapper.classList.toggle('hidden', !this.state.isGridVisible);
         
         // Update button text
-        const updateBtn = (btn) => {
-            if (!btn) return;
+        if (this.dom.toggleGridBtn) {
             if (this.state.isGridVisible) {
-                btn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE MENU';
+                this.dom.toggleGridBtn.innerHTML = '<i class="fas fa-chevron-down"></i> HIDE MENU';
             } else {
-                btn.innerHTML = '<i class="fas fa-chevron-up"></i> SHOW MENU';
+                this.dom.toggleGridBtn.innerHTML = '<i class="fas fa-chevron-up"></i> SHOW MENU';
             }
-        };
-
-        updateBtn(this.dom.toggleGridBtn);
-        updateBtn(this.dom.compareToggleGridBtn);
+        }
     }
 
     /**
