@@ -55,6 +55,8 @@
     flex: 1;
     min-height: 0;
     overflow: hidden;
+    /* Ensure the view fills all available space so bottom-info-bar goes to the bottom */
+    height: 100%;
 }
 
 /* Grid container height is controlled by the shared .hidden class from script.js toggleGrid() */
@@ -64,7 +66,7 @@
    MATCHUP ZONE (Main fight area)
    ========================== */
 #compare-view .fight-screen {
-    flex: 1;
+    flex: 1 1 auto;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     gap: clamp(8px, 1.2vw, 16px);

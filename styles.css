@@ -168,7 +168,7 @@ body {
 
 .view-container {
     display: none;
-    flex: 1;
+    flex: 1 1 auto;
     min-height: 0;
     overflow: hidden; /* No scrolling in main container */
 }
@@ -177,6 +177,7 @@ body {
     display: flex;
     flex-direction: column;
     position: relative;
+    flex: 1 1 auto;
 }
 
 .character-display-area {
@@ -869,7 +870,7 @@ body {
     white-space: nowrap;
     min-height: 32px;
     max-height: 32px;
-    border-top: none;
+    border-top: 2px solid rgba(0, 212, 255, 0.4);
     box-shadow: none;
 }
 
