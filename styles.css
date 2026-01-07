@@ -935,7 +935,12 @@ body {
     min-width: 110px;
 }
 
-.expand-details-btn:hover {
+.expand-details-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.expand-details-btn:not(:disabled):hover {
     background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(0, 212, 255, 0.15));
     box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
     transform: translateY(-2px);

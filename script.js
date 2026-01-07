@@ -1246,9 +1246,6 @@ class AnimalStatsApp {
 
         // Grid visibility logic - preserve user's hidden/shown preference across stats/compare
         if (viewName === 'compare') {
-            // Show compare toggle, hide stats toggle
-            this.dom.toggleGridBtn.style.display = 'none';
-            
             // Apply current grid visibility state (preserved from previous view)
             this.dom.gridWrapper.classList.toggle('hidden', !this.state.isGridVisible);
             
@@ -1292,6 +1289,12 @@ class AnimalStatsApp {
         // Update button text to match current state (for stats/compare only)
         if (viewName === 'stats' || viewName === 'compare') {
             this.updateGridVisibility();
+            
+            // Disable "More Details" button on Compare page (not yet implemented)
+            const expandDetailsBtn = document.getElementById('expand-details-btn');
+            if (expandDetailsBtn) {
+                expandDetailsBtn.disabled = (viewName === 'compare');
+            }
         }
     }
 
