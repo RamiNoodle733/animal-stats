@@ -135,9 +135,10 @@
     flex: 1 1 auto;
     display: grid;
     /* Fixed proportional columns: fighter cards are equal, center is fixed responsive */
-    grid-template-columns: minmax(280px, 1fr) clamp(220px, 20vw, 320px) minmax(280px, 1fr);
-    gap: clamp(10px, 1.5vw, 20px);
-    padding: clamp(8px, 1.2vh, 14px) clamp(16px, 2.5vw, 32px);
+    grid-template-columns: minmax(300px, 1fr) clamp(220px, 18vw, 300px) minmax(300px, 1fr);
+    grid-template-rows: 1fr;  /* Single row fills available height */
+    gap: clamp(12px, 1.5vw, 20px);
+    padding: clamp(10px, 1.5vh, 16px) clamp(20px, 3vw, 40px);
     align-items: stretch;
     justify-items: stretch;
     min-height: 0;
@@ -159,7 +160,7 @@
     border-radius: 12px;
     border: 1px solid var(--c-glass-border);
     padding: 0;
-    overflow: hidden;
+    overflow: visible;        /* Allow content to be visible */
     position: relative;
     min-height: 0;
     width: 100%;              /* Fill grid cell width */
@@ -280,19 +281,18 @@
 }
 
 /* ==========================
-   HERO SECTION (ANIMAL IMAGE) - Fills available space, contains image
+   HERO SECTION (ANIMAL IMAGE) - Fixed size, contains image
    ========================== */
 #compare-view .c-hero-section {
-    flex: 1 1 auto;
+    flex: 0 0 auto;           /* Fixed size, don't grow */
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
-    padding: clamp(10px, 1.5vh, 16px);
+    padding: clamp(8px, 1vh, 14px);
     background: transparent;
     overflow: hidden;         /* Contain image within bounds */
     z-index: 1;
-    min-height: 80px;         /* Minimum height to prevent collapse */
 }
 
 #compare-view .fighter-display {
@@ -397,42 +397,40 @@
 }
 
 /* ==========================
-   BOTTOM INFO SECTION - Interactive design
+   BOTTOM INFO SECTION - Fills remaining space, scrolls if needed
    ========================== */
 #compare-view .c-bottom-info {
-    flex: 0 0 auto;
-    padding: clamp(6px, 0.8vh, 10px) clamp(8px, 1vw, 12px);
+    flex: 1 1 auto;           /* Expand to fill remaining space */
+    padding: clamp(8px, 1vh, 12px) clamp(10px, 1.2vw, 14px);
     background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.4) 100%);
     border-top: 1px solid var(--c-glass-border);
     display: flex;
     flex-direction: column;
-    gap: clamp(4px, 0.5vh, 6px);
-    overflow: hidden;
+    gap: clamp(6px, 0.8vh, 10px);
+    overflow-y: auto;         /* Scroll if content exceeds */
+    overflow-x: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
+    min-height: 0;            /* Allow shrinking for flex */
 }
 
-/* Expand indicator - subtle hint */
-#compare-view .c-bottom-info::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 30px;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--c-cyan), transparent);
-    opacity: 0.5;
-    transition: all 0.3s ease;
-}
-
-#compare-view .fighter-right .c-bottom-info::after {
-    background: linear-gradient(90deg, transparent, var(--c-orange), transparent);
-}
-
-/* No scrollbar styling needed */
+/* Custom scrollbar for bottom info */
 #compare-view .c-bottom-info::-webkit-scrollbar {
-    display: none;
+    width: 4px;
+}
+
+#compare-view .c-bottom-info::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2px;
+}
+
+#compare-view .c-bottom-info::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+}
+
+#compare-view .c-bottom-info::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
 }
 
 /* Quick Info - Horizontal pills */
