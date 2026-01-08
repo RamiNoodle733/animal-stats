@@ -47,6 +47,76 @@
 }
 
 /* ==========================
+   ENTRANCE ANIMATIONS
+   ========================== */
+@keyframes c-slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes c-slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes c-fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes c-scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes c-shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+}
+
+@keyframes c-pulseGlow {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(0, 212, 255, 0.5), 0 0 30px rgba(0, 212, 255, 0.2);
+    }
+}
+
+@keyframes c-pulseGlowOrange {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(255, 107, 0, 0.3);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(255, 107, 0, 0.5), 0 0 30px rgba(255, 107, 0, 0.2);
+    }
+}
+
+/* ==========================
    VIEWPORT SHELL - Flex-based containment
    ========================== */
 #compare-view.active-view {
@@ -55,12 +125,8 @@
     flex: 1;
     min-height: 0;
     overflow: hidden;
-    /* Ensure the view fills all available space so bottom-info-bar goes to the bottom */
     height: 100%;
 }
-
-/* Grid container height is controlled by the shared .hidden class from script.js toggleGrid() */
-/* No custom height overrides needed - reuse the Stats page mechanism */
 
 /* ==========================
    MATCHUP ZONE (Main fight area)
@@ -69,8 +135,8 @@
     flex: 1 1 auto;
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    gap: clamp(8px, 1.2vw, 16px);
-    padding: clamp(6px, 1vh, 12px) clamp(12px, 2vw, 24px);
+    gap: clamp(6px, 1vw, 12px);
+    padding: clamp(4px, 0.8vh, 8px) clamp(8px, 1.5vw, 16px);
     align-items: stretch;
     min-height: 0;
     overflow: hidden;
@@ -82,7 +148,7 @@
    ========================== */
 
 /* ==========================
-   FIGHTER SECTION (CARD)
+   FIGHTER SECTION (CARD) - Interactive hover-expand design
    ========================== */
 #compare-view .fighter-section {
     display: flex;
@@ -96,6 +162,29 @@
     min-height: 0;
     min-width: 0;
     max-height: 100%;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Entrance animations for fighter cards */
+#compare-view .fighter-section.fighter-left {
+    border-left: 3px solid var(--c-cyan);
+    animation: c-slideInLeft 0.5s ease-out;
+}
+
+#compare-view .fighter-section.fighter-right {
+    border-right: 3px solid var(--c-orange);
+    animation: c-slideInRight 0.5s ease-out;
+}
+
+/* Subtle glow effect on hover */
+#compare-view .fighter-section.fighter-left:hover {
+    box-shadow: 0 0 25px rgba(0, 212, 255, 0.2);
+    border-color: rgba(0, 212, 255, 0.6);
+}
+
+#compare-view .fighter-section.fighter-right:hover {
+    box-shadow: 0 0 25px rgba(255, 107, 0, 0.2);
+    border-color: rgba(255, 107, 0, 0.6);
 }
 
 /* Hide old elements that are kept for script.js DOM references */
@@ -104,33 +193,32 @@
     display: none !important;
 }
 
-#compare-view .fighter-section.fighter-left {
-    border-left: 3px solid var(--c-cyan);
-}
-
-#compare-view .fighter-section.fighter-right {
-    border-right: 3px solid var(--c-orange);
-}
-
 /* ==========================
-   IDENTITY TOP SECTION
+   IDENTITY TOP SECTION - Ultra compact
    ========================== */
 #compare-view .c-identity-top {
-    padding: clamp(4px, 0.6vh, 8px) clamp(6px, 1vw, 12px);
+    padding: clamp(3px, 0.4vh, 6px) clamp(4px, 0.8vw, 8px);
     text-align: center;
-    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 100%);
+    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, transparent 100%);
     border-bottom: 1px solid var(--c-glass-border);
     flex-shrink: 0;
 }
 
 #compare-view .c-fighter-name {
-    font-size: clamp(0.75rem, 1.3vh, 1rem);
+    font-size: clamp(0.7rem, 1.2vh, 0.95rem);
     font-weight: 800;
     color: var(--c-text-primary);
-    margin: 0 0 1px 0;
+    margin: 0;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#compare-view .c-scientific {
+    display: none; /* Hidden to save space - name is enough */
 }
 
 #compare-view .fighter-left .c-fighter-name {
@@ -141,47 +229,42 @@
     color: var(--c-orange);
 }
 
-#compare-view .c-scientific {
-    font-size: clamp(0.55rem, 1vh, 0.7rem);
-    color: var(--c-text-muted);
-    font-style: italic;
-    display: block;
-    margin-bottom: 0.3rem;
-}
-
-/* Battle Record Badge */
+/* Battle Record Badge - Inline compact */
 #compare-view .c-record-badge {
     display: flex;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.4rem;
     background: rgba(0,0,0,0.3);
-    border-radius: 6px;
-    padding: clamp(0.2rem, 0.5vh, 0.4rem) 0.4rem;
+    border-radius: 4px;
+    padding: clamp(2px, 0.3vh, 4px) 0.3rem;
+    margin-top: 2px;
 }
 
 #compare-view .c-record-badge .record-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.1rem;
+    gap: 0;
 }
 
 #compare-view .c-record-badge .record-item i {
-    font-size: 0.65rem;
+    font-size: 0.5rem;
     color: var(--c-gold);
 }
 
 #compare-view .c-record-badge .record-value {
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     font-weight: 700;
     color: var(--c-text-primary);
+    line-height: 1;
 }
 
 #compare-view .c-record-badge .record-label {
-    font-size: 0.55rem;
+    font-size: 0.45rem;
     color: var(--c-text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.02em;
+    line-height: 1;
 }
 
 #compare-view .c-record-badge .record-divider {
@@ -190,7 +273,7 @@
 }
 
 /* ==========================
-   HERO SECTION (ANIMAL IMAGE) - Trading card overflow effect
+   HERO SECTION (ANIMAL IMAGE) - Flexible sizing
    ========================== */
 #compare-view .c-hero-section {
     flex: 1 1 auto;
@@ -198,7 +281,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    padding: clamp(4px, 0.8vh, 8px);
+    padding: clamp(2px, 0.4vh, 6px);
     background: transparent;
     overflow: visible;
     z-index: 1;
@@ -206,68 +289,67 @@
 }
 
 #compare-view .fighter-display {
-    /* Compact sizing - uses percentage of available space */
-    width: clamp(80px, 12vw, 150px);
-    height: clamp(80px, 12vw, 150px);
+    /* Responsive sizing based on viewport */
+    width: clamp(70px, 10vw, 130px);
+    height: clamp(70px, 10vw, 130px);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     cursor: pointer;
-    border-radius: 12px;
-    overflow: visible; /* Allow image to extend outside */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    overflow: visible;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     background: linear-gradient(145deg, rgba(0,20,40,0.6), rgba(0,10,20,0.8));
     border: 2px solid var(--c-glass-border);
     box-shadow: 
-        inset 0 0 20px rgba(0,0,0,0.5),
-        0 4px 20px rgba(0,0,0,0.3);
+        inset 0 0 15px rgba(0,0,0,0.5),
+        0 4px 15px rgba(0,0,0,0.3);
 }
 
 #compare-view .fighter-left .fighter-display {
     border-color: rgba(0, 212, 255, 0.4);
     box-shadow: 
-        inset 0 0 20px rgba(0,0,0,0.5),
-        0 4px 20px rgba(0, 212, 255, 0.15);
+        inset 0 0 15px rgba(0,0,0,0.5),
+        0 4px 15px rgba(0, 212, 255, 0.15);
 }
 
 #compare-view .fighter-right .fighter-display {
     border-color: rgba(255, 107, 0, 0.4);
     box-shadow: 
-        inset 0 0 20px rgba(0,0,0,0.5),
-        0 4px 20px rgba(255, 107, 0, 0.15);
+        inset 0 0 15px rgba(0,0,0,0.5),
+        0 4px 15px rgba(255, 107, 0, 0.15);
 }
 
 #compare-view .fighter-display:hover {
-    transform: scale(1.02);
+    transform: scale(1.05);
 }
 
 #compare-view .fighter-left .fighter-display:hover {
     box-shadow: 
-        inset 0 0 20px rgba(0,0,0,0.5),
-        0 8px 30px rgba(0, 212, 255, 0.3);
+        inset 0 0 15px rgba(0,0,0,0.5),
+        0 8px 25px rgba(0, 212, 255, 0.3);
 }
 
 #compare-view .fighter-right .fighter-display:hover {
     box-shadow: 
-        inset 0 0 20px rgba(0,0,0,0.5),
-        0 8px 30px rgba(255, 107, 0, 0.3);
+        inset 0 0 15px rgba(0,0,0,0.5),
+        0 8px 25px rgba(255, 107, 0, 0.3);
 }
 
-/* Animal image - enlarged with overflow effect */
+/* Animal image */
 #compare-view .fighter-image {
-    /* Allow image to be larger than container for trading card pop effect */
-    max-width: 130%;
-    max-height: 130%;
+    max-width: 120%;
+    max-height: 120%;
     object-fit: contain;
-    filter: drop-shadow(0 8px 25px rgba(0,0,0,0.6));
+    filter: drop-shadow(0 6px 20px rgba(0,0,0,0.6));
     transition: transform 0.3s ease;
     position: relative;
     z-index: 2;
 }
 
 #compare-view .fighter-display:hover .fighter-image {
-    transform: scale(1.08);
+    transform: scale(1.1);
 }
 
 #compare-view .fighter-placeholder {
@@ -306,207 +388,226 @@
 }
 
 /* ==========================
-   BOTTOM INFO SECTION - Scrollable to fit all content
+   BOTTOM INFO SECTION - Hover-to-expand interactive design
    ========================== */
 #compare-view .c-bottom-info {
-    flex: 1 1 0;
-    min-height: 0;
-    padding: clamp(4px, 0.5vh, 6px) clamp(6px, 0.8vw, 10px);
-    background: rgba(0,0,0,0.2);
+    flex: 0 0 auto;
+    padding: clamp(3px, 0.4vh, 5px) clamp(4px, 0.6vw, 8px);
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.4) 100%);
     border-top: 1px solid var(--c-glass-border);
     display: flex;
     flex-direction: column;
-    gap: clamp(3px, 0.4vh, 5px);
-    overflow-y: auto;
-    overflow-x: hidden;
+    gap: clamp(2px, 0.3vh, 4px);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
 }
 
-/* Scrollbar styling for bottom-info */
+/* Expand indicator - subtle hint */
+#compare-view .c-bottom-info::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--c-cyan), transparent);
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+#compare-view .fighter-right .c-bottom-info::after {
+    background: linear-gradient(90deg, transparent, var(--c-orange), transparent);
+}
+
+/* No scrollbar styling needed */
 #compare-view .c-bottom-info::-webkit-scrollbar {
-    width: 4px;
+    display: none;
 }
 
-#compare-view .c-bottom-info::-webkit-scrollbar-track {
-    background: rgba(0,0,0,0.2);
-}
-
-#compare-view .c-bottom-info::-webkit-scrollbar-thumb {
-    background: var(--c-glass-border);
-    border-radius: 2px;
-}
-
-/* Quick Info - compact for Compare */
+/* Quick Info - Horizontal compact pills */
 #compare-view .c-quick-info {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 0.3rem;
-    padding-bottom: 0.3rem;
-    border-bottom: 1px solid var(--c-glass-border);
+    flex-wrap: nowrap;
+    gap: 0.25rem;
+    padding-bottom: 0;
+    border-bottom: none;
 }
 
-/* Match Stats page quick-info-item styling exactly */
+/* Quick info items - Ultra compact pills */
 #compare-view .quick-info-item {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
-    font-size: 0.65rem;
-    color: rgba(255, 255, 255, 0.85);
+    gap: 3px;
+    font-size: 0.55rem;
+    color: rgba(255, 255, 255, 0.9);
     font-weight: 600;
-    padding: 2px 6px;
-    background: rgba(0, 20, 40, 0.8);
-    border: 1px solid rgba(0, 212, 255, 0.2);
-    border-radius: 4px;
+    padding: 2px 5px;
+    background: rgba(0, 20, 40, 0.9);
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    border-radius: 3px;
     transition: all 0.2s ease;
-    min-width: 65px;
+    min-width: auto;
+    white-space: nowrap;
 }
 
 #compare-view .quick-info-item span {
-    min-width: 40px;
+    min-width: auto;
     text-align: center;
     font-variant-numeric: tabular-nums;
 }
 
-#compare-view .quick-info-item:hover {
-    background: rgba(0, 30, 50, 0.9);
-    border-color: rgba(0, 212, 255, 0.35);
-}
-
-/* Weight and Speed are clickable to toggle units */
-#compare-view .quick-info-item.clickable {
-    cursor: pointer;
-}
-
-#compare-view .quick-info-item.clickable:hover {
-    background: rgba(0, 40, 60, 0.9);
-    border-color: var(--c-cyan);
-    box-shadow: 0 0 8px rgba(0, 212, 255, 0.25);
-}
-
-#compare-view .quick-info-item.clickable .toggle-icon {
-    font-size: 0.55rem;
-    color: rgba(255, 255, 255, 0.4);
-    margin-left: 2px;
-    transition: transform 0.3s ease;
-}
-
-#compare-view .quick-info-item.clickable:hover .toggle-icon {
-    color: var(--c-cyan);
-    transform: rotate(180deg);
-}
-
 #compare-view .quick-info-item i {
     color: var(--c-cyan);
-    font-size: 0.9rem;
+    font-size: 0.6rem;
 }
 
-/* Tags Section */
+#compare-view .quick-info-item .toggle-icon {
+    display: none; /* Hide toggle icon to save space */
+}
+
+#compare-view .quick-info-item:hover {
+    background: rgba(0, 40, 60, 0.9);
+    border-color: var(--c-cyan);
+    transform: translateY(-1px);
+}
+
+/* Tags Section - Compact horizontal layout */
 #compare-view .c-tags {
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
+    gap: 0.2rem;
 }
 
 #compare-view .c-abilities-section,
 #compare-view .c-traits-section {
     display: flex;
     flex-direction: column;
-    gap: 0.15rem;
+    gap: 0.1rem;
 }
 
 #compare-view .abilities-label,
 #compare-view .traits-label {
-    font-size: 0.55rem;
+    font-size: 0.45rem;
     color: var(--c-text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.2rem;
 }
 
 #compare-view .abilities-label i {
     color: var(--c-cyan);
+    font-size: 0.45rem;
 }
 
 #compare-view .traits-label i {
     color: var(--c-purple);
+    font-size: 0.45rem;
 }
 
 #compare-view .abilities-tags-compact,
 #compare-view .traits-tags-compact {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.25rem;
+    gap: 0.15rem;
 }
 
 #compare-view .ability-tag-sm {
-    background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(0,212,255,0.1));
+    background: linear-gradient(135deg, rgba(0,212,255,0.25), rgba(0,212,255,0.1));
     color: var(--c-cyan);
-    padding: 0.15rem 0.4rem;
-    border-radius: 4px;
-    font-size: 0.55rem;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 0.45rem;
     font-weight: 600;
     text-transform: uppercase;
     border: 1px solid rgba(0,212,255,0.3);
+    transition: all 0.2s ease;
+}
+
+#compare-view .ability-tag-sm:hover {
+    background: linear-gradient(135deg, rgba(0,212,255,0.4), rgba(0,212,255,0.2));
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0,212,255,0.3);
 }
 
 #compare-view .trait-tag-sm {
-    background: linear-gradient(135deg, rgba(153,102,255,0.2), rgba(153,102,255,0.1));
+    background: linear-gradient(135deg, rgba(153,102,255,0.25), rgba(153,102,255,0.1));
     color: var(--c-purple);
-    padding: 0.15rem 0.4rem;
-    border-radius: 4px;
-    font-size: 0.55rem;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 0.45rem;
     font-weight: 600;
     text-transform: uppercase;
     border: 1px solid rgba(153,102,255,0.3);
+    transition: all 0.2s ease;
 }
 
-/* Tournament Dashboard */
+#compare-view .trait-tag-sm:hover {
+    background: linear-gradient(135deg, rgba(153,102,255,0.4), rgba(153,102,255,0.2));
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(153,102,255,0.3);
+}
+
+/* Tournament Dashboard - Ultra compact medals */
 #compare-view .c-tournament-dashboard {
-    background: rgba(0,0,0,0.2);
-    border-radius: 6px;
-    padding: 0.3rem;
+    background: rgba(0,0,0,0.25);
+    border-radius: 4px;
+    padding: 0.2rem 0.3rem;
 }
 
 #compare-view .dashboard-header {
-    margin-bottom: 0.3rem;
+    margin-bottom: 0.15rem;
 }
 
 #compare-view .dashboard-title {
-    font-size: 0.55rem;
+    font-size: 0.45rem;
     color: var(--c-text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
     display: flex;
     align-items: center;
-    gap: 0.25rem;
+    gap: 0.2rem;
 }
 
 #compare-view .dashboard-title i {
     color: var(--c-gold);
+    font-size: 0.45rem;
 }
 
 #compare-view .medal-row {
     display: flex;
     justify-content: center;
-    gap: 0.5rem;
+    gap: 0.3rem;
 }
 
 #compare-view .medal-card {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 0.1rem;
-    padding: 0.3rem 0.5rem;
-    border-radius: 6px;
-    background: rgba(0,0,0,0.3);
-    min-width: 40px;
+    gap: 0.15rem;
+    padding: 2px 5px;
+    border-radius: 4px;
+    background: rgba(0,0,0,0.35);
+    min-width: auto;
+    transition: all 0.2s ease;
 }
 
+#compare-view .medal-card:hover {
+    transform: translateY(-1px);
+    background: rgba(0,0,0,0.5);
+}
+
+#compare-view .medal-card.gold:hover { box-shadow: 0 2px 10px rgba(255,215,0,0.3); }
+#compare-view .medal-card.silver:hover { box-shadow: 0 2px 10px rgba(192,192,192,0.3); }
+#compare-view .medal-card.bronze:hover { box-shadow: 0 2px 10px rgba(205,127,50,0.3); }
+
 #compare-view .medal-icon-wrap {
-    font-size: 0.8rem;
+    font-size: 0.6rem;
 }
 
 #compare-view .medal-card.gold .medal-icon-wrap i { color: #ffd700; }
@@ -514,39 +615,38 @@
 #compare-view .medal-card.bronze .medal-icon-wrap i { color: #cd7f32; }
 
 #compare-view .medal-count {
-    font-size: 0.85rem;
+    font-size: 0.65rem;
     font-weight: 700;
     color: var(--c-text-primary);
 }
 
 #compare-view .medal-label {
-    font-size: 0.5rem;
-    color: var(--c-text-muted);
-    text-transform: uppercase;
+    display: none; /* Hide labels to save space */
 }
 
 /* ==========================
-   FIGHT CENTER - Vertical layout with FIGHT button near top
+   FIGHT CENTER - Compact vertical layout with entrance animation
    ========================== */
 #compare-view .fight-center {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: clamp(8px, 1.2vh, 14px) clamp(8px, 1.2vw, 14px);
-    gap: clamp(8px, 1vh, 12px);
-    width: clamp(260px, 28vw, 360px);
+    padding: clamp(6px, 0.8vh, 10px) clamp(6px, 1vw, 12px);
+    gap: clamp(6px, 0.8vh, 10px);
+    width: clamp(240px, 26vw, 340px);
     min-height: 0;
     overflow: hidden;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.15));
-    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.35), rgba(0, 0, 0, 0.2));
+    border-radius: 10px;
     border: 1px solid var(--c-glass-border);
+    animation: c-fadeInUp 0.6s ease-out 0.2s both;
 }
 
-/* Fight button - positioned near top after VS badge */
+/* Fight button - compact but impactful */
 #compare-view .c-fight-btn {
-    padding: clamp(10px, 1.4vh, 14px) clamp(24px, 4vw, 40px);
-    font-size: clamp(1rem, 2vh, 1.3rem);
+    padding: clamp(8px, 1.2vh, 12px) clamp(20px, 3.5vw, 36px);
+    font-size: clamp(0.9rem, 1.8vh, 1.2rem);
     font-weight: 800;
     letter-spacing: 3px;
     text-transform: uppercase;
@@ -583,11 +683,11 @@
     font-size: 0.9em;
 }
 
-/* VS Section */
+/* VS Section - Compact */
 #compare-view .c-vs-section {
     position: relative;
-    width: clamp(32px, 5vh, 48px);
-    height: clamp(32px, 5vh, 48px);
+    width: clamp(28px, 4vh, 40px);
+    height: clamp(28px, 4vh, 40px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -608,7 +708,7 @@
     height: 80%;
     background: linear-gradient(135deg, rgba(255,215,0,0.3), rgba(255,107,0,0.3));
     transform: rotate(45deg);
-    border-radius: 6px;
+    border-radius: 4px;
     animation: c-diamondRotate 8s linear infinite;
 }
 
@@ -616,27 +716,26 @@
     position: relative;
     z-index: 2;
     background: linear-gradient(135deg, var(--c-gold), var(--c-orange));
-    width: clamp(32px, 5vh, 44px);
-    height: clamp(32px, 5vh, 44px);
+    width: clamp(26px, 4vh, 36px);
+    height: clamp(26px, 4vh, 36px);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 
-        0 0 15px rgba(255,215,0,0.5),
+        0 0 12px rgba(255,215,0,0.5),
         inset 0 2px 4px rgba(255,255,255,0.3);
     animation: c-vsFloat 3s ease-in-out infinite;
 }
 
 #compare-view .c-vs-badge span {
-    font-size: clamp(0.75rem, 1.2vh, 1rem);
+    font-size: clamp(0.6rem, 1vh, 0.85rem);
     font-weight: 900;
     color: #1a1a2e;
     text-shadow: 0 1px 2px rgba(255,255,255,0.3);
 }
 
-/* Radar Chart Container - Hidden by default to save vertical space
-   The tournament stat bars provide the same comparison functionality */
+/* Radar Chart Container - Hidden to save space */
 #compare-view .radar-chart-container {
     display: none;
 }
@@ -752,42 +851,42 @@
     text-shadow: 0 0 8px var(--c-green);
 }
 
-/* Override Tournament stat bar styles for Compare view - properly sized */
+/* Override Tournament stat bar styles for Compare view - Ultra compact */
 #compare-view .t-stats-compact {
     width: 100%;
-    padding: clamp(8px, 1vh, 12px) clamp(10px, 1.2vw, 14px);
-    gap: clamp(6px, 0.8vh, 10px);
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 8px;
+    padding: clamp(4px, 0.6vh, 8px) clamp(6px, 0.8vw, 10px);
+    gap: clamp(3px, 0.5vh, 6px);
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 6px;
     border: 1px solid rgba(255, 215, 0, 0.2);
     flex-shrink: 0;
 }
 
 #compare-view .t-stat-row-compact {
-    gap: clamp(6px, 0.8vw, 10px);
+    gap: clamp(4px, 0.6vw, 8px);
 }
 
 #compare-view .t-stat-center-cluster {
-    padding: clamp(4px, 0.5vh, 6px) clamp(8px, 1vw, 12px);
-    min-width: clamp(90px, 14vw, 120px);
-    gap: clamp(6px, 0.8vw, 10px);
+    padding: clamp(2px, 0.3vh, 4px) clamp(6px, 0.8vw, 10px);
+    min-width: clamp(70px, 12vw, 100px);
+    gap: clamp(4px, 0.6vw, 8px);
 }
 
 #compare-view .t-stat-center-cluster .t-val {
-    font-size: clamp(0.85rem, 1.4vh, 1.1rem);
+    font-size: clamp(0.7rem, 1.2vh, 0.95rem);
 }
 
 #compare-view .t-stat-center-cluster .t-stat-icon-label i {
-    font-size: clamp(0.7rem, 1.2vh, 0.9rem);
+    font-size: clamp(0.55rem, 1vh, 0.75rem);
 }
 
 #compare-view .t-stat-abbr {
-    font-size: clamp(0.5rem, 0.75vh, 0.6rem);
+    font-size: clamp(0.4rem, 0.6vh, 0.5rem);
 }
 
 #compare-view .t-stat-bar-left,
 #compare-view .t-stat-bar-right {
-    height: clamp(12px, 1.6vh, 16px);
+    height: clamp(8px, 1.2vh, 12px);
 }
 
 /* ==========================
