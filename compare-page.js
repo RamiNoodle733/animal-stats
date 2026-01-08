@@ -132,7 +132,7 @@
                 const heroSection = document.createElement('div');
                 heroSection.className = 'c-hero-section';
                 
-                // Create bottom info section
+                // Create bottom info section (stats + abilities/traits - NO medals here)
                 const bottomInfo = document.createElement('div');
                 bottomInfo.className = 'c-bottom-info';
                 bottomInfo.id = `c-bottom-info-${num}`;
@@ -163,26 +163,25 @@
                             <div class="traits-tags-compact" id="c-traits-${num}"></div>
                         </div>
                     </div>
-                    <div class="c-tournament-dashboard">
-                        <div class="dashboard-header">
-                            <span class="dashboard-title"><i class="fas fa-trophy"></i> TOURNAMENT</span>
+                `;
+                
+                // Create tournament dashboard separately (sits at bottom row of grid)
+                const tournamentDashboard = document.createElement('div');
+                tournamentDashboard.className = 'c-tournament-dashboard';
+                tournamentDashboard.innerHTML = `
+                    <span class="dashboard-title"><i class="fas fa-trophy"></i> MEDALS</span>
+                    <div class="medal-row">
+                        <div class="medal-card gold">
+                            <div class="medal-icon-wrap"><i class="fas fa-trophy"></i></div>
+                            <span class="medal-count" id="c-gold-${num}">0</span>
                         </div>
-                        <div class="medal-row">
-                            <div class="medal-card gold">
-                                <div class="medal-icon-wrap"><i class="fas fa-trophy"></i></div>
-                                <span class="medal-count" id="c-gold-${num}">0</span>
-                                <span class="medal-label">1ST</span>
-                            </div>
-                            <div class="medal-card silver">
-                                <div class="medal-icon-wrap"><i class="fas fa-medal"></i></div>
-                                <span class="medal-count" id="c-silver-${num}">0</span>
-                                <span class="medal-label">2ND</span>
-                            </div>
-                            <div class="medal-card bronze">
-                                <div class="medal-icon-wrap"><i class="fas fa-medal"></i></div>
-                                <span class="medal-count" id="c-bronze-${num}">0</span>
-                                <span class="medal-label">3RD</span>
-                            </div>
+                        <div class="medal-card silver">
+                            <div class="medal-icon-wrap"><i class="fas fa-medal"></i></div>
+                            <span class="medal-count" id="c-silver-${num}">0</span>
+                        </div>
+                        <div class="medal-card bronze">
+                            <div class="medal-icon-wrap"><i class="fas fa-medal"></i></div>
+                            <span class="medal-count" id="c-bronze-${num}">0</span>
                         </div>
                     </div>
                 `;
@@ -200,8 +199,8 @@
                     }
                 }
                 
-                // Insert new elements into section
-                // We insert AT the beginning, leaving fighter-display and old panel in place
+                // Insert new elements into section in grid order
+                // Grid: identity-top (row 1), hero+bottom-info (row 2), tournament (row 3)
                 section.insertBefore(identityTop, section.firstChild);
                 
                 // Wrap fighter-display in hero section
@@ -210,8 +209,11 @@
                     heroSection.appendChild(fighterDisplay);
                 }
                 
-                // Add bottom info after hero section
+                // Add bottom info next to hero section (row 2, col 2)
                 section.insertBefore(bottomInfo, oldStatsPanel);
+                
+                // Add tournament dashboard at end (row 3, spans both columns)
+                section.appendChild(tournamentDashboard);
             });
             
             // Setup fight center with VS badge and stat bars
