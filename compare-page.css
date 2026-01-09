@@ -117,19 +117,20 @@
 }
 
 /* ==========================
-   VIEWPORT SHELL - Flex-based containment
+   VIEWPORT SHELL - Flex-based containment - fills all space
    ========================== */
 #compare-view.active-view {
     display: flex;
     flex-direction: column;
-    flex: 1;
+    flex: 1 1 0;
     min-height: 0;
     overflow: hidden;
     height: 100%;
+    background: transparent;  /* No blocking background */
 }
 
 /* ==========================
-   MATCHUP ZONE - Premium battle arena layout
+   MATCHUP ZONE - Premium battle arena layout - stretches to fill
    ========================== */
 #compare-view .fight-screen {
     flex: 1 1 0;              /* Fill ALL available vertical space */
@@ -137,12 +138,13 @@
     grid-template-columns: 1fr clamp(220px, 22vw, 340px) 1fr;  /* Wider center */
     grid-template-rows: 1fr;
     gap: clamp(8px, 1vw, 16px);
-    padding: clamp(6px, 0.8vh, 10px) clamp(10px, 1.5vw, 20px) 0 clamp(10px, 1.5vw, 20px); /* NO bottom padding */
+    padding: clamp(6px, 0.8vh, 10px) clamp(10px, 1.5vw, 20px) clamp(6px, 0.8vh, 10px) clamp(10px, 1.5vw, 20px);
     align-items: stretch;
     justify-items: stretch;
     min-height: 0;
-    overflow: hidden;
+    overflow: visible;        /* Allow cards to fully show */
     margin-bottom: 0;
+    background: transparent;  /* No blocking background */
 }
 
 /* ==========================
@@ -214,7 +216,7 @@
 }
 
 /* ==========================
-   IDENTITY TOP SECTION - Mirrored layout (names toward center)
+   IDENTITY TOP SECTION - Names CENTERED on cards
    ========================== */
 #compare-view .c-identity-top {
     grid-column: 1 / -1;      /* Span full width at top */
@@ -225,25 +227,16 @@
     z-index: 5;
     display: flex;
     flex-direction: column;
+    align-items: center;      /* CENTER everything */
+    text-align: center;
     gap: 0.3rem;
-}
-
-/* Left card: align everything to the RIGHT (toward center) */
-#compare-view .fighter-left .c-identity-top {
-    align-items: flex-end;
-    text-align: right;
-}
-
-/* Right card: align everything to the LEFT (toward center) */
-#compare-view .fighter-right .c-identity-top {
-    align-items: flex-start;
-    text-align: left;
 }
 
 /* Name row container */
 #compare-view .c-name-row {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 0.1rem;
 }
 
@@ -452,7 +445,7 @@
 }
 
 /* ==========================
-   BOTTOM INFO SECTION - Stats/abilities/traits (mirrored layout)
+   BOTTOM INFO SECTION - Stats/abilities/traits - CENTERED
    ========================== */
 #compare-view .c-bottom-info {
     grid-row: 2;
@@ -460,6 +453,8 @@
     background: transparent;
     display: flex;
     flex-direction: column;
+    align-items: center;      /* CENTER content */
+    text-align: center;
     gap: clamp(6px, 0.7vh, 10px);
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -468,38 +463,25 @@
     justify-content: space-evenly;
 }
 
-/* LEFT card: Info is in column 1, content aligns RIGHT (toward center) */
+/* LEFT card: Info is in column 1 */
 #compare-view .fighter-left .c-bottom-info {
     grid-column: 1;
     border-right: 1px solid var(--c-glass-border);
-    align-items: flex-end;
-    text-align: right;
 }
 
-/* RIGHT card: Info is in column 2, content aligns LEFT (toward center) */
+/* RIGHT card: Info is in column 2 */
 #compare-view .fighter-right .c-bottom-info {
     grid-column: 2;
     border-left: 1px solid var(--c-glass-border);
-    align-items: flex-start;
-    text-align: left;
 }
 
-/* Quick Info - Premium stat pills (mirrored) */
+/* Quick Info - Premium stat pills - CENTERED */
 #compare-view .c-quick-info {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;  /* CENTER */
     gap: 0.4rem;
     flex: 0 0 auto;
-}
-
-/* Left card: pills align right */
-#compare-view .fighter-left .c-quick-info {
-    justify-content: flex-end;
-}
-
-/* Right card: pills align left */
-#compare-view .fighter-right .c-quick-info {
-    justify-content: flex-start;
 }
 
 /* Quick info items - Bold readable pills */
@@ -541,10 +523,11 @@
     border-color: var(--c-cyan);
 }
 
-/* Tags Section - Mirrored layout */
+/* Tags Section - CENTERED */
 #compare-view .c-tags {
     display: flex;
     flex-direction: column;
+    align-items: center;     /* CENTER */
     gap: 0.2rem;
     flex: 1 1 auto;
     min-height: 0;
@@ -556,10 +539,12 @@
 #compare-view .c-traits-section {
     display: flex;
     flex-direction: column;
+    align-items: center;     /* CENTER */
     gap: 0.15rem;
+    width: 100%;
 }
 
-/* Labels - mirrored alignment */
+/* Labels - CENTERED */
 #compare-view .abilities-label,
 #compare-view .traits-label {
     font-size: 0.65rem;
@@ -568,21 +553,9 @@
     letter-spacing: 0.06em;
     display: flex;
     align-items: center;
+    justify-content: center;  /* CENTER */
     gap: 0.3rem;
     font-weight: 700;
-}
-
-/* Left card: labels align right */
-#compare-view .fighter-left .abilities-label,
-#compare-view .fighter-left .traits-label {
-    justify-content: flex-end;
-    flex-direction: row-reverse;
-}
-
-/* Right card: labels align left */
-#compare-view .fighter-right .abilities-label,
-#compare-view .fighter-right .traits-label {
-    justify-content: flex-start;
 }
 
 #compare-view .abilities-label i {
@@ -599,19 +572,8 @@
 #compare-view .traits-tags-compact {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;  /* CENTER */
     gap: 0.3rem;
-}
-
-/* Left card: tags align right */
-#compare-view .fighter-left .abilities-tags-compact,
-#compare-view .fighter-left .traits-tags-compact {
-    justify-content: flex-end;
-}
-
-/* Right card: tags align left */
-#compare-view .fighter-right .abilities-tags-compact,
-#compare-view .fighter-right .traits-tags-compact {
-    justify-content: flex-start;
 }
 
 #compare-view .ability-tag-sm {
@@ -651,7 +613,7 @@
     box-shadow: 0 3px 10px rgba(153,102,255,0.3);
 }
 
-/* Tournament Dashboard - Premium medal bar at bottom (mirrored layout) */
+/* Tournament Dashboard - Premium medal bar at bottom - CENTERED */
 #compare-view .c-tournament-dashboard {
     grid-column: 1 / -1;      /* Span full width at bottom */
     grid-row: 3;
@@ -661,19 +623,8 @@
     border-top: 1px solid var(--c-glass-border);
     display: flex;
     align-items: center;
+    justify-content: center;  /* CENTERED */
     gap: 0.8rem;
-}
-
-/* Left card: medals align right (toward center) */
-#compare-view .fighter-left .c-tournament-dashboard {
-    flex-direction: row-reverse;
-    justify-content: flex-start;
-}
-
-/* Right card: medals align left (toward center) */
-#compare-view .fighter-right .c-tournament-dashboard {
-    flex-direction: row;
-    justify-content: flex-start;
 }
 
 #compare-view .dashboard-title {
@@ -685,11 +636,6 @@
     align-items: center;
     gap: 0.3rem;
     font-weight: 700;
-}
-
-/* Left card: icon after text */
-#compare-view .fighter-left .dashboard-title {
-    flex-direction: row-reverse;
 }
 
 #compare-view .dashboard-title i {
