@@ -15313,5 +15313,12 @@ body {
     display: flex;
 }
 
+/* Hide header and bottom bar on home page */
+#home-view.active-view ~ .game-header,
+body:has(#home-view.active-view) .game-header,
+body:has(#home-view.active-view) .bottom-bar {
+    display: none !important;
+}
+
 /* Home page styles will be added here */
 
