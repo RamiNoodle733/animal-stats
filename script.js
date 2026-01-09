@@ -302,15 +302,7 @@ class AnimalStatsApp {
             this.switchView('home', false);
         });
 
-        // Stats routes
-        router.on('/stats', () => {
-            this.switchView('stats', false);
-            // Select first animal if none selected
-            if (!this.state.selectedAnimal && this.state.filteredAnimals.length > 0) {
-                this.selectAnimal(this.state.filteredAnimals[0], false);
-            }
-        });
-
+        // Stats routes - register more specific route first
         router.on('/stats/:slug', (params) => {
             this.switchView('stats', false);
             const animal = this.findAnimalBySlug(params.slug);
@@ -321,6 +313,14 @@ class AnimalStatsApp {
                 if (this.state.filteredAnimals.length > 0) {
                     this.selectAnimal(this.state.filteredAnimals[0], false);
                 }
+            }
+        });
+
+        router.on('/stats', () => {
+            this.switchView('stats', false);
+            // Select first animal if none selected
+            if (!this.state.selectedAnimal && this.state.filteredAnimals.length > 0) {
+                this.selectAnimal(this.state.filteredAnimals[0], false);
             }
         });
 
@@ -341,6 +341,10 @@ class AnimalStatsApp {
 
         // Tournament route
         router.on('/tournament', () => {
+            // Ensure a base view is active before showing tournament overlay
+            if (this.state.view === 'home' || !this.state.view) {
+                this.switchView('rankings', false);
+            }
             // Show tournament modal on top of current view
             if (this.tournamentManager) {
                 this.tournamentManager.showSetup();
@@ -349,6 +353,13 @@ class AnimalStatsApp {
 
         // Profile route
         router.on('/profile', () => {
+            // Ensure a base view is active before showing profile overlay
+            if (this.state.view === 'home' || !this.state.view) {
+                this.switchView('stats', false);
+                if (!this.state.selectedAnimal && this.state.filteredAnimals.length > 0) {
+                    this.selectAnimal(this.state.filteredAnimals[0], false);
+                }
+            }
             // Show profile modal on top of current view
             if (window.Auth && window.Auth.isLoggedIn()) {
                 window.Auth.openProfileModal(false);
@@ -1167,7 +1178,8 @@ class AnimalStatsApp {
         // Update URL to reflect selected animal
         if (updateUrl && window.Router) {
             const slug = this.getAnimalSlug(animal);
-            window.Router.navigate(`/stats/${slug}`);;
+            window.Router.navigate(`/stats/${slug}`);
+        }
         
         // Update only affected cards instead of full re-render
         if (prevSelected) {
