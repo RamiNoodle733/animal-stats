@@ -38,15 +38,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bebas+Neue&family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Prevent flash of header on home page -->
+    <!-- Prevent flash of content on home page -->
     <script>
         if (window.location.pathname === '/' || window.location.pathname === '') {
             document.documentElement.classList.add('is-home');
         }
     </script>
     <style>
+        /* Hide everything except home view on home page */
         html.is-home .game-header,
-        html.is-home .bottom-bar { display: none !important; }
+        html.is-home .bottom-bar,
+        html.is-home #stats-view,
+        html.is-home #compare-view,
+        html.is-home #rankings-view,
+        html.is-home #community-view { display: none !important; }
+        html.is-home #home-view { display: flex !important; }
     </style>
 </head>
 <body>
