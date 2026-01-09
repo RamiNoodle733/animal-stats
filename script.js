@@ -236,6 +236,9 @@ class AnimalStatsApp {
             await this.fetchData();
             this.populateClassFilter();
             this.setupEventListeners();
+            
+            // Cache home view element
+            this.dom.homeView = document.getElementById('home-view');
 
             // Track site visit
             this.trackSiteVisit();
@@ -262,10 +265,8 @@ class AnimalStatsApp {
             this.state.filters.sort = 'rank';
             this.applyFilters();
             
-            // Select first animal by default if available
-            if (this.state.filteredAnimals.length > 0) {
-                this.selectAnimal(this.state.filteredAnimals[0]);
-            }
+            // Initialize Router
+            this.initRouter();
             
             // Refresh user avatar now that animals are loaded
             if (window.Auth && window.Auth.isLoggedIn()) {
@@ -279,6 +280,123 @@ class AnimalStatsApp {
             this.showLoadingState(false);
             alert('Failed to load animal data. Please try refreshing the page.');
         }
+    }
+
+    /**
+     * Initialize URL Router
+     */
+    initRouter() {
+        if (!window.Router) {
+            console.warn('Router not available');
+            // Fallback: show stats view with first animal
+            if (this.state.filteredAnimals.length > 0) {
+                this.selectAnimal(this.state.filteredAnimals[0], false);
+            }
+            return;
+        }
+
+        const router = window.Router;
+
+        // Home route
+        router.on('/', () => {
+            this.switchView('home', false);
+        });
+
+        // Stats routes
+        router.on('/stats', () => {
+            this.switchView('stats', false);
+            // Select first animal if none selected
+            if (!this.state.selectedAnimal && this.state.filteredAnimals.length > 0) {
+                this.selectAnimal(this.state.filteredAnimals[0], false);
+            }
+        });
+
+        router.on('/stats/:slug', (params) => {
+            this.switchView('stats', false);
+            const animal = this.findAnimalBySlug(params.slug);
+            if (animal) {
+                this.selectAnimal(animal, false);
+            } else {
+                // Animal not found, select first
+                if (this.state.filteredAnimals.length > 0) {
+                    this.selectAnimal(this.state.filteredAnimals[0], false);
+                }
+            }
+        });
+
+        // Compare route
+        router.on('/compare', () => {
+            this.switchView('compare', false);
+        });
+
+        // Rankings route
+        router.on('/rankings', () => {
+            this.switchView('rankings', false);
+        });
+
+        // Community route
+        router.on('/community', () => {
+            this.switchView('community', false);
+        });
+
+        // Tournament route
+        router.on('/tournament', () => {
+            // Show tournament modal on top of current view
+            if (this.tournamentManager) {
+                this.tournamentManager.showSetup();
+            }
+        });
+
+        // Profile route
+        router.on('/profile', () => {
+            // Show profile modal on top of current view
+            if (window.Auth && window.Auth.isLoggedIn()) {
+                window.Auth.openProfileModal(false);
+            } else {
+                // Not logged in, redirect to home and show login
+                router.navigate('/');
+                window.Auth?.showModal('login');
+            }
+        });
+
+        // Initialize router (handles current URL)
+        router.init();
+    }
+
+    /**
+     * Find animal by URL slug
+     */
+    findAnimalBySlug(slug) {
+        // First try exact ID match
+        let animal = this.state.animals.find(a => a.id === slug || a._id === slug);
+        if (animal) return animal;
+
+        // Try slug match
+        animal = this.state.animals.find(a => {
+            const animalSlug = Router.slugify(a.name);
+            return animalSlug === slug;
+        });
+        if (animal) return animal;
+
+        // Try partial/fuzzy match (for URL typos)
+        const normalizedSlug = slug.toLowerCase().replace(/-/g, '');
+        animal = this.state.animals.find(a => {
+            const normalizedName = a.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+            return normalizedName === normalizedSlug;
+        });
+
+        return animal;
+    }
+
+    /**
+     * Get URL slug for animal
+     */
+    getAnimalSlug(animal) {
+        // Prefer ID if available, otherwise generate from name
+        if (animal.id && typeof animal.id === 'string') {
+            return animal.id;
+        }
+        return Router.slugify(animal.name);
     }
 
     /**
@@ -484,16 +602,59 @@ class AnimalStatsApp {
             statsCommentsBtn.addEventListener('click', () => this.openStatsComments());
         }
         
-        // Navigation
-        this.dom.navBtns.stats.addEventListener('click', () => this.switchView('stats'));
-        this.dom.navBtns.compare.addEventListener('click', () => this.switchView('compare'));
-        this.dom.navBtns.rankings?.addEventListener('click', () => this.switchView('rankings'));
-        this.dom.navBtns.community?.addEventListener('click', () => this.switchView('community'));
+        // Navigation - use router if available
+        this.dom.navBtns.stats.addEventListener('click', () => {
+            if (window.Router) {
+                window.Router.navigate('/stats');
+            } else {
+                this.switchView('stats');
+            }
+        });
+        this.dom.navBtns.compare.addEventListener('click', () => {
+            if (window.Router) {
+                window.Router.navigate('/compare');
+            } else {
+                this.switchView('compare');
+            }
+        });
+        this.dom.navBtns.rankings?.addEventListener('click', () => {
+            if (window.Router) {
+                window.Router.navigate('/rankings');
+            } else {
+                this.switchView('rankings');
+            }
+        });
+        this.dom.navBtns.community?.addEventListener('click', () => {
+            if (window.Router) {
+                window.Router.navigate('/community');
+            } else {
+                this.switchView('community');
+            }
+        });
         
-        // Logo click goes to stats (home)
+        // Logo click goes to home
         const headerLogo = document.getElementById('header-logo');
         if (headerLogo) {
-            headerLogo.addEventListener('click', () => this.switchView('stats'));
+            headerLogo.addEventListener('click', () => {
+                if (window.Router) {
+                    window.Router.navigate('/');
+                } else {
+                    this.switchView('stats');
+                }
+            });
+        }
+        
+        // Main title click also goes to home
+        const mainTitle = document.getElementById('main-title');
+        if (mainTitle) {
+            mainTitle.style.cursor = 'pointer';
+            mainTitle.addEventListener('click', () => {
+                if (window.Router) {
+                    window.Router.navigate('/');
+                } else {
+                    this.switchView('stats');
+                }
+            });
         }
         
         // Compare View Interactions
@@ -986,7 +1147,7 @@ class AnimalStatsApp {
         
         if (animal) {
             if (this.state.view === 'stats') {
-                this.selectAnimal(animal);
+                this.selectAnimal(animal, true); // Update URL on user click
             } else {
                 this.selectFighter(animal);
             }
@@ -995,11 +1156,18 @@ class AnimalStatsApp {
 
     /**
      * Select an animal in Stats view
+     * @param {object} animal - Animal to select
+     * @param {boolean} updateUrl - Whether to update the URL (default true)
      */
-    selectAnimal(animal) {
+    selectAnimal(animal, updateUrl = true) {
         const prevSelected = this.state.selectedAnimal;
         this.state.selectedAnimal = animal;
         this.updateStatsView(animal);
+        
+        // Update URL to reflect selected animal
+        if (updateUrl && window.Router) {
+            const slug = this.getAnimalSlug(animal);
+            window.Router.navigate(`/stats/${slug}`);;
         
         // Update only affected cards instead of full re-render
         if (prevSelected) {
@@ -1218,12 +1386,15 @@ class AnimalStatsApp {
 
     /**
      * Switch between Stats and Compare views
+     * @param {string} viewName - View to switch to
+     * @param {boolean} updateUrl - Whether to update the URL (default true)
      */
-    switchView(viewName) {
+    switchView(viewName, updateUrl = true) {
         this.state.view = viewName;
         
         // Update the main title based on current view
         const titleModes = {
+            home: 'STATS',
             stats: 'STATS',
             compare: 'COMPARE',
             rankings: 'RANKINGS',
@@ -1233,19 +1404,51 @@ class AnimalStatsApp {
             this.dom.titleMode.textContent = titleModes[viewName] || 'STATS';
         }
         
-        // Update UI classes
+        // Update UI classes - include home view
+        this.dom.homeView?.classList.toggle('active-view', viewName === 'home');
         this.dom.statsView.classList.toggle('active-view', viewName === 'stats');
         this.dom.compareView.classList.toggle('active-view', viewName === 'compare');
         this.dom.rankingsView?.classList.toggle('active-view', viewName === 'rankings');
         this.dom.communityView?.classList.toggle('active-view', viewName === 'community');
         
+        // Update nav button active states
         this.dom.navBtns.stats.classList.toggle('active', viewName === 'stats');
         this.dom.navBtns.compare.classList.toggle('active', viewName === 'compare');
         this.dom.navBtns.rankings?.classList.toggle('active', viewName === 'rankings');
         this.dom.navBtns.community?.classList.toggle('active', viewName === 'community');
+        
+        // No nav button for home - none should be active
+        if (viewName === 'home') {
+            this.dom.navBtns.stats.classList.remove('active');
+        }
+
+        // Update URL if requested
+        if (updateUrl && window.Router) {
+            const routes = {
+                home: '/',
+                stats: '/stats',
+                compare: '/compare',
+                rankings: '/rankings',
+                community: '/community'
+            };
+            if (routes[viewName]) {
+                // For stats, include the animal slug if one is selected
+                if (viewName === 'stats' && this.state.selectedAnimal) {
+                    const slug = this.getAnimalSlug(this.state.selectedAnimal);
+                    window.Router.navigate(`/stats/${slug}`);
+                } else {
+                    window.Router.navigate(routes[viewName]);
+                }
+            }
+        }
 
         // Grid visibility logic - preserve user's hidden/shown preference across stats/compare
-        if (viewName === 'compare') {
+        if (viewName === 'home') {
+            // Hide grid and bottom bar on home
+            this.dom.gridWrapper?.classList.add('hidden');
+            if (this.dom.toggleGridBtn) this.dom.toggleGridBtn.style.display = 'none';
+            if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'none';
+        } else if (viewName === 'compare') {
             // Show bottom bar for Compare view
             if (this.dom.toggleGridBtn) this.dom.toggleGridBtn.style.display = 'flex';
             if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'flex';
@@ -1280,7 +1483,7 @@ class AnimalStatsApp {
                 this.communityManager.onViewEnter();
             }
         } else {
-            // Stats or Compare view - show bottom bar
+            // Stats view - show bottom bar
             if (this.dom.toggleGridBtn) this.dom.toggleGridBtn.style.display = 'flex';
             if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'flex';
             
@@ -3798,9 +4001,21 @@ class TournamentManager {
     }
 
     bindEvents() {
-        // Open tournament modal button (both hero and sidebar)
-        this.dom.openBtn?.addEventListener('click', () => this.showSetup());
-        document.getElementById('hero-tournament-btn')?.addEventListener('click', () => this.showSetup());
+        // Open tournament modal button (both hero and sidebar) - use router
+        this.dom.openBtn?.addEventListener('click', () => {
+            if (window.Router) {
+                window.Router.navigate('/tournament');
+            } else {
+                this.showSetup();
+            }
+        });
+        document.getElementById('hero-tournament-btn')?.addEventListener('click', () => {
+            if (window.Router) {
+                window.Router.navigate('/tournament');
+            } else {
+                this.showSetup();
+            }
+        });
         
         // Start tournament button - now actually starts the tournament
         this.dom.startBtn?.addEventListener('click', () => this.startTournament());
@@ -4030,6 +4245,11 @@ class TournamentManager {
         this.dom.battle.style.display = 'none';
         this.dom.results.style.display = 'none';
         this.dom.modal.classList.add('show');
+        
+        // Update URL if not already on tournament route
+        if (window.Router && window.Router.getCurrentPath() !== '/tournament') {
+            window.Router.navigate('/tournament', { skipHandler: true });
+        }
     }
 
     hideModal() {
@@ -4039,6 +4259,11 @@ class TournamentManager {
         }
         this.dom.modal.classList.remove('show');
         this.isActive = false;
+        
+        // Navigate back using router if on tournament route
+        if (window.Router && window.Router.getCurrentPath() === '/tournament') {
+            window.Router.back();
+        }
     }
 
     resetTournamentState() {

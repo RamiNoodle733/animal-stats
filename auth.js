@@ -133,11 +133,15 @@ const Auth = {
             this.logout();
         });
 
-        // Profile button
+        // Profile button - use router if available
         this.elements.profileBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            this.openProfileModal();
+            if (window.Router) {
+                window.Router.navigate('/profile');
+            } else {
+                this.openProfileModal();
+            }
         });
 
         // Profile modal close - with unsaved changes check
@@ -612,8 +616,9 @@ const Auth = {
 
     /**
      * Open profile modal
+     * @param {boolean} updateUrl - Whether to update URL (default true)
      */
-    async openProfileModal() {
+    async openProfileModal(updateUrl = true) {
         if (!this.user) return;
 
         // Fetch fresh profile data
@@ -641,6 +646,11 @@ const Auth = {
 
         // Show modal
         this.elements.profileModal?.classList.add('active');
+        
+        // Update URL if requested
+        if (updateUrl && window.Router) {
+            window.Router.navigate('/profile', { skipHandler: true });
+        }
     },
 
     /**
@@ -664,6 +674,11 @@ const Auth = {
         this.closeAvatarPicker();
         // Reset pending changes
         this.pendingChanges = { displayName: null, username: null, profileAnimal: null };
+        
+        // Navigate back using router
+        if (window.Router && window.Router.getCurrentPath() === '/profile') {
+            window.Router.back();
+        }
     },
 
     /**

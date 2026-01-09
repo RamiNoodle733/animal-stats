@@ -49,7 +49,7 @@
                 <h1 id="main-title">ANIMAL BATTLE <span class="title-mode">STATS</span></h1>
             </div>
             <nav class="nav-tabs">
-                <button class="mode-btn active" id="stats-mode-btn" data-mode="stats">
+                <button class="mode-btn" id="stats-mode-btn" data-mode="stats">
                     <i class="fas fa-chart-bar"></i> <span class="mode-text">STATS</span>
                 </button>
                 <button class="mode-btn" id="compare-mode-btn" data-mode="compare">
@@ -103,8 +103,73 @@
             </div>
         </header>
         
+        <!-- Home View (Landing Page) -->
+        <div id="home-view" class="view-container">
+            <div class="home-container">
+                <div class="home-hero">
+                    <div class="home-hero-bg"></div>
+                    <div class="home-hero-content">
+                        <div class="home-logo-wrap">
+                            <img src="/images/logo.png" alt="Animal Battle Stats" class="home-logo">
+                        </div>
+                        <h1 class="home-title">ANIMAL BATTLE STATS</h1>
+                        <p class="home-tagline">The ultimate animal powerscaling database. Compare matchups, rank the roster, and run tournaments to see who comes out on top.</p>
+                        
+                        <div class="home-actions">
+                            <a href="/stats" class="home-action-btn primary">
+                                <i class="fas fa-chart-bar"></i>
+                                <span class="action-text">
+                                    <strong>EXPLORE STATS</strong>
+                                    <small>Discover 200+ animals</small>
+                                </span>
+                            </a>
+                            <a href="/compare" class="home-action-btn secondary">
+                                <i class="fas fa-balance-scale"></i>
+                                <span class="action-text">
+                                    <strong>COMPARE</strong>
+                                    <small>Head-to-head battles</small>
+                                </span>
+                            </a>
+                            <a href="/rankings" class="home-action-btn secondary">
+                                <i class="fas fa-trophy"></i>
+                                <span class="action-text">
+                                    <strong>RANKINGS</strong>
+                                    <small>Power leaderboards</small>
+                                </span>
+                            </a>
+                            <a href="/community" class="home-action-btn secondary">
+                                <i class="fas fa-users"></i>
+                                <span class="action-text">
+                                    <strong>COMMUNITY</strong>
+                                    <small>Join the discussion</small>
+                                </span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="home-features">
+                    <div class="home-feature">
+                        <div class="feature-icon"><i class="fas fa-database"></i></div>
+                        <h3>200+ Animals</h3>
+                        <p>From mighty predators to unique specialists, explore a comprehensive database of the animal kingdom.</p>
+                    </div>
+                    <div class="home-feature">
+                        <div class="feature-icon"><i class="fas fa-chart-radar"></i></div>
+                        <h3>6 Core Stats</h3>
+                        <p>Attack, Defense, Agility, Stamina, Intelligence, and Special - every animal rated on a detailed stat system.</p>
+                    </div>
+                    <div class="home-feature">
+                        <div class="feature-icon"><i class="fas fa-gamepad"></i></div>
+                        <h3>Tournaments</h3>
+                        <p>Run bracket tournaments to crown the ultimate champion. Vote head-to-head and shape the rankings.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <!-- Stats View (Character Select Style) -->
-        <div id="stats-view" class="view-container active-view">
+        <div id="stats-view" class="view-container">
             <div class="character-display-area">
                 <!-- Left Stats Panel -->
                 <div class="stats-panel stats-panel-left">
@@ -1946,6 +2011,7 @@
     </div>
     
     <!-- Data loaded from MongoDB API - no local data.js needed -->
+    <script src="router.js"></script>
     <script src="auth.js"></script>
     <script src="script.js" defer></script>
     <!-- Page-specific enhancements -->
