@@ -129,6 +129,13 @@ class Router {
         this.previousRoute = this.currentRoute;
         this.currentRoute = path;
 
+        // Toggle home page class for header visibility
+        if (path === '/' || path === '') {
+            document.documentElement.classList.add('is-home');
+        } else {
+            document.documentElement.classList.remove('is-home');
+        }
+
         // Find matching route
         for (const route of this.routes) {
             const match = path.match(route.pattern);
