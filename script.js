@@ -411,6 +411,41 @@ class AnimalStatsApp {
     }
 
     /**
+     * Update homepage statistics
+     */
+    updateHomeStats() {
+        const animalCountEl = document.getElementById('home-animal-count');
+        if (animalCountEl && this.state.animals.length > 0) {
+            animalCountEl.textContent = this.state.animals.length;
+        }
+        
+        // Fetch battle count from API
+        this.fetchBattleCount();
+    }
+
+    /**
+     * Fetch total battle count for homepage
+     */
+    async fetchBattleCount() {
+        try {
+            const response = await fetch('/api/stats');
+            if (response.ok) {
+                const data = await response.json();
+                const battleCountEl = document.getElementById('home-battle-count');
+                if (battleCountEl && data.totalBattles) {
+                    // Format with K for thousands
+                    const count = data.totalBattles;
+                    battleCountEl.textContent = count >= 1000 
+                        ? (count / 1000).toFixed(1).replace(/\.0$/, '') + 'K'
+                        : count.toString();
+                }
+            }
+        } catch (e) {
+            console.log('Could not fetch battle stats');
+        }
+    }
+
+    /**
      * Show/hide loading state
      */
     showLoadingState(isLoading) {
@@ -500,6 +535,9 @@ class AnimalStatsApp {
             this.state.filteredAnimals = [...result.data];
             this.state.apiAvailable = true;
             console.log(`Loaded ${result.data.length} animals from MongoDB API`);
+            
+            // Update homepage animal count
+            this.updateHomeStats();
             
         } catch (error) {
             console.error('Failed to load animal data:', error.message);
@@ -664,6 +702,24 @@ class AnimalStatsApp {
                     window.Router.navigate('/');
                 } else {
                     this.switchView('stats');
+                }
+            });
+        }
+        
+        // Homepage auth buttons
+        const homeSignupBtn = document.getElementById('home-signup-btn');
+        const homeLoginBtn = document.getElementById('home-login-btn');
+        if (homeSignupBtn) {
+            homeSignupBtn.addEventListener('click', () => {
+                if (window.Auth) {
+                    Auth.showAuthModal('signup');
+                }
+            });
+        }
+        if (homeLoginBtn) {
+            homeLoginBtn.addEventListener('click', () => {
+                if (window.Auth) {
+                    Auth.showAuthModal('login');
                 }
             });
         }

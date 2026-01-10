@@ -134,7 +134,92 @@
         
         <!-- Home View (Landing Page) -->
         <div id="home-view" class="view-container">
-            <!-- Empty - ready for new design -->
+            <div class="home-portal">
+                <!-- Portal Header -->
+                <header class="portal-header">
+                    <div class="portal-header-inner">
+                        <div class="portal-brand">
+                            <img src="/images/logo.png" alt="ABS" class="portal-logo-small">
+                            <span class="portal-title">ANIMAL BATTLE STATS</span>
+                        </div>
+                        <div class="portal-auth">
+                            <button class="portal-auth-btn" id="home-signup-btn">SIGN UP</button>
+                            <button class="portal-auth-btn portal-auth-login" id="home-login-btn">LOG IN</button>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Main Portal Content -->
+                <main class="portal-main">
+                    <!-- Logo Centerpiece -->
+                    <div class="portal-logo-section">
+                        <div class="portal-logo-frame">
+                            <div class="portal-logo-glow"></div>
+                            <img src="/images/logo.png" alt="Animal Battle Stats" class="portal-logo">
+                        </div>
+                        <h1 class="portal-tagline">THE ULTIMATE ANIMAL DATABASE</h1>
+                        <p class="portal-subtitle">Stats • Matchups • Rankings • Community</p>
+                    </div>
+
+                    <!-- Four Main Navigation Panels -->
+                    <nav class="portal-nav">
+                        <a href="/stats" class="portal-panel" data-section="stats">
+                            <div class="panel-icon">
+                                <i class="fas fa-chart-bar"></i>
+                            </div>
+                            <span class="panel-label">STATS</span>
+                            <div class="panel-shine"></div>
+                        </a>
+                        <a href="/compare" class="portal-panel" data-section="compare">
+                            <div class="panel-icon">
+                                <i class="fas fa-balance-scale"></i>
+                            </div>
+                            <span class="panel-label">COMPARE</span>
+                            <div class="panel-shine"></div>
+                        </a>
+                        <a href="/rankings" class="portal-panel" data-section="rankings">
+                            <div class="panel-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <span class="panel-label">RANKINGS</span>
+                            <div class="panel-shine"></div>
+                        </a>
+                        <a href="/community" class="portal-panel" data-section="community">
+                            <div class="panel-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <span class="panel-label">COMMUNITY</span>
+                            <div class="panel-shine"></div>
+                        </a>
+                    </nav>
+
+                    <!-- Stats Widgets -->
+                    <div class="portal-widgets">
+                        <div class="portal-widget">
+                            <div class="widget-value" id="home-animal-count">200+</div>
+                            <div class="widget-label">ANIMALS</div>
+                        </div>
+                        <div class="portal-widget-divider"></div>
+                        <div class="portal-widget">
+                            <div class="widget-value" id="home-battle-count">10K+</div>
+                            <div class="widget-label">BATTLES</div>
+                        </div>
+                        <div class="portal-widget-divider"></div>
+                        <div class="portal-widget">
+                            <div class="widget-value">6</div>
+                            <div class="widget-label">CORE STATS</div>
+                        </div>
+                    </div>
+                </main>
+
+                <!-- Portal Footer -->
+                <footer class="portal-footer">
+                    <div class="portal-footer-inner">
+                        <span class="portal-version">v2.0</span>
+                        <span class="portal-copyright">© 2026 ANIMAL BATTLE STATS</span>
+                    </div>
+                </footer>
+            </div>
         </div>
         
         <!-- Stats View (Character Select Style) -->
