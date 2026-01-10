@@ -52,7 +52,7 @@
     <script>
         (function() {
             var path = window.location.pathname;
-            if (path === '/' || path === '' || path === '/login' || path === '/signup') {
+            if (path === '/' || path === '' || path === '/login' || path === '/signup' || path === '/profile') {
                 document.documentElement.classList.add('is-home');
             }
             if (path === '/login') {
@@ -60,6 +60,9 @@
             }
             if (path === '/signup') {
                 document.documentElement.classList.add('is-signup');
+            }
+            if (path === '/profile') {
+                document.documentElement.classList.add('is-profile');
             }
         })();
     </script>
@@ -69,9 +72,10 @@
         html.is-home .bottom-bar { display: none !important; }
         
         /* Show correct view based on route */
-        html.is-home:not(.is-login):not(.is-signup) #home-view { display: flex !important; }
+        html.is-home:not(.is-login):not(.is-signup):not(.is-profile) #home-view { display: flex !important; }
         html.is-login #login-view { display: flex !important; }
         html.is-signup #signup-view { display: flex !important; }
+        html.is-profile #profile-view { display: flex !important; }
         
         /* Hide other views on home/auth pages */
         html.is-home #stats-view,
@@ -79,7 +83,8 @@
         html.is-home #rankings-view,
         html.is-home #community-view { display: none !important; }
         html.is-login #home-view,
-        html.is-signup #home-view { display: none !important; }
+        html.is-signup #home-view,
+        html.is-profile #home-view { display: none !important; }
     </style>
 </head>
 <body>
@@ -340,6 +345,231 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        
+        <!-- Profile View (Old Facebook Style) -->
+        <div id="profile-view" class="view-container">
+            <div class="fb-profile-page">
+                <!-- Facebook-style Header Bar -->
+                <div class="fb-header">
+                    <div class="fb-header-inner">
+                        <a href="/" class="fb-logo">animal<span>stats</span></a>
+                        <nav class="fb-nav">
+                            <a href="/">home</a>
+                            <a href="/stats">stats</a>
+                            <a href="/compare">compare</a>
+                            <a href="/rankings">rankings</a>
+                            <a href="/community">community</a>
+                        </nav>
+                        <div class="fb-search">
+                            <input type="text" placeholder="Search" disabled>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Profile Header Banner -->
+                <div class="fb-profile-banner">
+                    <span class="fb-profile-banner-text" id="fb-profile-title">User's Profile</span>
+                    <span class="fb-profile-banner-site">Animal Battle Stats</span>
+                </div>
+                
+                <!-- Main Content Area -->
+                <div class="fb-profile-content">
+                    <!-- Left Sidebar -->
+                    <div class="fb-sidebar">
+                        <!-- Profile Picture Box -->
+                        <div class="fb-box fb-profile-pic-box">
+                            <div class="fb-profile-pic" id="fb-profile-pic">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <div class="fb-profile-name" id="fb-profile-name">Username</div>
+                            <div class="fb-profile-info" id="fb-profile-info">
+                                <div class="fb-info-row">
+                                    <span class="fb-info-label">Level:</span>
+                                    <span class="fb-info-value" id="fb-profile-level">1</span>
+                                </div>
+                                <div class="fb-info-row">
+                                    <span class="fb-info-label">Prestige:</span>
+                                    <span class="fb-info-value" id="fb-profile-prestige">0</span>
+                                </div>
+                                <div class="fb-info-row">
+                                    <span class="fb-info-label">Battle Points:</span>
+                                    <span class="fb-info-value" id="fb-profile-bp">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Profile Actions Box -->
+                        <div class="fb-box">
+                            <div class="fb-box-links">
+                                <a href="#" id="fb-edit-profile-link"><i class="fas fa-pencil-alt"></i> Edit Profile</a>
+                                <a href="#" id="fb-change-avatar-link"><i class="fas fa-camera"></i> Change Avatar</a>
+                                <a href="/stats"><i class="fas fa-chart-bar"></i> View Animal Stats</a>
+                                <a href="/compare"><i class="fas fa-balance-scale"></i> Compare Animals</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Status Box -->
+                        <div class="fb-box">
+                            <div class="fb-box-header">
+                                <span class="fb-box-toggle">▼</span>
+                                <span class="fb-box-title">Status</span>
+                            </div>
+                            <div class="fb-box-content">
+                                <div class="fb-status">
+                                    <span class="fb-status-icon">🟢</span>
+                                    <span class="fb-status-text" id="fb-profile-status">Online now.</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Stats Box -->
+                        <div class="fb-box">
+                            <div class="fb-box-header">
+                                <span class="fb-box-toggle">▼</span>
+                                <span class="fb-box-title">Statistics</span>
+                            </div>
+                            <div class="fb-box-content">
+                                <div class="fb-stat-list">
+                                    <div class="fb-stat-item">
+                                        <span class="fb-stat-label">Total XP</span>
+                                        <span class="fb-stat-value" id="fb-profile-total-xp">0</span>
+                                    </div>
+                                    <div class="fb-stat-item">
+                                        <span class="fb-stat-label">Current XP</span>
+                                        <span class="fb-stat-value" id="fb-profile-current-xp">0 / 100</span>
+                                    </div>
+                                    <div class="fb-stat-item">
+                                        <span class="fb-stat-label">Battles Won</span>
+                                        <span class="fb-stat-value" id="fb-profile-battles-won">0</span>
+                                    </div>
+                                    <div class="fb-stat-item">
+                                        <span class="fb-stat-label">Votes Cast</span>
+                                        <span class="fb-stat-value" id="fb-profile-votes-cast">0</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Achievements Box -->
+                        <div class="fb-box">
+                            <div class="fb-box-header">
+                                <span class="fb-box-toggle">▶</span>
+                                <span class="fb-box-title">Achievements</span>
+                            </div>
+                            <div class="fb-box-content fb-collapsed">
+                                <div class="fb-achievement-list" id="fb-achievement-list">
+                                    <div class="fb-achievement">
+                                        <span class="fb-achievement-icon">🏆</span>
+                                        <span class="fb-achievement-name">First Vote</span>
+                                    </div>
+                                    <div class="fb-achievement">
+                                        <span class="fb-achievement-icon">⚔️</span>
+                                        <span class="fb-achievement-name">Battle Starter</span>
+                                    </div>
+                                    <div class="fb-achievement locked">
+                                        <span class="fb-achievement-icon">🔒</span>
+                                        <span class="fb-achievement-name">???</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Member Info -->
+                        <div class="fb-box">
+                            <div class="fb-box-content fb-member-info">
+                                <span>Member since: <strong id="fb-profile-member-since">---</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Feed Area -->
+                    <div class="fb-main">
+                        <!-- Mini-Feed Header -->
+                        <div class="fb-feed-header">
+                            <span class="fb-feed-toggle">▼</span>
+                            <span class="fb-feed-title">Mini-Feed</span>
+                            <span class="fb-feed-count">Displaying <span id="fb-feed-count">0</span> stories.</span>
+                            <a href="#" class="fb-feed-see-all">See All</a>
+                        </div>
+                        
+                        <!-- Feed Items -->
+                        <div class="fb-feed" id="fb-feed">
+                            <!-- Today Section -->
+                            <div class="fb-feed-section">
+                                <div class="fb-feed-date">Today</div>
+                                <div class="fb-feed-items" id="fb-feed-today">
+                                    <div class="fb-feed-item fb-feed-placeholder">
+                                        <span class="fb-feed-icon">📊</span>
+                                        <span class="fb-feed-text">No recent activity. Start exploring animals!</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Earlier Section -->
+                            <div class="fb-feed-section">
+                                <div class="fb-feed-date">Earlier</div>
+                                <div class="fb-feed-items" id="fb-feed-earlier">
+                                    <div class="fb-feed-item">
+                                        <span class="fb-feed-icon">🎉</span>
+                                        <span class="fb-feed-text"><strong id="fb-feed-username">User</strong> joined Animal Battle Stats.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- XP Progress Section -->
+                        <div class="fb-box fb-xp-box">
+                            <div class="fb-box-header">
+                                <span class="fb-box-toggle">▼</span>
+                                <span class="fb-box-title">Level Progress</span>
+                            </div>
+                            <div class="fb-box-content">
+                                <div class="fb-xp-display">
+                                    <div class="fb-xp-level">
+                                        <span class="fb-xp-level-label">Level</span>
+                                        <span class="fb-xp-level-value" id="fb-xp-level">1</span>
+                                    </div>
+                                    <div class="fb-xp-bar-container">
+                                        <div class="fb-xp-bar">
+                                            <div class="fb-xp-bar-fill" id="fb-xp-bar-fill" style="width: 0%;"></div>
+                                        </div>
+                                        <div class="fb-xp-text" id="fb-xp-text">0 / 100 XP</div>
+                                    </div>
+                                    <div class="fb-xp-next">
+                                        <span class="fb-xp-next-label">Next Level</span>
+                                        <span class="fb-xp-next-value" id="fb-xp-next-level">2</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Favorite Animals Section -->
+                        <div class="fb-box">
+                            <div class="fb-box-header">
+                                <span class="fb-box-toggle">▼</span>
+                                <span class="fb-box-title">Favorite Animals</span>
+                                <a href="/stats" class="fb-see-all">See All</a>
+                            </div>
+                            <div class="fb-box-content">
+                                <div class="fb-favorites-grid" id="fb-favorites-grid">
+                                    <a href="/stats" class="fb-favorite-item">
+                                        <div class="fb-favorite-img">
+                                            <i class="fas fa-plus"></i>
+                                        </div>
+                                        <span class="fb-favorite-name">Add favorites</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Close/Back Button -->
+                <button class="fb-close-btn" id="fb-profile-close">
+                    <i class="fas fa-arrow-left"></i> Back
+                </button>
             </div>
         </div>
         

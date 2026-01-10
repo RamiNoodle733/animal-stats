@@ -243,6 +243,9 @@ class AnimalStatsApp {
             // Cache auth view elements
             this.dom.loginView = document.getElementById('login-view');
             this.dom.signupView = document.getElementById('signup-view');
+            
+            // Cache profile view element
+            this.dom.profileView = document.getElementById('profile-view');
 
             // Track site visit
             this.trackSiteVisit();
@@ -357,20 +360,15 @@ class AnimalStatsApp {
 
         // Profile route
         router.on('/profile', () => {
-            // Ensure a base view is active before showing profile overlay
-            if (this.state.view === 'home' || !this.state.view) {
-                this.switchView('stats', false);
-                if (!this.state.selectedAnimal && this.state.filteredAnimals.length > 0) {
-                    this.selectAnimal(this.state.filteredAnimals[0], false);
-                }
-            }
-            // Show profile modal on top of current view
-            if (window.Auth && window.Auth.isLoggedIn()) {
-                window.Auth.openProfileModal(false);
-            } else {
-                // Not logged in, redirect to login page
+            // If not logged in, redirect to login
+            if (!window.Auth || !window.Auth.isLoggedIn()) {
                 router.navigate('/login');
+                return;
             }
+            // Show profile view
+            this.switchView('profile', false);
+            // Update profile page data
+            this.updateProfilePage();
         });
 
         // Login route
@@ -756,6 +754,55 @@ class AnimalStatsApp {
                 }
             });
         }
+        
+        // Profile page event listeners
+        const fbProfileClose = document.getElementById('fb-profile-close');
+        const fbEditProfileLink = document.getElementById('fb-edit-profile-link');
+        const fbChangeAvatarLink = document.getElementById('fb-change-avatar-link');
+        
+        if (fbProfileClose) {
+            fbProfileClose.addEventListener('click', () => {
+                // Go back or to home
+                if (window.history.length > 1) {
+                    window.history.back();
+                } else if (window.Router) {
+                    window.Router.navigate('/');
+                }
+            });
+        }
+        
+        if (fbEditProfileLink) {
+            fbEditProfileLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (window.Auth) {
+                    window.Auth.openProfileModal();
+                }
+            });
+        }
+        
+        if (fbChangeAvatarLink) {
+            fbChangeAvatarLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (window.Auth) {
+                    window.Auth.openProfileModal();
+                    // Small delay to let modal open, then trigger avatar picker
+                    setTimeout(() => {
+                        window.Auth.openAvatarPicker();
+                    }, 100);
+                }
+            });
+        }
+        
+        // FB nav links - use Router
+        document.querySelectorAll('.fb-nav a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const href = link.getAttribute('href');
+                if (window.Router && href) {
+                    window.Router.navigate(href);
+                }
+            });
+        });
         
         // Compare View Interactions
         this.dom.fighter1.display.addEventListener('click', () => this.setSelectingSide('left'));
@@ -1501,16 +1548,18 @@ class AnimalStatsApp {
             rankings: 'RANKINGS',
             community: 'COMMUNITY',
             login: 'LOGIN',
-            signup: 'SIGNUP'
+            signup: 'SIGNUP',
+            profile: 'PROFILE'
         };
         if (this.dom.titleMode) {
             this.dom.titleMode.textContent = titleModes[viewName] || 'STATS';
         }
         
-        // Update UI classes - include home view and auth views
+        // Update UI classes - include home view, auth views, and profile view
         this.dom.homeView?.classList.toggle('active-view', viewName === 'home');
         this.dom.loginView?.classList.toggle('active-view', viewName === 'login');
         this.dom.signupView?.classList.toggle('active-view', viewName === 'signup');
+        this.dom.profileView?.classList.toggle('active-view', viewName === 'profile');
         this.dom.statsView.classList.toggle('active-view', viewName === 'stats');
         this.dom.compareView.classList.toggle('active-view', viewName === 'compare');
         this.dom.rankingsView?.classList.toggle('active-view', viewName === 'rankings');
@@ -1522,8 +1571,8 @@ class AnimalStatsApp {
         this.dom.navBtns.rankings?.classList.toggle('active', viewName === 'rankings');
         this.dom.navBtns.community?.classList.toggle('active', viewName === 'community');
         
-        // No nav button for home/login/signup - none should be active
-        if (viewName === 'home' || viewName === 'login' || viewName === 'signup') {
+        // No nav button for home/login/signup/profile - none should be active
+        if (viewName === 'home' || viewName === 'login' || viewName === 'signup' || viewName === 'profile') {
             this.dom.navBtns.stats.classList.remove('active');
         }
 
@@ -1536,7 +1585,8 @@ class AnimalStatsApp {
                 rankings: '/rankings',
                 community: '/community',
                 login: '/login',
-                signup: '/signup'
+                signup: '/signup',
+                profile: '/profile'
             };
             if (routes[viewName]) {
                 // For stats, include the animal slug if one is selected
@@ -1550,8 +1600,8 @@ class AnimalStatsApp {
         }
 
         // Grid visibility logic - preserve user's hidden/shown preference across stats/compare
-        if (viewName === 'home' || viewName === 'login' || viewName === 'signup') {
-            // Hide grid and bottom bar on home and auth pages
+        if (viewName === 'home' || viewName === 'login' || viewName === 'signup' || viewName === 'profile') {
+            // Hide grid and bottom bar on home, auth, and profile pages
             this.dom.gridWrapper?.classList.add('hidden');
             if (this.dom.toggleGridBtn) this.dom.toggleGridBtn.style.display = 'none';
             if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'none';
@@ -2040,6 +2090,109 @@ class AnimalStatsApp {
             } else {
                 this.dom.toggleGridBtn.innerHTML = '<i class="fas fa-chevron-up"></i> SHOW MENU';
             }
+        }
+    }
+
+    /**
+     * Update profile page with user data (Old Facebook style)
+     */
+    updateProfilePage() {
+        if (!window.Auth || !window.Auth.user) return;
+        
+        const user = window.Auth.user;
+        const {
+            displayName = 'User',
+            username = 'user',
+            level = 1,
+            xp = 0,
+            xpToNext,
+            prestige = 0,
+            battlePoints = 0,
+            profileAnimal,
+            totalXp = 0,
+            battlesWon = 0,
+            votesCast = 0,
+            createdAt
+        } = user;
+        
+        // Calculate XP values
+        const xpNeeded = xpToNext || window.Auth.xpToNextLevel(level);
+        const xpPercentage = Math.min(100, Math.round((xp / xpNeeded) * 100));
+        
+        // Update profile title
+        const profileTitle = document.getElementById('fb-profile-title');
+        if (profileTitle) {
+            profileTitle.textContent = `${displayName}'s Profile`;
+        }
+        
+        // Update profile picture
+        const profilePic = document.getElementById('fb-profile-pic');
+        if (profilePic) {
+            if (profileAnimal) {
+                profilePic.innerHTML = `<img src="/images/animals/${profileAnimal}.png" alt="${displayName}">`;
+            } else {
+                profilePic.innerHTML = '<i class="fas fa-user-circle"></i>';
+            }
+        }
+        
+        // Update profile name
+        const profileName = document.getElementById('fb-profile-name');
+        if (profileName) {
+            profileName.textContent = displayName;
+        }
+        
+        // Update profile info
+        const levelEl = document.getElementById('fb-profile-level');
+        const prestigeEl = document.getElementById('fb-profile-prestige');
+        const bpEl = document.getElementById('fb-profile-bp');
+        
+        if (levelEl) levelEl.textContent = level;
+        if (prestigeEl) prestigeEl.textContent = prestige > 0 ? `⭐ ${prestige}` : '0';
+        if (bpEl) bpEl.textContent = window.Auth.formatNumber(battlePoints);
+        
+        // Update statistics
+        const totalXpEl = document.getElementById('fb-profile-total-xp');
+        const currentXpEl = document.getElementById('fb-profile-current-xp');
+        const battlesWonEl = document.getElementById('fb-profile-battles-won');
+        const votesCastEl = document.getElementById('fb-profile-votes-cast');
+        
+        if (totalXpEl) totalXpEl.textContent = window.Auth.formatNumber(totalXp || xp);
+        if (currentXpEl) currentXpEl.textContent = `${xp} / ${xpNeeded}`;
+        if (battlesWonEl) battlesWonEl.textContent = battlesWon || '0';
+        if (votesCastEl) votesCastEl.textContent = votesCast || '0';
+        
+        // Update XP progress bar
+        const xpLevel = document.getElementById('fb-xp-level');
+        const xpNextLevel = document.getElementById('fb-xp-next-level');
+        const xpBarFill = document.getElementById('fb-xp-bar-fill');
+        const xpText = document.getElementById('fb-xp-text');
+        
+        if (xpLevel) xpLevel.textContent = level;
+        if (xpNextLevel) xpNextLevel.textContent = level + 1;
+        if (xpBarFill) xpBarFill.style.width = `${xpPercentage}%`;
+        if (xpText) xpText.textContent = `${xp} / ${xpNeeded} XP (${xpPercentage}%)`;
+        
+        // Update member since
+        const memberSince = document.getElementById('fb-profile-member-since');
+        if (memberSince && createdAt) {
+            const date = new Date(createdAt);
+            memberSince.textContent = date.toLocaleDateString('en-US', { 
+                month: 'long', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
+        }
+        
+        // Update feed username
+        const feedUsername = document.getElementById('fb-feed-username');
+        if (feedUsername) {
+            feedUsername.textContent = displayName;
+        }
+        
+        // Update feed count
+        const feedCount = document.getElementById('fb-feed-count');
+        if (feedCount) {
+            feedCount.textContent = '1'; // At least the join event
         }
     }
 
