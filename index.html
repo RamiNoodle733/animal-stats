@@ -48,24 +48,38 @@
     
     <!-- Chart.js - defer loading since not needed immediately -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-    <!-- Prevent flash of content on home page only -->
+    <!-- Prevent flash of content on home/auth pages -->
     <script>
         (function() {
             var path = window.location.pathname;
-            if (path === '/' || path === '') {
+            if (path === '/' || path === '' || path === '/login' || path === '/signup') {
                 document.documentElement.classList.add('is-home');
+            }
+            if (path === '/login') {
+                document.documentElement.classList.add('is-login');
+            }
+            if (path === '/signup') {
+                document.documentElement.classList.add('is-signup');
             }
         })();
     </script>
     <style>
-        /* Hide everything except home view on home page */
+        /* Hide header/bottom bar on home and auth pages */
         html.is-home .game-header,
-        html.is-home .bottom-bar,
+        html.is-home .bottom-bar { display: none !important; }
+        
+        /* Show correct view based on route */
+        html.is-home:not(.is-login):not(.is-signup) #home-view { display: flex !important; }
+        html.is-login #login-view { display: flex !important; }
+        html.is-signup #signup-view { display: flex !important; }
+        
+        /* Hide other views on home/auth pages */
         html.is-home #stats-view,
         html.is-home #compare-view,
         html.is-home #rankings-view,
         html.is-home #community-view { display: none !important; }
-        html.is-home #home-view { display: flex !important; }
+        html.is-login #home-view,
+        html.is-signup #home-view { display: none !important; }
     </style>
 </head>
 <body>

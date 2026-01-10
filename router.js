@@ -129,12 +129,19 @@ class Router {
         this.previousRoute = this.currentRoute;
         this.currentRoute = path;
 
-        // Toggle home/auth page class for header visibility
-        // Hide header on home, login, and signup pages
-        if (path === '/' || path === '' || path === '/login' || path === '/signup') {
-            document.documentElement.classList.add('is-home');
-        } else {
-            document.documentElement.classList.remove('is-home');
+        // Toggle page classes for header visibility and instant view display
+        const html = document.documentElement;
+        
+        // Clear all route-specific classes first
+        html.classList.remove('is-home', 'is-login', 'is-signup');
+        
+        // Add appropriate classes based on route
+        if (path === '/' || path === '') {
+            html.classList.add('is-home');
+        } else if (path === '/login') {
+            html.classList.add('is-home', 'is-login');
+        } else if (path === '/signup') {
+            html.classList.add('is-home', 'is-signup');
         }
 
         // Find matching route
