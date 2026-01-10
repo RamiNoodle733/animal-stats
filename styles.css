@@ -15527,11 +15527,34 @@ body:has(#home-view.active-view) .shared-bottom-bar {
 
 .portal-subtitle {
     font-family: var(--font-body);
-    font-size: 1rem;
-    letter-spacing: 4px;
-    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    color: var(--primary-color);
     margin: 0;
     text-transform: uppercase;
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+}
+
+.portal-description {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+    text-align: center;
+    max-width: 500px;
+    line-height: 1.5;
+}
+
+/* Auth Section (integrated into page) */
+.portal-auth-section {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.portal-auth-section .portal-auth-btn {
+    padding: 12px 30px;
+    font-size: 0.9rem;
 }
 
 /* ========================================
