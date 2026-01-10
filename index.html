@@ -48,11 +48,16 @@
     
     <!-- Chart.js - defer loading since not needed immediately -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-    <!-- Prevent flash of content on home page -->
+    <!-- Prevent flash of content on page load -->
     <script>
-        if (window.location.pathname === '/' || window.location.pathname === '') {
-            document.documentElement.classList.add('is-home');
-        }
+        (function() {
+            var path = window.location.pathname;
+            if (path === '/' || path === '') {
+                document.documentElement.classList.add('is-home');
+            } else {
+                document.documentElement.classList.add('is-loading');
+            }
+        })();
     </script>
     <style>
         /* Hide everything except home view on home page */
@@ -63,6 +68,12 @@
         html.is-home #rankings-view,
         html.is-home #community-view { display: none !important; }
         html.is-home #home-view { display: flex !important; }
+        
+        /* Hide content while loading on other pages */
+        html.is-loading .main-content-area,
+        html.is-loading .character-display-area { opacity: 0; }
+        html.is-loading .game-header,
+        html.is-loading .bottom-bar { opacity: 1; }
     </style>
 </head>
 <body>
@@ -889,7 +900,7 @@
         <!-- Animal Grid (Bottom) -->
         <div class="character-grid-container">
             <div class="grid-controls">
-                <input type="search" id="search-input" placeholder="Search animals..." class="search-box" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore="true" aria-autocomplete="none">
+                <input type="search" id="search-input" name="animal-search-field" placeholder="Search animals..." class="search-box" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" data-form-type="other" data-lpignore="true" data-1p-ignore="true" aria-autocomplete="none" role="searchbox">
                 
                 <!-- Filter Dropdown -->
                 <div class="dropdown-menu-container">

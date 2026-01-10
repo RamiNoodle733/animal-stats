@@ -1190,6 +1190,9 @@ class AnimalStatsApp {
         if (newCard) newCard.classList.add('selected');
         
         this.updateStatsCommentsBtn(animal);
+        
+        // Remove loading state once animal is displayed
+        document.documentElement.classList.remove('is-loading');
     }
 
     /**
@@ -1515,6 +1518,11 @@ class AnimalStatsApp {
             const statsCommentsBtn = document.getElementById('stats-comments-btn');
             if (expandDetailsBtn) expandDetailsBtn.disabled = isCompare;
             if (statsCommentsBtn) statsCommentsBtn.disabled = isCompare;
+        }
+        
+        // Remove loading state once view is ready (for non-stats views, stats removes in selectAnimal)
+        if (viewName !== 'stats') {
+            document.documentElement.classList.remove('is-loading');
         }
     }
 
