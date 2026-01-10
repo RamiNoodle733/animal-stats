@@ -48,24 +48,12 @@
     
     <!-- Chart.js - defer loading since not needed immediately -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-    <!-- Prevent flash of content on page load -->
+    <!-- Prevent flash of content on home page only -->
     <script>
         (function() {
             var path = window.location.pathname;
             if (path === '/' || path === '') {
                 document.documentElement.classList.add('is-home');
-            } else {
-                document.documentElement.classList.add('is-loading');
-                // Detect which page we're loading
-                if (path.startsWith('/stats')) {
-                    document.documentElement.classList.add('loading-stats');
-                } else if (path.startsWith('/compare')) {
-                    document.documentElement.classList.add('loading-compare');
-                } else if (path.startsWith('/rankings')) {
-                    document.documentElement.classList.add('loading-rankings');
-                } else if (path.startsWith('/community')) {
-                    document.documentElement.classList.add('loading-community');
-                }
             }
         })();
     </script>
@@ -78,55 +66,6 @@
         html.is-home #rankings-view,
         html.is-home #community-view { display: none !important; }
         html.is-home #home-view { display: flex !important; }
-        
-        /* Loading state - hide all views by default */
-        html.is-loading .view-container { display: none !important; }
-        
-        /* Show only the specific view being loaded */
-        html.loading-stats #stats-view { display: flex !important; }
-        html.loading-compare #compare-view { display: flex !important; }
-        html.loading-rankings #rankings-view { display: flex !important; }
-        html.loading-community #community-view { display: flex !important; }
-        
-        /* Show bottom bar for stats/compare only */
-        html.is-loading .shared-bottom-bar { display: none !important; }
-        html.loading-stats .shared-bottom-bar,
-        html.loading-compare .shared-bottom-bar { display: flex !important; }
-        
-        /* Dim overlay on content area during load */
-        html.is-loading .character-display-area::before,
-        html.is-loading .rankings-container::before,
-        html.is-loading .community-container::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: rgba(5, 8, 16, 0.7);
-            z-index: 100;
-        }
-        html.is-loading .character-display-area,
-        html.is-loading .rankings-container,
-        html.is-loading .community-container { position: relative; }
-        
-        /* Spinner centered in the main content area */
-        html.is-loading .character-display-area::after,
-        html.is-loading .rankings-container::after,
-        html.is-loading .community-container::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 50px;
-            height: 50px;
-            margin: -25px 0 0 -25px;
-            border: 3px solid rgba(0, 212, 255, 0.2);
-            border-top-color: #00d4ff;
-            border-radius: 50%;
-            animation: loadingSpin 0.8s linear infinite;
-            z-index: 101;
-        }
-        @keyframes loadingSpin {
-            to { transform: rotate(360deg); }
-        }
     </style>
 </head>
 <body>
