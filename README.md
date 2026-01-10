@@ -11,7 +11,7 @@ A web application that presents animal statistics in an engaging fighting game-s
 
 ## 🎮 Live Demo
 
-**[https://animal-battle-stats.vercel.app](https://animal-battle-stats.vercel.app)**
+**[https://animalbattlestats.com](https://animalbattlestats.com)**
 
 ## ✨ Features
 
@@ -40,7 +40,7 @@ A web application that presents animal statistics in an engaging fighting game-s
 ## 🚀 Quick Start
 
 ### Live Site
-Visit [animal-battle-stats.vercel.app](https://animal-battle-stats.vercel.app) directly.
+Visit [animalbattlestats.com](https://animalbattlestats.com) directly.
 
 ### Local Development
 ```bash

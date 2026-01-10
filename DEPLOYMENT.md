@@ -199,25 +199,25 @@ Once deployed, you'll have access to these API endpoints:
 
 ```bash
 # Get all animals
-curl https://your-app.vercel.app/api/animals
+curl https://animalbattlestats.com/api/animals
 
 # Search for animals
-curl https://your-app.vercel.app/api/animals?search=lion
+curl https://animalbattlestats.com/api/animals?search=lion
 
 # Filter by type and sort
-curl https://your-app.vercel.app/api/animals?type=Mammal&sort=attack&order=desc
+curl https://animalbattlestats.com/api/animals?type=Mammal&sort=attack&order=desc
 
 # Get a specific animal
-curl https://your-app.vercel.app/api/animals/African%20Lion
+curl https://animalbattlestats.com/api/animals/African%20Lion
 
 # Get random animal
-curl https://your-app.vercel.app/api/random
+curl https://animalbattlestats.com/api/random
 
 # Get 2 random animals
-curl https://your-app.vercel.app/api/random?count=2
+curl https://animalbattlestats.com/api/random?count=2
 
 # Health check
-curl https://your-app.vercel.app/api/health
+curl https://animalbattlestats.com/api/health
 ```
 
 ## 🔧 Configuration Files
@@ -346,7 +346,7 @@ View logs in Vercel Dashboard → Functions → Logs
 ### Add New Animal via API
 
 ```bash
-curl -X POST https://your-app.vercel.app/api/animals \
+curl -X POST https://animalbattlestats.com/api/animals \
   -H "Content-Type: application/json" \
   -d '{
     "name": "New Animal",
@@ -364,7 +364,7 @@ curl -X POST https://your-app.vercel.app/api/animals \
 ### Update Existing Animal
 
 ```bash
-curl -X PUT https://your-app.vercel.app/api/animals/New%20Animal \
+curl -X PUT https://animalbattlestats.com/api/animals/New%20Animal \
   -H "Content-Type: application/json" \
   -d '{
     "attack": 75,
