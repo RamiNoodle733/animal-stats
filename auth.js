@@ -80,29 +80,16 @@ const Auth = {
             profileDropdown: document.getElementById('profile-dropdown'),
             profileBtn: document.getElementById('profile-btn'),
             logoutBtn: document.getElementById('logout-btn'),
-            // Profile Modal
-            profileModal: document.getElementById('profile-modal'),
-            profileModalClose: document.getElementById('profile-modal-close'),
-            profileAvatarLarge: document.getElementById('profile-avatar-large'),
-            profileUsername: document.getElementById('profile-username'),
-            profileLoginUsername: document.getElementById('profile-login-username'),
-            profileLevelBadge: document.getElementById('profile-level-badge'),
-            profileXpFill: document.getElementById('profile-xp-fill'),
-            profileXpText: document.getElementById('profile-xp-text'),
-            profileBpValue: document.getElementById('profile-bp-value'),
-            profileTotalXp: document.getElementById('profile-total-xp'),
-            profileLevelValue: document.getElementById('profile-level-value'),
-            avatarGrid: document.getElementById('avatar-grid'),
-            avatarSearch: document.getElementById('avatar-search'),
-            displayNameInput: document.getElementById('display-name-input'),
-            usernameInput: document.getElementById('username-input'),
-            usernameChangesRemaining: document.getElementById('username-changes-remaining'),
-            profileMemberSince: document.getElementById('profile-member-since'),
-            profileSaveBtn: document.getElementById('profile-save-btn'),
-            profileUnsavedIndicator: document.getElementById('profile-unsaved-indicator'),
+            // Profile Page Elements (retro style)
+            retroDisplayName: document.getElementById('retro-display-name'),
+            retroUsername: document.getElementById('retro-username'),
+            retroSaveBtn: document.getElementById('retro-save-btn'),
+            retroUnsavedIndicator: document.getElementById('retro-unsaved-indicator'),
             // Avatar Picker Modal
             avatarPickerModal: document.getElementById('avatar-picker-modal'),
-            avatarPickerClose: document.getElementById('avatar-picker-close')
+            avatarPickerClose: document.getElementById('avatar-picker-close'),
+            avatarGrid: document.getElementById('avatar-grid'),
+            avatarSearch: document.getElementById('avatar-search')
         };
     },
 
@@ -150,25 +137,14 @@ const Auth = {
             this.logout();
         });
 
-        // Profile button - use router if available
+        // Profile button - use router
         this.elements.profileBtn?.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             if (window.Router) {
                 window.Router.navigate('/profile');
-            } else {
-                this.openProfileModal();
             }
         });
-
-        // Profile modal close - with unsaved changes check
-        this.elements.profileModalClose?.addEventListener('click', () => this.tryCloseProfileModal());
-        this.elements.profileModal?.addEventListener('click', (e) => {
-            if (e.target === this.elements.profileModal) this.tryCloseProfileModal();
-        });
-
-        // Avatar picker trigger - clicking the profile avatar header opens the picker
-        this.elements.profileAvatarLarge?.addEventListener('click', () => this.openAvatarPicker());
 
         // Avatar picker close
         this.elements.avatarPickerClose?.addEventListener('click', () => this.closeAvatarPicker());
@@ -179,27 +155,25 @@ const Auth = {
         // Avatar search
         this.elements.avatarSearch?.addEventListener('input', (e) => this.filterAvatars(e.target.value));
 
-        // Display name input - track changes (unlimited)
-        this.elements.displayNameInput?.addEventListener('input', (e) => {
+        // Profile page inputs - track changes
+        this.elements.retroDisplayName?.addEventListener('input', (e) => {
             this.pendingChanges.displayName = e.target.value.trim();
             this.updateSaveButtonState();
         });
 
-        // Username input - track changes (3/week limit)
-        this.elements.usernameInput?.addEventListener('input', (e) => {
+        this.elements.retroUsername?.addEventListener('input', (e) => {
             this.pendingChanges.username = e.target.value.trim();
             this.updateSaveButtonState();
         });
 
-        // Save all changes button
-        this.elements.profileSaveBtn?.addEventListener('click', () => this.saveProfileChanges());
+        // Save all changes button (profile page)
+        this.elements.retroSaveBtn?.addEventListener('click', () => this.saveProfileChanges());
 
         // Escape key closes modals
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 this.hideModal();
                 this.closeAvatarPicker();
-                this.tryCloseProfileModal();
             }
         });
 
@@ -867,10 +841,10 @@ const Auth = {
     },
 
     /**
-     * Open profile modal
-     * @param {boolean} updateUrl - Whether to update URL (default true)
+     * Initialize profile page with user data
+     * Called when navigating to /profile
      */
-    async openProfileModal(updateUrl = true) {
+    async initProfilePage() {
         if (!this.user) return;
 
         // Fetch fresh profile data
@@ -890,47 +864,16 @@ const Auth = {
             profileAnimal: null
         };
 
-        // Update profile modal UI
-        this.updateProfileModal();
+        // Populate edit form
+        if (this.elements.retroDisplayName) {
+            this.elements.retroDisplayName.value = this.user.displayName || '';
+        }
+        if (this.elements.retroUsername) {
+            this.elements.retroUsername.value = this.user.username || '';
+        }
 
         // Reset save button state
         this.updateSaveButtonState();
-
-        // Show modal
-        this.elements.profileModal?.classList.add('active');
-        
-        // Update URL if requested
-        if (updateUrl && window.Router) {
-            window.Router.navigate('/profile', { skipHandler: true });
-        }
-    },
-
-    /**
-     * Try to close profile modal (check for unsaved changes)
-     */
-    tryCloseProfileModal() {
-        if (this.hasUnsavedChanges()) {
-            if (confirm('You have unsaved changes. Are you sure you want to leave?')) {
-                this.closeProfileModal();
-            }
-        } else {
-            this.closeProfileModal();
-        }
-    },
-
-    /**
-     * Close profile modal
-     */
-    closeProfileModal() {
-        this.elements.profileModal?.classList.remove('active');
-        this.closeAvatarPicker();
-        // Reset pending changes
-        this.pendingChanges = { displayName: null, username: null, profileAnimal: null };
-        
-        // Navigate back using router
-        if (window.Router && window.Router.getCurrentPath() === '/profile') {
-            window.Router.back();
-        }
     },
 
     /**
@@ -954,10 +897,11 @@ const Auth = {
     },
 
     /**
-     * Check if there are unsaved changes
+     * Check if there are unsaved changes (profile page)
      */
     hasUnsavedChanges() {
-        if (!this.elements.profileModal?.classList.contains('active')) return false;
+        // Check if we're on the profile page
+        if (!document.body.classList.contains('is-profile')) return false;
 
         const displayNameChanged = this.pendingChanges.displayName !== null && 
             this.pendingChanges.displayName !== this.originalValues.displayName;
@@ -975,11 +919,11 @@ const Auth = {
     updateSaveButtonState() {
         const hasChanges = this.hasUnsavedChanges();
 
-        if (this.elements.profileSaveBtn) {
-            this.elements.profileSaveBtn.disabled = !hasChanges;
+        if (this.elements.retroSaveBtn) {
+            this.elements.retroSaveBtn.disabled = !hasChanges;
         }
-        if (this.elements.profileUnsavedIndicator) {
-            this.elements.profileUnsavedIndicator.classList.toggle('visible', hasChanges);
+        if (this.elements.retroUnsavedIndicator) {
+            this.elements.retroUnsavedIndicator.classList.toggle('show', hasChanges);
         }
     },
 
@@ -1006,82 +950,6 @@ const Auth = {
         } catch (error) {
             console.error('Profile fetch error:', error);
         }
-    },
-
-    /**
-     * Update profile modal with user data
-     */
-    updateProfileModal() {
-        if (!this.user) return;
-
-        const { 
-            username, displayName, level = 1, xp = 0, battlePoints = 0, 
-            profileAnimal, createdAt, xpToNext, prestige = 0, lifetimeXp = 0 
-        } = this.user;
-
-        // New XP system: xp is progress toward next level, xpToNext is amount needed
-        const needed = xpToNext || this.xpToNextLevel(level);
-        const progress = Math.max(0, xp); // xp is already progress, not cumulative
-        const percentage = level >= 100 ? 100 : Math.min(100, Math.round((progress / needed) * 100));
-
-        // Update elements
-        if (this.elements.profileUsername) {
-            this.elements.profileUsername.textContent = displayName || username;
-        }
-        if (this.elements.profileLoginUsername) {
-            this.elements.profileLoginUsername.textContent = `@${username}`;
-        }
-        if (this.elements.profileLevelBadge) {
-            this.elements.profileLevelBadge.textContent = `LEVEL ${level}`;
-        }
-        if (this.elements.profileXpFill) {
-            this.elements.profileXpFill.style.width = `${percentage}%`;
-        }
-        if (this.elements.profileXpText) {
-            this.elements.profileXpText.textContent = `${progress} / ${needed} XP`;
-        }
-        if (this.elements.profileBpValue) {
-            this.elements.profileBpValue.textContent = this.formatNumber(battlePoints);
-        }
-        if (this.elements.profileTotalXp) {
-            this.elements.profileTotalXp.textContent = this.formatNumber(lifetimeXp);
-        }
-        if (this.elements.profileLevelValue) {
-            this.elements.profileLevelValue.textContent = level;
-        }
-        // Show prestige in profile if > 0
-        if (this.elements.profileLevelBadge && prestige > 0) {
-            this.elements.profileLevelBadge.textContent = `⭐${prestige} LEVEL ${level}`;
-        }
-        // Display name input (unlimited changes)
-        if (this.elements.displayNameInput) {
-            this.elements.displayNameInput.value = displayName || '';
-        }
-        // Username input (3/week limit)
-        if (this.elements.usernameInput) {
-            this.elements.usernameInput.value = username || '';
-        }
-        if (this.elements.profileMemberSince && createdAt) {
-            const date = new Date(createdAt);
-            this.elements.profileMemberSince.textContent = date.toLocaleDateString('en-US', {
-                year: 'numeric', month: 'long', day: 'numeric'
-            });
-        }
-
-        // Update username changes remaining indicator
-        if (this.elements.usernameChangesRemaining) {
-            const remaining = this.user.usernameChangesRemaining ?? 3;
-            this.elements.usernameChangesRemaining.textContent = `${remaining} change${remaining !== 1 ? 's' : ''} remaining this week`;
-            this.elements.usernameChangesRemaining.classList.remove('warning', 'error');
-            if (remaining === 0) {
-                this.elements.usernameChangesRemaining.classList.add('error');
-            } else if (remaining === 1) {
-                this.elements.usernameChangesRemaining.classList.add('warning');
-            }
-        }
-
-        // Update large avatar in profile header (this is now clickable to open picker)
-        this.updateAvatarDisplay(this.elements.profileAvatarLarge, profileAnimal);
     },
 
     /**
@@ -1145,8 +1013,11 @@ const Auth = {
             option.classList.toggle('selected', option.dataset.animal === animalName);
         });
 
-        // Update preview avatar in profile header
-        this.updateAvatarDisplay(this.elements.profileAvatarLarge, animalName);
+        // Update preview avatar on profile page
+        const profilePic = document.getElementById('retro-profile-pic');
+        if (profilePic) {
+            this.updateAvatarDisplay(profilePic, animalName);
+        }
 
         // Close the avatar picker popup
         this.closeAvatarPicker();
@@ -1161,10 +1032,10 @@ const Auth = {
     async saveProfileChanges() {
         if (!this.token || !this.hasUnsavedChanges()) return;
 
-        const btn = this.elements.profileSaveBtn;
+        const btn = this.elements.retroSaveBtn;
         if (btn) {
             btn.classList.add('saving');
-            btn.innerHTML = '<i class="fas fa-spinner"></i> Saving...';
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
         }
 
         const updates = {};
@@ -1211,8 +1082,12 @@ const Auth = {
 
                 // Update all UI
                 this.updateUserStatsBar();
-                this.updateProfileModal();
                 this.updateSaveButtonState();
+
+                // Update profile page if visible
+                if (window.app?.updateProfilePage) {
+                    window.app.updateProfilePage();
+                }
 
                 // Update all user avatars on the page
                 this.refreshAllUserAvatars();

@@ -367,6 +367,10 @@ class AnimalStatsApp {
             }
             // Show profile view
             this.switchView('profile', false);
+            // Initialize profile page with fresh data
+            if (window.Auth.initProfilePage) {
+                window.Auth.initProfilePage();
+            }
             // Update profile page data
             this.updateProfilePage();
         });
@@ -756,12 +760,12 @@ class AnimalStatsApp {
         }
         
         // Profile page event listeners
-        const fbProfileClose = document.getElementById('fb-profile-close');
-        const fbEditProfileLink = document.getElementById('fb-edit-profile-link');
-        const fbChangeAvatarLink = document.getElementById('fb-change-avatar-link');
+        const retroProfileClose = document.getElementById('retro-profile-close');
+        const retroEditProfileLink = document.getElementById('retro-edit-profile-link');
+        const retroChangeAvatarLink = document.getElementById('retro-change-avatar-link');
         
-        if (fbProfileClose) {
-            fbProfileClose.addEventListener('click', () => {
+        if (retroProfileClose) {
+            retroProfileClose.addEventListener('click', () => {
                 // Go back or to home
                 if (window.history.length > 1) {
                     window.history.back();
@@ -771,38 +775,25 @@ class AnimalStatsApp {
             });
         }
         
-        if (fbEditProfileLink) {
-            fbEditProfileLink.addEventListener('click', (e) => {
+        if (retroEditProfileLink) {
+            retroEditProfileLink.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (window.Auth) {
-                    window.Auth.openProfileModal();
+                // Toggle edit section visibility
+                const editSection = document.getElementById('retro-edit-section');
+                if (editSection) {
+                    editSection.style.display = editSection.style.display === 'none' ? 'block' : 'none';
                 }
             });
         }
         
-        if (fbChangeAvatarLink) {
-            fbChangeAvatarLink.addEventListener('click', (e) => {
+        if (retroChangeAvatarLink) {
+            retroChangeAvatarLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 if (window.Auth) {
-                    window.Auth.openProfileModal();
-                    // Small delay to let modal open, then trigger avatar picker
-                    setTimeout(() => {
-                        window.Auth.openAvatarPicker();
-                    }, 100);
+                    window.Auth.openAvatarPicker();
                 }
             });
         }
-        
-        // FB nav links - use Router
-        document.querySelectorAll('.fb-nav a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const href = link.getAttribute('href');
-                if (window.Router && href) {
-                    window.Router.navigate(href);
-                }
-            });
-        });
         
         // Compare View Interactions
         this.dom.fighter1.display.addEventListener('click', () => this.setSelectingSide('left'));
@@ -2094,7 +2085,7 @@ class AnimalStatsApp {
     }
 
     /**
-     * Update profile page with user data (Old Facebook style)
+     * Update profile page with user data (Retro style)
      */
     updateProfilePage() {
         if (!window.Auth || !window.Auth.user) return;
@@ -2119,42 +2110,32 @@ class AnimalStatsApp {
         const xpNeeded = xpToNext || window.Auth.xpToNextLevel(level);
         const xpPercentage = Math.min(100, Math.round((xp / xpNeeded) * 100));
         
-        // Update profile title
-        const profileTitle = document.getElementById('fb-profile-title');
-        if (profileTitle) {
-            profileTitle.textContent = `${displayName}'s Profile`;
-        }
-        
-        // Update profile picture
-        const profilePic = document.getElementById('fb-profile-pic');
-        if (profilePic) {
-            if (profileAnimal) {
-                profilePic.innerHTML = `<img src="/images/animals/${profileAnimal}.png" alt="${displayName}">`;
-            } else {
-                profilePic.innerHTML = '<i class="fas fa-user-circle"></i>';
-            }
+        // Update profile picture using Auth helper
+        const profilePic = document.getElementById('retro-profile-pic');
+        if (profilePic && window.Auth) {
+            window.Auth.updateAvatarDisplay(profilePic, profileAnimal);
         }
         
         // Update profile name
-        const profileName = document.getElementById('fb-profile-name');
+        const profileName = document.getElementById('retro-profile-name');
         if (profileName) {
             profileName.textContent = displayName;
         }
         
         // Update profile info
-        const levelEl = document.getElementById('fb-profile-level');
-        const prestigeEl = document.getElementById('fb-profile-prestige');
-        const bpEl = document.getElementById('fb-profile-bp');
+        const levelEl = document.getElementById('retro-profile-level');
+        const prestigeEl = document.getElementById('retro-profile-prestige');
+        const bpEl = document.getElementById('retro-profile-bp');
         
         if (levelEl) levelEl.textContent = level;
         if (prestigeEl) prestigeEl.textContent = prestige > 0 ? `⭐ ${prestige}` : '0';
         if (bpEl) bpEl.textContent = window.Auth.formatNumber(battlePoints);
         
         // Update statistics
-        const totalXpEl = document.getElementById('fb-profile-total-xp');
-        const currentXpEl = document.getElementById('fb-profile-current-xp');
-        const battlesWonEl = document.getElementById('fb-profile-battles-won');
-        const votesCastEl = document.getElementById('fb-profile-votes-cast');
+        const totalXpEl = document.getElementById('retro-profile-total-xp');
+        const currentXpEl = document.getElementById('retro-profile-current-xp');
+        const battlesWonEl = document.getElementById('retro-profile-battles-won');
+        const votesCastEl = document.getElementById('retro-profile-votes-cast');
         
         if (totalXpEl) totalXpEl.textContent = window.Auth.formatNumber(totalXp || xp);
         if (currentXpEl) currentXpEl.textContent = `${xp} / ${xpNeeded}`;
@@ -2162,10 +2143,10 @@ class AnimalStatsApp {
         if (votesCastEl) votesCastEl.textContent = votesCast || '0';
         
         // Update XP progress bar
-        const xpLevel = document.getElementById('fb-xp-level');
-        const xpNextLevel = document.getElementById('fb-xp-next-level');
-        const xpBarFill = document.getElementById('fb-xp-bar-fill');
-        const xpText = document.getElementById('fb-xp-text');
+        const xpLevel = document.getElementById('retro-xp-level');
+        const xpNextLevel = document.getElementById('retro-xp-next-level');
+        const xpBarFill = document.getElementById('retro-xp-bar-fill');
+        const xpText = document.getElementById('retro-xp-text');
         
         if (xpLevel) xpLevel.textContent = level;
         if (xpNextLevel) xpNextLevel.textContent = level + 1;
@@ -2173,7 +2154,7 @@ class AnimalStatsApp {
         if (xpText) xpText.textContent = `${xp} / ${xpNeeded} XP (${xpPercentage}%)`;
         
         // Update member since
-        const memberSince = document.getElementById('fb-profile-member-since');
+        const memberSince = document.getElementById('retro-profile-member-since');
         if (memberSince && createdAt) {
             const date = new Date(createdAt);
             memberSince.textContent = date.toLocaleDateString('en-US', { 
@@ -2184,16 +2165,22 @@ class AnimalStatsApp {
         }
         
         // Update feed username
-        const feedUsername = document.getElementById('fb-feed-username');
+        const feedUsername = document.getElementById('retro-feed-username');
         if (feedUsername) {
             feedUsername.textContent = displayName;
         }
         
         // Update feed count
-        const feedCount = document.getElementById('fb-feed-count');
+        const feedCount = document.getElementById('retro-feed-count');
         if (feedCount) {
             feedCount.textContent = '1'; // At least the join event
         }
+        
+        // Populate edit form with current values
+        const editDisplayName = document.getElementById('retro-display-name');
+        const editUsername = document.getElementById('retro-username');
+        if (editDisplayName) editDisplayName.value = displayName;
+        if (editUsername) editUsername.value = user.username || '';
     }
 
     /**
