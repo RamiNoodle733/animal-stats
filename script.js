@@ -239,6 +239,10 @@ class AnimalStatsApp {
             
             // Cache home view element
             this.dom.homeView = document.getElementById('home-view');
+            
+            // Cache auth view elements
+            this.dom.loginView = document.getElementById('login-view');
+            this.dom.signupView = document.getElementById('signup-view');
 
             // Track site visit
             this.trackSiteVisit();
@@ -364,10 +368,29 @@ class AnimalStatsApp {
             if (window.Auth && window.Auth.isLoggedIn()) {
                 window.Auth.openProfileModal(false);
             } else {
-                // Not logged in, redirect to home and show login
-                router.navigate('/');
-                window.Auth?.showModal('login');
+                // Not logged in, redirect to login page
+                router.navigate('/login');
             }
+        });
+
+        // Login route
+        router.on('/login', () => {
+            // If already logged in, redirect to home
+            if (window.Auth && window.Auth.isLoggedIn()) {
+                router.navigate('/');
+                return;
+            }
+            this.switchView('login', false);
+        });
+
+        // Signup route
+        router.on('/signup', () => {
+            // If already logged in, redirect to home
+            if (window.Auth && window.Auth.isLoggedIn()) {
+                router.navigate('/');
+                return;
+            }
+            this.switchView('signup', false);
         });
 
         // Initialize router (handles current URL)
@@ -706,20 +729,20 @@ class AnimalStatsApp {
             });
         }
         
-        // Homepage auth buttons
+        // Homepage auth buttons - navigate to auth pages
         const homeSignupBtn = document.getElementById('home-signup-btn');
         const homeLoginBtn = document.getElementById('home-login-btn');
         if (homeSignupBtn) {
             homeSignupBtn.addEventListener('click', () => {
-                if (window.Auth) {
-                    Auth.showModal('signup');
+                if (window.Router) {
+                    window.Router.navigate('/signup');
                 }
             });
         }
         if (homeLoginBtn) {
             homeLoginBtn.addEventListener('click', () => {
-                if (window.Auth) {
-                    Auth.showModal('login');
+                if (window.Router) {
+                    window.Router.navigate('/login');
                 }
             });
         }
@@ -1466,14 +1489,18 @@ class AnimalStatsApp {
             stats: 'STATS',
             compare: 'COMPARE',
             rankings: 'RANKINGS',
-            community: 'COMMUNITY'
+            community: 'COMMUNITY',
+            login: 'LOGIN',
+            signup: 'SIGNUP'
         };
         if (this.dom.titleMode) {
             this.dom.titleMode.textContent = titleModes[viewName] || 'STATS';
         }
         
-        // Update UI classes - include home view
+        // Update UI classes - include home view and auth views
         this.dom.homeView?.classList.toggle('active-view', viewName === 'home');
+        this.dom.loginView?.classList.toggle('active-view', viewName === 'login');
+        this.dom.signupView?.classList.toggle('active-view', viewName === 'signup');
         this.dom.statsView.classList.toggle('active-view', viewName === 'stats');
         this.dom.compareView.classList.toggle('active-view', viewName === 'compare');
         this.dom.rankingsView?.classList.toggle('active-view', viewName === 'rankings');
@@ -1485,8 +1512,8 @@ class AnimalStatsApp {
         this.dom.navBtns.rankings?.classList.toggle('active', viewName === 'rankings');
         this.dom.navBtns.community?.classList.toggle('active', viewName === 'community');
         
-        // No nav button for home - none should be active
-        if (viewName === 'home') {
+        // No nav button for home/login/signup - none should be active
+        if (viewName === 'home' || viewName === 'login' || viewName === 'signup') {
             this.dom.navBtns.stats.classList.remove('active');
         }
 
@@ -1497,7 +1524,9 @@ class AnimalStatsApp {
                 stats: '/stats',
                 compare: '/compare',
                 rankings: '/rankings',
-                community: '/community'
+                community: '/community',
+                login: '/login',
+                signup: '/signup'
             };
             if (routes[viewName]) {
                 // For stats, include the animal slug if one is selected
@@ -1511,8 +1540,8 @@ class AnimalStatsApp {
         }
 
         // Grid visibility logic - preserve user's hidden/shown preference across stats/compare
-        if (viewName === 'home') {
-            // Hide grid and bottom bar on home
+        if (viewName === 'home' || viewName === 'login' || viewName === 'signup') {
+            // Hide grid and bottom bar on home and auth pages
             this.dom.gridWrapper?.classList.add('hidden');
             if (this.dom.toggleGridBtn) this.dom.toggleGridBtn.style.display = 'none';
             if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'none';

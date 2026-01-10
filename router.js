@@ -129,8 +129,9 @@ class Router {
         this.previousRoute = this.currentRoute;
         this.currentRoute = path;
 
-        // Toggle home page class for header visibility
-        if (path === '/' || path === '') {
+        // Toggle home/auth page class for header visibility
+        // Hide header on home, login, and signup pages
+        if (path === '/' || path === '' || path === '/login' || path === '/signup') {
             document.documentElement.classList.add('is-home');
         } else {
             document.documentElement.classList.remove('is-home');

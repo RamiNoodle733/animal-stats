@@ -29,6 +29,7 @@ const Auth = {
     init() {
         this.cacheElements();
         this.bindEvents();
+        this.bindPageEvents();
         this.checkExistingSession();
     },
 
@@ -50,6 +51,19 @@ const Auth = {
             signupSubmit: document.getElementById('signup-submit'),
             showSignup: document.getElementById('show-signup'),
             showLogin: document.getElementById('show-login'),
+            // Auth Page Elements
+            loginPageForm: document.getElementById('login-page-form'),
+            loginPageEmail: document.getElementById('login-page-email'),
+            loginPagePassword: document.getElementById('login-page-password'),
+            loginPageError: document.getElementById('login-page-error'),
+            loginPageSubmit: document.getElementById('login-page-submit'),
+            signupPageForm: document.getElementById('signup-page-form'),
+            signupPageUsername: document.getElementById('signup-page-username'),
+            signupPageEmail: document.getElementById('signup-page-email'),
+            signupPagePassword: document.getElementById('signup-page-password'),
+            signupPageConfirm: document.getElementById('signup-page-confirm'),
+            signupPageError: document.getElementById('signup-page-error'),
+            signupPageSubmit: document.getElementById('signup-page-submit'),
             // User Stats Bar
             userStatsBar: document.getElementById('user-stats-bar'),
             userProfileMini: document.getElementById('user-profile-mini'),
@@ -90,10 +104,10 @@ const Auth = {
     },
 
     /**
-     * Bind event listeners
+     * Bind event listeners for modal forms (legacy)
      */
     bindEvents() {
-        // Login button click (when logged out)
+        // Login button click (when logged out) - now navigates to page
         this.elements.authLoginBtn?.addEventListener('click', () => {
             this.showModal('login');
         });
@@ -196,6 +210,176 @@ const Auth = {
     },
 
     /**
+     * Bind event listeners for auth page forms
+     */
+    bindPageEvents() {
+        // Login page form submission
+        this.elements.loginPageForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handlePageLogin();
+        });
+
+        // Signup page form submission
+        this.elements.signupPageForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handlePageSignup();
+        });
+
+        // Enter key handlers for page forms
+        this.elements.loginPagePassword?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                this.handlePageLogin();
+            }
+        });
+
+        this.elements.signupPageConfirm?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                this.handlePageSignup();
+            }
+        });
+    },
+
+    /**
+     * Handle login from page form
+     */
+    async handlePageLogin() {
+        const login = this.elements.loginPageEmail?.value.trim();
+        const password = this.elements.loginPagePassword?.value;
+
+        if (!login || !password) {
+            this.showPageError('login', 'Please fill in all fields');
+            return;
+        }
+
+        this.setPageLoading('login', true);
+
+        try {
+            const response = await fetch('/api/auth?action=login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ login, password })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.token = result.data.token;
+                this.user = result.data.user;
+                localStorage.setItem('auth_token', this.token);
+                this.updateUI();
+                this.showToast(`Welcome back, ${this.user.displayName}!`);
+                
+                // Redirect to home after successful login
+                if (window.Router) {
+                    window.Router.navigate('/');
+                }
+            } else {
+                this.showPageError('login', result.error || 'Login failed');
+            }
+        } catch (error) {
+            console.error('Login error:', error);
+            this.showPageError('login', 'Network error. Please try again.');
+        } finally {
+            this.setPageLoading('login', false);
+        }
+    },
+
+    /**
+     * Handle signup from page form
+     */
+    async handlePageSignup() {
+        const username = this.elements.signupPageUsername?.value.trim();
+        const email = this.elements.signupPageEmail?.value.trim();
+        const password = this.elements.signupPagePassword?.value;
+        const confirm = this.elements.signupPageConfirm?.value;
+
+        // Validation
+        if (!username || !email || !password || !confirm) {
+            this.showPageError('signup', 'Please fill in all fields');
+            return;
+        }
+
+        if (password !== confirm) {
+            this.showPageError('signup', 'Passwords do not match');
+            return;
+        }
+
+        if (password.length < 6) {
+            this.showPageError('signup', 'Password must be at least 6 characters');
+            return;
+        }
+
+        if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+            this.showPageError('signup', 'Username can only contain letters, numbers, and underscores');
+            return;
+        }
+
+        this.setPageLoading('signup', true);
+
+        try {
+            const response = await fetch('/api/auth?action=signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, email, password })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                this.token = result.data.token;
+                this.user = result.data.user;
+                localStorage.setItem('auth_token', this.token);
+                this.updateUI();
+                this.showToast(`Welcome to Animal Battle Stats, ${this.user.displayName}!`);
+                
+                // Redirect to home after successful signup
+                if (window.Router) {
+                    window.Router.navigate('/');
+                }
+            } else {
+                this.showPageError('signup', result.error || 'Signup failed');
+            }
+        } catch (error) {
+            console.error('Signup error:', error);
+            this.showPageError('signup', 'Network error. Please try again.');
+        } finally {
+            this.setPageLoading('signup', false);
+        }
+    },
+
+    /**
+     * Show error on auth page
+     */
+    showPageError(type, message) {
+        const errorEl = type === 'login' ? this.elements.loginPageError : this.elements.signupPageError;
+        if (errorEl) {
+            errorEl.textContent = message;
+            errorEl.classList.add('show');
+        }
+    },
+
+    /**
+     * Clear page errors
+     */
+    clearPageErrors() {
+        this.elements.loginPageError?.classList.remove('show');
+        this.elements.signupPageError?.classList.remove('show');
+    },
+
+    /**
+     * Set loading state on page form
+     */
+    setPageLoading(type, loading) {
+        const submitBtn = type === 'login' ? this.elements.loginPageSubmit : this.elements.signupPageSubmit;
+        if (submitBtn) {
+            submitBtn.disabled = loading;
+            submitBtn.classList.toggle('loading', loading);
+        }
+    },
+
+    /**
      * Check for existing session on page load
      */
     async checkExistingSession() {
@@ -215,6 +399,14 @@ const Auth = {
                     this.token = token;
                     this.user = result.data.user;
                     this.updateUI();
+                    
+                    // If on login/signup page and already logged in, redirect to home
+                    if (window.Router) {
+                        const path = window.location.pathname;
+                        if (path === '/login' || path === '/signup') {
+                            window.Router.navigate('/');
+                        }
+                    }
                 }
             } else {
                 // Token invalid, clear it
@@ -226,22 +418,14 @@ const Auth = {
     },
 
     /**
-     * Show auth modal
+     * Show auth page (navigate to login/signup page)
+     * @param {string} type - 'login' or 'signup'
      */
     showModal(type = 'login') {
-        this.clearErrors();
-        this.elements.loginForm.style.display = type === 'login' ? 'block' : 'none';
-        this.elements.signupForm.style.display = type === 'signup' ? 'block' : 'none';
-        this.elements.authModal.classList.add('show');
-        
-        // Focus first input
-        setTimeout(() => {
-            if (type === 'login') {
-                document.getElementById('login-email')?.focus();
-            } else {
-                document.getElementById('signup-username')?.focus();
-            }
-        }, 100);
+        // Navigate to the auth page instead of showing modal
+        if (window.Router) {
+            window.Router.navigate(type === 'signup' ? '/signup' : '/login');
+        }
     },
 
     /**
