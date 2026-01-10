@@ -69,12 +69,26 @@
         html.is-home #community-view { display: none !important; }
         html.is-home #home-view { display: flex !important; }
         
-        /* Loading state - hide all content, show loading screen */
-        html.is-loading .view-container { visibility: hidden !important; }
-        html.is-loading .shared-bottom-bar { visibility: hidden !important; }
-        html.is-loading::after {
+        /* Loading state - show page structure with overlay and spinner */
+        html.is-loading #stats-view { display: flex !important; }
+        html.is-loading #stats-view.active-view,
+        html.is-loading .view-container:not(#home-view) { display: flex; }
+        html.is-loading .shared-bottom-bar { display: flex !important; visibility: visible !important; }
+        
+        /* Dim overlay on content area during load */
+        html.is-loading .character-display-area::before {
             content: '';
-            position: fixed;
+            position: absolute;
+            inset: 0;
+            background: rgba(5, 8, 16, 0.7);
+            z-index: 100;
+        }
+        html.is-loading .character-display-area { position: relative; }
+        
+        /* Spinner centered in the main content area */
+        html.is-loading .character-display-area::after {
+            content: '';
+            position: absolute;
             top: 50%;
             left: 50%;
             width: 50px;
@@ -84,7 +98,7 @@
             border-top-color: #00d4ff;
             border-radius: 50%;
             animation: loadingSpin 0.8s linear infinite;
-            z-index: 9999;
+            z-index: 101;
         }
         @keyframes loadingSpin {
             to { transform: rotate(360deg); }
