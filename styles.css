@@ -15832,16 +15832,131 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     line-height: 1.5;
 }
 
-/* Auth Section (integrated into page) */
-.portal-auth-section {
-    display: flex;
-    gap: 15px;
-    margin-top: 10px;
+/* Home Page Top Right Auth Corner */
+.home-auth-corner {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
 }
 
-.portal-auth-section .portal-auth-btn {
-    padding: 12px 30px;
+.home-auth-buttons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.home-auth-btn {
+    padding: 10px 20px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.home-auth-login {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.home-auth-login:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.home-auth-signup {
+    background: var(--primary-color);
+    border: none;
+    color: #000;
+}
+
+.home-auth-signup:hover {
+    background: #00b8d9;
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+}
+
+/* Home Profile Link (when logged in) */
+.home-profile-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px 8px 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    text-decoration: none;
+    color: #fff;
+    transition: all 0.2s ease;
+}
+
+.home-profile-link:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: var(--primary-color);
+}
+
+.home-profile-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(0, 212, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    overflow: hidden;
+}
+
+.home-profile-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.home-profile-name {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.home-profile-arrow {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    transition: transform 0.2s ease;
+}
+
+.home-profile-link:hover .home-profile-arrow {
+    transform: translateX(3px);
+    color: var(--primary-color);
+}
+
+/* Responsive for home auth corner */
+@media (max-width: 480px) {
+    .home-auth-corner {
+        top: 12px;
+        right: 12px;
+    }
+    
+    .home-auth-btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .home-profile-link {
+        padding: 6px 12px 6px 6px;
+    }
+    
+    .home-profile-avatar {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .home-profile-name {
+        font-size: 0.85rem;
+    }
 }
 
 /* ========================================

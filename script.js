@@ -732,6 +732,8 @@ class AnimalStatsApp {
         // Homepage auth buttons - navigate to auth pages
         const homeSignupBtn = document.getElementById('home-signup-btn');
         const homeLoginBtn = document.getElementById('home-login-btn');
+        const homeProfileLink = document.getElementById('home-profile-link');
+        
         if (homeSignupBtn) {
             homeSignupBtn.addEventListener('click', () => {
                 if (window.Router) {
@@ -743,6 +745,14 @@ class AnimalStatsApp {
             homeLoginBtn.addEventListener('click', () => {
                 if (window.Router) {
                     window.Router.navigate('/login');
+                }
+            });
+        }
+        if (homeProfileLink) {
+            homeProfileLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (window.Router) {
+                    window.Router.navigate('/profile');
                 }
             });
         }

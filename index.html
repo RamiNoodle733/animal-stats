@@ -149,6 +149,23 @@
         <!-- Home View (Landing Page) -->
         <div id="home-view" class="view-container">
             <div class="home-portal">
+                <!-- Top Right Auth/Profile Area -->
+                <div class="home-auth-corner" id="home-auth-corner">
+                    <!-- Logged Out State -->
+                    <div class="home-auth-buttons" id="home-auth-buttons">
+                        <button class="home-auth-btn home-auth-login" id="home-login-btn">Log in</button>
+                        <button class="home-auth-btn home-auth-signup" id="home-signup-btn">Sign up</button>
+                    </div>
+                    <!-- Logged In State -->
+                    <a href="/profile" class="home-profile-link" id="home-profile-link" style="display: none;">
+                        <div class="home-profile-avatar" id="home-profile-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <span class="home-profile-name" id="home-profile-name">Profile</span>
+                        <i class="fas fa-chevron-right home-profile-arrow"></i>
+                    </a>
+                </div>
+                
                 <!-- Main Portal Content -->
                 <main class="portal-main">
                     <!-- Logo Centerpiece -->
@@ -160,11 +177,6 @@
                         <h1 class="portal-tagline">ANIMAL BATTLE STATS</h1>
                         <p class="portal-subtitle">The animal powerscaling database</p>
                         <p class="portal-description">Compare matchups, rank the roster, and run tournaments to see who comes out on top.</p>
-                        <!-- Auth Buttons -->
-                        <div class="portal-auth-section">
-                            <button class="portal-auth-btn" id="home-signup-btn">SIGN UP</button>
-                            <button class="portal-auth-btn portal-auth-login" id="home-login-btn">LOG IN</button>
-                        </div>
                     </div>
 
                     <!-- Four Main Navigation Panels -->

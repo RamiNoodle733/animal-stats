@@ -597,6 +597,12 @@ const Auth = {
      * Update UI based on auth state
      */
     updateUI() {
+        // Home page auth corner elements
+        const homeAuthButtons = document.getElementById('home-auth-buttons');
+        const homeProfileLink = document.getElementById('home-profile-link');
+        const homeProfileAvatar = document.getElementById('home-profile-avatar');
+        const homeProfileName = document.getElementById('home-profile-name');
+        
         if (this.user) {
             // Hide login button, show stats bar
             if (this.elements.authLoginBtn) {
@@ -604,6 +610,22 @@ const Auth = {
             }
             if (this.elements.userStatsBar) {
                 this.elements.userStatsBar.style.display = 'flex';
+            }
+            
+            // Home page: hide auth buttons, show profile link
+            if (homeAuthButtons) {
+                homeAuthButtons.style.display = 'none';
+            }
+            if (homeProfileLink) {
+                homeProfileLink.style.display = 'flex';
+                // Update profile name
+                if (homeProfileName) {
+                    homeProfileName.textContent = this.user.displayName || 'Profile';
+                }
+                // Update avatar if user has one
+                if (homeProfileAvatar && this.user.profileAnimal) {
+                    homeProfileAvatar.innerHTML = `<img src="/images/animals/${this.user.profileAnimal}.png" alt="Profile">`;
+                }
             }
             
             // Update user stats bar
@@ -615,6 +637,14 @@ const Auth = {
             }
             if (this.elements.userStatsBar) {
                 this.elements.userStatsBar.style.display = 'none';
+            }
+            
+            // Home page: show auth buttons, hide profile link
+            if (homeAuthButtons) {
+                homeAuthButtons.style.display = 'flex';
+            }
+            if (homeProfileLink) {
+                homeProfileLink.style.display = 'none';
             }
         }
     },
