@@ -712,14 +712,14 @@ class AnimalStatsApp {
         if (homeSignupBtn) {
             homeSignupBtn.addEventListener('click', () => {
                 if (window.Auth) {
-                    Auth.showAuthModal('signup');
+                    Auth.showModal('signup');
                 }
             });
         }
         if (homeLoginBtn) {
             homeLoginBtn.addEventListener('click', () => {
                 if (window.Auth) {
-                    Auth.showAuthModal('login');
+                    Auth.showModal('login');
                 }
             });
         }
