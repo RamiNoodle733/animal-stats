@@ -9,6 +9,9 @@ const Auth = {
     // Current user state
     user: null,
     token: null,
+    
+    // Return URL after login/signup
+    returnUrl: null,
 
     // Profile editing state
     pendingChanges: {
@@ -30,6 +33,7 @@ const Auth = {
         this.cacheElements();
         this.bindEvents();
         this.bindPageEvents();
+        this.bindCloseButtons();
         this.checkExistingSession();
     },
 
@@ -61,7 +65,6 @@ const Auth = {
             signupPageUsername: document.getElementById('signup-page-username'),
             signupPageEmail: document.getElementById('signup-page-email'),
             signupPagePassword: document.getElementById('signup-page-password'),
-            signupPageConfirm: document.getElementById('signup-page-confirm'),
             signupPageError: document.getElementById('signup-page-error'),
             signupPageSubmit: document.getElementById('signup-page-submit'),
             // User Stats Bar
@@ -233,12 +236,42 @@ const Auth = {
             }
         });
 
-        this.elements.signupPageConfirm?.addEventListener('keypress', (e) => {
+        this.elements.signupPagePassword?.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 this.handlePageSignup();
             }
         });
+    },
+
+    /**
+     * Bind close button events for auth pages
+     */
+    bindCloseButtons() {
+        const loginCloseBtn = document.getElementById('login-close-btn');
+        const signupCloseBtn = document.getElementById('signup-close-btn');
+        
+        const handleClose = () => {
+            // Check if we have a stored return URL
+            if (this.returnUrl) {
+                const returnTo = this.returnUrl;
+                this.returnUrl = null;
+                if (window.Router) {
+                    window.Router.navigate(returnTo);
+                }
+            } else if (window.history.length > 1) {
+                // Use browser back if we came from another page on the site
+                window.history.back();
+            } else {
+                // Fallback to home if no history
+                if (window.Router) {
+                    window.Router.navigate('/');
+                }
+            }
+        };
+        
+        loginCloseBtn?.addEventListener('click', handleClose);
+        signupCloseBtn?.addEventListener('click', handleClose);
     },
 
     /**
@@ -271,9 +304,11 @@ const Auth = {
                 this.updateUI();
                 this.showToast(`Welcome back, ${this.user.displayName}!`);
                 
-                // Redirect to home after successful login
+                // Redirect to return URL or home after successful login
                 if (window.Router) {
-                    window.Router.navigate('/');
+                    const returnTo = this.returnUrl || '/';
+                    this.returnUrl = null; // Clear it
+                    window.Router.navigate(returnTo);
                 }
             } else {
                 this.showPageError('login', result.error || 'Login failed');
@@ -293,16 +328,10 @@ const Auth = {
         const username = this.elements.signupPageUsername?.value.trim();
         const email = this.elements.signupPageEmail?.value.trim();
         const password = this.elements.signupPagePassword?.value;
-        const confirm = this.elements.signupPageConfirm?.value;
 
         // Validation
-        if (!username || !email || !password || !confirm) {
+        if (!username || !email || !password) {
             this.showPageError('signup', 'Please fill in all fields');
-            return;
-        }
-
-        if (password !== confirm) {
-            this.showPageError('signup', 'Passwords do not match');
             return;
         }
 
@@ -334,9 +363,11 @@ const Auth = {
                 this.updateUI();
                 this.showToast(`Welcome to Animal Battle Stats, ${this.user.displayName}!`);
                 
-                // Redirect to home after successful signup
+                // Redirect to return URL or home after successful signup
                 if (window.Router) {
-                    window.Router.navigate('/');
+                    const returnTo = this.returnUrl || '/';
+                    this.returnUrl = null; // Clear it
+                    window.Router.navigate(returnTo);
                 }
             } else {
                 this.showPageError('signup', result.error || 'Signup failed');
@@ -422,6 +453,13 @@ const Auth = {
      * @param {string} type - 'login' or 'signup'
      */
     showModal(type = 'login') {
+        // Store current path for return navigation
+        const currentPath = window.location.pathname;
+        // Don't store auth pages as return URL
+        if (currentPath !== '/login' && currentPath !== '/signup') {
+            this.returnUrl = currentPath;
+        }
+        
         // Navigate to the auth page instead of showing modal
         if (window.Router) {
             window.Router.navigate(type === 'signup' ? '/signup' : '/login');

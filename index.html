@@ -231,40 +231,34 @@
         <!-- Login View -->
         <div id="login-view" class="view-container">
             <div class="auth-page">
+                <button class="auth-close-btn" id="login-close-btn" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+                
                 <div class="auth-page-container">
                     <a href="/" class="auth-page-logo">
                         <img src="/images/logo.png" alt="Animal Battle Stats">
-                        <span>ANIMAL BATTLE STATS</span>
                     </a>
                     
                     <div class="auth-page-card">
-                        <h1 class="auth-page-title">
-                            <i class="fas fa-sign-in-alt"></i>
-                            Welcome Back
-                        </h1>
-                        <p class="auth-page-subtitle">Log in to your account</p>
+                        <h1 class="auth-page-title">Sign in</h1>
+                        <p class="auth-page-subtitle">Stay updated on the animal kingdom</p>
                         
                         <div class="auth-page-error" id="login-page-error"></div>
                         
                         <form class="auth-page-form" id="login-page-form">
                             <div class="auth-form-group">
-                                <label for="login-page-email">
-                                    <i class="fas fa-envelope"></i>
-                                    Email or Username
-                                </label>
-                                <input type="text" id="login-page-email" placeholder="Enter your email or username" autocomplete="username" required>
+                                <label for="login-page-email">Email or username</label>
+                                <input type="text" id="login-page-email" autocomplete="username" required>
                             </div>
                             
                             <div class="auth-form-group">
-                                <label for="login-page-password">
-                                    <i class="fas fa-lock"></i>
-                                    Password
-                                </label>
-                                <input type="password" id="login-page-password" placeholder="Enter your password" autocomplete="current-password" required>
+                                <label for="login-page-password">Password</label>
+                                <input type="password" id="login-page-password" autocomplete="current-password" required>
                             </div>
                             
                             <button type="submit" class="auth-page-submit" id="login-page-submit">
-                                <span class="btn-text">LOG IN</span>
+                                <span class="btn-text">Sign in</span>
                                 <span class="btn-loader"><i class="fas fa-spinner fa-spin"></i></span>
                             </button>
                         </form>
@@ -274,15 +268,9 @@
                         </div>
                         
                         <div class="auth-page-switch">
-                            Don't have an account?
-                            <a href="/signup">Create one</a>
+                            New to Animal Battle Stats? <a href="/signup">Join now</a>
                         </div>
                     </div>
-                    
-                    <a href="/" class="auth-page-back">
-                        <i class="fas fa-arrow-left"></i>
-                        Back to Home
-                    </a>
                 </div>
             </div>
         </div>
@@ -290,58 +278,43 @@
         <!-- Signup View -->
         <div id="signup-view" class="view-container">
             <div class="auth-page">
+                <button class="auth-close-btn" id="signup-close-btn" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+                
                 <div class="auth-page-container">
                     <a href="/" class="auth-page-logo">
                         <img src="/images/logo.png" alt="Animal Battle Stats">
-                        <span>ANIMAL BATTLE STATS</span>
                     </a>
                     
                     <div class="auth-page-card">
-                        <h1 class="auth-page-title">
-                            <i class="fas fa-user-plus"></i>
-                            Join the Battle
-                        </h1>
-                        <p class="auth-page-subtitle">Create your account</p>
+                        <h1 class="auth-page-title">Join Animal Battle Stats</h1>
+                        <p class="auth-page-subtitle">Make the most of the animal database</p>
                         
                         <div class="auth-page-error" id="signup-page-error"></div>
                         
                         <form class="auth-page-form" id="signup-page-form">
                             <div class="auth-form-group">
-                                <label for="signup-page-username">
-                                    <i class="fas fa-user"></i>
-                                    Username
-                                </label>
-                                <input type="text" id="signup-page-username" placeholder="Choose a username" autocomplete="username" required>
-                                <span class="auth-form-hint">Letters, numbers, and underscores only</span>
+                                <label for="signup-page-username">Username</label>
+                                <input type="text" id="signup-page-username" autocomplete="username" required>
                             </div>
                             
                             <div class="auth-form-group">
-                                <label for="signup-page-email">
-                                    <i class="fas fa-envelope"></i>
-                                    Email
-                                </label>
-                                <input type="email" id="signup-page-email" placeholder="Enter your email" autocomplete="email" required>
+                                <label for="signup-page-email">Email</label>
+                                <input type="email" id="signup-page-email" autocomplete="email" required>
                             </div>
                             
                             <div class="auth-form-group">
-                                <label for="signup-page-password">
-                                    <i class="fas fa-lock"></i>
-                                    Password
-                                </label>
-                                <input type="password" id="signup-page-password" placeholder="Create a password" autocomplete="new-password" required>
-                                <span class="auth-form-hint">Minimum 6 characters</span>
+                                <label for="signup-page-password">Password (6+ characters)</label>
+                                <input type="password" id="signup-page-password" autocomplete="new-password" required minlength="6">
                             </div>
                             
-                            <div class="auth-form-group">
-                                <label for="signup-page-confirm">
-                                    <i class="fas fa-lock"></i>
-                                    Confirm Password
-                                </label>
-                                <input type="password" id="signup-page-confirm" placeholder="Confirm your password" autocomplete="new-password" required>
-                            </div>
+                            <p class="auth-terms">
+                                By clicking Agree & Join, you agree to the Animal Battle Stats <a href="#">User Agreement</a> and <a href="#">Privacy Policy</a>.
+                            </p>
                             
                             <button type="submit" class="auth-page-submit" id="signup-page-submit">
-                                <span class="btn-text">CREATE ACCOUNT</span>
+                                <span class="btn-text">Agree & Join</span>
                                 <span class="btn-loader"><i class="fas fa-spinner fa-spin"></i></span>
                             </button>
                         </form>
@@ -351,15 +324,9 @@
                         </div>
                         
                         <div class="auth-page-switch">
-                            Already have an account?
-                            <a href="/login">Log in</a>
+                            Already on Animal Battle Stats? <a href="/login">Sign in</a>
                         </div>
                     </div>
-                    
-                    <a href="/" class="auth-page-back">
-                        <i class="fas fa-arrow-left"></i>
-                        Back to Home
-                    </a>
                 </div>
             </div>
         </div>

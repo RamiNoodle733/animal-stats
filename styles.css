@@ -4593,102 +4593,103 @@ body {
 
 /* ========================================
    AUTH PAGES (Login/Signup Full Pages)
+   LinkedIn-inspired clean design
    ======================================== */
 
 .auth-page {
     min-height: 100vh;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px 20px;
-    background: 
-        radial-gradient(ellipse at top, rgba(0, 30, 60, 0.4) 0%, transparent 50%),
-        radial-gradient(ellipse at bottom, rgba(0, 50, 100, 0.3) 0%, transparent 50%),
-        linear-gradient(180deg, #0a0a12 0%, #050510 100%);
+    padding: 20px;
+    background: linear-gradient(135deg, #0a0f1a 0%, #0d1525 50%, #0a1018 100%);
+    position: relative;
+    box-sizing: border-box;
+}
+
+.auth-close-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.auth-close-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
 }
 
 .auth-page-container {
     width: 100%;
-    max-width: 420px;
+    max-width: 352px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 30px;
+    gap: 24px;
 }
 
 .auth-page-logo {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 12px;
+    justify-content: center;
     text-decoration: none;
-    transition: transform 0.3s ease;
-}
-
-.auth-page-logo:hover {
-    transform: scale(1.05);
 }
 
 .auth-page-logo img {
-    width: 80px;
-    height: 80px;
-    filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.4));
-}
-
-.auth-page-logo span {
-    font-family: var(--font-heading);
-    font-size: 1.5rem;
-    letter-spacing: 4px;
-    color: #fff;
-    text-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    width: 56px;
+    height: 56px;
+    filter: drop-shadow(0 0 15px rgba(0, 212, 255, 0.3));
 }
 
 .auth-page-card {
     width: 100%;
-    background: 
-        linear-gradient(180deg, 
-            rgba(15, 25, 45, 0.95) 0%, 
-            rgba(5, 10, 20, 0.98) 100%
-        );
-    border: 1px solid rgba(0, 212, 255, 0.3);
-    border-radius: 16px;
-    padding: 40px 35px;
-    box-shadow: 
-        0 0 60px rgba(0, 0, 0, 0.5),
-        0 0 40px rgba(0, 212, 255, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    background: rgba(20, 30, 50, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+    box-sizing: border-box;
 }
 
 .auth-page-title {
-    font-family: var(--font-heading);
-    font-size: 2rem;
-    letter-spacing: 3px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 1.75rem;
+    font-weight: 600;
     color: #fff;
     text-align: center;
     margin: 0 0 8px 0;
-}
-
-.auth-page-title i {
-    color: var(--primary-color);
-    margin-right: 10px;
+    line-height: 1.25;
 }
 
 .auth-page-subtitle {
-    font-family: var(--font-body);
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.5);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
     text-align: center;
-    margin: 0 0 30px 0;
+    margin: 0 0 24px 0;
 }
 
 .auth-page-error {
-    background: rgba(255, 68, 68, 0.15);
-    border: 1px solid rgba(255, 68, 68, 0.4);
-    border-radius: 8px;
-    padding: 12px 16px;
-    margin-bottom: 20px;
+    background: rgba(220, 53, 69, 0.15);
+    border: 1px solid rgba(220, 53, 69, 0.4);
+    border-radius: 4px;
+    padding: 12px;
+    margin-bottom: 16px;
     color: #ff6b6b;
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     display: none;
 }
 
@@ -4699,103 +4700,97 @@ body {
 .auth-page-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
 }
 
 .auth-form-group {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
 }
 
 .auth-form-group label {
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.8);
-    letter-spacing: 1px;
-}
-
-.auth-form-group label i {
-    color: var(--primary-color);
-    margin-right: 8px;
-    width: 16px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .auth-form-group input {
     width: 100%;
-    padding: 14px 16px;
-    background: rgba(0, 20, 40, 0.6);
-    border: 1px solid rgba(0, 212, 255, 0.25);
-    border-radius: 8px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
     color: #fff;
-    font-family: var(--font-body);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    box-sizing: border-box;
 }
 
 .auth-form-group input:focus {
     outline: none;
     border-color: var(--primary-color);
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.2);
-    background: rgba(0, 20, 40, 0.8);
+    box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
 }
 
 .auth-form-group input::placeholder {
-    color: rgba(255, 255, 255, 0.35);
+    color: rgba(255, 255, 255, 0.4);
 }
 
-.auth-form-hint {
+.auth-terms {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.4);
-    margin-top: -4px;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.5;
+    margin: 8px 0 0 0;
+    text-align: center;
+}
+
+.auth-terms a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-terms a:hover {
+    text-decoration: underline;
 }
 
 .auth-page-submit {
     width: 100%;
-    padding: 16px;
-    margin-top: 10px;
-    background: linear-gradient(135deg, var(--primary-color), #0088aa);
+    padding: 12px 24px;
+    margin-top: 8px;
+    background: var(--primary-color);
     border: none;
-    border-radius: 8px;
+    border-radius: 24px;
     color: #000;
-    font-family: var(--font-heading);
-    font-size: 1.2rem;
-    letter-spacing: 2px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     position: relative;
-    overflow: hidden;
-}
-
-.auth-page-submit::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s ease;
-}
-
-.auth-page-submit:hover::before {
-    left: 100%;
 }
 
 .auth-page-submit:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0, 212, 255, 0.4);
+    background: #00b8d9;
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.3);
+}
+
+.auth-page-submit:active {
+    transform: scale(0.98);
 }
 
 .auth-page-submit:disabled {
-    opacity: 0.7;
+    opacity: 0.6;
     cursor: not-allowed;
-    transform: none;
 }
 
 .auth-page-submit .btn-loader {
     display: none;
+    color: #000;
 }
 
 .auth-page-submit.loading .btn-text {
@@ -4813,8 +4808,8 @@ body {
 .auth-page-divider {
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin: 25px 0;
+    gap: 16px;
+    margin: 20px 0;
 }
 
 .auth-page-divider::before,
@@ -4822,59 +4817,43 @@ body {
     content: '';
     flex: 1;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.3), transparent);
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .auth-page-divider span {
-    font-family: var(--font-body);
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.4);
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.5);
 }
 
 .auth-page-switch {
     text-align: center;
-    font-family: var(--font-body);
-    font-size: 0.95rem;
-    color: rgba(255, 255, 255, 0.6);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
 }
 
 .auth-page-switch a {
     color: var(--primary-color);
     text-decoration: none;
     font-weight: 600;
-    transition: all 0.2s ease;
 }
 
 .auth-page-switch a:hover {
-    color: #fff;
-    text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
-}
-
-.auth-page-back {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: var(--font-body);
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.5);
-    text-decoration: none;
-    transition: all 0.2s ease;
-}
-
-.auth-page-back:hover {
-    color: var(--primary-color);
-}
-
-.auth-page-back i {
-    font-size: 0.8rem;
+    text-decoration: underline;
 }
 
 /* Auth Page Responsive */
 @media (max-width: 480px) {
     .auth-page {
-        padding: 20px 15px;
+        padding: 16px;
+        align-items: flex-start;
+        padding-top: 60px;
+    }
+    
+    .auth-close-btn {
+        top: 12px;
+        right: 12px;
     }
     
     .auth-page-container {
@@ -4882,30 +4861,20 @@ body {
     }
     
     .auth-page-logo img {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .auth-page-logo span {
-        font-size: 1.2rem;
-        letter-spacing: 3px;
+        width: 48px;
+        height: 48px;
     }
     
     .auth-page-card {
-        padding: 30px 25px;
+        padding: 20px;
     }
     
     .auth-page-title {
-        font-size: 1.6rem;
+        font-size: 1.5rem;
     }
     
-    .auth-form-group input {
-        padding: 12px 14px;
-    }
-    
-    .auth-page-submit {
-        padding: 14px;
-        font-size: 1.1rem;
+    .auth-page-subtitle {
+        font-size: 0.85rem;
     }
 }
 
