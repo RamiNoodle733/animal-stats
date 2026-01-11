@@ -1543,7 +1543,7 @@
 /* Stat Bars - Compact Version */
 .t-stats-compact .t-stat-bar-left,
 .t-stats-compact .t-stat-bar-right {
-    height: clamp(14px, 1.8vh, 18px);
+    height: 18px;
 }
 
 .t-stats-compact .t-stat-bar-left .stat-bar,
@@ -1553,13 +1553,14 @@
 
 /* Left bars fill from right to left (toward center) */
 .t-stats-compact .t-stat-bar-left {
-    transform: scaleX(-1);
+    direction: rtl;
 }
 
 /* Bar fill aligns toward center */
 .t-stats-compact .t-stat-bar-left .stat-bar {
     display: flex;
     justify-content: flex-start;
+    direction: ltr;
 }
 
 .t-stats-compact .t-stat-bar-right .stat-bar {
@@ -1567,24 +1568,24 @@
     justify-content: flex-start;
 }
 
-/* Left fighter color */
+/* Left fighter color - PURPLE */
 .t-stats-compact .t-stat-bar-left .stat-bar-fill {
     background: linear-gradient(180deg, 
         rgba(255, 255, 255, 0.3) 0%, 
-        var(--t-cyan) 15%, 
-        #0099cc 85%, 
+        #a855f7 15%, 
+        #9333ea 85%, 
         rgba(0, 0, 0, 0.3) 100%) !important;
-    box-shadow: 0 0 8px var(--t-cyan);
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
 }
 
-/* Right fighter color */
+/* Right fighter color - GREEN */
 .t-stats-compact .t-stat-bar-right .stat-bar-fill {
     background: linear-gradient(180deg, 
         rgba(255, 255, 255, 0.3) 0%, 
-        var(--t-orange) 15%, 
-        #cc5500 85%, 
+        #22c55e 15%, 
+        #16a34a 85%, 
         rgba(0, 0, 0, 0.3) 100%) !important;
-    box-shadow: 0 0 8px var(--t-orange);
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
 }
 
 /* Guess Result Overlay */

@@ -422,11 +422,13 @@
 }
 
 #compare-view .fighter-left .fighter-display {
-    border-color: rgba(14, 165, 233, 0.3);
+    border-color: #a855f7;
+    box-shadow: var(--cv-shadow-md), inset 0 0 30px rgba(168, 85, 247, 0.2), 0 0 15px rgba(168, 85, 247, 0.3);
 }
 
 #compare-view .fighter-right .fighter-display {
-    border-color: rgba(249, 115, 22, 0.3);
+    border-color: #22c55e;
+    box-shadow: var(--cv-shadow-md), inset 0 0 30px rgba(34, 197, 94, 0.2), 0 0 15px rgba(34, 197, 94, 0.3);
 }
 
 #compare-view .fighter-display:hover {
