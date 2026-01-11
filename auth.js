@@ -76,8 +76,6 @@ const Auth = {
             xpBarFill: document.getElementById('xp-bar-fill'),
             xpBarText: document.getElementById('xp-bar-text'),
             bpAmount: document.getElementById('bp-amount'),
-            // Profile link (direct navigation)
-            userProfileMini: document.getElementById('user-profile-mini'),
             // Profile Page Elements (retro style)
             retroDisplayName: document.getElementById('retro-display-name'),
             retroUsername: document.getElementById('retro-username'),
@@ -808,29 +806,6 @@ const Auth = {
                 loader.style.display = 'none';
             }
         }
-    },
-
-    /**
-     * Show toast notification
-     */
-    showToast(message) {
-        // Remove existing toast
-        const existing = document.querySelector('.auth-toast');
-        if (existing) existing.remove();
-
-        const toast = document.createElement('div');
-        toast.className = 'auth-toast';
-        toast.textContent = message;
-        document.body.appendChild(toast);
-
-        // Trigger animation
-        setTimeout(() => toast.classList.add('show'), 10);
-
-        // Remove after delay
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
     },
 
     /**

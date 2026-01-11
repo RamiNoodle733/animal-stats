@@ -4192,33 +4192,6 @@ class RankingsManager {
         }
     }
 
-    getTimeAgo(date) {
-        const seconds = Math.floor((new Date() - date) / 1000);
-        
-        const intervals = [
-            { label: 'year', seconds: 31536000 },
-            { label: 'month', seconds: 2592000 },
-            { label: 'day', seconds: 86400 },
-            { label: 'hour', seconds: 3600 },
-            { label: 'minute', seconds: 60 }
-        ];
-
-        for (const interval of intervals) {
-            const count = Math.floor(seconds / interval.seconds);
-            if (count >= 1) {
-                return `${count} ${interval.label}${count > 1 ? 's' : ''} ago`;
-            }
-        }
-
-        return 'Just now';
-    }
-
-    escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
     /**
      * Get avatar HTML for a user (animal image or fallback)
      */
@@ -5779,61 +5752,6 @@ class TournamentManager {
         const { animal1Votes, animal2Votes } = this.currentMatchupVotes;
         if (animal1Votes === animal2Votes) return null;
         return animal1Votes > animal2Votes ? 0 : 1;
-    }
-    
-    /**
-     * Handle voting on animals in tournament battle screen
-     */
-    async handleTournamentVote(animal, voteType, fighterNum) {
-        if (!Auth.isLoggedIn()) {
-            Auth.showToast('Please log in to vote!');
-            Auth.showModal('login');
-            return;
-        }
-        
-        try {
-            const response = await fetch('/api/votes', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${Auth.getToken()}`
-                },
-                body: JSON.stringify({ 
-                    animalId: animal._id || animal.id, 
-                    animalName: animal.name, 
-                    voteType 
-                })
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                // Update vote counts in the UI
-                const upvotesEl = document.getElementById(`t-fighter-${fighterNum}-upvotes`);
-                const downvotesEl = document.getElementById(`t-fighter-${fighterNum}-downvotes`);
-                
-                if (upvotesEl) upvotesEl.textContent = result.data.upvotes;
-                if (downvotesEl) downvotesEl.textContent = result.data.downvotes;
-                
-                // Visual feedback
-                const btn = voteType === 'up' ? upvotesEl?.parentElement : downvotesEl?.parentElement;
-                if (btn) {
-                    btn.style.transform = 'scale(1.2)';
-                    setTimeout(() => btn.style.transform = 'scale(1)', 200);
-                }
-                
-                Auth.showToast(result.message || 'Vote recorded!');
-            } else {
-                if (result.alreadyVotedToday) {
-                    Auth.showToast('Already voted on this animal today!');
-                } else {
-                    Auth.showToast(result.error || 'Failed to vote');
-                }
-            }
-        } catch (error) {
-            console.error('Tournament vote error:', error);
-            Auth.showToast('Error voting. Please try again.');
-        }
     }
     
     async recordBattleWithInCardAnimation(winner, loser, winnerIndex) {
