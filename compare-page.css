@@ -657,14 +657,15 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    padding: 16px 12px;
-    gap: 12px;
+    justify-content: flex-start;
+    padding: 10px 10px;
+    gap: 8px;
     background: linear-gradient(180deg, var(--cv-bg-panel) 0%, var(--cv-bg-dark) 100%);
     border-radius: var(--cv-radius-lg);
     border: 1px solid var(--cv-border);
     box-shadow: var(--cv-shadow-lg), var(--cv-shadow-inset);
     animation: cv-fadeIn 0.5s ease-out 0.15s both;
+    overflow: hidden;
 }
 
 /* Hide radar chart */
@@ -677,8 +678,8 @@
    ========================== */
 #compare-view .c-vs-section {
     position: relative;
-    width: clamp(36px, 5vh, 50px);
-    height: clamp(36px, 5vh, 50px);
+    width: clamp(28px, 4vh, 40px);
+    height: clamp(28px, 4vh, 40px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -707,8 +708,8 @@
     position: relative;
     z-index: 2;
     background: linear-gradient(135deg, var(--cv-cta), #f59e0b);
-    width: clamp(32px, 4.5vh, 44px);
-    height: clamp(32px, 4.5vh, 44px);
+    width: clamp(26px, 3.5vh, 36px);
+    height: clamp(26px, 3.5vh, 36px);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -718,7 +719,7 @@
 }
 
 #compare-view .c-vs-badge span {
-    font-size: clamp(0.7rem, 1.2vh, 0.9rem);
+    font-size: clamp(0.55rem, 1vh, 0.75rem);
     font-weight: 900;
     color: #1a1a2e;
     letter-spacing: 0.05em;
@@ -728,8 +729,8 @@
    FIGHT BUTTON - CTA ONLY GETS GLOW
    ========================== */
 #compare-view .c-fight-btn {
-    padding: clamp(10px, 1.5vh, 14px) clamp(24px, 4vw, 36px);
-    font-size: clamp(0.85rem, 1.6vh, 1.1rem);
+    padding: clamp(6px, 1vh, 10px) clamp(18px, 3vw, 28px);
+    font-size: clamp(0.7rem, 1.3vh, 0.95rem);
     font-weight: 800;
     letter-spacing: 0.15em;
     text-transform: uppercase;
@@ -740,7 +741,7 @@
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     transition: all var(--cv-transition);
     box-shadow: 0 4px 20px var(--cv-cta-glow);
     animation: cv-ctaPulse 2.5s ease-in-out infinite;
@@ -762,8 +763,8 @@
    ========================== */
 #compare-view .t-stats-compact {
     width: 100%;
-    padding: 12px;
-    gap: 8px;
+    padding: 6px 8px;
+    gap: 4px;
     background: var(--cv-bg-module);
     border-radius: var(--cv-radius-md);
     border: 1px solid var(--cv-border);
@@ -771,15 +772,16 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    min-height: 0;
 }
 
 #compare-view .t-stat-row-compact {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    gap: 8px;
+    gap: 6px;
     align-items: center;
     transition: background var(--cv-transition);
-    padding: 2px 4px;
+    padding: 1px 2px;
     border-radius: var(--cv-radius-sm);
 }
 
@@ -792,9 +794,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    min-width: clamp(80px, 12vw, 110px);
-    padding: 4px 10px;
+    gap: 6px;
+    min-width: clamp(70px, 10vw, 100px);
+    padding: 2px 6px;
     background: var(--cv-bg-elevated);
     border-radius: var(--cv-radius-sm);
     border: 1px solid var(--cv-border-subtle);
@@ -802,9 +804,9 @@
 
 /* Stat Values - LARGER */
 #compare-view .t-stat-center-cluster .t-val {
-    font-size: clamp(0.9rem, 1.6vh, 1.15rem);
+    font-size: clamp(0.75rem, 1.3vh, 1rem);
     font-weight: 800;
-    min-width: 24px;
+    min-width: 20px;
     text-align: center;
     font-variant-numeric: tabular-nums;
     transition: all var(--cv-transition);
@@ -830,16 +832,16 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1px;
+    gap: 0px;
 }
 
 #compare-view .t-stat-icon-label i {
-    font-size: clamp(0.6rem, 1vh, 0.75rem);
+    font-size: clamp(0.5rem, 0.9vh, 0.65rem);
     color: var(--cv-text-muted);
 }
 
 #compare-view .t-stat-abbr {
-    font-size: clamp(0.45rem, 0.7vh, 0.55rem);
+    font-size: clamp(0.4rem, 0.6vh, 0.5rem);
     color: var(--cv-text-dim);
     text-transform: uppercase;
     font-weight: 700;
@@ -849,7 +851,7 @@
 /* Stat Bar Tracks */
 #compare-view .t-stat-bar-left,
 #compare-view .t-stat-bar-right {
-    height: clamp(10px, 1.4vh, 14px);
+    height: clamp(8px, 1.2vh, 12px);
     border-radius: 3px;
     overflow: hidden;
     background: rgba(0, 0, 0, 0.3);
