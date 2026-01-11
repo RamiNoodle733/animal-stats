@@ -552,11 +552,24 @@ class AnimalStatsApp {
                     username = payload.username || 'Anonymous';
                 } catch (e) { }
             }
+            
+            // Send Discord notification
             fetch(API_CONFIG.baseUrl + '/api/animals?action=notify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username })
             }).catch(() => {});
+            
+            // Increment site visit counter (rate limited - once per session)
+            const lastVisitKey = 'abs_last_visit';
+            const lastVisit = sessionStorage.getItem(lastVisitKey);
+            if (!lastVisit) {
+                fetch(API_CONFIG.baseUrl + '/api/community?action=visit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                }).catch(() => {});
+                sessionStorage.setItem(lastVisitKey, Date.now().toString());
+            }
             
             // Set up site leave tracking
             window.addEventListener('beforeunload', () => {

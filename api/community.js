@@ -216,24 +216,31 @@ async function handleStats(req, res) {
         totalVotes,
         totalComments,
         totalChatMessages,
-        totalBattles
+        battleStatsAgg,
+        tournamentStatsAgg
     ] = await Promise.all([
         User.countDocuments({}),
         Vote.countDocuments({}),
         Comment.countDocuments({ isHidden: false }),
         ChatMessage.countDocuments({ isDeleted: { $ne: true } }),
+        // Sum up all tournament battles (matches)
         BattleStats.aggregate([
-            { $group: { _id: null, total: { $sum: '$totalBattles' } } }
-        ]).then(r => r[0]?.total || 0)
+            { $group: { _id: null, totalMatches: { $sum: '$tournamentBattles' } } }
+        ]).then(r => r[0]?.totalMatches || 0),
+        // Sum up all tournaments played (each animal's tournaments count / 8 for bracket size avg)
+        BattleStats.aggregate([
+            { $group: { _id: null, totalTournaments: { $sum: '$tournamentsPlayed' } } }
+        ]).then(r => r[0]?.totalTournaments || 0)
     ]);
 
     // Clean up presence to get accurate count
     cleanupPresence();
     
-    // Calculate tournament stats from battles data
-    // Assume average tournament has ~7 rounds (8-animal brackets)
-    const estimatedTournaments = Math.floor(totalBattles / 7) || (siteStats.totalTournaments || 0);
-    const estimatedMatches = totalBattles;
+    // Total matches is sum of all tournamentBattles
+    const totalMatches = battleStatsAgg;
+    // Total tournaments is sum of tournamentsPlayed divided by avg participants (8)
+    // Each tournament has 8 animals, so total tournamentsPlayed / 8 = actual tournaments
+    const totalTournaments = Math.floor(tournamentStatsAgg / 8) || siteStats.totalTournaments || 0;
 
     return res.status(200).json({
         success: true,
@@ -241,10 +248,9 @@ async function handleStats(req, res) {
             totalUsers,
             totalVotes,
             totalComments: totalComments + totalChatMessages,
-            totalBattles,
-            totalComparisons: siteStats.totalComparisons || totalBattles,
-            totalTournaments: estimatedTournaments,
-            totalMatches: estimatedMatches,
+            totalMatches,
+            totalComparisons: siteStats.totalComparisons || totalMatches,
+            totalTournaments,
             totalVisits: siteStats.totalVisits || Math.floor(totalUsers * 5), // Estimate if not tracked
             onlineNow: presenceStore.size
         }
