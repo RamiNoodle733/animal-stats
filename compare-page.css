@@ -131,14 +131,16 @@
    FIGHT SCREEN GRID
    ========================== */
 #compare-view .fight-screen {
-    flex: 1 1 0;
+    flex: 1 1 auto;
     display: grid;
     grid-template-columns: 1fr clamp(200px, 20vw, 300px) 1fr;
-    grid-template-rows: 1fr;
+    grid-template-rows: minmax(0, 1fr);
     gap: 12px;
     padding: 12px 16px;
     align-items: stretch;
     min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
     background: transparent;
 }
 
