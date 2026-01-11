@@ -104,7 +104,7 @@
     top: 0;
     z-index: 20;
     background: linear-gradient(135deg, var(--panel-1, rgba(14, 20, 28, 0.95)), var(--panel-0, rgba(8, 12, 18, 0.98)));
-    border: 1px solid var(--steel-border, rgba(90, 100, 120, 0.5));
+    border: 1px solid rgba(0, 212, 255, 0.2);
     border-radius: 4px;
     margin-bottom: clamp(8px, 1vh, 12px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
@@ -137,7 +137,7 @@
 }
 
 #community-view .community-tab-btn.active {
-    color: var(--accent-teal, #1E8B97);
+    color: #00d4ff;
     background: rgba(30, 139, 151, 0.1);
 }
 
@@ -148,7 +148,7 @@
     left: 20%;
     right: 20%;
     height: 3px;
-    background: var(--accent-teal, #1E8B97);
+    background: #00d4ff;
     border-radius: 2px;
 }
 
@@ -217,7 +217,7 @@
     width: clamp(32px, 4vw, 40px);
     height: clamp(32px, 4vw, 40px);
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent-teal-strong), #0066cc);
+    background: linear-gradient(135deg, #00d4ff, #0066cc);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -251,7 +251,7 @@
     width: clamp(38px, 5vw, 44px);
     height: clamp(38px, 5vw, 44px);
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent-teal-strong), #0066cc);
+    background: linear-gradient(135deg, #00d4ff, #0066cc);
     border: none;
     color: #fff;
     cursor: pointer;
@@ -282,7 +282,7 @@
 }
 
 #community-view .compose-login-prompt a {
-    color: var(--accent-teal-strong);
+    color: #00d4ff;
     text-decoration: none;
     font-weight: 600;
 }
@@ -343,7 +343,7 @@
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(0.9rem, 1.1vw, 1.15rem);
     letter-spacing: 2px;
-    color: var(--accent-teal-strong);
+    color: #00d4ff;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -552,7 +552,7 @@
 
 #community-view .matchup-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, var(--accent-teal-strong), var(--accent-teal));
+    background: linear-gradient(90deg, #00d4ff, #00d4ff);
     border-radius: 3px;
     transition: width 0.5s ease;
 }
@@ -560,7 +560,7 @@
 #community-view .matchup-pct {
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(0.75rem, 0.85vw, 0.9rem);
-    color: var(--accent-teal-strong);
+    color: #00d4ff;
 }
 
 #community-view .matchup-vote-btn {
@@ -676,7 +676,7 @@
     width: clamp(26px, 3vw, 34px);
     height: clamp(26px, 3vw, 34px);
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent-teal-strong), #0066cc);
+    background: linear-gradient(135deg, #00d4ff, #0066cc);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -767,7 +767,7 @@
 }
 
 #community-view .feed-action-btn.voted {
-    color: var(--accent-teal-strong);
+    color: #00d4ff;
 }
 
 #community-view .feed-action-btn i {

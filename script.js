@@ -25,22 +25,6 @@ function formatStat(num, decimals = 1) {
     return parts.length > 1 ? `${intPart}.${parts[1]}` : intPart;
 }
 
-/**
- * Value-driven stat bar color mapping
- * Returns CSS class based on numeric value (0-100)
- * Same value = same color across entire site
- */
-function getStatBandClass(value) {
-    const v = Math.round(value || 0);
-    if (v >= 100) return 'stat-band-max';
-    if (v >= 95) return 'stat-band-5';
-    if (v >= 80) return 'stat-band-4';
-    if (v >= 60) return 'stat-band-3';
-    if (v >= 40) return 'stat-band-2';
-    if (v >= 20) return 'stat-band-1';
-    return 'stat-band-0';
-}
-
 // Fallback placeholder image (inline SVG - always works, no external dependency)
 const FALLBACK_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect fill='%23222' width='100' height='100'/%3E%3Ctext x='50' y='55' text-anchor='middle' fill='%23666' font-size='32' font-family='sans-serif'%3E%3F%3C/text%3E%3C/svg%3E";
 

@@ -3,18 +3,18 @@
    Designed to fit 1366x768 minimum viewport
    ============================================ */
 
-/* CSS Variables for Tournament - mapped to main theme tokens */
+/* CSS Variables for Tournament - VIBRANT colors */
 :root {
-    --t-gold: var(--reward-gold, #F2B233);
+    --t-gold: #ffd700;
     --t-gold-dark: #B8860B;
-    --t-cyan: var(--accent-teal-strong, #25A8B6);
+    --t-cyan: #00d4ff;
     --t-orange: #ff6b00;
-    --t-red: var(--negative-muted, #8B4A4A);
-    --t-green: var(--accent-teal, #1E8B97);
+    --t-red: #ff4d4d;
+    --t-green: #00ff88;
     --t-purple: #9966ff;
-    --t-bg-dark: var(--panel-0, rgba(10, 14, 26, 0.98));
-    --t-bg-darker: var(--bg-0, rgba(5, 8, 16, 0.98));
-    --t-border: var(--steel-border, rgba(255, 255, 255, 0.1));
+    --t-bg-dark: rgba(10, 14, 26, 0.98);
+    --t-bg-darker: rgba(5, 8, 16, 0.98);
+    --t-border: rgba(0, 212, 255, 0.2);
     --t-glow: 0 0 20px;
     --t-radius: 4px;
     --t-spacing: clamp(8px, 1.5vh, 16px);
@@ -178,8 +178,8 @@
 }
 
 .t-bracket-card {
-    background: rgba(30, 139, 151, 0.08);
-    border: 2px solid rgba(30, 139, 151, 0.3);
+    background: rgba(0, 212, 255, 0.08);
+    border: 2px solid rgba(0, 212, 255, 0.3);
     border-radius: 6px;
     padding: clamp(8px, 1.2vh, 14px) 8px;
     cursor: pointer;
@@ -189,9 +189,9 @@
 }
 
 .t-bracket-card:hover {
-    border-color: rgba(30, 139, 151, 0.6);
+    border-color: rgba(0, 212, 255, 0.6);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(30, 139, 151, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
 }
 
 .t-bracket-card.selected {
@@ -294,7 +294,7 @@
 /* HUD-style chip - rectangular, no pills */
 .t-chip {
     padding: 4px 10px;
-    background: rgba(30, 139, 151, 0.1);
+    background: rgba(0, 212, 255, 0.1);
     border: 1px solid var(--steel-1, rgba(64, 72, 88, 0.8));
     border-radius: 2px;
     color: var(--text-muted, rgba(255, 255, 255, 0.55));
@@ -312,9 +312,9 @@
 }
 
 .t-chip:hover {
-    border-color: var(--accent-teal, #1E8B97);
+    border-color: var(--accent-teal, #00d4ff);
     color: var(--text-0, #fff);
-    background: rgba(30, 139, 151, 0.15);
+    background: rgba(0, 212, 255, 0.15);
 }
 
 .t-chip.active {
@@ -329,7 +329,7 @@
     align-items: center;
     justify-content: space-between;
     padding: clamp(10px, 1.5vh, 16px);
-    background: linear-gradient(90deg, rgba(30, 139, 151, 0.08), rgba(242, 178, 51, 0.08));
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.08), rgba(242, 178, 51, 0.08));
     border: 1px solid var(--t-border);
     border-radius: var(--t-radius);
     margin-bottom: clamp(6px, 1vh, 10px);
@@ -493,7 +493,7 @@
     display: flex;
     flex-direction: column;
     background: linear-gradient(135deg, rgba(15, 20, 35, 0.95), rgba(10, 15, 25, 0.98));
-    border: 2px solid rgba(30, 139, 151, 0.35);
+    border: 2px solid rgba(0, 212, 255, 0.35);
     border-radius: 8px;
     padding: clamp(10px, 1.5vh, 16px);
     cursor: pointer;
@@ -504,7 +504,7 @@
 }
 
 .t-fighter-card.left {
-    border-color: rgba(30, 139, 151, 0.4);
+    border-color: rgba(0, 212, 255, 0.4);
 }
 
 .t-fighter-card.right {
@@ -517,7 +517,7 @@
 
 .t-fighter-card.left:hover {
     border-color: var(--t-cyan);
-    box-shadow: 0 0 25px rgba(30, 139, 151, 0.4);
+    box-shadow: 0 0 25px rgba(0, 212, 255, 0.4);
 }
 
 .t-fighter-card.right:hover {
@@ -1160,7 +1160,7 @@
 }
 
 .t-info-panel.left {
-    border-color: rgba(30, 139, 151, 0.3);
+    border-color: rgba(0, 212, 255, 0.3);
 }
 
 .t-info-panel.right {
@@ -1276,13 +1276,13 @@
 }
 
 .t-details-btn {
-    background: rgba(30, 139, 151, 0.1) !important;
-    border-color: rgba(30, 139, 151, 0.3) !important;
+    background: rgba(0, 212, 255, 0.1) !important;
+    border-color: rgba(0, 212, 255, 0.3) !important;
 }
 
 .t-details-btn:hover {
-    background: rgba(30, 139, 151, 0.2) !important;
-    border-color: rgba(30, 139, 151, 0.5) !important;
+    background: rgba(0, 212, 255, 0.2) !important;
+    border-color: rgba(0, 212, 255, 0.5) !important;
 }
 
 /* ========== DETAILS OVERLAY PANEL ========== */
@@ -1311,8 +1311,8 @@
 }
 
 .t-info-panel.left .t-details-overlay {
-    border: 1px solid rgba(30, 139, 151, 0.4);
-    box-shadow: 0 0 30px rgba(30, 139, 151, 0.2), inset 0 0 60px rgba(30, 139, 151, 0.05);
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.2), inset 0 0 60px rgba(0, 212, 255, 0.05);
 }
 
 .t-info-panel.right .t-details-overlay {
@@ -1330,7 +1330,7 @@
 }
 
 .t-info-panel.left .t-details-header {
-    background: linear-gradient(90deg, rgba(30, 139, 151, 0.15), transparent);
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.15), transparent);
 }
 
 .t-info-panel.right .t-details-header {
@@ -2044,8 +2044,8 @@
             45deg,
             transparent 0px,
             transparent 100px,
-            rgba(30, 139, 151, 0.02) 100px,
-            rgba(30, 139, 151, 0.02) 102px
+            rgba(0, 212, 255, 0.02) 100px,
+            rgba(0, 212, 255, 0.02) 102px
         );
     opacity: 0;
     animation: speedLinesIn 0.3s ease-out 0.1s forwards;
@@ -2116,10 +2116,10 @@
 }
 
 .intro-fighter-plate.left {
-    border: 2px solid rgba(30, 139, 151, 0.5);
+    border: 2px solid rgba(0, 212, 255, 0.5);
     box-shadow: 
-        0 0 30px rgba(30, 139, 151, 0.3),
-        inset 0 0 20px rgba(30, 139, 151, 0.05);
+        0 0 30px rgba(0, 212, 255, 0.3),
+        inset 0 0 20px rgba(0, 212, 255, 0.05);
     transform: translateX(-100vw);
     animation: introSlideLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
 }
@@ -2186,7 +2186,7 @@
 }
 
 .intro-fighter-glow.left {
-    background: radial-gradient(circle, rgba(30, 139, 151, 0.4) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(0, 212, 255, 0.4) 0%, transparent 70%);
 }
 
 .intro-fighter-glow.right {
@@ -2253,7 +2253,7 @@
 }
 
 .intro-fighter-plate.left .intro-fighter-name {
-    text-shadow: 0 0 20px rgba(30, 139, 151, 0.5);
+    text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
 }
 
 .intro-fighter-plate.right .intro-fighter-name {
