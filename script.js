@@ -25,6 +25,22 @@ function formatStat(num, decimals = 1) {
     return parts.length > 1 ? `${intPart}.${parts[1]}` : intPart;
 }
 
+/**
+ * Value-driven stat bar color mapping
+ * Returns CSS class based on numeric value (0-100)
+ * Same value = same color across entire site
+ */
+function getStatBandClass(value) {
+    const v = Math.round(value || 0);
+    if (v >= 100) return 'stat-band-max';
+    if (v >= 95) return 'stat-band-5';
+    if (v >= 80) return 'stat-band-4';
+    if (v >= 60) return 'stat-band-3';
+    if (v >= 40) return 'stat-band-2';
+    if (v >= 20) return 'stat-band-1';
+    return 'stat-band-0';
+}
+
 // Fallback placeholder image (inline SVG - always works, no external dependency)
 const FALLBACK_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect fill='%23222' width='100' height='100'/%3E%3Ctext x='50' y='55' text-anchor='middle' fill='%23666' font-size='32' font-family='sans-serif'%3E%3F%3C/text%3E%3C/svg%3E";
 
@@ -1495,9 +1511,9 @@ class AnimalStatsApp {
             
             if (this.dom.statBars[stat]) {
                 this.dom.statBars[stat].style.width = `${Math.min(value, 100)}%`;
-                // Add tier class for color-coding (use base letter for color)
-                const tierBase = tier.charAt(0).toLowerCase();
-                this.dom.statBars[stat].className = `stat-bar-fill stat-bar-tier-${tierBase}`;
+                // Use value-driven band class for consistent colors across site
+                const bandClass = getStatBandClass(value);
+                this.dom.statBars[stat].className = `stat-bar-fill ${bandClass}`;
             }
             
             if (this.dom.statValues[stat]) {
@@ -1516,6 +1532,7 @@ class AnimalStatsApp {
                 this.dom.statValues[stat].innerHTML = `<span class="stat-badge-slot">${statBadge}</span><span class="stat-number">${formatStat(value, 1)}</span><span class="stat-tier-badge tier-${tierClass}">${tier}</span>`;
             }
         });
+
 
         // Quick Stats Bar
         if (this.dom.quickWeight) {
@@ -5355,15 +5372,10 @@ class TournamentManager {
     }
     
     /**
-     * Get the tier class for a stat value (reuses Stats page tier system)
+     * Get the tier class for a stat value (uses value-driven band system)
      */
     getStatTierClass(value) {
-        if (value >= 90) return 'stat-bar-tier-s';
-        if (value >= 75) return 'stat-bar-tier-a';
-        if (value >= 60) return 'stat-bar-tier-b';
-        if (value >= 40) return 'stat-bar-tier-c';
-        if (value >= 20) return 'stat-bar-tier-d';
-        return 'stat-bar-tier-f';
+        return getStatBandClass(value);
     }
     
     /**

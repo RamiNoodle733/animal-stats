@@ -467,11 +467,20 @@
                 if (val1El) val1El.textContent = leftVal.toFixed ? leftVal.toFixed(0) : leftVal;
                 if (val2El) val2El.textContent = rightVal.toFixed ? rightVal.toFixed(0) : rightVal;
                 
-                // Update bars (assuming 0-100 scale)
+                // Update bars with value-driven colors
                 const bar1El = document.getElementById(`c-bar-1-${stat}`);
                 const bar2El = document.getElementById(`c-bar-2-${stat}`);
-                if (bar1El) bar1El.style.width = `${Math.min(100, leftVal)}%`;
-                if (bar2El) bar2El.style.width = `${Math.min(100, rightVal)}%`;
+                if (bar1El) {
+                    bar1El.style.width = `${Math.min(100, leftVal)}%`;
+                    // Use the global getStatBandClass if available
+                    const bandClass = typeof getStatBandClass === 'function' ? getStatBandClass(leftVal) : '';
+                    bar1El.className = `c-bar-fill c-bar-left-fill ${bandClass}`;
+                }
+                if (bar2El) {
+                    bar2El.style.width = `${Math.min(100, rightVal)}%`;
+                    const bandClass = typeof getStatBandClass === 'function' ? getStatBandClass(rightVal) : '';
+                    bar2El.className = `c-bar-fill c-bar-right-fill ${bandClass}`;
+                }
                 
                 // Highlight winner
                 const rowEl = document.getElementById(`c-stat-row-${stat}`);
