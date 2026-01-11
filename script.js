@@ -6746,8 +6746,9 @@ class CommunityManager {
             const result = await response.json();
             this.chatMessages = result.data || [];
             
+            // Track newest message time for polling (first message is now newest)
             if (this.chatMessages.length > 0) {
-                this.lastChatTime = this.chatMessages[this.chatMessages.length - 1].createdAt;
+                this.lastChatTime = this.chatMessages[0].createdAt;
             }
             
             this.renderChat();
@@ -7097,13 +7098,14 @@ class CommunityManager {
             const result = await response.json();
             const newMessages = result.data || [];
             
-            // Check for new messages
+            // Check for new messages (newer messages are at start of array now)
             if (newMessages.length > 0) {
                 const existingIds = new Set(this.chatMessages.map(m => m._id));
                 const trulyNew = newMessages.filter(m => !existingIds.has(m._id));
                 
                 if (trulyNew.length > 0) {
-                    this.chatMessages.push(...trulyNew);
+                    // Add new messages at the beginning (newest first)
+                    this.chatMessages.unshift(...trulyNew);
                     this.renderChat();
                 }
             }

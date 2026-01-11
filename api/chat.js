@@ -254,8 +254,8 @@ async function handleGet(req, res) {
     // Build tree structure
     const tree = buildMessageTree(allMessages, userMap);
 
-    // Reverse to get chronological order (oldest first for chat)
-    tree.reverse();
+    // Keep newest first (reverse chronological)
+    // tree.reverse(); // Removed - newest messages should be at top
 
     return res.status(200).json({
         success: true,
