@@ -470,8 +470,21 @@
                 // Update bars (assuming 0-100 scale)
                 const bar1El = document.getElementById(`c-bar-1-${stat}`);
                 const bar2El = document.getElementById(`c-bar-2-${stat}`);
-                if (bar1El) bar1El.style.width = `${Math.min(100, leftVal)}%`;
-                if (bar2El) bar2El.style.width = `${Math.min(100, rightVal)}%`;
+                
+                if (bar1El) {
+                    bar1El.style.width = `${Math.min(100, leftVal)}%`;
+                    // Saturation: low stats are grey (0.2), high stats are saturated (1.3)
+                    const leftSat = 0.2 + (leftVal / 100) * 1.1;
+                    bar1El.style.filter = `saturate(${leftSat})`;
+                    // Add high-stat class for pulse animation on high values
+                    bar1El.classList.toggle('high-stat', leftVal >= 80);
+                }
+                if (bar2El) {
+                    bar2El.style.width = `${Math.min(100, rightVal)}%`;
+                    const rightSat = 0.2 + (rightVal / 100) * 1.1;
+                    bar2El.style.filter = `saturate(${rightSat})`;
+                    bar2El.classList.toggle('high-stat', rightVal >= 80);
+                }
                 
                 // Highlight winner
                 const rowEl = document.getElementById(`c-stat-row-${stat}`);
@@ -649,31 +662,35 @@
 
         /**
          * Setup click handlers for weight/speed unit toggles
+         * Uses event delegation to handle dynamically created elements
          */
         setupUnitToggles() {
-            // Weight toggles (click to switch kg/lbs)
-            ['c-weight-1', 'c-weight-2'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.addEventListener('click', () => {
-                        if (window.app?.toggleWeightUnit) {
-                            window.app.toggleWeightUnit();
-                            this.refreshUnitDisplays();
-                        }
-                    });
-                }
-            });
+            // Use event delegation on the compare view container
+            const compareView = document.getElementById('compare-view');
+            if (!compareView || compareView.dataset.unitTogglesSetup) return;
             
-            // Speed toggles (click to switch km/h / mph)
-            ['c-speed-1', 'c-speed-2'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) {
-                    el.addEventListener('click', () => {
-                        if (window.app?.toggleSpeedUnit) {
-                            window.app.toggleSpeedUnit();
-                            this.refreshUnitDisplays();
-                        }
-                    });
+            compareView.dataset.unitTogglesSetup = 'true';
+            
+            compareView.addEventListener('click', (e) => {
+                const target = e.target.closest('.quick-info-item.clickable');
+                if (!target) return;
+                
+                const id = target.id;
+                
+                // Weight toggles
+                if (id === 'c-weight-1' || id === 'c-weight-2') {
+                    if (window.app?.toggleWeightUnit) {
+                        window.app.toggleWeightUnit();
+                        this.refreshUnitDisplays();
+                    }
+                }
+                
+                // Speed toggles
+                if (id === 'c-speed-1' || id === 'c-speed-2') {
+                    if (window.app?.toggleSpeedUnit) {
+                        window.app.toggleSpeedUnit();
+                        this.refreshUnitDisplays();
+                    }
                 }
             });
         },
