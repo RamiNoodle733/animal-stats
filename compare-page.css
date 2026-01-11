@@ -175,10 +175,10 @@
     pointer-events: none;
 }
 
-/* LEFT PANEL */
+/* LEFT PANEL - PURPLE */
 #compare-view .fighter-section.fighter-left {
     grid-template-columns: 1fr auto;
-    border-left: 3px solid var(--cv-team-left);
+    border-left: 3px solid #a855f7;
     animation: cv-slideInLeft 0.4s ease-out;
 }
 
@@ -189,15 +189,15 @@
     left: 0;
     width: 40%;
     height: 100%;
-    background: linear-gradient(90deg, var(--cv-team-left-dim), transparent);
+    background: linear-gradient(90deg, rgba(168, 85, 247, 0.15), transparent);
     pointer-events: none;
     opacity: 0.6;
 }
 
-/* RIGHT PANEL */
+/* RIGHT PANEL - GREEN */
 #compare-view .fighter-section.fighter-right {
     grid-template-columns: auto 1fr;
-    border-right: 3px solid var(--cv-team-right);
+    border-right: 3px solid #22c55e;
     animation: cv-slideInRight 0.4s ease-out;
 }
 
@@ -208,7 +208,7 @@
     right: 0;
     width: 40%;
     height: 100%;
-    background: linear-gradient(-90deg, var(--cv-team-right-dim), transparent);
+    background: linear-gradient(-90deg, rgba(34, 197, 94, 0.15), transparent);
     pointer-events: none;
     opacity: 0.6;
 }
@@ -917,11 +917,11 @@
     text-shadow: 0 0 8px var(--cv-team-right-glow), 0 1px 3px rgba(0, 0, 0, 0.7);
 }
 
-/* Winner highlight */
+/* Winner highlight - just add brightness, keep team colors */
 #compare-view .t-stat-row-compact.left-wins .t-val.left,
 #compare-view .t-stat-row-compact.right-wins .t-val.right {
-    color: var(--cv-win);
-    text-shadow: 0 0 8px var(--cv-win-dim);
+    filter: brightness(1.3);
+    text-shadow: 0 0 12px currentColor, 0 1px 3px rgba(0, 0, 0, 0.7);
 }
 
 /* Stat Icon & Label */
@@ -947,19 +947,19 @@
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
 }
 
-/* Stat Bar Tracks - PS3 style THICK bars */
+/* Stat Bar Tracks - THICK RECTANGLE bars like stats page */
 #compare-view .t-stat-bar-left,
 #compare-view .t-stat-bar-right {
-    height: 22px;
-    border-radius: 3px;
+    height: 18px;
+    border-radius: 2px;
     overflow: hidden;
     background: linear-gradient(180deg, #0a0a0a 0%, #151515 50%, #0a0a0a 100%);
     border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.9), 0 1px 0 rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.9), 0 1px 0 rgba(255, 255, 255, 0.05);
     position: relative;
 }
 
-/* Segment lines overlay for PS3 style */
+/* Segment lines overlay for segmented look */
 #compare-view .t-stat-bar-left::before,
 #compare-view .t-stat-bar-right::before {
     content: '';
@@ -971,9 +971,9 @@
     background: repeating-linear-gradient(
         90deg,
         transparent 0px,
-        transparent 6px,
-        rgba(0, 0, 0, 0.5) 6px,
-        rgba(0, 0, 0, 0.5) 8px
+        transparent 8px,
+        rgba(0, 0, 0, 0.6) 8px,
+        rgba(0, 0, 0, 0.6) 10px
     );
     z-index: 2;
     pointer-events: none;
@@ -986,43 +986,42 @@
 
 #compare-view .t-stat-bar-left .stat-bar {
     height: 100%;
-    display: flex;
-    justify-content: flex-start;
-    direction: ltr;
+    display: block;
+    width: 100%;
 }
 
 #compare-view .t-stat-bar-right .stat-bar {
     height: 100%;
-    display: flex;
-    justify-content: flex-start;
+    display: block;
+    width: 100%;
 }
 
-/* Bar Fills with saturation based on value (set via inline style) */
+/* Bar Fills - PURPLE for left, GREEN for right */
 #compare-view .t-stat-bar-left .stat-bar-fill {
     background: linear-gradient(180deg, 
-        rgba(255, 255, 255, 0.25) 0%, 
+        rgba(255, 255, 255, 0.3) 0%, 
         #a855f7 15%, 
         #9333ea 85%, 
         rgba(0, 0, 0, 0.3) 100%);
     height: 100%;
-    border-radius: 0 2px 2px 0;
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s ease, transform 0.3s ease;
-    box-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+    border-radius: 0;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s ease;
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
 }
 
 #compare-view .t-stat-bar-right .stat-bar-fill {
     background: linear-gradient(180deg, 
-        rgba(255, 255, 255, 0.25) 0%, 
+        rgba(255, 255, 255, 0.3) 0%, 
         #22c55e 15%, 
         #16a34a 85%, 
         rgba(0, 0, 0, 0.3) 100%);
     height: 100%;
-    border-radius: 2px 0 0 2px;
-    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s ease, transform 0.3s ease;
-    box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+    border-radius: 0;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1), filter 0.3s ease;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
 }
 
-/* High stat animation - subtle shake and glow for bars with high values */
+/* High stat animation - subtle pulse for bars with high values */
 #compare-view .t-stat-bar-left .stat-bar-fill.high-stat,
 #compare-view .t-stat-bar-right .stat-bar-fill.high-stat {
     animation: cv-highStatPulse 1.5s ease-in-out infinite;
@@ -1031,23 +1030,21 @@
 @keyframes cv-highStatPulse {
     0%, 100% { 
         filter: brightness(1) saturate(1.2);
-        transform: scaleY(1);
     }
     50% { 
-        filter: brightness(1.15) saturate(1.4);
-        transform: scaleY(1.05);
+        filter: brightness(1.2) saturate(1.5);
     }
 }
 
-/* Winner bar highlight - keep team colors, just add glow */
+/* Winner bar highlight - brighter glow */
 #compare-view .t-stat-row-compact.left-wins .t-stat-bar-left .stat-bar-fill {
-    filter: brightness(1.2) saturate(1.3);
-    box-shadow: 0 0 12px rgba(168, 85, 247, 0.7);
+    filter: brightness(1.15) saturate(1.4);
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.8);
 }
 
 #compare-view .t-stat-row-compact.right-wins .t-stat-bar-right .stat-bar-fill {
-    filter: brightness(1.2) saturate(1.3);
-    box-shadow: 0 0 12px rgba(34, 197, 94, 0.7);
+    filter: brightness(1.15) saturate(1.4);
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.8);
 }
 
 /* ==========================

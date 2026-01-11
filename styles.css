@@ -1992,17 +1992,6 @@ body {
     flex-shrink: 0;
 }
 
-/* Compare view: character cards get purple/green borders */
-#compare-view ~ .bottom-section .character-card,
-body:has(#compare-view.active-view) .character-card {
-    border-color: rgba(168, 85, 247, 0.4);
-}
-
-body:has(#compare-view.active-view) .character-card:hover {
-    border-color: #a855f7;
-    box-shadow: 0 0 20px rgba(168, 85, 247, 0.6), 0 4px 15px rgba(0, 0, 0, 0.4);
-}
-
 .character-card:hover {
     border-color: var(--primary-color);
     box-shadow: 0 0 20px rgba(0, 212, 255, 0.6), 0 4px 15px rgba(0, 0, 0, 0.4);
