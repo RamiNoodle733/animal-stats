@@ -343,164 +343,173 @@
             </div>
         </div>
         
-        <!-- Profile View (Classic Retro Style) -->
+        <!-- Profile View (ABS Game UI Style) -->
         <div id="profile-view" class="view-container">
-            <div class="retro-profile-page">
+            <div class="abs-profile-page" data-prestige="0">
                 <!-- Main Content Area -->
-                <div class="retro-profile-content">
+                <div class="abs-profile-content">
                     <!-- Left Sidebar -->
-                    <div class="retro-sidebar">
+                    <div class="abs-sidebar">
                         <!-- Profile Picture Box -->
-                        <div class="retro-box retro-profile-pic-box">
-                            <div class="retro-profile-pic clickable" id="retro-profile-pic" title="Click to change avatar">
+                        <div class="abs-panel abs-profile-card">
+                            <div class="abs-avatar-frame clickable" id="retro-profile-pic" title="Click to change avatar">
                                 <i class="fas fa-user-circle"></i>
-                                <div class="retro-avatar-overlay">
+                                <div class="abs-avatar-overlay">
                                     <i class="fas fa-camera"></i>
                                     <span>Change</span>
                                 </div>
                             </div>
-                            <div class="retro-profile-name" id="retro-profile-name">Username</div>
-                            <div class="retro-profile-info" id="retro-profile-info">
-                                <div class="retro-info-row">
-                                    <span class="retro-info-label">Level:</span>
-                                    <span class="retro-info-value" id="retro-profile-level">1</span>
+                            <div class="abs-gamertag-plate">
+                                <span class="abs-username" id="retro-profile-name">Username</span>
+                            </div>
+                            <div class="abs-identity-stats">
+                                <div class="abs-identity-row abs-identity-primary">
+                                    <span class="abs-identity-label"><i class="fas fa-layer-group"></i> Level</span>
+                                    <span class="abs-identity-value" id="retro-profile-level">1</span>
                                 </div>
-                                <div class="retro-info-row">
-                                    <span class="retro-info-label">Prestige:</span>
-                                    <span class="retro-info-value" id="retro-profile-prestige">0</span>
+                                <div class="abs-identity-row abs-identity-secondary">
+                                    <span class="abs-identity-label"><i class="fas fa-bolt"></i> Battle Points</span>
+                                    <span class="abs-identity-value" id="retro-profile-bp">0</span>
                                 </div>
-                                <div class="retro-info-row">
-                                    <span class="retro-info-label">Battle Points:</span>
-                                    <span class="retro-info-value" id="retro-profile-bp">0</span>
+                                <div class="abs-identity-row abs-identity-prestige">
+                                    <span class="abs-identity-label"><i class="fas fa-gem"></i> Prestige</span>
+                                    <span class="abs-identity-value">
+                                        <span class="abs-prestige-badge" id="retro-profile-prestige" data-tier="0">0</span>
+                                    </span>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Status Box -->
-                        <div class="retro-box">
-                            <div class="retro-box-header">
-                                <span class="retro-box-toggle">▼</span>
-                                <span class="retro-box-title">Status</span>
+                        <div class="abs-panel">
+                            <div class="abs-panel-header">
+                                <i class="fas fa-signal"></i>
+                                <span class="abs-panel-title">Status</span>
                             </div>
-                            <div class="retro-box-content">
-                                <div class="retro-status">
-                                    <span class="retro-status-icon">🟢</span>
-                                    <span class="retro-status-text" id="retro-profile-status">Online now.</span>
+                            <div class="abs-panel-content">
+                                <div class="abs-status-indicator">
+                                    <span class="abs-status-dot online"></span>
+                                    <span class="abs-status-text" id="retro-profile-status">Online now</span>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Stats Box -->
-                        <div class="retro-box">
-                            <div class="retro-box-header">
-                                <span class="retro-box-toggle">▼</span>
-                                <span class="retro-box-title">Statistics</span>
+                        <div class="abs-panel">
+                            <div class="abs-panel-header" data-toggle="collapse">
+                                <i class="fas fa-chart-bar"></i>
+                                <span class="abs-panel-title">Statistics</span>
+                                <i class="fas fa-chevron-down abs-panel-toggle"></i>
                             </div>
-                            <div class="retro-box-content">
-                                <div class="retro-stat-list">
-                                    <div class="retro-stat-item">
-                                        <span class="retro-stat-label">Total XP</span>
-                                        <span class="retro-stat-value" id="retro-profile-total-xp">0</span>
+                            <div class="abs-panel-content">
+                                <div class="abs-stat-list">
+                                    <div class="abs-stat-row">
+                                        <span class="abs-stat-label">Total XP</span>
+                                        <span class="abs-stat-value" id="retro-profile-total-xp">0</span>
                                     </div>
-                                    <div class="retro-stat-item">
-                                        <span class="retro-stat-label">Current XP</span>
-                                        <span class="retro-stat-value" id="retro-profile-current-xp">0 / 100</span>
+                                    <div class="abs-stat-row">
+                                        <span class="abs-stat-label">Current XP</span>
+                                        <span class="abs-stat-value" id="retro-profile-current-xp">0 / 100</span>
                                     </div>
-                                    <div class="retro-stat-item">
-                                        <span class="retro-stat-label">Battles Won</span>
-                                        <span class="retro-stat-value" id="retro-profile-battles-won">0</span>
+                                    <div class="abs-stat-row">
+                                        <span class="abs-stat-label">Battles Won</span>
+                                        <span class="abs-stat-value" id="retro-profile-battles-won">0</span>
                                     </div>
-                                    <div class="retro-stat-item">
-                                        <span class="retro-stat-label">Votes Cast</span>
-                                        <span class="retro-stat-value" id="retro-profile-votes-cast">0</span>
+                                    <div class="abs-stat-row">
+                                        <span class="abs-stat-label">Votes Cast</span>
+                                        <span class="abs-stat-value" id="retro-profile-votes-cast">0</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Achievements Box -->
-                        <div class="retro-box">
-                            <div class="retro-box-header">
-                                <span class="retro-box-toggle">▶</span>
-                                <span class="retro-box-title">Achievements</span>
+                        <div class="abs-panel">
+                            <div class="abs-panel-header" data-toggle="collapse">
+                                <i class="fas fa-trophy"></i>
+                                <span class="abs-panel-title">Achievements</span>
+                                <i class="fas fa-chevron-right abs-panel-toggle"></i>
                             </div>
-                            <div class="retro-box-content retro-collapsed">
-                                <div class="retro-achievement-list" id="retro-achievement-list">
-                                    <div class="retro-achievement">
-                                        <span class="retro-achievement-icon">🏆</span>
-                                        <span class="retro-achievement-name">First Vote</span>
+                            <div class="abs-panel-content abs-collapsed" id="retro-achievement-list">
+                                <div class="abs-achievement-list">
+                                    <div class="abs-achievement">
+                                        <span class="abs-achievement-icon">🏆</span>
+                                        <span class="abs-achievement-name">First Vote</span>
                                     </div>
-                                    <div class="retro-achievement">
-                                        <span class="retro-achievement-icon">⚔️</span>
-                                        <span class="retro-achievement-name">Battle Starter</span>
+                                    <div class="abs-achievement">
+                                        <span class="abs-achievement-icon">⚔️</span>
+                                        <span class="abs-achievement-name">Battle Starter</span>
                                     </div>
-                                    <div class="retro-achievement locked">
-                                        <span class="retro-achievement-icon">🔒</span>
-                                        <span class="retro-achievement-name">???</span>
+                                    <div class="abs-achievement locked">
+                                        <span class="abs-achievement-icon">🔒</span>
+                                        <span class="abs-achievement-name">???</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Member Info -->
-                        <div class="retro-box">
-                            <div class="retro-box-content retro-member-info">
-                                <span>Member since: <strong id="retro-profile-member-since">---</strong></span>
+                        <div class="abs-panel abs-member-panel">
+                            <div class="abs-member-info">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span>Member since <strong id="retro-profile-member-since">---</strong></span>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Main Content Area -->
-                    <div class="retro-main">
-                        <!-- XP Progress Section (moved to top) -->
-                        <div class="retro-box retro-xp-box">
-                            <div class="retro-box-header">
-                                <span class="retro-box-toggle">▼</span>
-                                <span class="retro-box-title">Level Progress</span>
+                    <div class="abs-main">
+                        <!-- XP Progress Section (Hero of right column) -->
+                        <div class="abs-panel abs-xp-panel">
+                            <div class="abs-panel-header">
+                                <i class="fas fa-arrow-up"></i>
+                                <span class="abs-panel-title">Level Progress</span>
                             </div>
-                            <div class="retro-box-content">
-                                <div class="retro-xp-display">
-                                    <div class="retro-xp-level">
-                                        <span class="retro-xp-level-label">Level</span>
-                                        <span class="retro-xp-level-value" id="retro-xp-level">1</span>
+                            <div class="abs-panel-content">
+                                <div class="abs-xp-display">
+                                    <div class="abs-xp-level">
+                                        <span class="abs-xp-label">Level</span>
+                                        <span class="abs-xp-value" id="retro-xp-level">1</span>
                                     </div>
-                                    <div class="retro-xp-bar-container">
-                                        <div class="retro-xp-bar">
-                                            <div class="retro-xp-bar-fill" id="retro-xp-bar-fill" style="width: 0%;"></div>
+                                    <div class="abs-xp-bar-wrapper">
+                                        <div class="abs-xp-bar">
+                                            <div class="abs-xp-bar-fill" id="retro-xp-bar-fill" style="width: 0%;"></div>
+                                            <div class="abs-xp-bar-segments"></div>
                                         </div>
-                                        <div class="retro-xp-text" id="retro-xp-text">0 / 100 XP</div>
+                                        <div class="abs-xp-text" id="retro-xp-text">0 / 100 XP</div>
                                     </div>
-                                    <div class="retro-xp-next">
-                                        <span class="retro-xp-next-label">Next Level</span>
-                                        <span class="retro-xp-next-value" id="retro-xp-next-level">2</span>
+                                    <div class="abs-xp-next">
+                                        <span class="abs-xp-label">Next</span>
+                                        <span class="abs-xp-value" id="retro-xp-next-level">2</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Edit Profile Section -->
-                        <div class="retro-box retro-edit-section">
-                            <div class="retro-box-header">
-                                <span class="retro-box-toggle">▼</span>
-                                <span class="retro-box-title">Edit Profile</span>
+                        <!-- Edit Profile Section (Collapsible, secondary) -->
+                        <div class="abs-panel abs-edit-panel" id="edit-profile-panel">
+                            <div class="abs-panel-header abs-edit-header" data-toggle="collapse">
+                                <i class="fas fa-user-edit"></i>
+                                <span class="abs-panel-title">Edit Profile</span>
+                                <i class="fas fa-chevron-right abs-panel-toggle"></i>
                             </div>
-                            <div class="retro-box-content">
-                                <div class="retro-edit-form">
-                                    <div class="retro-form-group">
+                            <div class="abs-panel-content abs-collapsed" id="edit-profile-content">
+                                <div class="abs-edit-form">
+                                    <div class="abs-form-group">
                                         <label for="retro-display-name">Display Name</label>
-                                        <p class="retro-form-hint">This is how others see you in comments and chat.</p>
+                                        <p class="abs-form-hint">This is how others see you in comments and chat.</p>
                                         <input type="text" id="retro-display-name" placeholder="Enter display name..." maxlength="30">
                                     </div>
-                                    <div class="retro-form-group">
+                                    <div class="abs-form-group">
                                         <label for="retro-username">Username</label>
-                                        <p class="retro-form-hint">Your login username. <span id="retro-username-changes">3 changes remaining this week.</span></p>
+                                        <p class="abs-form-hint">Your login username. <span id="retro-username-changes">3 changes remaining this week.</span></p>
                                         <input type="text" id="retro-username" placeholder="Enter username..." maxlength="20">
                                     </div>
-                                    <div class="retro-form-actions">
-                                        <span class="retro-unsaved-indicator" id="retro-unsaved-indicator">
+                                    <div class="abs-form-actions">
+                                        <span class="abs-unsaved-indicator" id="retro-unsaved-indicator">
                                             <i class="fas fa-exclamation-circle"></i> Unsaved changes
                                         </span>
-                                        <button class="retro-save-btn" id="retro-save-btn" disabled>
+                                        <button class="abs-save-btn" id="retro-save-btn" disabled>
                                             <i class="fas fa-save"></i> Save Changes
                                         </button>
                                     </div>
@@ -508,60 +517,61 @@
                             </div>
                         </div>
                         
-                        <!-- Activity Feed Header -->
-                        <div class="retro-feed-header">
-                            <span class="retro-feed-toggle">▼</span>
-                            <span class="retro-feed-title">Activity Feed</span>
-                            <span class="retro-feed-count">Displaying <span id="retro-feed-count">0</span> stories.</span>
-                        </div>
-                        
-                        <!-- Feed Items -->
-                        <div class="retro-feed" id="retro-feed">
-                            <!-- Today Section -->
-                            <div class="retro-feed-section">
-                                <div class="retro-feed-date">Today</div>
-                                <div class="retro-feed-items" id="retro-feed-today">
-                                    <div class="retro-feed-item retro-feed-placeholder">
-                                        <span class="retro-feed-icon">📊</span>
-                                        <span class="retro-feed-text">No recent activity. Start exploring animals!</span>
+                        <!-- Activity Feed -->
+                        <div class="abs-panel abs-feed-panel">
+                            <div class="abs-panel-header">
+                                <i class="fas fa-stream"></i>
+                                <span class="abs-panel-title">Activity Feed</span>
+                                <span class="abs-feed-count">Displaying <span id="retro-feed-count">0</span> stories</span>
+                            </div>
+                            <div class="abs-panel-content abs-feed-content">
+                                <!-- Today Section -->
+                                <div class="abs-feed-section">
+                                    <div class="abs-feed-date">Today</div>
+                                    <div class="abs-feed-items" id="retro-feed-today">
+                                        <div class="abs-feed-item abs-feed-placeholder">
+                                            <span class="abs-feed-icon">📊</span>
+                                            <span class="abs-feed-text">No recent activity. Start exploring animals!</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            
-                            <!-- Earlier Section -->
-                            <div class="retro-feed-section">
-                                <div class="retro-feed-date">Earlier</div>
-                                <div class="retro-feed-items" id="retro-feed-earlier">
-                                    <div class="retro-feed-item">
-                                        <span class="retro-feed-icon">🎉</span>
-                                        <span class="retro-feed-text"><strong id="retro-feed-username">User</strong> joined Animal Battle Stats on <span id="retro-feed-join-date">---</span>.</span>
+                                
+                                <!-- Earlier Section -->
+                                <div class="abs-feed-section">
+                                    <div class="abs-feed-date">Earlier</div>
+                                    <div class="abs-feed-items" id="retro-feed-earlier">
+                                        <div class="abs-feed-item">
+                                            <span class="abs-feed-icon">🎉</span>
+                                            <span class="abs-feed-text"><strong id="retro-feed-username">User</strong> joined Animal Battle Stats on <span id="retro-feed-join-date">---</span>.</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Favorite Animals Section -->
-                        <div class="retro-box">
-                            <div class="retro-box-header">
-                                <span class="retro-box-toggle">▼</span>
-                                <span class="retro-box-title">Favorite Animals</span>
-                                <a href="/stats" class="retro-see-all">See All</a>
+                        <div class="abs-panel">
+                            <div class="abs-panel-header" data-toggle="collapse">
+                                <i class="fas fa-heart"></i>
+                                <span class="abs-panel-title">Favorite Animals</span>
+                                <a href="/stats" class="abs-see-all">See All</a>
+                                <i class="fas fa-chevron-down abs-panel-toggle"></i>
                             </div>
-                            <div class="retro-box-content">
-                                <div class="retro-favorites-grid" id="retro-favorites-grid">
-                                    <a href="/stats" class="retro-favorite-item">
-                                        <div class="retro-favorite-img">
+                            <div class="abs-panel-content">
+                                <div class="abs-favorites-grid" id="retro-favorites-grid">
+                                    <a href="/stats" class="abs-favorite-item">
+                                        <div class="abs-favorite-img">
                                             <i class="fas fa-plus"></i>
                                         </div>
-                                        <span class="retro-favorite-name">Add favorites</span>
+                                        <span class="abs-favorite-name">Add favorites</span>
                                     </a>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Logout Section -->
-                        <div class="retro-box retro-logout-section">
-                            <button class="retro-logout-btn" id="retro-logout-btn">
+                        <div class="abs-panel abs-logout-panel">
+                            <button class="abs-logout-btn" id="retro-logout-btn">
                                 <i class="fas fa-sign-out-alt"></i> Log Out
                             </button>
                         </div>
@@ -569,7 +579,7 @@
                 </div>
                 
                 <!-- Close/Back Button -->
-                <button class="retro-close-btn" id="retro-profile-close">
+                <button class="abs-back-btn" id="retro-profile-close">
                     <i class="fas fa-arrow-left"></i> Back
                 </button>
             </div>

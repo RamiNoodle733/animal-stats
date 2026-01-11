@@ -694,7 +694,7 @@ const Auth = {
 
         // Check if this element has an overlay (like the profile pic)
         const hasOverlay = element.classList.contains('clickable');
-        const overlayHtml = hasOverlay ? `<div class="retro-avatar-overlay"><i class="fas fa-camera"></i><span>Change</span></div>` : '';
+        const overlayHtml = hasOverlay ? `<div class="abs-avatar-overlay"><i class="fas fa-camera"></i><span>Change</span></div>` : '';
 
         if (animalName && window.app?.state?.animals) {
             const animal = window.app.state.animals.find(a => 

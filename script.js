@@ -2119,8 +2119,18 @@ class AnimalStatsApp {
         const bpEl = document.getElementById('retro-profile-bp');
         
         if (levelEl) levelEl.textContent = level;
-        if (prestigeEl) prestigeEl.textContent = prestige > 0 ? `⭐ ${prestige}` : '0';
+        if (prestigeEl) {
+            prestigeEl.textContent = prestige > 0 ? `⭐ ${prestige}` : '0';
+            // Update the badge tier for styling
+            prestigeEl.dataset.tier = Math.min(prestige, 10);
+        }
         if (bpEl) bpEl.textContent = window.Auth.formatNumber(battlePoints);
+        
+        // Update the profile page wrapper prestige for left column styling
+        const profilePage = document.querySelector('.abs-profile-page');
+        if (profilePage) {
+            profilePage.dataset.prestige = Math.min(prestige, 10);
+        }
         
         // Update statistics
         const totalXpEl = document.getElementById('retro-profile-total-xp');
@@ -2188,21 +2198,23 @@ class AnimalStatsApp {
      * Setup profile page dropdown toggles
      */
     setupProfileDropdowns() {
-        // Find all box headers with toggles on the profile page
-        document.querySelectorAll('#profile-view .retro-box-header').forEach(header => {
+        // Find all panel headers with toggle functionality on the profile page
+        document.querySelectorAll('#profile-view .abs-panel-header[data-toggle="collapse"]').forEach(header => {
             header.addEventListener('click', () => {
-                const toggle = header.querySelector('.retro-box-toggle');
+                const toggle = header.querySelector('.abs-panel-toggle');
                 const content = header.nextElementSibling;
                 
                 if (toggle && content) {
-                    const isCollapsed = content.classList.contains('retro-collapsed');
+                    const isCollapsed = content.classList.contains('abs-collapsed');
                     
                     if (isCollapsed) {
-                        content.classList.remove('retro-collapsed');
-                        toggle.textContent = '▼';
+                        content.classList.remove('abs-collapsed');
+                        toggle.classList.remove('fa-chevron-right');
+                        toggle.classList.add('fa-chevron-down');
                     } else {
-                        content.classList.add('retro-collapsed');
-                        toggle.textContent = '▶';
+                        content.classList.add('abs-collapsed');
+                        toggle.classList.remove('fa-chevron-down');
+                        toggle.classList.add('fa-chevron-right');
                     }
                 }
             });
