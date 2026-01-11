@@ -67,17 +67,64 @@
         })();
     </script>
     <style>
-        /* Hide header/bottom bar on home and auth pages */
-        html.is-home .game-header,
-        html.is-home .bottom-bar { display: none !important; }
+        /* Loading Screen */
+        .app-loading-screen {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(180deg, #0a1525 0%, #050a12 50%, #020408 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .app-loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .loading-logo {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+            animation: loadingPulse 1.5s ease-in-out infinite;
+        }
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(0, 212, 255, 0.2);
+            border-top-color: #00d4ff;
+            border-radius: 50%;
+            animation: loadingSpin 0.8s linear infinite;
+        }
+        .loading-text {
+            margin-top: 16px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 2px;
+        }
+        @keyframes loadingSpin {
+            to { transform: rotate(360deg); }
+        }
+        @keyframes loadingPulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
         
-        /* Show correct view based on route */
+        /* Hide header/bottom bar on home and auth pages - only during initial load */
+        html.is-home .game-header,
+        html.is-home .bottom-bar,
+        html.is-home .shared-bottom-bar { display: none !important; }
+        
+        /* Show correct view based on route - only during initial load */
         html.is-home:not(.is-login):not(.is-signup):not(.is-profile) #home-view { display: flex !important; }
         html.is-login #login-view { display: flex !important; }
         html.is-signup #signup-view { display: flex !important; }
         html.is-profile #profile-view { display: flex !important; }
         
-        /* Hide other views on home/auth pages */
+        /* Hide other views on home/auth pages - only during initial load */
         html.is-home #stats-view,
         html.is-home #compare-view,
         html.is-home #rankings-view,
@@ -85,9 +132,20 @@
         html.is-login #home-view,
         html.is-signup #home-view,
         html.is-profile #home-view { display: none !important; }
+        
+        /* After app loads, remove priority styles */
+        html.app-loaded .game-header,
+        html.app-loaded .bottom-bar,
+        html.app-loaded .shared-bottom-bar { display: revert !important; }
     </style>
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div class="app-loading-screen" id="app-loading-screen">
+        <img src="/images/logo.png" alt="" class="loading-logo">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">LOADING</div>
+    </div>
     <!-- Main Game Screen -->
     <div class="game-screen">
         <!-- Header -->

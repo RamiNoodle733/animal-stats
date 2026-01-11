@@ -280,13 +280,36 @@ class AnimalStatsApp {
                 window.Auth.updateUserStatsBar();
             }
             
-            this.showLoadingState(false);
+            // Hide loading screen and mark app as loaded
+            this.hideLoadingScreen();
+            
             console.log(`Animal Stats App Initialized (API: ${this.state.apiAvailable ? 'Connected' : 'Fallback Mode'})`);
         } catch (error) {
             console.error('Initialization failed:', error);
-            this.showLoadingState(false);
+            this.hideLoadingScreen();
             alert('Failed to load animal data. Please try refreshing the page.');
         }
+    }
+
+    /**
+     * Hide the loading screen and clean up initial load classes
+     */
+    hideLoadingScreen() {
+        this.state.isLoading = false;
+        
+        // Hide loading screen
+        const loadingScreen = document.getElementById('app-loading-screen');
+        if (loadingScreen) {
+            loadingScreen.classList.add('hidden');
+            // Remove from DOM after transition
+            setTimeout(() => {
+                loadingScreen.remove();
+            }, 300);
+        }
+        
+        // Clean up initial load classes - let JS handle view management now
+        document.documentElement.classList.add('app-loaded');
+        document.documentElement.classList.remove('is-home', 'is-login', 'is-signup', 'is-profile');
     }
 
     /**
@@ -476,6 +499,44 @@ class AnimalStatsApp {
     showLoadingState(isLoading) {
         this.state.isLoading = isLoading;
         // Could add loading spinner UI here if desired
+    }
+
+    /**
+     * Reset scroll positions on all views and scrollable containers
+     * This prevents the "half page" glitch when switching views
+     */
+    resetScrollPositions() {
+        // Reset main window scroll
+        window.scrollTo(0, 0);
+        
+        // Reset scroll on all view containers
+        const views = document.querySelectorAll('.view-container');
+        views.forEach(view => {
+            view.scrollTop = 0;
+            // Also reset any scrollable children
+            const scrollables = view.querySelectorAll('[style*="overflow"], .overflow-auto, .overflow-y-auto');
+            scrollables.forEach(el => el.scrollTop = 0);
+        });
+        
+        // Reset specific scrollable elements
+        const scrollableSelectors = [
+            '.abs-profile-page',
+            '.rankings-container',
+            '.rankings-list',
+            '.rankings-console',
+            '.community-feed-column',
+            '.community-sidebar-column',
+            '.feed-scroll-region',
+            '.character-grid-container',
+            '.stats-panel',
+            '.details-panel',
+            '.home-portal'
+        ];
+        
+        scrollableSelectors.forEach(selector => {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(el => el.scrollTop = 0);
+        });
     }
 
     /**
@@ -1520,6 +1581,7 @@ class AnimalStatsApp {
      * @param {boolean} updateUrl - Whether to update the URL (default true)
      */
     switchView(viewName, updateUrl = true) {
+        const previousView = this.state.view;
         this.state.view = viewName;
         
         // Update the main title based on current view
@@ -1536,6 +1598,9 @@ class AnimalStatsApp {
         if (this.dom.titleMode) {
             this.dom.titleMode.textContent = titleModes[viewName] || 'STATS';
         }
+        
+        // Reset scroll position on any scrollable elements before switching
+        this.resetScrollPositions();
         
         // Update UI classes - include home view, auth views, and profile view
         this.dom.homeView?.classList.toggle('active-view', viewName === 'home');
@@ -1582,7 +1647,17 @@ class AnimalStatsApp {
         }
 
         // Grid visibility logic - preserve user's hidden/shown preference across stats/compare
-        if (viewName === 'home' || viewName === 'login' || viewName === 'signup' || viewName === 'profile') {
+        const isFullscreenView = viewName === 'home' || viewName === 'login' || viewName === 'signup';
+        const isProfileView = viewName === 'profile';
+        
+        // Show/hide header for different view types
+        const gameHeader = document.querySelector('.game-header');
+        if (gameHeader) {
+            // Home and auth pages don't show header
+            gameHeader.style.display = isFullscreenView ? 'none' : '';
+        }
+        
+        if (isFullscreenView || isProfileView) {
             // Hide grid and bottom bar on home, auth, and profile pages
             this.dom.gridWrapper?.classList.add('hidden');
             if (this.dom.toggleGridBtn) this.dom.toggleGridBtn.style.display = 'none';

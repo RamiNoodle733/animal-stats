@@ -170,7 +170,8 @@ body {
     display: none;
     flex: 1 1 auto;
     min-height: 0;
-    overflow: hidden; /* No scrolling in main container */
+    overflow: hidden;
+    position: relative;
 }
 
 .view-container.active-view {
@@ -178,6 +179,8 @@ body {
     flex-direction: column;
     position: relative;
     flex: 1 1 auto;
+    overflow: hidden;
+    z-index: 1;
 }
 
 .character-display-area {
@@ -4600,12 +4603,14 @@ body {
 
 /* ===== Page Container with Smoky Lighting ===== */
 .abs-profile-page {
-    min-height: 100vh;
+    min-height: 100%;
     width: 100%;
     padding: 20px;
+    padding-bottom: 80px; /* Space for back button */
     font-family: var(--font-body);
     color: var(--text-light);
     position: relative;
+    overflow-y: auto;
     
     /* Smoky lighting background with vignette */
     background: 
@@ -4619,6 +4624,11 @@ body {
         /* Base gradient */
         linear-gradient(180deg, #0a1525 0%, #050a12 50%, #020408 100%);
     background-attachment: fixed;
+}
+
+/* Profile view container overrides */
+#profile-view.active-view {
+    overflow: hidden;
 }
 
 /* ===== Main Content Layout ===== */
