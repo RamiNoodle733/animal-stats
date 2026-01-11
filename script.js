@@ -1495,9 +1495,9 @@ class AnimalStatsApp {
             
             if (this.dom.statBars[stat]) {
                 this.dom.statBars[stat].style.width = `${Math.min(value, 100)}%`;
-                // Use value-driven band class for consistent colors across site
-                const bandClass = getStatBandClass(value);
-                this.dom.statBars[stat].className = `stat-bar-fill ${bandClass}`;
+                // Add tier class for color-coding (use base letter for color)
+                const tierBase = tier.charAt(0).toLowerCase();
+                this.dom.statBars[stat].className = `stat-bar-fill stat-bar-tier-${tierBase}`;
             }
             
             if (this.dom.statValues[stat]) {
@@ -1516,7 +1516,6 @@ class AnimalStatsApp {
                 this.dom.statValues[stat].innerHTML = `<span class="stat-badge-slot">${statBadge}</span><span class="stat-number">${formatStat(value, 1)}</span><span class="stat-tier-badge tier-${tierClass}">${tier}</span>`;
             }
         });
-
 
         // Quick Stats Bar
         if (this.dom.quickWeight) {
@@ -5356,10 +5355,15 @@ class TournamentManager {
     }
     
     /**
-     * Get the tier class for a stat value (uses value-driven band system)
+     * Get the tier class for a stat value (reuses Stats page tier system)
      */
     getStatTierClass(value) {
-        return getStatBandClass(value);
+        if (value >= 90) return 'stat-bar-tier-s';
+        if (value >= 75) return 'stat-bar-tier-a';
+        if (value >= 60) return 'stat-bar-tier-b';
+        if (value >= 40) return 'stat-bar-tier-c';
+        if (value >= 20) return 'stat-bar-tier-d';
+        return 'stat-bar-tier-f';
     }
     
     /**

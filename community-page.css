@@ -64,7 +64,7 @@
     min-height: 0; /* Critical for scroll */
     max-height: 100%;
     scrollbar-width: thin;
-    scrollbar-color: rgba(30, 139, 151, 0.3) transparent;
+    scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
 }
 
 #community-view .community-sidebar-column::-webkit-scrollbar {
@@ -77,12 +77,12 @@
 }
 
 #community-view .community-sidebar-column::-webkit-scrollbar-thumb {
-    background: rgba(30, 139, 151, 0.3);
+    background: rgba(0, 212, 255, 0.3);
     border-radius: 3px;
 }
 
 #community-view .community-sidebar-column::-webkit-scrollbar-thumb:hover {
-    background: rgba(30, 139, 151, 0.5);
+    background: rgba(0, 212, 255, 0.5);
 }
 
 /* ========================================
@@ -103,9 +103,9 @@
     position: sticky;
     top: 0;
     z-index: 20;
-    background: linear-gradient(135deg, var(--panel-1, rgba(14, 20, 28, 0.95)), var(--panel-0, rgba(8, 12, 18, 0.98)));
-    border: 1px solid rgba(0, 212, 255, 0.2);
-    border-radius: 4px;
+    background: linear-gradient(135deg, rgba(20, 25, 35, 0.99), rgba(15, 20, 30, 1));
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    border-radius: 10px;
     margin-bottom: clamp(8px, 1vh, 12px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
@@ -117,12 +117,12 @@
     padding: clamp(10px, 1.5vh, 14px) clamp(12px, 2vw, 20px);
     background: transparent;
     border: none;
-    color: var(--text-muted, rgba(255, 255, 255, 0.55));
+    color: rgba(255, 255, 255, 0.5);
     font-family: 'Bebas Neue', sans-serif;
     font-size: clamp(0.85rem, 1vw, 1rem);
     letter-spacing: 2px;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -132,13 +132,13 @@
 }
 
 #community-view .community-tab-btn:hover {
-    color: var(--text-1, rgba(255, 255, 255, 0.85));
-    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(0, 212, 255, 0.05);
 }
 
 #community-view .community-tab-btn.active {
     color: #00d4ff;
-    background: rgba(30, 139, 151, 0.1);
+    background: rgba(0, 212, 255, 0.1);
 }
 
 #community-view .community-tab-btn.active::after {
@@ -148,7 +148,7 @@
     left: 20%;
     right: 20%;
     height: 3px;
-    background: #00d4ff;
+    background: linear-gradient(90deg, transparent, #00d4ff, transparent);
     border-radius: 2px;
 }
 
@@ -169,7 +169,7 @@
     /* Leave room for composer */
     padding-bottom: clamp(8px, 1vh, 12px);
     scrollbar-width: thin;
-    scrollbar-color: rgba(30, 139, 151, 0.3) transparent;
+    scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
 }
 
 #community-view .feed-scroll-region::-webkit-scrollbar {
@@ -182,12 +182,12 @@
 }
 
 #community-view .feed-scroll-region::-webkit-scrollbar-thumb {
-    background: rgba(30, 139, 151, 0.3);
+    background: rgba(0, 212, 255, 0.3);
     border-radius: 3px;
 }
 
 #community-view .feed-scroll-region::-webkit-scrollbar-thumb:hover {
-    background: rgba(30, 139, 151, 0.5);
+    background: rgba(0, 212, 255, 0.5);
 }
 
 /* ========================================
@@ -199,7 +199,7 @@
     position: relative;
     z-index: 15;
     background: linear-gradient(135deg, rgba(15, 20, 30, 0.99), rgba(10, 15, 25, 1));
-    border: 1px solid rgba(30, 139, 151, 0.2);
+    border: 1px solid rgba(0, 212, 255, 0.2);
     border-radius: 10px;
     padding: clamp(10px, 1.5vh, 16px);
     margin-top: clamp(8px, 1vh, 12px);
@@ -242,9 +242,9 @@
 
 #community-view .compose-input:focus {
     outline: none;
-    border-color: rgba(30, 139, 151, 0.4);
+    border-color: rgba(0, 212, 255, 0.4);
     background: rgba(0, 0, 0, 0.5);
-    box-shadow: 0 0 15px rgba(30, 139, 151, 0.15);
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.15);
 }
 
 #community-view .compose-send-btn {
@@ -265,7 +265,7 @@
 
 #community-view .compose-send-btn:hover:not(:disabled) {
     transform: scale(1.05);
-    box-shadow: 0 4px 20px rgba(30, 139, 151, 0.4);
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
 }
 
 #community-view .compose-send-btn:disabled {
@@ -297,7 +297,7 @@
 
 #community-view .community-hud-module {
     background: linear-gradient(135deg, rgba(15, 20, 30, 0.99), rgba(10, 15, 25, 1));
-    border: 1px solid rgba(30, 139, 151, 0.3);
+    border: 1px solid rgba(0, 212, 255, 0.3);
     border-radius: 12px;
     overflow: hidden;
     position: relative;
@@ -310,7 +310,7 @@
     position: absolute;
     width: 16px;
     height: 16px;
-    border: 2px solid rgba(30, 139, 151, 0.4);
+    border: 2px solid rgba(0, 212, 255, 0.4);
     pointer-events: none;
     z-index: 5;
 }
@@ -331,12 +331,12 @@
 
 /* HUD header with glow effect */
 #community-view .hud-header {
-    background: linear-gradient(135deg, rgba(30, 139, 151, 0.15), rgba(0, 100, 200, 0.1));
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(0, 100, 200, 0.1));
     padding: clamp(10px, 1.2vh, 14px) clamp(12px, 1.5vw, 18px);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(30, 139, 151, 0.2);
+    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
 }
 
 #community-view .hud-title {
@@ -347,7 +347,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    text-shadow: 0 0 10px rgba(30, 139, 151, 0.4);
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
 }
 
 /* Live badges row */
@@ -415,7 +415,7 @@
 
 #community-view .hud-stat-item:hover {
     background: rgba(255, 255, 255, 0.06);
-    border-color: rgba(30, 139, 151, 0.2);
+    border-color: rgba(0, 212, 255, 0.2);
 }
 
 #community-view .hud-stat-item .hud-stat-value {
@@ -552,7 +552,7 @@
 
 #community-view .matchup-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #00d4ff, #00d4ff);
+    background: linear-gradient(90deg, #00d4ff, #00ff88);
     border-radius: 3px;
     transition: width 0.5s ease;
 }
@@ -728,12 +728,12 @@
 }
 
 #community-view .feed-post-card:hover {
-    border-color: rgba(30, 139, 151, 0.2);
+    border-color: rgba(0, 212, 255, 0.2);
     transform: translateY(-1px);
 }
 
 #community-view .feed-post-card.has-animal-context {
-    border-left: 3px solid rgba(30, 139, 151, 0.5);
+    border-left: 3px solid rgba(0, 212, 255, 0.5);
 }
 
 /* Post action buttons - consistent sizing */
