@@ -761,8 +761,7 @@ class AnimalStatsApp {
         
         // Profile page event listeners
         const retroProfileClose = document.getElementById('retro-profile-close');
-        const retroEditProfileLink = document.getElementById('retro-edit-profile-link');
-        const retroChangeAvatarLink = document.getElementById('retro-change-avatar-link');
+        const retroProfilePic = document.getElementById('retro-profile-pic');
         
         if (retroProfileClose) {
             retroProfileClose.addEventListener('click', () => {
@@ -775,25 +774,17 @@ class AnimalStatsApp {
             });
         }
         
-        if (retroEditProfileLink) {
-            retroEditProfileLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                // Toggle edit section visibility
-                const editSection = document.getElementById('retro-edit-section');
-                if (editSection) {
-                    editSection.style.display = editSection.style.display === 'none' ? 'block' : 'none';
-                }
-            });
-        }
-        
-        if (retroChangeAvatarLink) {
-            retroChangeAvatarLink.addEventListener('click', (e) => {
-                e.preventDefault();
+        // Click on profile pic to change avatar
+        if (retroProfilePic) {
+            retroProfilePic.addEventListener('click', () => {
                 if (window.Auth) {
                     window.Auth.openAvatarPicker();
                 }
             });
         }
+        
+        // Setup profile page dropdown toggles
+        this.setupProfileDropdowns();
         
         // Compare View Interactions
         this.dom.fighter1.display.addEventListener('click', () => this.setSelectingSide('left'));
@@ -2164,10 +2155,20 @@ class AnimalStatsApp {
             });
         }
         
-        // Update feed username
+        // Update feed username and join date
         const feedUsername = document.getElementById('retro-feed-username');
         if (feedUsername) {
             feedUsername.textContent = displayName;
+        }
+        
+        const feedJoinDate = document.getElementById('retro-feed-join-date');
+        if (feedJoinDate && createdAt) {
+            const date = new Date(createdAt);
+            feedJoinDate.textContent = date.toLocaleDateString('en-US', { 
+                month: 'long', 
+                day: 'numeric', 
+                year: 'numeric' 
+            });
         }
         
         // Update feed count
@@ -2181,6 +2182,31 @@ class AnimalStatsApp {
         const editUsername = document.getElementById('retro-username');
         if (editDisplayName) editDisplayName.value = displayName;
         if (editUsername) editUsername.value = user.username || '';
+    }
+    
+    /**
+     * Setup profile page dropdown toggles
+     */
+    setupProfileDropdowns() {
+        // Find all box headers with toggles on the profile page
+        document.querySelectorAll('#profile-view .retro-box-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const toggle = header.querySelector('.retro-box-toggle');
+                const content = header.nextElementSibling;
+                
+                if (toggle && content) {
+                    const isCollapsed = content.classList.contains('retro-collapsed');
+                    
+                    if (isCollapsed) {
+                        content.classList.remove('retro-collapsed');
+                        toggle.textContent = '▼';
+                    } else {
+                        content.classList.add('retro-collapsed');
+                        toggle.textContent = '▶';
+                    }
+                }
+            });
+        });
     }
 
     /**

@@ -4640,11 +4640,18 @@ body {
     align-items: center;
     gap: 5px;
     cursor: pointer;
+    transition: background 0.15s ease;
+    user-select: none;
+}
+
+.retro-box-header:hover {
+    background: linear-gradient(180deg, #e0e5ed 0%, #c8d0e0 100%);
 }
 
 .retro-box-toggle {
     color: #3b5998;
     font-size: 8px;
+    transition: transform 0.2s ease;
 }
 
 .retro-box-title {
@@ -4677,9 +4684,49 @@ body {
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    position: relative;
 }
 
-.retro-profile-pic i {
+.retro-profile-pic.clickable {
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.retro-profile-pic.clickable:hover {
+    border-color: #3b5998;
+}
+
+.retro-profile-pic.clickable:hover .retro-avatar-overlay {
+    opacity: 1;
+}
+
+/* Avatar change overlay */
+.retro-avatar-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    color: #fff;
+    gap: 4px;
+}
+
+.retro-avatar-overlay i {
+    font-size: 24px;
+    color: #fff;
+}
+
+.retro-avatar-overlay span {
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.retro-profile-pic > i {
     font-size: 100px;
     color: #8b9dc3;
 }

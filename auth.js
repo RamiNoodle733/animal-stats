@@ -696,17 +696,21 @@ const Auth = {
     updateAvatarDisplay(element, animalName) {
         if (!element) return;
 
+        // Check if this element has an overlay (like the profile pic)
+        const hasOverlay = element.classList.contains('clickable');
+        const overlayHtml = hasOverlay ? `<div class="retro-avatar-overlay"><i class="fas fa-camera"></i><span>Change</span></div>` : '';
+
         if (animalName && window.app?.state?.animals) {
             const animal = window.app.state.animals.find(a => 
                 a.name.toLowerCase() === animalName.toLowerCase()
             );
             if (animal?.image) {
-                element.innerHTML = `<img src="${animal.image}" alt="${animalName}">`;
+                element.innerHTML = `<img src="${animal.image}" alt="${animalName}">${overlayHtml}`;
                 return;
             }
         }
         // Default icon
-        element.innerHTML = '<i class="fas fa-user-circle"></i>';
+        element.innerHTML = `<i class="fas fa-user-circle"></i>${overlayHtml}`;
     },
 
     /**

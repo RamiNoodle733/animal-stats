@@ -357,8 +357,12 @@
                     <div class="retro-sidebar">
                         <!-- Profile Picture Box -->
                         <div class="retro-box retro-profile-pic-box">
-                            <div class="retro-profile-pic" id="retro-profile-pic">
+                            <div class="retro-profile-pic clickable" id="retro-profile-pic" title="Click to change avatar">
                                 <i class="fas fa-user-circle"></i>
+                                <div class="retro-avatar-overlay">
+                                    <i class="fas fa-camera"></i>
+                                    <span>Change</span>
+                                </div>
                             </div>
                             <div class="retro-profile-name" id="retro-profile-name">Username</div>
                             <div class="retro-profile-info" id="retro-profile-info">
@@ -374,15 +378,6 @@
                                     <span class="retro-info-label">Battle Points:</span>
                                     <span class="retro-info-value" id="retro-profile-bp">0</span>
                                 </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Profile Actions Box -->
-                        <div class="retro-box">
-                            <div class="retro-box-links">
-                                <a href="#" id="retro-change-avatar-link"><i class="fas fa-camera"></i> Change Avatar</a>
-                                <a href="/stats"><i class="fas fa-chart-bar"></i> View Animal Stats</a>
-                                <a href="/compare"><i class="fas fa-balance-scale"></i> Compare Animals</a>
                             </div>
                         </div>
                         
@@ -518,7 +513,7 @@
                                 <div class="retro-feed-items" id="retro-feed-earlier">
                                     <div class="retro-feed-item">
                                         <span class="retro-feed-icon">🎉</span>
-                                        <span class="retro-feed-text"><strong id="retro-feed-username">User</strong> joined Animal Battle Stats.</span>
+                                        <span class="retro-feed-text"><strong id="retro-feed-username">User</strong> joined Animal Battle Stats on <span id="retro-feed-join-date">---</span>.</span>
                                     </div>
                                 </div>
                             </div>
