@@ -1862,11 +1862,14 @@ body {
     justify-content: center;
     width: 100%;
     min-width: 100%;
+    min-height: 120px;
+    height: 120px;
     color: var(--text-muted, #64748b);
     font-size: 0.9rem;
     font-weight: 500;
     text-align: center;
     padding: 20px;
+    flex-shrink: 0;
 }
 
 .character-grid::-webkit-scrollbar {
@@ -1987,6 +1990,17 @@ body {
     flex-direction: column;
     padding: 0;
     flex-shrink: 0;
+}
+
+/* Compare view: character cards get purple/green borders */
+#compare-view ~ .bottom-section .character-card,
+body:has(#compare-view.active-view) .character-card {
+    border-color: rgba(168, 85, 247, 0.4);
+}
+
+body:has(#compare-view.active-view) .character-card:hover {
+    border-color: #a855f7;
+    box-shadow: 0 0 20px rgba(168, 85, 247, 0.6), 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
 .character-card:hover {
