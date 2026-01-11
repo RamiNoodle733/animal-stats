@@ -120,7 +120,7 @@
                 
                 <!-- User Stats Bar (shown when logged in) -->
                 <div class="user-stats-bar" id="user-stats-bar" style="display: none;">
-                    <div class="user-profile-mini" id="user-profile-mini">
+                    <a href="/profile" class="user-profile-mini" id="user-profile-mini" title="View Profile">
                         <div class="user-avatar-mini" id="user-avatar-mini">
                             <i class="fas fa-user-circle"></i>
                         </div>
@@ -134,12 +134,7 @@
                                 <span class="xp-bar-text" id="xp-bar-text">0 / 100 XP</span>
                             </div>
                         </div>
-                        <!-- Profile Dropdown -->
-                        <div class="profile-dropdown" id="profile-dropdown">
-                            <a href="#" class="profile-dropdown-item" id="profile-btn"><i class="fas fa-id-card"></i> Profile</a>
-                            <a href="#" class="profile-dropdown-item logout" id="logout-btn"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-                        </div>
-                    </div>
+                    </a>
                     <div class="battle-points-display" id="battle-points-display">
                         <div class="bp-coin" id="bp-coin">
                             <span class="bp-icon">⚔</span>
@@ -457,6 +452,32 @@
                     
                     <!-- Main Content Area -->
                     <div class="retro-main">
+                        <!-- XP Progress Section (moved to top) -->
+                        <div class="retro-box retro-xp-box">
+                            <div class="retro-box-header">
+                                <span class="retro-box-toggle">▼</span>
+                                <span class="retro-box-title">Level Progress</span>
+                            </div>
+                            <div class="retro-box-content">
+                                <div class="retro-xp-display">
+                                    <div class="retro-xp-level">
+                                        <span class="retro-xp-level-label">Level</span>
+                                        <span class="retro-xp-level-value" id="retro-xp-level">1</span>
+                                    </div>
+                                    <div class="retro-xp-bar-container">
+                                        <div class="retro-xp-bar">
+                                            <div class="retro-xp-bar-fill" id="retro-xp-bar-fill" style="width: 0%;"></div>
+                                        </div>
+                                        <div class="retro-xp-text" id="retro-xp-text">0 / 100 XP</div>
+                                    </div>
+                                    <div class="retro-xp-next">
+                                        <span class="retro-xp-next-label">Next Level</span>
+                                        <span class="retro-xp-next-value" id="retro-xp-next-level">2</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <!-- Edit Profile Section -->
                         <div class="retro-box retro-edit-section">
                             <div class="retro-box-header">
@@ -519,32 +540,6 @@
                             </div>
                         </div>
                         
-                        <!-- XP Progress Section -->
-                        <div class="retro-box retro-xp-box">
-                            <div class="retro-box-header">
-                                <span class="retro-box-toggle">▼</span>
-                                <span class="retro-box-title">Level Progress</span>
-                            </div>
-                            <div class="retro-box-content">
-                                <div class="retro-xp-display">
-                                    <div class="retro-xp-level">
-                                        <span class="retro-xp-level-label">Level</span>
-                                        <span class="retro-xp-level-value" id="retro-xp-level">1</span>
-                                    </div>
-                                    <div class="retro-xp-bar-container">
-                                        <div class="retro-xp-bar">
-                                            <div class="retro-xp-bar-fill" id="retro-xp-bar-fill" style="width: 0%;"></div>
-                                        </div>
-                                        <div class="retro-xp-text" id="retro-xp-text">0 / 100 XP</div>
-                                    </div>
-                                    <div class="retro-xp-next">
-                                        <span class="retro-xp-next-label">Next Level</span>
-                                        <span class="retro-xp-next-value" id="retro-xp-next-level">2</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
                         <!-- Favorite Animals Section -->
                         <div class="retro-box">
                             <div class="retro-box-header">
@@ -562,6 +557,13 @@
                                     </a>
                                 </div>
                             </div>
+                        </div>
+                        
+                        <!-- Logout Section -->
+                        <div class="retro-box retro-logout-section">
+                            <button class="retro-logout-btn" id="retro-logout-btn">
+                                <i class="fas fa-sign-out-alt"></i> Log Out
+                            </button>
                         </div>
                     </div>
                 </div>

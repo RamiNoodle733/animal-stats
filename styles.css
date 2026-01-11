@@ -2247,6 +2247,8 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
+    text-decoration: none;
+    color: inherit;
 }
 
 .user-profile-mini:hover {
@@ -5189,6 +5191,40 @@ body {
 
 .retro-see-all:hover {
     text-decoration: underline;
+}
+
+/* Logout Section */
+.retro-logout-section {
+    padding: 10px;
+    text-align: center;
+}
+
+.retro-logout-btn {
+    width: 100%;
+    padding: 10px 20px;
+    background: #fff;
+    color: #c0392b;
+    border: 1px solid #d8dfea;
+    border-radius: 3px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.retro-logout-btn:hover {
+    background: #c0392b;
+    color: #fff;
+    border-color: #c0392b;
+}
+
+.retro-logout-btn i {
+    font-size: 14px;
 }
 
 /* Close/Back Button */

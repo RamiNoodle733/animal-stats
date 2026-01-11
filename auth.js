@@ -76,15 +76,14 @@ const Auth = {
             xpBarFill: document.getElementById('xp-bar-fill'),
             xpBarText: document.getElementById('xp-bar-text'),
             bpAmount: document.getElementById('bp-amount'),
-            // Profile Dropdown
-            profileDropdown: document.getElementById('profile-dropdown'),
-            profileBtn: document.getElementById('profile-btn'),
-            logoutBtn: document.getElementById('logout-btn'),
+            // Profile link (direct navigation)
+            userProfileMini: document.getElementById('user-profile-mini'),
             // Profile Page Elements (retro style)
             retroDisplayName: document.getElementById('retro-display-name'),
             retroUsername: document.getElementById('retro-username'),
             retroSaveBtn: document.getElementById('retro-save-btn'),
             retroUnsavedIndicator: document.getElementById('retro-unsaved-indicator'),
+            retroLogoutBtn: document.getElementById('retro-logout-btn'),
             // Avatar Picker Modal
             avatarPickerModal: document.getElementById('avatar-picker-modal'),
             avatarPickerClose: document.getElementById('avatar-picker-close'),
@@ -130,20 +129,17 @@ const Auth = {
             if (e.key === 'Enter') this.handleSignup();
         });
 
-        // Logout
-        this.elements.logoutBtn?.addEventListener('click', (e) => {
+        // Profile link - use router for navigation
+        this.elements.userProfileMini?.addEventListener('click', (e) => {
             e.preventDefault();
-            e.stopPropagation();
-            this.logout();
-        });
-
-        // Profile button - use router
-        this.elements.profileBtn?.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
             if (window.Router) {
                 window.Router.navigate('/profile');
             }
+        });
+        
+        // Logout button on profile page
+        this.elements.retroLogoutBtn?.addEventListener('click', () => {
+            this.logout();
         });
 
         // Avatar picker close
