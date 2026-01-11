@@ -1844,7 +1844,7 @@ body {
 .character-grid {
     display: flex;
     gap: 10px;
-    overflow-x: auto;
+    overflow-x: scroll;
     overflow-y: hidden;
     padding: 6px 12px 14px 12px;
     scroll-behavior: smooth;
@@ -3625,7 +3625,7 @@ body {
         padding: 5px 8px;
         flex: 1;
         height: auto;
-        overflow-x: auto;
+        overflow-x: scroll;
         overflow-y: hidden;
         align-items: center;
         -webkit-overflow-scrolling: touch;
