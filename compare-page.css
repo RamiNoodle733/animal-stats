@@ -1,123 +1,121 @@
 /**
  * ============================================
- * COMPARE PAGE TOURNAMENT-STYLE CSS
+ * COMPARE PAGE - PREMIUM PS3-ERA HUD DESIGN
  * ============================================
  * 
- * All styles scoped to #compare-view
- * Matches the visual style of tournament-v4.css
+ * Clean, dark, premium design with depth and hierarchy.
+ * Minimal glow, maximum readability.
  * 
- * STRUCTURE:
- * - Viewport shell with three zones
- * - Fighter card layout (identity, hero image, bottom info)
- * - Fight center (VS section, stat bars)
- * - Collapsible menu tray
- * - Intro overlay
- * - Result overlay (sticky header, scrollable content)
- * - Responsive breakpoints for all screen sizes
+ * DESIGN SYSTEM:
+ * - Border radius: 4px (small), 8px (medium), 12px (large)
+ * - Border weight: 1px (subtle), 2px (accent)
+ * - Spacing: 4px, 8px, 12px, 16px, 24px
+ * - Shadows: layered for depth
  */
 
 /* ==========================
-   CSS VARIABLES
+   DESIGN TOKENS
    ========================== */
 #compare-view {
-    --c-gold: #ffd700;
-    --c-cyan: #00d4ff;
-    --c-orange: #ff6b00;
-    --c-green: #00ff88;
-    --c-purple: #9966ff;
-    --c-dark-bg: #0a0a12;
-    --c-panel-bg: rgba(20, 20, 35, 0.95);
-    --c-glass: rgba(255, 255, 255, 0.05);
-    --c-glass-border: rgba(255, 255, 255, 0.1);
-    --c-text-primary: #ffffff;
-    --c-text-secondary: rgba(255, 255, 255, 0.7);
-    --c-text-muted: rgba(255, 255, 255, 0.5);
+    /* Backgrounds */
+    --cv-bg-dark: #080a10;
+    --cv-bg-panel: #0d1118;
+    --cv-bg-module: #121820;
+    --cv-bg-elevated: #181f28;
     
-    /* Map to Tournament CSS variables so t-* classes work correctly */
-    --t-gold: #ffd700;
-    --t-cyan: #00d4ff;
-    --t-orange: #ff6b00;
-    --t-green: #00ff88;
+    /* Team Colors */
+    --cv-team-left: #0ea5e9;        /* Blue - clean sky blue */
+    --cv-team-left-dim: rgba(14, 165, 233, 0.15);
+    --cv-team-left-glow: rgba(14, 165, 233, 0.4);
+    --cv-team-right: #f97316;       /* Orange - warm orange */
+    --cv-team-right-dim: rgba(249, 115, 22, 0.15);
+    --cv-team-right-glow: rgba(249, 115, 22, 0.4);
     
-    /* Layout height variables */
-    --c-header-h: 56px;
-    --c-action-h: clamp(38px, 5vh, 52px);
-    --c-menu-expanded: clamp(180px, 26vh, 280px);
-    --c-menu-collapsed: 0px;
+    /* Accent Colors */
+    --cv-accent: #22d3ee;           /* Cyan - UI accent */
+    --cv-accent-dim: rgba(34, 211, 238, 0.12);
+    --cv-cta: #facc15;              /* Yellow - Fight/VS only */
+    --cv-cta-dim: rgba(250, 204, 21, 0.15);
+    --cv-cta-glow: rgba(250, 204, 21, 0.5);
+    --cv-win: #22c55e;              /* Green - winner indicator */
+    --cv-win-dim: rgba(34, 197, 94, 0.15);
+    
+    /* Text */
+    --cv-text-primary: #f1f5f9;
+    --cv-text-secondary: #94a3b8;
+    --cv-text-muted: #64748b;
+    --cv-text-dim: #475569;
+    
+    /* Borders & Surfaces */
+    --cv-border: rgba(255, 255, 255, 0.08);
+    --cv-border-subtle: rgba(255, 255, 255, 0.05);
+    --cv-border-accent: rgba(34, 211, 238, 0.3);
+    
+    /* Shadows */
+    --cv-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --cv-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --cv-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+    --cv-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+    
+    /* Consistent sizing */
+    --cv-radius-sm: 4px;
+    --cv-radius-md: 8px;
+    --cv-radius-lg: 12px;
+    
+    /* Transitions */
+    --cv-transition: 0.2s ease;
+    --cv-transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Legacy variable mappings for JS compatibility */
+    --c-gold: #facc15;
+    --c-cyan: #0ea5e9;
+    --c-orange: #f97316;
+    --c-green: #22c55e;
+    --c-purple: #a78bfa;
+    --c-text-primary: #f1f5f9;
+    --c-text-secondary: #94a3b8;
+    --c-text-muted: #64748b;
+    --c-glass-border: rgba(255, 255, 255, 0.08);
+    --t-gold: #facc15;
+    --t-cyan: #0ea5e9;
+    --t-orange: #f97316;
+    --t-green: #22c55e;
 }
 
 /* ==========================
-   ENTRANCE ANIMATIONS
+   ANIMATIONS
    ========================== */
-@keyframes c-slideInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+@keyframes cv-slideInLeft {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 
-@keyframes c-slideInRight {
-    from {
-        opacity: 0;
-        transform: translateX(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+@keyframes cv-slideInRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 
-@keyframes c-fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+@keyframes cv-fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes c-scaleIn {
-    from {
-        opacity: 0;
-        transform: scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+@keyframes cv-barFill {
+    from { width: 0; }
 }
 
-@keyframes c-shimmer {
-    0% { background-position: -200% center; }
-    100% { background-position: 200% center; }
+@keyframes cv-ctaPulse {
+    0%, 100% { box-shadow: 0 4px 20px var(--cv-cta-glow); }
+    50% { box-shadow: 0 6px 30px var(--cv-cta-glow), 0 0 40px var(--cv-cta-dim); }
 }
 
-@keyframes c-pulseGlow {
-    0%, 100% { 
-        box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
-    }
-    50% { 
-        box-shadow: 0 0 20px rgba(0, 212, 255, 0.5), 0 0 30px rgba(0, 212, 255, 0.2);
-    }
-}
-
-@keyframes c-pulseGlowOrange {
-    0%, 100% { 
-        box-shadow: 0 0 10px rgba(255, 107, 0, 0.3);
-    }
-    50% { 
-        box-shadow: 0 0 20px rgba(255, 107, 0, 0.5), 0 0 30px rgba(255, 107, 0, 0.2);
-    }
+@keyframes cv-vsFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
 }
 
 /* ==========================
-   VIEWPORT SHELL - Flex-based containment - fills all space
+   VIEWPORT SHELL
    ========================== */
 #compare-view.active-view {
     display: flex;
@@ -126,160 +124,161 @@
     min-height: 0;
     overflow: hidden;
     height: 100%;
-    background: transparent;  /* No blocking background */
+    background: transparent;
 }
 
 /* ==========================
-   MATCHUP ZONE - Premium battle arena layout - stretches to fill
+   FIGHT SCREEN GRID
    ========================== */
 #compare-view .fight-screen {
-    flex: 1 1 0;              /* Fill ALL available vertical space */
+    flex: 1 1 0;
     display: grid;
-    grid-template-columns: 1fr clamp(220px, 22vw, 340px) 1fr;  /* Wider center */
+    grid-template-columns: 1fr clamp(200px, 20vw, 300px) 1fr;
     grid-template-rows: 1fr;
-    gap: clamp(8px, 1vw, 16px);
-    padding: clamp(6px, 0.8vh, 10px) clamp(10px, 1.5vw, 20px) clamp(6px, 0.8vh, 10px) clamp(10px, 1.5vw, 20px);
+    gap: 12px;
+    padding: 12px 16px;
     align-items: stretch;
-    justify-items: stretch;
     min-height: 0;
-    overflow: visible;        /* Allow cards to fully show */
-    margin-bottom: 0;
-    background: transparent;  /* No blocking background */
+    background: transparent;
 }
 
 /* ==========================
-   BOTTOM INFO BAR - Uses styles.css .bottom-info-bar directly
-   ========================== */
-
-/* ==========================
-   FIGHTER SECTION (CARD) - Premium glass morphism cards
+   FIGHTER PANELS (LEFT/RIGHT)
    ========================== */
 #compare-view .fighter-section {
     display: grid;
-    /* 3 rows: Name/Record | Image+Info side-by-side | Medals */
-    grid-template-columns: 1fr auto;  /* Default: Info | Image */
+    grid-template-columns: 1fr auto;
     grid-template-rows: auto 1fr auto;
-    background: linear-gradient(145deg, rgba(15, 25, 45, 0.95), rgba(10, 15, 30, 0.98));
-    border-radius: 12px;
-    border: 2px solid var(--c-glass-border);
-    padding: 0;
+    background: linear-gradient(165deg, var(--cv-bg-panel) 0%, var(--cv-bg-dark) 100%);
+    border-radius: var(--cv-radius-lg);
+    border: 1px solid var(--cv-border);
     overflow: hidden;
     position: relative;
-    min-height: 0;
-    min-width: 0;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 
-        0 4px 20px rgba(0, 0, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        var(--cv-shadow-lg),
+        var(--cv-shadow-inset),
+        inset 0 0 60px rgba(0, 0, 0, 0.3);
+    transition: all var(--cv-transition-slow);
 }
 
-/* LEFT CARD: Info on left, Image on right (toward center) */
+/* Rim light effect */
+#compare-view .fighter-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    pointer-events: none;
+}
+
+/* LEFT PANEL */
 #compare-view .fighter-section.fighter-left {
-    grid-template-columns: 1fr auto;  /* Info | Image */
-    border-left: 4px solid var(--c-cyan);
-    animation: c-slideInLeft 0.5s ease-out;
+    grid-template-columns: 1fr auto;
+    border-left: 2px solid var(--cv-team-left);
+    animation: cv-slideInLeft 0.4s ease-out;
 }
 
-/* RIGHT CARD: Image on left (toward center), Info on right */
+#compare-view .fighter-section.fighter-left::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--cv-team-left-dim), transparent);
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* RIGHT PANEL */
 #compare-view .fighter-section.fighter-right {
-    grid-template-columns: auto 1fr;  /* Image | Info */
-    border-right: 4px solid var(--c-orange);
-    animation: c-slideInRight 0.5s ease-out;
+    grid-template-columns: auto 1fr;
+    border-right: 2px solid var(--cv-team-right);
+    animation: cv-slideInRight 0.4s ease-out;
 }
 
-/* Premium hover effects */
-#compare-view .fighter-section.fighter-left:hover {
-    box-shadow: 
-        0 8px 40px rgba(0, 212, 255, 0.25),
-        0 0 30px rgba(0, 212, 255, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    border-color: var(--c-cyan);
+#compare-view .fighter-section.fighter-right::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(-90deg, var(--cv-team-right-dim), transparent);
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* Hover states - subtle lift only */
+#compare-view .fighter-section:hover {
     transform: translateY(-2px);
-}
-
-#compare-view .fighter-section.fighter-right:hover {
     box-shadow: 
-        0 8px 40px rgba(255, 107, 0, 0.25),
-        0 0 30px rgba(255, 107, 0, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    border-color: var(--c-orange);
-    transform: translateY(-2px);
+        var(--cv-shadow-lg),
+        0 12px 40px rgba(0, 0, 0, 0.4),
+        var(--cv-shadow-inset);
 }
 
-/* Hide old elements that are kept for script.js DOM references */
+/* Hide old elements */
 #compare-view .fighter-info-overlay,
 #compare-view .compare-stats-panel {
     display: none !important;
 }
 
 /* ==========================
-   IDENTITY TOP SECTION - Names CENTERED on cards
+   IDENTITY TOP SECTION
    ========================== */
 #compare-view .c-identity-top {
-    grid-column: 1 / -1;      /* Span full width at top */
-    padding: clamp(6px, 0.8vh, 10px) clamp(10px, 1.2vw, 16px);
-    background: linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.3) 100%);
-    border-bottom: 1px solid var(--c-glass-border);
-    position: relative;
-    z-index: 5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;      /* CENTER everything */
-    text-align: center;
-    gap: 0.3rem;
-}
-
-/* Name row container */
-#compare-view .c-name-row {
+    grid-column: 1 / -1;
+    padding: 10px 14px;
+    background: rgba(0, 0, 0, 0.4);
+    border-bottom: 1px solid var(--cv-border-subtle);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.1rem;
+    text-align: center;
+    gap: 4px;
 }
 
+/* Animal Name - strongest hierarchy */
 #compare-view .c-fighter-name {
-    font-size: clamp(1.1rem, 2vw, 1.5rem);
-    font-weight: 900;
-    color: var(--c-text-primary);
+    font-size: clamp(1rem, 1.8vw, 1.3rem);
+    font-weight: 800;
+    color: var(--cv-text-primary);
     margin: 0;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    letter-spacing: 0.1em;
     line-height: 1.2;
 }
 
-#compare-view .c-scientific {
-    font-size: clamp(0.6rem, 0.9vw, 0.8rem);
-    color: var(--c-text-muted);
-    font-style: italic;
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    opacity: 0.8;
-}
-
 #compare-view .fighter-left .c-fighter-name {
-    color: var(--c-cyan);
+    color: var(--cv-team-left);
 }
 
 #compare-view .fighter-right .c-fighter-name {
-    color: var(--c-orange);
+    color: var(--cv-team-right);
 }
 
-/* Battle Record Badge - Premium inline badge */
+/* Scientific Name - subtle */
+#compare-view .c-scientific {
+    font-size: 0.65rem;
+    color: var(--cv-text-dim);
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+}
+
+/* Battle Record Badge */
 #compare-view .c-record-badge {
     display: flex;
     justify-content: center;
-    gap: 0.5rem;
-    background: rgba(0,0,0,0.5);
-    border-radius: 6px;
-    padding: clamp(4px, 0.5vh, 6px) clamp(8px, 1vw, 12px);
-    border: 1px solid rgba(255,255,255,0.1);
+    gap: 8px;
+    background: var(--cv-bg-module);
+    border-radius: var(--cv-radius-sm);
+    padding: 6px 10px;
+    border: 1px solid var(--cv-border-subtle);
+    margin-top: 4px;
 }
 
 #compare-view .c-record-badge .record-item {
@@ -290,123 +289,93 @@
 }
 
 #compare-view .c-record-badge .record-item i {
-    font-size: 0.65rem;
-    color: var(--c-gold);
+    font-size: 0.6rem;
+    color: var(--cv-text-muted);
 }
 
 #compare-view .c-record-badge .record-value {
-    font-size: 0.85rem;
-    font-weight: 800;
-    color: var(--c-text-primary);
-    line-height: 1;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--cv-text-primary);
+    font-variant-numeric: tabular-nums;
 }
 
 #compare-view .c-record-badge .record-label {
-    font-size: 0.55rem;
-    color: var(--c-text-muted);
+    font-size: 0.5rem;
+    color: var(--cv-text-dim);
     text-transform: uppercase;
     letter-spacing: 0.03em;
-    line-height: 1;
 }
 
 #compare-view .c-record-badge .record-divider {
     width: 1px;
-    height: 16px;
-    background: rgba(255,255,255,0.2);
+    height: 14px;
+    background: var(--cv-border);
     align-self: center;
 }
 
 /* ==========================
-   HERO SECTION (ANIMAL IMAGE) - Positioned based on card side
+   HERO SECTION (ANIMAL IMAGE)
    ========================== */
 #compare-view .c-hero-section {
     grid-row: 2;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 12px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4));
     position: relative;
-    padding: clamp(8px, 1vh, 12px);
-    background: linear-gradient(135deg, rgba(0,20,40,0.4), rgba(0,10,20,0.6));
-    overflow: hidden;
-    z-index: 1;
 }
 
-/* LEFT card: Image is in column 2 (right side, toward center) */
 #compare-view .fighter-left .c-hero-section {
     grid-column: 2;
-    border-left: 1px solid var(--c-glass-border);
+    border-left: 1px solid var(--cv-border-subtle);
 }
 
-/* RIGHT card: Image is in column 1 (left side, toward center) */
 #compare-view .fighter-right .c-hero-section {
     grid-column: 1;
-    border-right: 1px solid var(--c-glass-border);
+    border-right: 1px solid var(--cv-border-subtle);
 }
 
 #compare-view .fighter-display {
-    /* Bigger, more prominent image display */
-    width: clamp(80px, 15vh, 180px);
-    height: clamp(80px, 15vh, 180px);
+    width: clamp(70px, 12vh, 150px);
+    height: clamp(70px, 12vh, 150px);
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     cursor: pointer;
-    border-radius: 12px;
+    border-radius: var(--cv-radius-md);
     overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    background: linear-gradient(145deg, rgba(0,30,60,0.7), rgba(0,15,30,0.9));
-    border: 3px solid var(--c-glass-border);
-    box-shadow: 
-        inset 0 0 20px rgba(0,0,0,0.6),
-        0 6px 20px rgba(0,0,0,0.4);
+    transition: all var(--cv-transition);
+    background: var(--cv-bg-module);
+    border: 2px solid var(--cv-border);
+    box-shadow: var(--cv-shadow-md), inset 0 0 30px rgba(0, 0, 0, 0.5);
 }
 
 #compare-view .fighter-left .fighter-display {
-    border-color: rgba(0, 212, 255, 0.4);
-    box-shadow: 
-        inset 0 0 15px rgba(0,0,0,0.5),
-        0 4px 15px rgba(0, 212, 255, 0.15);
+    border-color: rgba(14, 165, 233, 0.3);
 }
 
 #compare-view .fighter-right .fighter-display {
-    border-color: rgba(255, 107, 0, 0.4);
-    box-shadow: 
-        inset 0 0 15px rgba(0,0,0,0.5),
-        0 4px 15px rgba(255, 107, 0, 0.15);
+    border-color: rgba(249, 115, 22, 0.3);
 }
 
 #compare-view .fighter-display:hover {
     transform: scale(1.05);
+    border-color: var(--cv-accent);
 }
 
-#compare-view .fighter-left .fighter-display:hover {
-    box-shadow: 
-        inset 0 0 15px rgba(0,0,0,0.5),
-        0 8px 25px rgba(0, 212, 255, 0.3);
-}
-
-#compare-view .fighter-right .fighter-display:hover {
-    box-shadow: 
-        inset 0 0 15px rgba(0,0,0,0.5),
-        0 8px 25px rgba(255, 107, 0, 0.3);
-}
-
-/* Animal image - contained within display box */
 #compare-view .fighter-image {
     max-width: 100%;
     max-height: 100%;
-    width: auto;
-    height: auto;
     object-fit: contain;
-    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
-    transition: transform 0.3s ease;
-    position: relative;
-    z-index: 2;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+    transition: transform var(--cv-transition);
 }
 
 #compare-view .fighter-display:hover .fighter-image {
-    transform: scale(1.1);
+    transform: scale(1.08);
 }
 
 #compare-view .fighter-placeholder {
@@ -414,30 +383,39 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.5rem;
-    color: var(--c-text-muted);
-    padding: 2rem;
+    gap: 6px;
+    color: var(--cv-text-dim);
+    padding: 1rem;
+    text-align: center;
 }
 
 #compare-view .fighter-placeholder i {
-    font-size: 2rem;
-    opacity: 0.5;
+    font-size: 1.5rem;
+    opacity: 0.4;
+}
+
+#compare-view .fighter-placeholder p {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    margin: 0;
 }
 
 /* Click hint */
 #compare-view .c-click-hint {
     position: absolute;
-    bottom: 8px;
+    bottom: 6px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0,0,0,0.7);
-    color: var(--c-text-secondary);
-    font-size: 0.65rem;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.8);
+    color: var(--cv-text-muted);
+    font-size: 0.55rem;
+    padding: 3px 6px;
+    border-radius: var(--cv-radius-sm);
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity var(--cv-transition);
     pointer-events: none;
+    white-space: nowrap;
 }
 
 #compare-view .fighter-display:hover .c-click-hint {
@@ -445,298 +423,260 @@
 }
 
 /* ==========================
-   BOTTOM INFO SECTION - Stats/abilities/traits - CENTERED
+   BOTTOM INFO SECTION
    ========================== */
 #compare-view .c-bottom-info {
     grid-row: 2;
-    padding: clamp(8px, 1vh, 12px) clamp(10px, 1vw, 14px);
-    background: transparent;
+    padding: 10px 12px;
     display: flex;
     flex-direction: column;
-    align-items: center;      /* CENTER content */
+    align-items: center;
     text-align: center;
-    gap: clamp(6px, 0.7vh, 10px);
+    gap: 8px;
     overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    min-height: 0;
     justify-content: space-evenly;
 }
 
-/* LEFT card: Info is in column 1 */
 #compare-view .fighter-left .c-bottom-info {
     grid-column: 1;
-    border-right: 1px solid var(--c-glass-border);
+    border-right: 1px solid var(--cv-border-subtle);
 }
 
-/* RIGHT card: Info is in column 2 */
 #compare-view .fighter-right .c-bottom-info {
     grid-column: 2;
-    border-left: 1px solid var(--c-glass-border);
+    border-left: 1px solid var(--cv-border-subtle);
 }
 
-/* Quick Info - Premium stat pills - CENTERED */
+/* Quick Info Pills */
 #compare-view .c-quick-info {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;  /* CENTER */
-    gap: 0.4rem;
-    flex: 0 0 auto;
+    justify-content: center;
+    gap: 6px;
 }
 
-/* Quick info items - Bold readable pills */
 #compare-view .quick-info-item {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 5px;
-    font-size: 0.7rem;
-    color: rgba(255, 255, 255, 0.95);
-    font-weight: 700;
+    gap: 4px;
+    font-size: 0.65rem;
+    color: var(--cv-text-secondary);
+    font-weight: 600;
     padding: 4px 8px;
-    background: linear-gradient(135deg, rgba(0, 30, 60, 0.9), rgba(0, 20, 40, 0.95));
-    border: 1px solid rgba(0, 212, 255, 0.35);
-    border-radius: 6px;
-    transition: all 0.2s ease;
-    min-width: auto;
-    white-space: nowrap;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-}
-
-#compare-view .quick-info-item span {
-    min-width: auto;
-    text-align: center;
+    background: var(--cv-bg-module);
+    border: 1px solid var(--cv-border);
+    border-radius: var(--cv-radius-sm);
+    transition: all var(--cv-transition);
     font-variant-numeric: tabular-nums;
 }
 
+#compare-view .quick-info-item:hover {
+    background: var(--cv-bg-elevated);
+    border-color: var(--cv-border-accent);
+}
+
 #compare-view .quick-info-item i {
-    color: var(--c-cyan);
-    font-size: 0.6rem;
+    color: var(--cv-accent);
+    font-size: 0.55rem;
 }
 
 #compare-view .quick-info-item .toggle-icon {
     display: none;
 }
 
-#compare-view .quick-info-item:hover {
-    background: rgba(0, 40, 60, 0.9);
-    border-color: var(--c-cyan);
-}
-
-/* Tags Section - CENTERED */
+/* Tags Section */
 #compare-view .c-tags {
     display: flex;
     flex-direction: column;
-    align-items: center;     /* CENTER */
-    gap: 0.2rem;
-    flex: 1 1 auto;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
     min-height: 0;
     overflow: hidden;
     justify-content: space-evenly;
+    width: 100%;
 }
 
 #compare-view .c-abilities-section,
 #compare-view .c-traits-section {
     display: flex;
     flex-direction: column;
-    align-items: center;     /* CENTER */
-    gap: 0.15rem;
+    align-items: center;
+    gap: 4px;
     width: 100%;
 }
 
-/* Labels - CENTERED */
+/* Section Labels */
 #compare-view .abilities-label,
 #compare-view .traits-label {
-    font-size: 0.65rem;
-    color: var(--c-text-muted);
+    font-size: 0.55rem;
+    color: var(--cv-text-dim);
     text-transform: uppercase;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
+    font-weight: 700;
     display: flex;
     align-items: center;
-    justify-content: center;  /* CENTER */
-    gap: 0.3rem;
-    font-weight: 700;
+    gap: 4px;
 }
 
 #compare-view .abilities-label i {
-    color: var(--c-cyan);
-    font-size: 0.55rem;
+    color: var(--cv-team-left);
+    font-size: 0.5rem;
 }
 
 #compare-view .traits-label i {
-    color: var(--c-purple);
-    font-size: 0.55rem;
+    color: var(--cv-text-muted);
+    font-size: 0.5rem;
 }
 
 #compare-view .abilities-tags-compact,
 #compare-view .traits-tags-compact {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;  /* CENTER */
-    gap: 0.3rem;
+    justify-content: center;
+    gap: 4px;
 }
 
+/* Ability Tags - "Moves" style, slightly louder */
 #compare-view .ability-tag-sm {
-    background: linear-gradient(135deg, rgba(0,212,255,0.3), rgba(0,212,255,0.15));
-    color: var(--c-cyan);
+    background: linear-gradient(135deg, var(--cv-team-left-dim), rgba(14, 165, 233, 0.08));
+    color: var(--cv-team-left);
     padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 0.6rem;
+    border-radius: var(--cv-radius-sm);
+    font-size: 0.55rem;
     font-weight: 700;
     text-transform: uppercase;
-    border: 1px solid rgba(0,212,255,0.4);
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 6px rgba(0,212,255,0.15);
+    letter-spacing: 0.03em;
+    border: 1px solid rgba(14, 165, 233, 0.25);
+    transition: all var(--cv-transition);
 }
 
 #compare-view .ability-tag-sm:hover {
-    background: linear-gradient(135deg, rgba(0,212,255,0.5), rgba(0,212,255,0.3));
+    background: rgba(14, 165, 233, 0.2);
     transform: translateY(-1px);
 }
 
+/* Trait Tags - "Passives" style, quieter/neutral */
 #compare-view .trait-tag-sm {
-    background: linear-gradient(135deg, rgba(153,102,255,0.3), rgba(153,102,255,0.15));
-    color: var(--c-purple);
+    background: var(--cv-bg-module);
+    color: var(--cv-text-secondary);
     padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 0.6rem;
-    font-weight: 700;
+    border-radius: var(--cv-radius-sm);
+    font-size: 0.55rem;
+    font-weight: 600;
     text-transform: uppercase;
-    border: 1px solid rgba(153,102,255,0.4);
-    transition: all 0.2s ease;
-    box-shadow: 0 2px 6px rgba(153,102,255,0.15);
+    letter-spacing: 0.03em;
+    border: 1px solid var(--cv-border);
+    transition: all var(--cv-transition);
 }
 
 #compare-view .trait-tag-sm:hover {
-    background: linear-gradient(135deg, rgba(153,102,255,0.5), rgba(153,102,255,0.3));
-    transform: translateY(-1px);
-    box-shadow: 0 3px 10px rgba(153,102,255,0.3);
+    background: var(--cv-bg-elevated);
+    border-color: var(--cv-border-accent);
 }
 
-/* Tournament Dashboard - Premium medal bar at bottom - CENTERED */
+/* ==========================
+   TOURNAMENT DASHBOARD (MEDALS)
+   ========================== */
 #compare-view .c-tournament-dashboard {
-    grid-column: 1 / -1;      /* Span full width at bottom */
+    grid-column: 1 / -1;
     grid-row: 3;
-    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.5) 100%);
-    border-radius: 0 0 10px 10px;
-    padding: clamp(8px, 0.8vh, 12px) clamp(10px, 1.2vw, 16px);
-    border-top: 1px solid var(--c-glass-border);
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0 0 var(--cv-radius-lg) var(--cv-radius-lg);
+    padding: 8px 12px;
+    border-top: 1px solid var(--cv-border-subtle);
     display: flex;
     align-items: center;
-    justify-content: center;  /* CENTERED */
-    gap: 0.8rem;
+    justify-content: center;
+    gap: 10px;
 }
 
 #compare-view .dashboard-title {
-    font-size: 0.7rem;
-    color: var(--c-text-muted);
+    font-size: 0.6rem;
+    color: var(--cv-text-dim);
     text-transform: uppercase;
     letter-spacing: 0.06em;
+    font-weight: 700;
     display: flex;
     align-items: center;
-    gap: 0.3rem;
-    font-weight: 700;
+    gap: 4px;
 }
 
 #compare-view .dashboard-title i {
-    color: var(--c-gold);
-    font-size: 0.65rem;
+    color: var(--cv-cta);
+    font-size: 0.55rem;
 }
 
 #compare-view .medal-row {
     display: flex;
     justify-content: center;
-    gap: 0.5rem;
-    flex: 1;
+    gap: 6px;
 }
 
 #compare-view .medal-card {
     display: flex;
-    flex-direction: row;
     align-items: center;
-    gap: 0.25rem;
-    padding: 4px 10px;
-    border-radius: 6px;
-    background: linear-gradient(135deg, rgba(0,0,0,0.4), rgba(0,0,0,0.5));
-    min-width: auto;
-    transition: all 0.2s ease;
-    border: 1px solid rgba(255,255,255,0.1);
+    gap: 4px;
+    padding: 4px 8px;
+    border-radius: var(--cv-radius-sm);
+    background: var(--cv-bg-module);
+    border: 1px solid var(--cv-border);
+    transition: all var(--cv-transition);
 }
 
 #compare-view .medal-card:hover {
-    background: rgba(0,0,0,0.6);
+    background: var(--cv-bg-elevated);
     transform: translateY(-1px);
 }
 
-#compare-view .medal-card.gold:hover { box-shadow: 0 3px 12px rgba(255,215,0,0.4); }
-#compare-view .medal-card.silver:hover { box-shadow: 0 3px 12px rgba(192,192,192,0.4); }
-#compare-view .medal-card.bronze:hover { box-shadow: 0 3px 12px rgba(205,127,50,0.4); }
-
 #compare-view .medal-icon-wrap {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
 }
 
-#compare-view .medal-card.gold .medal-icon-wrap i { color: #ffd700; text-shadow: 0 0 8px rgba(255,215,0,0.5); }
-#compare-view .medal-card.silver .medal-icon-wrap i { color: #c0c0c0; text-shadow: 0 0 8px rgba(192,192,192,0.5); }
-#compare-view .medal-card.bronze .medal-icon-wrap i { color: #cd7f32; text-shadow: 0 0 8px rgba(205,127,50,0.5); }
+#compare-view .medal-card.gold .medal-icon-wrap i { color: #fbbf24; }
+#compare-view .medal-card.silver .medal-icon-wrap i { color: #9ca3af; }
+#compare-view .medal-card.bronze .medal-icon-wrap i { color: #d97706; }
 
 #compare-view .medal-count {
-    font-size: 0.85rem;
-    font-weight: 800;
-    color: var(--c-text-primary);
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--cv-text-primary);
+    font-variant-numeric: tabular-nums;
 }
 
 #compare-view .medal-label {
     display: none;
 }
 
-/* ==========================\n   FIGHT CENTER - Premium battle arena center column - fills space\n   ========================== */\n#compare-view .fight-center {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    justify-content: space-between;  /* Spread content evenly */\n    padding: clamp(10px, 1.2vh, 16px) clamp(10px, 1.2vw, 16px);\n    gap: clamp(8px, 1vh, 14px);\n    width: 100%;\n    height: 100%;\n    box-sizing: border-box;\n    overflow: hidden;\n    background: linear-gradient(180deg, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.3));\n    border-radius: 12px;\n    border: 2px solid var(--c-glass-border);\n    box-shadow: \n        inset 0 0 30px rgba(0,0,0,0.3),\n        0 4px 20px rgba(0,0,0,0.3);\n    animation: c-fadeInUp 0.6s ease-out 0.2s both;\n}
-
-/* Fight button - Bold and prominent */
-#compare-view .c-fight-btn {
-    padding: clamp(10px, 1.2vh, 16px) clamp(20px, 3.5vw, 40px);
-    font-size: clamp(0.9rem, 1.8vh, 1.3rem);
-    font-weight: 900;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    background: linear-gradient(135deg, var(--c-gold), var(--c-orange));
-    color: #1a1a2e;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
+/* ==========================
+   FIGHT CENTER
+   ========================== */
+#compare-view .fight-center {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0.4rem;
-    transition: all 0.3s ease;
-    box-shadow: 
-        0 3px 15px rgba(255, 215, 0, 0.5),
-        0 0 20px rgba(255, 107, 0, 0.3);
-    flex-shrink: 0;
-    animation: fightButtonPulse 2s ease-in-out infinite;
+    justify-content: space-between;
+    padding: 16px 12px;
+    gap: 12px;
+    background: linear-gradient(180deg, var(--cv-bg-panel) 0%, var(--cv-bg-dark) 100%);
+    border-radius: var(--cv-radius-lg);
+    border: 1px solid var(--cv-border);
+    box-shadow: var(--cv-shadow-lg), var(--cv-shadow-inset);
+    animation: cv-fadeIn 0.5s ease-out 0.15s both;
 }
 
-@keyframes fightButtonPulse {
-    0%, 100% { box-shadow: 0 4px 20px rgba(255, 215, 0, 0.5), 0 0 30px rgba(255, 107, 0, 0.3); }
-    50% { box-shadow: 0 6px 30px rgba(255, 215, 0, 0.7), 0 0 40px rgba(255, 107, 0, 0.5); }
+/* Hide radar chart */
+#compare-view .radar-chart-container {
+    display: none;
 }
 
-#compare-view .c-fight-btn:hover {
-    transform: scale(1.08);
-    box-shadow: 
-        0 8px 40px rgba(255, 215, 0, 0.7),
-        0 0 50px rgba(255, 107, 0, 0.5);
-    animation: none;
-}
-
-#compare-view .c-fight-btn i {
-    font-size: 0.9em;
-}
-
-/* VS Section - Premium battle badge */
+/* ==========================
+   VS SECTION
+   ========================== */
 #compare-view .c-vs-section {
     position: relative;
-    width: clamp(40px, 6vh, 60px);
-    height: clamp(40px, 6vh, 60px);
+    width: clamp(36px, 5vh, 50px);
+    height: clamp(36px, 5vh, 50px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -747,129 +687,84 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle, rgba(255,215,0,0.3) 0%, transparent 70%);
-    animation: c-vsBurstPulse 2s ease-in-out infinite;
+    background: radial-gradient(circle, var(--cv-cta-dim) 0%, transparent 70%);
+    opacity: 0.6;
 }
 
 #compare-view .c-vs-diamond {
     position: absolute;
-    width: 85%;
-    height: 85%;
-    background: linear-gradient(135deg, rgba(255,215,0,0.4), rgba(255,107,0,0.4));
+    width: 80%;
+    height: 80%;
+    background: linear-gradient(135deg, var(--cv-cta-dim), rgba(250, 204, 21, 0.08));
     transform: rotate(45deg);
-    border-radius: 6px;
-    animation: c-diamondRotate 8s linear infinite;
+    border-radius: 4px;
+    border: 1px solid rgba(250, 204, 21, 0.2);
 }
 
 #compare-view .c-vs-badge {
     position: relative;
     z-index: 2;
-    background: linear-gradient(135deg, var(--c-gold), var(--c-orange));
-    width: clamp(36px, 5vh, 52px);
-    height: clamp(36px, 5vh, 52px);
+    background: linear-gradient(135deg, var(--cv-cta), #f59e0b);
+    width: clamp(32px, 4.5vh, 44px);
+    height: clamp(32px, 4.5vh, 44px);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 
-        0 0 20px rgba(255,215,0,0.6),
-        inset 0 2px 6px rgba(255,255,255,0.4);
-    animation: c-vsFloat 3s ease-in-out infinite;
+    box-shadow: 0 2px 12px var(--cv-cta-glow);
+    animation: cv-vsFloat 3s ease-in-out infinite;
 }
 
 #compare-view .c-vs-badge span {
-    font-size: clamp(0.8rem, 1.4vh, 1.1rem);
+    font-size: clamp(0.7rem, 1.2vh, 0.9rem);
     font-weight: 900;
     color: #1a1a2e;
-    text-shadow: 0 1px 2px rgba(255,255,255,0.4);
+    letter-spacing: 0.05em;
 }
 
-/* Radar Chart Container - Hidden to save space */
-#compare-view .radar-chart-container {
-    display: none;
-}
-
-/* ==========================\n   STAT BARS (CENTER) - Premium comparison bars - BIGGER\n   ========================== */\n#compare-view .c-stats-compact {\n    width: 100%;\n    display: flex;\n    flex-direction: column;\n    gap: 0.7rem;\n    flex: 1;\n    justify-content: space-evenly;\n}\n\n#compare-view .c-stat-row {\n    display: grid;\n    grid-template-columns: 1fr auto 1fr;\n    gap: 0.5rem;\n    align-items: center;\n}\n\n#compare-view .c-stat-bar-left,\n#compare-view .c-stat-bar-right {\n    height: 14px;\n    border-radius: 7px;\n    overflow: hidden;\n    box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);\n}
-
-#compare-view .c-stat-bar-left {
-    background: rgba(0,212,255,0.2);
-}
-
-#compare-view .c-stat-bar-right {
-    background: rgba(255,107,0,0.2);
-}
-
-#compare-view .c-stat-bar-left .stat-bar {
-    height: 100%;
-    display: flex;
-    justify-content: flex-end;
-}
-
-#compare-view .c-stat-bar-right .stat-bar {
-    height: 100%;
-    display: flex;
-    justify-content: flex-start;
-}
-
-#compare-view .c-stat-bar-left .stat-bar-fill {
-    background: linear-gradient(90deg, transparent, var(--c-cyan));
-    height: 100%;
-    border-radius: 3px;
-    transition: width 0.5s ease;
-}
-
-#compare-view .c-stat-bar-right .stat-bar-fill {
-    background: linear-gradient(90deg, var(--c-orange), transparent);
-    height: 100%;
-    border-radius: 3px;
-    transition: width 0.5s ease;
-}
-
-#compare-view .c-stat-center {
+/* ==========================
+   FIGHT BUTTON - CTA ONLY GETS GLOW
+   ========================== */
+#compare-view .c-fight-btn {
+    padding: clamp(10px, 1.5vh, 14px) clamp(24px, 4vw, 36px);
+    font-size: clamp(0.85rem, 1.6vh, 1.1rem);
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, var(--cv-cta), #f59e0b);
+    color: #1a1a2e;
+    border: none;
+    border-radius: var(--cv-radius-md);
+    cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 0.3rem;
-    min-width: 80px;
+    gap: 8px;
+    transition: all var(--cv-transition);
+    box-shadow: 0 4px 20px var(--cv-cta-glow);
+    animation: cv-ctaPulse 2.5s ease-in-out infinite;
+    flex-shrink: 0;
 }
 
-#compare-view .c-val {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: var(--c-text-secondary);
-    min-width: 20px;
-    text-align: center;
+#compare-view .c-fight-btn:hover {
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 8px 32px var(--cv-cta-glow), 0 0 40px var(--cv-cta-dim);
+    animation: none;
 }
 
-#compare-view .c-val.left {
-    color: var(--c-cyan);
+#compare-view .c-fight-btn i {
+    font-size: 0.85em;
 }
 
-#compare-view .c-val.right {
-    color: var(--c-orange);
-}
-
-#compare-view .c-stat-icon-label {\n    display: flex;\n    flex-direction: column;\n    align-items: center;\n    gap: 0;\n}\n\n#compare-view .c-stat-icon-label i {\n    font-size: 0.75rem;\n    color: var(--c-gold);\n}\n\n#compare-view .c-stat-abbr {\n    font-size: 0.55rem;\n    color: var(--c-text-muted);\n    text-transform: uppercase;\n    font-weight: 600;\n}
-
-/* Winner highlighting */
-#compare-view .c-stat-row.left-wins .c-val.left {
-    color: var(--c-green);
-    text-shadow: 0 0 8px var(--c-green);
-}
-
-#compare-view .c-stat-row.right-wins .c-val.right {
-    color: var(--c-green);
-    text-shadow: 0 0 8px var(--c-green);
-}
-
-/* Override Tournament stat bar styles for Compare view - BIGGER */
+/* ==========================
+   STAT BARS - CLEAN READABLE DESIGN
+   ========================== */
 #compare-view .t-stats-compact {
     width: 100%;
-    padding: clamp(8px, 1vh, 14px) clamp(10px, 1.2vw, 16px);
-    gap: clamp(6px, 0.8vh, 10px);
-    background: rgba(0, 0, 0, 0.5);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 215, 0, 0.25);
+    padding: 12px;
+    gap: 8px;
+    background: var(--cv-bg-module);
+    border-radius: var(--cv-radius-md);
+    border: 1px solid var(--cv-border);
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -877,32 +772,126 @@
 }
 
 #compare-view .t-stat-row-compact {
-    gap: clamp(6px, 0.8vw, 12px);
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 8px;
+    align-items: center;
+    transition: background var(--cv-transition);
+    padding: 2px 4px;
+    border-radius: var(--cv-radius-sm);
 }
 
+#compare-view .t-stat-row-compact:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Stat Center Cluster */
 #compare-view .t-stat-center-cluster {
-    padding: clamp(3px, 0.4vh, 6px) clamp(8px, 1vw, 14px);
-    min-width: clamp(80px, 14vw, 120px);
-    gap: clamp(6px, 0.8vw, 10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: clamp(80px, 12vw, 110px);
+    padding: 4px 10px;
+    background: var(--cv-bg-elevated);
+    border-radius: var(--cv-radius-sm);
+    border: 1px solid var(--cv-border-subtle);
 }
 
+/* Stat Values - LARGER */
 #compare-view .t-stat-center-cluster .t-val {
-    font-size: clamp(0.85rem, 1.5vh, 1.1rem);
+    font-size: clamp(0.9rem, 1.6vh, 1.15rem);
     font-weight: 800;
+    min-width: 24px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    transition: all var(--cv-transition);
 }
 
-#compare-view .t-stat-center-cluster .t-stat-icon-label i {
-    font-size: clamp(0.65rem, 1.2vh, 0.85rem);
+#compare-view .t-stat-center-cluster .t-val.left {
+    color: var(--cv-team-left);
+}
+
+#compare-view .t-stat-center-cluster .t-val.right {
+    color: var(--cv-team-right);
+}
+
+/* Winner highlight */
+#compare-view .t-stat-row-compact.left-wins .t-val.left,
+#compare-view .t-stat-row-compact.right-wins .t-val.right {
+    color: var(--cv-win);
+    text-shadow: 0 0 8px var(--cv-win-dim);
+}
+
+/* Stat Icon & Label */
+#compare-view .t-stat-icon-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+
+#compare-view .t-stat-icon-label i {
+    font-size: clamp(0.6rem, 1vh, 0.75rem);
+    color: var(--cv-text-muted);
 }
 
 #compare-view .t-stat-abbr {
-    font-size: clamp(0.5rem, 0.75vh, 0.6rem);
-    font-weight: 600;
+    font-size: clamp(0.45rem, 0.7vh, 0.55rem);
+    color: var(--cv-text-dim);
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
 }
 
+/* Stat Bar Tracks */
 #compare-view .t-stat-bar-left,
 #compare-view .t-stat-bar-right {
-    height: clamp(12px, 1.6vh, 18px);
+    height: clamp(10px, 1.4vh, 14px);
+    border-radius: 3px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+#compare-view .t-stat-bar-left .stat-bar {
+    height: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#compare-view .t-stat-bar-right .stat-bar {
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+}
+
+/* Bar Fills with gradient */
+#compare-view .t-stat-bar-left .stat-bar-fill {
+    background: linear-gradient(90deg, transparent 0%, var(--cv-team-left) 100%);
+    height: 100%;
+    border-radius: 0 3px 3px 0;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 6px var(--cv-team-left-glow);
+}
+
+#compare-view .t-stat-bar-right .stat-bar-fill {
+    background: linear-gradient(90deg, var(--cv-team-right) 0%, transparent 100%);
+    height: 100%;
+    border-radius: 3px 0 0 3px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 6px var(--cv-team-right-glow);
+}
+
+/* Winner bar highlight */
+#compare-view .t-stat-row-compact.left-wins .t-stat-bar-left .stat-bar-fill {
+    background: linear-gradient(90deg, transparent 0%, var(--cv-win) 100%);
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+}
+
+#compare-view .t-stat-row-compact.right-wins .t-stat-bar-right .stat-bar-fill {
+    background: linear-gradient(90deg, var(--cv-win) 0%, transparent 100%);
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
 }
 
 /* ==========================
@@ -932,7 +921,7 @@
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,215,0,0.1), transparent);
+    background: linear-gradient(90deg, transparent, var(--cv-cta-dim), transparent);
     opacity: 0;
 }
 
@@ -954,11 +943,11 @@
     align-items: center;
     gap: 1rem;
     opacity: 0;
-    transform: translateX(-100px);
+    transform: translateX(-80px);
 }
 
 .intro-fighter.right {
-    transform: translateX(100px);
+    transform: translateX(80px);
 }
 
 .intro-fighter.animate-in {
@@ -970,27 +959,27 @@
 }
 
 .intro-fighter-image {
-    width: 180px;
-    height: 180px;
+    width: 160px;
+    height: 160px;
     object-fit: contain;
-    filter: drop-shadow(0 0 30px rgba(255,215,0,0.5));
+    filter: drop-shadow(0 0 24px var(--cv-cta-glow));
 }
 
 .intro-fighter-name {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 900;
-    color: var(--c-text-primary);
+    color: var(--cv-text-primary);
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    text-shadow: 0 0 20px rgba(255,215,0,0.5);
+    text-shadow: 0 0 16px var(--cv-cta-glow);
 }
 
 .intro-fighter.left .intro-fighter-name {
-    color: var(--c-cyan);
+    color: var(--cv-team-left);
 }
 
 .intro-fighter.right .intro-fighter-name {
-    color: var(--c-orange);
+    color: var(--cv-team-right);
 }
 
 .intro-vs-badge {
@@ -1003,16 +992,16 @@
 }
 
 .intro-vs-text {
-    font-size: 3rem;
+    font-size: 2.5rem;
     font-weight: 900;
-    color: var(--c-gold);
-    text-shadow: 0 0 30px rgba(255,215,0,0.8);
+    color: var(--cv-cta);
+    text-shadow: 0 0 24px var(--cv-cta-glow);
 }
 
 .intro-skip-hint {
     position: absolute;
     bottom: 2rem;
-    color: var(--c-text-muted);
+    color: var(--cv-text-dim);
     font-size: 0.75rem;
 }
 
@@ -1041,7 +1030,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.92);
     opacity: 0;
     transition: opacity 0.3s ease;
 }
@@ -1053,19 +1042,17 @@
 .result-container {
     position: relative;
     width: 90%;
-    max-width: 420px;
+    max-width: 400px;
     max-height: calc(100vh - 24px);
-    background: linear-gradient(180deg, #1a1a2e 0%, #0d0d1a 100%);
-    border-radius: 16px;
-    border: 1px solid var(--c-glass-border);
-    box-shadow: 
-        0 0 60px rgba(255,215,0,0.3),
-        inset 0 1px 0 rgba(255,255,255,0.1);
+    background: linear-gradient(180deg, var(--cv-bg-panel) 0%, var(--cv-bg-dark) 100%);
+    border-radius: var(--cv-radius-lg);
+    border: 1px solid var(--cv-border);
+    box-shadow: 0 0 50px var(--cv-cta-dim), var(--cv-shadow-lg);
     display: flex;
     flex-direction: column;
     overflow: hidden;
     opacity: 0;
-    transform: scale(0.8) translateY(20px);
+    transform: scale(0.9) translateY(20px);
     transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -1079,33 +1066,33 @@
     position: sticky;
     top: 0;
     z-index: 10;
-    background: linear-gradient(180deg, #1a1a2e 0%, rgba(26,26,46,0.98) 100%);
-    padding: 0.75rem;
-    border-bottom: 1px solid var(--c-glass-border);
+    background: linear-gradient(180deg, var(--cv-bg-panel) 0%, rgba(13, 17, 24, 0.98) 100%);
+    padding: 12px;
+    border-bottom: 1px solid var(--cv-border);
     flex-shrink: 0;
 }
 
 .result-close-btn {
     position: absolute;
-    top: 0.5rem;
-    right: 0.5rem;
-    width: 32px;
-    height: 32px;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.1);
-    border: 1px solid rgba(255,255,255,0.2);
-    color: var(--c-text-secondary);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--cv-border);
+    color: var(--cv-text-muted);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
+    transition: all var(--cv-transition);
     z-index: 11;
 }
 
 .result-close-btn:hover {
-    background: rgba(255,107,0,0.3);
-    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--cv-text-primary);
     transform: rotate(90deg);
 }
 
@@ -1120,18 +1107,18 @@
 }
 
 .result-crown {
-    font-size: 2rem;
-    color: var(--c-gold);
+    font-size: 1.75rem;
+    color: var(--cv-cta);
     animation: crownBounce 1s ease-in-out infinite;
 }
 
 .result-title {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: 900;
-    color: var(--c-gold);
+    color: var(--cv-cta);
     text-transform: uppercase;
-    letter-spacing: 0.2em;
-    text-shadow: 0 0 20px rgba(255,215,0,0.5);
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 16px var(--cv-cta-glow);
 }
 
 /* Scrollable Content */
@@ -1156,52 +1143,52 @@
 
 .result-winner-glow {
     position: absolute;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, rgba(255,215,0,0.2) 0%, transparent 70%);
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, var(--cv-cta-dim) 0%, transparent 70%);
     animation: winnerGlow 2s ease-in-out infinite;
 }
 
 .result-winner-image {
-    width: 150px;
-    height: 150px;
+    width: 130px;
+    height: 130px;
     object-fit: contain;
     position: relative;
     z-index: 1;
-    filter: drop-shadow(0 0 30px rgba(255,215,0,0.5));
+    filter: drop-shadow(0 0 24px var(--cv-cta-glow));
     animation: winnerPulse 1.5s ease-in-out infinite;
 }
 
 .result-winner-name {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 900;
-    color: var(--c-gold);
+    color: var(--cv-cta);
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    text-shadow: 0 0 15px rgba(255,215,0,0.5);
-    margin-top: 0.5rem;
+    text-shadow: 0 0 12px var(--cv-cta-glow);
+    margin-top: 8px;
 }
 
 .result-probability-badge {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: linear-gradient(135deg, rgba(0,255,136,0.2), rgba(0,255,136,0.1));
-    border: 1px solid rgba(0,255,136,0.3);
-    border-radius: 8px;
-    padding: 0.4rem 0.75rem;
-    margin-top: 0.5rem;
+    background: var(--cv-win-dim);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: var(--cv-radius-md);
+    padding: 6px 12px;
+    margin-top: 8px;
 }
 
 .result-probability-badge .prob-value {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 900;
-    color: var(--c-green);
+    color: var(--cv-win);
 }
 
 .result-probability-badge .prob-label {
-    font-size: 0.55rem;
-    color: var(--c-text-muted);
+    font-size: 0.5rem;
+    color: var(--cv-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.1em;
 }
@@ -1210,36 +1197,36 @@
 .result-vs-divider {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 10px;
     padding: 0 1rem;
 }
 
 .result-vs-line {
     flex: 1;
     height: 1px;
-    background: linear-gradient(90deg, transparent, var(--c-glass-border), transparent);
+    background: linear-gradient(90deg, transparent, var(--cv-border), transparent);
 }
 
 .result-vs-text {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    color: var(--c-text-muted);
+    color: var(--cv-text-dim);
 }
 
 /* Loser Section */
 .result-loser-section {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    padding: 0.75rem;
-    background: rgba(0,0,0,0.2);
-    border-radius: 8px;
+    gap: 12px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--cv-radius-md);
     opacity: 0.7;
 }
 
 .result-loser-image {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     object-fit: contain;
     filter: grayscale(30%);
 }
@@ -1250,43 +1237,43 @@
 }
 
 .result-loser-name {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 700;
-    color: var(--c-text-secondary);
+    color: var(--cv-text-secondary);
 }
 
 .result-loser-prob {
-    font-size: 0.7rem;
-    color: var(--c-text-muted);
+    font-size: 0.65rem;
+    color: var(--cv-text-muted);
 }
 
 /* Breakdown Section */
 .result-breakdown {
-    background: rgba(0,0,0,0.3);
-    border-radius: 12px;
-    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: var(--cv-radius-md);
+    padding: 12px;
 }
 
 .breakdown-header {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
-    color: var(--c-text-secondary);
-    font-size: 0.7rem;
-    font-weight: 600;
+    gap: 6px;
+    margin-bottom: 8px;
+    color: var(--cv-text-secondary);
+    font-size: 0.65rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
 }
 
 .breakdown-header i {
-    color: var(--c-gold);
+    color: var(--cv-cta);
 }
 
 .breakdown-scores {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 0.5rem;
+    margin-bottom: 8px;
 }
 
 .score-item {
@@ -1296,39 +1283,39 @@
 }
 
 .score-item.winner {
-    color: var(--c-green);
+    color: var(--cv-win);
 }
 
 .score-item.loser {
-    color: var(--c-text-muted);
+    color: var(--cv-text-dim);
 }
 
 .score-name {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     font-weight: 600;
 }
 
 .score-value {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 900;
 }
 
 .breakdown-bar {
     display: flex;
-    height: 8px;
-    border-radius: 4px;
+    height: 6px;
+    border-radius: 3px;
     overflow: hidden;
-    background: rgba(0,0,0,0.3);
-    margin-bottom: 0.75rem;
+    background: rgba(0, 0, 0, 0.3);
+    margin-bottom: 12px;
 }
 
 .breakdown-bar-fill.winner {
-    background: linear-gradient(90deg, var(--c-green), var(--c-cyan));
+    background: linear-gradient(90deg, var(--cv-win), var(--cv-team-left));
     transition: width 0.5s ease;
 }
 
 .breakdown-bar-fill.loser {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.15);
     transition: width 0.5s ease;
 }
 
@@ -1336,20 +1323,20 @@
 .stat-comparison-grid {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
+    gap: 4px;
 }
 
 .stat-comparison-grid .stat-row {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
-    gap: 0.5rem;
+    gap: 8px;
     align-items: center;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
 }
 
 .stat-comparison-grid .stat-name {
     text-align: center;
-    color: var(--c-text-muted);
+    color: var(--cv-text-dim);
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -1358,7 +1345,7 @@
 .stat-comparison-grid .stat-val {
     text-align: center;
     font-weight: 700;
-    color: var(--c-text-secondary);
+    color: var(--cv-text-secondary);
 }
 
 .stat-comparison-grid .stat-val:first-child {
@@ -1370,75 +1357,60 @@
 }
 
 .stat-comparison-grid .stat-val.higher {
-    color: var(--c-green);
+    color: var(--cv-win);
 }
 
 /* Action Buttons */
 .result-actions {
     display: flex;
-    gap: 0.75rem;
-    padding: 0.75rem;
-    border-top: 1px solid var(--c-glass-border);
+    gap: 10px;
+    padding: 12px;
+    border-top: 1px solid var(--cv-border);
     flex-shrink: 0;
-    background: rgba(0,0,0,0.2);
+    background: rgba(0, 0, 0, 0.2);
 }
 
 .result-btn {
     flex: 1;
-    padding: 0.6rem 1rem;
-    border-radius: 8px;
+    padding: 10px 14px;
+    border-radius: var(--cv-radius-md);
     font-weight: 700;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.4rem;
-    transition: all 0.3s ease;
+    gap: 6px;
+    transition: all var(--cv-transition);
     border: none;
 }
 
 .result-btn.primary {
-    background: linear-gradient(135deg, var(--c-gold), var(--c-orange));
+    background: linear-gradient(135deg, var(--cv-cta), #f59e0b);
     color: #1a1a2e;
 }
 
 .result-btn.primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 20px rgba(255,215,0,0.4);
+    box-shadow: 0 4px 16px var(--cv-cta-glow);
 }
 
 .result-btn.secondary {
-    background: rgba(255,255,255,0.1);
-    color: var(--c-text-secondary);
-    border: 1px solid var(--c-glass-border);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--cv-text-secondary);
+    border: 1px solid var(--cv-border);
 }
 
 .result-btn.secondary:hover {
-    background: rgba(255,255,255,0.15);
-    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--cv-text-primary);
 }
 
 /* ==========================
-   ANIMATIONS - Prefixed with 'c-' to avoid conflicts with tournament-v4.css
+   ANIMATIONS
    ========================== */
-@keyframes c-vsBurstPulse {
-    0%, 100% { transform: scale(1); opacity: 0.5; }
-    50% { transform: scale(1.2); opacity: 0.8; }
-}
-
-@keyframes c-diamondRotate {
-    0% { transform: rotate(45deg); }
-    100% { transform: rotate(405deg); }
-}
-
-@keyframes c-vsFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
-}
-
 @keyframes lightSweep {
     0% { left: -100%; opacity: 0; }
     50% { opacity: 1; }
@@ -1446,97 +1418,117 @@
 }
 
 @keyframes fighterSlideIn {
-    0% { opacity: 0; transform: translateX(-100px); }
-    100% { opacity: 1; transform: translateX(0); }
+    from { opacity: 0; transform: translateX(-80px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes fighterSlideInRight {
-    0% { opacity: 0; transform: translateX(100px); }
-    100% { opacity: 1; transform: translateX(0); }
+    from { opacity: 0; transform: translateX(80px); }
+    to { opacity: 1; transform: translateX(0); }
 }
 
 @keyframes vsPop {
     0% { opacity: 0; transform: scale(0); }
-    50% { transform: scale(1.3); }
+    50% { transform: scale(1.2); }
     100% { opacity: 1; transform: scale(1); }
 }
 
 @keyframes winnerPulse {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.03); }
+    50% { transform: scale(1.02); }
 }
 
 @keyframes winnerGlow {
     0%, 100% { opacity: 0.5; transform: scale(1); }
-    50% { opacity: 0.8; transform: scale(1.1); }
+    50% { opacity: 0.7; transform: scale(1.05); }
 }
 
 @keyframes crownBounce {
-    0%, 100% { transform: translateY(0) rotate(-5deg); }
-    50% { transform: translateY(-8px) rotate(5deg); }
+    0%, 100% { transform: translateY(0) rotate(-3deg); }
+    50% { transform: translateY(-6px) rotate(3deg); }
 }
 
 /* ==========================
-   RESPONSIVE BREAKPOINTS
+   RESPONSIVE: Large Desktop
    ========================== */
-
-/* Large Desktop (1920x1080) */
 @media (min-width: 1600px) {
+    #compare-view .fight-screen {
+        padding: 16px 24px;
+        gap: 16px;
+    }
+    
     #compare-view .c-fighter-name {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
     }
     
     #compare-view .fighter-display {
-        width: clamp(90px, 14vh, 160px);
-        height: clamp(90px, 14vh, 160px);
+        width: clamp(100px, 14vh, 180px);
+        height: clamp(100px, 14vh, 180px);
     }
 }
 
-/* Medium Desktop (1536x864, 1440x900) */
-@media (max-width: 1599px) and (min-width: 1200px) {
+/* ==========================
+   RESPONSIVE: Small Desktop (1366x768)
+   ========================== */
+@media (max-width: 1199px) and (min-width: 1024px) {
     #compare-view .fight-screen {
+        grid-template-columns: 1fr clamp(180px, 18vw, 240px) 1fr;
         gap: 10px;
-        padding: 6px 12px;
+        padding: 10px 12px;
+    }
+    
+    #compare-view .c-identity-top {
+        padding: 8px 10px;
+    }
+    
+    #compare-view .c-fighter-name {
+        font-size: 0.95rem;
+    }
+    
+    #compare-view .fighter-display {
+        width: clamp(60px, 10vh, 110px);
+        height: clamp(60px, 10vh, 110px);
     }
 }
 
-/* Small Desktop (1366x768) - CRITICAL: This is the target laptop resolution */\n@media (max-width: 1199px) and (min-width: 1024px) {\n    #compare-view .fight-screen {\n        grid-template-columns: 1fr clamp(180px, 20vw, 250px) 1fr;\n        gap: 8px;\n        padding: 6px 10px;\n    }\n    \n    #compare-view .c-identity-top {\n        padding: 3px 8px;\n    }\n    \n    #compare-view .c-fighter-name {\n        font-size: 0.9rem;\n    }\n    \n    #compare-view .fighter-display {\n        width: clamp(60px, 11vh, 120px);\n        height: clamp(60px, 11vh, 120px);\n    }\n}
-
-/* Tablet */
+/* ==========================
+   RESPONSIVE: Tablet
+   ========================== */
 @media (max-width: 1023px) and (min-width: 768px) {
     #compare-view .fight-screen {
         grid-template-columns: 1fr 1fr;
         grid-template-rows: auto auto;
-        gap: 0.5rem;
-        padding: 0.5rem;
+        gap: 8px;
+        padding: 8px;
     }
     
     #compare-view .fight-center {
         grid-column: 1 / -1;
         flex-direction: row;
         justify-content: center;
-        gap: 1rem;
-        max-width: none;
+        gap: 16px;
         order: -1;
+        padding: 12px;
     }
     
-    #compare-view .c-stats-compact {
-        max-width: 300px;
+    #compare-view .t-stats-compact {
+        max-width: 280px;
     }
 }
 
-/* Mobile (390x844) */
+/* ==========================
+   RESPONSIVE: Mobile
+   ========================== */
 @media (max-width: 767px) {
     #compare-view .fight-screen {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
-        padding: 0.5rem;
-        min-height: auto;
-        max-height: none;
+        gap: 8px;
+        padding: 8px;
     }
     
     #compare-view .fighter-section {
+        display: flex;
         flex-direction: row;
         padding: 0;
     }
@@ -1545,11 +1537,15 @@
     #compare-view .fighter-section.fighter-right {
         border-left: none;
         border-right: none;
-        border-top: 2px solid var(--c-cyan);
+        border-top: 2px solid var(--cv-team-left);
     }
     
     #compare-view .fighter-section.fighter-right {
-        border-top-color: var(--c-orange);
+        border-top-color: var(--cv-team-right);
+    }
+    
+    #compare-view .fighter-section::after {
+        display: none;
     }
     
     #compare-view .c-identity-top {
@@ -1557,28 +1553,29 @@
     }
     
     #compare-view .c-hero-section {
-        width: 100px;
-        min-height: 100px;
-        padding: 0.5rem;
+        width: 90px;
+        min-height: 90px;
+        padding: 8px;
+        border: none !important;
     }
     
     #compare-view .fighter-image {
-        max-height: 80px;
+        max-height: 70px;
     }
     
     #compare-view .c-bottom-info {
         flex: 1;
-        padding: 0.5rem;
+        padding: 8px;
+        border: none !important;
     }
     
-    /* Show name in bottom info on mobile */
     #compare-view .c-bottom-info::before {
         content: attr(data-name);
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         font-weight: 700;
-        color: var(--c-text-primary);
+        color: var(--cv-text-primary);
         display: block;
-        margin-bottom: 0.25rem;
+        margin-bottom: 4px;
     }
     
     #compare-view .c-tournament-dashboard {
@@ -1587,28 +1584,22 @@
     
     #compare-view .fight-center {
         order: -1;
-        padding: 0.5rem;
+        padding: 8px;
         flex-direction: row;
-        gap: 0.5rem;
-        min-width: auto;
-        max-width: none;
+        gap: 8px;
     }
     
     #compare-view .c-vs-section {
-        width: 50px;
-        height: 50px;
+        width: 44px;
+        height: 44px;
     }
     
     #compare-view .c-vs-badge {
-        width: 35px;
-        height: 35px;
+        width: 32px;
+        height: 32px;
     }
     
-    #compare-view .c-vs-badge span {
-        font-size: 0.9rem;
-    }
-    
-    #compare-view .c-stats-compact {
+    #compare-view .t-stats-compact {
         display: none;
     }
     
@@ -1623,13 +1614,9 @@
         height: 100px;
     }
     
-    .result-winner-name {
-        font-size: 1rem;
-    }
-    
     .intro-fighter-image {
-        width: 120px;
-        height: 120px;
+        width: 100px;
+        height: 100px;
     }
     
     .intro-fighter-name {
@@ -1641,116 +1628,121 @@
     }
 }
 
-/* Very small screens */
 @media (max-width: 400px) {
     #compare-view .c-hero-section {
-        width: 80px;
+        width: 70px;
     }
     
     #compare-view .fighter-image {
-        max-height: 60px;
+        max-height: 55px;
     }
     
     .result-container {
         max-width: 100%;
-        border-radius: 12px 12px 0 0;
-        max-height: calc(100vh - 8px);
+        border-radius: var(--cv-radius-lg) var(--cv-radius-lg) 0 0;
     }
 }
 
 /* ==========================
-   HEIGHT-CONSTRAINED SCREENS
-   Ensures no vertical overflow on laptops
+   RESPONSIVE: Height-constrained
    ========================== */
-
-/* 1366x768 and similar - CRITICAL for laptop viewports */
 @media (max-height: 800px) {
-    #compare-view {
-        --c-menu-expanded: clamp(130px, 20vh, 170px);
-        --c-action-h: clamp(36px, 5vh, 44px);
+    #compare-view .fight-screen {
+        padding: 8px 12px;
+        gap: 10px;
     }
     
+    #compare-view .c-identity-top {
+        padding: 6px 10px;
+    }
+    
+    #compare-view .c-fighter-name {
+        font-size: clamp(0.85rem, 1.8vh, 1rem);
+    }
+    
+    #compare-view .c-scientific {
+        font-size: 0.55rem;
+    }
+    
+    #compare-view .c-record-badge {
+        padding: 4px 8px;
+    }
+    
+    #compare-view .fighter-display {
+        width: clamp(70px, 11vw, 120px);
+        height: clamp(70px, 11vw, 120px);
+    }
+    
+    #compare-view .c-bottom-info {
+        padding: 6px 8px;
+        gap: 6px;
+    }
+    
+    #compare-view .c-tournament-dashboard {
+        padding: 6px 10px;
+    }
+    
+    #compare-view .fight-center {
+        padding: 10px;
+        gap: 10px;
+    }
+    
+    #compare-view .c-vs-section {
+        width: 36px;
+        height: 36px;
+    }
+    
+    #compare-view .c-vs-badge {
+        width: 28px;
+        height: 28px;
+    }
+    
+    #compare-view .t-stats-compact {
+        padding: 8px 10px;
+        gap: 6px;
+    }
+    
+    #compare-view .t-stat-bar-left,
+    #compare-view .t-stat-bar-right {
+        height: 8px;
+    }
+    
+    #compare-view .c-fight-btn {
+        padding: 8px 20px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-height: 700px) {
     #compare-view .fight-screen {
         padding: 6px 10px;
         gap: 8px;
     }
     
     #compare-view .c-identity-top {
-        padding: 5px 8px;
+        padding: 4px 8px;
     }
     
-    #compare-view .c-fighter-name {
-        font-size: clamp(0.9rem, 2vh, 1.1rem);
-        margin-bottom: 2px;
-    }
-    
-    #compare-view .c-scientific {
-        font-size: 0.55rem;
-        margin-bottom: 3px;
-    }
-    
-    #compare-view .c-record-badge {
-        padding: 3px 6px;
-        gap: 6px;
-    }
-    
-    #compare-view .c-record-badge .record-value {
-        font-size: 0.75rem;
-    }
-    
-    #compare-view .c-record-badge .record-label {
-        font-size: 0.45rem;
+    #compare-view .fighter-display {
+        width: clamp(60px, 10vw, 100px);
+        height: clamp(60px, 10vw, 100px);
     }
     
     #compare-view .c-hero-section {
         padding: 6px;
     }
     
-    #compare-view .fighter-display {
-        width: clamp(90px, 14vw, 130px);
-        height: clamp(90px, 14vw, 130px);
-    }
-    
     #compare-view .c-bottom-info {
-        padding: 5px;
-        gap: 4px;
-    }
-    
-    #compare-view .c-tags {
-        gap: 3px;
+        padding: 4px 6px;
     }
     
     #compare-view .c-tournament-dashboard {
-        padding: 4px;
+        padding: 4px 8px;
     }
     
-    #compare-view .medal-card {
-        padding: 2px 5px;
-        min-width: 34px;
-    }
-    
-    #compare-view .medal-count {
-        font-size: 0.75rem;
-    }
-    
-    #compare-view .medal-label {
-        font-size: 0.45rem;
-    }
-    
-    #compare-view .fight-center {\n        padding: 8px;\n        gap: 8px;\n    }
-    
-    #compare-view .c-vs-section {
-        width: 40px;
-        height: 40px;
-    }
-    
-    #compare-view .c-vs-badge {
-        width: 32px;
-        height: 32px;
-    }
-    
-    #compare-view .c-vs-badge span {
-        font-size: 0.85rem;
+    #compare-view .fight-center {
+        padding: 8px;
+        gap: 8px;
     }
     
     #compare-view .t-stats-compact {
@@ -1758,106 +1750,14 @@
         gap: 4px;
     }
     
-    #compare-view .t-stat-row-compact {
-        gap: 6px;
-    }
-    
     #compare-view .t-stat-bar-left,
     #compare-view .t-stat-bar-right {
-        height: 10px;
+        height: 6px;
     }
     
-    #compare-view .t-stat-center-cluster .t-val {
+    #compare-view .c-fight-btn {
+        padding: 6px 16px;
         font-size: 0.8rem;
-    }
-    
-    #compare-view .t-stat-center-cluster .t-stat-icon-label i {
-        font-size: 0.65rem;
-    }
-    
-    #compare-view .t-stat-abbr {
-        font-size: 0.45rem;
-    }
-    
-    .result-container {
-        max-height: calc(100vh - 20px);
-    }
-    
-    .result-winner-image {
-        width: 100px;
-        height: 100px;
-    }
-}
-
-/* Very short screens (< 700px height) */
-@media (max-height: 700px) {
-    #compare-view {
-        --c-menu-expanded: clamp(110px, 18vh, 150px);
-        --c-action-h: 34px;
-    }
-    
-    #compare-view .c-tournament-dashboard {
-        padding: 3px;
-    }
-    
-    #compare-view .c-quick-info {
-        padding-bottom: 3px;
-    }
-    
-    #compare-view .c-hero-section {
-        padding: 4px;
-    }
-    
-    #compare-view .fighter-display {
-        width: clamp(70px, 12vw, 100px);
-        height: clamp(70px, 12vw, 100px);
-    }
-    
-    #compare-view .c-identity-top {
-        padding: 4px 6px;
-    }
-    
-    #compare-view .c-bottom-info {
-        padding: 4px;
-    }
-    
-    #compare-view .fight-center {\n        padding: 6px;\n        gap: 6px;\n    }
-    
-    #compare-view .t-stats-compact {
-        padding: 4px 6px;
-        gap: 3px;
-    }
-    
-    #compare-view .t-stat-bar-left,
-    #compare-view .t-stat-bar-right {
-        height: 8px;
-    }
-}
-
-/* ==========================
-   RESPONSIVE: Height-constrained screens - FIGHT button
-   ========================== */
-@media (max-height: 800px) {
-    #compare-view .c-fight-btn {
-        padding: clamp(8px, 1.2vh, 12px) clamp(20px, 3.5vw, 32px);
-        font-size: clamp(0.9rem, 1.8vh, 1.2rem);
-    }
-    
-    #compare-view .fighter-display {
-        width: clamp(80px, 12vw, 130px);
-        height: clamp(80px, 12vw, 130px);
-    }
-}
-
-@media (max-height: 700px) {
-    #compare-view .c-fight-btn {
-        padding: clamp(6px, 1vh, 10px) clamp(16px, 3vw, 28px);
-        font-size: clamp(0.85rem, 1.6vh, 1rem);
-    }
-    
-    #compare-view .fighter-display {
-        width: clamp(70px, 10vw, 100px);
-        height: clamp(70px, 10vw, 100px);
     }
 }
 
