@@ -27,47 +27,7 @@
 
 'use strict';
 
-// ========================================
-// SECTION: GLOBAL HELPERS & CONSTANTS
-// ========================================
-
-// Helper function to format numbers with commas
-function formatNumber(num) {
-    if (num === null || num === undefined) return null;
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
-
-// Helper function to format numbers with consistent decimals (.0 for whole numbers)
-function formatStat(num, decimals = 1) {
-    if (num === null || num === undefined) return null;
-    // Don't show decimal for 100 since it's already 3 digits
-    if (num === 100) return '100';
-    const fixed = Number(num).toFixed(decimals);
-    // Insert commas only in the integer part, keep decimal part intact
-    const parts = fixed.split('.');
-    const intPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-    return parts.length > 1 ? `${intPart}.${parts[1]}` : intPart;
-}
-
-// Fallback placeholder image (inline SVG - always works, no external dependency)
-const FALLBACK_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Crect fill='%23222' width='100' height='100'/%3E%3Ctext x='50' y='55' text-anchor='middle' fill='%23666' font-size='32' font-family='sans-serif'%3E%3F%3C/text%3E%3C/svg%3E";
-
-// API Configuration
-const API_CONFIG = {
-    // Base URL for API - auto-detects local vs production
-    baseUrl: window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? '' // Use relative paths in development
-        : '', // Use relative paths in production too (same domain)
-    endpoints: {
-        animals: '/api/animals',
-        search: '/api/search',
-        random: '/api/random',
-        stats: '/api/stats',
-        health: '/api/animals?action=health'
-    },
-    // Fallback to local data if API fails
-    useFallback: true
-};
+// Note: FALLBACK_IMAGE, API_CONFIG, formatNumber, formatStat are defined in core.js
 
 // ========================================
 // SECTION: ANIMAL STATS APP (CORE + STATS PAGE)
