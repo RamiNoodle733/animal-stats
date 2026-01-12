@@ -1,0 +1,226 @@
+/**
+ * ============================================
+ * DESIGN TOKENS - Global CSS Variables
+ * ============================================
+ * 
+ * Single source of truth for all design values.
+ * Import this file first in your CSS stack.
+ */
+
+:root {
+    /* ========================
+       COLOR PALETTE
+       ======================== */
+    
+    /* Primary Brand Colors */
+    --color-primary: #00d4ff;           /* Cyan - main accent */
+    --color-primary-dark: #00a8cc;
+    --color-primary-light: #66e5ff;
+    --color-primary-dim: rgba(0, 212, 255, 0.15);
+    --color-primary-glow: rgba(0, 212, 255, 0.5);
+    
+    /* Secondary Brand Colors */
+    --color-secondary: #ff6b00;         /* Orange - action/CTA */
+    --color-secondary-dark: #cc5500;
+    --color-secondary-light: #ff8533;
+    --color-secondary-dim: rgba(255, 107, 0, 0.15);
+    --color-secondary-glow: rgba(255, 107, 0, 0.5);
+    
+    /* Accent Colors */
+    --color-gold: #ffd700;              /* Gold - premium/special */
+    --color-gold-dim: rgba(255, 215, 0, 0.15);
+    --color-gold-glow: rgba(255, 215, 0, 0.5);
+    
+    --color-purple: #a855f7;            /* Purple - left fighter */
+    --color-purple-dark: #9333ea;
+    --color-purple-dim: rgba(168, 85, 247, 0.15);
+    --color-purple-glow: rgba(168, 85, 247, 0.5);
+    
+    --color-green: #22c55e;             /* Green - right fighter/success */
+    --color-green-dark: #16a34a;
+    --color-green-dim: rgba(34, 197, 94, 0.15);
+    --color-green-glow: rgba(34, 197, 94, 0.5);
+    
+    --color-red: #ef4444;               /* Red - danger/loss */
+    --color-red-dim: rgba(239, 68, 68, 0.15);
+    
+    /* Background Colors */
+    --bg-darkest: #000000;
+    --bg-darker: #050810;
+    --bg-dark: #0a0e1a;
+    --bg-base: #0d1220;
+    --bg-elevated: #121828;
+    --bg-surface: #1a2235;
+    --bg-hover: #242d42;
+    
+    /* Text Colors */
+    --text-primary: #f1f5f9;
+    --text-secondary: #94a3b8;
+    --text-muted: #64748b;
+    --text-dim: #475569;
+    --text-disabled: #334155;
+    
+    /* Border Colors */
+    --border-default: rgba(255, 255, 255, 0.08);
+    --border-subtle: rgba(255, 255, 255, 0.05);
+    --border-accent: rgba(0, 212, 255, 0.3);
+    --border-bright: rgba(0, 212, 255, 0.6);
+    
+    /* ========================
+       TYPOGRAPHY
+       ======================== */
+    
+    /* Font Families */
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+    
+    /* Font Sizes - Using fluid typography */
+    --text-xs: clamp(0.65rem, 0.6rem + 0.25vw, 0.75rem);
+    --text-sm: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+    --text-base: clamp(0.875rem, 0.8rem + 0.375vw, 1rem);
+    --text-lg: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+    --text-xl: clamp(1.125rem, 1rem + 0.625vw, 1.25rem);
+    --text-2xl: clamp(1.25rem, 1.1rem + 0.75vw, 1.5rem);
+    --text-3xl: clamp(1.5rem, 1.3rem + 1vw, 1.875rem);
+    --text-4xl: clamp(1.875rem, 1.5rem + 1.875vw, 2.25rem);
+    --text-5xl: clamp(2.25rem, 1.75rem + 2.5vw, 3rem);
+    
+    /* Font Weights */
+    --weight-normal: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+    --weight-black: 900;
+    
+    /* Line Heights */
+    --leading-none: 1;
+    --leading-tight: 1.25;
+    --leading-snug: 1.375;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.625;
+    
+    /* Letter Spacing */
+    --tracking-tighter: -0.05em;
+    --tracking-tight: -0.025em;
+    --tracking-normal: 0;
+    --tracking-wide: 0.025em;
+    --tracking-wider: 0.05em;
+    --tracking-widest: 0.1em;
+    
+    /* ========================
+       SPACING
+       ======================== */
+    
+    --space-0: 0;
+    --space-1: 0.25rem;    /* 4px */
+    --space-2: 0.5rem;     /* 8px */
+    --space-3: 0.75rem;    /* 12px */
+    --space-4: 1rem;       /* 16px */
+    --space-5: 1.25rem;    /* 20px */
+    --space-6: 1.5rem;     /* 24px */
+    --space-8: 2rem;       /* 32px */
+    --space-10: 2.5rem;    /* 40px */
+    --space-12: 3rem;      /* 48px */
+    --space-16: 4rem;      /* 64px */
+    --space-20: 5rem;      /* 80px */
+    
+    /* ========================
+       BORDERS & RADIUS
+       ======================== */
+    
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-2xl: 24px;
+    --radius-full: 9999px;
+    
+    --border-thin: 1px;
+    --border-default: 2px;
+    --border-thick: 3px;
+    --border-heavy: 4px;
+    
+    /* ========================
+       SHADOWS
+       ======================== */
+    
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
+    --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    --shadow-glow-primary: 0 0 20px var(--color-primary-glow);
+    --shadow-glow-secondary: 0 0 20px var(--color-secondary-glow);
+    --shadow-glow-gold: 0 0 20px var(--color-gold-glow);
+    
+    /* ========================
+       TRANSITIONS
+       ======================== */
+    
+    --transition-fast: 150ms ease;
+    --transition-base: 200ms ease;
+    --transition-slow: 300ms ease;
+    --transition-slower: 500ms ease;
+    --transition-spring: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+    --transition-smooth: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* ========================
+       Z-INDEX SCALE
+       ======================== */
+    
+    --z-base: 0;
+    --z-dropdown: 100;
+    --z-sticky: 200;
+    --z-fixed: 300;
+    --z-modal-backdrop: 400;
+    --z-modal: 500;
+    --z-popover: 600;
+    --z-tooltip: 700;
+    --z-notification: 800;
+    --z-overlay: 900;
+    --z-max: 9999;
+    
+    /* ========================
+       LAYOUT
+       ======================== */
+    
+    --header-height: 60px;
+    --grid-height: 200px;
+    --sidebar-width: 280px;
+    --content-max-width: 1400px;
+    
+    /* ========================
+       BREAKPOINTS (for reference)
+       ======================== */
+    /* 
+     * --bp-sm: 640px
+     * --bp-md: 768px
+     * --bp-lg: 1024px
+     * --bp-xl: 1280px
+     * --bp-2xl: 1536px
+     */
+}
+
+/* ========================
+   THEME VARIANTS
+   ======================== */
+
+/* Fighter/Team Colors - used in compare & tournament */
+[data-theme="compare"] {
+    --team-left: var(--color-purple);
+    --team-left-dark: var(--color-purple-dark);
+    --team-left-dim: var(--color-purple-dim);
+    --team-left-glow: var(--color-purple-glow);
+    
+    --team-right: var(--color-green);
+    --team-right-dark: var(--color-green-dark);
+    --team-right-dim: var(--color-green-dim);
+    --team-right-glow: var(--color-green-glow);
+}
+
+/* Tournament specific overrides */
+[data-theme="tournament"] {
+    --accent-primary: var(--color-gold);
+    --accent-glow: var(--color-gold-glow);
+}

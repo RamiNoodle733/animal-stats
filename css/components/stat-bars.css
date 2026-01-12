@@ -1,0 +1,313 @@
+/**
+ * ============================================
+ * STAT BAR COMPONENT
+ * ============================================
+ * 
+ * BEM Structure:
+ * .stat-bar                - Container for a single stat
+ * .stat-bar--compact       - Compact version for grids
+ * .stat-bar__track         - Background track
+ * .stat-bar__fill          - Filled portion
+ * .stat-bar__fill--left    - Left fighter (purple)
+ * .stat-bar__fill--right   - Right fighter (green)
+ * .stat-bar__label         - Stat name
+ * .stat-bar__value         - Numeric value
+ * .stat-bar__icon          - Stat icon
+ */
+
+/* ========================
+   BASE STAT BAR
+   ======================== */
+
+.stat-bar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2) var(--space-3);
+    background: var(--bg-surface);
+    border-radius: var(--radius-md);
+    transition: background var(--transition-fast);
+}
+
+.stat-bar:hover {
+    background: var(--bg-hover);
+}
+
+/* ========================
+   STAT BAR ELEMENTS
+   ======================== */
+
+.stat-bar__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    font-size: var(--text-lg);
+    color: var(--color-primary);
+    background: var(--color-primary-dim);
+    border-radius: var(--radius-sm);
+}
+
+.stat-bar__label {
+    flex: 0 0 80px;
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.stat-bar__track {
+    flex: 1;
+    height: 20px;
+    background: linear-gradient(180deg, #0a0a0a 0%, #151515 50%, #0a0a0a 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+
+/* Segment lines for styled bars */
+.stat-bar__track--segmented::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        transparent 8px,
+        rgba(0, 0, 0, 0.6) 8px,
+        rgba(0, 0, 0, 0.6) 10px
+    );
+    z-index: 2;
+    pointer-events: none;
+}
+
+.stat-bar__fill {
+    height: 100%;
+    border-radius: 0;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Default fill - cyan */
+.stat-bar__fill {
+    background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.3) 0%, 
+        var(--color-primary) 15%, 
+        var(--color-primary-dark) 85%, 
+        rgba(0, 0, 0, 0.3) 100%);
+    box-shadow: 0 0 8px var(--color-primary-glow);
+}
+
+/* Left fighter - Purple */
+.stat-bar__fill--left,
+.stat-bar__fill--purple {
+    background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.3) 0%, 
+        #a855f7 15%, 
+        #9333ea 85%, 
+        rgba(0, 0, 0, 0.3) 100%);
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.6);
+}
+
+/* Right fighter - Green */
+.stat-bar__fill--right,
+.stat-bar__fill--green {
+    background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.3) 0%, 
+        #22c55e 15%, 
+        #16a34a 85%, 
+        rgba(0, 0, 0, 0.3) 100%);
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.6);
+}
+
+/* Gold variant */
+.stat-bar__fill--gold {
+    background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.3) 0%, 
+        var(--color-gold) 15%, 
+        #d4a500 85%, 
+        rgba(0, 0, 0, 0.3) 100%);
+    box-shadow: 0 0 8px var(--color-gold-glow);
+}
+
+.stat-bar__value {
+    min-width: 40px;
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-bold);
+    text-align: right;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+}
+
+/* Winner/Loser states */
+.stat-bar--winner .stat-bar__fill {
+    filter: brightness(1.2) saturate(1.3);
+}
+
+.stat-bar--winner .stat-bar__value {
+    color: var(--color-green);
+    text-shadow: 0 0 8px var(--color-green-glow);
+}
+
+.stat-bar--loser {
+    opacity: 0.7;
+}
+
+/* ========================
+   COMPARISON STAT BARS
+   ======================== */
+
+/* Dual bar row for compare/tournament */
+.stat-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--space-2);
+    align-items: center;
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-sm);
+    transition: background var(--transition-fast);
+}
+
+.stat-row:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Center cluster with icon and values */
+.stat-row__center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-width: 100px;
+    padding: var(--space-1) var(--space-2);
+    background: var(--bg-elevated);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+}
+
+.stat-row__icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.stat-row__icon i {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+.stat-row__abbr {
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.stat-row__value {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: var(--weight-black);
+    min-width: 28px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-row__value--left {
+    color: var(--color-purple);
+    text-shadow: 0 0 8px var(--color-purple-glow);
+}
+
+.stat-row__value--right {
+    color: var(--color-green);
+    text-shadow: 0 0 8px var(--color-green-glow);
+}
+
+/* Left bar - grows right to left */
+.stat-row__bar--left {
+    direction: rtl;
+}
+
+.stat-row__bar--left .stat-bar__track {
+    display: flex;
+    justify-content: flex-start;
+    direction: ltr;
+}
+
+/* Winner highlight */
+.stat-row--left-wins .stat-row__value--left,
+.stat-row--right-wins .stat-row__value--right {
+    filter: brightness(1.3);
+}
+
+.stat-row--left-wins .stat-bar__fill--left,
+.stat-row--right-wins .stat-bar__fill--right {
+    filter: brightness(1.15) saturate(1.4);
+}
+
+/* ========================
+   COMPACT VERSION
+   ======================== */
+
+.stat-bar--compact {
+    padding: var(--space-1) var(--space-2);
+    gap: var(--space-2);
+}
+
+.stat-bar--compact .stat-bar__icon {
+    width: 24px;
+    height: 24px;
+    font-size: var(--text-sm);
+}
+
+.stat-bar--compact .stat-bar__label {
+    flex: 0 0 60px;
+    font-size: var(--text-xs);
+}
+
+.stat-bar--compact .stat-bar__track {
+    height: 14px;
+}
+
+.stat-bar--compact .stat-bar__value {
+    min-width: 32px;
+    font-size: var(--text-sm);
+}
+
+/* ========================
+   STAT GRID
+   ======================== */
+
+.stat-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    padding: var(--space-2);
+    background: var(--bg-base);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-default);
+}
+
+.stat-grid__header {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-2);
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: var(--space-2);
+}
+
+.stat-grid__title {
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--text-muted);
+}

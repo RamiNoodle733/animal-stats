@@ -1,0 +1,715 @@
+/**
+ * ============================================
+ * COMPARE PAGE STYLES
+ * ============================================
+ * 
+ * Single source of truth for the Compare/Fight page.
+ * Uses #compare-view as the root namespace.
+ * 
+ * BEM Structure:
+ * .compare                 - Page container
+ * .compare__arena          - Fight screen area
+ * .compare__fighter        - Fighter panel
+ * .compare__fighter--left  - Left fighter (purple)
+ * .compare__fighter--right - Right fighter (green)
+ * .compare__center         - VS/stats center column
+ * .compare__stats          - Stat comparison bars
+ * .compare__vs             - VS badge
+ * .compare__action         - Fight button
+ * 
+ * Fighter Panel:
+ * .fighter                 - Fighter card
+ * .fighter__identity       - Name/info section
+ * .fighter__hero           - Image section
+ * .fighter__details        - Additional info
+ */
+
+/* ========================
+   PAGE CONTAINER
+   ======================== */
+
+#compare-view,
+.compare {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    background: transparent;
+}
+
+#compare-view.active-view {
+    display: flex;
+}
+
+/* ========================
+   FIGHT ARENA
+   ======================== */
+
+.compare__arena,
+#compare-view .fight-screen {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr clamp(200px, 22vw, 320px) 1fr;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    align-items: stretch;
+    min-height: 0;
+    max-height: 100%;
+    overflow: hidden;
+}
+
+/* ========================
+   FIGHTER PANELS
+   ======================== */
+
+.compare__fighter,
+#compare-view .fighter-section {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    
+    background: linear-gradient(165deg, var(--bg-elevated) 0%, var(--bg-darker) 100%);
+    border-radius: var(--radius-lg);
+    border: var(--border-thin) solid var(--border-default);
+    overflow: hidden;
+    position: relative;
+    
+    box-shadow: 
+        var(--shadow-lg),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03),
+        inset 0 0 60px rgba(0, 0, 0, 0.3);
+    
+    transition: all var(--transition-slow);
+}
+
+/* Rim light effect */
+.compare__fighter::before,
+#compare-view .fighter-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    pointer-events: none;
+}
+
+/* LEFT FIGHTER - Purple */
+.compare__fighter--left,
+#compare-view .fighter-section.fighter-left {
+    grid-template-columns: 1fr auto;
+    border-left: var(--border-thick) solid var(--color-purple);
+    animation: slide-in-left 0.4s ease-out;
+}
+
+.compare__fighter--left::after,
+#compare-view .fighter-section.fighter-left::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-purple-dim), transparent);
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* RIGHT FIGHTER - Green */
+.compare__fighter--right,
+#compare-view .fighter-section.fighter-right {
+    grid-template-columns: auto 1fr;
+    border-right: var(--border-thick) solid var(--color-green);
+    animation: slide-in-right 0.4s ease-out;
+}
+
+.compare__fighter--right::after,
+#compare-view .fighter-section.fighter-right::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(-90deg, var(--color-green-dim), transparent);
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* Hover state */
+.compare__fighter:hover,
+#compare-view .fighter-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        var(--shadow-lg),
+        0 12px 40px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+/* ========================
+   FIGHTER IDENTITY (Top)
+   ======================== */
+
+.fighter__identity,
+#compare-view .c-identity-top {
+    grid-column: 1 / -1;
+    padding: var(--space-3) var(--space-4);
+    
+    background: rgba(0, 0, 0, 0.4);
+    border-bottom: var(--border-thin) solid var(--border-subtle);
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-1);
+}
+
+.fighter__name,
+#compare-view .c-fighter-name {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    font-weight: var(--weight-black);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    line-height: var(--leading-tight);
+    margin: 0;
+}
+
+.compare__fighter--left .fighter__name,
+#compare-view .fighter-left .c-fighter-name {
+    color: var(--color-purple);
+    text-shadow: 0 0 15px var(--color-purple-glow);
+}
+
+.compare__fighter--right .fighter__name,
+#compare-view .fighter-right .c-fighter-name {
+    color: var(--color-green);
+    text-shadow: 0 0 15px var(--color-green-glow);
+}
+
+.fighter__scientific,
+#compare-view .c-scientific {
+    font-size: var(--text-sm);
+    font-style: italic;
+    color: var(--text-secondary);
+}
+
+/* ========================
+   FIGHTER HERO (Image)
+   ======================== */
+
+.fighter__hero,
+#compare-view .c-hero-section {
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4));
+    position: relative;
+}
+
+#compare-view .fighter-left .c-hero-section {
+    grid-column: 2;
+    border-left: var(--border-thin) solid var(--border-subtle);
+}
+
+#compare-view .fighter-right .c-hero-section {
+    grid-column: 1;
+    border-right: var(--border-thin) solid var(--border-subtle);
+}
+
+.fighter__display,
+#compare-view .fighter-display {
+    width: clamp(70px, 12vh, 150px);
+    height: clamp(70px, 12vh, 150px);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    
+    background: var(--bg-base);
+    border: var(--border-default) solid var(--border-default);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: var(--shadow-md), inset 0 0 30px rgba(0, 0, 0, 0.5);
+}
+
+.compare__fighter--left .fighter__display,
+#compare-view .fighter-left .fighter-display {
+    border-color: var(--color-purple);
+    box-shadow: 
+        var(--shadow-md), 
+        inset 0 0 30px var(--color-purple-dim), 
+        0 0 15px var(--color-purple-glow);
+}
+
+.compare__fighter--right .fighter__display,
+#compare-view .fighter-right .fighter-display {
+    border-color: var(--color-green);
+    box-shadow: 
+        var(--shadow-md), 
+        inset 0 0 30px var(--color-green-dim), 
+        0 0 15px var(--color-green-glow);
+}
+
+.fighter__display:hover,
+#compare-view .fighter-display:hover {
+    transform: scale(1.05);
+    border-color: var(--color-primary);
+}
+
+.fighter__image,
+#compare-view .fighter-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+    transition: transform var(--transition-base);
+}
+
+.fighter__display:hover .fighter__image,
+#compare-view .fighter-display:hover .fighter-image {
+    transform: scale(1.08);
+}
+
+/* Placeholder */
+.fighter__placeholder,
+#compare-view .fighter-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    color: var(--text-dim);
+    text-align: center;
+    padding: var(--space-4);
+}
+
+.fighter__placeholder i,
+#compare-view .fighter-placeholder i {
+    font-size: 1.5rem;
+    opacity: 0.4;
+}
+
+.fighter__placeholder p,
+#compare-view .fighter-placeholder p {
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    margin: 0;
+}
+
+/* Selecting state */
+.fighter__display--selecting,
+#compare-view .fighter-display.selecting {
+    animation: selecting-pulse 1.2s ease-in-out infinite;
+}
+
+@keyframes selecting-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+}
+
+/* ========================
+   CENTER COLUMN
+   ======================== */
+
+.compare__center,
+#compare-view .fight-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    gap: var(--space-2);
+    padding: var(--space-3);
+    
+    background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-darker) 100%);
+    border-radius: var(--radius-lg);
+    border: var(--border-thin) solid var(--border-default);
+    box-shadow: var(--shadow-lg);
+    
+    overflow: hidden;
+    animation: fade-in 0.5s ease-out 0.15s both;
+}
+
+/* ========================
+   VS BADGE
+   ======================== */
+
+.compare__vs,
+#compare-view .c-vs-section {
+    position: relative;
+    width: clamp(28px, 4vh, 40px);
+    height: clamp(28px, 4vh, 40px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.compare__vs-burst,
+#compare-view .c-vs-burst {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, var(--color-gold-dim) 0%, transparent 70%);
+    opacity: 0.6;
+}
+
+.compare__vs-badge,
+#compare-view .c-vs-badge {
+    position: relative;
+    z-index: 2;
+    
+    width: clamp(26px, 3.5vh, 36px);
+    height: clamp(26px, 3.5vh, 36px);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    background: linear-gradient(135deg, var(--color-gold), #f59e0b);
+    border-radius: var(--radius-full);
+    box-shadow: 0 2px 12px var(--color-gold-glow);
+    
+    animation: vs-float 3s ease-in-out infinite;
+}
+
+.compare__vs-badge span,
+#compare-view .c-vs-badge span {
+    font-family: var(--font-display);
+    font-size: clamp(0.55rem, 1vh, 0.75rem);
+    font-weight: var(--weight-black);
+    color: var(--bg-darkest);
+    letter-spacing: var(--tracking-wide);
+}
+
+@keyframes vs-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
+
+/* ========================
+   STAT BARS (Center)
+   ======================== */
+
+.compare__stats,
+#compare-view .t-stats-compact {
+    width: 100%;
+    padding: var(--space-2);
+    gap: var(--space-1);
+    
+    background: var(--bg-base);
+    border-radius: var(--radius-md);
+    border: var(--border-thin) solid var(--border-default);
+    
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    min-height: 0;
+}
+
+/* Stat rows use the stat-bar component */
+#compare-view .t-stat-row-compact {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--space-2);
+    align-items: center;
+    padding: var(--space-1);
+    border-radius: var(--radius-sm);
+    transition: background var(--transition-fast);
+    min-height: 28px;
+}
+
+#compare-view .t-stat-row-compact:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+/* Center cluster */
+#compare-view .t-stat-center-cluster {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-width: clamp(70px, 10vw, 100px);
+    padding: var(--space-1) var(--space-2);
+    background: var(--bg-elevated);
+    border-radius: var(--radius-sm);
+    border: var(--border-thin) solid var(--border-subtle);
+}
+
+#compare-view .t-stat-center-cluster .t-val {
+    font-family: var(--font-display);
+    font-size: clamp(0.9rem, 1.6vh, 1.2rem);
+    font-weight: var(--weight-black);
+    min-width: 24px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+#compare-view .t-stat-center-cluster .t-val.left {
+    color: var(--color-purple);
+    text-shadow: 0 0 8px var(--color-purple-glow);
+}
+
+#compare-view .t-stat-center-cluster .t-val.right {
+    color: var(--color-green);
+    text-shadow: 0 0 8px var(--color-green-glow);
+}
+
+/* Stat icon/label */
+#compare-view .t-stat-icon-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+
+#compare-view .t-stat-icon-label i {
+    font-size: clamp(0.7rem, 1.2vh, 0.9rem);
+    color: var(--text-secondary);
+}
+
+#compare-view .t-stat-abbr {
+    font-family: var(--font-display);
+    font-size: clamp(0.55rem, 0.85vh, 0.7rem);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+/* Stat bar tracks */
+#compare-view .t-stat-bar-left,
+#compare-view .t-stat-bar-right {
+    height: 18px;
+    border-radius: 2px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #0a0a0a 0%, #151515 50%, #0a0a0a 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.9);
+    position: relative;
+}
+
+/* Segment overlay */
+#compare-view .t-stat-bar-left::before,
+#compare-view .t-stat-bar-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        transparent 8px,
+        rgba(0, 0, 0, 0.6) 8px,
+        rgba(0, 0, 0, 0.6) 10px
+    );
+    z-index: 2;
+    pointer-events: none;
+}
+
+/* Left bar - grows right to left */
+#compare-view .t-stat-bar-left {
+    direction: rtl;
+}
+
+#compare-view .t-stat-bar-left .stat-bar {
+    height: 100%;
+    display: block;
+    width: 100%;
+}
+
+#compare-view .t-stat-bar-right .stat-bar {
+    height: 100%;
+    display: block;
+    width: 100%;
+}
+
+/* Bar fills */
+#compare-view .t-stat-bar-left .stat-bar-fill {
+    background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.3) 0%, 
+        #a855f7 15%, 
+        #9333ea 85%, 
+        rgba(0, 0, 0, 0.3) 100%);
+    height: 100%;
+    border-radius: 0;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 8px var(--color-purple-glow);
+}
+
+#compare-view .t-stat-bar-right .stat-bar-fill {
+    background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.3) 0%, 
+        #22c55e 15%, 
+        #16a34a 85%, 
+        rgba(0, 0, 0, 0.3) 100%);
+    height: 100%;
+    border-radius: 0;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 0 8px var(--color-green-glow);
+}
+
+/* Winner states */
+#compare-view .t-stat-row-compact.left-wins .t-val.left,
+#compare-view .t-stat-row-compact.right-wins .t-val.right {
+    filter: brightness(1.3);
+}
+
+#compare-view .t-stat-row-compact.left-wins .t-stat-bar-left .stat-bar-fill {
+    filter: brightness(1.15) saturate(1.4);
+    box-shadow: 0 0 15px var(--color-purple-glow);
+}
+
+#compare-view .t-stat-row-compact.right-wins .t-stat-bar-right .stat-bar-fill {
+    filter: brightness(1.15) saturate(1.4);
+    box-shadow: 0 0 15px var(--color-green-glow);
+}
+
+/* ========================
+   FIGHT BUTTON
+   ======================== */
+
+.compare__action,
+#compare-view .c-fight-btn {
+    padding: clamp(6px, 1vh, 10px) clamp(18px, 3vw, 28px);
+    
+    font-family: var(--font-display);
+    font-size: clamp(0.7rem, 1.3vh, 0.95rem);
+    font-weight: var(--weight-black);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    
+    background: linear-gradient(135deg, var(--color-gold), #f59e0b);
+    color: var(--bg-darkest);
+    border: none;
+    border-radius: var(--radius-md);
+    
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    
+    cursor: pointer;
+    transition: all var(--transition-base);
+    box-shadow: 0 4px 20px var(--color-gold-glow);
+    animation: fight-btn-pulse 2.5s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+.compare__action:hover,
+#compare-view .c-fight-btn:hover {
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 8px 32px var(--color-gold-glow);
+    animation: none;
+}
+
+@keyframes fight-btn-pulse {
+    0%, 100% { box-shadow: 0 4px 20px var(--color-gold-glow); }
+    50% { box-shadow: 0 6px 30px var(--color-gold-glow), 0 0 40px var(--color-gold-dim); }
+}
+
+/* ========================
+   ANIMATIONS
+   ======================== */
+
+@keyframes slide-in-left {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-in-right {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================
+   RESPONSIVE
+   ======================== */
+
+@media (max-width: 1023px) {
+    .compare__arena,
+    #compare-view .fight-screen {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        gap: var(--space-2);
+        padding: var(--space-2);
+    }
+    
+    .compare__center,
+    #compare-view .fight-center {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        justify-content: center;
+        gap: var(--space-4);
+        order: -1;
+        padding: var(--space-3);
+    }
+    
+    #compare-view .t-stats-compact {
+        max-width: 280px;
+    }
+}
+
+@media (max-width: 767px) {
+    .compare__arena,
+    #compare-view .fight-screen {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+        padding: var(--space-2);
+    }
+    
+    .compare__fighter,
+    #compare-view .fighter-section {
+        display: flex;
+        flex-direction: row;
+        padding: 0;
+    }
+    
+    #compare-view .fighter-section.fighter-left,
+    #compare-view .fighter-section.fighter-right {
+        border-left: none;
+        border-right: none;
+        border-top: var(--border-default) solid var(--color-purple);
+    }
+    
+    #compare-view .fighter-section.fighter-right {
+        border-top-color: var(--color-green);
+    }
+    
+    .fighter__identity,
+    #compare-view .c-identity-top {
+        display: none;
+    }
+    
+    .fighter__hero,
+    #compare-view .c-hero-section {
+        width: 90px;
+        min-height: 90px;
+        padding: var(--space-2);
+        border: none !important;
+    }
+}
+
+/* ========================
+   HIDE LEGACY ELEMENTS
+   ======================== */
+
+#compare-view .fighter-info-overlay,
+#compare-view .compare-stats-panel,
+#compare-view .radar-chart-container {
+    display: none !important;
+}

@@ -1,0 +1,311 @@
+/**
+ * ============================================
+ * CARD COMPONENT
+ * ============================================
+ * 
+ * BEM Structure:
+ * .card                    - Base card container
+ * .card--elevated          - Elevated with shadow
+ * .card--bordered          - With visible border
+ * .card--interactive       - Hoverable/clickable
+ * .card--glass             - Glassmorphism style
+ * .card__header            - Card header section
+ * .card__body              - Card main content
+ * .card__footer            - Card footer section
+ * .card__image             - Card image
+ * .card__title             - Card title
+ * .card__subtitle          - Card subtitle
+ */
+
+/* ========================
+   BASE CARD
+   ======================== */
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    
+    background: var(--bg-elevated);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    
+    transition: all var(--transition-base);
+}
+
+/* ========================
+   CARD VARIANTS
+   ======================== */
+
+.card--bordered {
+    border: var(--border-thin) solid var(--border-default);
+}
+
+.card--elevated {
+    box-shadow: var(--shadow-lg);
+}
+
+.card--interactive {
+    cursor: pointer;
+}
+
+.card--interactive:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-xl);
+}
+
+.card--interactive:hover.card--bordered {
+    border-color: var(--border-accent);
+}
+
+/* Glass card */
+.card--glass {
+    background: rgba(13, 18, 32, 0.8);
+    backdrop-filter: blur(12px);
+    border: var(--border-thin) solid var(--border-subtle);
+}
+
+/* Accent variants */
+.card--accent-primary {
+    border-left: var(--border-thick) solid var(--color-primary);
+}
+
+.card--accent-gold {
+    border-left: var(--border-thick) solid var(--color-gold);
+}
+
+.card--accent-purple {
+    border-left: var(--border-thick) solid var(--color-purple);
+}
+
+.card--accent-green {
+    border-left: var(--border-thick) solid var(--color-green);
+}
+
+/* ========================
+   CARD SECTIONS
+   ======================== */
+
+.card__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    border-bottom: var(--border-thin) solid var(--border-subtle);
+}
+
+.card__body {
+    flex: 1;
+    padding: var(--space-4);
+}
+
+.card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    border-top: var(--border-thin) solid var(--border-subtle);
+    background: var(--bg-dark);
+}
+
+/* ========================
+   CARD ELEMENTS
+   ======================== */
+
+.card__image {
+    width: 100%;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+}
+
+.card__image--square {
+    aspect-ratio: 1;
+}
+
+.card__image--portrait {
+    aspect-ratio: 3/4;
+}
+
+.card__title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.card__subtitle {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.card__description {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+    line-height: var(--leading-relaxed);
+}
+
+.card__badge {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    padding: var(--space-1) var(--space-2);
+    font-size: var(--text-xs);
+    font-weight: var(--weight-bold);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    background: var(--color-primary);
+    color: var(--bg-darkest);
+    border-radius: var(--radius-sm);
+}
+
+/* ========================
+   ANIMAL CARD (Specific)
+   ======================== */
+
+.animal-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    width: 100px;
+    padding: var(--space-2);
+    
+    background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-dark) 100%);
+    border: var(--border-default) solid var(--border-default);
+    border-radius: var(--radius-md);
+    
+    cursor: pointer;
+    transition: all var(--transition-base);
+}
+
+.animal-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-primary);
+    box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3);
+}
+
+.animal-card--selected {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 20px var(--color-gold-glow);
+}
+
+.animal-card__image {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+    filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+    transition: transform var(--transition-base);
+}
+
+.animal-card:hover .animal-card__image {
+    transform: scale(1.1);
+}
+
+.animal-card__name {
+    margin-top: var(--space-1);
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    letter-spacing: var(--tracking-wide);
+    text-align: center;
+    color: var(--text-primary);
+    
+    /* Truncate long names */
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.animal-card__rank {
+    position: absolute;
+    top: var(--space-1);
+    left: var(--space-1);
+    
+    padding: 2px 6px;
+    font-family: var(--font-display);
+    font-size: var(--text-xs);
+    
+    background: var(--bg-darkest);
+    border-radius: var(--radius-sm);
+    color: var(--color-gold);
+}
+
+/* Selection indicators */
+.animal-card__indicator {
+    position: absolute;
+    top: var(--space-1);
+    right: var(--space-1);
+    
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: transparent;
+    border: 2px solid transparent;
+}
+
+.animal-card__indicator--left {
+    background: var(--color-purple);
+    border-color: var(--color-purple);
+    box-shadow: 0 0 8px var(--color-purple-glow);
+}
+
+.animal-card__indicator--right {
+    background: var(--color-green);
+    border-color: var(--color-green);
+    box-shadow: 0 0 8px var(--color-green-glow);
+}
+
+/* ========================
+   STAT CARD
+   ======================== */
+
+.stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    
+    padding: var(--space-3);
+    
+    background: var(--bg-surface);
+    border: var(--border-thin) solid var(--border-subtle);
+    border-radius: var(--radius-md);
+}
+
+.stat-card__label {
+    font-size: var(--text-xs);
+    font-weight: var(--weight-medium);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-wide);
+    color: var(--text-muted);
+}
+
+.stat-card__value {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    font-weight: var(--weight-bold);
+    color: var(--text-primary);
+}
+
+.stat-card__value--highlight {
+    color: var(--color-gold);
+    text-shadow: 0 0 10px var(--color-gold-glow);
+}
+
+.stat-card__change {
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+}
+
+.stat-card__change--positive {
+    color: var(--color-green);
+}
+
+.stat-card__change--negative {
+    color: var(--color-red);
+}

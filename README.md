@@ -66,32 +66,77 @@ npm run dev
 
 ```
 animal-battle-stats/
-├── api/                    # Serverless API functions
-│   ├── animals.js          # GET all, POST new animal
-│   ├── animals/[id].js     # GET, PUT, DELETE by ID
-│   ├── auth/               # Authentication endpoints
-│   │   ├── login.js
-│   │   ├── signup.js
-│   │   └── me.js
-│   ├── health.js           # Health check
-│   ├── random.js           # Random animal(s)
-│   ├── search.js           # Advanced search
-│   └── stats.js            # Database statistics
-├── lib/                    # Shared utilities
+├── index.html              # Main HTML (single-page app)
+├── manifest.json           # PWA manifest
+├── vercel.json             # Vercel deployment config
+│
+├── css/                    # Stylesheets (modular architecture)
+│   ├── main.css            # Import manifest
+│   ├── legacy.css          # Original styles (being migrated)
+│   ├── variables.css       # Design tokens
+│   ├── base.css            # Reset & utilities
+│   ├── components/         # Reusable UI components
+│   │   ├── buttons.css
+│   │   ├── cards.css
+│   │   ├── modals.css
+│   │   └── stat-bars.css
+│   ├── layout/             # Layout components
+│   │   ├── header.css
+│   │   └── grid.css
+│   └── pages/              # Page-specific styles
+│       ├── compare.css
+│       ├── community.css
+│       ├── rankings.css
+│       ├── stats.css
+│       └── tournament.css
+│
+├── js/                     # Client-side JavaScript
+│   ├── core.js             # Shared utilities & config
+│   ├── main.js             # Core app + Stats page (~2,500 lines)
+│   ├── rankings.js         # Rankings page (~1,850 lines)
+│   ├── tournament.js       # Tournament system (~1,900 lines)
+│   ├── community-manager.js # Community page (~1,300 lines)
+│   ├── router.js           # Client-side routing
+│   ├── auth.js             # Authentication UI
+│   ├── compare.js          # Compare page enhancements
+│   └── community.js        # Community page enhancements
+│
+├── api/                    # Serverless API functions (Vercel)
+│   ├── animals.js          # Animals CRUD
+│   ├── animals/[id].js     # Single animal operations
+│   ├── auth.js             # Authentication
+│   ├── battles.js          # Battle results
+│   ├── chat.js             # Community chat
+│   ├── comments.js         # Animal comments
+│   ├── community.js        # Community features
+│   ├── rankings.js         # Power rankings
+│   ├── search.js           # Search API
+│   ├── stats.js            # Site statistics
+│   └── votes.js            # Voting system
+│
+├── lib/                    # Shared backend utilities
 │   ├── mongodb.js          # Database connection
-│   └── models/
-│       └── Animal.js       # Mongoose animal model
-├── models/
-│   └── User.js             # Mongoose user model
-├── scripts/
-│   └── seed-database.js    # Database seeder
-├── index.html              # Main HTML
-├── styles.css              # Styles
-├── script.js               # Main app logic
-├── auth.js                 # Authentication UI
-├── data.js                 # Local fallback data
-├── package.json            # Dependencies
-└── vercel.json             # Vercel config
+│   ├── auth.js             # JWT utilities
+│   ├── discord.js          # Discord integration
+│   ├── xpSystem.js         # XP/leveling system
+│   └── models/             # Mongoose models
+│       ├── Animal.js
+│       ├── BattleStats.js
+│       ├── ChatMessage.js
+│       ├── Comment.js
+│       ├── RankHistory.js
+│       ├── SiteStats.js
+│       ├── User.js
+│       ├── Vote.js
+│       └── XpClaim.js
+│
+├── scripts/                # Admin/development scripts
+│   ├── migrations/         # Database migrations
+│   ├── data-tools/         # Data manipulation tools
+│   └── image-tools/        # Image processing tools
+│
+├── images/                 # Static images
+└── animal_stats.json       # Backup animal data
 ```
 
 ## 📡 API Endpoints
@@ -115,6 +160,12 @@ animal-battle-stats/
 **Backend**: Vercel Serverless Functions, MongoDB Atlas, Mongoose  
 **Auth**: JWT, bcryptjs
 
-## 📝 License
+## � Documentation
+
+- [ARCHITECTURE.md](ARCHITECTURE.md) - Detailed codebase structure & development guidelines
+- [DEPLOYMENT.md](DEPLOYMENT.md) - Deployment instructions
+- [IMAGE_UPDATER_README.md](IMAGE_UPDATER_README.md) - Image processing tools
+
+## �📝 License
 
 MIT License - see [LICENSE](LICENSE) for details.

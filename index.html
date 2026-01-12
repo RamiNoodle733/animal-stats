@@ -35,13 +35,13 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     
     <!-- Critical CSS first -->
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/legacy.css">
+    
+    <!-- New modular CSS architecture -->
+    <link rel="stylesheet" href="css/main.css">
     
     <!-- Non-critical external resources loaded async -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="tournament-v4.css" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="compare-page.css" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="community-page.css" media="print" onload="this.media='all'">
     
     <!-- Google Fonts - loaded async -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bebas+Neue&family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
@@ -144,23 +144,23 @@
     <!-- Main Game Screen -->
     <div class="game-screen">
         <!-- Header -->
-        <header class="game-header">
-            <div class="header-brand">
-                <img src="/images/logo.png" alt="Animal Battle Stats" class="header-logo" id="header-logo">
-                <h1 id="main-title">ANIMAL BATTLE <span class="title-mode">STATS</span></h1>
+        <header class="game-header header">
+            <div class="header-brand header__brand">
+                <img src="/images/logo.png" alt="Animal Battle Stats" class="header-logo header__logo" id="header-logo">
+                <h1 id="main-title" class="header__title">ANIMAL BATTLE <span class="title-mode header__title-mode">STATS</span></h1>
             </div>
-            <nav class="nav-tabs">
-                <button type="button" class="mode-btn" id="stats-mode-btn" data-mode="stats">
-                    <i class="fas fa-chart-bar"></i> <span class="mode-text">STATS</span>
+            <nav class="nav-tabs nav-tabs">
+                <button type="button" class="mode-btn nav-tab" id="stats-mode-btn" data-mode="stats">
+                    <i class="fas fa-chart-bar"></i> <span class="mode-text nav-tab__text">STATS</span>
                 </button>
-                <button type="button" class="mode-btn" id="compare-mode-btn" data-mode="compare">
-                    <i class="fas fa-balance-scale"></i> <span class="mode-text">COMPARE</span>
+                <button type="button" class="mode-btn nav-tab" id="compare-mode-btn" data-mode="compare">
+                    <i class="fas fa-balance-scale"></i> <span class="mode-text nav-tab__text">COMPARE</span>
                 </button>
-                <button type="button" class="mode-btn" id="rankings-mode-btn" data-mode="rankings">
-                    <i class="fas fa-trophy"></i> <span class="mode-text">RANKINGS</span>
+                <button type="button" class="mode-btn nav-tab" id="rankings-mode-btn" data-mode="rankings">
+                    <i class="fas fa-trophy"></i> <span class="mode-text nav-tab__text">RANKINGS</span>
                 </button>
-                <button type="button" class="mode-btn" id="community-mode-btn" data-mode="community">
-                    <i class="fas fa-users"></i> <span class="mode-text">COMMUNITY</span>
+                <button type="button" class="mode-btn nav-tab" id="community-mode-btn" data-mode="community">
+                    <i class="fas fa-users"></i> <span class="mode-text nav-tab__text">COMMUNITY</span>
                 </button>
             </nav>
             
@@ -898,17 +898,17 @@
         </div>
         
         <!-- Compare View (Fight Screen Style) -->
-        <div id="compare-view" class="view-container">
-            <div class="fight-screen">
-                <div class="fighter-section fighter-left">
+        <div id="compare-view" class="view-container compare">
+            <div class="fight-screen compare__arena">
+                <div class="fighter-section fighter-left compare__fighter compare__fighter--left">
                     <div class="fighter-display">
                         <div class="fighter-placeholder" id="animal-1-placeholder">
                             <i class="fas fa-paw"></i>
                             <p>SELECT<br>ANIMAL 1</p>
                         </div>
-                        <img id="animal-1-image" class="fighter-image" src="" alt="" style="display: none;">
-                        <div class="fighter-info-overlay">
-                            <div class="fighter-name" id="animal-1-name">???</div>
+                        <img id="animal-1-image" class="fighter-image fighter__image" src="" alt="" style="display: none;">
+                        <div class="fighter-info-overlay fighter__overlay">
+                            <div class="fighter-name fighter__name" id="animal-1-name">???</div>
                         </div>
                     </div>
                     <!-- Stats Panel for Fighter 1 -->
@@ -946,22 +946,22 @@
                     </div>
                 </div>
                 
-                <div class="fight-center">
-                    <div class="radar-chart-container">
+                <div class="fight-center compare__center">
+                    <div class="radar-chart-container compare__radar">
                         <canvas id="comparison-radar"></canvas>
                     </div>
-                    <!-- Fight button is placed here by compare-page.js after stat bars -->
+                    <!-- Fight button is placed here by js/compare.js after stat bars -->
                 </div>
                 
-                <div class="fighter-section fighter-right">
-                    <div class="fighter-display">
-                        <div class="fighter-placeholder" id="animal-2-placeholder">
+                <div class="fighter-section fighter-right compare__fighter compare__fighter--right">
+                    <div class="fighter-display fighter__display">
+                        <div class="fighter-placeholder fighter__placeholder" id="animal-2-placeholder">
                             <i class="fas fa-paw"></i>
                             <p>SELECT<br>ANIMAL 2</p>
                         </div>
-                        <img id="animal-2-image" class="fighter-image" src="" alt="" style="display: none;">
-                        <div class="fighter-info-overlay">
-                            <div class="fighter-name" id="animal-2-name">???</div>
+                        <img id="animal-2-image" class="fighter-image fighter__image" src="" alt="" style="display: none;">
+                        <div class="fighter-info-overlay fighter__overlay">
+                            <div class="fighter-name fighter__name" id="animal-2-name">???</div>
                         </div>
                     </div>
                     <!-- Stats Panel for Fighter 2 -->
@@ -1240,10 +1240,10 @@
         </div>
         
         <!-- Community View -->
-        <div id="community-view" class="view-container">
-            <div class="community-feed-layout">
+        <div id="community-view" class="view-container community">
+            <div class="community-feed-layout community__layout">
                 <!-- Sidebar Column (LEFT) -->
-                <div class="community-sidebar-column">
+                <div class="community-sidebar-column community__sidebar">
                     <!-- Community HUD Module -->
                     <div class="community-hud-module">
                         <div class="hud-header">
@@ -2399,11 +2399,24 @@
     </div>
     
     <!-- Data loaded from MongoDB API - no local data.js needed -->
-    <script src="router.js"></script>
-    <script src="auth.js"></script>
-    <script src="script.js" defer></script>
+    
+    <!-- Core utilities - shared across all modules -->
+    <script src="js/core.js"></script>
+    
+    <!-- Application modules - load order matters -->
+    <script src="js/router.js"></script>
+    <script src="js/auth.js"></script>
+    
+    <!-- Page managers (must load before main.js initializes them) -->
+    <script src="js/rankings.js"></script>
+    <script src="js/tournament.js"></script>
+    <script src="js/community-manager.js"></script>
+    
+    <!-- Main app (initializes everything) -->
+    <script src="js/main.js" defer></script>
+    
     <!-- Page-specific enhancements -->
-    <script src="compare-page.js" defer></script>
-    <script src="community-page.js" defer></script>
+    <script src="js/compare.js" defer></script>
+    <script src="js/community.js" defer></script>
 </body>
 </html>

@@ -1,0 +1,297 @@
+/**
+ * ============================================
+ * BUTTON COMPONENT
+ * ============================================
+ * 
+ * BEM Structure:
+ * .btn                     - Base button
+ * .btn--primary            - Primary action
+ * .btn--secondary          - Secondary action
+ * .btn--ghost              - Ghost/outline style
+ * .btn--danger             - Destructive action
+ * .btn--sm, --lg           - Size modifiers
+ * .btn--icon               - Icon-only button
+ * .btn__icon               - Icon element inside button
+ * .btn__text               - Text element inside button
+ */
+
+/* ========================
+   BASE BUTTON
+   ======================== */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    
+    padding: var(--space-2) var(--space-4);
+    min-height: 40px;
+    
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    border: var(--border-default) solid var(--border-accent);
+    border-radius: var(--radius-md);
+    
+    cursor: pointer;
+    transition: all var(--transition-base);
+    
+    /* Prevent text selection */
+    user-select: none;
+}
+
+.btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--color-primary);
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn:disabled,
+.btn--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ========================
+   BUTTON VARIANTS
+   ======================== */
+
+/* Primary - Main CTA */
+.btn--primary {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+    color: var(--bg-darkest);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-glow-primary);
+}
+
+.btn--primary:hover {
+    background: linear-gradient(135deg, var(--color-primary-light), var(--color-primary));
+    box-shadow: 0 0 30px var(--color-primary-glow);
+    transform: translateY(-2px);
+}
+
+/* Secondary - Action buttons */
+.btn--secondary {
+    background: linear-gradient(135deg, var(--color-secondary), var(--color-secondary-dark));
+    color: var(--text-primary);
+    border-color: var(--color-secondary);
+    box-shadow: var(--shadow-glow-secondary);
+}
+
+.btn--secondary:hover {
+    background: linear-gradient(135deg, var(--color-secondary-light), var(--color-secondary));
+    box-shadow: 0 0 30px var(--color-secondary-glow);
+    transform: translateY(-2px);
+}
+
+/* Ghost - Outline style */
+.btn--ghost {
+    background: transparent;
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.btn--ghost:hover {
+    background: var(--color-primary-dim);
+    color: var(--color-primary-light);
+}
+
+/* Gold - Premium/Special */
+.btn--gold {
+    background: linear-gradient(135deg, var(--color-gold), #d4a500);
+    color: var(--bg-darkest);
+    border-color: var(--color-gold);
+    box-shadow: var(--shadow-glow-gold);
+}
+
+.btn--gold:hover {
+    box-shadow: 0 0 40px var(--color-gold-glow);
+    transform: scale(1.05) translateY(-2px);
+}
+
+/* Danger */
+.btn--danger {
+    background: linear-gradient(135deg, var(--color-red), #dc2626);
+    color: var(--text-primary);
+    border-color: var(--color-red);
+}
+
+.btn--danger:hover {
+    box-shadow: 0 0 20px var(--color-red-dim);
+}
+
+/* ========================
+   SIZE MODIFIERS
+   ======================== */
+
+.btn--xs {
+    padding: var(--space-1) var(--space-2);
+    min-height: 28px;
+    font-size: var(--text-xs);
+    border-radius: var(--radius-sm);
+}
+
+.btn--sm {
+    padding: var(--space-1) var(--space-3);
+    min-height: 32px;
+    font-size: var(--text-xs);
+}
+
+.btn--lg {
+    padding: var(--space-3) var(--space-6);
+    min-height: 48px;
+    font-size: var(--text-base);
+}
+
+.btn--xl {
+    padding: var(--space-4) var(--space-8);
+    min-height: 56px;
+    font-size: var(--text-lg);
+    border-radius: var(--radius-lg);
+}
+
+/* ========================
+   ICON BUTTONS
+   ======================== */
+
+.btn--icon {
+    padding: var(--space-2);
+    min-width: 40px;
+    aspect-ratio: 1;
+}
+
+.btn--icon.btn--sm {
+    padding: var(--space-1);
+    min-width: 32px;
+}
+
+.btn--icon.btn--lg {
+    padding: var(--space-3);
+    min-width: 48px;
+}
+
+/* ========================
+   BUTTON ELEMENTS
+   ======================== */
+
+.btn__icon {
+    font-size: 1.1em;
+    line-height: 1;
+}
+
+.btn__text {
+    line-height: 1;
+}
+
+/* Loading state */
+.btn--loading {
+    position: relative;
+    color: transparent !important;
+    pointer-events: none;
+}
+
+.btn--loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: btn-spin 0.6s linear infinite;
+}
+
+@keyframes btn-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ========================
+   BUTTON GROUPS
+   ======================== */
+
+.btn-group {
+    display: inline-flex;
+}
+
+.btn-group .btn {
+    border-radius: 0;
+}
+
+.btn-group .btn:first-child {
+    border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.btn-group .btn:last-child {
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+.btn-group .btn:not(:last-child) {
+    border-right: none;
+}
+
+/* ========================
+   SPECIAL BUTTONS
+   ======================== */
+
+/* Fight Button - Premium CTA */
+.btn--fight {
+    padding: var(--space-3) var(--space-8);
+    font-size: var(--text-xl);
+    letter-spacing: var(--tracking-widest);
+    
+    background: linear-gradient(135deg, #ff6b00, #ff3300);
+    border: var(--border-thick) solid #ff8800;
+    border-radius: var(--radius-lg);
+    
+    text-shadow: 0 0 15px rgba(255, 107, 0, 0.8);
+    box-shadow: 0 0 40px rgba(255, 107, 0, 0.6);
+    
+    animation: fight-pulse 2.5s ease-in-out infinite;
+}
+
+.btn--fight:hover {
+    background: linear-gradient(135deg, #ff8800, #ff5500);
+    box-shadow: 0 0 60px rgba(255, 107, 0, 1);
+    transform: scale(1.1);
+    animation: none;
+}
+
+@keyframes fight-pulse {
+    0%, 100% { 
+        box-shadow: 0 0 40px rgba(255, 107, 0, 0.6); 
+    }
+    50% { 
+        box-shadow: 0 0 60px rgba(255, 107, 0, 0.8); 
+    }
+}
+
+/* Vote Button */
+.btn--vote {
+    flex-direction: column;
+    padding: var(--space-3) var(--space-4);
+    background: var(--bg-surface);
+    border-color: var(--border-default);
+}
+
+.btn--vote:hover {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 20px var(--color-gold-dim);
+}
+
+.btn--vote.btn--selected {
+    background: var(--color-gold-dim);
+    border-color: var(--color-gold);
+}

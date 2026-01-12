@@ -10,7 +10,7 @@
  */
 
 const { connectToDatabase } = require('../lib/mongodb');
-const User = require('../models/User');
+const User = require('../lib/models/User');
 const jwt = require('jsonwebtoken');
 const { notifyDiscord } = require('../lib/discord');
 const { verifyToken } = require('../lib/auth');

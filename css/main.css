@@ -1,0 +1,54 @@
+/**
+ * ============================================
+ * MAIN CSS - Import Manifest
+ * ============================================
+ * 
+ * This file imports all CSS modules in the correct order.
+ * Load this single file in your HTML instead of multiple CSS files.
+ * 
+ * ORDER MATTERS:
+ * 1. Variables (design tokens)
+ * 2. Base (reset, typography)
+ * 3. Layout (header, grid, containers)
+ * 4. Components (buttons, cards, modals)
+ * 5. Pages (page-specific styles)
+ * 6. Utilities (helper classes - loaded last to override)
+ */
+
+/* ========================
+   1. DESIGN TOKENS
+   ======================== */
+@import url('./variables.css');
+
+/* ========================
+   2. BASE STYLES
+   ======================== */
+@import url('./base.css');
+
+/* ========================
+   3. LAYOUT
+   ======================== */
+@import url('./layout/header.css');
+@import url('./layout/grid.css');
+
+/* ========================
+   4. COMPONENTS
+   ======================== */
+@import url('./components/buttons.css');
+@import url('./components/cards.css');
+@import url('./components/stat-bars.css');
+@import url('./components/modals.css');
+
+/* ========================
+   5. PAGES
+   ======================== */
+@import url('./pages/compare.css');
+@import url('./pages/tournament.css');
+@import url('./pages/community.css');
+@import url('./pages/rankings.css');
+@import url('./pages/stats.css');
+
+/* ========================
+   6. UTILITIES (Optional)
+   ======================== */
+/* Utility classes are included in base.css */

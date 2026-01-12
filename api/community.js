@@ -73,7 +73,7 @@ module.exports = async function handler(req, res) {
  */
 async function handleLeaderboard(req, res) {
     const { limit = 10, full = false } = req.query;
-    const User = require('../models/User');
+    const User = require('../lib/models/User');
 
     const maxLimit = full === 'true' ? 100 : Math.min(parseInt(limit), 50);
 
@@ -163,7 +163,7 @@ async function handlePing(req, res) {
     }
 
     const { page } = req.body;
-    const User = require('../models/User');
+    const User = require('../lib/models/User');
 
     // Get current user data
     const userDoc = await User.findById(user.id).select('displayName username profileAnimal');
@@ -192,7 +192,7 @@ async function handlePing(req, res) {
  * Returns site-wide statistics
  */
 async function handleStats(req, res) {
-    const User = require('../models/User');
+    const User = require('../lib/models/User');
     const Vote = require('../lib/models/Vote');
     const Comment = require('../lib/models/Comment');
     const ChatMessage = require('../lib/models/ChatMessage');

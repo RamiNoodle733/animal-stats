@@ -1,0 +1,614 @@
+/* ============================================
+   COMMUNITY PAGE
+   BEM Architecture + Legacy Selector Support
+   ============================================ */
+
+/* ========================================
+   COMMUNITY LAYOUT (BEM)
+   ======================================== */
+
+.community {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--header-height, 56px));
+    max-height: calc(100vh - var(--header-height, 56px));
+    min-height: 0;
+    overflow: hidden;
+}
+
+.community__layout {
+    display: grid;
+    grid-template-columns: minmax(220px, min(320px, 28%)) minmax(300px, 1fr);
+    gap: clamp(12px, 2vw, 24px);
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: clamp(8px, 1.5vh, 16px) clamp(12px, 2vw, 24px);
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* ========================================
+   SIDEBAR (BEM)
+   ======================================== */
+
+.community__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1.5vh, 16px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: var(--space-2);
+    padding-bottom: var(--space-4);
+    min-height: 0;
+    max-height: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
+}
+
+.community__sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.community__sidebar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-sm);
+}
+
+.community__sidebar::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.3);
+    border-radius: var(--radius-sm);
+}
+
+.community__sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 212, 255, 0.5);
+}
+
+/* ========================================
+   SIDEBAR WIDGETS (BEM)
+   ======================================== */
+
+.community-widget {
+    background: linear-gradient(135deg, rgba(20, 25, 35, 0.95), rgba(15, 20, 30, 0.98));
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    position: relative;
+}
+
+.community-widget--with-brackets::before,
+.community-widget--with-brackets::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--color-primary);
+    pointer-events: none;
+}
+
+.community-widget--with-brackets::before {
+    top: -2px;
+    left: -2px;
+    border-right: none;
+    border-bottom: none;
+}
+
+.community-widget--with-brackets::after {
+    bottom: -2px;
+    right: -2px;
+    border-left: none;
+    border-top: none;
+}
+
+.community-widget__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+}
+
+.community-widget__icon {
+    color: var(--color-primary);
+    font-size: var(--text-lg);
+}
+
+.community-widget__title {
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    letter-spacing: 2px;
+    color: var(--color-primary);
+}
+
+/* ========================================
+   FEED COLUMN (BEM)
+   ======================================== */
+
+.community__feed {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+/* ========================================
+   TAB BAR (BEM)
+   ======================================== */
+
+.community-tabs {
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: linear-gradient(135deg, rgba(20, 25, 35, 0.99), rgba(15, 20, 30, 1));
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    border-radius: var(--radius-lg);
+    margin-bottom: clamp(8px, 1vh, 12px);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+}
+
+.community-tabs__btn {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: clamp(10px, 1.5vh, 14px) clamp(12px, 2vw, 20px);
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: var(--font-display);
+    font-size: clamp(0.85rem, 1vw, 1rem);
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    position: relative;
+    white-space: nowrap;
+}
+
+.community-tabs__btn:hover {
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(0, 212, 255, 0.05);
+}
+
+.community-tabs__btn--active {
+    color: var(--color-primary);
+    background: rgba(0, 212, 255, 0.1);
+}
+
+.community-tabs__btn--active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    right: 20%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+    border-radius: 2px;
+}
+
+.community-tabs__btn-icon {
+    font-size: 0.9rem;
+}
+
+/* ========================================
+   FEED SCROLL REGION (BEM)
+   ======================================== */
+
+.community__scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    padding: clamp(8px, 1vh, 12px);
+    padding-bottom: clamp(8px, 1vh, 12px);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
+}
+
+.community__scroll::-webkit-scrollbar {
+    width: 6px;
+}
+
+.community__scroll::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-sm);
+}
+
+.community__scroll::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.3);
+    border-radius: var(--radius-sm);
+}
+
+/* ========================================
+   COMPOSE BOX (BEM)
+   ======================================== */
+
+.community-compose {
+    flex-shrink: 0;
+    position: relative;
+    z-index: 15;
+    background: linear-gradient(135deg, rgba(20, 25, 35, 0.98), rgba(15, 20, 30, 1));
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    margin-top: var(--space-3);
+}
+
+.community-compose__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+}
+
+.community-compose__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--color-primary);
+}
+
+.community-compose__input {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    resize: none;
+    min-height: 60px;
+    transition: var(--transition-base);
+}
+
+.community-compose__input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+.community-compose__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-2);
+    margin-top: var(--space-3);
+}
+
+/* ========================================
+   POST CARD (BEM)
+   ======================================== */
+
+.post {
+    background: linear-gradient(135deg, rgba(20, 25, 35, 0.95), rgba(15, 20, 30, 0.98));
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    margin-bottom: var(--space-3);
+    transition: var(--transition-base);
+}
+
+.post:hover {
+    border-color: rgba(0, 212, 255, 0.3);
+}
+
+.post__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+}
+
+.post__avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid var(--border-subtle);
+    object-fit: cover;
+}
+
+.post__meta {
+    flex: 1;
+}
+
+.post__author {
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    letter-spacing: 1px;
+    color: var(--text-primary);
+}
+
+.post__author-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    background: rgba(0, 212, 255, 0.15);
+    color: var(--color-primary);
+    font-size: var(--text-xs);
+    padding: var(--space-1) var(--space-2);
+    border-radius: var(--radius-full);
+    margin-left: var(--space-2);
+}
+
+.post__time {
+    font-size: var(--text-sm);
+    color: var(--text-muted);
+}
+
+.post__content {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: var(--space-3);
+}
+
+.post__image {
+    width: 100%;
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-3);
+}
+
+.post__actions {
+    display: flex;
+    gap: var(--space-4);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-subtle);
+}
+
+.post__action {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--text-muted);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.post__action:hover {
+    color: var(--color-primary);
+}
+
+.post__action--liked {
+    color: var(--color-danger);
+}
+
+/* ========================================
+   LEADERBOARD WIDGET (BEM)
+   ======================================== */
+
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
+    transition: var(--transition-fast);
+}
+
+.leaderboard-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.leaderboard-item__rank {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+}
+
+.leaderboard-item__rank--gold {
+    background: linear-gradient(135deg, #ffd700, #cc9900);
+    color: #000;
+}
+
+.leaderboard-item__rank--silver {
+    background: linear-gradient(135deg, #c0c0c0, #a0a0a0);
+    color: #000;
+}
+
+.leaderboard-item__rank--bronze {
+    background: linear-gradient(135deg, #cd7f32, #a05020);
+    color: #fff;
+}
+
+.leaderboard-item__rank--default {
+    background: var(--border-subtle);
+    color: var(--text-muted);
+}
+
+.leaderboard-item__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--border-subtle);
+}
+
+.leaderboard-item__info {
+    flex: 1;
+    min-width: 0;
+}
+
+.leaderboard-item__name {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.leaderboard-item__xp {
+    font-size: var(--text-xs);
+    color: var(--color-gold);
+}
+
+/* ========================================
+   LEGACY SELECTOR SUPPORT
+   Maintains compatibility with existing HTML
+   ======================================== */
+
+#community-view.active-view {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--header-height, 56px));
+    max-height: calc(100vh - var(--header-height, 56px));
+    min-height: 0;
+    overflow: hidden;
+}
+
+#community-view .community-feed-layout {
+    display: grid;
+    grid-template-columns: minmax(220px, min(320px, 28%)) minmax(300px, 1fr);
+    gap: clamp(12px, 2vw, 24px);
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: clamp(8px, 1.5vh, 16px) clamp(12px, 2vw, 24px);
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#community-view .community-sidebar-column {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(10px, 1.5vh, 16px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 8px;
+    padding-bottom: 16px;
+    min-height: 0;
+    max-height: 100%;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
+}
+
+#community-view .community-sidebar-column::-webkit-scrollbar {
+    width: 6px;
+}
+
+#community-view .community-sidebar-column::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+#community-view .community-sidebar-column::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.3);
+    border-radius: 3px;
+}
+
+#community-view .community-feed-column {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+#community-view .community-tab-bar {
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: linear-gradient(135deg, rgba(20, 25, 35, 0.99), rgba(15, 20, 30, 1));
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    border-radius: 10px;
+    margin-bottom: clamp(8px, 1vh, 12px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+#community-view .community-tab-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: clamp(10px, 1.5vh, 14px) clamp(12px, 2vw, 20px);
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(0.85rem, 1vw, 1rem);
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    position: relative;
+    white-space: nowrap;
+}
+
+#community-view .community-tab-btn:hover {
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(0, 212, 255, 0.05);
+}
+
+#community-view .community-tab-btn.active {
+    color: #00d4ff;
+    background: rgba(0, 212, 255, 0.1);
+}
+
+#community-view .community-tab-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    right: 20%;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #00d4ff, transparent);
+    border-radius: 2px;
+}
+
+#community-view .feed-scroll-region {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 0;
+    padding: clamp(8px, 1vh, 12px);
+    padding-bottom: clamp(8px, 1vh, 12px);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
+}
+
+#community-view .feed-scroll-region::-webkit-scrollbar {
+    width: 6px;
+}
+
+#community-view .feed-scroll-region::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+#community-view .feed-scroll-region::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.3);
+    border-radius: 3px;
+}
+
+#community-view .feed-compose-box {
+    flex-shrink: 0;
+    position: relative;
+    z-index: 15;
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+
+@media (max-width: 768px) {
+    .community__layout,
+    #community-view .community-feed-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .community__sidebar,
+    #community-view .community-sidebar-column {
+        display: none;
+    }
+}

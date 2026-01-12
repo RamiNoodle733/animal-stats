@@ -1,0 +1,426 @@
+/* ============================================
+   RANKINGS PAGE
+   BEM Architecture + Legacy Selector Support
+   ============================================ */
+
+/* ========================================
+   RANKINGS VIEW (BEM)
+   ======================================== */
+
+.rankings {
+    padding: var(--space-4) var(--space-6);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.rankings__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-6);
+    flex-wrap: wrap;
+    gap: var(--space-4);
+}
+
+.rankings__title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.rankings__title-icon {
+    font-size: var(--text-3xl);
+    color: var(--color-gold);
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+}
+
+.rankings__title-text {
+    font-family: var(--font-display);
+    font-size: var(--text-3xl);
+    letter-spacing: 3px;
+    color: var(--text-primary);
+}
+
+/* ========================================
+   FILTERS (BEM)
+   ======================================== */
+
+.rankings__filters {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+}
+
+.rankings-filter {
+    background: var(--surface-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-2) var(--space-4);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    cursor: pointer;
+    transition: var(--transition-base);
+}
+
+.rankings-filter:hover {
+    border-color: var(--color-primary);
+}
+
+.rankings-filter:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.2);
+}
+
+/* ========================================
+   PODIUM (BEM)
+   ======================================== */
+
+.podium {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+    padding: var(--space-4);
+}
+
+.podium__place {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: var(--transition-base);
+}
+
+.podium__place:hover {
+    transform: translateY(-4px);
+}
+
+.podium__place--first {
+    order: 2;
+}
+
+.podium__place--second {
+    order: 1;
+}
+
+.podium__place--third {
+    order: 3;
+}
+
+.podium__image-wrapper {
+    position: relative;
+    margin-bottom: var(--space-3);
+}
+
+.podium__crown {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: var(--text-2xl);
+    color: var(--color-gold);
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+    animation: crownFloat 2s ease-in-out infinite;
+}
+
+@keyframes crownFloat {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-4px); }
+}
+
+.podium__image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--border-subtle);
+    box-shadow: var(--shadow-lg);
+}
+
+.podium__place--first .podium__image {
+    width: 130px;
+    height: 130px;
+    border-color: var(--color-gold);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+}
+
+.podium__place--second .podium__image {
+    border-color: #c0c0c0;
+    box-shadow: 0 0 20px rgba(192, 192, 192, 0.3);
+}
+
+.podium__place--third .podium__image {
+    border-color: #cd7f32;
+    box-shadow: 0 0 20px rgba(205, 127, 50, 0.3);
+}
+
+.podium__rank {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: bold;
+}
+
+.podium__rank--first {
+    background: linear-gradient(135deg, #ffd700, #cc9900);
+    color: #000;
+}
+
+.podium__rank--second {
+    background: linear-gradient(135deg, #c0c0c0, #a0a0a0);
+    color: #000;
+}
+
+.podium__rank--third {
+    background: linear-gradient(135deg, #cd7f32, #a05020);
+    color: #fff;
+}
+
+.podium__name {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    letter-spacing: 1px;
+    text-align: center;
+    margin-bottom: var(--space-1);
+}
+
+.podium__score {
+    font-size: var(--text-sm);
+    color: var(--color-gold);
+}
+
+/* ========================================
+   RANKINGS TABLE (BEM)
+   ======================================== */
+
+.rankings-table {
+    background: var(--surface-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.rankings-table__header {
+    display: grid;
+    grid-template-columns: 60px 1fr 120px 120px 100px;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.rankings-table__header-cell {
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.rankings-table__row {
+    display: grid;
+    grid-template-columns: 60px 1fr 120px 120px 100px;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    align-items: center;
+    border-bottom: 1px solid var(--border-subtle);
+    transition: var(--transition-fast);
+}
+
+.rankings-table__row:last-child {
+    border-bottom: none;
+}
+
+.rankings-table__row:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.rankings-table__rank {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    color: var(--text-muted);
+}
+
+.rankings-table__rank--gold {
+    color: var(--color-gold);
+}
+
+.rankings-table__rank--silver {
+    color: #c0c0c0;
+}
+
+.rankings-table__rank--bronze {
+    color: #cd7f32;
+}
+
+.rankings-table__animal {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.rankings-table__image {
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+    border: 2px solid var(--border-subtle);
+}
+
+.rankings-table__name {
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    letter-spacing: 1px;
+}
+
+.rankings-table__category {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+.rankings-table__stat {
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+}
+
+.rankings-table__stat--wins {
+    color: var(--color-success);
+}
+
+.rankings-table__stat--losses {
+    color: var(--color-danger);
+}
+
+.rankings-table__change {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-sm);
+}
+
+.rankings-table__change--up {
+    color: var(--color-success);
+}
+
+.rankings-table__change--down {
+    color: var(--color-danger);
+}
+
+.rankings-table__change--same {
+    color: var(--text-muted);
+}
+
+/* ========================================
+   PAGINATION (BEM)
+   ======================================== */
+
+.rankings-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+}
+
+.rankings-pagination__btn {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    color: var(--text-secondary);
+    font-family: var(--font-display);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.rankings-pagination__btn:hover:not(:disabled) {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.rankings-pagination__btn--active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #000;
+}
+
+.rankings-pagination__btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ========================================
+   LEGACY SELECTOR SUPPORT
+   ======================================== */
+
+#rankings-view {
+    padding: var(--space-4, 1rem) var(--space-6, 1.5rem);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.rankings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-6, 1.5rem);
+    flex-wrap: wrap;
+    gap: var(--space-4, 1rem);
+}
+
+.rankings-title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3, 0.75rem);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 3px;
+}
+
+.rankings-title i {
+    color: var(--color-gold, #ffd700);
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+
+@media (max-width: 768px) {
+    .podium {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .podium__place--first,
+    .podium__place--second,
+    .podium__place--third {
+        order: unset;
+    }
+    
+    .rankings-table__header,
+    .rankings-table__row {
+        grid-template-columns: 50px 1fr 80px;
+    }
+    
+    .rankings-table__header-cell:nth-child(4),
+    .rankings-table__header-cell:nth-child(5),
+    .rankings-table__row > *:nth-child(4),
+    .rankings-table__row > *:nth-child(5) {
+        display: none;
+    }
+}

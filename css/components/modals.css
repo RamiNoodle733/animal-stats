@@ -1,0 +1,300 @@
+/**
+ * ============================================
+ * MODAL COMPONENT
+ * ============================================
+ * 
+ * BEM Structure:
+ * .modal                   - Modal container (backdrop)
+ * .modal--active           - Visible state
+ * .modal__dialog           - The modal box itself
+ * .modal__dialog--sm/lg    - Size variants
+ * .modal__header           - Header with title/close
+ * .modal__body             - Main content area
+ * .modal__footer           - Action buttons
+ * .modal__title            - Modal title
+ * .modal__close            - Close button
+ */
+
+/* ========================
+   MODAL BACKDROP
+   ======================== */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal-backdrop);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+    
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(4px);
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+}
+
+.modal--active,
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ========================
+   MODAL DIALOG
+   ======================== */
+
+.modal__dialog {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    
+    display: flex;
+    flex-direction: column;
+    
+    background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-dark) 100%);
+    border: var(--border-default) solid var(--border-accent);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-xl), 0 0 60px var(--color-primary-dim);
+    
+    transform: scale(0.95) translateY(20px);
+    transition: transform var(--transition-spring);
+}
+
+.modal--active .modal__dialog {
+    transform: scale(1) translateY(0);
+}
+
+/* Size variants */
+.modal__dialog--sm {
+    max-width: 360px;
+}
+
+.modal__dialog--lg {
+    max-width: 700px;
+}
+
+.modal__dialog--xl {
+    max-width: 900px;
+}
+
+.modal__dialog--full {
+    max-width: none;
+    width: calc(100vw - var(--space-8));
+    height: calc(100vh - var(--space-8));
+}
+
+/* ========================
+   MODAL SECTIONS
+   ======================== */
+
+.modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    
+    padding: var(--space-4) var(--space-5);
+    border-bottom: var(--border-thin) solid var(--border-subtle);
+}
+
+.modal__title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-wider);
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin: 0;
+}
+
+.modal__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    width: 36px;
+    height: 36px;
+    
+    font-size: var(--text-lg);
+    color: var(--text-muted);
+    
+    background: var(--bg-surface);
+    border: var(--border-thin) solid var(--border-default);
+    border-radius: var(--radius-md);
+    
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.modal__close:hover {
+    color: var(--text-primary);
+    background: var(--bg-hover);
+    border-color: var(--color-primary);
+}
+
+.modal__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-5);
+}
+
+.modal__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    
+    padding: var(--space-4) var(--space-5);
+    border-top: var(--border-thin) solid var(--border-subtle);
+    background: var(--bg-dark);
+    border-radius: 0 0 var(--radius-xl) var(--radius-xl);
+}
+
+/* ========================
+   MODAL VARIANTS
+   ======================== */
+
+/* Confirmation modal */
+.modal--confirm .modal__dialog {
+    max-width: 400px;
+    text-align: center;
+}
+
+.modal--confirm .modal__body {
+    padding: var(--space-6);
+}
+
+.modal--confirm .modal__footer {
+    justify-content: center;
+}
+
+/* Alert modal */
+.modal--alert .modal__header {
+    background: var(--color-red-dim);
+    border-bottom-color: var(--color-red);
+}
+
+.modal--alert .modal__title {
+    color: var(--color-red);
+}
+
+/* Success modal */
+.modal--success .modal__header {
+    background: var(--color-green-dim);
+    border-bottom-color: var(--color-green);
+}
+
+.modal--success .modal__title {
+    color: var(--color-green);
+}
+
+/* ========================
+   DETAIL PANEL (Slide-in)
+   ======================== */
+
+.detail-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: var(--z-modal);
+    
+    width: 100%;
+    max-width: 450px;
+    
+    display: flex;
+    flex-direction: column;
+    
+    background: var(--bg-dark);
+    border-left: var(--border-default) solid var(--border-accent);
+    box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
+    
+    transform: translateX(100%);
+    transition: transform var(--transition-slow);
+}
+
+.detail-panel--active,
+.detail-panel.expanded {
+    transform: translateX(0);
+}
+
+.detail-panel__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    
+    padding: var(--space-4);
+    border-bottom: var(--border-thin) solid var(--border-subtle);
+    background: var(--bg-elevated);
+}
+
+.detail-panel__body {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--space-4);
+}
+
+/* ========================
+   OVERLAY SCREEN
+   ======================== */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-overlay);
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: var(--space-6);
+    
+    background: rgba(0, 0, 0, 0.95);
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: all var(--transition-base);
+}
+
+.overlay--active,
+.overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.overlay__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    text-align: center;
+    max-width: 500px;
+    padding: var(--space-6);
+}
+
+.overlay__title {
+    font-family: var(--font-display);
+    font-size: var(--text-4xl);
+    font-weight: var(--weight-black);
+    letter-spacing: var(--tracking-widest);
+    text-transform: uppercase;
+    color: var(--color-gold);
+    text-shadow: 0 0 30px var(--color-gold-glow);
+}
+
+.overlay__subtitle {
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+}
+
+.overlay__hint {
+    position: absolute;
+    bottom: var(--space-8);
+    font-size: var(--text-sm);
+    color: var(--text-dim);
+}

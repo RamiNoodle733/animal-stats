@@ -1,4 +1,4 @@
-﻿/**
+/**
  * API Route: /api/comments
  * Handles comments on animals and comparisons with replies and voting
  */
@@ -96,7 +96,7 @@ async function handleGet(req, res) {
         // Try to get current user data, but don't fail if User model has issues
         let userMap = {};
         try {
-            const User = require('../models/User');
+            const User = require('../lib/models/User');
             const authorIds = [...new Set(comments.map(c => c.authorId?.toString()).filter(Boolean))];
             if (authorIds.length > 0) {
                 const users = await User.find({ _id: { $in: authorIds } })
@@ -166,7 +166,7 @@ async function handlePost(req, res) {
     }
 
     // Get user's profile info for display
-    const User = require('../models/User');
+    const User = require('../lib/models/User');
     const userDoc = await User.findById(user.id).select('displayName profileAnimal');
 
     const commentData = {

@@ -1,0 +1,431 @@
+/* ============================================
+   STATS PAGE
+   BEM Architecture + Legacy Selector Support
+   ============================================ */
+
+/* ========================================
+   STATS VIEW (BEM)
+   ======================================== */
+
+.stats {
+    padding: var(--space-4) var(--space-6);
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.stats__header {
+    text-align: center;
+    margin-bottom: var(--space-8);
+}
+
+.stats__title {
+    font-family: var(--font-display);
+    font-size: var(--text-4xl);
+    letter-spacing: 4px;
+    margin-bottom: var(--space-2);
+}
+
+.stats__subtitle {
+    color: var(--text-muted);
+    font-size: var(--text-lg);
+}
+
+/* ========================================
+   STATS GRID (BEM)
+   ======================================== */
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+}
+
+/* ========================================
+   STATS CARD (BEM)
+   ======================================== */
+
+.stats-card {
+    background: linear-gradient(135deg, var(--surface-secondary), var(--surface-elevated));
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+    position: relative;
+    overflow: hidden;
+    transition: var(--transition-base);
+}
+
+.stats-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 212, 255, 0.3);
+    box-shadow: var(--shadow-lg);
+}
+
+.stats-card__icon {
+    position: absolute;
+    top: var(--space-4);
+    right: var(--space-4);
+    font-size: var(--text-3xl);
+    color: rgba(255, 255, 255, 0.05);
+}
+
+.stats-card__label {
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    letter-spacing: 2px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: var(--space-2);
+}
+
+.stats-card__value {
+    font-family: var(--font-display);
+    font-size: var(--text-4xl);
+    letter-spacing: 2px;
+    color: var(--text-primary);
+    line-height: 1;
+    margin-bottom: var(--space-2);
+}
+
+.stats-card__value--gold {
+    color: var(--color-gold);
+}
+
+.stats-card__value--cyan {
+    color: var(--color-primary);
+}
+
+.stats-card__value--green {
+    color: var(--color-success);
+}
+
+.stats-card__change {
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+    font-size: var(--text-sm);
+}
+
+.stats-card__change--up {
+    color: var(--color-success);
+}
+
+.stats-card__change--down {
+    color: var(--color-danger);
+}
+
+/* ========================================
+   CHART SECTION (BEM)
+   ======================================== */
+
+.stats-charts {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--space-4);
+    margin-bottom: var(--space-8);
+}
+
+.stats-chart {
+    background: var(--surface-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+}
+
+.stats-chart__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-4);
+}
+
+.stats-chart__title {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    letter-spacing: 2px;
+}
+
+.stats-chart__filters {
+    display: flex;
+    gap: var(--space-2);
+}
+
+.stats-chart__filter-btn {
+    padding: var(--space-1) var(--space-3);
+    background: transparent;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-muted);
+    font-size: var(--text-xs);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.stats-chart__filter-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+}
+
+.stats-chart__filter-btn--active {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #000;
+}
+
+.stats-chart__canvas {
+    width: 100%;
+    height: 300px;
+}
+
+/* ========================================
+   TOP ANIMALS SECTION (BEM)
+   ======================================== */
+
+.top-animals {
+    background: var(--surface-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+}
+
+.top-animals__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-4);
+}
+
+.top-animals__title {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    letter-spacing: 2px;
+}
+
+.top-animals__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+}
+
+.top-animals__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    transition: var(--transition-fast);
+}
+
+.top-animals__item:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.top-animals__rank {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    background: var(--border-subtle);
+    color: var(--text-muted);
+}
+
+.top-animals__rank--gold {
+    background: linear-gradient(135deg, #ffd700, #cc9900);
+    color: #000;
+}
+
+.top-animals__rank--silver {
+    background: linear-gradient(135deg, #c0c0c0, #a0a0a0);
+    color: #000;
+}
+
+.top-animals__rank--bronze {
+    background: linear-gradient(135deg, #cd7f32, #a05020);
+    color: #fff;
+}
+
+.top-animals__image {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+    border: 2px solid var(--border-subtle);
+}
+
+.top-animals__info {
+    flex: 1;
+    min-width: 0;
+}
+
+.top-animals__name {
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    letter-spacing: 1px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.top-animals__category {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+.top-animals__stat {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    color: var(--color-primary);
+}
+
+/* ========================================
+   ACTIVITY FEED (BEM)
+   ======================================== */
+
+.stats-activity {
+    background: var(--surface-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-lg);
+    padding: var(--space-5);
+}
+
+.stats-activity__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--space-4);
+}
+
+.stats-activity__title {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    letter-spacing: 2px;
+}
+
+.stats-activity__list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.stats-activity__item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.stats-activity__icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: var(--text-base);
+}
+
+.stats-activity__icon--battle {
+    background: rgba(255, 107, 0, 0.2);
+    color: var(--color-secondary);
+}
+
+.stats-activity__icon--vote {
+    background: rgba(0, 212, 255, 0.2);
+    color: var(--color-primary);
+}
+
+.stats-activity__icon--comment {
+    background: rgba(34, 197, 94, 0.2);
+    color: var(--color-success);
+}
+
+.stats-activity__content {
+    flex: 1;
+}
+
+.stats-activity__text {
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
+}
+
+.stats-activity__text strong {
+    color: var(--text-primary);
+}
+
+.stats-activity__time {
+    font-size: var(--text-xs);
+    color: var(--text-muted);
+}
+
+/* ========================================
+   LEGACY SELECTOR SUPPORT
+   ======================================== */
+
+#stats-view {
+    padding: var(--space-4, 1rem) var(--space-6, 1.5rem);
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+.site-stats-header {
+    text-align: center;
+    margin-bottom: var(--space-8, 2rem);
+}
+
+.site-stats-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    letter-spacing: 4px;
+    margin-bottom: var(--space-2, 0.5rem);
+}
+
+.stats-overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-4, 1rem);
+    margin-bottom: var(--space-8, 2rem);
+}
+
+.stat-overview-card {
+    background: linear-gradient(135deg, rgba(20, 25, 35, 0.95), rgba(15, 20, 30, 0.98));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.stat-overview-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 212, 255, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+
+@media (max-width: 1024px) {
+    .stats-charts {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .stats-card__value {
+        font-size: var(--text-3xl);
+    }
+}

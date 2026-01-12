@@ -1111,311 +1111,23 @@ body {
     margin: 0;
 }
 
-.fight-screen {
-    min-height: 0; /* Removed fixed min-height to prevent overflow */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    padding: 20px;
-    overflow-x: auto;
-    flex: 1; /* Allow it to fill available space */
-}
-
-.fighter-section {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 15px;
-    flex: 0 0 auto;
-    max-height: 100%;
-}
-
-.fighter-left {
-    flex-direction: row-reverse;
-}
-
-.fighter-display {
-    width: 280px;
-    height: 280px;
-    background: radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
-    border: 4px solid var(--border-bright);
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 30px rgba(0, 212, 255, 0.5), inset 0 0 30px rgba(0, 212, 255, 0.1);
-    flex-shrink: 1;
-    min-height: 0;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    position: relative;
-}
-
-.fighter-display:hover {
-    border-color: var(--primary-color);
-    box-shadow: 0 0 40px rgba(0, 212, 255, 0.7), inset 0 0 40px rgba(0, 212, 255, 0.2);
-}
-
-.fighter-left .fighter-display {
-    background: radial-gradient(ellipse at center, rgba(168, 85, 247, 0.1) 0%, transparent 70%);
-    border-color: #a855f7;
-    box-shadow: 0 0 30px rgba(168, 85, 247, 0.5), inset 0 0 30px rgba(168, 85, 247, 0.1);
-}
-
-.fighter-left .fighter-display:hover {
-    border-color: #a855f7;
-    box-shadow: 0 0 40px rgba(168, 85, 247, 0.7), inset 0 0 40px rgba(168, 85, 247, 0.2);
-}
-
-.fighter-right .fighter-display {
-    background: radial-gradient(ellipse at center, rgba(34, 197, 94, 0.1) 0%, transparent 70%);
-    border-color: #22c55e;
-    box-shadow: 0 0 30px rgba(34, 197, 94, 0.5), inset 0 0 30px rgba(34, 197, 94, 0.1);
-}
-
-.fighter-right .fighter-display:hover {
-    border-color: #22c55e;
-    box-shadow: 0 0 40px rgba(34, 197, 94, 0.7), inset 0 0 40px rgba(34, 197, 94, 0.2);
-}
-
-.fighter-display.selecting {
-    border-color: var(--gold-color);
-    box-shadow: 0 0 50px rgba(255, 215, 0, 1), inset 0 0 30px rgba(255, 215, 0, 0.3);
-    animation: selectPulse 1.5s ease-in-out infinite;
-}
-
-.fighter-left .fighter-display.selecting {
-    border-color: #a855f7;
-    box-shadow: 0 0 50px rgba(168, 85, 247, 1), inset 0 0 30px rgba(168, 85, 247, 0.3);
-}
-
-.fighter-right .fighter-display.selecting {
-    border-color: #22c55e;
-    box-shadow: 0 0 50px rgba(34, 197, 94, 1), inset 0 0 30px rgba(34, 197, 94, 0.3);
-}
-
-@keyframes selectPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.02); }
-}
-
-.fighter-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
-    color: rgba(0, 212, 255, 0.4);
-    text-align: center;
-}
-
-.fighter-placeholder i {
-    font-size: 3.5rem;
-}
-
-.fighter-placeholder p {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem;
-    letter-spacing: 2px;
-}
-
-.fighter-image {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.6));
-    position: relative;
-    z-index: 1;
-}
-
-.fighter-placeholder {
-    position: relative;
-    z-index: 1;
-}
-
-.fighter-info-overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.7) 70%, transparent 100%);
-    padding: 15px 10px 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    border-radius: 0 0 8px 8px;
-    z-index: 10;
-    pointer-events: none;
-}
-
-.fighter-info-overlay * {
-    pointer-events: auto;
-}
-
-.fighter-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    letter-spacing: 3px;
-    color: var(--text-light);
-    text-shadow: var(--text-glow);
-    margin: 0;
-}
-
-.view-stats-btn {
-    padding: 6px 16px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.8rem;
-    letter-spacing: 2px;
-    background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(0, 212, 255, 0.1));
-    border: 2px solid var(--border-bright);
-    border-radius: 8px;
-    color: var(--text-light);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
-    flex-shrink: 0;
-}
-
-.view-stats-btn:hover {
-    background: linear-gradient(135deg, rgba(0, 212, 255, 0.5), rgba(0, 212, 255, 0.2));
-    box-shadow: 0 0 20px rgba(0, 212, 255, 0.8);
-    transform: translateY(-2px);
-}
-
-.compare-stats-panel {
-    width: 200px;
-    background: rgba(0, 14, 26, 0.95);
-    border: 2px solid rgba(0, 212, 255, 0.3);
-    border-radius: 8px;
-    padding: 12px;
-    backdrop-filter: blur(10px);
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.compare-stat-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.85rem;
-    color: var(--text-light);
-}
-
-.compare-stat-row i {
-    color: var(--primary-color);
-    font-size: 1rem;
-    width: 20px;
-}
-
-.compare-stat-label {
-    flex: 1;
-    font-family: 'Bebas Neue', sans-serif;
-    letter-spacing: 1px;
-    color: var(--primary-color);
-}
-
-.compare-stat-value {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    color: var(--gold-color);
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
-}
-
-/* Compare stat highlighting - winner/loser */
-.compare-stat-row.stat-winner {
-    background: rgba(0, 255, 100, 0.15);
-    border-radius: 4px;
-    border-left: 3px solid #00ff88;
-}
-
-.compare-stat-row.stat-winner .compare-stat-value {
-    color: #00ff88;
-    text-shadow: 0 0 10px rgba(0, 255, 136, 0.8);
-}
-
-.compare-stat-row.stat-winner i {
-    color: #00ff88;
-}
-
-.compare-stat-row.stat-loser {
-    background: rgba(255, 60, 60, 0.1);
-    border-radius: 4px;
-    border-left: 3px solid transparent;
-    opacity: 0.7;
-}
-
-.compare-stat-row.stat-loser .compare-stat-value {
-    color: #ff6666;
-}
-
-.compare-stat-row.stat-tie {
-    background: rgba(255, 200, 0, 0.1);
-    border-radius: 4px;
-    border-left: 3px solid #ffcc00;
-}
-
-.compare-stat-row.stat-tie .compare-stat-value {
-    color: #ffcc00;
-}
-
-.fight-center {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    flex: 0 0 auto;
-}
-
-.vs-badge {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 3.5rem;
-    letter-spacing: 8px;
-    color: var(--secondary-color);
-    text-shadow: 0 0 30px rgba(255, 107, 0, 1), 0 0 60px rgba(255, 107, 0, 0.6);
-    animation: pulse 2s ease-in-out infinite;
-    flex-shrink: 0;
-    margin-top: 20px; /* Add margin to prevent it from being too high */
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.1); opacity: 0.8; }
-}
-
-.fight-btn {
-    padding: 15px 40px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
-    letter-spacing: 6px;
-    background: linear-gradient(135deg, #ff6b00, #ff3300);
-    border: 4px solid #ff8800;
-    border-radius: 12px;
-    color: var(--text-light);
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-shadow: 0 0 15px rgba(255, 107, 0, 0.8);
-    box-shadow: 0 0 40px rgba(255, 107, 0, 0.6);
-    flex-shrink: 0;
-}
-
-.fight-btn:hover {
-    background: linear-gradient(135deg, #ff8800, #ff5500);
-    box-shadow: 0 0 60px rgba(255, 107, 0, 1);
-    transform: scale(1.1);
-}
-
-.fight-btn i {
-    animation: spark 1s ease-in-out infinite;
-}
-
-@keyframes spark {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-}
+/* ==========================
+   COMPARE PAGE STYLES
+   ==========================
+   All compare page styles have been moved to compare-page.css
+   for better organization and to prevent conflicts.
+   
+   Moved styles include:
+   - .fight-screen
+   - .fighter-section, .fighter-left, .fighter-right
+   - .fighter-display, .fighter-placeholder, .fighter-image
+   - .fighter-info-overlay, .fighter-name
+   - .compare-stats-panel, .compare-stat-row
+   - .fight-center, .vs-badge, .fight-btn
+   - Related animations (@keyframes selectPulse, pulse, spark)
+   
+   Compare page CSS uses #compare-view prefix for proper namespacing.
+========================== */
 
 .character-grid-container {
     background: linear-gradient(180deg, rgba(5, 10, 20, 0.98) 0%, rgba(0, 8, 18, 1) 100%);
@@ -3237,9 +2949,7 @@ body {
         max-width: 320px;
     }
     
-    .fighter-display {
-        max-width: 240px;
-    }
+    /* Fighter display styles moved to compare-page.css */
     
     .stat-name {
         font-size: 1rem;
@@ -3706,100 +3416,7 @@ body {
         padding: 4px 2px;
     }
 
-    /* --- COMPARE VIEW - Bigger elements --- */
-    .fight-screen {
-        display: grid !important;
-        grid-template-columns: 1fr auto 1fr;
-        grid-template-rows: 1fr auto;
-        padding: 15px 10px;
-        gap: 8px;
-        flex: 1;
-        min-height: 0;
-        overflow: hidden;
-        align-items: center;
-    }
-
-    .fighter-section {
-        flex-direction: column !important;
-        gap: 8px;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    .fighter-left {
-        grid-column: 1;
-        grid-row: 1;
-    }
-    
-    .fighter-right {
-        grid-column: 3;
-        grid-row: 1;
-    }
-
-    .fight-center {
-        grid-column: 2;
-        grid-row: 1;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-    }
-
-    .fighter-display {
-        width: 120px;
-        height: 120px;
-        border-width: 3px;
-    }
-
-    .fighter-placeholder i {
-        font-size: 2rem;
-    }
-    
-    .fighter-placeholder p {
-        font-size: 0.7rem;
-    }
-    
-    .fighter-name {
-        font-size: 0.85rem;
-        letter-spacing: 1px;
-    }
-    
-    .fighter-info-overlay {
-        padding: 10px 6px 6px;
-    }
-
-    .view-stats-btn {
-        padding: 4px 8px;
-        font-size: 0.65rem;
-    }
-
-    .vs-badge { 
-        font-size: 1.5rem; 
-        margin: 0;
-    }
-    
-    /* Show radar chart on mobile - bigger size */
-    .radar-chart-container {
-        display: block !important;
-        width: 140px;
-        height: 140px;
-        max-width: 140px;
-        margin: 0;
-    }
-
-    .fight-btn {
-        grid-column: 1 / -1;
-        grid-row: 2;
-        padding: 12px 30px;
-        font-size: 1.2rem;
-        justify-self: center;
-    }
-    
-    /* Hide compare stats panels on mobile */
-    .compare-stats-panel {
-        display: none;
-    }
+    /* Compare page responsive styles are in compare-page.css */
 
     /* --- DETAILS PANEL --- */
     .details-grid {
@@ -4408,76 +4025,11 @@ body {
         padding: 3px 2px;
     }
 
-    /* Compare View */
-    .fight-screen {
-        padding: 8px;
-        gap: 8px;
-    }
-
-    .fighter-display {
-        width: 100px;
-        height: 100px;
-    }
-
-    .fighter-placeholder i {
-        font-size: 1.8rem;
-    }
-
-    .fighter-placeholder p {
-        font-size: 0.6rem;
-    }
-
-    .fighter-name {
-        font-size: 0.75rem;
-    }
-
-    .view-stats-btn {
-        padding: 4px 8px;
-        font-size: 0.55rem;
-    }
-
-    .vs-badge {
-        font-size: 1.2rem;
-    }
-
-    .fight-btn {
-        padding: 8px 20px;
-        font-size: 1rem;
-    }
-    
-    .radar-chart-container {
-        width: 100px;
-        height: 100px;
-    }
+    /* Compare page responsive styles are in compare-page.css */
 }
 
 /* --- LAPTOP/DESKTOP FIXES --- */
-@media (min-width: 1025px) {
-    .fight-screen {
-        height: 100%;
-        max-height: calc(100vh - 240px - 60px); /* Subtract grid and header height */
-        overflow-y: auto;
-        align-items: center;
-        justify-content: center; /* Center content vertically */
-        padding-bottom: 20px;
-        gap: 20px; /* Restore gap */
-    }
-
-    .fight-center {
-        gap: 20px; /* Restore gap */
-    }
-
-    .radar-chart-container {
-        width: 300px; /* Restore size */
-        height: 300px;
-        margin: 10px 0;
-    }
-
-    .fighter-display {
-        width: 280px; /* Restore size */
-        height: 280px;
-    }
-}
+/* Compare page responsive styles are in compare-page.css */
 
 /* Compare Controls Bar */
 .compare-controls-bar {
@@ -4488,45 +4040,7 @@ body {
     align-items: center;
 }
 
-.compare-controls-bar .fight-btn {
-    padding: 6px 24px; /* Smaller padding to fit in bar */
-    font-size: 1.2rem; /* Smaller font */
-    margin: 0;
-    box-shadow: 0 0 15px rgba(255, 107, 0, 0.4);
-    border-width: 2px; /* Thinner border */
-}
-
-.compare-controls-bar .fight-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 25px rgba(255, 107, 0, 0.8);
-}
-
-/* Ensure Compare Screen fits vertically */
-@media (min-width: 1025px) {
-    .fight-screen {
-        /* Calculate height: 100vh - Header(60px) - Grid(240px) - ControlBar(50px) */
-        max-height: calc(100vh - 60px - 240px - 50px);
-        padding: 10px;
-        gap: 10px;
-        justify-content: center;
-        overflow: hidden; /* Prevent scroll if possible */
-    }
-
-    .radar-chart-container {
-        width: 260px; /* Slightly smaller to ensure fit */
-        height: 260px;
-        margin: 5px 0;
-    }
-
-    .fighter-display {
-        width: 240px; /* Slightly smaller to ensure fit */
-        height: 240px;
-    }
-    
-    .fighter-placeholder i {
-        font-size: 3rem;
-    }
-}
+/* Compare page fight button styles moved to compare-page.css */
 
 /* =====================================================
    AUTHENTICATION STYLES

@@ -1,0 +1,756 @@
+/* ============================================
+   TOURNAMENT PAGE
+   BEM Architecture + Legacy Selector Support
+   ============================================ */
+
+/* Tournament-specific CSS Variables */
+:root {
+    /* Tournament color overrides */
+    --t-gold: var(--color-gold);
+    --t-gold-dark: #cc9900;
+    --t-cyan: var(--color-primary);
+    --t-orange: var(--color-secondary);
+    --t-red: var(--color-danger);
+    --t-green: var(--color-success);
+    --t-purple: var(--color-purple);
+    
+    /* Tournament backgrounds */
+    --t-bg-dark: rgba(10, 14, 26, 0.98);
+    --t-bg-darker: rgba(5, 8, 16, 0.98);
+    --t-border: var(--border-subtle);
+    --t-glow: 0 0 20px;
+    --t-radius: var(--radius-md);
+    --t-spacing: clamp(8px, 1.5vh, 16px);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .tournament *, .tournament *::before, .tournament *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ========================================
+   TOURNAMENT MODAL (BEM)
+   ======================================== */
+
+.tournament {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: var(--z-modal);
+    display: none;
+    overflow: hidden;
+}
+
+.tournament--active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tournament__close {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-4);
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: var(--text-xl);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    z-index: 10;
+}
+
+.tournament__close:hover {
+    color: var(--t-red);
+    transform: scale(1.1);
+}
+
+/* ========================================
+   SETUP SCREEN (BEM)
+   ======================================== */
+
+.tournament-setup {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--t-spacing);
+}
+
+.tournament-setup__container {
+    background: linear-gradient(135deg, var(--t-bg-dark), var(--t-bg-darker));
+    border: 2px solid var(--t-gold);
+    border-radius: var(--t-radius);
+    padding: clamp(12px, 2vh, 24px);
+    width: min(580px, 95vw);
+    max-height: calc(100vh - 40px);
+    position: relative;
+    box-shadow: var(--t-glow) rgba(255, 215, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.tournament-setup__header {
+    text-align: center;
+    margin-bottom: clamp(8px, 1.5vh, 16px);
+}
+
+.tournament-setup__crown {
+    font-size: clamp(1.5rem, 3vh, 2rem);
+    color: var(--t-gold);
+    filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.8));
+    animation: crownFloat 2s ease-in-out infinite;
+}
+
+@keyframes crownFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+.tournament-setup__title {
+    display: inline-block;
+    background: linear-gradient(90deg, var(--t-gold), var(--t-gold-dark));
+    padding: clamp(4px, 1vh, 8px) clamp(20px, 4vw, 40px);
+    transform: skewX(-5deg);
+    margin-top: var(--space-2);
+}
+
+.tournament-setup__title span {
+    display: block;
+    transform: skewX(5deg);
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2.5vh, 1.8rem);
+    letter-spacing: 4px;
+    color: #000;
+}
+
+.tournament-setup__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(8px, 1.5vh, 16px);
+    margin-bottom: clamp(8px, 1.5vh, 16px);
+}
+
+/* ========================================
+   SETUP PANEL (BEM)
+   ======================================== */
+
+.tournament-panel {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--t-border);
+    border-left: 3px solid var(--t-cyan);
+    border-radius: var(--t-radius);
+    padding: clamp(10px, 1.5vh, 16px);
+}
+
+.tournament-panel__header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-bottom: clamp(8px, 1.2vh, 12px);
+}
+
+.tournament-panel__badge {
+    width: 22px;
+    height: 22px;
+    background: linear-gradient(135deg, var(--t-cyan), #0099cc);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-xs);
+    font-weight: bold;
+    color: #000;
+}
+
+.tournament-panel__title {
+    font-family: var(--font-display);
+    font-size: clamp(0.85rem, 1.5vh, 1rem);
+    letter-spacing: 2px;
+    color: var(--t-cyan);
+}
+
+.tournament-panel__optional {
+    font-size: var(--text-xs);
+    color: rgba(255, 255, 255, 0.4);
+    margin-left: auto;
+}
+
+/* ========================================
+   BRACKET CARDS (BEM)
+   ======================================== */
+
+.bracket-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(6px, 1vh, 10px);
+}
+
+.bracket-card {
+    background: rgba(0, 212, 255, 0.08);
+    border: 2px solid rgba(0, 212, 255, 0.3);
+    border-radius: var(--radius-sm);
+    padding: clamp(8px, 1.2vh, 14px) var(--space-2);
+    cursor: pointer;
+    transition: var(--transition-base);
+    text-align: center;
+    position: relative;
+}
+
+.bracket-card:hover {
+    border-color: rgba(0, 212, 255, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
+}
+
+.bracket-card--selected {
+    border-color: var(--t-gold);
+    background: rgba(255, 215, 0, 0.12);
+    box-shadow: var(--t-glow) rgba(255, 215, 0, 0.3);
+}
+
+.bracket-card__number {
+    font-family: var(--font-display);
+    font-size: clamp(1.2rem, 2vh, 1.5rem);
+    color: var(--t-cyan);
+    line-height: 1;
+    margin-bottom: var(--space-1);
+}
+
+.bracket-card--selected .bracket-card__number {
+    color: var(--t-gold);
+}
+
+.bracket-card__label {
+    font-size: var(--text-xs);
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.bracket-card__check {
+    position: absolute;
+    top: var(--space-1);
+    right: var(--space-2);
+    color: var(--t-gold);
+    font-size: var(--text-sm);
+    opacity: 0;
+    transition: var(--transition-fast);
+}
+
+.bracket-card--selected .bracket-card__check {
+    opacity: 1;
+}
+
+/* ========================================
+   TOURNAMENT BRACKET VIEW (BEM)
+   ======================================== */
+
+.bracket-view {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: var(--space-3);
+    overflow: hidden;
+}
+
+.bracket-view__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 var(--space-4);
+    margin-bottom: var(--space-4);
+}
+
+.bracket-view__title {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.bracket-view__title-text {
+    font-family: var(--font-display);
+    font-size: var(--text-2xl);
+    letter-spacing: 3px;
+    color: var(--t-gold);
+}
+
+.bracket-view__round {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--t-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2) var(--space-4);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    letter-spacing: 2px;
+    color: var(--t-cyan);
+}
+
+/* ========================================
+   BRACKET CONTAINER (BEM)
+   ======================================== */
+
+.bracket {
+    flex: 1;
+    display: flex;
+    gap: var(--space-4);
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: var(--space-4);
+    scrollbar-width: thin;
+    scrollbar-color: var(--t-gold) transparent;
+}
+
+.bracket::-webkit-scrollbar {
+    height: 8px;
+}
+
+.bracket::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-full);
+}
+
+.bracket::-webkit-scrollbar-thumb {
+    background: linear-gradient(90deg, var(--t-gold), var(--t-gold-dark));
+    border-radius: var(--radius-full);
+}
+
+.bracket__column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    min-width: 200px;
+    flex-shrink: 0;
+}
+
+.bracket__round-label {
+    text-align: center;
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: var(--space-3);
+    text-transform: uppercase;
+}
+
+/* ========================================
+   MATCHUP CARD (BEM)
+   ======================================== */
+
+.matchup {
+    background: linear-gradient(135deg, rgba(20, 25, 35, 0.95), rgba(15, 20, 30, 0.98));
+    border: 1px solid var(--t-border);
+    border-radius: var(--radius-md);
+    margin: var(--space-2) 0;
+    overflow: hidden;
+    transition: var(--transition-base);
+}
+
+.matchup--active {
+    border-color: var(--t-gold);
+    box-shadow: var(--t-glow) rgba(255, 215, 0, 0.3);
+}
+
+.matchup--completed {
+    opacity: 0.7;
+}
+
+.matchup__fighter {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3);
+    cursor: pointer;
+    transition: var(--transition-fast);
+    border-left: 3px solid transparent;
+}
+
+.matchup__fighter:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.matchup__fighter--winner {
+    background: rgba(255, 215, 0, 0.1);
+    border-left-color: var(--t-gold);
+}
+
+.matchup__fighter--loser {
+    opacity: 0.5;
+}
+
+.matchup__image {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    object-fit: cover;
+    border: 2px solid var(--t-border);
+}
+
+.matchup__fighter--winner .matchup__image {
+    border-color: var(--t-gold);
+}
+
+.matchup__name {
+    flex: 1;
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    letter-spacing: 1px;
+}
+
+.matchup__seed {
+    font-size: var(--text-xs);
+    color: rgba(255, 255, 255, 0.4);
+    min-width: 24px;
+    text-align: right;
+}
+
+.matchup__divider {
+    height: 1px;
+    background: var(--t-border);
+}
+
+/* ========================================
+   FIGHT ANIMATION OVERLAY (BEM)
+   ======================================== */
+
+.fight-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: calc(var(--z-modal) + 100);
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.fight-overlay--active {
+    display: flex;
+}
+
+.fight-overlay__content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-10);
+}
+
+.fight-overlay__fighter {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.fight-overlay__image {
+    width: clamp(100px, 15vw, 180px);
+    height: clamp(100px, 15vw, 180px);
+    border-radius: var(--radius-lg);
+    object-fit: cover;
+    border: 3px solid var(--t-gold);
+    box-shadow: var(--t-glow) rgba(255, 215, 0, 0.4);
+}
+
+.fight-overlay__name {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    letter-spacing: 2px;
+}
+
+.fight-overlay__vs {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 4rem);
+    color: var(--t-gold);
+    animation: vsPulse 1s ease-in-out infinite;
+}
+
+@keyframes vsPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+/* ========================================
+   WINNER CELEBRATION (BEM)
+   ======================================== */
+
+.winner-celebration {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse at center, rgba(255, 215, 0, 0.2), rgba(0, 0, 0, 0.95));
+    z-index: calc(var(--z-modal) + 200);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+.winner-celebration--active {
+    display: flex;
+}
+
+.winner-celebration__crown {
+    font-size: clamp(3rem, 8vw, 6rem);
+    color: var(--t-gold);
+    animation: crownBounce 0.6s ease-out;
+}
+
+@keyframes crownBounce {
+    0% { transform: translateY(-100px) scale(0); opacity: 0; }
+    60% { transform: translateY(10px) scale(1.1); }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+.winner-celebration__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    letter-spacing: 4px;
+    color: var(--t-gold);
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+}
+
+.winner-celebration__image {
+    width: clamp(150px, 25vw, 250px);
+    height: clamp(150px, 25vw, 250px);
+    border-radius: var(--radius-xl);
+    object-fit: cover;
+    border: 4px solid var(--t-gold);
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+}
+
+.winner-celebration__name {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 4rem);
+    letter-spacing: 3px;
+    color: white;
+}
+
+.winner-celebration__actions {
+    display: flex;
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+}
+
+/* ========================================
+   LEGACY SELECTOR SUPPORT
+   Maintains compatibility with existing HTML
+   ======================================== */
+
+/* Tournament modal */
+.tournament-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.95);
+    z-index: var(--z-modal, 2000);
+    display: none;
+    overflow: hidden;
+}
+
+.tournament-modal.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Setup container */
+.t-setup-container {
+    background: linear-gradient(135deg, var(--t-bg-dark), var(--t-bg-darker));
+    border: 2px solid var(--t-gold);
+    border-radius: var(--t-radius);
+    padding: clamp(12px, 2vh, 24px);
+    width: min(580px, 95vw);
+    max-height: calc(100vh - 40px);
+    position: relative;
+    box-shadow: var(--t-glow) rgba(255, 215, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+}
+
+.t-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    z-index: 10;
+}
+
+.t-close-btn:hover {
+    color: var(--t-red);
+    transform: scale(1.1);
+}
+
+/* Setup header */
+.t-setup-header {
+    text-align: center;
+    margin-bottom: clamp(8px, 1.5vh, 16px);
+}
+
+.t-crown-icon {
+    font-size: clamp(1.5rem, 3vh, 2rem);
+    color: var(--t-gold);
+    filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.8));
+    animation: crownFloat 2s ease-in-out infinite;
+}
+
+.t-title-banner {
+    display: inline-block;
+    background: linear-gradient(90deg, var(--t-gold), var(--t-gold-dark));
+    padding: clamp(4px, 1vh, 8px) clamp(20px, 4vw, 40px);
+    transform: skewX(-5deg);
+    margin-top: 6px;
+}
+
+.t-title-banner span {
+    display: block;
+    transform: skewX(5deg);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.3rem, 2.5vh, 1.8rem);
+    letter-spacing: 4px;
+    color: #000;
+}
+
+/* Setup grid */
+.t-setup-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(8px, 1.5vh, 16px);
+    margin-bottom: clamp(8px, 1.5vh, 16px);
+}
+
+.t-setup-panel {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--t-border);
+    border-left: 3px solid var(--t-cyan);
+    border-radius: var(--t-radius);
+    padding: clamp(10px, 1.5vh, 16px);
+}
+
+.t-panel-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: clamp(8px, 1.2vh, 12px);
+}
+
+.t-step-badge {
+    width: 22px;
+    height: 22px;
+    background: linear-gradient(135deg, var(--t-cyan), #0099cc);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: #000;
+}
+
+.t-panel-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(0.85rem, 1.5vh, 1rem);
+    letter-spacing: 2px;
+    color: var(--t-cyan);
+}
+
+.t-optional {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin-left: auto;
+}
+
+/* Bracket cards legacy */
+.t-bracket-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(6px, 1vh, 10px);
+}
+
+.t-bracket-card {
+    background: rgba(0, 212, 255, 0.08);
+    border: 2px solid rgba(0, 212, 255, 0.3);
+    border-radius: 6px;
+    padding: clamp(8px, 1.2vh, 14px) 8px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: center;
+    position: relative;
+}
+
+.t-bracket-card:hover {
+    border-color: rgba(0, 212, 255, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 212, 255, 0.2);
+}
+
+.t-bracket-card.selected {
+    border-color: var(--t-gold);
+    background: rgba(255, 215, 0, 0.12);
+    box-shadow: var(--t-glow) rgba(255, 215, 0, 0.3);
+}
+
+.t-bracket-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1.2rem, 2vh, 1.5rem);
+    color: var(--t-cyan);
+    line-height: 1;
+    margin-bottom: 2px;
+}
+
+.t-bracket-card.selected .t-bracket-num {
+    color: var(--t-gold);
+}
+
+.t-bracket-label {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.t-check {
+    position: absolute;
+    top: 4px;
+    right: 8px;
+    color: var(--t-gold);
+    font-size: 0.7rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.t-bracket-card.selected .t-check {
+    opacity: 1;
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+   ======================================== */
+
+@media (max-width: 768px) {
+    .tournament-setup__grid,
+    .t-setup-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .bracket {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .bracket__column {
+        min-width: 100%;
+    }
+    
+    .fight-overlay__content {
+        flex-direction: column;
+        gap: var(--space-6);
+    }
+}

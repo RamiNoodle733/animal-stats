@@ -101,7 +101,7 @@ function buildMessageTree(messages, userMap) {
 // GET: Get community feed (all comments)
 async function handleGetFeed(req, res) {
     const { limit = 50, skip = 0 } = req.query;
-    const User = require('../models/User');
+    const User = require('../lib/models/User');
 
     // Get all root comments (not replies) sorted by newest first
     const comments = await Comment.find({
@@ -208,7 +208,7 @@ async function handleGetFeed(req, res) {
 // GET: Get recent chat messages with nested replies
 async function handleGet(req, res) {
     const { limit = 50, before } = req.query;
-    const User = require('../models/User');
+    const User = require('../lib/models/User');
 
     let query = { parentId: null }; // Only get root messages
     
@@ -288,7 +288,7 @@ async function handlePost(req, res) {
     }
 
     // Get user's profile info for display
-    const User = require('../models/User');
+    const User = require('../lib/models/User');
     const userDoc = await User.findById(user.id).select('displayName profileAnimal');
 
     // If this is a reply, verify parent exists
