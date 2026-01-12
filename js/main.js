@@ -2455,9 +2455,22 @@ class AnimalStatsApp {
 // ========================================
 
 // Initialize App when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    window.app = new AnimalStatsApp();
-    window.app.init();
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        console.log('[DEBUG] Creating AnimalStatsApp...');
+        window.app = new AnimalStatsApp();
+        console.log('[DEBUG] Calling init()...');
+        await window.app.init();
+        console.log('[DEBUG] Init completed successfully');
+    } catch (error) {
+        console.error('[DEBUG] Fatal error:', error);
+        // Force hide loading screen
+        const loadingScreen = document.getElementById('app-loading-screen');
+        if (loadingScreen) {
+            loadingScreen.classList.add('hidden');
+        }
+        alert('Failed to load: ' + error.message);
+    }
 });
 
 // ========================================
