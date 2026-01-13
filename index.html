@@ -42,6 +42,9 @@
     <link rel="stylesheet" href="compare-page.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="community-page.css" media="print" onload="this.media='all'">
     
+    <!-- Mobile-specific styles (loaded last to override) -->
+    <link rel="stylesheet" href="css/mobile.css" media="print" onload="this.media='all'">
+    
     <!-- Non-critical external resources loaded async -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" media="print" onload="this.media='all'">
     
@@ -2400,6 +2403,25 @@
         </div>
     </div>
     
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-bottom-nav" id="mobile-bottom-nav">
+        <a class="mobile-nav-item" data-view="stats" href="/stats">
+            <i class="fas fa-chart-bar"></i>
+            <span>Stats</span>
+        </a>
+        <a class="mobile-nav-item" data-view="compare" href="/compare">
+            <i class="fas fa-balance-scale"></i>
+            <span>Compare</span>
+        </a>
+        <a class="mobile-nav-item" data-view="rankings" href="/rankings">
+            <i class="fas fa-trophy"></i>
+            <span>Rankings</span>
+        </a>
+        <a class="mobile-nav-item" data-view="community" href="/community">
+            <i class="fas fa-users"></i>
+            <span>Community</span>
+        </a>
+    </nav>
     <!-- Data loaded from MongoDB API - no local data.js needed -->
     
     <!-- Core utilities - shared across all modules -->

@@ -1,0 +1,1540 @@
+/*
+ * ============================================================================
+ * MOBILE RESPONSIVE STYLES
+ * ============================================================================
+ * Target: 320px - 430px screens (iPhone SE to iPhone Pro Max)
+ * Design: Touch-first, thumb-friendly, no horizontal scroll
+ * Maintains: Game HUD aesthetic with neon accents
+ * ============================================================================
+ */
+
+/* ============================================================================
+ * CSS VARIABLES - Mobile Overrides
+ * ============================================================================ */
+:root {
+    --mobile-nav-height: 60px;
+    --mobile-header-height: 50px;
+    --mobile-safe-bottom: env(safe-area-inset-bottom, 0px);
+    --mobile-safe-top: env(safe-area-inset-top, 0px);
+    --mobile-touch-min: 44px; /* Apple HIG minimum touch target */
+    --mobile-gap: 12px;
+    --mobile-padding: 16px;
+}
+
+/* ============================================================================
+ * GLOBAL MOBILE STYLES (max-width: 480px)
+ * ============================================================================ */
+@media (max-width: 480px) {
+    /* Prevent horizontal scroll */
+    html, body {
+        overflow-x: hidden;
+        max-width: 100vw;
+    }
+    
+    * {
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+    }
+    
+    /* Better touch scrolling */
+    .view-container,
+    .character-grid,
+    .rankings-list,
+    .feed-scroll-region {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+}
+
+/* ============================================================================
+ * MOBILE NAVIGATION - Bottom Tab Bar
+ * ============================================================================ */
+@media (max-width: 480px) {
+    /* Hide desktop nav tabs in header */
+    .game-header .nav-tabs {
+        display: none !important;
+    }
+    
+    /* Compact header - just logo/title and auth */
+    .game-header {
+        padding: 8px var(--mobile-padding) !important;
+        padding-top: calc(8px + var(--mobile-safe-top)) !important;
+        gap: 8px !important;
+        justify-content: space-between !important;
+        min-height: var(--mobile-header-height) !important;
+    }
+    
+    .header-brand {
+        flex: 1;
+    }
+    
+    .header-logo {
+        width: 28px !important;
+        height: 28px !important;
+    }
+    
+    .game-header h1 {
+        font-size: 0.85rem !important;
+        letter-spacing: 1px !important;
+    }
+    
+    /* Auth area mobile */
+    .auth-area {
+        position: relative !important;
+        right: auto !important;
+    }
+    
+    .auth-btn {
+        padding: 8px 12px !important;
+        font-size: 0.7rem !important;
+        min-height: var(--mobile-touch-min) !important;
+    }
+    
+    /* User stats bar compact */
+    .user-stats-bar {
+        padding: 6px 10px !important;
+        gap: 8px !important;
+    }
+    
+    .user-avatar-small {
+        width: 28px !important;
+        height: 28px !important;
+    }
+    
+    .user-name-small {
+        font-size: 0.75rem !important;
+        max-width: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .user-xp-badge {
+        font-size: 0.65rem !important;
+        padding: 2px 6px !important;
+    }
+
+    /* Create mobile bottom navigation */
+    body::after {
+        content: '';
+        display: block;
+        height: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom));
+    }
+}
+
+/* Mobile Bottom Navigation Bar - Injected via CSS or requires HTML element */
+.mobile-bottom-nav {
+    display: none;
+}
+
+@media (max-width: 480px) {
+    .mobile-bottom-nav {
+        display: flex !important;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: var(--mobile-nav-height);
+        padding-bottom: var(--mobile-safe-bottom);
+        background: linear-gradient(180deg, rgba(10, 20, 35, 0.98) 0%, rgba(5, 10, 20, 0.99) 100%);
+        border-top: 1px solid rgba(0, 212, 255, 0.3);
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
+        z-index: 9000;
+        justify-content: space-around;
+        align-items: center;
+    }
+    
+    .mobile-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        height: 100%;
+        padding: 8px 4px;
+        color: rgba(255, 255, 255, 0.5);
+        text-decoration: none;
+        transition: all 0.2s ease;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .mobile-nav-item:active {
+        transform: scale(0.95);
+    }
+    
+    .mobile-nav-item.active {
+        color: #00d4ff;
+    }
+    
+    .mobile-nav-item i {
+        font-size: 1.25rem;
+        margin-bottom: 4px;
+    }
+    
+    .mobile-nav-item span {
+        font-size: 0.6rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-family: 'Orbitron', 'Rajdhani', sans-serif;
+    }
+    
+    .mobile-nav-item.active i {
+        filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.8));
+    }
+}
+
+/* ============================================================================
+ * HOME PAGE - Mobile Layout
+ * ============================================================================ */
+@media (max-width: 480px) {
+    #home-view {
+        padding: var(--mobile-padding) !important;
+        padding-top: calc(var(--mobile-header-height) + var(--mobile-padding)) !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + var(--mobile-padding)) !important;
+    }
+    
+    /* Home auth corner */
+    .home-auth-corner {
+        top: auto !important;
+        right: auto !important;
+        position: relative !important;
+        margin-bottom: 16px !important;
+    }
+    
+    /* Logo section */
+    .portal-logo-section {
+        margin-bottom: 24px !important;
+    }
+    
+    .portal-main-logo {
+        width: 80px !important;
+        height: 80px !important;
+    }
+    
+    .portal-title {
+        font-size: 1.5rem !important;
+        letter-spacing: 3px !important;
+    }
+    
+    .portal-tagline {
+        font-size: 0.8rem !important;
+    }
+    
+    .portal-description {
+        font-size: 0.75rem !important;
+        padding: 0 10px !important;
+        line-height: 1.5 !important;
+    }
+    
+    /* Portal navigation - 2x2 grid */
+    .portal-nav {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: var(--mobile-gap) !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+    
+    .portal-panel {
+        padding: 16px 12px !important;
+        min-height: 100px !important;
+    }
+    
+    .panel-icon {
+        width: 40px !important;
+        height: 40px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .panel-icon i {
+        font-size: 1.1rem !important;
+    }
+    
+    .panel-label {
+        font-size: 0.75rem !important;
+        letter-spacing: 1px !important;
+    }
+    
+    .panel-subtitle {
+        font-size: 0.6rem !important;
+    }
+    
+    /* Portal widgets - stack on mobile */
+    .portal-widgets {
+        flex-direction: column !important;
+        gap: 10px !important;
+        padding: 16px !important;
+    }
+    
+    .portal-widget {
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        padding: 12px 16px !important;
+        width: 100% !important;
+    }
+    
+    .portal-widget-divider {
+        display: none !important;
+    }
+    
+    .widget-value {
+        font-size: 1.25rem !important;
+        order: 2;
+    }
+    
+    .widget-label {
+        font-size: 0.7rem !important;
+        order: 1;
+    }
+    
+    /* Footer */
+    .portal-footer-inner {
+        flex-direction: column !important;
+        gap: 10px !important;
+        padding: var(--mobile-padding) !important;
+        font-size: 0.7rem !important;
+    }
+}
+
+/* ============================================================================
+ * STATS PAGE - Mobile Layout  
+ * ============================================================================ */
+@media (max-width: 480px) {
+    #stats-view {
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
+    }
+    
+    /* Stack character display area vertically */
+    .character-display-area {
+        flex-direction: column !important;
+        padding: 8px !important;
+        gap: 12px !important;
+    }
+    
+    /* Character showcase - centered at top */
+    .character-showcase {
+        order: 1 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 16px 12px !important;
+    }
+    
+    .character-name-display {
+        font-size: 1.3rem !important;
+    }
+    
+    .character-scientific-name {
+        font-size: 0.7rem !important;
+    }
+    
+    .character-model-container {
+        max-width: 180px !important;
+        margin: 12px auto !important;
+    }
+    
+    .character-model {
+        max-height: 160px !important;
+    }
+    
+    /* Battle record badge - horizontal on mobile */
+    .battle-record-badge {
+        flex-direction: row !important;
+        padding: 8px 12px !important;
+        gap: 8px !important;
+    }
+    
+    .record-item {
+        flex-direction: column !important;
+        padding: 4px 8px !important;
+    }
+    
+    .record-value {
+        font-size: 0.9rem !important;
+    }
+    
+    .record-label {
+        font-size: 0.55rem !important;
+    }
+    
+    .record-divider {
+        height: 24px !important;
+    }
+    
+    /* Quick info bar */
+    .quick-info-bar {
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        padding: 8px !important;
+    }
+    
+    .quick-info-item {
+        padding: 6px 10px !important;
+        font-size: 0.7rem !important;
+    }
+    
+    .quick-info-divider {
+        display: none !important;
+    }
+    
+    /* Stats panels - horizontal scroll container */
+    .stats-panel {
+        order: 2 !important;
+        width: 100% !important;
+        padding: 0 !important;
+    }
+    
+    .stats-panel-left {
+        order: 2 !important;
+    }
+    
+    .stats-panel-right {
+        order: 3 !important;
+    }
+    
+    /* Make stat rows more compact */
+    .stat-group-container {
+        margin-bottom: 10px !important;
+    }
+    
+    .stat-row {
+        padding: 6px 8px !important;
+        gap: 6px !important;
+    }
+    
+    .stat-icon {
+        width: 24px !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .stat-name {
+        font-size: 0.7rem !important;
+        min-width: 30px !important;
+    }
+    
+    .stat-bar-wrapper {
+        flex: 1 !important;
+        min-width: 80px !important;
+    }
+    
+    .stat-bar {
+        height: 8px !important;
+    }
+    
+    .stat-value {
+        font-size: 0.8rem !important;
+        min-width: 28px !important;
+    }
+    
+    /* Substats */
+    .substat-container {
+        padding: 4px 8px !important;
+        gap: 8px !important;
+    }
+    
+    .substat-row {
+        font-size: 0.65rem !important;
+    }
+    
+    /* Abilities and Traits cards */
+    .abilities-card,
+    .traits-card {
+        margin-top: 12px !important;
+        padding: 10px !important;
+    }
+    
+    .card-header {
+        font-size: 0.75rem !important;
+        padding: 6px 10px !important;
+    }
+    
+    .abilities-list,
+    .traits-list {
+        gap: 6px !important;
+        padding: 8px !important;
+    }
+    
+    .ability-item,
+    .trait-item {
+        padding: 6px 10px !important;
+        font-size: 0.7rem !important;
+    }
+    
+    /* Details panel - full screen modal on mobile */
+    .details-panel {
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 8000 !important;
+        padding: 16px !important;
+        padding-top: calc(var(--mobile-header-height) + 16px) !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 16px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    .details-close-btn {
+        display: block !important;
+        margin-bottom: 16px !important;
+    }
+    
+    .details-close-btn button {
+        width: 100% !important;
+        padding: 12px !important;
+        font-size: 0.8rem !important;
+        background: rgba(255, 0, 51, 0.2) !important;
+        border: 1px solid rgba(255, 0, 51, 0.5) !important;
+        color: #ff3366 !important;
+        border-radius: 8px !important;
+        cursor: pointer;
+        min-height: var(--mobile-touch-min) !important;
+    }
+    
+    .details-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+    }
+    
+    .details-column {
+        width: 100% !important;
+    }
+    
+    .detail-section {
+        padding: 12px !important;
+    }
+    
+    .detail-section h3 {
+        font-size: 0.8rem !important;
+    }
+    
+    .detail-item {
+        font-size: 0.75rem !important;
+        padding: 6px 0 !important;
+    }
+    
+    #animal-description {
+        font-size: 0.75rem !important;
+        line-height: 1.6 !important;
+    }
+}
+
+/* ============================================================================
+ * BOTTOM BAR & GRID - Mobile Layout
+ * ============================================================================ */
+@media (max-width: 480px) {
+    /* Bottom info bar */
+    .bottom-info-bar {
+        padding: 8px var(--mobile-padding) !important;
+        gap: 6px !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+    }
+    
+    .bottom-info-bar button {
+        padding: 10px 14px !important;
+        font-size: 0.7rem !important;
+        min-height: var(--mobile-touch-min) !important;
+        flex: 1 !important;
+        min-width: 90px !important;
+    }
+    
+    .info-separator {
+        display: none !important;
+    }
+    
+    /* Character grid */
+    .character-grid-container {
+        min-height: 140px !important;
+        max-height: 180px !important;
+        padding: 8px !important;
+    }
+    
+    .grid-controls {
+        flex-wrap: wrap !important;
+        gap: 6px !important;
+        margin-bottom: 8px !important;
+        padding: 0 4px !important;
+    }
+    
+    .search-box {
+        flex: 1 !important;
+        min-width: 120px !important;
+        max-width: none !important;
+        padding: 10px 12px !important;
+        font-size: 0.8rem !important;
+        min-height: var(--mobile-touch-min) !important;
+    }
+    
+    .dropdown-toggle-btn {
+        padding: 10px 12px !important;
+        font-size: 0.7rem !important;
+        min-height: var(--mobile-touch-min) !important;
+    }
+    
+    /* Grid items */
+    .character-grid {
+        gap: 6px !important;
+        padding: 4px !important;
+    }
+    
+    .character-card {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    .character-card img {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    .card-name {
+        font-size: 0.5rem !important;
+        padding: 2px 4px !important;
+    }
+    
+    /* Dropdown panels */
+    .dropdown-panel {
+        max-width: calc(100vw - 32px) !important;
+        max-height: 60vh !important;
+    }
+    
+    .filter-panel-compact {
+        width: calc(100vw - 32px) !important;
+        left: 16px !important;
+        right: 16px !important;
+    }
+    
+    .checkbox-option {
+        padding: 10px 12px !important;
+        min-height: var(--mobile-touch-min) !important;
+    }
+}
+
+/* ============================================================================
+ * COMPARE PAGE - Mobile Layout
+ * ============================================================================ */
+@media (max-width: 480px) {
+    #compare-view {
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
+    }
+    
+    .fight-screen,
+    .compare__arena {
+        flex-direction: column !important;
+        padding: 12px !important;
+        gap: 16px !important;
+    }
+    
+    /* Fighter sections - stack vertically */
+    .fighter-section,
+    .compare__fighter {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex-direction: column !important;
+    }
+    
+    .fighter-left,
+    .compare__fighter--left {
+        order: 1 !important;
+    }
+    
+    .fight-center,
+    .compare__center {
+        order: 2 !important;
+        width: 100% !important;
+    }
+    
+    .fighter-right,
+    .compare__fighter--right {
+        order: 3 !important;
+    }
+    
+    /* Fighter display */
+    .fighter-display,
+    .fighter__display {
+        max-width: 200px !important;
+        margin: 0 auto !important;
+    }
+    
+    .fighter-image,
+    .fighter__image {
+        max-height: 140px !important;
+    }
+    
+    .fighter-placeholder,
+    .fighter__placeholder {
+        padding: 30px !important;
+    }
+    
+    .fighter-placeholder i,
+    .fighter__placeholder i {
+        font-size: 2rem !important;
+    }
+    
+    .fighter-placeholder p,
+    .fighter__placeholder p {
+        font-size: 0.8rem !important;
+    }
+    
+    .fighter-name,
+    .fighter__name {
+        font-size: 1rem !important;
+        padding: 8px !important;
+    }
+    
+    /* Compare stats panel */
+    .compare-stats-panel {
+        padding: 10px !important;
+        margin-top: 10px !important;
+    }
+    
+    .compare-stat-row {
+        padding: 8px 10px !important;
+        gap: 8px !important;
+    }
+    
+    .compare-stat-row i {
+        font-size: 0.85rem !important;
+    }
+    
+    .compare-stat-label {
+        font-size: 0.65rem !important;
+    }
+    
+    .compare-stat-value {
+        font-size: 0.85rem !important;
+    }
+    
+    /* Radar chart */
+    .radar-chart-container,
+    .compare__radar {
+        max-width: 250px !important;
+        max-height: 250px !important;
+        margin: 16px auto !important;
+    }
+    
+    /* Fight button - sticky at bottom */
+    .fight-btn,
+    .compare__fight-btn {
+        width: 100% !important;
+        max-width: 280px !important;
+        margin: 16px auto !important;
+        padding: 16px 24px !important;
+        font-size: 1rem !important;
+        min-height: 56px !important;
+    }
+    
+    /* Compare stat bars */
+    .compare-bars-container {
+        padding: 12px 8px !important;
+        margin: 16px 0 !important;
+    }
+    
+    .compare-bar-row {
+        flex-direction: column !important;
+        gap: 4px !important;
+        padding: 8px 0 !important;
+    }
+    
+    .compare-bar-stat-name {
+        width: 100% !important;
+        text-align: center !important;
+        margin-bottom: 4px !important;
+        font-size: 0.7rem !important;
+    }
+    
+    .compare-bar-left,
+    .compare-bar-right {
+        width: 100% !important;
+        flex-direction: row !important;
+        gap: 8px !important;
+    }
+    
+    .compare-bar-value {
+        min-width: 35px !important;
+        font-size: 0.8rem !important;
+    }
+    
+    .compare-bar-track {
+        height: 10px !important;
+    }
+}
+
+/* ============================================================================
+ * RANKINGS PAGE - Mobile Layout
+ * ============================================================================ */
+@media (max-width: 480px) {
+    #rankings-view {
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
+    }
+    
+    .rankings-console {
+        padding: 8px !important;
+    }
+    
+    /* Hero banner compact */
+    .rankings-hero-banner {
+        padding: 20px 16px !important;
+        margin-bottom: 12px !important;
+    }
+    
+    .hero-top-row {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+    
+    .hero-trophy-badge {
+        width: 32px !important;
+        height: 32px !important;
+    }
+    
+    .hero-trophy-badge i {
+        font-size: 0.9rem !important;
+    }
+    
+    .hero-title {
+        font-size: 0.9rem !important;
+        text-align: center !important;
+        width: 100% !important;
+        order: 1 !important;
+    }
+    
+    .hero-trophy-badge:first-child {
+        order: 2 !important;
+    }
+    
+    .hero-trophy-badge.mirror {
+        order: 3 !important;
+    }
+    
+    .hero-play-btn-big {
+        padding: 14px 32px !important;
+        font-size: 0.9rem !important;
+        min-height: var(--mobile-touch-min) !important;
+    }
+    
+    .hero-subtitle {
+        font-size: 0.65rem !important;
+        padding: 0 8px !important;
+    }
+    
+    /* Main content - single column */
+    .rankings-main-content {
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+    
+    .rankings-list-column {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    .rankings-right-column {
+        display: none !important; /* Hidden by default on mobile */
+    }
+    
+    /* Show detail panel as bottom sheet when animal selected */
+    .rankings-right-column.mobile-visible {
+        display: block !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        max-height: 70vh !important;
+        z-index: 8500 !important;
+        background: linear-gradient(180deg, rgba(10, 20, 35, 0.98) 0%, rgba(5, 10, 20, 0.99) 100%) !important;
+        border-top: 2px solid rgba(0, 212, 255, 0.4) !important;
+        border-radius: 20px 20px 0 0 !important;
+        padding: 12px 16px !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 16px) !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        animation: slideUpSheet 0.3s ease-out;
+    }
+    
+    @keyframes slideUpSheet {
+        from {
+            transform: translateY(100%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+    
+    /* Drag handle for bottom sheet */
+    .rankings-right-column.mobile-visible::before {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 2px;
+        margin: 0 auto 12px;
+    }
+    
+    /* Rankings list header */
+    .rankings-list-toolbar {
+        padding: 8px 12px !important;
+    }
+    
+    .rankings-list-title {
+        font-size: 0.85rem !important;
+    }
+    
+    .rankings-list-header {
+        padding: 8px 12px !important;
+        font-size: 0.65rem !important;
+        gap: 4px !important;
+    }
+    
+    .list-header-rank {
+        min-width: 35px !important;
+    }
+    
+    .list-header-stats,
+    .list-header-votes {
+        min-width: 50px !important;
+    }
+    
+    .rankings-search-wrapper.header-search {
+        max-width: 100px !important;
+    }
+    
+    .rankings-search-inline {
+        font-size: 0.7rem !important;
+        padding: 6px 8px !important;
+    }
+    
+    /* Rankings list items */
+    .rankings-list {
+        max-height: 50vh !important;
+    }
+    
+    .ranking-item {
+        padding: 10px 12px !important;
+        gap: 8px !important;
+        min-height: var(--mobile-touch-min) !important;
+    }
+    
+    .rank-badge {
+        font-size: 0.75rem !important;
+        min-width: 30px !important;
+    }
+    
+    .ranking-portrait {
+        width: 36px !important;
+        height: 36px !important;
+    }
+    
+    .ranking-name {
+        font-size: 0.75rem !important;
+    }
+    
+    .ranking-scientific {
+        font-size: 0.55rem !important;
+    }
+    
+    .ranking-winrate,
+    .ranking-votes {
+        font-size: 0.7rem !important;
+        min-width: 45px !important;
+    }
+    
+    .ranking-grade {
+        font-size: 0.65rem !important;
+        padding: 3px 6px !important;
+    }
+    
+    /* Detail panel content */
+    .detail-header-compact {
+        padding: 12px !important;
+        gap: 10px !important;
+    }
+    
+    .detail-portrait-sm {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    .detail-animal-name {
+        font-size: 1rem !important;
+    }
+    
+    .detail-rank-badge {
+        font-size: 0.7rem !important;
+    }
+    
+    .detail-grade-badge {
+        width: 36px !important;
+        height: 36px !important;
+        font-size: 1rem !important;
+    }
+    
+    .detail-stats-compact {
+        gap: 8px !important;
+        padding: 10px !important;
+    }
+    
+    .stat-mini {
+        padding: 8px !important;
+    }
+    
+    .stat-mini i {
+        font-size: 0.9rem !important;
+    }
+    
+    .stat-val {
+        font-size: 0.85rem !important;
+    }
+    
+    .detail-physical-row {
+        gap: 8px !important;
+        padding: 8px !important;
+    }
+    
+    .physical-stat {
+        font-size: 0.7rem !important;
+    }
+    
+    .detail-abilities-section {
+        padding: 10px !important;
+        gap: 8px !important;
+    }
+    
+    .ability-tag-sm,
+    .trait-tag-sm {
+        font-size: 0.6rem !important;
+        padding: 4px 8px !important;
+    }
+}
+
+/* ============================================================================
+ * TOURNAMENT / VOTING - Mobile Layout
+ * ============================================================================ */
+@media (max-width: 480px) {
+    .tournament-modal-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+        padding: 16px !important;
+        padding-top: calc(var(--mobile-safe-top) + 16px) !important;
+        padding-bottom: calc(var(--mobile-safe-bottom) + 16px) !important;
+    }
+    
+    .tournament-close-btn {
+        top: calc(var(--mobile-safe-top) + 12px) !important;
+        right: 12px !important;
+        width: 40px !important;
+        height: 40px !important;
+    }
+    
+    .tournament-fighters {
+        flex-direction: column !important;
+        gap: 16px !important;
+    }
+    
+    .tournament-fighter {
+        width: 100% !important;
+        max-width: 280px !important;
+        margin: 0 auto !important;
+    }
+    
+    .tournament-fighter-image {
+        max-height: 120px !important;
+    }
+    
+    .tournament-fighter-name {
+        font-size: 1rem !important;
+    }
+    
+    .tournament-vs {
+        font-size: 1.5rem !important;
+        padding: 8px 0 !important;
+    }
+    
+    .tournament-stat-bar-container {
+        padding: 8px !important;
+    }
+    
+    .tournament-stat-bar {
+        height: 10px !important;
+    }
+    
+    .tournament-choose-btn {
+        padding: 14px 24px !important;
+        font-size: 0.9rem !important;
+        min-height: var(--mobile-touch-min) !important;
+    }
+}
+
+/* ============================================================================
+ * COMMUNITY PAGE - Mobile Layout
+ * ============================================================================ */
+@media (max-width: 480px) {
+    #community-view {
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
+    }
+    
+    .community-feed-layout,
+    .community__layout {
+        flex-direction: column !important;
+        gap: 0 !important;
+    }
+    
+    /* Sidebar becomes horizontal tabs on mobile */
+    .community-sidebar-column,
+    .community__sidebar {
+        width: 100% !important;
+        order: 1 !important;
+        display: none !important; /* Hidden by default, shown via tabs */
+    }
+    
+    .community-sidebar-column.mobile-visible {
+        display: block !important;
+        max-height: 50vh !important;
+        overflow-y: auto !important;
+    }
+    
+    /* Main feed column */
+    .community-feed-column {
+        width: 100% !important;
+        order: 2 !important;
+        height: auto !important;
+        min-height: calc(100vh - var(--mobile-header-height) - var(--mobile-nav-height) - 100px) !important;
+    }
+    
+    /* Tab bar styling */
+    .community-tab-bar {
+        position: sticky !important;
+        top: var(--mobile-header-height) !important;
+        z-index: 100 !important;
+        padding: 8px !important;
+        gap: 6px !important;
+        background: rgba(10, 20, 35, 0.98) !important;
+    }
+    
+    .community-tab-btn {
+        flex: 1 !important;
+        padding: 12px 8px !important;
+        font-size: 0.7rem !important;
+        min-height: var(--mobile-touch-min) !important;
+    }
+    
+    .community-tab-btn i {
+        margin-right: 4px !important;
+    }
+    
+    /* HUD Module compact */
+    .community-hud-module {
+        padding: 12px !important;
+    }
+    
+    .hud-header {
+        padding: 8px 10px !important;
+    }
+    
+    .hud-title {
+        font-size: 0.75rem !important;
+    }
+    
+    .hud-live-badges {
+        gap: 10px !important;
+        padding: 8px !important;
+    }
+    
+    .hud-online-badge,
+    .hud-visits-badge {
+        font-size: 0.65rem !important;
+    }
+    
+    .hud-stats-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+        padding: 8px !important;
+    }
+    
+    .hud-stat-item {
+        padding: 8px !important;
+    }
+    
+    .hud-stat-value {
+        font-size: 1rem !important;
+    }
+    
+    .hud-stat-label {
+        font-size: 0.55rem !important;
+    }
+    
+    /* Daily matchup compact */
+    .daily-matchup-module {
+        padding: 12px !important;
+    }
+    
+    .module-header {
+        padding: 8px 10px !important;
+    }
+    
+    .module-title {
+        font-size: 0.75rem !important;
+    }
+    
+    .matchup-timer {
+        font-size: 0.7rem !important;
+    }
+    
+    .matchup-arena {
+        flex-direction: column !important;
+        gap: 12px !important;
+        padding: 12px !important;
+    }
+    
+    .matchup-fighter {
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 10px !important;
+        width: 100% !important;
+    }
+    
+    .matchup-fighter-img {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    .matchup-fighter-name {
+        font-size: 0.8rem !important;
+        flex: 1 !important;
+    }
+    
+    .matchup-vs {
+        font-size: 1rem !important;
+        padding: 4px !important;
+    }
+    
+    .matchup-vote-btn {
+        padding: 10px 16px !important;
+        font-size: 0.7rem !important;
+        min-height: var(--mobile-touch-min) !important;
+    }
+    
+    /* Leaderboard compact */
+    .leaderboard-module {
+        padding: 12px !important;
+    }
+    
+    .leaderboard-list {
+        gap: 6px !important;
+    }
+    
+    .leaderboard-item {
+        padding: 10px 12px !important;
+        gap: 8px !important;
+    }
+    
+    .leaderboard-rank {
+        font-size: 0.75rem !important;
+        min-width: 24px !important;
+    }
+    
+    .leaderboard-avatar {
+        width: 32px !important;
+        height: 32px !important;
+    }
+    
+    .leaderboard-name {
+        font-size: 0.75rem !important;
+    }
+    
+    .leaderboard-xp {
+        font-size: 0.65rem !important;
+    }
+    
+    /* Feed area */
+    .feed-scroll-region {
+        padding: 8px !important;
+    }
+    
+    .feed-posts-container {
+        gap: 10px !important;
+    }
+    
+    /* Chat/comment posts */
+    .feed-post,
+    .chat-message,
+    .comment-card {
+        padding: 12px !important;
+    }
+    
+    .post-avatar,
+    .message-avatar {
+        width: 32px !important;
+        height: 32px !important;
+    }
+    
+    .post-username,
+    .message-username {
+        font-size: 0.75rem !important;
+    }
+    
+    .post-timestamp,
+    .message-timestamp {
+        font-size: 0.6rem !important;
+    }
+    
+    .post-content,
+    .message-content {
+        font-size: 0.8rem !important;
+        line-height: 1.5 !important;
+    }
+    
+    /* Compose box sticky */
+    .feed-compose-box {
+        position: sticky !important;
+        bottom: 0 !important;
+        padding: 12px !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 12px) !important;
+        background: linear-gradient(180deg, rgba(10, 20, 35, 0.95) 0%, rgba(5, 10, 20, 0.98) 100%) !important;
+        border-top: 1px solid rgba(0, 212, 255, 0.2) !important;
+    }
+    
+    .compose-input-row {
+        gap: 8px !important;
+    }
+    
+    .compose-avatar {
+        width: 32px !important;
+        height: 32px !important;
+        font-size: 0.8rem !important;
+    }
+    
+    .compose-input {
+        padding: 12px !important;
+        font-size: 0.85rem !important;
+        min-height: var(--mobile-touch-min) !important;
+    }
+    
+    .compose-send-btn {
+        width: 44px !important;
+        height: 44px !important;
+    }
+    
+    .compose-reply-preview {
+        padding: 8px 10px !important;
+        font-size: 0.7rem !important;
+    }
+}
+
+/* ============================================================================
+ * LOGIN / SIGNUP / PROFILE PAGES - Mobile Layout
+ * ============================================================================ */
+@media (max-width: 480px) {
+    #login-view,
+    #signup-view,
+    #profile-view {
+        padding: var(--mobile-padding) !important;
+        padding-top: calc(var(--mobile-safe-top) + 60px) !important;
+        padding-bottom: calc(var(--mobile-safe-bottom) + var(--mobile-padding)) !important;
+    }
+    
+    .auth-container,
+    .auth-card,
+    .profile-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 20px 16px !important;
+    }
+    
+    .auth-logo {
+        width: 60px !important;
+        height: 60px !important;
+    }
+    
+    .auth-title {
+        font-size: 1.2rem !important;
+    }
+    
+    .auth-subtitle {
+        font-size: 0.75rem !important;
+    }
+    
+    .form-group label {
+        font-size: 0.75rem !important;
+    }
+    
+    .form-input,
+    .auth-input {
+        padding: 14px 16px !important;
+        font-size: 16px !important; /* Prevents iOS zoom */
+        min-height: var(--mobile-touch-min) !important;
+    }
+    
+    .auth-btn,
+    .form-submit-btn {
+        padding: 14px 20px !important;
+        font-size: 0.9rem !important;
+        min-height: 50px !important;
+    }
+    
+    .discord-btn {
+        padding: 14px 20px !important;
+        font-size: 0.85rem !important;
+    }
+    
+    .auth-footer {
+        font-size: 0.75rem !important;
+    }
+    
+    /* Profile page */
+    .profile-header {
+        flex-direction: column !important;
+        gap: 16px !important;
+        text-align: center !important;
+    }
+    
+    .profile-avatar-large {
+        width: 80px !important;
+        height: 80px !important;
+    }
+    
+    .profile-username {
+        font-size: 1.3rem !important;
+    }
+    
+    .profile-stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+    }
+    
+    .profile-stat-card {
+        padding: 12px !important;
+    }
+    
+    .profile-stat-value {
+        font-size: 1.2rem !important;
+    }
+    
+    .profile-stat-label {
+        font-size: 0.65rem !important;
+    }
+}
+
+/* ============================================================================
+ * MODALS & OVERLAYS - Mobile Layout
+ * ============================================================================ */
+@media (max-width: 480px) {
+    .modal,
+    .overlay,
+    .popup {
+        padding: var(--mobile-padding) !important;
+    }
+    
+    .modal-content,
+    .popup-content {
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: calc(100vh - 100px) !important;
+        border-radius: 16px !important;
+    }
+    
+    .modal-close-btn,
+    .popup-close {
+        width: 40px !important;
+        height: 40px !important;
+        min-height: var(--mobile-touch-min) !important;
+    }
+    
+    /* Comments modal */
+    .comments-modal-content {
+        width: 100% !important;
+        height: 100% !important;
+        max-height: none !important;
+        border-radius: 0 !important;
+    }
+    
+    .comments-list {
+        padding: 12px !important;
+    }
+    
+    .comment-input-area {
+        padding: 12px !important;
+        padding-bottom: calc(var(--mobile-safe-bottom) + 12px) !important;
+    }
+    
+    .comment-input {
+        padding: 12px !important;
+        font-size: 16px !important;
+    }
+}
+
+/* ============================================================================
+ * UTILITY CLASSES FOR MOBILE
+ * ============================================================================ */
+@media (max-width: 480px) {
+    /* Hide on mobile */
+    .hide-mobile {
+        display: none !important;
+    }
+    
+    /* Show only on mobile */
+    .show-mobile {
+        display: block !important;
+    }
+    
+    .show-mobile-flex {
+        display: flex !important;
+    }
+    
+    /* Touch-friendly padding */
+    .touch-padding {
+        padding: 12px !important;
+    }
+    
+    /* Full width on mobile */
+    .full-mobile {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    /* Stack on mobile */
+    .stack-mobile {
+        flex-direction: column !important;
+    }
+    
+    /* Center on mobile */
+    .center-mobile {
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
+    }
+}
+
+/* ============================================================================
+ * ACCESSIBILITY & PERFORMANCE
+ * ============================================================================ */
+@media (max-width: 480px) {
+    /* Reduce animations on mobile for performance */
+    @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+    
+    /* Better focus indicators for touch */
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible,
+    select:focus-visible {
+        outline: 2px solid #00d4ff !important;
+        outline-offset: 2px !important;
+    }
+    
+    /* Prevent text size adjustment */
+    body {
+        -webkit-text-size-adjust: 100%;
+        text-size-adjust: 100%;
+    }
+}

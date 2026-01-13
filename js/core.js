@@ -284,4 +284,101 @@ window.CoreUtils = {
     API_CONFIG
 };
 
+// ========================================
+// MOBILE NAVIGATION HANDLER
+// ========================================
+
+/**
+ * Initialize mobile bottom navigation
+ */
+function initMobileNav() {
+    const mobileNav = document.getElementById('mobile-bottom-nav');
+    if (!mobileNav) return;
+    
+    const navItems = mobileNav.querySelectorAll('.mobile-nav-item');
+    
+    // Update active state based on current route
+    function updateActiveNav() {
+        const currentPath = window.location.pathname;
+        navItems.forEach(item => {
+            const href = item.getAttribute('href');
+            // Check if current path matches or starts with the href
+            const isActive = currentPath === href || 
+                (href !== '/' && currentPath.startsWith(href));
+            item.classList.toggle('active', isActive);
+        });
+    }
+    
+    // Handle nav item clicks (prevent default and use router)
+    navItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const href = item.getAttribute('href');
+            if (window.router) {
+                window.router.navigate(href);
+            } else {
+                // Fallback if router not available
+                window.location.href = href;
+            }
+            updateActiveNav();
+        });
+    });
+    
+    // Update on route changes
+    window.addEventListener('popstate', updateActiveNav);
+    
+    // Initial update
+    updateActiveNav();
+    
+    // Also update when router navigates
+    const originalNavigate = window.router?.navigate?.bind(window.router);
+    if (originalNavigate) {
+        window.router.navigate = function(...args) {
+            originalNavigate(...args);
+            setTimeout(updateActiveNav, 10);
+        };
+    }
+    
+    // Hide mobile nav on home/auth pages
+    function updateMobileNavVisibility() {
+        const path = window.location.pathname;
+        const isHomeOrAuth = path === '/' || path === '/login' || path === '/signup' || path === '/profile';
+        mobileNav.style.display = isHomeOrAuth ? 'none' : '';
+    }
+    
+    updateMobileNavVisibility();
+    window.addEventListener('popstate', updateMobileNavVisibility);
+}
+
+/**
+ * Initialize mobile rankings bottom sheet behavior
+ */
+function initMobileRankingsSheet() {
+    const rightColumn = document.querySelector('.rankings-right-column');
+    if (!rightColumn) return;
+    
+    // Add close button for mobile sheet
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'mobile-sheet-close';
+    closeBtn.innerHTML = '<i class="fas fa-times"></i> Close';
+    closeBtn.style.cssText = 'display:none; width:100%; padding:12px; margin-top:12px; background:rgba(255,0,51,0.2); border:1px solid rgba(255,0,51,0.5); color:#ff3366; border-radius:8px; cursor:pointer; font-family:inherit;';
+    rightColumn.appendChild(closeBtn);
+    
+    closeBtn.addEventListener('click', () => {
+        rightColumn.classList.remove('mobile-visible');
+    });
+    
+    // Show close button only on mobile when sheet is visible
+    const mediaQuery = window.matchMedia('(max-width: 480px)');
+    mediaQuery.addEventListener('change', (e) => {
+        closeBtn.style.display = e.matches && rightColumn.classList.contains('mobile-visible') ? 'block' : 'none';
+    });
+}
+
+// Initialize mobile features when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    initMobileNav();
+    initMobileRankingsSheet();
+});
+
 console.log('[Core] Utilities loaded');

@@ -1034,6 +1034,15 @@ class RankingsManager {
         // Comment count
         if (this.dom.detailCommentCount) this.dom.detailCommentCount.textContent = item.commentCount || 0;
         
+        // Show mobile bottom sheet on small screens
+        const rightColumn = document.querySelector('.rankings-right-column');
+        if (rightColumn && window.matchMedia('(max-width: 480px)').matches) {
+            rightColumn.classList.add('mobile-visible');
+            // Show close button
+            const closeBtn = rightColumn.querySelector('.mobile-sheet-close');
+            if (closeBtn) closeBtn.style.display = 'block';
+        }
+        
         // Tournament History (optional fields - graceful degradation)
         this.updateTournamentHistory(animal, item);
     }
