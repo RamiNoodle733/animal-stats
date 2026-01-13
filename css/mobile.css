@@ -309,21 +309,26 @@
  * ============================================================================ */
 @media (max-width: 480px) {
     #stats-view {
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
+        padding-bottom: 0 !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
+        display: flex !important;
+        flex-direction: column !important;
+        height: calc(100vh - var(--mobile-header-height) - var(--mobile-nav-height) - var(--mobile-safe-bottom)) !important;
+        max-height: calc(100vh - var(--mobile-header-height) - var(--mobile-nav-height) - var(--mobile-safe-bottom)) !important;
     }
     
     /* KEEP the grid layout - just adjust column sizes for mobile */
     .character-display-area {
         display: grid !important;
-        grid-template-columns: 90px 1fr 90px !important;
+        grid-template-columns: 80px 1fr 80px !important;
         gap: 4px !important;
         padding: 4px !important;
         overflow: hidden !important;
         align-items: start !important;
-        min-height: auto !important;
-        max-height: calc(100vh - 200px) !important;
+        flex: 1 !important;
+        min-height: 0 !important;
+        max-height: none !important;
     }
     
     /* Left stats panel */
@@ -331,11 +336,16 @@
         grid-column: 1 !important;
         grid-row: 1 !important;
         width: 100% !important;
-        max-width: 90px !important;
+        max-width: 80px !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
-        max-height: calc(100vh - 280px) !important;
-        padding: 4px 2px !important;
+        max-height: 100% !important;
+        padding: 2px !important;
+        scrollbar-width: none !important;
+    }
+    
+    .stats-panel-left::-webkit-scrollbar {
+        display: none !important;
     }
     
     /* Center showcase */
@@ -343,11 +353,12 @@
         grid-column: 2 !important;
         grid-row: 1 !important;
         width: 100% !important;
-        padding: 8px 4px !important;
+        padding: 4px 2px !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         overflow: hidden !important;
+        justify-content: flex-start !important;
     }
     
     /* Right stats panel */
@@ -355,11 +366,16 @@
         grid-column: 3 !important;
         grid-row: 1 !important;
         width: 100% !important;
-        max-width: 90px !important;
+        max-width: 80px !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
-        max-height: calc(100vh - 280px) !important;
-        padding: 4px 2px !important;
+        max-height: 100% !important;
+        padding: 2px !important;
+        scrollbar-width: none !important;
+    }
+    
+    .stats-panel-right::-webkit-scrollbar {
+        display: none !important;
     }
     
     /* Generic stats panel styling */
@@ -370,42 +386,51 @@
     
     /* Character name smaller */
     .character-name-display {
-        font-size: 0.9rem !important;
+        font-size: 0.75rem !important;
         text-align: center !important;
-        line-height: 1.2 !important;
+        line-height: 1.1 !important;
+        margin-bottom: 2px !important;
     }
     
     .character-scientific-name {
-        font-size: 0.55rem !important;
+        font-size: 0.5rem !important;
+        display: none !important; /* Hide on mobile - too cramped */
     }
     
     /* Animal image - centered and sized appropriately */
     .character-model-container {
         width: 100% !important;
-        max-width: 140px !important;
-        margin: 6px auto !important;
+        max-width: 120px !important;
+        margin: 4px auto !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
+        min-height: 60px !important;
     }
     
     .character-model {
-        max-height: 100px !important;
+        max-height: 80px !important;
         max-width: 100% !important;
         object-fit: contain !important;
     }
     
+    /* Silhouette - only show when JS sets it, hide when animal loaded */
     .character-silhouette {
-        display: flex !important;
-        max-width: 100px !important;
+        /* Don't override JS display property */
+        max-width: 60px !important;
+        max-height: 60px !important;
+    }
+    
+    .character-silhouette i {
+        font-size: 1.5rem !important;
     }
     
     /* Battle record badge - very compact */
     .battle-record-badge {
         flex-direction: row !important;
-        padding: 4px 6px !important;
-        gap: 4px !important;
-        margin-top: 6px !important;
+        padding: 3px 4px !important;
+        gap: 2px !important;
+        margin-top: 4px !important;
     }
     
     .record-item {
@@ -414,54 +439,45 @@
     }
     
     .record-value {
-        font-size: 0.7rem !important;
+        font-size: 0.6rem !important;
     }
     
     .record-label {
-        font-size: 0.45rem !important;
+        font-size: 0.4rem !important;
     }
     
     .record-divider {
-        height: 16px !important;
-        margin: 0 2px !important;
+        height: 12px !important;
+        margin: 0 1px !important;
     }
     
-    /* Quick info bar - very compact */
+    .record-item i {
+        font-size: 0.5rem !important;
+    }
+    
+    /* Quick info bar - hidden on mobile, too cramped */
     .quick-info-bar {
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-        gap: 4px !important;
-        padding: 4px !important;
-        margin-top: 4px !important;
-    }
-    
-    .quick-info-item {
-        padding: 3px 6px !important;
-        font-size: 0.55rem !important;
-    }
-    
-    .quick-info-divider {
         display: none !important;
     }
     
     /* Stat rows - ULTRA compact for narrow columns */
     .stat-group-container {
-        margin-bottom: 4px !important;
+        margin-bottom: 2px !important;
     }
     
     .stat-group-title {
-        font-size: 0.5rem !important;
-        padding: 2px 4px !important;
-        margin-bottom: 2px !important;
+        font-size: 0.45rem !important;
+        padding: 1px 2px !important;
+        margin-bottom: 1px !important;
     }
     
     .stat-row {
         display: flex !important;
         flex-direction: column !important;
         align-items: stretch !important;
-        padding: 3px 2px !important;
-        gap: 1px !important;
-        margin-bottom: 3px !important;
+        padding: 2px 1px !important;
+        gap: 0px !important;
+        margin-bottom: 2px !important;
     }
     
     /* Hide stat icon on mobile - too cramped */
@@ -617,11 +633,17 @@
         display: none !important;
     }
     
-    /* Character grid */
+    /* Character grid - fixed height above bottom nav */
     .character-grid-container {
-        min-height: 140px !important;
-        max-height: 180px !important;
-        padding: 8px !important;
+        min-height: 120px !important;
+        max-height: 140px !important;
+        height: 140px !important;
+        padding: 6px !important;
+        flex-shrink: 0 !important;
+        overflow-y: auto !important;
+        margin-bottom: 0 !important;
+        position: relative !important;
+        z-index: 10 !important;
     }
     
     .grid-controls {
