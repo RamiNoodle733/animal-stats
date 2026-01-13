@@ -305,194 +305,245 @@
 }
 
 /* ============================================================================
- * STATS PAGE - Mobile Layout  
+ * STATS PAGE - Mobile Layout (KEEP GRID - Stats Left | Animal Center | Stats Right)
  * ============================================================================ */
 @media (max-width: 480px) {
     #stats-view {
         padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
         overflow-y: auto !important;
+        overflow-x: hidden !important;
     }
     
-    /* Stack character display area vertically - MUST override grid */
+    /* KEEP the grid layout - just adjust column sizes for mobile */
     .character-display-area {
-        display: flex !important;
-        flex-direction: column !important;
-        grid-template-columns: unset !important;
-        padding: 8px !important;
-        gap: 12px !important;
-        overflow: visible !important;
+        display: grid !important;
+        grid-template-columns: 90px 1fr 90px !important;
+        gap: 4px !important;
+        padding: 4px !important;
+        overflow: hidden !important;
+        align-items: start !important;
+        min-height: auto !important;
+        max-height: calc(100vh - 200px) !important;
     }
     
-    /* Character showcase - centered at top */
-    .character-showcase {
-        order: 1 !important;
+    /* Left stats panel */
+    .stats-panel-left {
+        grid-column: 1 !important;
+        grid-row: 1 !important;
         width: 100% !important;
-        max-width: 100% !important;
-        padding: 16px 12px !important;
+        max-width: 90px !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        max-height: calc(100vh - 280px) !important;
+        padding: 4px 2px !important;
+    }
+    
+    /* Center showcase */
+    .character-showcase {
+        grid-column: 2 !important;
+        grid-row: 1 !important;
+        width: 100% !important;
+        padding: 8px 4px !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
+        overflow: hidden !important;
     }
     
+    /* Right stats panel */
+    .stats-panel-right {
+        grid-column: 3 !important;
+        grid-row: 1 !important;
+        width: 100% !important;
+        max-width: 90px !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        max-height: calc(100vh - 280px) !important;
+        padding: 4px 2px !important;
+    }
+    
+    /* Generic stats panel styling */
+    .stats-panel {
+        padding: 0 !important;
+        background: transparent !important;
+    }
+    
+    /* Character name smaller */
     .character-name-display {
-        font-size: 1.3rem !important;
+        font-size: 0.9rem !important;
+        text-align: center !important;
+        line-height: 1.2 !important;
     }
     
     .character-scientific-name {
-        font-size: 0.7rem !important;
+        font-size: 0.55rem !important;
     }
     
+    /* Animal image - centered and sized appropriately */
     .character-model-container {
-        max-width: 180px !important;
-        margin: 12px auto !important;
-        display: block !important;
+        width: 100% !important;
+        max-width: 140px !important;
+        margin: 6px auto !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
     }
     
     .character-model {
-        max-height: 160px !important;
-        display: block !important;
+        max-height: 100px !important;
+        max-width: 100% !important;
+        object-fit: contain !important;
     }
     
     .character-silhouette {
         display: flex !important;
+        max-width: 100px !important;
     }
     
-    /* Battle record badge - horizontal on mobile */
+    /* Battle record badge - very compact */
     .battle-record-badge {
         flex-direction: row !important;
-        padding: 8px 12px !important;
-        gap: 8px !important;
+        padding: 4px 6px !important;
+        gap: 4px !important;
+        margin-top: 6px !important;
     }
     
     .record-item {
         flex-direction: column !important;
-        padding: 4px 8px !important;
+        padding: 2px 4px !important;
     }
     
     .record-value {
-        font-size: 0.9rem !important;
+        font-size: 0.7rem !important;
     }
     
     .record-label {
-        font-size: 0.55rem !important;
+        font-size: 0.45rem !important;
     }
     
     .record-divider {
-        height: 24px !important;
+        height: 16px !important;
+        margin: 0 2px !important;
     }
     
-    /* Quick info bar */
+    /* Quick info bar - very compact */
     .quick-info-bar {
         flex-wrap: wrap !important;
         justify-content: center !important;
-        gap: 8px !important;
-        padding: 8px !important;
+        gap: 4px !important;
+        padding: 4px !important;
+        margin-top: 4px !important;
     }
     
     .quick-info-item {
-        padding: 6px 10px !important;
-        font-size: 0.7rem !important;
+        padding: 3px 6px !important;
+        font-size: 0.55rem !important;
     }
     
     .quick-info-divider {
         display: none !important;
     }
     
-    /* Stats panels - horizontal scroll container */
-    .stats-panel {
-        order: 2 !important;
-        width: 100% !important;
-        padding: 0 !important;
-    }
-    
-    .stats-panel-left {
-        order: 2 !important;
-    }
-    
-    .stats-panel-right {
-        order: 3 !important;
-    }
-    
-    /* Make stat rows more compact */
+    /* Stat rows - ULTRA compact for narrow columns */
     .stat-group-container {
-        margin-bottom: 10px !important;
+        margin-bottom: 4px !important;
+    }
+    
+    .stat-group-title {
+        font-size: 0.5rem !important;
+        padding: 2px 4px !important;
+        margin-bottom: 2px !important;
     }
     
     .stat-row {
-        padding: 6px 8px !important;
-        gap: 6px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        padding: 3px 2px !important;
+        gap: 1px !important;
+        margin-bottom: 3px !important;
     }
     
+    /* Hide stat icon on mobile - too cramped */
     .stat-icon {
-        width: 24px !important;
-        font-size: 0.85rem !important;
+        display: none !important;
     }
     
+    /* Stat name as label on top */
     .stat-name {
-        font-size: 0.7rem !important;
-        min-width: 30px !important;
+        font-size: 0.5rem !important;
+        text-align: center !important;
+        min-width: unset !important;
+        width: 100% !important;
+        margin-bottom: 1px !important;
+        opacity: 0.8 !important;
     }
     
+    /* Stat bar full width */
     .stat-bar-wrapper {
-        flex: 1 !important;
-        min-width: 80px !important;
+        width: 100% !important;
+        min-width: unset !important;
     }
     
     .stat-bar {
-        height: 8px !important;
+        height: 6px !important;
+        border-radius: 3px !important;
     }
     
+    /* Stat value below bar */
     .stat-value {
-        font-size: 0.8rem !important;
-        min-width: 28px !important;
+        font-size: 0.6rem !important;
+        text-align: center !important;
+        min-width: unset !important;
+        margin-top: 1px !important;
     }
     
-    /* Substats */
+    /* Substats hidden on mobile - too cramped */
     .substat-container {
-        padding: 4px 8px !important;
-        gap: 8px !important;
+        display: none !important;
     }
     
-    .substat-row {
-        font-size: 0.65rem !important;
-    }
-    
-    /* Abilities and Traits cards */
+    /* Abilities and Traits - very compact */
     .abilities-card,
     .traits-card {
-        margin-top: 12px !important;
-        padding: 10px !important;
+        margin-top: 6px !important;
+        padding: 4px !important;
     }
     
     .card-header {
-        font-size: 0.75rem !important;
-        padding: 6px 10px !important;
+        font-size: 0.55rem !important;
+        padding: 3px 6px !important;
     }
     
     .abilities-list,
     .traits-list {
-        gap: 6px !important;
-        padding: 8px !important;
+        gap: 3px !important;
+        padding: 4px !important;
     }
     
     .ability-item,
     .trait-item {
-        padding: 6px 10px !important;
-        font-size: 0.7rem !important;
+        padding: 3px 6px !important;
+        font-size: 0.5rem !important;
     }
     
-    /* Details panel - only style when expanded (don't force visibility) */
+    /* Details panel - bottom sheet style when expanded */
     .details-panel {
-        /* Let legacy.css handle the show/hide via .expanded class */
-        /* Only override dimensions when it IS expanded */
+        /* Base state handled by legacy.css */
     }
     
     .details-panel.expanded {
-        max-height: 80vh !important;
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 16px) !important;
+        position: fixed !important;
+        bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
+        left: 0 !important;
+        right: 0 !important;
+        max-height: 70vh !important;
+        border-radius: 16px 16px 0 0 !important;
+        z-index: 8000 !important;
+        padding-bottom: 16px !important;
     }
     
-    /* Close button should only show when panel is expanded */
+    /* Close button only when expanded */
     .details-close-btn {
         display: none !important;
     }
@@ -635,117 +686,139 @@
 }
 
 /* ============================================================================
- * COMPARE PAGE - Mobile Layout
+ * COMPARE PAGE - Mobile Layout (KEEP side-by-side like desktop)
  * ============================================================================ */
 @media (max-width: 480px) {
     #compare-view {
         padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
     }
     
+    /* Keep side-by-side layout like desktop */
     .fight-screen,
     .compare__arena {
-        flex-direction: column !important;
-        padding: 12px !important;
-        gap: 16px !important;
+        display: grid !important;
+        grid-template-columns: 1fr auto 1fr !important;
+        flex-direction: unset !important;
+        padding: 8px 4px !important;
+        gap: 4px !important;
+        align-items: start !important;
     }
     
-    /* Fighter sections - stack vertically */
+    /* Fighter sections - side by side */
     .fighter-section,
     .compare__fighter {
         width: 100% !important;
         max-width: 100% !important;
-        flex-direction: column !important;
+        padding: 4px !important;
     }
     
     .fighter-left,
     .compare__fighter--left {
-        order: 1 !important;
+        grid-column: 1 !important;
     }
     
     .fight-center,
     .compare__center {
-        order: 2 !important;
-        width: 100% !important;
+        grid-column: 2 !important;
+        width: auto !important;
+        min-width: 60px !important;
+        padding: 4px !important;
     }
     
     .fighter-right,
     .compare__fighter--right {
-        order: 3 !important;
+        grid-column: 3 !important;
     }
     
-    /* Fighter display */
+    /* Fighter display - compact */
     .fighter-display,
     .fighter__display {
-        max-width: 200px !important;
+        max-width: 100% !important;
         margin: 0 auto !important;
     }
     
     .fighter-image,
     .fighter__image {
-        max-height: 140px !important;
+        max-height: 80px !important;
+        max-width: 100% !important;
+        object-fit: contain !important;
     }
     
     .fighter-placeholder,
     .fighter__placeholder {
-        padding: 30px !important;
+        padding: 16px 8px !important;
+        min-height: 80px !important;
     }
     
     .fighter-placeholder i,
     .fighter__placeholder i {
-        font-size: 2rem !important;
+        font-size: 1.5rem !important;
     }
     
     .fighter-placeholder p,
     .fighter__placeholder p {
-        font-size: 0.8rem !important;
+        font-size: 0.6rem !important;
     }
     
     .fighter-name,
     .fighter__name {
-        font-size: 1rem !important;
-        padding: 8px !important;
+        font-size: 0.7rem !important;
+        padding: 4px !important;
+        text-align: center !important;
     }
     
-    /* Compare stats panel */
+    /* Compare stats panel - very compact */
     .compare-stats-panel {
-        padding: 10px !important;
-        margin-top: 10px !important;
+        padding: 4px !important;
+        margin-top: 6px !important;
     }
     
     .compare-stat-row {
-        padding: 8px 10px !important;
-        gap: 8px !important;
+        padding: 3px 4px !important;
+        gap: 4px !important;
     }
     
     .compare-stat-row i {
-        font-size: 0.85rem !important;
+        font-size: 0.6rem !important;
+        display: none !important; /* Hide icons on mobile */
     }
     
     .compare-stat-label {
-        font-size: 0.65rem !important;
+        font-size: 0.5rem !important;
     }
     
     .compare-stat-value {
-        font-size: 0.85rem !important;
+        font-size: 0.65rem !important;
     }
     
-    /* Radar chart */
+    /* VS badge in center */
+    .vs-badge,
+    .compare__vs {
+        font-size: 0.8rem !important;
+        padding: 6px !important;
+        width: 36px !important;
+        height: 36px !important;
+    }
+    
+    /* Radar chart - smaller */
     .radar-chart-container,
     .compare__radar {
-        max-width: 250px !important;
-        max-height: 250px !important;
-        margin: 16px auto !important;
+        max-width: 120px !important;
+        max-height: 120px !important;
+        margin: 8px auto !important;
     }
     
-    /* Fight button - sticky at bottom */
+    /* Fight button */
     .fight-btn,
     .compare__fight-btn {
         width: 100% !important;
-        max-width: 280px !important;
-        margin: 16px auto !important;
-        padding: 16px 24px !important;
-        font-size: 1rem !important;
-        min-height: 56px !important;
+        max-width: 200px !important;
+        margin: 10px auto !important;
+        padding: 12px 16px !important;
+        font-size: 0.85rem !important;
+        min-height: 44px !important;
     }
     
     /* Compare stat bars */
