@@ -127,6 +127,14 @@
 }
 
 @media (max-width: 480px) {
+    /* Hide bottom nav on home and auth pages */
+    html.is-home .mobile-bottom-nav,
+    html.is-login .mobile-bottom-nav,
+    html.is-signup .mobile-bottom-nav,
+    html.is-profile .mobile-bottom-nav {
+        display: none !important;
+    }
+    
     .mobile-bottom-nav {
         display: flex !important;
         position: fixed;
@@ -302,13 +310,17 @@
 @media (max-width: 480px) {
     #stats-view {
         padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
+        overflow-y: auto !important;
     }
     
-    /* Stack character display area vertically */
+    /* Stack character display area vertically - MUST override grid */
     .character-display-area {
+        display: flex !important;
         flex-direction: column !important;
+        grid-template-columns: unset !important;
         padding: 8px !important;
         gap: 12px !important;
+        overflow: visible !important;
     }
     
     /* Character showcase - centered at top */
@@ -317,6 +329,9 @@
         width: 100% !important;
         max-width: 100% !important;
         padding: 16px 12px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
     }
     
     .character-name-display {
@@ -330,10 +345,16 @@
     .character-model-container {
         max-width: 180px !important;
         margin: 12px auto !important;
+        display: block !important;
     }
     
     .character-model {
         max-height: 160px !important;
+        display: block !important;
+    }
+    
+    .character-silhouette {
+        display: flex !important;
     }
     
     /* Battle record badge - horizontal on mobile */
@@ -460,21 +481,25 @@
         font-size: 0.7rem !important;
     }
     
-    /* Details panel - full screen modal on mobile */
+    /* Details panel - only style when expanded (don't force visibility) */
     .details-panel {
-        position: fixed !important;
-        inset: 0 !important;
-        z-index: 8000 !important;
-        padding: 16px !important;
-        padding-top: calc(var(--mobile-header-height) + 16px) !important;
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 16px) !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
+        /* Let legacy.css handle the show/hide via .expanded class */
+        /* Only override dimensions when it IS expanded */
     }
     
+    .details-panel.expanded {
+        max-height: 80vh !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 16px) !important;
+    }
+    
+    /* Close button should only show when panel is expanded */
     .details-close-btn {
-        display: block !important;
-        margin-bottom: 16px !important;
+        display: none !important;
+    }
+    
+    .details-panel.expanded .details-close-btn {
+        display: flex !important;
+        margin-bottom: 12px !important;
     }
     
     .details-close-btn button {
