@@ -316,12 +316,12 @@
         overflow-x: hidden !important;
     }
     
-    /* KEEP the grid layout - just adjust column sizes for mobile */
+    /* KEEP the grid layout - use percentage columns for better fit */
     .character-display-area {
         display: grid !important;
-        grid-template-columns: 85px 1fr 85px !important;
-        gap: 6px !important;
-        padding: 6px !important;
+        grid-template-columns: 22% 1fr 22% !important;
+        gap: 4px !important;
+        padding: 4px !important;
         overflow: visible !important;
         align-items: start !important;
         flex: 1 !important;
@@ -333,10 +333,10 @@
         grid-column: 1 !important;
         grid-row: 1 !important;
         width: 100% !important;
-        max-width: 85px !important;
+        max-width: 100% !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
-        padding: 4px 2px !important;
+        padding: 2px !important;
         scrollbar-width: none !important;
     }
     
@@ -349,12 +349,13 @@
         grid-column: 2 !important;
         grid-row: 1 !important;
         width: 100% !important;
-        padding: 8px 4px !important;
+        padding: 4px 2px !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         overflow: visible !important;
         justify-content: flex-start !important;
+        min-width: 0 !important; /* Allow shrinking */
     }
     
     /* Right stats panel */
@@ -362,10 +363,10 @@
         grid-column: 3 !important;
         grid-row: 1 !important;
         width: 100% !important;
-        max-width: 85px !important;
+        max-width: 100% !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
-        padding: 4px 2px !important;
+        padding: 2px !important;
         scrollbar-width: none !important;
     }
     
@@ -708,177 +709,13 @@
 }
 
 /* ============================================================================
- * COMPARE PAGE - Mobile Layout (KEEP side-by-side like desktop)
+ * COMPARE PAGE - Mobile Layout
+ * Let compare-page.css handle the layout - just add padding for bottom nav
  * ============================================================================ */
 @media (max-width: 480px) {
-    /* Only style when active */
+    /* Only add bottom padding for mobile nav - let compare-page.css handle layout */
     #compare-view.active-view {
         padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-    }
-    
-    /* Keep side-by-side layout like desktop */
-    .fight-screen,
-    .compare__arena {
-        display: grid !important;
-        grid-template-columns: 1fr 50px 1fr !important;
-        padding: 8px !important;
-        gap: 4px !important;
-        align-items: start !important;
-        max-width: 100% !important;
-        overflow: hidden !important;
-    }
-    
-    /* Fighter sections - side by side */
-    .fighter-section,
-    .compare__fighter {
-        width: 100% !important;
-        max-width: 100% !important;
-        padding: 4px !important;
-        overflow: hidden !important;
-    }
-    
-    .fighter-left,
-    .compare__fighter--left {
-        grid-column: 1 !important;
-    }
-    
-    .fight-center,
-    .compare__center {
-        grid-column: 2 !important;
-        width: 50px !important;
-        max-width: 50px !important;
-        padding: 4px 2px !important;
-    }
-    
-    .fighter-right,
-    .compare__fighter--right {
-        grid-column: 3 !important;
-    }
-    
-    /* Fighter display - compact */
-    .fighter-display,
-    .fighter__display {
-        max-width: 100% !important;
-        margin: 0 auto !important;
-    }
-    
-    .fighter-image,
-    .fighter__image {
-        max-height: 70px !important;
-        max-width: 100% !important;
-        object-fit: contain !important;
-    }
-    
-    .fighter-placeholder,
-    .fighter__placeholder {
-        padding: 12px 4px !important;
-        min-height: 70px !important;
-    }
-    
-    .fighter-placeholder i,
-    .fighter__placeholder i {
-        font-size: 1.2rem !important;
-    }
-    
-    .fighter-placeholder p,
-    .fighter__placeholder p {
-        font-size: 0.6rem !important;
-    }
-    
-    .fighter-name,
-    .fighter__name {
-        font-size: 0.7rem !important;
-        padding: 4px !important;
-        text-align: center !important;
-    }
-    
-    /* Compare stats panel - very compact */
-    .compare-stats-panel {
-        padding: 4px !important;
-        margin-top: 6px !important;
-    }
-    
-    .compare-stat-row {
-        padding: 3px 4px !important;
-        gap: 4px !important;
-    }
-    
-    .compare-stat-row i {
-        font-size: 0.6rem !important;
-        display: none !important; /* Hide icons on mobile */
-    }
-    
-    .compare-stat-label {
-        font-size: 0.5rem !important;
-    }
-    
-    .compare-stat-value {
-        font-size: 0.65rem !important;
-    }
-    
-    /* VS badge in center */
-    .vs-badge,
-    .compare__vs {
-        font-size: 0.8rem !important;
-        padding: 6px !important;
-        width: 36px !important;
-        height: 36px !important;
-    }
-    
-    /* Radar chart - smaller */
-    .radar-chart-container,
-    .compare__radar {
-        max-width: 120px !important;
-        max-height: 120px !important;
-        margin: 8px auto !important;
-    }
-    
-    /* Fight button */
-    .fight-btn,
-    .compare__fight-btn {
-        width: 100% !important;
-        max-width: 200px !important;
-        margin: 10px auto !important;
-        padding: 12px 16px !important;
-        font-size: 0.85rem !important;
-        min-height: 44px !important;
-    }
-    
-    /* Compare stat bars */
-    .compare-bars-container {
-        padding: 12px 8px !important;
-        margin: 16px 0 !important;
-    }
-    
-    .compare-bar-row {
-        flex-direction: column !important;
-        gap: 4px !important;
-        padding: 8px 0 !important;
-    }
-    
-    .compare-bar-stat-name {
-        width: 100% !important;
-        text-align: center !important;
-        margin-bottom: 4px !important;
-        font-size: 0.7rem !important;
-    }
-    
-    .compare-bar-left,
-    .compare-bar-right {
-        width: 100% !important;
-        flex-direction: row !important;
-        gap: 8px !important;
-    }
-    
-    .compare-bar-value {
-        min-width: 35px !important;
-        font-size: 0.8rem !important;
-    }
-    
-    .compare-bar-track {
-        height: 10px !important;
     }
 }
 
