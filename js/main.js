@@ -1109,15 +1109,18 @@ class AnimalStatsApp {
         
         // Continuous scroll for arrow hold
         let scrollInterval = null;
+        const isMobile = window.innerWidth <= 480;
         const startContinuousScroll = (direction) => {
             if (scrollInterval) return;
             // First immediate scroll
             const amount = getScrollAmount() * direction;
             grid.scrollBy({ left: amount, behavior: 'smooth' });
-            // Then continuous scrolling at intervals
+            // Then continuous scrolling at intervals - faster on mobile
+            const scrollMultiplier = isMobile ? 2 : 0.5;
+            const intervalSpeed = isMobile ? 50 : 100;
             scrollInterval = setInterval(() => {
-                grid.scrollBy({ left: getScrollAmount() * direction * 0.5, behavior: 'auto' });
-            }, 100);
+                grid.scrollBy({ left: getScrollAmount() * direction * scrollMultiplier, behavior: 'auto' });
+            }, intervalSpeed);
         };
         const stopContinuousScroll = () => {
             if (scrollInterval) {
