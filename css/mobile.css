@@ -625,10 +625,10 @@
         left: 0 !important;
         right: 0 !important;
         z-index: 7500 !important;
-        min-height: 110px !important;
-        max-height: 110px !important;
-        height: 110px !important;
-        padding: 4px 8px !important;
+        min-height: 100px !important;
+        max-height: 100px !important;
+        height: 100px !important;
+        padding: 2px 4px !important;
         margin-bottom: 0 !important;
         overflow: hidden !important;
         background: linear-gradient(180deg, rgba(5, 10, 20, 0.98) 0%, rgba(0, 8, 18, 1) 100%) !important;
@@ -647,7 +647,7 @@
     /* Bottom info bar - fixed position ABOVE character grid */
     .bottom-info-bar {
         position: fixed !important;
-        bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 110px) !important;
+        bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 100px) !important;
         left: 0 !important;
         right: 0 !important;
         z-index: 8000 !important;
@@ -657,8 +657,8 @@
         justify-content: center !important;
         background: linear-gradient(180deg, rgba(5, 10, 20, 0.98), rgba(10, 15, 25, 0.99)) !important;
         border-top: 1px solid rgba(0, 212, 255, 0.3) !important;
-        max-height: 40px !important;
-        min-height: 40px !important;
+        max-height: 36px !important;
+        min-height: 36px !important;
     }
     
     /* When grid is hidden, move bottom bar down */
@@ -686,12 +686,12 @@
     
     /* Adjust stats view to account for fixed bottom elements */
     #stats-view.active-view {
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 40px + 110px + 16px) !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 36px + 100px + 16px) !important;
     }
     
     /* When menu is hidden, less padding needed */
     #stats-view.active-view:has(.character-grid-container.hidden) {
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 40px + 16px) !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 36px + 16px) !important;
     }
     
     /* Hide grid controls (search/filter) on mobile - too cramped */
@@ -708,24 +708,40 @@
         padding: 0 !important;
     }
     
-    /* Arrow buttons - larger touch targets, visible */
+    /* Arrow buttons - square touch targets */
     .grid-arrow {
-        width: 36px !important;
-        min-width: 36px !important;
-        height: 70px !important;
-        font-size: 1.2rem !important;
+        width: 40px !important;
+        min-width: 40px !important;
+        height: 40px !important;
+        min-height: 40px !important;
+        max-height: 40px !important;
+        font-size: 1rem !important;
         flex-shrink: 0 !important;
         z-index: 10 !important;
         background: rgba(0, 20, 40, 0.9) !important;
         border: 1px solid rgba(0, 212, 255, 0.3) !important;
+        border-radius: 8px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    /* Grid wrapper - center vertically */
+    .grid-scroll-wrapper {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        height: 100% !important;
+        gap: 4px !important;
+        padding: 0 !important;
     }
     
     /* Grid items - show names properly */
     .character-grid {
-        gap: 6px !important;
-        padding: 4px 2px !important;
-        height: 100% !important;
-        max-height: 100% !important;
+        gap: 4px !important;
+        padding: 2px !important;
+        height: 90px !important;
+        max-height: 90px !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
         flex-wrap: nowrap !important;
@@ -735,25 +751,25 @@
     }
     
     .character-card {
-        width: 65px !important;
-        height: 80px !important;
+        width: 58px !important;
+        height: 75px !important;
         flex-shrink: 0 !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: flex-start !important;
-        padding: 4px !important;
+        padding: 2px !important;
     }
     
     .character-card img {
-        width: 50px !important;
-        height: 50px !important;
+        width: 46px !important;
+        height: 46px !important;
         flex-shrink: 0 !important;
     }
     
     .card-name {
-        font-size: 0.5rem !important;
-        padding: 2px 2px !important;
+        font-size: 0.48rem !important;
+        padding: 1px 2px !important;
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
@@ -763,8 +779,8 @@
         max-width: 100% !important;
         width: 100% !important;
         text-align: center !important;
-        line-height: 1.2 !important;
-        margin-top: 2px !important;
+        line-height: 1.1 !important;
+        margin-top: 1px !important;
     }
     
     /* Dropdown panels */
@@ -1482,21 +1498,43 @@
         min-height: var(--mobile-touch-min) !important;
     }
     
-    /* Comments modal */
+    /* Comments modal - must be above everything */
+    .comments-modal {
+        z-index: 10000 !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+    }
+    
     .comments-modal-content {
         width: 100% !important;
         height: 100% !important;
-        max-height: none !important;
+        max-height: 100% !important;
         border-radius: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
     }
     
     .comments-list {
         padding: 12px !important;
+        flex: 1 !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        max-height: none !important;
+    }
+    
+    .comments-scroll-area {
+        flex: 1 !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
     }
     
     .comment-input-area {
         padding: 12px !important;
         padding-bottom: calc(var(--mobile-safe-bottom) + 12px) !important;
+        flex-shrink: 0 !important;
     }
     
     .comment-input {
