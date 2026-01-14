@@ -614,86 +614,139 @@
 
 /* ============================================================================
  * BOTTOM BAR & GRID - Mobile Layout
+ * Fixed positioning to avoid scroll issues and bottom nav overlap
  * ============================================================================ */
 @media (max-width: 480px) {
-    /* Bottom info bar */
+    /* Bottom info bar - fixed position above bottom nav */
     .bottom-info-bar {
-        padding: 8px var(--mobile-padding) !important;
-        gap: 6px !important;
-        flex-wrap: wrap !important;
+        position: fixed !important;
+        bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 8000 !important;
+        padding: 6px 8px !important;
+        gap: 4px !important;
+        flex-wrap: nowrap !important;
         justify-content: center !important;
+        background: linear-gradient(180deg, rgba(5, 10, 20, 0.98), rgba(10, 15, 25, 0.99)) !important;
+        border-top: 1px solid rgba(0, 212, 255, 0.3) !important;
+        max-height: 44px !important;
+        min-height: 44px !important;
     }
     
     .bottom-info-bar button {
-        padding: 10px 14px !important;
-        font-size: 0.7rem !important;
-        min-height: var(--mobile-touch-min) !important;
-        flex: 1 !important;
-        min-width: 90px !important;
+        padding: 8px 10px !important;
+        font-size: 0.6rem !important;
+        min-height: 32px !important;
+        flex: 0 1 auto !important;
+        min-width: auto !important;
+        white-space: nowrap !important;
+    }
+    
+    .bottom-info-bar button i {
+        margin-right: 4px !important;
     }
     
     .info-separator {
         display: none !important;
     }
     
-    /* Character grid - proper sizing */
+    /* Character grid container - fixed position above bottom bar */
     .character-grid-container {
-        min-height: 100px !important;
-        max-height: 160px !important;
-        padding: 8px !important;
-        flex-shrink: 0 !important;
-        overflow-y: auto !important;
+        position: fixed !important;
+        bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 44px) !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 7500 !important;
+        min-height: 130px !important;
+        max-height: 130px !important;
+        height: 130px !important;
+        padding: 6px 8px !important;
+        margin-bottom: 0 !important;
+        overflow-y: hidden !important;
         overflow-x: hidden !important;
-        margin-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
+        background: linear-gradient(180deg, rgba(5, 10, 20, 0.98) 0%, rgba(0, 8, 18, 1) 100%) !important;
+        border-top: 1px solid rgba(0, 212, 255, 0.2) !important;
+    }
+    
+    /* When menu is hidden */
+    .character-grid-container.hidden {
+        height: 0 !important;
+        min-height: 0 !important;
+        max-height: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+    }
+    
+    /* Adjust stats view to account for fixed bottom elements */
+    #stats-view.active-view {
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 44px + 130px + 16px) !important;
+    }
+    
+    /* When menu is hidden, less padding needed */
+    #stats-view.active-view:has(.character-grid-container.hidden) {
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 44px + 16px) !important;
     }
     
     .grid-controls {
-        flex-wrap: wrap !important;
-        gap: 6px !important;
-        margin-bottom: 8px !important;
-        padding: 0 4px !important;
+        flex-wrap: nowrap !important;
+        gap: 4px !important;
+        margin-bottom: 4px !important;
+        padding: 0 !important;
     }
     
     .search-box {
         flex: 1 !important;
-        min-width: 120px !important;
+        min-width: 80px !important;
         max-width: none !important;
-        padding: 10px 12px !important;
-        font-size: 0.8rem !important;
-        min-height: var(--mobile-touch-min) !important;
+        padding: 6px 8px !important;
+        font-size: 0.7rem !important;
+        min-height: 32px !important;
     }
     
     .dropdown-toggle-btn {
-        padding: 10px 12px !important;
-        font-size: 0.7rem !important;
-        min-height: var(--mobile-touch-min) !important;
+        padding: 6px 8px !important;
+        font-size: 0.6rem !important;
+        min-height: 32px !important;
     }
     
-    /* Grid items */
+    /* Grid items - smaller for mobile */
     .character-grid {
-        gap: 6px !important;
-        padding: 4px !important;
+        gap: 4px !important;
+        padding: 2px !important;
+        max-height: 80px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+        flex-wrap: nowrap !important;
     }
     
     .character-card {
-        width: 60px !important;
-        height: 60px !important;
+        width: 55px !important;
+        height: 55px !important;
+        flex-shrink: 0 !important;
     }
     
     .character-card img {
-        width: 50px !important;
-        height: 50px !important;
+        width: 45px !important;
+        height: 45px !important;
     }
     
     .card-name {
-        font-size: 0.5rem !important;
-        padding: 2px 4px !important;
+        font-size: 0.45rem !important;
+        padding: 1px 2px !important;
+        display: block !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
+        max-width: 100% !important;
     }
     
     /* Dropdown panels */
     .dropdown-panel {
         max-width: calc(100vw - 32px) !important;
-        max-height: 60vh !important;
+        max-height: 50vh !important;
+        bottom: 100% !important;
+        top: auto !important;
     }
     
     .filter-panel-compact {
