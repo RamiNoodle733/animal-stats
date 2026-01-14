@@ -55,27 +55,30 @@
         display: none !important;
     }
     
-    /* Compact header - just logo/title and auth */
+    /* Compact header - just logo and auth */
     .game-header {
-        padding: 8px var(--mobile-padding) !important;
-        padding-top: calc(8px + var(--mobile-safe-top)) !important;
+        padding: 6px var(--mobile-padding) !important;
+        padding-top: calc(6px + var(--mobile-safe-top)) !important;
         gap: 8px !important;
         justify-content: space-between !important;
-        min-height: var(--mobile-header-height) !important;
+        min-height: 44px !important;
+        max-height: 50px !important;
     }
     
     .header-brand {
-        flex: 1;
+        flex: 0 0 auto;
     }
     
+    /* Make logo bigger, hide title text */
     .header-logo {
-        width: 28px !important;
-        height: 28px !important;
+        width: 36px !important;
+        height: 36px !important;
+        cursor: pointer !important;
     }
     
+    /* Hide the title text on mobile, just show logo */
     .game-header h1 {
-        font-size: 0.85rem !important;
-        letter-spacing: 1px !important;
+        display: none !important;
     }
     
     /* Auth area mobile */
@@ -380,16 +383,24 @@
         background: transparent !important;
     }
     
-    /* Character name */
+    /* Character name - fixed height to prevent shifting */
     .character-name-display {
-        font-size: 0.9rem !important;
+        font-size: 0.8rem !important;
         text-align: center !important;
-        line-height: 1.2 !important;
-        margin-bottom: 4px !important;
+        line-height: 1.1 !important;
+        margin-bottom: 2px !important;
+        min-height: 32px !important;
+        max-height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        overflow: hidden !important;
     }
     
     .character-scientific-name {
-        font-size: 0.55rem !important;
+        font-size: 0.5rem !important;
+        min-height: 14px !important;
+        max-height: 14px !important;
     }
     
     /* Animal image - centered and sized appropriately */
@@ -419,72 +430,85 @@
         font-size: 2rem !important;
     }
     
-    /* Battle record badge */
+    /* Battle record badge - fixed width */
     .battle-record-badge {
         flex-direction: row !important;
-        padding: 6px 8px !important;
-        gap: 6px !important;
-        margin-top: 8px !important;
+        padding: 4px 6px !important;
+        gap: 4px !important;
+        margin-top: 4px !important;
+        min-width: 140px !important;
+        max-width: 140px !important;
+        justify-content: center !important;
     }
     
     .record-item {
         flex-direction: column !important;
-        padding: 4px 6px !important;
+        padding: 2px 4px !important;
+        min-width: 36px !important;
     }
     
     .record-value {
-        font-size: 0.75rem !important;
+        font-size: 0.65rem !important;
+        min-width: 28px !important;
+        text-align: center !important;
     }
     
     .record-label {
-        font-size: 0.5rem !important;
+        font-size: 0.4rem !important;
     }
     
     .record-divider {
-        height: 20px !important;
-        margin: 0 4px !important;
+        height: 16px !important;
+        margin: 0 2px !important;
     }
     
     .record-item i {
-        font-size: 0.6rem !important;
+        font-size: 0.5rem !important;
     }
     
-    /* Quick info bar - compact */
+    /* Quick info bar - single row, very compact */
     .quick-info-bar {
-        flex-wrap: wrap !important;
+        flex-wrap: nowrap !important;
         justify-content: center !important;
-        gap: 6px !important;
-        padding: 6px !important;
-        margin-top: 6px !important;
+        gap: 3px !important;
+        padding: 2px !important;
+        margin-top: 2px !important;
     }
     
     .quick-info-item {
-        padding: 4px 8px !important;
-        font-size: 0.6rem !important;
+        padding: 2px 4px !important;
+        font-size: 0.5rem !important;
+        white-space: nowrap !important;
     }
     
     .quick-info-divider {
         display: none !important;
     }
     
-    /* Stat rows - compact for narrow columns */
+    .quick-info-item i {
+        display: none !important;
+    }
+    
+    /* Stat rows - consistent layout for both sides */
     .stat-group-container {
-        margin-bottom: 6px !important;
+        margin-bottom: 4px !important;
     }
     
     .stat-group-title {
-        font-size: 0.5rem !important;
-        padding: 2px 4px !important;
-        margin-bottom: 2px !important;
+        font-size: 0.45rem !important;
+        padding: 1px 2px !important;
+        margin-bottom: 1px !important;
     }
     
     .stat-row {
         display: flex !important;
         flex-direction: column !important;
         align-items: stretch !important;
-        padding: 3px 2px !important;
-        gap: 1px !important;
-        margin-bottom: 4px !important;
+        padding: 1px 1px !important;
+        gap: 0px !important;
+        margin-bottom: 2px !important;
+        min-height: 24px !important;
+        max-height: 24px !important;
     }
     
     /* Hide stat icon on mobile */
@@ -492,33 +516,52 @@
         display: none !important;
     }
     
-    /* Stat name as label on top */
+    /* Stat name on top - consistent for both sides */
     .stat-name {
-        font-size: 0.5rem !important;
+        font-size: 0.42rem !important;
         text-align: center !important;
         min-width: unset !important;
         width: 100% !important;
-        margin-bottom: 2px !important;
+        margin-bottom: 1px !important;
         opacity: 0.9 !important;
+        order: 1 !important;
+        line-height: 1 !important;
     }
     
-    /* Stat bar full width */
+    /* Stat bar in middle */
     .stat-bar-wrapper {
         width: 100% !important;
         min-width: unset !important;
+        order: 2 !important;
     }
     
+    /* Rectangular stat bars, not pill shaped */
     .stat-bar {
-        height: 8px !important;
-        border-radius: 4px !important;
+        height: 6px !important;
+        border-radius: 1px !important;
     }
     
-    /* Stat value below bar */
+    .stat-bar-bg {
+        border-radius: 1px !important;
+    }
+    
+    .stat-bar-fill {
+        border-radius: 1px !important;
+    }
+    
+    /* Stat value at bottom - consistent for both sides */
     .stat-value {
-        font-size: 0.65rem !important;
+        font-size: 0.5rem !important;
         text-align: center !important;
         min-width: unset !important;
-        margin-top: 2px !important;
+        margin-top: 0px !important;
+        order: 3 !important;
+        line-height: 1 !important;
+    }
+    
+    /* Hide max label on mobile to prevent shifting */
+    .stat-max-label {
+        display: none !important;
     }
     
     /* Substats hidden on mobile */
@@ -526,28 +569,38 @@
         display: none !important;
     }
     
-    /* Abilities and Traits cards */
+    /* Abilities and Traits cards - fixed height */
     .abilities-card,
     .traits-card {
-        margin-top: 8px !important;
-        padding: 6px !important;
+        margin-top: 4px !important;
+        padding: 3px !important;
+        min-height: 60px !important;
+        max-height: 60px !important;
+        overflow: hidden !important;
     }
     
     .card-header {
-        font-size: 0.6rem !important;
-        padding: 4px 8px !important;
+        font-size: 0.45rem !important;
+        padding: 2px 4px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
     
     .abilities-list,
     .traits-list {
-        gap: 4px !important;
-        padding: 6px !important;
+        gap: 2px !important;
+        padding: 2px !important;
+        overflow: hidden !important;
     }
     
     .ability-item,
     .trait-item {
-        padding: 4px 8px !important;
-        font-size: 0.55rem !important;
+        padding: 2px 4px !important;
+        font-size: 0.42rem !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
     
     /* Details panel - bottom sheet style when expanded */
@@ -618,21 +671,24 @@
  * Stack order (bottom to top): mobile-nav -> character-grid -> bottom-info-bar
  * ============================================================================ */
 @media (max-width: 480px) {
-    /* Character grid container - fixed position above bottom nav */
+    /* Character grid container - fixed position, taller to fit search */
     .character-grid-container {
         position: fixed !important;
         bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
         left: 0 !important;
         right: 0 !important;
         z-index: 7500 !important;
-        min-height: 100px !important;
-        max-height: 100px !important;
-        height: 100px !important;
-        padding: 2px 4px !important;
+        min-height: 130px !important;
+        max-height: 130px !important;
+        height: 130px !important;
+        padding: 4px 6px !important;
         margin-bottom: 0 !important;
         overflow: hidden !important;
         background: linear-gradient(180deg, rgba(5, 10, 20, 0.98) 0%, rgba(0, 8, 18, 1) 100%) !important;
         border-top: 1px solid rgba(0, 212, 255, 0.2) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 2px !important;
     }
     
     /* When menu is hidden */
@@ -647,7 +703,7 @@
     /* Bottom info bar - fixed position ABOVE character grid */
     .bottom-info-bar {
         position: fixed !important;
-        bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 100px) !important;
+        bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 130px) !important;
         left: 0 !important;
         right: 0 !important;
         z-index: 8000 !important;
@@ -686,7 +742,7 @@
     
     /* Adjust stats view to account for fixed bottom elements */
     #stats-view.active-view {
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 36px + 100px + 16px) !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 36px + 130px + 16px) !important;
     }
     
     /* When menu is hidden, less padding needed */
@@ -694,65 +750,81 @@
         padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 36px + 16px) !important;
     }
     
-    /* Hide grid controls (search/filter) on mobile - too cramped */
+    /* Show grid controls on mobile - compact row */
     .grid-controls {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        gap: 4px !important;
+        padding: 0 2px !important;
+        height: 28px !important;
+        min-height: 28px !important;
+        max-height: 28px !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .search-box {
+        flex: 1 !important;
+        min-width: 60px !important;
+        padding: 4px 8px !important;
+        font-size: 0.7rem !important;
+        height: 26px !important;
+    }
+    
+    .dropdown-toggle-btn {
+        padding: 4px 8px !important;
+        font-size: 0.6rem !important;
+        height: 26px !important;
+        white-space: nowrap !important;
+    }
+    
+    .dropdown-arrow {
         display: none !important;
     }
     
-    /* Grid wrapper with arrows */
+    /* Grid wrapper - fills remaining space */
     .grid-scroll-wrapper {
         display: flex !important;
         align-items: center !important;
-        height: 100% !important;
+        justify-content: center !important;
+        flex: 1 !important;
+        min-height: 0 !important;
         gap: 4px !important;
         padding: 0 !important;
     }
     
     /* Arrow buttons - square touch targets */
     .grid-arrow {
-        width: 40px !important;
-        min-width: 40px !important;
-        height: 40px !important;
-        min-height: 40px !important;
-        max-height: 40px !important;
+        width: 36px !important;
+        min-width: 36px !important;
+        height: 60px !important;
         font-size: 1rem !important;
         flex-shrink: 0 !important;
         z-index: 10 !important;
         background: rgba(0, 20, 40, 0.9) !important;
         border: 1px solid rgba(0, 212, 255, 0.3) !important;
-        border-radius: 8px !important;
+        border-radius: 6px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-    }
-    
-    /* Grid wrapper - center vertically */
-    .grid-scroll-wrapper {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        height: 100% !important;
-        gap: 4px !important;
-        padding: 0 !important;
     }
     
     /* Grid items - show names properly */
     .character-grid {
         gap: 4px !important;
         padding: 2px !important;
-        height: 90px !important;
-        max-height: 90px !important;
+        flex: 1 !important;
+        max-height: 100px !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
         flex-wrap: nowrap !important;
-        align-items: center !important;
+        align-items: flex-start !important;
         -webkit-overflow-scrolling: touch !important;
         scroll-behavior: auto !important;
     }
     
     .character-card {
-        width: 58px !important;
-        height: 75px !important;
+        width: 60px !important;
+        height: 90px !important;
         flex-shrink: 0 !important;
         display: flex !important;
         flex-direction: column !important;
@@ -762,13 +834,13 @@
     }
     
     .character-card img {
-        width: 46px !important;
-        height: 46px !important;
+        width: 50px !important;
+        height: 50px !important;
         flex-shrink: 0 !important;
     }
     
     .card-name {
-        font-size: 0.48rem !important;
+        font-size: 0.5rem !important;
         padding: 1px 2px !important;
         display: block !important;
         visibility: visible !important;
@@ -779,8 +851,8 @@
         max-width: 100% !important;
         width: 100% !important;
         text-align: center !important;
-        line-height: 1.1 !important;
-        margin-top: 1px !important;
+        line-height: 1.2 !important;
+        margin-top: 2px !important;
     }
     
     /* Dropdown panels */
