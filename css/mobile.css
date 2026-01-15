@@ -399,14 +399,14 @@
         overflow-x: hidden !important;
     }
     
-    /* KEEP the grid layout - center column fills space, sides equal width */
+    /* KEEP the grid layout - wider side columns for stats visibility */
     .character-display-area {
         display: grid !important;
-        grid-template-columns: 20% 1fr 20% !important;
-        gap: 4px !important;
-        padding: 6px 2px !important;
+        grid-template-columns: 24% 1fr 24% !important;
+        gap: 3px !important;
+        padding: 4px 1px !important;
         overflow: visible !important;
-        align-items: center !important;
+        align-items: start !important;
         flex: 1 !important;
         min-height: 0 !important;
         margin-top: auto !important;
@@ -414,20 +414,15 @@
         width: 100% !important;
     }
     
-    /* Left stats panel - centered alignment */
+    /* Left stats panel - align at top */
     .stats-panel-left {
         grid-column: 1 !important;
         grid-row: 1 !important;
         width: 100% !important;
         max-width: 100% !important;
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-        padding: 2px !important;
-        scrollbar-width: none !important;
-    }
-    
-    .stats-panel-left::-webkit-scrollbar {
-        display: none !important;
+        overflow: visible !important;
+        padding: 2px 1px !important;
+        align-self: start !important;
     }
     
     /* Center showcase - fill available space and center content */
@@ -445,20 +440,15 @@
         min-width: 0 !important;
     }
     
-    /* Right stats panel */
+    /* Right stats panel - align at top */
     .stats-panel-right {
         grid-column: 3 !important;
         grid-row: 1 !important;
         width: 100% !important;
         max-width: 100% !important;
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-        padding: 2px !important;
-        scrollbar-width: none !important;
-    }
-    
-    .stats-panel-right::-webkit-scrollbar {
-        display: none !important;
+        overflow: visible !important;
+        padding: 2px 1px !important;
+        align-self: start !important;
     }
     
     /* Generic stats panel styling */
@@ -607,11 +597,12 @@
         display: flex !important;
         flex-direction: row !important;
         align-items: center !important;
-        padding: 2px !important;
-        gap: 3px !important;
+        padding: 1px 0 !important;
+        gap: 2px !important;
         margin-bottom: 1px !important;
         min-height: auto !important;
         max-height: unset !important;
+        width: 100% !important;
     }
     
     /* Hide stat icon on mobile */
@@ -619,30 +610,52 @@
         display: none !important;
     }
     
-    /* Stat name - left side for left panel, right side for right panel */
-    .stat-name {
-        font-size: 0.5rem !important;
+    /* LEFT PANEL: Name | Bar | Grade */
+    .stats-panel-left .stat-row {
+        flex-direction: row !important;
+    }
+    
+    .stats-panel-left .stat-name {
+        order: 1 !important;
         text-align: left !important;
-        min-width: 22px !important;
+    }
+    
+    .stats-panel-left .stat-bar-wrapper {
+        order: 2 !important;
+    }
+    
+    .stats-panel-left .stat-value {
+        order: 3 !important;
+        text-align: right !important;
+    }
+    
+    /* Stat name styling */
+    .stat-name {
+        font-size: 0.45rem !important;
+        min-width: 18px !important;
         width: auto !important;
         margin-bottom: 0 !important;
         opacity: 0.9 !important;
-        order: unset !important;
         line-height: 1 !important;
         flex-shrink: 0 !important;
     }
     
-    /* Stat bar in middle */
+    /* Stat bar in middle - ensure it displays */
     .stat-bar-wrapper {
         flex: 1 !important;
-        min-width: 0 !important;
-        order: unset !important;
+        min-width: 20px !important;
+        display: block !important;
     }
     
-    /* Thicker stat bars like desktop */
+    /* Stat bar - visible and styled */
     .stat-bar {
-        height: 12px !important;
+        height: 10px !important;
         border-radius: 2px !important;
+        display: block !important;
+        width: 100% !important;
+        background: rgba(0, 0, 0, 0.3) !important;
+        position: relative !important;
+        overflow: hidden !important;
     }
     
     .stat-bar-bg {
@@ -651,36 +664,38 @@
     
     .stat-bar-fill {
         border-radius: 2px !important;
+        height: 100% !important;
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
     }
     
-    /* Stat value (grade) - positioned correctly */
+    /* Stat value (grade letter) */
     .stat-value {
-        font-size: 0.55rem !important;
-        text-align: right !important;
-        min-width: 16px !important;
+        font-size: 0.5rem !important;
+        min-width: 14px !important;
         margin-top: 0 !important;
-        order: unset !important;
         line-height: 1 !important;
         flex-shrink: 0 !important;
     }
     
-    /* Right panel - reverse the order so grade is on left */
+    /* RIGHT PANEL: Grade | Bar | Name (mirrored) */
     .stats-panel-right .stat-row {
         flex-direction: row !important;
     }
     
-    .stats-panel-right .stat-name {
-        text-align: right !important;
-        order: 3 !important;
+    .stats-panel-right .stat-value {
+        order: 1 !important;
+        text-align: left !important;
     }
     
     .stats-panel-right .stat-bar-wrapper {
         order: 2 !important;
     }
     
-    .stats-panel-right .stat-value {
-        text-align: left !important;
-        order: 1 !important;
+    .stats-panel-right .stat-name {
+        order: 3 !important;
+        text-align: right !important;
     }
     
     /* Hide max label on mobile */
@@ -726,27 +741,29 @@
         color: rgba(255, 255, 255, 0.75) !important;
     }
     
-    /* Abilities and Traits cards - expand to fit all content */
+    /* Abilities and Traits cards - fixed height with scroll to keep alignment */
     .abilities-card,
     .traits-card {
         margin-top: 6px !important;
-        padding: 4px !important;
-        min-height: auto !important;
-        max-height: unset !important;
-        overflow: visible !important;
+        padding: 3px !important;
+        min-height: 60px !important;
+        max-height: 90px !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
     }
     
     .card-header {
-        font-size: 0.55rem !important;
-        padding: 3px 5px !important;
+        font-size: 0.5rem !important;
+        padding: 2px 4px !important;
         white-space: nowrap !important;
-        overflow: visible !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
     }
     
     .abilities-list,
     .traits-list {
-        gap: 3px !important;
-        padding: 3px !important;
+        gap: 2px !important;
+        padding: 2px !important;
         overflow: visible !important;
         display: flex !important;
         flex-direction: column !important;
@@ -754,8 +771,8 @@
     
     .ability-item,
     .trait-item {
-        padding: 3px 5px !important;
-        font-size: 0.5rem !important;
+        padding: 2px 4px !important;
+        font-size: 0.45rem !important;
         white-space: normal !important;
         word-wrap: break-word !important;
         line-height: 1.2 !important;
