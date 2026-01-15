@@ -57,12 +57,14 @@
     
     /* Compact header - just logo and auth */
     .game-header {
-        padding: 6px var(--mobile-padding) !important;
-        padding-top: calc(6px + var(--mobile-safe-top)) !important;
+        padding: 8px var(--mobile-padding) !important;
+        padding-top: calc(8px + var(--mobile-safe-top)) !important;
         gap: 8px !important;
         justify-content: space-between !important;
-        min-height: 44px !important;
-        max-height: 50px !important;
+        min-height: 56px !important;
+        max-height: 60px !important;
+        height: auto !important;
+        overflow: visible !important;
     }
     
     .header-brand {
@@ -71,9 +73,10 @@
     
     /* Make logo bigger, hide title text */
     .header-logo {
-        width: 36px !important;
-        height: 36px !important;
+        width: 44px !important;
+        height: 44px !important;
         cursor: pointer !important;
+        flex-shrink: 0 !important;
     }
     
     /* Hide the title text on mobile, just show logo */
@@ -81,10 +84,14 @@
         display: none !important;
     }
     
-    /* Auth area mobile */
+    /* Auth area mobile - centered */
     .auth-area {
         position: relative !important;
         right: auto !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        flex: 1 !important;
     }
     
     .auth-btn {
@@ -93,10 +100,82 @@
         min-height: var(--mobile-touch-min) !important;
     }
     
+    /* Login button centered when logged out */
+    .auth-login-btn {
+        margin: 0 auto !important;
+    }
+    
     /* User stats bar compact */
     .user-stats-bar {
-        padding: 6px 10px !important;
-        gap: 8px !important;
+        padding: 4px 8px !important;
+        gap: 6px !important;
+        flex-wrap: nowrap !important;
+        max-height: 48px !important;
+        align-items: center !important;
+    }
+    
+    /* Profile mini section */
+    .user-profile-mini {
+        padding: 3px 6px !important;
+        gap: 4px !important;
+    }
+    
+    .user-avatar-mini {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 1.2rem !important;
+    }
+    
+    .user-level-info {
+        gap: 2px !important;
+    }
+    
+    .user-name-mini {
+        font-size: 0.65rem !important;
+        max-width: 60px !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+    
+    .user-level-badge {
+        font-size: 0.55rem !important;
+        padding: 1px 4px !important;
+    }
+    
+    .xp-bar-container {
+        width: 50px !important;
+        height: 6px !important;
+    }
+    
+    .xp-bar-text {
+        font-size: 0.45rem !important;
+    }
+    
+    /* Battle points display */
+    .battle-points-display {
+        padding: 4px 6px !important;
+        gap: 3px !important;
+    }
+    
+    .bp-coin {
+        width: 20px !important;
+        height: 20px !important;
+        font-size: 0.7rem !important;
+    }
+    
+    .bp-amount {
+        font-size: 0.75rem !important;
+    }
+    
+    .bp-label {
+        font-size: 0.55rem !important;
+    }
+    
+    /* Login button styling */
+    .auth-login-btn {
+        padding: 8px 12px !important;
+        font-size: 0.7rem !important;
+        min-height: 36px !important;
     }
     
     .user-avatar-small {
@@ -105,15 +184,15 @@
     }
     
     .user-name-small {
-        font-size: 0.75rem !important;
-        max-width: 80px;
+        font-size: 0.7rem !important;
+        max-width: 70px;
         overflow: hidden;
         text-overflow: ellipsis;
     }
     
     .user-xp-badge {
-        font-size: 0.65rem !important;
-        padding: 2px 6px !important;
+        font-size: 0.6rem !important;
+        padding: 2px 5px !important;
     }
 
     /* Create mobile bottom navigation */
@@ -319,19 +398,21 @@
         overflow-x: hidden !important;
     }
     
-    /* KEEP the grid layout - use percentage columns for better fit */
+    /* KEEP the grid layout - use percentage columns, center vertically */
     .character-display-area {
         display: grid !important;
         grid-template-columns: 22% 1fr 22% !important;
-        gap: 4px !important;
-        padding: 4px !important;
+        gap: 6px !important;
+        padding: 8px 4px !important;
         overflow: visible !important;
-        align-items: start !important;
+        align-items: center !important;
         flex: 1 !important;
         min-height: 0 !important;
+        margin-top: auto !important;
+        margin-bottom: auto !important;
     }
     
-    /* Left stats panel */
+    /* Left stats panel - centered alignment */
     .stats-panel-left {
         grid-column: 1 !important;
         grid-row: 1 !important;
@@ -466,27 +547,44 @@
         font-size: 0.5rem !important;
     }
     
-    /* Quick info bar - single row, very compact */
+    /* Quick info bar - horizontal row with full format */
     .quick-info-bar {
         flex-wrap: nowrap !important;
         justify-content: center !important;
-        gap: 3px !important;
-        padding: 2px !important;
-        margin-top: 2px !important;
+        gap: 6px !important;
+        padding: 4px 6px !important;
+        margin-top: 4px !important;
+        flex-direction: row !important;
     }
     
     .quick-info-item {
-        padding: 2px 4px !important;
-        font-size: 0.5rem !important;
+        padding: 3px 6px !important;
+        font-size: 0.55rem !important;
         white-space: nowrap !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 3px !important;
+        background: rgba(0, 20, 40, 0.6) !important;
+        border-radius: 4px !important;
+        border: 1px solid rgba(0, 212, 255, 0.2) !important;
     }
     
     .quick-info-divider {
-        display: none !important;
+        display: block !important;
+        width: 1px !important;
+        height: 14px !important;
+        background: rgba(0, 212, 255, 0.3) !important;
     }
     
     .quick-info-item i {
-        display: none !important;
+        display: inline-block !important;
+        font-size: 0.5rem !important;
+        color: var(--primary-color) !important;
+    }
+    
+    .quick-info-item .toggle-icon {
+        font-size: 0.4rem !important;
+        opacity: 0.6 !important;
     }
     
     /* Stat rows - consistent layout for both sides */
@@ -535,18 +633,18 @@
         order: 2 !important;
     }
     
-    /* Rectangular stat bars, not pill shaped */
+    /* Thicker stat bars like desktop, slightly rounded */
     .stat-bar {
-        height: 6px !important;
-        border-radius: 1px !important;
+        height: 10px !important;
+        border-radius: 2px !important;
     }
     
     .stat-bar-bg {
-        border-radius: 1px !important;
+        border-radius: 2px !important;
     }
     
     .stat-bar-fill {
-        border-radius: 1px !important;
+        border-radius: 2px !important;
     }
     
     /* Stat value at bottom - consistent for both sides */
@@ -569,38 +667,42 @@
         display: none !important;
     }
     
-    /* Abilities and Traits cards - fixed height */
+    /* Abilities and Traits cards - scrollable when content overflows */
     .abilities-card,
     .traits-card {
         margin-top: 4px !important;
         padding: 3px !important;
-        min-height: 60px !important;
-        max-height: 60px !important;
-        overflow: hidden !important;
+        min-height: 50px !important;
+        max-height: 80px !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
     }
     
     .card-header {
-        font-size: 0.45rem !important;
+        font-size: 0.5rem !important;
         padding: 2px 4px !important;
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
+        position: sticky !important;
+        top: 0 !important;
+        background: rgba(10, 14, 26, 0.95) !important;
+        z-index: 1 !important;
     }
     
     .abilities-list,
     .traits-list {
         gap: 2px !important;
         padding: 2px !important;
-        overflow: hidden !important;
+        overflow: visible !important;
     }
     
     .ability-item,
     .trait-item {
         padding: 2px 4px !important;
-        font-size: 0.42rem !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
+        font-size: 0.45rem !important;
+        white-space: normal !important;
+        word-wrap: break-word !important;
     }
     
     /* Details panel - bottom sheet style when expanded */
@@ -855,23 +957,53 @@
         margin-top: 2px !important;
     }
     
-    /* Dropdown panels */
+    /* Dropdown panels - must be above all fixed elements */
+    .dropdown-menu-container {
+        position: relative !important;
+        z-index: 9500 !important;
+    }
+    
     .dropdown-panel {
-        max-width: calc(100vw - 32px) !important;
-        max-height: 50vh !important;
-        bottom: 100% !important;
+        position: absolute !important;
+        bottom: calc(100% + 4px) !important;
+        left: 0 !important;
+        right: auto !important;
         top: auto !important;
+        z-index: 9600 !important;
+        max-width: calc(100vw - 32px) !important;
+        min-width: 200px !important;
+        max-height: 50vh !important;
+        overflow-y: auto !important;
+        background: rgba(10, 14, 26, 0.98) !important;
+        border: 2px solid rgba(0, 212, 255, 0.5) !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.8) !important;
+    }
+    
+    .dropdown-panel.show {
+        display: flex !important;
     }
     
     .filter-panel-compact {
-        width: calc(100vw - 32px) !important;
-        left: 16px !important;
-        right: 16px !important;
+        width: auto !important;
+        min-width: 220px !important;
+        left: 0 !important;
+        right: auto !important;
+    }
+    
+    /* Sort panel - position from right */
+    #sort-panel {
+        left: auto !important;
+        right: 0 !important;
     }
     
     .checkbox-option {
         padding: 10px 12px !important;
         min-height: var(--mobile-touch-min) !important;
+    }
+    
+    .filter-tab {
+        padding: 8px 6px !important;
+        font-size: 0.7rem !important;
     }
 }
 
