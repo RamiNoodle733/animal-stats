@@ -77,7 +77,14 @@
     /* Add top padding to body/main content to account for fixed header */
     .main-content,
     .view-container {
-        padding-top: 70px !important;
+        padding-top: 75px !important;
+        margin-top: 0 !important;
+    }
+    
+    /* Stats view needs extra margin to clear fixed header */
+    #stats-view.active-view {
+        margin-top: 0 !important;
+        padding-top: 10px !important;
     }
     
     .header-brand {
@@ -615,10 +622,19 @@
         opacity: 0.6 !important;
     }
     
-    /* Show substats on mobile, hide abilities/traits */
+    /* Show abilities and traits on mobile */
     .abilities-card,
     .traits-card {
-        display: none !important;
+        display: block !important;
+        margin-top: 8px !important;
+        padding: 4px !important;
+        min-height: auto !important;
+        max-height: 80px !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        background: rgba(0, 15, 30, 0.6) !important;
+        border: 1px solid rgba(0, 212, 255, 0.2) !important;
+        border-radius: 6px !important;
     }
     
     /* Stat rows - horizontal layout with proper alignment */
@@ -636,7 +652,7 @@
         flex-direction: row !important;
         align-items: center !important;
         padding: 2px 0 !important;
-        gap: 4px !important;
+        gap: 0 !important;
         margin-bottom: 0 !important;
         width: 100% !important;
         box-sizing: border-box !important;
@@ -653,9 +669,10 @@
     .stat-name {
         font-size: 0.55rem !important;
         font-weight: 600 !important;
-        min-width: 22px !important;
-        max-width: 22px !important;
+        min-width: 24px !important;
+        max-width: 24px !important;
         margin-bottom: 0 !important;
+        margin-right: 4px !important;
         opacity: 1 !important;
         line-height: 16px !important;
         flex-shrink: 0 !important;
@@ -670,6 +687,7 @@
         display: flex !important;
         align-items: center !important;
         height: 12px !important;
+        margin: 0 4px !important;
     }
     
     /* Stat bar - visible with proper sizing */
@@ -701,15 +719,16 @@
     /* Stat value container - show number AND tier */
     .stat-value {
         font-size: 0.55rem !important;
-        min-width: 38px !important;
-        max-width: 45px !important;
+        min-width: auto !important;
+        max-width: none !important;
         margin-top: 0 !important;
+        margin-left: 4px !important;
         line-height: 16px !important;
         flex-shrink: 0 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: flex-end !important;
-        gap: 2px !important;
+        gap: 3px !important;
         height: 16px !important;
     }
     
@@ -724,8 +743,10 @@
         display: inline-flex !important;
         align-items: center !important;
         font-size: 0.5rem !important;
-        opacity: 0.9 !important;
+        opacity: 0.85 !important;
         line-height: 1 !important;
+        min-width: 18px !important;
+        justify-content: flex-end !important;
     }
     
     .stat-value .stat-tier-badge {
@@ -734,30 +755,50 @@
         justify-content: center !important;
         font-size: 0.5rem !important;
         padding: 1px 3px !important;
-        min-width: 16px !important;
+        min-width: 18px !important;
         line-height: 1 !important;
     }
     
-    /* LEFT PANEL: name on left, value+grade on right */
+    /* LEFT PANEL: name | bar | number grade */
     .stats-panel-left .stat-name {
         text-align: left !important;
         justify-content: flex-start !important;
+        order: 1 !important;
+    }
+    
+    .stats-panel-left .stat-bar-wrapper {
+        order: 2 !important;
     }
     
     .stats-panel-left .stat-value {
+        order: 3 !important;
         justify-content: flex-end !important;
         flex-direction: row !important;
     }
     
-    /* RIGHT PANEL: grade+value on left, name on right */
+    /* RIGHT PANEL: grade number | bar | name */
+    .stats-panel-right .stat-row {
+        flex-direction: row-reverse !important;
+    }
+    
     .stats-panel-right .stat-name {
         text-align: right !important;
         justify-content: flex-end !important;
+        order: 1 !important;
+        margin-right: 0 !important;
+        margin-left: 4px !important;
+    }
+    
+    .stats-panel-right .stat-bar-wrapper {
+        order: 2 !important;
     }
     
     .stats-panel-right .stat-value {
+        order: 3 !important;
         justify-content: flex-start !important;
         flex-direction: row-reverse !important;
+        margin-left: 0 !important;
+        margin-right: 4px !important;
     }
     
     /* Substats - compact single row */
@@ -798,17 +839,7 @@
         color: rgba(255, 255, 255, 0.8) !important;
     }
     
-    /* Abilities and Traits cards - fixed height with scroll to keep alignment */
-    .abilities-card,
-    .traits-card {
-        margin-top: 6px !important;
-        padding: 3px !important;
-        min-height: 60px !important;
-        max-height: 90px !important;
-        overflow-y: auto !important;
-        overflow-x: hidden !important;
-    }
-    
+    /* Abilities and Traits cards styling */
     .card-header {
         font-size: 0.5rem !important;
         padding: 2px 4px !important;
