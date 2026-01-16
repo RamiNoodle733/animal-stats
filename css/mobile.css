@@ -400,14 +400,14 @@
         padding-top: 8px !important;
     }
     
-    /* Grid layout - fixed width side panels, flexible center */
+    /* Grid layout - 25% side panels, 50% center */
     .character-display-area {
         display: grid !important;
-        grid-template-columns: minmax(70px, 85px) 1fr minmax(70px, 85px) !important;
-        gap: 4px !important;
-        padding: 8px 4px !important;
-        overflow: visible !important;
-        align-items: start !important;
+        grid-template-columns: 25% 50% 25% !important;
+        gap: 0 !important;
+        padding: 8px 0 !important;
+        overflow: hidden !important;
+        align-items: center !important;
         flex: 1 !important;
         min-height: 0 !important;
         width: 100% !important;
@@ -419,15 +419,16 @@
         grid-column: 1 !important;
         grid-row: 1 !important;
         width: 100% !important;
-        min-width: 70px !important;
-        max-width: 85px !important;
-        overflow: visible !important;
-        padding: 4px 2px !important;
-        align-self: start !important;
-        z-index: 1 !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+        padding: 4px 2px 4px 4px !important;
+        align-self: center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
     }
     
-    /* Center showcase - constrained width */
+    /* Center showcase */
     .character-showcase {
         grid-column: 2 !important;
         grid-row: 1 !important;
@@ -437,10 +438,9 @@
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        overflow: visible !important;
-        justify-content: flex-start !important;
+        overflow: hidden !important;
+        justify-content: center !important;
         min-width: 0 !important;
-        z-index: 0 !important;
     }
     
     /* Right stats panel */
@@ -448,12 +448,13 @@
         grid-column: 3 !important;
         grid-row: 1 !important;
         width: 100% !important;
-        min-width: 70px !important;
-        max-width: 85px !important;
-        overflow: visible !important;
-        padding: 4px 2px !important;
-        align-self: start !important;
-        z-index: 1 !important;
+        max-width: 100% !important;
+        overflow: hidden !important;
+        padding: 4px 4px 4px 2px !important;
+        align-self: center !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
     }
     
     /* Generic stats panel styling */
@@ -584,25 +585,30 @@
         opacity: 0.6 !important;
     }
     
+    /* Hide substats, abilities, traits on mobile */
+    .substat-container,
+    .abilities-card,
+    .traits-card {
+        display: none !important;
+    }
+    
     /* Stat rows - horizontal layout */
     .stat-group-container {
-        margin-bottom: 4px !important;
+        margin-bottom: 6px !important;
         width: 100% !important;
     }
     
     .stat-group-title {
-        font-size: 0.45rem !important;
-        padding: 1px 2px !important;
-        margin-bottom: 1px !important;
+        display: none !important;
     }
     
     .stat-row {
         display: flex !important;
         flex-direction: row !important;
         align-items: center !important;
-        padding: 1px !important;
-        gap: 2px !important;
-        margin-bottom: 2px !important;
+        padding: 2px 0 !important;
+        gap: 4px !important;
+        margin-bottom: 0 !important;
         width: 100% !important;
         box-sizing: border-box !important;
     }
@@ -612,32 +618,14 @@
         display: none !important;
     }
     
-    /* LEFT PANEL: Name | Bar | Grade */
-    .stats-panel-left .stat-row {
-        flex-direction: row !important;
-    }
-    
-    .stats-panel-left .stat-name {
-        order: 1 !important;
-        text-align: left !important;
-    }
-    
-    .stats-panel-left .stat-bar-wrapper {
-        order: 2 !important;
-    }
-    
-    .stats-panel-left .stat-value {
-        order: 3 !important;
-        text-align: right !important;
-    }
-    
     /* Stat name styling */
     .stat-name {
-        font-size: 0.4rem !important;
-        min-width: 16px !important;
-        max-width: 16px !important;
+        font-size: 0.55rem !important;
+        font-weight: 600 !important;
+        min-width: 22px !important;
+        max-width: 22px !important;
         margin-bottom: 0 !important;
-        opacity: 0.9 !important;
+        opacity: 1 !important;
         line-height: 1 !important;
         flex-shrink: 0 !important;
     }
@@ -645,96 +633,80 @@
     /* Stat bar wrapper - takes remaining space */
     .stat-bar-wrapper {
         flex: 1 1 auto !important;
-        min-width: 25px !important;
-        max-width: 100% !important;
+        min-width: 20px !important;
         display: block !important;
     }
     
     /* Stat bar - visible with proper sizing */
     .stat-bar {
-        height: 8px !important;
-        border-radius: 2px !important;
+        height: 12px !important;
+        border-radius: 3px !important;
         display: block !important;
         width: 100% !important;
-        background: rgba(0, 0, 0, 0.4) !important;
+        background: rgba(0, 0, 0, 0.5) !important;
         position: relative !important;
         overflow: hidden !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
     }
     
     .stat-bar-bg {
-        border-radius: 2px !important;
+        border-radius: 3px !important;
         width: 100% !important;
         height: 100% !important;
     }
     
     .stat-bar-fill {
-        border-radius: 1px !important;
+        border-radius: 2px !important;
         height: 100% !important;
         position: absolute !important;
         left: 0 !important;
         top: 0 !important;
     }
     
-    /* Stat value (grade letter) */
+    /* Stat value container - only show tier badge */
     .stat-value {
-        font-size: 0.45rem !important;
-        min-width: 12px !important;
-        max-width: 12px !important;
+        font-size: 0.6rem !important;
+        min-width: 18px !important;
+        max-width: 22px !important;
         margin-top: 0 !important;
         line-height: 1 !important;
         flex-shrink: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
     }
     
-    /* RIGHT PANEL: Grade | Bar | Name (mirrored) */
-    .stats-panel-right .stat-row {
-        flex-direction: row !important;
-    }
-    
-    .stats-panel-right .stat-value {
-        order: 1 !important;
-        text-align: left !important;
-    }
-    
-    .stats-panel-right .stat-bar-wrapper {
-        order: 2 !important;
-    }
-    
-    .stats-panel-right .stat-name {
-        order: 3 !important;
-        text-align: right !important;
-    }
-    
-    /* Hide max label on mobile */
-    .stat-max-label {
+    /* Hide badge slot and number, only show tier */
+    .stat-value .stat-badge-slot,
+    .stat-value .stat-number,
+    .stat-value .stat-max-badge,
+    .stat-value .stat-high-badge {
         display: none !important;
     }
     
-    /* Substats - show on mobile, compact style */
-    .substat-container {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        gap: 2px 6px !important;
-        padding: 1px 2px !important;
-        margin-top: 0 !important;
+    .stat-value .stat-tier-badge {
+        display: inline-block !important;
+        font-size: 0.55rem !important;
+        padding: 1px 3px !important;
+        min-width: 16px !important;
     }
     
-    .substat-container.right-align {
+    /* LEFT PANEL: name on left, grade on right */
+    .stats-panel-left .stat-name {
+        text-align: left !important;
+    }
+    
+    .stats-panel-left .stat-value {
         justify-content: flex-end !important;
     }
     
-    .substat-row {
-        display: flex !important;
-        align-items: center !important;
-        gap: 2px !important;
+    /* RIGHT PANEL: grade on left, name on right */
+    .stats-panel-right .stat-name {
+        text-align: right !important;
     }
     
-    .substat-row.compact {
-        padding: 0 !important;
-    }
-    
-    .substat-container.right-align .substat-row {
-        flex-direction: row-reverse !important;
+    .stats-panel-right .stat-value {
+        justify-content: flex-start !important;
     }
     
     .substat-label {
