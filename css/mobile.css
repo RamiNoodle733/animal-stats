@@ -427,6 +427,7 @@
         grid-template-columns: minmax(85px, 28%) minmax(140px, 44%) minmax(85px, 28%) !important;
         gap: 0 !important;
         padding: 8px 6px !important;
+        margin-top: 10px !important;
         overflow: visible !important;
         align-items: stretch !important;
         flex: 1 !important;
@@ -469,6 +470,70 @@
         position: relative !important;
     }
     
+    /* Character name - at top of center column */
+    .character-name-display {
+        font-size: 0.9rem !important;
+        text-align: center !important;
+        line-height: 1.2 !important;
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        overflow: hidden !important;
+        max-width: 100% !important;
+        order: 1 !important;
+    }
+    
+    .character-scientific-name {
+        font-size: 0.5rem !important;
+        margin-bottom: 2px !important;
+        order: 2 !important;
+    }
+    
+    /* Battle record - after scientific name */
+    .battle-record-badge {
+        flex-direction: row !important;
+        padding: 3px 4px !important;
+        gap: 3px !important;
+        margin-top: 2px !important;
+        margin-bottom: 4px !important;
+        min-width: auto !important;
+        max-width: 100% !important;
+        justify-content: center !important;
+        order: 3 !important;
+    }
+    
+    /* Animal image container - in the middle */
+    .character-model-container {
+        width: 100% !important;
+        max-width: 130px !important;
+        margin: 4px auto !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        min-height: 90px !important;
+        order: 4 !important;
+    }
+    
+    /* Quick info bar - BELOW the animal image */
+    .quick-info-bar {
+        flex-wrap: nowrap !important;
+        justify-content: center !important;
+        gap: 4px !important;
+        padding: 4px 6px !important;
+        margin-top: 4px !important;
+        margin-bottom: 0 !important;
+        flex-direction: row !important;
+        background: rgba(0, 15, 30, 0.85) !important;
+        border-radius: 6px !important;
+        border: 1px solid rgba(0, 212, 255, 0.25) !important;
+        order: 5 !important;
+        width: 100% !important;
+        position: relative !important;
+        z-index: 10 !important;
+    }
+    
     /* Right stats panel - high z-index to stay above center */
     .stats-panel-right {
         grid-column: 3 !important;
@@ -492,38 +557,33 @@
         background: transparent !important;
     }
     
-    /* Character name - compact for mobile */
-    .character-name-display {
-        font-size: 0.85rem !important;
+    .record-item {
+        flex-direction: column !important;
+        padding: 2px 4px !important;
+        min-width: 35px !important;
+    }
+    
+    .record-value {
+        font-size: 0.7rem !important;
+        min-width: 28px !important;
         text-align: center !important;
-        line-height: 1.2 !important;
-        margin-bottom: 2px !important;
-        margin-top: 4px !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        overflow: hidden !important;
-        max-width: 100% !important;
     }
     
-    .character-scientific-name {
+    .record-label {
+        font-size: 0.4rem !important;
+    }
+    
+    .record-divider {
+        height: 16px !important;
+        margin: 0 2px !important;
+    }
+    
+    .record-item i {
         font-size: 0.5rem !important;
-        margin-bottom: 4px !important;
-    }
-    
-    /* Animal image - constrained to not overflow into side panels */
-    .character-model-container {
-        width: 100% !important;
-        max-width: 120px !important;
-        margin: 4px auto !important;
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        min-height: 80px !important;
     }
     
     .character-model {
-        max-height: 100px !important;
+        max-height: 110px !important;
         max-width: 100% !important;
         object-fit: contain !important;
     }
@@ -536,60 +596,6 @@
     
     .character-silhouette i {
         font-size: 1.8rem !important;
-    }
-    
-    /* Battle record badge - compact */
-    .battle-record-badge {
-        flex-direction: row !important;
-        padding: 4px 6px !important;
-        gap: 4px !important;
-        margin-top: 4px !important;
-        min-width: auto !important;
-        max-width: 100% !important;
-        justify-content: center !important;
-    }
-    
-    .record-item {
-        flex-direction: column !important;
-        padding: 3px 6px !important;
-        min-width: 40px !important;
-    }
-    
-    .record-value {
-        font-size: 0.75rem !important;
-        min-width: 32px !important;
-        text-align: center !important;
-    }
-    
-    .record-label {
-        font-size: 0.45rem !important;
-    }
-    
-    .record-divider {
-        height: 18px !important;
-        margin: 0 3px !important;
-    }
-    
-    .record-item i {
-        font-size: 0.55rem !important;
-    }
-    
-    /* Quick info bar - positioned ABOVE everything, full width of center column */
-    .quick-info-bar {
-        flex-wrap: nowrap !important;
-        justify-content: center !important;
-        gap: 4px !important;
-        padding: 4px 6px !important;
-        margin-top: 0 !important;
-        margin-bottom: 4px !important;
-        flex-direction: row !important;
-        background: rgba(0, 15, 30, 0.85) !important;
-        border-radius: 6px !important;
-        border: 1px solid rgba(0, 212, 255, 0.25) !important;
-        order: -1 !important;
-        width: 100% !important;
-        position: relative !important;
-        z-index: 10 !important;
     }
     
     .quick-info-item {
@@ -1055,7 +1061,7 @@
     /* Grid wrapper - fills remaining space, proper alignment */
     .grid-scroll-wrapper {
         display: flex !important;
-        align-items: center !important;
+        align-items: flex-start !important;
         justify-content: center !important;
         flex: 1 !important;
         min-height: 0 !important;
@@ -1064,11 +1070,11 @@
         height: 90px !important;
     }
     
-    /* Arrow buttons - properly aligned with card images */
+    /* Arrow buttons - aligned with card images */
     .grid-arrow {
         width: 28px !important;
         min-width: 28px !important;
-        height: 56px !important;
+        height: 55px !important;
         font-size: 0.85rem !important;
         flex-shrink: 0 !important;
         z-index: 10 !important;
@@ -1079,7 +1085,7 @@
         align-items: center !important;
         justify-content: center !important;
         align-self: flex-start !important;
-        margin-top: 8px !important;
+        margin-top: 2px !important;
     }
     
     /* Grid items - show names properly */
