@@ -412,13 +412,22 @@
  * ============================================================================ */
 @media (max-width: 480px) {
     /* Only style stats-view when it's the ACTIVE view - don't override display */
+    /* padding-bottom must account for: mobile-nav(60) + grid(130) + bottom-bar(36) = 226px */
     #stats-view.active-view {
         flex-direction: column !important;
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 170px) !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
         padding-top: 70px !important;
         margin-top: 0 !important;
+        height: auto !important;
+        min-height: 0 !important;
+    }
+    
+    /* When menu is hidden, reduce padding */
+    #stats-view.active-view:has(.character-grid-container.hidden),
+    body:has(.character-grid-container.hidden) #stats-view.active-view {
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 40px) !important;
     }
     
     /* Grid layout - properly sized columns with center constrained */
@@ -964,6 +973,7 @@
         max-height: 130px !important;
         height: 130px !important;
         padding: 4px 6px !important;
+        padding-bottom: 2px !important;
         margin-bottom: 0 !important;
         overflow: hidden !important;
         background: linear-gradient(180deg, rgba(5, 10, 20, 0.98) 0%, rgba(0, 8, 18, 1) 100%) !important;
@@ -1022,15 +1032,6 @@
         display: none !important;
     }
     
-    /* Removed duplicate - main padding is defined earlier in the file */
-    
-    /* Character display area expands when menu hidden */
-    .character-grid-container.hidden ~ .character-display-area,
-    body:has(.character-grid-container.hidden) .character-display-area {
-        flex: 1 !important;
-        min-height: calc(100vh - 70px - var(--mobile-nav-height) - 60px) !important;
-    }
-    
     /* Show grid controls on mobile - compact row */
     .grid-controls {
         display: flex !important;
@@ -1062,26 +1063,26 @@
         display: none !important;
     }
     
-    /* Grid wrapper - fills space, items at top */
+    /* Grid wrapper - fills the remaining space in the 130px container */
     .grid-scroll-wrapper {
         display: flex !important;
-        align-items: flex-start !important;
+        align-items: stretch !important;
         justify-content: center !important;
         flex: 1 1 auto !important;
         min-height: 0 !important;
         gap: 4px !important;
         padding: 0 !important;
-        padding-top: 0 !important;
-        height: auto !important;
-        max-height: none !important;
-        overflow: visible !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        overflow: hidden !important;
     }
     
-    /* Arrow buttons - taller to match cards */
+    /* Arrow buttons - stretch to fill height */
     .grid-arrow {
         width: 28px !important;
         min-width: 28px !important;
-        height: 90px !important;
+        height: auto !important;
+        min-height: 100% !important;
         font-size: 0.85rem !important;
         flex-shrink: 0 !important;
         z-index: 10 !important;
@@ -1091,17 +1092,16 @@
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        align-self: stretch !important;
         margin: 0 !important;
     }
     
-    /* Grid items - show names properly */
+    /* Grid items - stretch to fill height */
     .character-grid {
         gap: 4px !important;
         padding: 2px !important;
         flex: 1 1 auto !important;
-        height: auto !important;
-        max-height: none !important;
+        height: 100% !important;
+        max-height: 100% !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
         flex-wrap: nowrap !important;
@@ -1112,8 +1112,9 @@
     
     .character-card {
         width: 60px !important;
-        min-height: 85px !important;
-        height: auto !important;
+        min-width: 60px !important;
+        height: 100% !important;
+        min-height: 80px !important;
         flex-shrink: 0 !important;
         display: flex !important;
         flex-direction: column !important;
@@ -1131,20 +1132,19 @@
     }
     
     .card-name {
-        font-size: 0.5rem !important;
-        padding: 2px 2px !important;
+        font-size: 0.45rem !important;
+        padding: 1px 2px !important;
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
-        overflow: visible !important;
-        text-overflow: clip !important;
-        white-space: normal !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
         max-width: 100% !important;
         width: 100% !important;
         text-align: center !important;
         line-height: 1.1 !important;
-        margin-top: 2px !important;
-        word-wrap: break-word !important;
+        margin-top: auto !important;
     }
     
     /* Dropdown panels - must be above all fixed elements */
