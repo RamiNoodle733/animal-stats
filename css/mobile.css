@@ -55,7 +55,7 @@
         display: none !important;
     }
     
-    /* Compact header - just logo and auth */
+    /* Compact header - just logo and auth - STICKY */
     .game-header {
         padding: 10px var(--mobile-padding) !important;
         padding-top: calc(10px + var(--mobile-safe-top)) !important;
@@ -65,6 +65,19 @@
         max-height: 70px !important;
         height: auto !important;
         overflow: visible !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 9000 !important;
+        background: linear-gradient(180deg, rgba(5, 10, 20, 0.98) 0%, rgba(0, 8, 18, 0.95) 100%) !important;
+        border-bottom: 1px solid rgba(0, 212, 255, 0.2) !important;
+    }
+    
+    /* Add top padding to body/main content to account for fixed header */
+    .main-content,
+    .view-container {
+        padding-top: 70px !important;
     }
     
     .header-brand {
@@ -400,12 +413,12 @@
         padding-top: 8px !important;
     }
     
-    /* Grid layout - 25% side panels, 50% center */
+    /* Grid layout - 28% side panels, 44% center */
     .character-display-area {
         display: grid !important;
-        grid-template-columns: 25% 50% 25% !important;
+        grid-template-columns: 28% 44% 28% !important;
         gap: 0 !important;
-        padding: 8px 0 !important;
+        padding: 8px 8px !important;
         overflow: hidden !important;
         align-items: center !important;
         flex: 1 !important;
@@ -421,7 +434,7 @@
         width: 100% !important;
         max-width: 100% !important;
         overflow: hidden !important;
-        padding: 4px 2px 4px 4px !important;
+        padding: 4px 4px 4px 8px !important;
         align-self: center !important;
         display: flex !important;
         flex-direction: column !important;
@@ -438,8 +451,8 @@
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        overflow: hidden !important;
-        justify-content: center !important;
+        overflow: visible !important;
+        justify-content: flex-start !important;
         min-width: 0 !important;
     }
     
@@ -450,7 +463,7 @@
         width: 100% !important;
         max-width: 100% !important;
         overflow: hidden !important;
-        padding: 4px 4px 4px 2px !important;
+        padding: 4px 8px 4px 4px !important;
         align-self: center !important;
         display: flex !important;
         flex-direction: column !important;
@@ -545,48 +558,55 @@
         font-size: 0.55rem !important;
     }
     
-    /* Quick info bar - horizontal row, bigger text */
+    /* Quick info bar - positioned ABOVE everything, full width of center column */
     .quick-info-bar {
         flex-wrap: nowrap !important;
         justify-content: center !important;
-        gap: 8px !important;
-        padding: 6px 8px !important;
-        margin-top: 6px !important;
+        gap: 4px !important;
+        padding: 4px 6px !important;
+        margin-top: 0 !important;
+        margin-bottom: 4px !important;
         flex-direction: row !important;
+        background: rgba(0, 15, 30, 0.85) !important;
+        border-radius: 6px !important;
+        border: 1px solid rgba(0, 212, 255, 0.25) !important;
+        order: -1 !important;
+        width: 100% !important;
+        position: relative !important;
+        z-index: 10 !important;
     }
     
     .quick-info-item {
-        padding: 4px 8px !important;
-        font-size: 0.65rem !important;
+        padding: 3px 6px !important;
+        font-size: 0.6rem !important;
         white-space: nowrap !important;
         display: flex !important;
         align-items: center !important;
-        gap: 4px !important;
-        background: rgba(0, 20, 40, 0.6) !important;
-        border-radius: 4px !important;
-        border: 1px solid rgba(0, 212, 255, 0.2) !important;
+        gap: 3px !important;
+        background: transparent !important;
+        border-radius: 3px !important;
+        border: none !important;
     }
     
     .quick-info-divider {
         display: block !important;
         width: 1px !important;
-        height: 16px !important;
+        height: 14px !important;
         background: rgba(0, 212, 255, 0.3) !important;
     }
     
     .quick-info-item i {
         display: inline-block !important;
-        font-size: 0.55rem !important;
+        font-size: 0.5rem !important;
         color: var(--primary-color) !important;
     }
     
     .quick-info-item .toggle-icon {
-        font-size: 0.45rem !important;
+        font-size: 0.4rem !important;
         opacity: 0.6 !important;
     }
     
-    /* Hide substats, abilities, traits on mobile */
-    .substat-container,
+    /* Show substats on mobile, hide abilities/traits */
     .abilities-card,
     .traits-card {
         display: none !important;
@@ -594,7 +614,7 @@
     
     /* Stat rows - horizontal layout */
     .stat-group-container {
-        margin-bottom: 6px !important;
+        margin-bottom: 4px !important;
         width: 100% !important;
     }
     
@@ -606,8 +626,8 @@
         display: flex !important;
         flex-direction: row !important;
         align-items: center !important;
-        padding: 2px 0 !important;
-        gap: 4px !important;
+        padding: 1px 0 !important;
+        gap: 3px !important;
         margin-bottom: 0 !important;
         width: 100% !important;
         box-sizing: border-box !important;
@@ -620,10 +640,10 @@
     
     /* Stat name styling */
     .stat-name {
-        font-size: 0.55rem !important;
+        font-size: 0.5rem !important;
         font-weight: 600 !important;
-        min-width: 22px !important;
-        max-width: 22px !important;
+        min-width: 20px !important;
+        max-width: 20px !important;
         margin-bottom: 0 !important;
         opacity: 1 !important;
         line-height: 1 !important;
@@ -633,90 +653,125 @@
     /* Stat bar wrapper - takes remaining space */
     .stat-bar-wrapper {
         flex: 1 1 auto !important;
-        min-width: 20px !important;
+        min-width: 15px !important;
         display: block !important;
     }
     
     /* Stat bar - visible with proper sizing */
     .stat-bar {
-        height: 12px !important;
-        border-radius: 3px !important;
+        height: 10px !important;
+        border-radius: 2px !important;
         display: block !important;
         width: 100% !important;
         background: rgba(0, 0, 0, 0.5) !important;
         position: relative !important;
         overflow: hidden !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
     }
     
     .stat-bar-bg {
-        border-radius: 3px !important;
+        border-radius: 2px !important;
         width: 100% !important;
         height: 100% !important;
     }
     
     .stat-bar-fill {
-        border-radius: 2px !important;
+        border-radius: 1px !important;
         height: 100% !important;
         position: absolute !important;
         left: 0 !important;
         top: 0 !important;
     }
     
-    /* Stat value container - only show tier badge */
+    /* Stat value container - show number AND tier */
     .stat-value {
-        font-size: 0.6rem !important;
-        min-width: 18px !important;
-        max-width: 22px !important;
+        font-size: 0.5rem !important;
+        min-width: 32px !important;
+        max-width: 40px !important;
         margin-top: 0 !important;
         line-height: 1 !important;
         flex-shrink: 0 !important;
         display: flex !important;
         align-items: center !important;
-        justify-content: center !important;
+        justify-content: flex-end !important;
+        gap: 2px !important;
     }
     
-    /* Hide badge slot and number, only show tier */
+    /* Hide badge slot but show number and tier */
     .stat-value .stat-badge-slot,
-    .stat-value .stat-number,
     .stat-value .stat-max-badge,
     .stat-value .stat-high-badge {
         display: none !important;
     }
     
-    .stat-value .stat-tier-badge {
+    .stat-value .stat-number {
         display: inline-block !important;
-        font-size: 0.55rem !important;
-        padding: 1px 3px !important;
-        min-width: 16px !important;
+        font-size: 0.5rem !important;
+        opacity: 0.9 !important;
     }
     
-    /* LEFT PANEL: name on left, grade on right */
+    .stat-value .stat-tier-badge {
+        display: inline-block !important;
+        font-size: 0.45rem !important;
+        padding: 1px 2px !important;
+        min-width: 14px !important;
+    }
+    
+    /* LEFT PANEL: name on left, value+grade on right */
     .stats-panel-left .stat-name {
         text-align: left !important;
     }
     
     .stats-panel-left .stat-value {
         justify-content: flex-end !important;
+        flex-direction: row !important;
     }
     
-    /* RIGHT PANEL: grade on left, name on right */
+    /* RIGHT PANEL: grade+value on left, name on right */
     .stats-panel-right .stat-name {
         text-align: right !important;
     }
     
     .stats-panel-right .stat-value {
         justify-content: flex-start !important;
+        flex-direction: row-reverse !important;
+    }
+    
+    /* Substats - compact single row */
+    .substat-container {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 1px 4px !important;
+        padding: 0 !important;
+        margin-top: 1px !important;
+    }
+    
+    .substat-container.right-align {
+        justify-content: flex-end !important;
+    }
+    
+    .substat-row {
+        display: flex !important;
+        align-items: center !important;
+        gap: 1px !important;
+    }
+    
+    .substat-row.compact {
+        padding: 0 !important;
+    }
+    
+    .substat-container.right-align .substat-row {
+        flex-direction: row-reverse !important;
     }
     
     .substat-label {
-        font-size: 0.38rem !important;
+        font-size: 0.35rem !important;
         color: rgba(255, 255, 255, 0.5) !important;
         min-width: auto !important;
     }
     
     .substat-value {
-        font-size: 0.42rem !important;
+        font-size: 0.4rem !important;
         color: rgba(255, 255, 255, 0.75) !important;
     }
     
@@ -897,11 +952,19 @@
     /* Adjust stats view to account for fixed bottom elements */
     #stats-view.active-view {
         padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 36px + 130px + 16px) !important;
+        min-height: calc(100vh - 70px) !important;
     }
     
-    /* When menu is hidden, less padding needed */
+    /* When menu is hidden, less padding and content expands */
     #stats-view.active-view:has(.character-grid-container.hidden) {
         padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 36px + 16px) !important;
+    }
+    
+    /* Character display area expands when menu hidden */
+    .character-grid-container.hidden ~ .character-display-area,
+    body:has(.character-grid-container.hidden) .character-display-area {
+        flex: 1 !important;
+        min-height: calc(100vh - 70px - var(--mobile-nav-height) - 60px) !important;
     }
     
     /* Show grid controls on mobile - compact row */
@@ -946,12 +1009,12 @@
         padding: 0 !important;
     }
     
-    /* Arrow buttons - square touch targets */
+    /* Arrow buttons - vertically centered with cards */
     .grid-arrow {
-        width: 36px !important;
-        min-width: 36px !important;
-        height: 60px !important;
-        font-size: 1rem !important;
+        width: 32px !important;
+        min-width: 32px !important;
+        height: 50px !important;
+        font-size: 0.9rem !important;
         flex-shrink: 0 !important;
         z-index: 10 !important;
         background: rgba(0, 20, 40, 0.9) !important;
@@ -960,6 +1023,8 @@
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        align-self: center !important;
+        margin-top: -10px !important;
     }
     
     /* Grid items - show names properly */
@@ -1021,18 +1086,21 @@
         left: 0 !important;
         right: auto !important;
         top: auto !important;
-        z-index: 9600 !important;
+        z-index: 9999 !important;
         max-width: calc(100vw - 32px) !important;
         min-width: 200px !important;
         max-height: 50vh !important;
         overflow-y: auto !important;
-        background: rgba(10, 14, 26, 0.98) !important;
-        border: 2px solid rgba(0, 212, 255, 0.5) !important;
-        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.8) !important;
+        background: rgba(10, 14, 26, 0.99) !important;
+        border: 2px solid rgba(0, 212, 255, 0.6) !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.9) !important;
+        pointer-events: auto !important;
     }
     
     .dropdown-panel.show {
         display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
     
     .filter-panel-compact {
@@ -1048,14 +1116,26 @@
         right: 0 !important;
     }
     
+    /* Make sure dropdown toggle buttons are clickable */
+    .dropdown-toggle-btn {
+        pointer-events: auto !important;
+        cursor: pointer !important;
+        -webkit-tap-highlight-color: rgba(0, 212, 255, 0.3) !important;
+        touch-action: manipulation !important;
+    }
+    
     .checkbox-option {
         padding: 10px 12px !important;
         min-height: var(--mobile-touch-min) !important;
+        pointer-events: auto !important;
+        cursor: pointer !important;
     }
     
     .filter-tab {
         padding: 8px 6px !important;
         font-size: 0.7rem !important;
+        pointer-events: auto !important;
+        cursor: pointer !important;
     }
 }
 
