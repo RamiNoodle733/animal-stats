@@ -1020,13 +1020,13 @@
     
     /* Adjust stats view to account for fixed bottom elements */
     #stats-view.active-view {
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 36px + 130px + 16px) !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 36px + 130px) !important;
         min-height: calc(100vh - 70px) !important;
     }
     
     /* When menu is hidden, less padding and content expands */
     #stats-view.active-view:has(.character-grid-container.hidden) {
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 36px + 16px) !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 36px) !important;
     }
     
     /* Character display area expands when menu hidden */
@@ -1070,7 +1070,7 @@
     /* Grid wrapper - fills remaining space, proper alignment */
     .grid-scroll-wrapper {
         display: flex !important;
-        align-items: flex-start !important;
+        align-items: center !important;
         justify-content: center !important;
         flex: 1 !important;
         min-height: 0 !important;
@@ -1079,7 +1079,7 @@
         height: 90px !important;
     }
     
-    /* Arrow buttons - aligned with card images */
+    /* Arrow buttons - centered with card images */
     .grid-arrow {
         width: 28px !important;
         min-width: 28px !important;
@@ -1093,8 +1093,8 @@
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        align-self: flex-start !important;
-        margin-top: 2px !important;
+        align-self: center !important;
+        margin-top: 0 !important;
     }
     
     /* Grid items - show names properly */
@@ -1106,7 +1106,7 @@
         overflow-x: auto !important;
         overflow-y: hidden !important;
         flex-wrap: nowrap !important;
-        align-items: flex-start !important;
+        align-items: center !important;
         -webkit-overflow-scrolling: touch !important;
         scroll-behavior: auto !important;
     }
