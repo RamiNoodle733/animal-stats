@@ -428,7 +428,7 @@
         grid-template-rows: auto auto !important;
         gap: 0 !important;
         padding: 8px 6px !important;
-        padding-bottom: 50px !important;
+        padding-bottom: 55px !important;
         margin-top: 0 !important;
         overflow: visible !important;
         align-items: stretch !important;
@@ -1018,16 +1018,7 @@
         display: none !important;
     }
     
-    /* Adjust stats view to account for fixed bottom elements */
-    #stats-view.active-view {
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 36px + 130px) !important;
-        min-height: calc(100vh - 70px) !important;
-    }
-    
-    /* When menu is hidden, less padding and content expands */
-    #stats-view.active-view:has(.character-grid-container.hidden) {
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 36px) !important;
-    }
+    /* Removed duplicate - main padding is defined earlier in the file */
     
     /* Character display area expands when menu hidden */
     .character-grid-container.hidden ~ .character-display-area,
@@ -1067,23 +1058,25 @@
         display: none !important;
     }
     
-    /* Grid wrapper - fills remaining space, proper alignment */
+    /* Grid wrapper - fills remaining space, align to top */
     .grid-scroll-wrapper {
         display: flex !important;
-        align-items: center !important;
+        align-items: flex-start !important;
         justify-content: center !important;
         flex: 1 !important;
         min-height: 0 !important;
         gap: 4px !important;
         padding: 0 !important;
-        height: 90px !important;
+        padding-top: 2px !important;
+        height: auto !important;
+        max-height: 95px !important;
     }
     
-    /* Arrow buttons - centered with card images */
+    /* Arrow buttons - same height as card area */
     .grid-arrow {
         width: 28px !important;
         min-width: 28px !important;
-        height: 55px !important;
+        height: 70px !important;
         font-size: 0.85rem !important;
         flex-shrink: 0 !important;
         z-index: 10 !important;
@@ -1093,7 +1086,7 @@
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        align-self: center !important;
+        align-self: flex-start !important;
         margin-top: 0 !important;
     }
     
@@ -1102,18 +1095,18 @@
         gap: 4px !important;
         padding: 2px !important;
         flex: 1 !important;
-        max-height: 100px !important;
+        max-height: 95px !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
         flex-wrap: nowrap !important;
-        align-items: center !important;
+        align-items: flex-start !important;
         -webkit-overflow-scrolling: touch !important;
         scroll-behavior: auto !important;
     }
     
     .character-card {
         width: 60px !important;
-        height: 90px !important;
+        height: 70px !important;
         flex-shrink: 0 !important;
         display: flex !important;
         flex-direction: column !important;
@@ -1123,8 +1116,8 @@
     }
     
     .character-card img {
-        width: 50px !important;
-        height: 50px !important;
+        width: 45px !important;
+        height: 45px !important;
         flex-shrink: 0 !important;
     }
     
