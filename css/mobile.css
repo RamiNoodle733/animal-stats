@@ -524,11 +524,10 @@
         min-height: 90px !important;
     }
     
-    /* Quick info bar - FIXED position above the bottom-info-bar (when menu visible) */
-    /* Stack: nav(60) + grid(130) + bottom-bar(36) = 226, add 4px gap */
+    /* Quick info bar - FIXED position just above the bottom-info-bar */
     .quick-info-bar {
         position: fixed !important;
-        bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 130px + 40px) !important;
+        bottom: 230px !important;
         left: 6px !important;
         right: 6px !important;
         display: flex !important;
@@ -548,7 +547,7 @@
     
     /* When menu is hidden, move quick-info-bar down */
     body:has(.character-grid-container.hidden) .quick-info-bar {
-        bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 40px) !important;
+        bottom: 100px !important;
     }
     
     /* Quick info items - styled like desktop */
