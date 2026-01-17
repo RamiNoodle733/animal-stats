@@ -411,10 +411,10 @@
  * STATS PAGE - Mobile Layout (KEEP GRID - Stats Left | Animal Center | Stats Right)
  * ============================================================================ */
 @media (max-width: 480px) {
-    /* Stats view needs padding-bottom for: nav(60) + grid(130) + bottom-bar(36) + quick-info(50) */
+    /* Stats view needs padding-bottom for: nav(60) + grid(130) + bottom-bar(36) */
     #stats-view.active-view {
         flex-direction: column !important;
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 130px + 90px) !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 130px + 50px) !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
         padding-top: 80px !important;
@@ -423,7 +423,7 @@
     
     /* When menu is hidden, reduce padding-bottom */
     body:has(.character-grid-container.hidden) #stats-view.active-view {
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 90px) !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 50px) !important;
     }
     
     /* Grid layout - properly sized columns with center constrained */
@@ -524,56 +524,58 @@
         min-height: 90px !important;
     }
     
-    /* Quick info bar - FIXED position just above the bottom-info-bar */
+    /* Quick info bar - positioned naturally within character-showcase, below the animal image */
     .quick-info-bar {
-        position: fixed !important;
-        bottom: 230px !important;
-        left: 6px !important;
-        right: 6px !important;
+        position: relative !important;
         display: flex !important;
         flex-wrap: nowrap !important;
         justify-content: center !important;
         align-items: center !important;
-        gap: 8px !important;
-        padding: 8px 12px !important;
+        gap: 6px !important;
+        padding: 6px 10px !important;
         flex-direction: row !important;
-        background: rgba(0, 20, 40, 0.95) !important;
-        border-radius: 8px !important;
-        border: 1px solid rgba(0, 212, 255, 0.3) !important;
-        width: auto !important;
-        z-index: 8100 !important;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+        background: rgba(0, 20, 40, 0.9) !important;
+        border-radius: 6px !important;
+        border: 1px solid rgba(0, 212, 255, 0.25) !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin-top: 6px !important;
+        box-sizing: border-box !important;
     }
     
-    /* When menu is hidden, move quick-info-bar down */
-    body:has(.character-grid-container.hidden) .quick-info-bar {
-        bottom: 100px !important;
-    }
-    
-    /* Quick info items - styled like desktop */
+    /* Quick info items - compact mobile styling */
     .quick-info-item {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 5px !important;
-        font-size: 0.7rem !important;
+        gap: 4px !important;
+        font-size: 0.65rem !important;
         color: rgba(255, 255, 255, 0.9) !important;
-        padding: 4px 8px !important;
-        background: rgba(0, 30, 50, 0.8) !important;
+        padding: 3px 6px !important;
+        background: rgba(0, 30, 50, 0.7) !important;
         border: 1px solid rgba(0, 212, 255, 0.2) !important;
         border-radius: 4px !important;
-        min-width: 70px !important;
+        min-width: 60px !important;
+        flex: 1 1 auto !important;
+        max-width: 100px !important;
     }
     
     .quick-info-item i {
         color: var(--primary-color) !important;
-        font-size: 0.8rem !important;
+        font-size: 0.7rem !important;
     }
     
     .quick-info-item .toggle-icon {
-        font-size: 0.5rem !important;
+        font-size: 0.45rem !important;
         color: rgba(255, 255, 255, 0.4) !important;
-        margin-left: 2px !important;
+        margin-left: 1px !important;
+    }
+    
+    .quick-info-item span {
+        min-width: 35px !important;
+        text-align: center !important;
+        font-variant-numeric: tabular-nums !important;
+        font-size: 0.6rem !important;
     }
     
     .quick-info-divider {
@@ -642,13 +644,6 @@
     
     .character-silhouette i {
         font-size: 1.8rem !important;
-    }
-    
-    /* Quick info item span */
-    .quick-info-item span {
-        min-width: 45px !important;
-        text-align: center !important;
-        font-variant-numeric: tabular-nums !important;
     }
     
     /* Show abilities and traits on mobile */
