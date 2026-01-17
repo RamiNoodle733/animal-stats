@@ -411,14 +411,19 @@
  * STATS PAGE - Mobile Layout (KEEP GRID - Stats Left | Animal Center | Stats Right)
  * ============================================================================ */
 @media (max-width: 480px) {
-    /* Only style stats-view when it's the ACTIVE view - don't override display */
+    /* Stats view needs padding-bottom for: nav(60) + grid(130) + bottom-bar(36) = 226px */
     #stats-view.active-view {
         flex-direction: column !important;
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 130px + 40px) !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
         padding-top: 70px !important;
         margin-top: 0 !important;
+    }
+    
+    /* When menu is hidden, reduce padding-bottom */
+    body:has(.character-grid-container.hidden) #stats-view.active-view {
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 40px) !important;
     }
     
     /* Grid layout - properly sized columns with center constrained */
@@ -1062,26 +1067,24 @@
         display: none !important;
     }
     
-    /* Grid wrapper - fills space, items at top */
+    /* Grid wrapper - center items vertically */
     .grid-scroll-wrapper {
         display: flex !important;
-        align-items: flex-start !important;
+        align-items: center !important;
         justify-content: center !important;
         flex: 1 1 auto !important;
-        min-height: 0 !important;
+        min-height: 80px !important;
+        height: 80px !important;
         gap: 4px !important;
-        padding: 0 !important;
-        padding-top: 0 !important;
-        height: auto !important;
-        max-height: none !important;
-        overflow: visible !important;
+        padding: 2px 0 !important;
+        overflow: hidden !important;
     }
     
-    /* Arrow buttons - taller to match cards */
+    /* Arrow buttons - fixed height to match cards */
     .grid-arrow {
         width: 28px !important;
         min-width: 28px !important;
-        height: 90px !important;
+        height: 70px !important;
         font-size: 0.85rem !important;
         flex-shrink: 0 !important;
         z-index: 10 !important;
@@ -1091,60 +1094,56 @@
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        align-self: stretch !important;
         margin: 0 !important;
     }
     
-    /* Grid items - show names properly */
+    /* Grid items - center aligned */
     .character-grid {
         gap: 4px !important;
         padding: 2px !important;
         flex: 1 1 auto !important;
-        height: auto !important;
-        max-height: none !important;
+        height: 76px !important;
+        max-height: 76px !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
         flex-wrap: nowrap !important;
-        align-items: stretch !important;
+        align-items: center !important;
         -webkit-overflow-scrolling: touch !important;
         scroll-behavior: auto !important;
     }
     
     .character-card {
         width: 60px !important;
-        min-height: 85px !important;
-        height: auto !important;
+        height: 70px !important;
         flex-shrink: 0 !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: flex-start !important;
         padding: 2px !important;
-        padding-bottom: 4px !important;
-        overflow: visible !important;
+        overflow: hidden !important;
     }
     
     .character-card img {
-        width: 50px !important;
-        height: 50px !important;
+        width: 48px !important;
+        height: 48px !important;
         flex-shrink: 0 !important;
     }
     
     .card-name {
-        font-size: 0.5rem !important;
-        padding: 2px 2px !important;
+        font-size: 0.45rem !important;
+        padding: 1px 2px !important;
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
-        overflow: visible !important;
-        text-overflow: clip !important;
-        white-space: normal !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        white-space: nowrap !important;
         max-width: 100% !important;
         width: 100% !important;
         text-align: center !important;
-        line-height: 1.1 !important;
+        line-height: 1.2 !important;
         margin-top: 2px !important;
-        word-wrap: break-word !important;
     }
     
     /* Dropdown panels - must be above all fixed elements */
