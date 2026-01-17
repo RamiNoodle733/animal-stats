@@ -411,19 +411,19 @@
  * STATS PAGE - Mobile Layout (KEEP GRID - Stats Left | Animal Center | Stats Right)
  * ============================================================================ */
 @media (max-width: 480px) {
-    /* Stats view needs padding-bottom for: nav(60) + grid(130) + bottom-bar(36) = 226px */
+    /* Stats view needs padding-bottom for: nav(60) + grid(130) + bottom-bar(36) + quick-info(50) */
     #stats-view.active-view {
         flex-direction: column !important;
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 130px + 40px) !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 130px + 90px) !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
-        padding-top: 70px !important;
+        padding-top: 80px !important;
         margin-top: 0 !important;
     }
     
     /* When menu is hidden, reduce padding-bottom */
     body:has(.character-grid-container.hidden) #stats-view.active-view {
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 40px) !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 90px) !important;
     }
     
     /* Grid layout - properly sized columns with center constrained */
@@ -433,7 +433,7 @@
         grid-template-rows: auto auto !important;
         gap: 0 !important;
         padding: 8px 6px !important;
-        padding-bottom: 55px !important;
+        padding-bottom: 8px !important;
         margin-top: 0 !important;
         overflow: visible !important;
         align-items: stretch !important;
@@ -524,10 +524,11 @@
         min-height: 90px !important;
     }
     
-    /* Quick info bar - OUTSIDE the card, full width below grid */
+    /* Quick info bar - FIXED position above the bottom-info-bar (when menu visible) */
+    /* Stack: nav(60) + grid(130) + bottom-bar(36) = 226, add 4px gap */
     .quick-info-bar {
-        position: absolute !important;
-        bottom: 8px !important;
+        position: fixed !important;
+        bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 130px + 40px) !important;
         left: 6px !important;
         right: 6px !important;
         display: flex !important;
@@ -541,8 +542,13 @@
         border-radius: 8px !important;
         border: 1px solid rgba(0, 212, 255, 0.3) !important;
         width: auto !important;
-        z-index: 100 !important;
+        z-index: 8100 !important;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    /* When menu is hidden, move quick-info-bar down */
+    body:has(.character-grid-container.hidden) .quick-info-bar {
+        bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 40px) !important;
     }
     
     /* Quick info items - styled like desktop */
