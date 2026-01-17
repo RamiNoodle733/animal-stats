@@ -411,10 +411,10 @@
  * STATS PAGE - Mobile Layout (KEEP GRID - Stats Left | Animal Center | Stats Right)
  * ============================================================================ */
 @media (max-width: 480px) {
-    /* Stats view needs padding-bottom for: nav(60) + grid(130) + bottom-bar(36) */
+    /* Stats view needs padding-bottom for: nav(60) + grid(130) + bottom-bar(36) + quick-info(~45) + spacing */
     #stats-view.active-view {
         flex-direction: column !important;
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 130px + 50px) !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 130px + 36px + 50px + 16px) !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
         padding-top: 80px !important;
@@ -423,7 +423,7 @@
     
     /* When menu is hidden, reduce padding-bottom */
     body:has(.character-grid-container.hidden) #stats-view.active-view {
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 50px) !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 36px + 50px + 16px) !important;
     }
     
     /* Grid layout - properly sized columns with center constrained */
@@ -524,9 +524,13 @@
         min-height: 90px !important;
     }
     
-    /* Quick info bar - positioned naturally within character-showcase, below the animal image */
+    /* Quick info bar - fixed position just above the bottom-info-bar */
+    /* Stack: mobile-nav(60) + grid(130) + bottom-bar(36) = 226px when menu visible */
     .quick-info-bar {
-        position: relative !important;
+        position: fixed !important;
+        bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 130px + 36px + 8px) !important;
+        left: 8px !important;
+        right: 8px !important;
         display: flex !important;
         flex-wrap: nowrap !important;
         justify-content: center !important;
@@ -534,13 +538,18 @@
         gap: 6px !important;
         padding: 6px 10px !important;
         flex-direction: row !important;
-        background: rgba(0, 20, 40, 0.9) !important;
+        background: rgba(0, 20, 40, 0.95) !important;
         border-radius: 6px !important;
-        border: 1px solid rgba(0, 212, 255, 0.25) !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        margin-top: 6px !important;
+        border: 1px solid rgba(0, 212, 255, 0.3) !important;
+        width: auto !important;
+        z-index: 7600 !important;
         box-sizing: border-box !important;
+    }
+    
+    /* When menu is hidden, move quick-info-bar down */
+    /* Stack: mobile-nav(60) + bottom-bar(36) = 96px when menu hidden */
+    body:has(.character-grid-container.hidden) .quick-info-bar {
+        bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 36px + 8px) !important;
     }
     
     /* Quick info items - compact mobile styling */
