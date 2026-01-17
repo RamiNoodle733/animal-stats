@@ -449,6 +449,7 @@
     }
     
     /* Left stats panel - high z-index to stay above center */
+    /* animation: none prevents transforms from creating stacking context issues */
     .stats-panel-left {
         grid-column: 1 !important;
         grid-row: 1 !important;
@@ -463,9 +464,13 @@
         z-index: 5 !important;
         position: relative !important;
         background: transparent !important;
+        animation: none !important;
+        transform: none !important;
     }
     
     /* Center showcase - constrained, lower z-index */
+    /* IMPORTANT: animation: none prevents transform-based animations from creating */
+    /* a new containing block, which would break position: fixed on child elements */
     .character-showcase {
         grid-column: 2 !important;
         grid-row: 1 !important;
@@ -480,6 +485,8 @@
         min-width: 0 !important;
         z-index: 1 !important;
         position: relative !important;
+        animation: none !important;
+        transform: none !important;
     }
     
     /* Character name - at top of center column */
@@ -592,6 +599,7 @@
     }
     
     /* Right stats panel - high z-index to stay above center */
+    /* animation: none prevents transforms from creating stacking context issues */
     .stats-panel-right {
         grid-column: 3 !important;
         grid-row: 1 !important;
@@ -606,6 +614,8 @@
         z-index: 5 !important;
         position: relative !important;
         background: transparent !important;
+        animation: none !important;
+        transform: none !important;
     }
     
     /* Generic stats panel styling */
@@ -985,6 +995,8 @@
         display: flex !important;
         flex-direction: column !important;
         gap: 2px !important;
+        animation: none !important;
+        transform: none !important;
     }
     
     /* When menu is hidden */
