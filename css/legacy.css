@@ -1203,7 +1203,7 @@ body {
 /* Dropdown Menu Container for Filter/Sort */
 .dropdown-menu-container {
     position: relative;
-    z-index: 150;
+    z-index: 9000;
 }
 
 .dropdown-toggle-btn {
@@ -1254,7 +1254,7 @@ body {
     display: none;
     flex-direction: column;
     gap: 8px;
-    z-index: 200;
+    z-index: 9500;
     box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5), 0 0 40px rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(10px);
 }

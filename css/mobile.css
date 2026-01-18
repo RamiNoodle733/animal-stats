@@ -1222,13 +1222,13 @@
     }
     
     .dropdown-panel {
-        position: absolute !important;
-        bottom: calc(100% + 4px) !important;
-        left: 0 !important;
-        right: auto !important;
+        position: fixed !important;
+        bottom: auto !important;
         top: auto !important;
-        z-index: 9999 !important;
-        max-width: calc(100vw - 32px) !important;
+        left: 10px !important;
+        right: 10px !important;
+        z-index: 99999 !important;
+        max-width: calc(100vw - 20px) !important;
         min-width: 200px !important;
         max-height: 50vh !important;
         overflow-y: auto !important;
@@ -1236,12 +1236,14 @@
         border: 2px solid rgba(0, 212, 255, 0.6) !important;
         box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.9) !important;
         pointer-events: auto !important;
+        display: none !important;
     }
     
     .dropdown-panel.show {
         display: flex !important;
         visibility: visible !important;
         opacity: 1 !important;
+        bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 140px) !important;
     }
     
     .filter-panel-compact {
