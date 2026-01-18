@@ -350,6 +350,9 @@ class TournamentManager {
         this.dom.results.style.display = 'none';
         this.dom.modal.classList.add('show');
         
+        // Hide header and nav on mobile for immersive tournament experience
+        document.body.classList.add('tournament-active');
+        
         // Update URL if not already on tournament route
         if (window.Router && window.Router.getCurrentPath() !== '/tournament') {
             window.Router.navigate('/tournament', { skipHandler: true });
@@ -363,6 +366,9 @@ class TournamentManager {
         }
         this.dom.modal.classList.remove('show');
         this.isActive = false;
+        
+        // Restore header and nav on mobile
+        document.body.classList.remove('tournament-active');
         
         // Navigate back using router if on tournament route
         if (window.Router && window.Router.getCurrentPath() === '/tournament') {

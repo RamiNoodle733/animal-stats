@@ -2099,3 +2099,730 @@
         text-size-adjust: 100%;
     }
 }
+
+/* ============================================================================
+ * TOURNAMENT PAGE - Mobile Layout
+ * Full-screen immersive tournament experience
+ * ============================================================================ */
+@media (max-width: 480px) {
+    /* Hide header and nav when tournament is active */
+    body.tournament-active .game-header,
+    body.tournament-active .mobile-bottom-nav {
+        display: none !important;
+    }
+    
+    /* Tournament modal - true full screen */
+    .tournament-modal {
+        z-index: 10000 !important;
+    }
+    
+    .tournament-modal.show {
+        display: flex !important;
+        align-items: stretch !important;
+        justify-content: stretch !important;
+    }
+    
+    /* ========================================
+       SETUP SCREEN - Mobile Optimized
+       ======================================== */
+    .tournament-setup {
+        width: 100% !important;
+        height: 100% !important;
+        padding: 0 !important;
+        display: flex !important;
+        align-items: stretch !important;
+        justify-content: stretch !important;
+    }
+    
+    .t-setup-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        border-radius: 0 !important;
+        border: none !important;
+        padding: 16px !important;
+        padding-top: calc(16px + env(safe-area-inset-top, 0px)) !important;
+        padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    /* Close button - larger touch target */
+    .t-close-btn {
+        position: absolute !important;
+        top: calc(12px + env(safe-area-inset-top, 0px)) !important;
+        right: 16px !important;
+        width: 44px !important;
+        height: 44px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 1.5rem !important;
+        z-index: 10 !important;
+    }
+    
+    /* Header compact */
+    .t-setup-header {
+        margin-bottom: 16px !important;
+        padding-top: 10px !important;
+    }
+    
+    .t-crown-icon {
+        font-size: 1.8rem !important;
+    }
+    
+    .t-title-banner {
+        padding: 8px 24px !important;
+    }
+    
+    .t-title-banner span {
+        font-size: 1.4rem !important;
+        letter-spacing: 3px !important;
+    }
+    
+    /* Grid becomes vertical stack */
+    .t-setup-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px !important;
+        flex: 1 !important;
+        min-height: 0 !important;
+    }
+    
+    .t-setup-panel {
+        padding: 14px !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .t-panel-header {
+        margin-bottom: 12px !important;
+    }
+    
+    .t-step-badge {
+        width: 24px !important;
+        height: 24px !important;
+        font-size: 0.8rem !important;
+    }
+    
+    .t-panel-title {
+        font-size: 0.9rem !important;
+    }
+    
+    /* Bracket cards - 2x2 grid, larger touch targets */
+    .t-bracket-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+    }
+    
+    .t-bracket-card {
+        padding: 16px 12px !important;
+        min-height: 70px !important;
+    }
+    
+    .t-bracket-num {
+        font-size: 2rem !important;
+    }
+    
+    .t-bracket-label {
+        font-size: 0.7rem !important;
+    }
+    
+    .t-bracket-tag {
+        top: -6px !important;
+        right: -6px !important;
+        font-size: 0.55rem !important;
+        padding: 3px 6px !important;
+    }
+    
+    /* Filter chips scrollable */
+    .t-filter-chips {
+        max-height: 100px !important;
+        gap: 6px !important;
+        padding-bottom: 4px !important;
+    }
+    
+    .t-chip {
+        padding: 8px 12px !important;
+        font-size: 0.75rem !important;
+        min-height: 36px !important;
+    }
+    
+    /* Footer - stacked */
+    .t-setup-footer {
+        flex-direction: column !important;
+        gap: 12px !important;
+        padding: 14px !important;
+        margin-top: auto !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .t-summary {
+        justify-content: center !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+    
+    .t-summary-item {
+        font-size: 0.8rem !important;
+    }
+    
+    .t-start-btn {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 16px 24px !important;
+        font-size: 1rem !important;
+        min-height: 50px !important;
+    }
+    
+    .t-login-note {
+        font-size: 0.75rem !important;
+        margin-top: 8px !important;
+    }
+    
+    /* ========================================
+       BATTLE SCREEN - Mobile Horizontal Layout
+       ======================================== */
+    .tournament-battle {
+        width: 100% !important;
+        height: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        overflow: hidden !important;
+    }
+    
+    /* Compact battle header */
+    .t-battle-header {
+        padding: 8px 12px !important;
+        padding-top: calc(8px + env(safe-area-inset-top, 0px)) !important;
+        height: auto !important;
+        min-height: 48px !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .t-battle-progress {
+        gap: 8px !important;
+        flex-wrap: wrap !important;
+    }
+    
+    .t-round-name {
+        font-size: 0.8rem !important;
+        letter-spacing: 1px !important;
+    }
+    
+    .t-progress-bar {
+        width: 60px !important;
+        height: 5px !important;
+    }
+    
+    .t-match-info {
+        font-size: 0.65rem !important;
+    }
+    
+    .t-quit-btn {
+        padding: 8px 12px !important;
+        font-size: 0.75rem !important;
+        min-height: 36px !important;
+    }
+    
+    /* Main battle area - horizontal fighters */
+    .t-battle-main {
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 8px !important;
+        gap: 8px !important;
+        min-height: 0 !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    /* Fighters row - HORIZONTAL side by side */
+    .t-battle-main {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        grid-template-rows: auto 1fr auto !important;
+        gap: 8px !important;
+        padding: 8px !important;
+        overflow: hidden !important;
+    }
+    
+    /* Fighter cards - compact for side-by-side */
+    .t-fighter-card {
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 8px !important;
+        min-height: 0 !important;
+        overflow: hidden !important;
+    }
+    
+    .t-fighter-card.left {
+        grid-column: 1 !important;
+        grid-row: 2 !important;
+    }
+    
+    .t-fighter-card.right {
+        grid-column: 2 !important;
+        grid-row: 2 !important;
+    }
+    
+    /* Center elements span full width at top */
+    .t-battle-center {
+        grid-column: 1 / -1 !important;
+        grid-row: 1 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 12px !important;
+        padding: 6px 8px !important;
+        min-width: 0 !important;
+        flex-wrap: wrap !important;
+    }
+    
+    /* Identity section compact */
+    .t-identity-top {
+        padding-bottom: 4px !important;
+    }
+    
+    .t-name {
+        font-size: 0.85rem !important;
+        letter-spacing: 1px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+    }
+    
+    .t-scientific {
+        font-size: 0.55rem !important;
+        display: none !important; /* Hide on mobile to save space */
+    }
+    
+    /* Record badge compact */
+    .t-record-badge {
+        max-width: 100% !important;
+        transform: scale(0.85) !important;
+        transform-origin: center !important;
+    }
+    
+    .t-record-badge .record-item {
+        padding: 2px 6px !important;
+    }
+    
+    .t-record-badge .record-value {
+        font-size: 0.7rem !important;
+    }
+    
+    .t-record-badge .record-label {
+        font-size: 0.35rem !important;
+    }
+    
+    /* Hero image - takes available space */
+    .t-hero-image {
+        flex: 1 !important;
+        min-height: 80px !important;
+        max-height: 120px !important;
+        margin: 4px 0 !important;
+    }
+    
+    .t-hero-image img {
+        max-height: 100% !important;
+        object-fit: contain !important;
+    }
+    
+    /* Click hint */
+    .t-click-hint {
+        font-size: 0.5rem !important;
+        padding: 4px 8px !important;
+        bottom: 2px !important;
+    }
+    
+    .t-fighter-card:hover .t-click-hint,
+    .t-fighter-card:active .t-click-hint {
+        opacity: 1 !important;
+    }
+    
+    /* Rating change compact */
+    .t-rating-change {
+        padding: 4px !important;
+        margin-top: 4px !important;
+    }
+    
+    .t-rating-delta {
+        font-size: 0.9rem !important;
+    }
+    
+    .t-rating-calc {
+        font-size: 0.55rem !important;
+    }
+    
+    /* VS Section compact */
+    .t-vs-section {
+        width: 50px !important;
+        height: 50px !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .t-vs-badge {
+        width: 40px !important;
+        height: 40px !important;
+    }
+    
+    .t-vs-badge span {
+        font-size: 0.9rem !important;
+    }
+    
+    /* Guess toggle compact */
+    .t-guess-section {
+        flex-shrink: 0 !important;
+    }
+    
+    .t-guess-toggle {
+        padding: 6px 10px !important;
+        font-size: 0.65rem !important;
+        gap: 4px !important;
+    }
+    
+    .t-toggle-switch {
+        width: 22px !important;
+        height: 12px !important;
+    }
+    
+    .t-toggle-switch::after {
+        width: 8px !important;
+        height: 8px !important;
+    }
+    
+    .t-guess-toggle.active .t-toggle-switch::after {
+        left: 12px !important;
+    }
+    
+    /* Community vote bar compact */
+    .t-community-vote {
+        flex: 1 !important;
+        min-width: 100px !important;
+        max-width: 180px !important;
+        padding: 6px !important;
+    }
+    
+    .t-vote-stats {
+        margin-bottom: 3px !important;
+    }
+    
+    .t-vote-pct {
+        font-size: 0.7rem !important;
+    }
+    
+    .t-vote-total {
+        font-size: 0.5rem !important;
+    }
+    
+    .t-vote-bar {
+        height: 12px !important;
+    }
+    
+    /* Radar chart - hide on mobile battle */
+    .t-radar-container {
+        display: none !important;
+    }
+    
+    /* ========================================
+       BOTTOM BAND - Info Panels + Stats
+       ======================================== */
+    .t-bottom-band {
+        grid-column: 1 / -1 !important;
+        grid-row: 3 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 6px !important;
+        padding: 6px !important;
+        padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px)) !important;
+        max-height: 180px !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    /* Stat bars - full width, compact */
+    .t-stats-compact {
+        order: -1 !important; /* Stats first */
+        padding: 6px 8px !important;
+        gap: 3px !important;
+    }
+    
+    .t-stat-row-compact {
+        gap: 4px !important;
+    }
+    
+    .t-stat-center-cluster {
+        padding: 3px 6px !important;
+        min-width: 70px !important;
+        gap: 4px !important;
+    }
+    
+    .t-stat-center-cluster .t-val {
+        font-size: 0.75rem !important;
+        min-width: 20px !important;
+    }
+    
+    .t-stat-icon-label i {
+        font-size: 0.6rem !important;
+    }
+    
+    .t-stat-abbr {
+        font-size: 0.4rem !important;
+    }
+    
+    .t-stats-compact .t-stat-bar-left,
+    .t-stats-compact .t-stat-bar-right {
+        height: 14px !important;
+        min-height: 14px !important;
+    }
+    
+    /* Hide info panels on mobile during battle - too cramped */
+    .t-info-panel {
+        display: none !important;
+    }
+    
+    /* ========================================
+       MATCH INTRO ANIMATION - Mobile
+       ======================================== */
+    .match-intro-overlay {
+        z-index: 10100 !important;
+    }
+    
+    .intro-content {
+        flex-direction: row !important; /* HORIZONTAL */
+        gap: 10px !important;
+        padding: 12px !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    /* Fighter plates - side by side */
+    .intro-fighter-plate {
+        flex-direction: column !important;
+        min-width: 0 !important;
+        max-width: 45% !important;
+        flex: 1 !important;
+        padding: 12px !important;
+    }
+    
+    .intro-fighter-plate.left {
+        animation-name: introSlideLeft !important;
+    }
+    
+    .intro-fighter-plate.right {
+        animation-name: introSlideRight !important;
+    }
+    
+    .intro-fighter-image-wrap {
+        width: 90px !important;
+        height: 90px !important;
+    }
+    
+    .intro-fighter-image {
+        width: 80px !important;
+        height: 80px !important;
+    }
+    
+    .intro-fighter-glow {
+        width: 100px !important;
+        height: 100px !important;
+    }
+    
+    .intro-fighter-name {
+        font-size: 0.9rem !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 100% !important;
+    }
+    
+    .intro-fighter-scientific {
+        font-size: 0.6rem !important;
+        display: none !important; /* Hide to save space */
+    }
+    
+    /* VS in center */
+    .intro-vs-container {
+        width: 60px !important;
+        height: 60px !important;
+        flex-shrink: 0 !important;
+        order: 0 !important; /* Keep in middle */
+        position: absolute !important;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        z-index: 10 !important;
+    }
+    
+    .intro-vs-badge {
+        width: 50px !important;
+        height: 50px !important;
+    }
+    
+    .intro-vs-badge span {
+        font-size: 1.2rem !important;
+    }
+    
+    .intro-vs-burst {
+        width: 80px !important;
+        height: 80px !important;
+    }
+    
+    /* ========================================
+       RESULTS SCREEN - Mobile
+       ======================================== */
+    .tournament-results {
+        padding: 0 !important;
+    }
+    
+    .t-results-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        border-radius: 0 !important;
+        border: none !important;
+        padding: 16px !important;
+        padding-top: calc(16px + env(safe-area-inset-top, 0px)) !important;
+        padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+        gap: 16px !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    /* Champion section */
+    .t-champion-section {
+        padding: 0 !important;
+    }
+    
+    .t-crown-burst {
+        font-size: 2rem !important;
+    }
+    
+    .t-champion-banner {
+        padding: 8px 20px !important;
+    }
+    
+    .t-champion-banner span {
+        font-size: 1.3rem !important;
+        letter-spacing: 3px !important;
+    }
+    
+    .t-champion-card {
+        padding: 16px !important;
+    }
+    
+    .t-champion-img {
+        width: 120px !important;
+        height: 120px !important;
+    }
+    
+    .t-champion-name {
+        font-size: 1.1rem !important;
+    }
+    
+    .t-champion-stats {
+        gap: 20px !important;
+    }
+    
+    .t-champ-val {
+        font-size: 1.1rem !important;
+    }
+    
+    .t-champ-label {
+        font-size: 0.6rem !important;
+    }
+    
+    /* Results row - stack */
+    .t-results-row {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+    }
+    
+    .t-stats-panel,
+    .t-podium-panel {
+        padding: 12px !important;
+    }
+    
+    .t-stats-title,
+    .t-podium-title {
+        font-size: 0.85rem !important;
+    }
+    
+    .t-stats-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+    }
+    
+    .t-stat-item {
+        padding: 8px !important;
+    }
+    
+    .t-stat-value {
+        font-size: 1rem !important;
+    }
+    
+    .t-stat-label {
+        font-size: 0.55rem !important;
+    }
+    
+    /* Podium compact */
+    .t-podium-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+    }
+    
+    .t-podium-card {
+        padding: 8px !important;
+    }
+    
+    .t-podium-pos {
+        font-size: 0.5rem !important;
+    }
+    
+    .t-podium-img {
+        width: 45px !important;
+        height: 45px !important;
+    }
+    
+    .t-podium-name {
+        font-size: 0.6rem !important;
+    }
+    
+    /* Bonus display */
+    .t-bonus-display {
+        gap: 16px !important;
+        padding: 12px !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+    }
+    
+    .t-bonus-item {
+        font-size: 0.85rem !important;
+    }
+    
+    /* Action buttons - stack */
+    .t-results-actions {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+    
+    .t-action-btn {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 14px 20px !important;
+        font-size: 0.9rem !important;
+        min-height: 48px !important;
+    }
+    
+    /* Guess result overlay */
+    .t-guess-result {
+        font-size: 0.85rem !important;
+        padding: 8px 16px !important;
+    }
+}
