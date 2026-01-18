@@ -3078,18 +3078,18 @@ body {
         grid-column: 1;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        overflow: hidden;
-        padding: 5px;
+        justify-content: flex-start;
+        overflow: visible;
+        padding: 80px 2px 4px 6px;
     }
     
     .stats-panel-right {
         grid-column: 3;
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        overflow: hidden;
-        padding: 5px;
+        justify-content: flex-start;
+        overflow: visible;
+        padding: 80px 6px 4px 2px;
     }
     
     /* Compact stat rows for mobile */
