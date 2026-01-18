@@ -1122,9 +1122,9 @@
         align-items: center !important;
         justify-content: center !important;
         flex: 0 0 auto !important;
-        min-height: 76px !important;
-        height: 76px !important;
-        max-height: 76px !important;
+        min-height: 78px !important;
+        height: 78px !important;
+        max-height: 78px !important;
         gap: 4px !important;
         padding: 0 !important;
         overflow: hidden !important;
@@ -1138,7 +1138,7 @@
         transform: none !important;
         width: 26px !important;
         min-width: 26px !important;
-        height: 66px !important;
+        height: 70px !important;
         font-size: 0.8rem !important;
         flex-shrink: 0 !important;
         z-index: 10 !important;
@@ -1159,8 +1159,8 @@
         gap: 4px !important;
         padding: 0 2px !important;
         flex: 1 1 auto !important;
-        height: 72px !important;
-        max-height: 72px !important;
+        height: 74px !important;
+        max-height: 74px !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
         flex-wrap: nowrap !important;
@@ -1170,28 +1170,36 @@
         box-sizing: border-box !important;
     }
     
+    /* Hide fade masks on mobile - they look like errors */
+    .grid-fade-mask,
+    .grid-fade-left,
+    .grid-fade-right {
+        display: none !important;
+    }
+    
     .character-card {
         width: 56px !important;
-        height: 66px !important;
+        height: 70px !important;
         flex-shrink: 0 !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: flex-start !important;
         padding: 2px !important;
-        overflow: hidden !important;
+        overflow: visible !important;
         box-sizing: border-box !important;
     }
     
     .character-card img {
-        width: 44px !important;
-        height: 44px !important;
+        width: 42px !important;
+        height: 42px !important;
         flex-shrink: 0 !important;
     }
     
-    .card-name {
-        font-size: 0.45rem !important;
-        padding: 1px 2px !important;
+    .card-name,
+    .character-card-name {
+        font-size: 0.5rem !important;
+        padding: 2px 2px !important;
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
@@ -1203,6 +1211,8 @@
         text-align: center !important;
         line-height: 1.2 !important;
         margin-top: 2px !important;
+        flex-shrink: 0 !important;
+        min-height: 14px !important;
     }
     
     /* Dropdown panels - must be above all fixed elements */
