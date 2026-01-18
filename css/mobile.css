@@ -427,20 +427,19 @@
     }
     
     /* Grid layout - properly sized columns with center constrained */
+    /* Stats panels on left/right, animal image in center */
     .character-display-area {
         display: grid !important;
         grid-template-columns: minmax(85px, 28%) minmax(140px, 44%) minmax(85px, 28%) !important;
-        grid-template-rows: auto auto !important;
+        grid-template-rows: 1fr !important;
         gap: 0 !important;
         padding: 8px 6px !important;
         padding-bottom: 8px !important;
         margin-top: 0 !important;
         overflow: visible !important;
         align-items: stretch !important;
-        flex: 0 0 auto !important;
-        flex-grow: 0 !important;
-        flex-shrink: 0 !important;
-        min-height: 0 !important;
+        flex: 1 1 auto !important;
+        min-height: 300px !important;
         max-height: none !important;
         height: auto !important;
         width: 100% !important;
@@ -457,10 +456,10 @@
         max-width: 100% !important;
         overflow: visible !important;
         padding: 4px 2px 4px 6px !important;
-        align-self: center !important;
+        align-self: stretch !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: center !important;
+        justify-content: space-evenly !important;
         z-index: 5 !important;
         position: relative !important;
         background: transparent !important;
@@ -487,6 +486,7 @@
         position: relative !important;
         animation: none !important;
         transform: none !important;
+        align-self: stretch !important;
     }
     
     /* Character name - at top of center column */
@@ -520,15 +520,16 @@
         justify-content: center !important;
     }
     
-    /* Animal image container - in the middle */
+    /* Animal image container - expands to fill center column */
     .character-model-container {
         width: 100% !important;
-        max-width: 130px !important;
+        max-width: 150px !important;
         margin: 4px auto !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
-        min-height: 90px !important;
+        min-height: 100px !important;
+        flex: 1 1 auto !important;
     }
     
     /* Quick info bar - fixed position just above the bottom-info-bar */
@@ -536,19 +537,21 @@
     .quick-info-bar {
         position: fixed !important;
         bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 130px + 36px + 8px) !important;
-        left: 8px !important;
-        right: 8px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        right: auto !important;
         display: flex !important;
         flex-wrap: nowrap !important;
         justify-content: center !important;
         align-items: center !important;
-        gap: 6px !important;
-        padding: 6px 10px !important;
+        gap: 4px !important;
+        padding: 5px 8px !important;
         flex-direction: row !important;
         background: rgba(0, 20, 40, 0.95) !important;
         border-radius: 6px !important;
         border: 1px solid rgba(0, 212, 255, 0.3) !important;
         width: auto !important;
+        max-width: 280px !important;
         z-index: 7600 !important;
         box-sizing: border-box !important;
     }
@@ -557,6 +560,7 @@
     /* Stack: mobile-nav(60) + bottom-bar(36) = 96px when menu hidden */
     body:has(.character-grid-container.hidden) .quick-info-bar {
         bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 36px + 8px) !important;
+        transform: translateX(-50%) !important;
     }
     
     /* Quick info items - compact mobile styling */
@@ -564,16 +568,16 @@
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 4px !important;
-        font-size: 0.65rem !important;
+        gap: 3px !important;
+        font-size: 0.6rem !important;
         color: rgba(255, 255, 255, 0.9) !important;
-        padding: 3px 6px !important;
+        padding: 3px 5px !important;
         background: rgba(0, 30, 50, 0.7) !important;
         border: 1px solid rgba(0, 212, 255, 0.2) !important;
         border-radius: 4px !important;
-        min-width: 60px !important;
-        flex: 1 1 auto !important;
-        max-width: 100px !important;
+        min-width: 55px !important;
+        flex: 0 1 auto !important;
+        max-width: 85px !important;
     }
     
     .quick-info-item i {
@@ -588,10 +592,10 @@
     }
     
     .quick-info-item span {
-        min-width: 35px !important;
+        min-width: 30px !important;
         text-align: center !important;
         font-variant-numeric: tabular-nums !important;
-        font-size: 0.6rem !important;
+        font-size: 0.55rem !important;
     }
     
     .quick-info-divider {
@@ -607,10 +611,10 @@
         max-width: 100% !important;
         overflow: visible !important;
         padding: 4px 6px 4px 2px !important;
-        align-self: center !important;
+        align-self: stretch !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: center !important;
+        justify-content: space-evenly !important;
         z-index: 5 !important;
         position: relative !important;
         background: transparent !important;
@@ -650,9 +654,10 @@
     }
     
     .character-model {
-        max-height: 110px !important;
+        max-height: 150px !important;
         max-width: 100% !important;
         object-fit: contain !important;
+        flex: 1 1 auto !important;
     }
     
     /* Silhouette - don't override JS display property */
