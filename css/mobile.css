@@ -457,11 +457,11 @@
         max-width: 100% !important;
         overflow: visible !important;
         padding: 4px 2px 4px 6px !important;
-        padding-top: 30px !important;
+        padding-top: 50px !important;
         align-self: stretch !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: center !important;
+        justify-content: flex-start !important;
         z-index: 5 !important;
         position: relative !important;
         background: transparent !important;
@@ -547,14 +547,14 @@
         flex-wrap: nowrap !important;
         justify-content: center !important;
         align-items: center !important;
-        gap: 4px !important;
-        padding: 6px 10px !important;
+        gap: 5px !important;
+        padding: 6px 12px !important;
         flex-direction: row !important;
         background: rgba(0, 20, 40, 0.95) !important;
         border-radius: 6px !important;
         border: 1px solid rgba(0, 212, 255, 0.3) !important;
         width: auto !important;
-        max-width: 200px !important;
+        max-width: 240px !important;
         z-index: 7600 !important;
         box-sizing: border-box !important;
     }
@@ -572,15 +572,15 @@
         align-items: center !important;
         justify-content: center !important;
         gap: 3px !important;
-        font-size: 0.55rem !important;
+        font-size: 0.58rem !important;
         color: rgba(255, 255, 255, 0.9) !important;
-        padding: 3px 5px !important;
+        padding: 4px 6px !important;
         background: rgba(0, 30, 50, 0.7) !important;
         border: 1px solid rgba(0, 212, 255, 0.2) !important;
         border-radius: 4px !important;
-        min-width: 55px !important;
+        min-width: 60px !important;
         flex: 0 1 auto !important;
-        max-width: 65px !important;
+        max-width: 75px !important;
     }
     
     .quick-info-item i {
@@ -614,11 +614,11 @@
         max-width: 100% !important;
         overflow: visible !important;
         padding: 4px 6px 4px 2px !important;
-        padding-top: 30px !important;
+        padding-top: 50px !important;
         align-self: stretch !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: center !important;
+        justify-content: flex-start !important;
         z-index: 5 !important;
         position: relative !important;
         background: transparent !important;
