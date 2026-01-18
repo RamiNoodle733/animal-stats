@@ -1,15 +1,13 @@
 /**
- * Mobile Scroll Lock with Cool Animation
- * Prevents page from scrolling normally on mobile
- * Triggers cool pop animation on animal images when scrolling
+ * Mobile Section Scroll Animation
+ * Adds cool animation to animal images and stats when scrolling within specific sections
+ * Only targets the middle section on stats page and compare page
  */
 
-class MobileScrollLock {
+class MobileSectionScrollAnimation {
     constructor() {
-        this.scrollTimeout = null;
-        this.isAnimating = false;
         this.lastScrollPos = 0;
-        this.scrollDirection = 0; // 1 for down, -1 for up
+        this.scrollTimeout = null;
         
         this.init();
     }
@@ -18,124 +16,95 @@ class MobileScrollLock {
         // Only apply on mobile (max-width: 768px)
         if (window.innerWidth > 768) return;
         
-        this.setupScrollLock();
-        window.addEventListener('resize', () => this.handleResize());
+        // Setup scroll listeners for specific sections
+        this.setupStatsPageAnimation();
+        this.setupComparePageAnimation();
     }
     
-    handleResize() {
-        // Reapply on resize if we hit mobile breakpoint
-        if (window.innerWidth <= 768) {
-            this.setupScrollLock();
-        }
-    }
-    
-    setupScrollLock() {
-        // Prevent default scroll behavior
-        document.addEventListener('wheel', (e) => this.handleWheel(e), { passive: false });
-        document.addEventListener('touchmove', (e) => this.handleTouchMove(e), { passive: false });
+    setupStatsPageAnimation() {
+        // Find the middle section on stats page (the scrollable stats area)
+        const statsContainer = document.querySelector('#stats-view .character-grid');
+        if (!statsContainer) return;
         
-        // Listen for scroll events
-        window.addEventListener('scroll', () => this.handleScroll());
+        // Listen for scroll on the character grid
+        statsContainer.addEventListener('scroll', (e) => {
+            this.handleStatsScroll(e, statsContainer);
+        });
     }
     
-    handleWheel(e) {
-        // Allow scroll on scrollable containers, lock on main page
-        const target = e.target;
-        const scrollableParent = this.findScrollableParent(target);
+    setupComparePageAnimation() {
+        // Find the fight-screen container on compare page
+        const fightScreen = document.querySelector('#compare-view .fight-screen');
+        if (!fightScreen) return;
         
-        if (!scrollableParent) {
-            e.preventDefault();
-            this.triggerScrollAnimation(e.deltaY);
-        }
-    }
-    
-    handleTouchMove(e) {
-        const target = e.target;
-        const scrollableParent = this.findScrollableParent(target);
+        // We mainly just want to ensure it scrolls internally without moving the page
+        // The page should not scroll when interacting with this area
+        fightScreen.addEventListener('touchstart', () => {
+            document.body.style.overscrollBehavior = 'contain';
+        }, false);
         
-        if (!scrollableParent) {
-            e.preventDefault();
-        }
+        fightScreen.addEventListener('touchend', () => {
+            document.body.style.overscrollBehavior = 'auto';
+        }, false);
     }
     
-    handleScroll() {
-        // Prevent page from scrolling
-        if (window.scrollY !== 0) {
-            window.scrollTo(0, 0);
-        }
-    }
-    
-    findScrollableParent(element) {
-        let current = element;
-        while (current) {
-            if (current === document.body || current === document.documentElement) {
-                return null;
-            }
-            
-            const style = window.getComputedStyle(current);
-            const hasOverflow = style.overflow === 'auto' || 
-                               style.overflow === 'scroll' ||
-                               style.overflowY === 'auto' ||
-                               style.overflowY === 'scroll';
-            
-            if (hasOverflow && current.scrollHeight > current.clientHeight) {
-                return current;
-            }
-            
-            current = current.parentElement;
-        }
-        return null;
-    }
-    
-    triggerScrollAnimation(delta) {
-        this.scrollDirection = delta > 0 ? 1 : -1;
+    handleStatsScroll(e, container) {
+        const scrollPos = container.scrollTop;
+        const scrollDelta = scrollPos - this.lastScrollPos;
         
-        // Get all animal images on current page
-        const images = document.querySelectorAll(
-            '.fighter-image, .fighter__image, #animal-1-image, #animal-2-image'
-        );
+        // Get animal image and stat elements
+        const animalImg = container.querySelector('.fighter-image, .fighter__image, img[id*="animal"]');
+        const statPanels = container.querySelectorAll('.stats-panel, .stat-item');
         
-        images.forEach(img => {
-            if (img.style.display !== 'none') {
-                this.animateImage(img);
-            }
+        if (!animalImg) {
+            this.lastScrollPos = scrollPos;
+            return;
+        }
+        
+        // Trigger animation based on scroll direction
+        const moveDistance = Math.min(Math.abs(scrollDelta), 10);
+        const direction = scrollDelta > 0 ? 1 : -1; // 1 = down, -1 = up
+        
+        // Move image based on scroll
+        const translateY = direction * moveDistance * 0.5;
+        
+        animalImg.style.transition = 'none';
+        animalImg.style.transform = `translateY(${translateY}px)`;
+        
+        // Also move stat panels slightly in opposite direction for parallax effect
+        statPanels.forEach(panel => {
+            panel.style.transition = 'none';
+            panel.style.transform = `translateY(${-translateY * 0.3}px)`;
         });
         
-        // Reset animation after scroll stops
+        // Reset animation after scrolling stops
         clearTimeout(this.scrollTimeout);
-        this.scrollTimeout = setTimeout(() => this.resetAnimation(images), 300);
-    }
-    
-    animateImage(img) {
-        if (this.isAnimating) return;
-        
-        this.isAnimating = true;
-        
-        // Pop/grow animation based on scroll direction
-        const scale = this.scrollDirection > 0 ? 1.15 : 0.92;
-        const duration = 150;
-        
-        img.style.transition = `transform ${duration}ms cubic-bezier(0.34, 1.56, 0.64, 1)`;
-        img.style.transform = `scale(${scale})`;
-    }
-    
-    resetAnimation(images) {
-        images.forEach(img => {
-            img.style.transition = 'transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1)';
-            img.style.transform = 'scale(1)';
+        this.scrollTimeout = setTimeout(() => {
+            animalImg.style.transition = 'transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1)';
+            animalImg.style.transform = 'translateY(0)';
             
+            statPanels.forEach(panel => {
+                panel.style.transition = 'transform 400ms cubic-bezier(0.34, 1.56, 0.64, 1)';
+                panel.style.transform = 'translateY(0)';
+            });
+            
+            // Clean up transition after animation
             setTimeout(() => {
-                img.style.transition = '';
+                animalImg.style.transition = '';
+                statPanels.forEach(panel => {
+                    panel.style.transition = '';
+                });
             }, 400);
-        });
+        }, 150);
         
-        this.isAnimating = false;
+        this.lastScrollPos = scrollPos;
     }
 }
 
 // Initialize when page loads
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new MobileScrollLock());
+    document.addEventListener('DOMContentLoaded', () => new MobileSectionScrollAnimation());
 } else {
-    new MobileScrollLock();
+    new MobileSectionScrollAnimation();
 }
+
