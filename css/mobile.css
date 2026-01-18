@@ -457,6 +457,7 @@
         max-width: 100% !important;
         overflow: visible !important;
         padding: 4px 2px 4px 6px !important;
+        padding-top: 30px !important;
         align-self: stretch !important;
         display: flex !important;
         flex-direction: column !important;
@@ -535,7 +536,7 @@
     }
     
     /* Quick info bar - fixed position just above the bottom-info-bar */
-    /* Must fit in center 44% of viewport to not overlap side abilities/traits */
+    /* Has room in center column now */
     .quick-info-bar {
         position: fixed !important;
         bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 130px + 36px + 8px) !important;
@@ -546,14 +547,14 @@
         flex-wrap: nowrap !important;
         justify-content: center !important;
         align-items: center !important;
-        gap: 2px !important;
-        padding: 4px 5px !important;
+        gap: 4px !important;
+        padding: 6px 10px !important;
         flex-direction: row !important;
         background: rgba(0, 20, 40, 0.95) !important;
         border-radius: 6px !important;
         border: 1px solid rgba(0, 212, 255, 0.3) !important;
         width: auto !important;
-        max-width: 160px !important;
+        max-width: 200px !important;
         z-index: 7600 !important;
         box-sizing: border-box !important;
     }
@@ -565,21 +566,21 @@
         transform: translateX(-50%) !important;
     }
     
-    /* Quick info items - very compact to fit in center */
+    /* Quick info items - bigger since there's room */
     .quick-info-item {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 2px !important;
-        font-size: 0.5rem !important;
+        gap: 3px !important;
+        font-size: 0.55rem !important;
         color: rgba(255, 255, 255, 0.9) !important;
-        padding: 2px 3px !important;
+        padding: 3px 5px !important;
         background: rgba(0, 30, 50, 0.7) !important;
         border: 1px solid rgba(0, 212, 255, 0.2) !important;
-        border-radius: 3px !important;
-        min-width: 42px !important;
+        border-radius: 4px !important;
+        min-width: 55px !important;
         flex: 0 1 auto !important;
-        max-width: 50px !important;
+        max-width: 65px !important;
     }
     
     .quick-info-item i {
@@ -613,6 +614,7 @@
         max-width: 100% !important;
         overflow: visible !important;
         padding: 4px 6px 4px 2px !important;
+        padding-top: 30px !important;
         align-self: stretch !important;
         display: flex !important;
         flex-direction: column !important;
@@ -672,13 +674,13 @@
         font-size: 1.8rem !important;
     }
     
-    /* Show abilities and traits on mobile - horizontally narrow to not overlap quick-info */
+    /* Show abilities and traits on mobile - align tops, grow downward */
     .abilities-card,
     .traits-card {
         display: block !important;
         margin-top: 8px !important;
         padding: 4px !important;
-        min-height: auto !important;
+        min-height: 60px !important;
         max-height: none !important;
         height: auto !important;
         overflow: visible !important;
@@ -688,6 +690,7 @@
         max-width: 100% !important;
         width: 100% !important;
         box-sizing: border-box !important;
+        align-self: flex-start !important;
     }
     
     /* Stat group wrapper (#left-stats, #right-stats) - keeps stats together above abilities/traits */
