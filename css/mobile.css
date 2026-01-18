@@ -2126,6 +2126,7 @@
     
     /* Each screen takes full viewport and uses position absolute */
     /* Only the visible one (not display:none) will show */
+    /* IMPORTANT: Do NOT use display: flex !important here - it overrides inline display:none */
     .tournament-setup,
     .tournament-battle,
     .tournament-results {
@@ -2136,6 +2137,12 @@
         bottom: 0 !important;
         width: 100% !important;
         height: 100% !important;
+    }
+    
+    /* Hide screens that should be hidden (respect inline styles) */
+    .tournament-battle[style*="display: none"],
+    .tournament-results[style*="display: none"] {
+        display: none !important;
     }
     
     /* Match intro overlay - above everything */
@@ -2151,9 +2158,10 @@
     /* ========================================
        SETUP SCREEN - Mobile Optimized
        ======================================== */
+    /* Note: Don't override display - let JS control visibility */
     .tournament-setup {
         padding: 0 !important;
-        display: flex !important;
+        /* When visible, use flex for centering */
         align-items: stretch !important;
         justify-content: stretch !important;
     }
@@ -2310,10 +2318,11 @@
     /* ========================================
        BATTLE SCREEN - Mobile Horizontal Layout
        ======================================== */
+    /* Note: Don't override display - let JS control visibility */
     .tournament-battle {
         width: 100% !important;
         height: 100% !important;
-        display: flex !important;
+        /* When visible, use flex column layout */
         flex-direction: column !important;
         overflow: hidden !important;
     }
@@ -2700,9 +2709,10 @@
     /* ========================================
        RESULTS SCREEN - Mobile
        ======================================== */
+    /* Note: Don't set display here - let inline styles control visibility */
     .tournament-results {
         padding: 0 !important;
-        display: flex !important;
+        /* When visible, it will use flex from base CSS */
         align-items: center !important;
         justify-content: center !important;
     }
