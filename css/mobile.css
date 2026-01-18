@@ -466,7 +466,7 @@
         background: transparent !important;
         animation: none !important;
         transform: none !important;
-        padding-top: 60px !important;
+        padding-top: 120px !important;
     }
     
     /* Center showcase - constrained, lower z-index */
@@ -478,7 +478,7 @@
         width: 100% !important;
         max-width: 100% !important;
         padding: 4px !important;
-        padding-top: 40px !important;
+        padding-top: 80px !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
@@ -547,14 +547,14 @@
         flex-wrap: nowrap !important;
         justify-content: center !important;
         align-items: center !important;
-        gap: 4px !important;
-        padding: 5px 8px !important;
+        gap: 3px !important;
+        padding: 4px 6px !important;
         flex-direction: row !important;
         background: rgba(0, 20, 40, 0.95) !important;
         border-radius: 6px !important;
         border: 1px solid rgba(0, 212, 255, 0.3) !important;
         width: auto !important;
-        max-width: 280px !important;
+        max-width: 220px !important;
         z-index: 7600 !important;
         box-sizing: border-box !important;
     }
@@ -571,16 +571,16 @@
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 3px !important;
-        font-size: 0.6rem !important;
+        gap: 2px !important;
+        font-size: 0.55rem !important;
         color: rgba(255, 255, 255, 0.9) !important;
-        padding: 3px 5px !important;
+        padding: 2px 4px !important;
         background: rgba(0, 30, 50, 0.7) !important;
         border: 1px solid rgba(0, 212, 255, 0.2) !important;
         border-radius: 4px !important;
-        min-width: 55px !important;
+        min-width: 48px !important;
         flex: 0 1 auto !important;
-        max-width: 85px !important;
+        max-width: 70px !important;
     }
     
     .quick-info-item i {
@@ -623,7 +623,7 @@
         background: transparent !important;
         animation: none !important;
         transform: none !important;
-        padding-top: 60px !important;
+        padding-top: 120px !important;
     }
     
     /* Generic stats panel styling */
@@ -674,19 +674,19 @@
         font-size: 1.8rem !important;
     }
     
-    /* Show abilities and traits on mobile - pushed to bottom */
+    /* Show abilities and traits on mobile - pushed to bottom, very compact */
     .abilities-card,
     .traits-card {
         display: block !important;
         margin-top: auto !important;
-        padding: 4px !important;
+        padding: 3px !important;
         min-height: auto !important;
-        max-height: 80px !important;
+        max-height: 50px !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
         background: rgba(0, 15, 30, 0.6) !important;
         border: 1px solid rgba(0, 212, 255, 0.2) !important;
-        border-radius: 6px !important;
+        border-radius: 4px !important;
     }
     
     /* Stat group wrapper (#left-stats, #right-stats) - keeps stats together above abilities/traits */
