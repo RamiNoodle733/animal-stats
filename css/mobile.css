@@ -470,11 +470,6 @@
         transform: none !important;
     }
     
-    /* When menu hidden, reduce top padding since we have more vertical space */
-    body:has(.character-grid-container.hidden) .stats-panel.stats-panel-left {
-        padding-top: 40px !important;
-    }
-    
     /* Center showcase - constrained, lower z-index */
     /* IMPORTANT: animation: none prevents transform-based animations from creating */
     /* a new containing block, which would break position: fixed on child elements */
@@ -631,11 +626,6 @@
         background: transparent !important;
         animation: none !important;
         transform: none !important;
-    }
-    
-    /* When menu hidden, reduce top padding since we have more vertical space */
-    body:has(.character-grid-container.hidden) .stats-panel.stats-panel-right {
-        padding-top: 40px !important;
     }
     
     /* Generic stats panel styling */
@@ -1125,9 +1115,9 @@
         display: none !important;
     }
     
-    /* Grid wrapper - center items vertically, fits within 130px container */
+    /* Grid row wrapper - contains arrows and grid, fits within container */
     /* Container: 130px - controls(28px) - padding(6px) - gap(2px) = ~94px available */
-    .grid-scroll-wrapper {
+    .grid-row-wrapper {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -1139,10 +1129,13 @@
         padding: 0 !important;
         overflow: hidden !important;
         box-sizing: border-box !important;
+        position: relative !important;
     }
     
-    /* Arrow buttons - fixed height to match cards */
+    /* Arrow buttons - flex items, not absolute positioned on mobile */
     .grid-arrow {
+        position: static !important;
+        transform: none !important;
         width: 26px !important;
         min-width: 26px !important;
         height: 66px !important;
@@ -1156,6 +1149,9 @@
         align-items: center !important;
         justify-content: center !important;
         margin: 0 !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
     }
     
     /* Grid items - center aligned */
