@@ -25,7 +25,7 @@ const VIEWPORTS = [
 ];
 
 // Default routes to capture
-const DEFAULT_ROUTES = ['/', '/stats', '/compare', '/rankings', '/community'];
+const DEFAULT_ROUTES = ['/', '/stats', '/compare', '/rankings', '/community', '/tournament'];
 
 // Key elements to analyze for layout
 const LAYOUT_SELECTORS = {
