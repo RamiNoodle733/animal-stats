@@ -2031,19 +2031,31 @@
         min-height: 70px !important;
     }
     
+    /* Left hero section - push to right (toward center) */
+    #compare-view .fighter-left .c-hero-section {
+        margin-left: auto !important;
+        margin-right: 0 !important;
+    }
+    
+    /* Right hero section - push to left (toward center) */
+    #compare-view .fighter-right .c-hero-section {
+        margin-left: 0 !important;
+        margin-right: auto !important;
+    }
+    
     #compare-view .fighter-display {
         width: 65px !important;
         height: 65px !important;
         border-radius: 6px !important;
     }
     
-    /* Left fighter - image pushed to right (toward center) */
+    /* Left fighter - image pushed to right (toward center within the box) */
     #compare-view .fighter-left .fighter-display {
         margin-left: auto !important;
         margin-right: 0 !important;
     }
     
-    /* Right fighter - image pushed to left (toward center) */
+    /* Right fighter - image pushed to left (toward center within the box) */
     #compare-view .fighter-right .fighter-display {
         margin-left: 0 !important;
         margin-right: auto !important;
@@ -2148,6 +2160,20 @@
         font-size: 0.4rem !important;
         padding: 2px 4px !important;
         border-radius: 3px !important;
+    }
+    
+    /* Left fighter abilities/traits - purple tint */
+    #compare-view .fighter-left .abilities-tags-compact .ability-tag,
+    #compare-view .fighter-left .traits-tags-compact .trait-tag {
+        background-color: rgba(168, 85, 247, 0.15) !important;
+        border-left: 2px solid rgba(168, 85, 247, 0.4) !important;
+    }
+    
+    /* Right fighter abilities/traits - green tint */
+    #compare-view .fighter-right .abilities-tags-compact .ability-tag,
+    #compare-view .fighter-right .traits-tags-compact .trait-tag {
+        background-color: rgba(34, 197, 94, 0.15) !important;
+        border-left: 2px solid rgba(34, 197, 94, 0.4) !important;
     }
     
     /* Tournament dashboard - medals row */
