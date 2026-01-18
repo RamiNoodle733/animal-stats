@@ -451,6 +451,7 @@
     /* Left stats panel - high z-index to stay above center */
     /* animation: none prevents transforms from creating stacking context issues */
     /* Use flex-start + padding-top so content starts at top and grows downward */
+    /* padding-top: 80px matches character-showcase to align stats with animal image */
     .stats-panel-left {
         grid-column: 1 !important;
         grid-row: 1 !important;
@@ -458,7 +459,7 @@
         max-width: 100% !important;
         overflow: visible !important;
         padding: 4px 2px 4px 6px !important;
-        padding-top: 50px !important;
+        padding-top: 80px !important;
         align-self: stretch !important;
         display: flex !important;
         flex-direction: column !important;
@@ -614,6 +615,7 @@
     /* Right stats panel - high z-index to stay above center */
     /* animation: none prevents transforms from creating stacking context issues */
     /* Use flex-start + padding-top so content starts at top and grows downward */
+    /* padding-top: 80px matches character-showcase to align stats with animal image */
     .stats-panel-right {
         grid-column: 3 !important;
         grid-row: 1 !important;
@@ -621,7 +623,7 @@
         max-width: 100% !important;
         overflow: visible !important;
         padding: 4px 6px 4px 2px !important;
-        padding-top: 50px !important;
+        padding-top: 80px !important;
         align-self: stretch !important;
         display: flex !important;
         flex-direction: column !important;
