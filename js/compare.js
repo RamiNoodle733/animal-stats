@@ -457,6 +457,16 @@
             
             const stats = ['attack', 'defense', 'agility', 'stamina', 'intelligence', 'special'];
             
+            // Define colors for each stat type
+            const statColors = {
+                attack: '#ef4444',      // red
+                defense: '#3b82f6',     // blue
+                agility: '#22c55e',     // green
+                stamina: '#f59e0b',     // amber
+                intelligence: '#a855f7', // purple
+                special: '#ec4899'      // pink
+            };
+            
             stats.forEach(stat => {
                 const leftVal = left?.[stat] || 0;
                 const rightVal = right?.[stat] || 0;
@@ -471,19 +481,52 @@
                 const bar1El = document.getElementById(`c-bar-1-${stat}`);
                 const bar2El = document.getElementById(`c-bar-2-${stat}`);
                 
+                // Stronger saturation effect: 0 (grey) to 1.4 (vibrant)
+                // Values below 30 are quite grey, above 70 are colorful
+                const calcSaturation = (val) => Math.max(0, (val / 100) * 1.4);
+                
+                // Calculate color for stat value numbers
+                // Grey (#888) for low stats, stat color for high stats
+                const calcStatColor = (val, statType) => {
+                    const intensity = Math.max(0, Math.min(1, val / 100));
+                    const grey = 136; // #888
+                    const statRgb = hexToRgb(statColors[statType]);
+                    const r = Math.round(grey + (statRgb.r - grey) * intensity);
+                    const g = Math.round(grey + (statRgb.g - grey) * intensity);
+                    const b = Math.round(grey + (statRgb.b - grey) * intensity);
+                    return `rgb(${r}, ${g}, ${b})`;
+                };
+                
+                // Helper to convert hex to rgb
+                const hexToRgb = (hex) => {
+                    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+                    return result ? {
+                        r: parseInt(result[1], 16),
+                        g: parseInt(result[2], 16),
+                        b: parseInt(result[3], 16)
+                    } : { r: 136, g: 136, b: 136 };
+                };
+                
                 if (bar1El) {
                     bar1El.style.width = `${Math.min(100, leftVal)}%`;
-                    // Saturation: low stats are grey (0.2), high stats are saturated (1.3)
-                    const leftSat = 0.2 + (leftVal / 100) * 1.1;
-                    bar1El.style.filter = `saturate(${leftSat})`;
+                    bar1El.style.filter = `saturate(${calcSaturation(leftVal)})`;
                     // Add high-stat class for pulse animation on high values
                     bar1El.classList.toggle('high-stat', leftVal >= 80);
                 }
                 if (bar2El) {
                     bar2El.style.width = `${Math.min(100, rightVal)}%`;
-                    const rightSat = 0.2 + (rightVal / 100) * 1.1;
-                    bar2El.style.filter = `saturate(${rightSat})`;
+                    bar2El.style.filter = `saturate(${calcSaturation(rightVal)})`;
                     bar2El.classList.toggle('high-stat', rightVal >= 80);
+                }
+                
+                // Apply color to stat value numbers
+                if (val1El) {
+                    val1El.style.color = calcStatColor(leftVal, stat);
+                    val1El.style.textShadow = leftVal >= 70 ? `0 0 8px ${statColors[stat]}40` : 'none';
+                }
+                if (val2El) {
+                    val2El.style.color = calcStatColor(rightVal, stat);
+                    val2El.style.textShadow = rightVal >= 70 ? `0 0 8px ${statColors[stat]}40` : 'none';
                 }
                 
                 // Highlight winner

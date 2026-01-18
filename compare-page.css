@@ -2026,9 +2026,18 @@
         flex-shrink: 0 !important;
         display: flex !important;
         align-items: center !important;
-        justify-content: center !important;
         border: none !important;
         min-height: 70px !important;
+    }
+    
+    /* Left fighter - image pushed to right (toward center) */
+    #compare-view .fighter-left .c-hero-section {
+        justify-content: flex-end !important;
+    }
+    
+    /* Right fighter - image pushed to left (toward center) */
+    #compare-view .fighter-right .c-hero-section {
+        justify-content: flex-start !important;
     }
     
     #compare-view .fighter-display {
