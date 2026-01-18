@@ -428,6 +428,7 @@
     
     /* Grid layout - properly sized columns with center constrained */
     /* Stats panels on left/right, animal image in center */
+    /* Height calculated: viewport - header(65) - nav(60) - grid(130) - bottom-bar(36) - quick-info(~45) - spacing */
     .character-display-area {
         display: grid !important;
         grid-template-columns: minmax(85px, 28%) minmax(140px, 44%) minmax(85px, 28%) !important;
@@ -438,10 +439,10 @@
         margin-top: 0 !important;
         overflow: visible !important;
         align-items: stretch !important;
-        flex: 1 1 auto !important;
-        min-height: 300px !important;
-        max-height: none !important;
-        height: auto !important;
+        flex: 0 0 auto !important;
+        min-height: 280px !important;
+        max-height: calc(100vh - 65px - var(--mobile-nav-height) - 130px - 36px - 50px - 20px) !important;
+        height: calc(100vh - 65px - var(--mobile-nav-height) - 130px - 36px - 50px - 20px) !important;
         width: 100% !important;
         box-sizing: border-box !important;
         position: relative !important;
@@ -459,12 +460,13 @@
         align-self: stretch !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: space-evenly !important;
+        justify-content: flex-end !important;
         z-index: 5 !important;
         position: relative !important;
         background: transparent !important;
         animation: none !important;
         transform: none !important;
+        padding-top: 60px !important;
     }
     
     /* Center showcase - constrained, lower z-index */
@@ -476,6 +478,7 @@
         width: 100% !important;
         max-width: 100% !important;
         padding: 4px !important;
+        padding-top: 40px !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
@@ -614,12 +617,13 @@
         align-self: stretch !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: space-evenly !important;
+        justify-content: flex-end !important;
         z-index: 5 !important;
         position: relative !important;
         background: transparent !important;
         animation: none !important;
         transform: none !important;
+        padding-top: 60px !important;
     }
     
     /* Generic stats panel styling */
@@ -670,11 +674,11 @@
         font-size: 1.8rem !important;
     }
     
-    /* Show abilities and traits on mobile */
+    /* Show abilities and traits on mobile - pushed to bottom */
     .abilities-card,
     .traits-card {
         display: block !important;
-        margin-top: 8px !important;
+        margin-top: auto !important;
         padding: 4px !important;
         min-height: auto !important;
         max-height: 80px !important;
@@ -683,6 +687,13 @@
         background: rgba(0, 15, 30, 0.6) !important;
         border: 1px solid rgba(0, 212, 255, 0.2) !important;
         border-radius: 6px !important;
+    }
+    
+    /* Stat group wrapper (#left-stats, #right-stats) - keeps stats together above abilities/traits */
+    .stat-group {
+        display: flex !important;
+        flex-direction: column !important;
+        margin-bottom: 8px !important;
     }
     
     /* Stat rows - horizontal layout with proper alignment */
@@ -1055,11 +1066,13 @@
     
     /* Removed duplicate - main padding is defined earlier in the file */
     
-    /* Character display area expands when menu hidden */
+    /* Character display area slightly expands when menu hidden - only goes down a little */
     .character-grid-container.hidden ~ .character-display-area,
     body:has(.character-grid-container.hidden) .character-display-area {
-        flex: 1 !important;
-        min-height: calc(100vh - 70px - var(--mobile-nav-height) - 60px) !important;
+        flex: 0 0 auto !important;
+        min-height: 280px !important;
+        max-height: calc(100vh - 65px - var(--mobile-nav-height) - 36px - 50px - 20px) !important;
+        height: calc(100vh - 65px - var(--mobile-nav-height) - 36px - 50px - 20px) !important;
     }
     
     /* Show grid controls on mobile - compact row */
