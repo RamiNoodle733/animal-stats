@@ -458,7 +458,7 @@
         max-width: 100% !important;
         overflow: visible !important;
         padding: 4px 2px 4px 6px !important;
-        padding-bottom: 25px !important;
+        padding-bottom: 50px !important;
         align-self: stretch !important;
         display: flex !important;
         flex-direction: column !important;
@@ -472,7 +472,7 @@
     
     /* When menu hidden, left panel needs less bottom padding */
     body:has(.character-grid-container.hidden) .stats-panel-left {
-        padding-bottom: 25px !important;
+        padding-bottom: 50px !important;
     }
     
     /* Center showcase - constrained, lower z-index */
@@ -621,7 +621,7 @@
         max-width: 100% !important;
         overflow: visible !important;
         padding: 4px 6px 4px 2px !important;
-        padding-bottom: 25px !important;
+        padding-bottom: 50px !important;
         align-self: stretch !important;
         display: flex !important;
         flex-direction: column !important;
@@ -635,7 +635,7 @@
     
     /* When menu hidden, right panel needs less bottom padding */
     body:has(.character-grid-container.hidden) .stats-panel-right {
-        padding-bottom: 25px !important;
+        padding-bottom: 50px !important;
     }
     
     /* Generic stats panel styling */
