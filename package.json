@@ -8,10 +8,7 @@
     "start": "vercel dev",
     "seed": "node scripts/seed-database.js",
     "lint": "eslint script.js auth.js router.js compare-page.js community-page.js",
-    "lint:fix": "eslint script.js auth.js router.js compare-page.js community-page.js --fix",
-    "ui:snap": "node tools/ui-snapshot.mjs http://localhost:3000",
-    "ui:snap:local": "node tools/ui-snapshot.mjs http://localhost:3000",
-    "ui:snap:prod": "node tools/ui-snapshot.mjs https://animalbattlestats.com"
+    "lint:fix": "eslint script.js auth.js router.js compare-page.js community-page.js --fix"
   },
   "keywords": [
     "animals",
