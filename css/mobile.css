@@ -466,6 +466,7 @@
         background: transparent !important;
         animation: none !important;
         transform: none !important;
+        padding-top: 60px !important;
     }
     
     /* Center showcase - constrained, lower z-index */
@@ -477,6 +478,7 @@
         width: 100% !important;
         max-width: 100% !important;
         padding: 4px !important;
+        padding-top: 40px !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
@@ -545,14 +547,14 @@
         flex-wrap: nowrap !important;
         justify-content: center !important;
         align-items: center !important;
-        gap: 3px !important;
-        padding: 4px 6px !important;
+        gap: 4px !important;
+        padding: 5px 8px !important;
         flex-direction: row !important;
         background: rgba(0, 20, 40, 0.95) !important;
         border-radius: 6px !important;
         border: 1px solid rgba(0, 212, 255, 0.3) !important;
         width: auto !important;
-        max-width: 240px !important;
+        max-width: 280px !important;
         z-index: 7600 !important;
         box-sizing: border-box !important;
     }
@@ -569,16 +571,16 @@
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 2px !important;
-        font-size: 0.55rem !important;
+        gap: 3px !important;
+        font-size: 0.6rem !important;
         color: rgba(255, 255, 255, 0.9) !important;
-        padding: 2px 4px !important;
+        padding: 3px 5px !important;
         background: rgba(0, 30, 50, 0.7) !important;
         border: 1px solid rgba(0, 212, 255, 0.2) !important;
         border-radius: 4px !important;
-        min-width: 50px !important;
+        min-width: 55px !important;
         flex: 0 1 auto !important;
-        max-width: 75px !important;
+        max-width: 85px !important;
     }
     
     .quick-info-item i {
@@ -621,6 +623,7 @@
         background: transparent !important;
         animation: none !important;
         transform: none !important;
+        padding-top: 60px !important;
     }
     
     /* Generic stats panel styling */
@@ -655,15 +658,10 @@
     }
     
     .character-model {
-        max-height: 130px !important;
+        max-height: 150px !important;
         max-width: 100% !important;
         object-fit: contain !important;
-        flex: 0 1 auto !important;
-    }
-    
-    /* When menu hidden, don't let animal image grow too much */
-    body:has(.character-grid-container.hidden) .character-model {
-        max-height: 160px !important;
+        flex: 1 1 auto !important;
     }
     
     /* Silhouette - don't override JS display property */
@@ -676,20 +674,19 @@
         font-size: 1.8rem !important;
     }
     
-    /* Show abilities and traits on mobile - pushed to bottom, very compact */
+    /* Show abilities and traits on mobile - pushed to bottom */
     .abilities-card,
     .traits-card {
         display: block !important;
         margin-top: auto !important;
-        padding: 3px !important;
+        padding: 4px !important;
         min-height: auto !important;
-        max-height: 55px !important;
+        max-height: 80px !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
         background: rgba(0, 15, 30, 0.6) !important;
         border: 1px solid rgba(0, 212, 255, 0.2) !important;
-        border-radius: 4px !important;
-        font-size: 0.5rem !important;
+        border-radius: 6px !important;
     }
     
     /* Stat group wrapper (#left-stats, #right-stats) - keeps stats together above abilities/traits */
@@ -1069,19 +1066,13 @@
     
     /* Removed duplicate - main padding is defined earlier in the file */
     
-    /* Character display area slightly expands when menu hidden - controlled expansion */
+    /* Character display area slightly expands when menu hidden - only goes down a little */
     .character-grid-container.hidden ~ .character-display-area,
     body:has(.character-grid-container.hidden) .character-display-area {
         flex: 0 0 auto !important;
         min-height: 280px !important;
-        max-height: calc(100vh - 65px - var(--mobile-nav-height) - 36px - 50px - 60px) !important;
-        height: calc(100vh - 65px - var(--mobile-nav-height) - 36px - 50px - 60px) !important;
-    }
-    
-    /* When menu hidden, stats panels spread out more naturally */
-    body:has(.character-grid-container.hidden) .stats-panel-left,
-    body:has(.character-grid-container.hidden) .stats-panel-right {
-        justify-content: space-evenly !important;
+        max-height: calc(100vh - 65px - var(--mobile-nav-height) - 36px - 50px - 20px) !important;
+        height: calc(100vh - 65px - var(--mobile-nav-height) - 36px - 50px - 20px) !important;
     }
     
     /* Show grid controls on mobile - compact row */
