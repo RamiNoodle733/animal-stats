@@ -428,7 +428,7 @@
     
     /* Grid layout - properly sized columns with center constrained */
     /* Stats panels on left/right, animal image in center */
-    /* Height calculated: viewport - header(65) - nav(60) - grid(130) - bottom-bar(36) - quick-info(~45) - spacing */
+    /* Height reduced to push content higher above quick-info-bar */
     .character-display-area {
         display: grid !important;
         grid-template-columns: minmax(85px, 28%) minmax(140px, 44%) minmax(85px, 28%) !important;
@@ -441,8 +441,8 @@
         align-items: stretch !important;
         flex: 0 0 auto !important;
         min-height: 280px !important;
-        max-height: calc(100vh - 65px - var(--mobile-nav-height) - 130px - 36px - 50px - 20px) !important;
-        height: calc(100vh - 65px - var(--mobile-nav-height) - 130px - 36px - 50px - 20px) !important;
+        max-height: calc(100vh - 65px - var(--mobile-nav-height) - 130px - 36px - 50px - 60px) !important;
+        height: calc(100vh - 65px - var(--mobile-nav-height) - 130px - 36px - 50px - 60px) !important;
         width: 100% !important;
         box-sizing: border-box !important;
         position: relative !important;
