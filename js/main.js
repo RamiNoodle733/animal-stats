@@ -1320,9 +1320,9 @@ class AnimalStatsApp {
                 <img src="${animal.image}" alt="${animal.name}" class="character-card-image" loading="lazy" onerror="this.src=FALLBACK_IMAGE">
                 <div class="character-card-name">${animal.name}</div>
                 <div class="card-hover-stats">
-                    <div class="hover-stat"><span class="hover-stat-icon">âš”</span>${Math.round(animal.attack || 0)}</div>
-                    <div class="hover-stat"><span class="hover-stat-icon">ðŸ›¡</span>${Math.round(animal.defense || 0)}</div>
-                    <div class="hover-stat"><span class="hover-stat-icon">âš¡</span>${Math.round(animal.agility || 0)}</div>
+                    <div class="hover-stat"><i class="fas fa-fist-raised"></i>${Math.round(animal.attack || 0)}</div>
+                    <div class="hover-stat"><i class="fas fa-shield-alt"></i>${Math.round(animal.defense || 0)}</div>
+                    <div class="hover-stat"><i class="fas fa-bolt"></i>${Math.round(animal.agility || 0)}</div>
                 </div>
             `;
             
