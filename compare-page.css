@@ -1992,24 +1992,30 @@
         display: flex !important;
         flex-wrap: wrap !important;
         justify-content: center !important;
-        gap: 2px 4px !important;
-        padding: 2px 4px !important;
-        background: transparent !important;
-        border: none !important;
-        margin-top: 2px !important;
+        align-items: center !important;
+        gap: 4px !important;
+        padding: 4px 6px !important;
+        background: var(--cv-bg-module) !important;
+        border: 1px solid var(--cv-border-subtle) !important;
+        border-radius: 4px !important;
+        margin-top: 3px !important;
     }
     
     #compare-view .c-record-badge .record-item {
         flex-direction: row !important;
         gap: 2px !important;
+        align-items: center !important;
     }
     
     #compare-view .c-record-badge .record-item i {
         font-size: 0.45rem !important;
+        color: var(--cv-text-muted) !important;
     }
     
     #compare-view .c-record-badge .record-value {
         font-size: 0.55rem !important;
+        font-weight: 700 !important;
+        color: var(--cv-text-primary) !important;
     }
     
     #compare-view .c-record-badge .record-label {
@@ -2155,23 +2161,23 @@
         gap: 2px !important;
     }
     
-    #compare-view .abilities-tags-compact .ability-tag,
-    #compare-view .traits-tags-compact .trait-tag {
+    #compare-view .abilities-tags-compact .ability-tag-sm,
+    #compare-view .traits-tags-compact .trait-tag-sm {
         font-size: 0.4rem !important;
         padding: 2px 4px !important;
         border-radius: 3px !important;
     }
     
     /* Left fighter abilities/traits - purple tint */
-    #compare-view .fighter-left .abilities-tags-compact .ability-tag,
-    #compare-view .fighter-left .traits-tags-compact .trait-tag {
+    #compare-view .fighter-left .abilities-tags-compact .ability-tag-sm,
+    #compare-view .fighter-left .traits-tags-compact .trait-tag-sm {
         background-color: rgba(168, 85, 247, 0.15) !important;
         border-left: 2px solid rgba(168, 85, 247, 0.4) !important;
     }
     
     /* Right fighter abilities/traits - green tint */
-    #compare-view .fighter-right .abilities-tags-compact .ability-tag,
-    #compare-view .fighter-right .traits-tags-compact .trait-tag {
+    #compare-view .fighter-right .abilities-tags-compact .ability-tag-sm,
+    #compare-view .fighter-right .traits-tags-compact .trait-tag-sm {
         background-color: rgba(34, 197, 94, 0.15) !important;
         border-left: 2px solid rgba(34, 197, 94, 0.4) !important;
     }
