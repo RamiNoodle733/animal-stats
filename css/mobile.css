@@ -470,9 +470,9 @@
         transform: none !important;
     }
     
-    /* When menu hidden, left panel needs less bottom padding */
-    body:has(.character-grid-container.hidden) .stats-panel-left {
-        padding-bottom: 50px !important;
+    /* When menu hidden, reduce top padding since we have more vertical space */
+    body:has(.character-grid-container.hidden) .stats-panel.stats-panel-left {
+        padding-top: 40px !important;
     }
     
     /* Center showcase - constrained, lower z-index */
@@ -633,9 +633,9 @@
         transform: none !important;
     }
     
-    /* When menu hidden, right panel needs less bottom padding */
-    body:has(.character-grid-container.hidden) .stats-panel-right {
-        padding-bottom: 50px !important;
+    /* When menu hidden, reduce top padding since we have more vertical space */
+    body:has(.character-grid-container.hidden) .stats-panel.stats-panel-right {
+        padding-top: 40px !important;
     }
     
     /* Generic stats panel styling */
@@ -1009,7 +1009,8 @@
  * Stack order (bottom to top): mobile-nav -> character-grid -> bottom-info-bar
  * ============================================================================ */
 @media (max-width: 480px) {
-    /* Character grid container - fixed position, taller to fit search */
+    /* Character grid container - fixed position above mobile nav */
+    /* Total height: 130px = grid-controls(28px) + grid-scroll-wrapper(~90px) + padding(~12px) */
     .character-grid-container {
         position: fixed !important;
         bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
@@ -1019,16 +1020,18 @@
         min-height: 130px !important;
         max-height: 130px !important;
         height: 130px !important;
-        padding: 4px 6px !important;
+        padding: 4px 6px 2px 6px !important;
         margin-bottom: 0 !important;
         overflow: hidden !important;
         background: linear-gradient(180deg, rgba(5, 10, 20, 0.98) 0%, rgba(0, 8, 18, 1) 100%) !important;
         border-top: 1px solid rgba(0, 212, 255, 0.2) !important;
         display: flex !important;
         flex-direction: column !important;
+        justify-content: flex-start !important;
         gap: 2px !important;
         animation: none !important;
         transform: none !important;
+        box-sizing: border-box !important;
     }
     
     /* When menu is hidden */
@@ -1122,25 +1125,28 @@
         display: none !important;
     }
     
-    /* Grid wrapper - center items vertically */
+    /* Grid wrapper - center items vertically, fits within 130px container */
+    /* Container: 130px - controls(28px) - padding(6px) - gap(2px) = ~94px available */
     .grid-scroll-wrapper {
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        flex: 1 1 auto !important;
-        min-height: 80px !important;
-        height: 80px !important;
+        flex: 0 0 auto !important;
+        min-height: 76px !important;
+        height: 76px !important;
+        max-height: 76px !important;
         gap: 4px !important;
-        padding: 2px 0 !important;
+        padding: 0 !important;
         overflow: hidden !important;
+        box-sizing: border-box !important;
     }
     
     /* Arrow buttons - fixed height to match cards */
     .grid-arrow {
-        width: 28px !important;
-        min-width: 28px !important;
-        height: 70px !important;
-        font-size: 0.85rem !important;
+        width: 26px !important;
+        min-width: 26px !important;
+        height: 66px !important;
+        font-size: 0.8rem !important;
         flex-shrink: 0 !important;
         z-index: 10 !important;
         background: rgba(0, 20, 40, 0.9) !important;
@@ -1155,21 +1161,22 @@
     /* Grid items - center aligned */
     .character-grid {
         gap: 4px !important;
-        padding: 2px !important;
+        padding: 0 2px !important;
         flex: 1 1 auto !important;
-        height: 76px !important;
-        max-height: 76px !important;
+        height: 72px !important;
+        max-height: 72px !important;
         overflow-x: auto !important;
         overflow-y: hidden !important;
         flex-wrap: nowrap !important;
         align-items: center !important;
         -webkit-overflow-scrolling: touch !important;
         scroll-behavior: auto !important;
+        box-sizing: border-box !important;
     }
     
     .character-card {
-        width: 60px !important;
-        height: 70px !important;
+        width: 56px !important;
+        height: 66px !important;
         flex-shrink: 0 !important;
         display: flex !important;
         flex-direction: column !important;
@@ -1177,11 +1184,12 @@
         justify-content: flex-start !important;
         padding: 2px !important;
         overflow: hidden !important;
+        box-sizing: border-box !important;
     }
     
     .character-card img {
-        width: 48px !important;
-        height: 48px !important;
+        width: 44px !important;
+        height: 44px !important;
         flex-shrink: 0 !important;
     }
     
