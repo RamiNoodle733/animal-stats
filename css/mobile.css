@@ -1283,12 +1283,18 @@
 
 /* ============================================================================
  * COMPARE PAGE - Mobile Layout
- * Let compare-page.css handle the layout - just add padding for bottom nav
+ * compare-page.css handles the 3-column layout
  * ============================================================================ */
 @media (max-width: 480px) {
-    /* Only add bottom padding for mobile nav - let compare-page.css handle layout */
+    /* Compare view needs padding for bottom fixed elements */
     #compare-view.active-view {
-        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
+        padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 130px + 36px) !important;
+        overflow: hidden !important;
+    }
+    
+    /* Ensure fight-screen takes full available height */
+    #compare-view .fight-screen {
+        height: calc(100vh - 65px - var(--mobile-nav-height) - var(--mobile-safe-bottom) - 130px - 36px - 20px) !important;
     }
 }
 
