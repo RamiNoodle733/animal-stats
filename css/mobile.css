@@ -1215,18 +1215,14 @@
         min-height: 14px !important;
     }
     
-    /* Dropdown panels - must be above all fixed elements */
+    /* Dropdown panels - attached to body, positioned via JS */
     .dropdown-menu-container {
         position: relative !important;
-        z-index: 9500 !important;
+        z-index: 100 !important;
     }
     
     .dropdown-panel {
         position: fixed !important;
-        bottom: auto !important;
-        top: auto !important;
-        left: 10px !important;
-        right: 10px !important;
         z-index: 99999 !important;
         max-width: calc(100vw - 20px) !important;
         min-width: 200px !important;
@@ -1234,16 +1230,19 @@
         overflow-y: auto !important;
         background: rgba(10, 14, 26, 0.99) !important;
         border: 2px solid rgba(0, 212, 255, 0.6) !important;
-        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.9) !important;
+        border-radius: 8px !important;
+        padding: 10px !important;
+        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.9), 0 0 30px rgba(0, 0, 0, 0.8) !important;
         pointer-events: auto !important;
         display: none !important;
+        flex-direction: column !important;
+        gap: 8px !important;
     }
     
     .dropdown-panel.show {
         display: flex !important;
         visibility: visible !important;
         opacity: 1 !important;
-        bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom) + 140px) !important;
     }
     
     .filter-panel-compact {

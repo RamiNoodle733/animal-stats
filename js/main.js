@@ -932,12 +932,43 @@ class AnimalStatsApp {
             });
         });
         
+        // Helper function to position dropdown panel
+        const positionDropdown = (toggle, panel) => {
+            const rect = toggle.getBoundingClientRect();
+            const isMobile = window.innerWidth <= 480;
+            
+            if (isMobile) {
+                // On mobile, position above the bottom bar
+                panel.style.position = 'fixed';
+                panel.style.bottom = '230px'; // Above nav + grid + bottom bar
+                panel.style.left = '10px';
+                panel.style.right = '10px';
+                panel.style.top = 'auto';
+            } else {
+                // On desktop, position above the toggle button
+                panel.style.position = 'fixed';
+                panel.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
+                panel.style.left = Math.max(10, rect.left) + 'px';
+                panel.style.right = 'auto';
+                panel.style.top = 'auto';
+            }
+        };
+        
         // Toggle filter dropdown
         if (filterToggle && filterPanel) {
             filterToggle.addEventListener('click', (e) => {
                 e.stopPropagation();
+                const isOpening = !filterPanel.classList.contains('show');
+                
                 filterToggle.classList.toggle('active');
                 filterPanel.classList.toggle('show');
+                
+                if (isOpening) {
+                    // Move to body and position
+                    document.body.appendChild(filterPanel);
+                    positionDropdown(filterToggle, filterPanel);
+                }
+                
                 // Close sort panel
                 sortToggle?.classList.remove('active');
                 sortPanel?.classList.remove('show');
@@ -948,8 +979,17 @@ class AnimalStatsApp {
         if (sortToggle && sortPanel) {
             sortToggle.addEventListener('click', (e) => {
                 e.stopPropagation();
+                const isOpening = !sortPanel.classList.contains('show');
+                
                 sortToggle.classList.toggle('active');
                 sortPanel.classList.toggle('show');
+                
+                if (isOpening) {
+                    // Move to body and position
+                    document.body.appendChild(sortPanel);
+                    positionDropdown(sortToggle, sortPanel);
+                }
+                
                 // Close filter panel
                 filterToggle?.classList.remove('active');
                 filterPanel?.classList.remove('show');
