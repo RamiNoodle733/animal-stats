@@ -2164,13 +2164,16 @@
         /* When visible, use flex for centering */
         align-items: stretch !important;
         justify-content: stretch !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
     }
     
     .t-setup-container {
         width: 100% !important;
         max-width: 100% !important;
-        height: 100% !important;
-        max-height: 100% !important;
+        height: auto !important;
+        min-height: 100% !important;
+        max-height: none !important;
         border-radius: 0 !important;
         border: none !important;
         padding: 16px !important;
@@ -2178,8 +2181,7 @@
         padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
         display: flex !important;
         flex-direction: column !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
+        overflow: visible !important;
     }
     
     /* Close button - larger touch target */
@@ -2316,305 +2318,312 @@
     }
     
     /* ========================================
-       BATTLE SCREEN - Mobile Horizontal Layout
+       BATTLE SCREEN - Mobile Layout
+       Animals side-by-side with VS in middle
+       Everything fits on screen - NO SCROLLING
        ======================================== */
     /* Note: Don't override display - let JS control visibility */
     .tournament-battle {
         width: 100% !important;
         height: 100% !important;
-        /* When visible, use flex column layout */
         flex-direction: column !important;
         overflow: hidden !important;
     }
     
     /* Compact battle header */
     .t-battle-header {
-        padding: 8px 12px !important;
-        padding-top: calc(8px + env(safe-area-inset-top, 0px)) !important;
+        padding: 6px 10px !important;
+        padding-top: calc(6px + env(safe-area-inset-top, 0px)) !important;
         height: auto !important;
-        min-height: 48px !important;
+        min-height: 40px !important;
         flex-shrink: 0 !important;
     }
     
     .t-battle-progress {
-        gap: 8px !important;
-        flex-wrap: wrap !important;
+        gap: 6px !important;
+        flex-wrap: nowrap !important;
     }
     
     .t-round-name {
-        font-size: 0.8rem !important;
+        font-size: 0.7rem !important;
         letter-spacing: 1px !important;
     }
     
     .t-progress-bar {
-        width: 60px !important;
-        height: 5px !important;
+        width: 50px !important;
+        height: 4px !important;
     }
     
     .t-match-info {
-        font-size: 0.65rem !important;
+        font-size: 0.6rem !important;
     }
     
     .t-quit-btn {
-        padding: 8px 12px !important;
-        font-size: 0.75rem !important;
-        min-height: 36px !important;
+        padding: 6px 10px !important;
+        font-size: 0.7rem !important;
+        min-height: 32px !important;
     }
     
-    /* Main battle area - horizontal fighters */
+    /* Main battle area - complete redesign */
     .t-battle-main {
         flex: 1 !important;
         display: flex !important;
-        flex-direction: column !important;
-        padding: 8px !important;
-        gap: 8px !important;
+        flex-direction: row !important;
+        align-items: stretch !important;
+        justify-content: center !important;
+        padding: 4px !important;
+        gap: 0 !important;
         min-height: 0 !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-    }
-    
-    /* Fighters row - HORIZONTAL side by side */
-    .t-battle-main {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        grid-template-rows: auto 1fr auto !important;
-        gap: 8px !important;
-        padding: 8px !important;
         overflow: hidden !important;
     }
     
-    /* Fighter cards - compact for side-by-side */
+    /* Fighter cards - side by side with VS between */
     .t-fighter-card {
+        flex: 1 !important;
         display: flex !important;
         flex-direction: column !important;
-        padding: 8px !important;
+        padding: 6px !important;
         min-height: 0 !important;
+        max-width: 45% !important;
         overflow: hidden !important;
     }
     
     .t-fighter-card.left {
-        grid-column: 1 !important;
-        grid-row: 2 !important;
+        order: 1 !important;
     }
     
     .t-fighter-card.right {
-        grid-column: 2 !important;
-        grid-row: 2 !important;
+        order: 3 !important;
     }
     
-    /* Center elements span full width at top */
+    /* VS and center elements between fighters */
     .t-battle-center {
-        grid-column: 1 / -1 !important;
-        grid-row: 1 !important;
+        order: 2 !important;
         display: flex !important;
-        flex-direction: row !important;
+        flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 12px !important;
-        padding: 6px 8px !important;
-        min-width: 0 !important;
-        flex-wrap: wrap !important;
-    }
-    
-    /* Identity section compact */
-    .t-identity-top {
-        padding-bottom: 4px !important;
-    }
-    
-    .t-name {
-        font-size: 0.85rem !important;
-        letter-spacing: 1px !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-    }
-    
-    .t-scientific {
-        font-size: 0.55rem !important;
-        display: none !important; /* Hide on mobile to save space */
-    }
-    
-    /* Record badge compact */
-    .t-record-badge {
-        max-width: 100% !important;
-        transform: scale(0.85) !important;
-        transform-origin: center !important;
-    }
-    
-    .t-record-badge .record-item {
-        padding: 2px 6px !important;
-    }
-    
-    .t-record-badge .record-value {
-        font-size: 0.7rem !important;
-    }
-    
-    .t-record-badge .record-label {
-        font-size: 0.35rem !important;
-    }
-    
-    /* Hero image - takes available space */
-    .t-hero-image {
-        flex: 1 !important;
-        min-height: 80px !important;
-        max-height: 120px !important;
-        margin: 4px 0 !important;
-    }
-    
-    .t-hero-image img {
-        max-height: 100% !important;
-        object-fit: contain !important;
-    }
-    
-    /* Click hint */
-    .t-click-hint {
-        font-size: 0.5rem !important;
-        padding: 4px 8px !important;
-        bottom: 2px !important;
-    }
-    
-    .t-fighter-card:hover .t-click-hint,
-    .t-fighter-card:active .t-click-hint {
-        opacity: 1 !important;
-    }
-    
-    /* Rating change compact */
-    .t-rating-change {
+        gap: 4px !important;
         padding: 4px !important;
-        margin-top: 4px !important;
-    }
-    
-    .t-rating-delta {
-        font-size: 0.9rem !important;
-    }
-    
-    .t-rating-calc {
-        font-size: 0.55rem !important;
-    }
-    
-    /* VS Section compact */
-    .t-vs-section {
-        width: 50px !important;
-        height: 50px !important;
+        min-width: 50px !important;
+        max-width: 60px !important;
         flex-shrink: 0 !important;
     }
     
-    .t-vs-badge {
+    /* VS Section - prominent between animals */
+    .t-vs-section {
         width: 40px !important;
         height: 40px !important;
+        flex-shrink: 0 !important;
+        order: 2 !important;
+    }
+    
+    .t-vs-badge {
+        width: 36px !important;
+        height: 36px !important;
     }
     
     .t-vs-badge span {
-        font-size: 0.9rem !important;
+        font-size: 0.8rem !important;
     }
     
-    /* Guess toggle compact */
+    .t-vs-burst,
+    .t-vs-diamond-outer,
+    .t-vs-stripes {
+        display: none !important;
+    }
+    
+    /* Guess section - very compact */
     .t-guess-section {
+        order: 1 !important;
         flex-shrink: 0 !important;
     }
     
     .t-guess-toggle {
-        padding: 6px 10px !important;
-        font-size: 0.65rem !important;
-        gap: 4px !important;
+        padding: 3px 6px !important;
+        font-size: 0.5rem !important;
+        gap: 2px !important;
+        border-radius: 10px !important;
+    }
+    
+    .t-guess-toggle span {
+        display: none !important; /* Hide text, just show icon */
+    }
+    
+    .t-guess-toggle i {
+        font-size: 0.6rem !important;
     }
     
     .t-toggle-switch {
-        width: 22px !important;
-        height: 12px !important;
+        width: 18px !important;
+        height: 10px !important;
     }
     
     .t-toggle-switch::after {
-        width: 8px !important;
-        height: 8px !important;
+        width: 6px !important;
+        height: 6px !important;
+        top: 2px !important;
+        left: 2px !important;
     }
     
     .t-guess-toggle.active .t-toggle-switch::after {
-        left: 12px !important;
+        left: 10px !important;
     }
     
-    /* Community vote bar compact */
+    .t-guess-prompt {
+        display: none !important;
+    }
+    
+    /* Community vote - very compact */
     .t-community-vote {
-        flex: 1 !important;
-        min-width: 100px !important;
-        max-width: 180px !important;
-        padding: 6px !important;
+        order: 3 !important;
+        width: 100% !important;
+        max-width: 50px !important;
+        padding: 3px !important;
+        background: transparent !important;
+        border: none !important;
     }
     
     .t-vote-stats {
-        margin-bottom: 3px !important;
-    }
-    
-    .t-vote-pct {
-        font-size: 0.7rem !important;
-    }
-    
-    .t-vote-total {
-        font-size: 0.5rem !important;
+        display: none !important; /* Hide percentages */
     }
     
     .t-vote-bar {
-        height: 12px !important;
+        height: 6px !important;
+        border-radius: 3px !important;
     }
     
-    /* Radar chart - hide on mobile battle */
+    /* Radar chart - hide */
     .t-radar-container {
         display: none !important;
     }
     
-    /* ========================================
-       BOTTOM BAND - Info Panels + Stats
-       ======================================== */
-    .t-bottom-band {
-        grid-column: 1 / -1 !important;
-        grid-row: 3 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 6px !important;
-        padding: 6px !important;
-        padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px)) !important;
-        max-height: 180px !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
+    /* Identity section compact */
+    .t-identity-top {
+        padding-bottom: 2px !important;
+        flex-shrink: 0 !important;
     }
     
-    /* Stat bars - full width, compact */
-    .t-stats-compact {
-        order: -1 !important; /* Stats first */
-        padding: 6px 8px !important;
-        gap: 3px !important;
+    .t-name {
+        font-size: 0.7rem !important;
+        letter-spacing: 0.5px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        margin-bottom: 2px !important;
     }
     
-    .t-stat-row-compact {
-        gap: 4px !important;
+    .t-scientific {
+        display: none !important;
     }
     
-    .t-stat-center-cluster {
-        padding: 3px 6px !important;
-        min-width: 70px !important;
-        gap: 4px !important;
+    /* Record badge - very compact */
+    .t-record-badge {
+        transform: scale(0.7) !important;
+        transform-origin: center top !important;
+        margin-bottom: -8px !important;
     }
     
-    .t-stat-center-cluster .t-val {
-        font-size: 0.75rem !important;
-        min-width: 20px !important;
+    .t-record-badge .record-item {
+        padding: 2px 4px !important;
     }
     
-    .t-stat-icon-label i {
+    .t-record-badge .record-value {
         font-size: 0.6rem !important;
     }
     
+    .t-record-badge .record-label {
+        font-size: 0.3rem !important;
+    }
+    
+    /* Hero image - main focus */
+    .t-hero-image {
+        flex: 1 !important;
+        min-height: 60px !important;
+        max-height: none !important;
+        margin: 2px 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+    
+    .t-hero-image img {
+        max-width: 100% !important;
+        max-height: 100% !important;
+        object-fit: contain !important;
+    }
+    
+    /* HIDE click-to-vote on mobile - no hovering */
+    .t-click-hint {
+        display: none !important;
+    }
+    
+    /* Rating change compact */
+    .t-rating-change {
+        padding: 2px !important;
+        margin-top: 2px !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .t-rating-delta {
+        font-size: 0.7rem !important;
+    }
+    
+    .t-rating-calc {
+        font-size: 0.45rem !important;
+    }
+    
+    /* ========================================
+       BOTTOM BAND - Stat Bars Only
+       NO SCROLLING - fits on screen
+       ======================================== */
+    .t-bottom-band {
+        display: block !important;
+        padding: 4px 6px !important;
+        padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px)) !important;
+        max-height: none !important;
+        overflow: visible !important;
+        flex-shrink: 0 !important;
+    }
+    
+    /* Stat bars - compact, no scroll */
+    .t-stats-compact {
+        padding: 4px 6px !important;
+        gap: 2px !important;
+        overflow: visible !important;
+    }
+    
+    .t-stat-row-compact {
+        gap: 2px !important;
+    }
+    
+    .t-stat-center-cluster {
+        padding: 2px 4px !important;
+        min-width: 55px !important;
+        gap: 2px !important;
+    }
+    
+    .t-stat-center-cluster .t-val {
+        font-size: 0.6rem !important;
+        min-width: 16px !important;
+    }
+    
+    .t-stat-icon-label {
+        display: none !important; /* Hide icon, just show values */
+    }
+    
     .t-stat-abbr {
-        font-size: 0.4rem !important;
+        display: block !important;
+        font-size: 0.35rem !important;
     }
     
     .t-stats-compact .t-stat-bar-left,
     .t-stats-compact .t-stat-bar-right {
-        height: 14px !important;
-        min-height: 14px !important;
+        height: 10px !important;
+        min-height: 10px !important;
     }
     
-    /* Hide info panels on mobile during battle - too cramped */
+    /* Hide info panels completely */
     .t-info-panel {
         display: none !important;
     }
