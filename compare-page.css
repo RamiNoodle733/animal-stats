@@ -2026,24 +2026,27 @@
         flex-shrink: 0 !important;
         display: flex !important;
         align-items: center !important;
+        justify-content: center !important;
         border: none !important;
         min-height: 70px !important;
-    }
-    
-    /* Left fighter - image pushed to right (toward center) */
-    #compare-view .fighter-left .c-hero-section {
-        justify-content: flex-end !important;
-    }
-    
-    /* Right fighter - image pushed to left (toward center) */
-    #compare-view .fighter-right .c-hero-section {
-        justify-content: flex-start !important;
     }
     
     #compare-view .fighter-display {
         width: 65px !important;
         height: 65px !important;
         border-radius: 6px !important;
+    }
+    
+    /* Left fighter - image pushed to right (toward center) */
+    #compare-view .fighter-left .fighter-display {
+        margin-left: auto !important;
+        margin-right: 0 !important;
+    }
+    
+    /* Right fighter - image pushed to left (toward center) */
+    #compare-view .fighter-right .fighter-display {
+        margin-left: 0 !important;
+        margin-right: auto !important;
     }
     
     #compare-view .fighter-image {
