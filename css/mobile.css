@@ -450,6 +450,7 @@
     
     /* Left stats panel - high z-index to stay above center */
     /* animation: none prevents transforms from creating stacking context issues */
+    /* Use flex-end + padding-bottom to align abilities bottom with quick-info top */
     .stats-panel-left {
         grid-column: 1 !important;
         grid-row: 1 !important;
@@ -457,16 +458,21 @@
         max-width: 100% !important;
         overflow: visible !important;
         padding: 4px 2px 4px 6px !important;
-        padding-top: 50px !important;
+        padding-bottom: 8px !important;
         align-self: stretch !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: flex-start !important;
+        justify-content: flex-end !important;
         z-index: 5 !important;
         position: relative !important;
         background: transparent !important;
         animation: none !important;
         transform: none !important;
+    }
+    
+    /* When menu hidden, left panel needs less bottom padding */
+    body:has(.character-grid-container.hidden) .stats-panel-left {
+        padding-bottom: 8px !important;
     }
     
     /* Center showcase - constrained, lower z-index */
@@ -607,6 +613,7 @@
     
     /* Right stats panel - high z-index to stay above center */
     /* animation: none prevents transforms from creating stacking context issues */
+    /* Use flex-end + padding-bottom to align traits bottom with quick-info top */
     .stats-panel-right {
         grid-column: 3 !important;
         grid-row: 1 !important;
@@ -614,16 +621,21 @@
         max-width: 100% !important;
         overflow: visible !important;
         padding: 4px 6px 4px 2px !important;
-        padding-top: 50px !important;
+        padding-bottom: 8px !important;
         align-self: stretch !important;
         display: flex !important;
         flex-direction: column !important;
-        justify-content: flex-start !important;
+        justify-content: flex-end !important;
         z-index: 5 !important;
         position: relative !important;
         background: transparent !important;
         animation: none !important;
         transform: none !important;
+    }
+    
+    /* When menu hidden, right panel needs less bottom padding */
+    body:has(.character-grid-container.hidden) .stats-panel-right {
+        padding-bottom: 8px !important;
     }
     
     /* Generic stats panel styling */
