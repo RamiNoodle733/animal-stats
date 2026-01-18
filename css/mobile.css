@@ -452,7 +452,7 @@
     /* animation: none prevents transforms from creating stacking context issues */
     /* Use flex-start + padding-top so content starts at top and grows downward */
     /* padding-top: 80px matches character-showcase to align stats with animal image */
-    .stats-panel-left {
+    .stats-panel.stats-panel-left {
         grid-column: 1 !important;
         grid-row: 1 !important;
         width: 100% !important;
@@ -615,7 +615,7 @@
     /* animation: none prevents transforms from creating stacking context issues */
     /* Use flex-start + padding-top so content starts at top and grows downward */
     /* padding-top: 80px matches character-showcase to align stats with animal image */
-    .stats-panel-right {
+    .stats-panel.stats-panel-right {
         grid-column: 3 !important;
         grid-row: 1 !important;
         width: 100% !important;
