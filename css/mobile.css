@@ -2456,16 +2456,17 @@
         margin-bottom: -6px !important;
     }
     
-    /* Hero image - MUST BE VISIBLE */
+    /* Hero image - BIGGER for main focus */
     .t-hero-image {
         width: 100% !important;
-        height: 90px !important;
-        min-height: 80px !important;
+        height: 120px !important;
+        min-height: 100px !important;
         margin: 4px 0 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         position: relative !important;
+        cursor: pointer !important;
     }
     
     .t-hero-image img {
@@ -2479,6 +2480,43 @@
     
     .t-click-hint {
         display: none !important;
+    }
+    
+    /* Quick-info when moved under animal image (via JS) */
+    .t-fighter-card .t-quick-info {
+        display: flex !important;
+        gap: 2px !important;
+        padding: 4px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 6px !important;
+        margin-top: 4px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    .t-fighter-card .quick-info-item {
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 1px !important;
+        padding: 2px !important;
+        min-width: 0 !important;
+    }
+    
+    .t-fighter-card .quick-info-item i {
+        font-size: 0.5rem !important;
+        opacity: 0.6 !important;
+    }
+    
+    .t-fighter-card .quick-info-item span {
+        font-size: 0.45rem !important;
+        font-weight: 600 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 100% !important;
     }
     
     .t-rating-change {
@@ -2672,65 +2710,42 @@
         background: linear-gradient(90deg, #cc5522, var(--neon-orange, #ff6b35)) !important;
     }
     
-    /* ====== INFO PANELS - Side by Side ====== */
+    /* ====== INFO PANELS - Side by Side, FIXED HEIGHT ====== */
     .t-info-panels-row {
         display: flex !important;
         gap: 6px !important;
         width: 100% !important;
     }
     
-    /* Ensure both panels show */
+    /* Fixed height panels so they don't change size */
     .t-bottom-band .t-info-panel {
         display: flex !important;
         flex-direction: column !important;
         flex: 1 !important;
         padding: 6px !important;
-        gap: 4px !important;
+        gap: 3px !important;
         background: rgba(255, 255, 255, 0.02) !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
         border-radius: 6px !important;
         min-width: 0 !important;
         max-width: 50% !important;
-    }
-    
-    /* Physical stats - very compact */
-    .t-info-panel .t-quick-info {
-        display: flex !important;
-        gap: 2px !important;
-        padding: 3px !important;
-        background: rgba(255, 255, 255, 0.03) !important;
-        border-radius: 4px !important;
-    }
-    
-    .t-info-panel .quick-info-item {
-        flex: 1 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        gap: 1px !important;
-        padding: 2px 1px !important;
-        min-width: 0 !important;
-    }
-    
-    .t-info-panel .quick-info-item i {
-        font-size: 0.5rem !important;
-        opacity: 0.5 !important;
-    }
-    
-    .t-info-panel .quick-info-item span {
-        font-size: 0.45rem !important;
-        font-weight: 600 !important;
-        white-space: nowrap !important;
+        height: 140px !important;
+        max-height: 140px !important;
         overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        max-width: 100% !important;
     }
     
-    /* Abilities & Traits - compact */
+    /* Hide quick-info in info panels (moved to fighter cards via JS) */
+    .t-info-panel .t-quick-info {
+        display: none !important;
+    }
+    
+    /* Abilities & Traits - compact with max height */
     .t-info-panel .t-tags {
         display: flex !important;
         flex-direction: column !important;
-        gap: 3px !important;
+        gap: 2px !important;
+        flex: 1 !important;
+        overflow: hidden !important;
     }
     
     .t-info-panel .t-abilities-section,
@@ -2738,13 +2753,16 @@
         display: flex !important;
         flex-direction: column !important;
         gap: 1px !important;
+        max-height: 32px !important;
+        overflow: hidden !important;
     }
     
     .t-info-panel .abilities-label,
     .t-info-panel .traits-label {
-        font-size: 0.4rem !important;
+        font-size: 0.38rem !important;
         opacity: 0.5 !important;
         letter-spacing: 0.5px !important;
+        flex-shrink: 0 !important;
     }
     
     .t-info-panel .abilities-tags-compact,
@@ -2752,12 +2770,13 @@
         display: flex !important;
         flex-wrap: wrap !important;
         gap: 2px !important;
+        overflow: hidden !important;
     }
     
     .t-info-panel .ability-tag,
     .t-info-panel .trait-tag {
-        padding: 1px 4px !important;
-        font-size: 0.4rem !important;
+        padding: 1px 3px !important;
+        font-size: 0.38rem !important;
         border-radius: 3px !important;
     }
     
@@ -2765,6 +2784,7 @@
     .t-info-panel .t-tournament-dashboard {
         padding: 3px !important;
         background: rgba(255, 255, 255, 0.02) !important;
+        flex-shrink: 0 !important;
         border-radius: 4px !important;
     }
     

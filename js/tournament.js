@@ -411,13 +411,37 @@ class TournamentManager {
         // Check if we're on mobile (max-width: 768px)
         if (window.innerWidth > 768) return;
         
-        // Check if mobile guess section already exists
+        // Check if mobile layout already set up
         if (document.querySelector('.mobile-guess-section')) return;
         
         const bottomBand = document.querySelector('.t-bottom-band');
         if (!bottomBand) return;
         
-        // Create compact mobile guess section with button instead of toggle
+        // === MOVE QUICK-INFO BOXES UNDER ANIMAL IMAGES ===
+        const fighter1Card = document.getElementById('tournament-fighter-1');
+        const fighter2Card = document.getElementById('tournament-fighter-2');
+        const infoPanelLeft = bottomBand.querySelector('.t-info-panel.left');
+        const infoPanelRight = bottomBand.querySelector('.t-info-panel.right');
+        
+        // Move quick-info from info panels to under each animal's hero image
+        if (fighter1Card && infoPanelLeft) {
+            const quickInfo1 = infoPanelLeft.querySelector('.t-quick-info');
+            const heroImage1 = fighter1Card.querySelector('.t-hero-image');
+            if (quickInfo1 && heroImage1) {
+                // Insert quick-info right after hero image
+                heroImage1.insertAdjacentElement('afterend', quickInfo1);
+            }
+        }
+        
+        if (fighter2Card && infoPanelRight) {
+            const quickInfo2 = infoPanelRight.querySelector('.t-quick-info');
+            const heroImage2 = fighter2Card.querySelector('.t-hero-image');
+            if (quickInfo2 && heroImage2) {
+                heroImage2.insertAdjacentElement('afterend', quickInfo2);
+            }
+        }
+        
+        // === CREATE COMPACT GUESS SECTION ===
         const mobileGuess = document.createElement('div');
         mobileGuess.className = 'mobile-guess-section';
         mobileGuess.innerHTML = `
@@ -440,7 +464,7 @@ class TournamentManager {
             </div>
         `;
         
-        // Insert at the beginning of bottom band (before stats)
+        // Insert guess section before stats
         const statsCompact = bottomBand.querySelector('.t-stats-compact');
         if (statsCompact) {
             bottomBand.insertBefore(mobileGuess, statsCompact);
@@ -448,15 +472,10 @@ class TournamentManager {
             bottomBand.insertBefore(mobileGuess, bottomBand.firstChild);
         }
         
-        // Create wrapper for info panels - IMPORTANT: wrap both panels
-        const infoPanelLeft = bottomBand.querySelector('.t-info-panel.left');
-        const infoPanelRight = bottomBand.querySelector('.t-info-panel.right');
-        
+        // === WRAP INFO PANELS (now without quick-info) ===
         if (infoPanelLeft && infoPanelRight && !bottomBand.querySelector('.t-info-panels-row')) {
             const infoPanelsRow = document.createElement('div');
             infoPanelsRow.className = 't-info-panels-row';
-            
-            // Clone and append to preserve DOM order
             infoPanelsRow.appendChild(infoPanelLeft);
             infoPanelsRow.appendChild(infoPanelRight);
             bottomBand.appendChild(infoPanelsRow);
@@ -467,14 +486,12 @@ class TournamentManager {
         mobileGuessBtn?.addEventListener('click', () => {
             this.guessModeEnabled = !this.guessModeEnabled;
             mobileGuessBtn.classList.toggle('active', this.guessModeEnabled);
-            // Also sync with original toggle
             const originalToggle = document.getElementById('t-guess-toggle');
             if (originalToggle) {
                 originalToggle.classList.toggle('active', this.guessModeEnabled);
             }
         });
         
-        // Sync toggle state
         if (this.guessModeEnabled) {
             mobileGuessBtn?.classList.add('active');
         }
