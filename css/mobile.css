@@ -2379,18 +2379,18 @@
         overflow: visible !important;
     }
     
-    /* Fighter cards - FIXED SIZE, allow image overflow */
+    /* Fighter cards - fill available height, slight side overflow only */
     .t-fighter-card {
-        flex: none !important;
+        flex: 1 1 auto !important;
         width: 42% !important;
         max-width: 42% !important;
         min-width: 120px !important;
-        height: 150px !important; /* Fixed height for consistent sizing */
+        min-height: 180px !important; /* Taller to fill space */
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        padding: 8px 4px 4px 4px !important;
-        overflow: visible !important; /* Allow image to overflow */
+        padding: 4px 4px 8px 4px !important;
+        overflow: visible !important; /* Allow slight side overflow */
         position: relative !important;
     }
     
@@ -2460,32 +2460,35 @@
         display: none !important;
     }
     
-    /* Record badge compact - scaled down */
+    /* Record badge compact - can overlap image */
     .t-record-badge {
-        transform: scale(0.65) !important;
+        transform: scale(0.6) !important;
         transform-origin: center top !important;
-        margin-bottom: -10px !important;
+        margin-bottom: -15px !important;
+        position: relative !important;
+        z-index: 10 !important;
     }
     
-    /* Hero image - bigger, can overflow the card box */
+    /* Hero image - balanced sizing, slight side overflow ok */
     .t-hero-image {
-        flex: none !important;
-        width: 120% !important; /* Bigger than container */
+        flex: 1 1 auto !important;
+        width: 105% !important; /* Slight overflow on sides only */
         height: auto !important;
-        min-height: 0 !important;
+        min-height: 80px !important;
         max-height: none !important;
-        margin: -10px 0 0 0 !important; /* Pull up to overflow top */
+        margin: 0 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         position: relative !important;
         cursor: pointer !important;
-        z-index: 5 !important; /* Above card border */
+        z-index: 5 !important;
     }
     
     .t-hero-image img {
-        max-width: 110% !important;
-        max-height: 120px !important; /* Bigger images */
+        max-width: 100% !important;
+        min-height: 70px !important; /* Minimum size for small images */
+        max-height: 100px !important; /* Cap large images */
         width: auto !important;
         height: auto !important;
         object-fit: contain !important;
@@ -2871,26 +2874,27 @@
     .t-info-panel .abilities-tags-compact,
     .t-info-panel .traits-tags-compact {
         display: flex !important;
-        flex-wrap: nowrap !important;
+        flex-wrap: wrap !important; /* Allow 2 lines */
         gap: 2px !important;
         overflow: hidden !important;
+        max-height: 22px !important; /* Limit to ~2 lines */
     }
     
-    /* Hide abilities/traits beyond the first 2 */
-    .t-info-panel .abilities-tags-compact .ability-tag:nth-child(n+3),
-    .t-info-panel .traits-tags-compact .trait-tag:nth-child(n+3) {
+    /* Show up to 4 tags across 2 lines */
+    .t-info-panel .abilities-tags-compact .ability-tag:nth-child(n+5),
+    .t-info-panel .traits-tags-compact .trait-tag:nth-child(n+5) {
         display: none !important;
     }
     
     .t-info-panel .ability-tag,
     .t-info-panel .trait-tag {
-        padding: 1px 3px !important;
-        font-size: 0.3rem !important;
+        padding: 1px 2px !important;
+        font-size: 0.28rem !important; /* Smaller to fit */
         border-radius: 2px !important;
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
-        max-width: 55px !important;
+        max-width: 48px !important; /* Narrower to fit more */
     }
     
     /* Tournament record - very compact */
