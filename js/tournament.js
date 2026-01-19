@@ -417,41 +417,21 @@ class TournamentManager {
         const bottomBand = document.querySelector('.t-bottom-band');
         if (!bottomBand) return;
         
-        // === MOVE QUICK-INFO BOXES UNDER ANIMAL IMAGES ===
-        const fighter1Card = document.getElementById('tournament-fighter-1');
-        const fighter2Card = document.getElementById('tournament-fighter-2');
+        // Get info panels
         const infoPanelLeft = bottomBand.querySelector('.t-info-panel.left');
         const infoPanelRight = bottomBand.querySelector('.t-info-panel.right');
-        
-        // Move quick-info from info panels to under each animal's hero image
-        if (fighter1Card && infoPanelLeft) {
-            const quickInfo1 = infoPanelLeft.querySelector('.t-quick-info');
-            const heroImage1 = fighter1Card.querySelector('.t-hero-image');
-            if (quickInfo1 && heroImage1) {
-                // Insert quick-info right after hero image
-                heroImage1.insertAdjacentElement('afterend', quickInfo1);
-            }
-        }
-        
-        if (fighter2Card && infoPanelRight) {
-            const quickInfo2 = infoPanelRight.querySelector('.t-quick-info');
-            const heroImage2 = fighter2Card.querySelector('.t-hero-image');
-            if (quickInfo2 && heroImage2) {
-                heroImage2.insertAdjacentElement('afterend', quickInfo2);
-            }
-        }
         
         // === CREATE COMPACT GUESS SECTION ===
         const mobileGuess = document.createElement('div');
         mobileGuess.className = 'mobile-guess-section';
         mobileGuess.innerHTML = `
-            <div class="guess-label">
-                <i class="fas fa-brain"></i> Click to Toggle Guess Majority
+            <div class="guess-label" id="mobile-guess-label">
+                <i class="fas fa-brain"></i> <span>Tap to Play Guess Mode</span>
             </div>
             <div class="vote-bar-section">
                 <div class="vote-stats-row">
                     <span class="vote-pct left" id="mobile-majority-pct-left">?%</span>
-                    <span class="vote-total" id="mobile-majority-total">0 votes</span>
+                    <span class="vote-total" id="mobile-majority-total">Community Vote</span>
                     <span class="vote-pct right" id="mobile-majority-pct-right">?%</span>
                 </div>
                 <div class="vote-bar">
@@ -469,7 +449,7 @@ class TournamentManager {
             bottomBand.insertBefore(mobileGuess, bottomBand.firstChild);
         }
         
-        // === WRAP INFO PANELS (now without quick-info) ===
+        // === WRAP INFO PANELS ===
         if (infoPanelLeft && infoPanelRight && !bottomBand.querySelector('.t-info-panels-row')) {
             const infoPanelsRow = document.createElement('div');
             infoPanelsRow.className = 't-info-panels-row';
@@ -478,10 +458,19 @@ class TournamentManager {
             bottomBand.appendChild(infoPanelsRow);
         }
         
+        // Helper function to update guess label text
+        const updateGuessLabel = (enabled) => {
+            const labelSpan = document.querySelector('#mobile-guess-label span');
+            if (labelSpan) {
+                labelSpan.textContent = enabled ? 'Guessing Mode ON — Pick the Crowd Favorite!' : 'Tap to Play Guess Mode';
+            }
+        };
+        
         // Bind mobile guess section - click anywhere to toggle
         mobileGuess.addEventListener('click', () => {
             this.guessModeEnabled = !this.guessModeEnabled;
             mobileGuess.classList.toggle('active', this.guessModeEnabled);
+            updateGuessLabel(this.guessModeEnabled);
             const originalToggle = document.getElementById('t-guess-toggle');
             if (originalToggle) {
                 originalToggle.classList.toggle('active', this.guessModeEnabled);
@@ -490,6 +479,7 @@ class TournamentManager {
         
         if (this.guessModeEnabled) {
             mobileGuess.classList.add('active');
+            updateGuessLabel(true);
         }
     }
     

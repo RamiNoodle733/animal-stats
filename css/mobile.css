@@ -2371,11 +2371,12 @@
     .t-battle-main {
         display: flex !important;
         flex-direction: row !important;
-        align-items: stretch !important;
+        align-items: flex-start !important;
         justify-content: center !important;
-        padding: 8px !important;
+        padding: 4px 8px !important;
         gap: 0 !important;
         flex-shrink: 0 !important;
+        overflow: hidden !important;
     }
     
     /* Fighter cards */
@@ -2384,10 +2385,10 @@
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        padding: 6px !important;
+        padding: 4px !important;
         max-width: 42% !important;
         min-width: 0 !important;
-        overflow: visible !important;
+        overflow: hidden !important;
     }
     
     .t-fighter-card.left { order: 1 !important; }
@@ -2445,7 +2446,7 @@
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
-        margin-bottom: 4px !important;
+        margin-bottom: 2px !important;
     }
     
     .t-scientific {
@@ -2454,17 +2455,17 @@
     
     /* Record badge compact */
     .t-record-badge {
-        transform: scale(0.75) !important;
+        transform: scale(0.7) !important;
         transform-origin: center top !important;
-        margin-bottom: -6px !important;
+        margin-bottom: -8px !important;
     }
     
-    /* Hero image - BIGGER for main focus */
+    /* Hero image - main focus */
     .t-hero-image {
         width: 100% !important;
-        height: 120px !important;
-        min-height: 100px !important;
-        margin: 4px 0 !important;
+        height: 100px !important;
+        min-height: 80px !important;
+        margin: 2px 0 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -2485,24 +2486,9 @@
         display: none !important;
     }
     
-    /* Quick-info when moved under animal image (via JS) */
+    /* Quick-info - hidden on mobile (shown in info panels instead) */
     .t-fighter-card .t-quick-info {
-        display: flex !important;
-        position: static !important; /* Override fixed positioning from .quick-info-bar */
-        gap: 2px !important;
-        padding: 4px !important;
-        background: rgba(255, 255, 255, 0.05) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 6px !important;
-        margin-top: 4px !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-        transform: none !important; /* Reset any transform */
-        left: auto !important;
-        right: auto !important;
-        bottom: auto !important;
-        top: auto !important;
-        z-index: auto !important;
+        display: none !important;
     }
     
     .t-fighter-card .quick-info-item {
@@ -2546,9 +2532,9 @@
     .t-bottom-band {
         display: flex !important;
         flex-direction: column !important;
-        padding: 0 12px 12px !important;
-        padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
-        gap: 8px !important;
+        padding: 0 10px 10px !important;
+        padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+        gap: 6px !important;
         flex-shrink: 0 !important;
     }
     
@@ -2556,35 +2542,50 @@
     .mobile-guess-section {
         display: flex !important;
         flex-direction: column !important;
-        gap: 6px !important;
-        padding: 8px !important;
-        background: rgba(255, 255, 255, 0.03) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 8px !important;
+        gap: 4px !important;
+        padding: 6px 8px !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 6px !important;
         cursor: pointer !important;
         transition: all 0.2s ease !important;
+        opacity: 0.6 !important;
     }
 
     .mobile-guess-section:hover {
-        background: rgba(255, 255, 255, 0.05) !important;
-        border-color: rgba(255, 255, 255, 0.2) !important;
+        opacity: 0.8 !important;
     }
 
     .mobile-guess-section.active {
-        background: rgba(255, 200, 50, 0.1) !important;
-        border-color: rgba(255, 200, 50, 0.3) !important;
+        background: rgba(255, 200, 50, 0.08) !important;
+        border-color: rgba(255, 200, 50, 0.25) !important;
+        opacity: 1 !important;
+    }
+
+    .mobile-guess-section.active .guess-label {
+        color: #ffc832 !important;
+    }
+
+    .mobile-guess-section.active .vote-bar {
+        opacity: 1 !important;
     }
     
     .mobile-guess-section .guess-header {
         display: none !important;
     }
     
-    /* Guess button - compact pill style */
+    /* Guess label styling */
     .mobile-guess-section .guess-label {
-        font-size: 0.55rem !important;
-        color: rgba(255, 255, 255, 0.5) !important;
-        letter-spacing: 0.5px !important;
+        font-size: 0.5rem !important;
+        color: rgba(255, 255, 255, 0.4) !important;
+        letter-spacing: 0.3px !important;
         text-transform: uppercase !important;
+        text-align: center !important;
+        transition: color 0.2s ease !important;
+    }
+
+    .mobile-guess-section .guess-label i {
+        margin-right: 3px !important;
     }
     
     /* Vote bar section - full width */
@@ -2725,20 +2726,43 @@
         display: flex !important;
         flex-direction: column !important;
         flex: 1 !important;
-        padding: 6px !important;
-        gap: 3px !important;
+        padding: 4px !important;
+        gap: 2px !important;
         background: rgba(255, 255, 255, 0.02) !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
         border-radius: 6px !important;
         min-width: 0 !important;
         max-width: 50% !important;
-        /* Auto height - no fixed constraints */
         overflow: visible !important;
     }
     
-    /* Hide quick-info in info panels (moved to fighter cards via JS) */
+    /* Quick-info in info panels - compact */
     .t-info-panel .t-quick-info {
-        display: none !important;
+        display: flex !important;
+        gap: 2px !important;
+        padding: 2px !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border-radius: 4px !important;
+        margin-bottom: 2px !important;
+    }
+    
+    .t-info-panel .quick-info-item {
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 0 !important;
+        padding: 1px !important;
+    }
+    
+    .t-info-panel .quick-info-item i {
+        font-size: 0.4rem !important;
+        opacity: 0.5 !important;
+    }
+    
+    .t-info-panel .quick-info-item span {
+        font-size: 0.4rem !important;
+        font-weight: 600 !important;
     }
     
     /* Abilities & Traits - compact */
@@ -2763,7 +2787,7 @@
         opacity: 0.5 !important;
         letter-spacing: 0.3px !important;
         flex-shrink: 0 !important;
-        margin: 2px 0 0 0 !important;
+        margin: 0 !important;
     }
     
     .t-info-panel .abilities-tags-compact,
