@@ -2464,9 +2464,11 @@
         margin-bottom: -10px !important;
     }
     
-    /* Hero image - main focus */
+    /* Hero image - main focus - MUST override desktop min/max heights */
     .t-hero-image {
         width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
         max-height: 100px !important;
         margin: 0 !important;
         display: flex !important;
@@ -2478,7 +2480,7 @@
     
     .t-hero-image img {
         max-width: 100% !important;
-        max-height: 100px !important;
+        max-height: 95px !important;
         width: auto !important;
         height: auto !important;
         object-fit: contain !important;
@@ -2635,25 +2637,30 @@
     .mobile-guess-section .vote-bar {
         height: 6px !important;
         border-radius: 3px !important;
-        overflow: hidden !important;
+        overflow: visible !important;
         background: rgba(255, 255, 255, 0.1) !important;
-        display: flex !important;
-        flex-direction: row !important;
+        display: block !important;
         width: 100% !important;
+        position: relative !important;
     }
     
     .mobile-guess-section .vote-fill {
         height: 100% !important;
         transition: width 0.3s ease !important;
-        display: block !important;
+        display: inline-block !important;
+        position: absolute !important;
+        top: 0 !important;
     }
     
     .mobile-guess-section .vote-fill.left {
         background: linear-gradient(90deg, var(--neon-blue, #00d4ff), #00a8cc) !important;
+        left: 0 !important;
     }
     
     .mobile-guess-section .vote-fill.right {
         background: linear-gradient(90deg, #cc5522, var(--neon-orange, #ff6b35)) !important;
+        right: 0 !important;
+        left: auto !important;
     }
     
     /* ====== STAT BARS ====== */
