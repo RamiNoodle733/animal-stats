@@ -2371,11 +2371,13 @@
     .t-battle-main {
         display: flex !important;
         flex-direction: row !important;
-        align-items: center !important;
+        align-items: flex-start !important;
         justify-content: center !important;
         padding: 4px 8px !important;
         gap: 0 !important;
-        flex-shrink: 0 !important;
+        flex-shrink: 1 !important;
+        min-height: 0 !important;
+        overflow: visible !important;
     }
     
     /* Fighter cards - contained area for clicking */
@@ -2497,23 +2499,33 @@
     /* Rating change - overlay at bottom of hero image */
     .t-rating-change {
         position: absolute !important;
-        bottom: 0 !important;
+        bottom: 4px !important;
         left: 50% !important;
         transform: translateX(-50%) !important;
-        padding: 3px 8px !important;
+        padding: 4px 10px !important;
         margin: 0 !important;
-        background: rgba(0, 0, 0, 0.85) !important;
-        border-radius: 4px !important;
+        background: rgba(0, 0, 0, 0.9) !important;
+        border-radius: 6px !important;
         z-index: 10 !important;
         white-space: nowrap !important;
+        display: none !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 6px !important;
+    }
+    
+    .t-rating-change.show {
+        display: flex !important;
     }
     
     .t-rating-delta {
-        font-size: 0.7rem !important;
+        font-size: 0.85rem !important;
+        font-weight: bold !important;
     }
     
     .t-rating-calc {
-        font-size: 0.5rem !important;
+        font-size: 0.55rem !important;
     }
     
     /* ====== BOTTOM BAND - Guess + Stats + Info ====== */
@@ -2531,13 +2543,14 @@
         display: flex !important;
         flex-direction: row !important;
         align-items: center !important;
-        gap: 10px !important;
-        padding: 8px 12px !important;
+        gap: 8px !important;
+        padding: 6px 10px !important;
         background: rgba(255, 255, 255, 0.05) !important;
         border: 1px solid rgba(255, 255, 255, 0.15) !important;
         border-radius: 8px !important;
         cursor: pointer !important;
         transition: all 0.2s ease !important;
+        flex-shrink: 0 !important;
     }
 
     .mobile-guess-section:hover {
@@ -2561,20 +2574,23 @@
         display: none !important;
     }
     
-    /* Guess label styling - visible white text */
+    /* Guess label styling - two lines, compact */
     .mobile-guess-section .guess-label {
-        font-size: 0.65rem !important;
+        font-size: 0.55rem !important;
         color: rgba(255, 255, 255, 0.85) !important;
-        letter-spacing: 0.2px !important;
+        letter-spacing: 0.1px !important;
         text-transform: none !important;
         text-align: left !important;
         transition: color 0.2s ease !important;
         flex-shrink: 0 !important;
-        white-space: nowrap !important;
+        white-space: pre-line !important;
+        line-height: 1.25 !important;
+        min-width: 85px !important;
+        max-width: 95px !important;
     }
 
     .mobile-guess-section .guess-label i {
-        margin-right: 5px !important;
+        margin-right: 4px !important;
     }
     
     /* Vote bar section - inline compact */
@@ -2615,17 +2631,22 @@
     }
     
     .mobile-guess-section .vote-bar {
-        height: 8px !important;
-        border-radius: 4px !important;
+        height: 6px !important;
+        border-radius: 3px !important;
         overflow: hidden !important;
         background: rgba(255, 255, 255, 0.1) !important;
         display: flex !important;
+        flex-direction: row !important;
         width: 100% !important;
+        min-width: 100% !important;
+        max-width: 100% !important;
     }
     
     .mobile-guess-section .vote-fill {
         height: 100% !important;
         transition: width 0.3s ease !important;
+        flex-shrink: 0 !important;
+        min-width: 0 !important;
     }
     
     .mobile-guess-section .vote-fill.left {
@@ -2728,13 +2749,19 @@
     
     /* Hide quick-info in info panels (moved to fighter cards via JS) */
     /* Quick-info in info panels - MUST override global .quick-info-bar fixed positioning */
+    /* Using body.tournament-active for highest specificity */
+    body.tournament-active .t-info-panel .quick-info-bar,
+    body.tournament-active .t-bottom-band .quick-info-bar,
+    body.tournament-active .quick-info-bar.t-quick-info,
     .t-bottom-band .t-info-panel .t-quick-info,
     .t-info-panel .t-quick-info,
     .t-info-panel .quick-info-bar.t-quick-info,
     .quick-info-bar.t-quick-info {
         position: static !important;
         display: flex !important;
+        flex-direction: row !important;
         justify-content: center !important;
+        align-items: center !important;
         gap: 4px !important;
         padding: 4px !important;
         background: rgba(255, 255, 255, 0.03) !important;
@@ -2750,6 +2777,8 @@
         width: 100% !important;
         max-width: none !important;
         border: none !important;
+        /* Flex properties for children */
+        flex-wrap: nowrap !important;
     }
     
     .t-info-panel .quick-info-item {

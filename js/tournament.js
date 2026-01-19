@@ -547,7 +547,7 @@ class TournamentManager {
         mobileGuess.className = 'mobile-guess-section';
         mobileGuess.innerHTML = `
             <div class="guess-label" id="mobile-guess-label">
-                <i class="fas fa-brain"></i> <span>Tap to guess majority</span>
+                <i class="fas fa-brain"></i> <span>Tap to guess majority\nvote</span>
             </div>
             <div class="vote-bar-section">
                 <div class="vote-stats-row">
@@ -583,7 +583,7 @@ class TournamentManager {
         const updateGuessLabel = (enabled) => {
             const labelSpan = document.querySelector('#mobile-guess-label span');
             if (labelSpan) {
-                labelSpan.textContent = enabled ? 'Guess mode ON!' : 'Tap to guess majority';
+                labelSpan.textContent = enabled ? 'Guess mode on!\nGuess who majority chose.' : 'Tap to guess majority\nvote';
             }
         };
         
