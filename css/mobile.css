@@ -2464,8 +2464,9 @@
         margin-bottom: -10px !important;
     }
     
-    /* Hero image - main focus - MUST override desktop min/max heights */
+    /* Hero image - MUST override desktop flex:1 and clamp() min/max heights */
     .t-hero-image {
+        flex: none !important; /* <-- THIS is the root fix - desktop has flex:1 causing grow */
         width: 100% !important;
         height: auto !important;
         min-height: 0 !important;
