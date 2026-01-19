@@ -2456,20 +2456,25 @@
         margin-bottom: -6px !important;
     }
     
-    /* Hero image */
+    /* Hero image - MUST BE VISIBLE */
     .t-hero-image {
         width: 100% !important;
-        height: 110px !important;
+        height: 90px !important;
+        min-height: 80px !important;
         margin: 4px 0 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        position: relative !important;
     }
     
     .t-hero-image img {
         max-width: 100% !important;
         max-height: 100% !important;
+        width: auto !important;
+        height: auto !important;
         object-fit: contain !important;
+        display: block !important;
     }
     
     .t-click-hint {
@@ -2499,53 +2504,56 @@
         flex-shrink: 0 !important;
     }
     
-    /* ====== MOBILE GUESS SECTION - Added via JS ====== */
+    /* ====== MOBILE GUESS SECTION - Compact ====== */
     .mobile-guess-section {
         display: flex !important;
-        flex-direction: column !important;
+        flex-direction: row !important;
+        align-items: center !important;
         gap: 8px !important;
-        padding: 10px 12px !important;
+        padding: 6px 10px !important;
         background: rgba(255, 255, 255, 0.03) !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        border-radius: 10px !important;
+        border-radius: 8px !important;
     }
     
     .mobile-guess-section .guess-header {
+        flex-shrink: 0 !important;
+    }
+    
+    /* Guess button - compact pill style */
+    .mobile-guess-section .guess-btn {
         display: flex !important;
-        justify-content: center !important;
+        align-items: center !important;
+        gap: 4px !important;
+        padding: 5px 10px !important;
+        font-size: 0.6rem !important;
+        border-radius: 14px !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        color: rgba(255, 255, 255, 0.7) !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+        white-space: nowrap !important;
     }
     
-    .mobile-guess-section .t-guess-toggle {
-        padding: 8px 16px !important;
-        font-size: 0.75rem !important;
-        gap: 8px !important;
-        border-radius: 20px !important;
+    .mobile-guess-section .guess-btn:hover,
+    .mobile-guess-section .guess-btn.active {
+        background: rgba(255, 200, 50, 0.2) !important;
+        border-color: rgba(255, 200, 50, 0.5) !important;
+        color: #ffc832 !important;
     }
     
-    .mobile-guess-section .t-guess-toggle span {
-        display: inline !important;
+    .mobile-guess-section .guess-btn i {
+        font-size: 0.65rem !important;
     }
     
-    .mobile-guess-section .t-toggle-switch {
-        width: 32px !important;
-        height: 18px !important;
-    }
-    
-    .mobile-guess-section .t-toggle-switch::after {
-        width: 12px !important;
-        height: 12px !important;
-        top: 3px !important;
-        left: 3px !important;
-    }
-    
-    .mobile-guess-section .t-guess-toggle.active .t-toggle-switch::after {
-        left: 17px !important;
-    }
-    
+    /* Vote bar section - takes remaining space */
     .mobile-guess-section .vote-bar-section {
+        flex: 1 !important;
         display: flex !important;
         flex-direction: column !important;
-        gap: 4px !important;
+        gap: 2px !important;
+        min-width: 0 !important;
     }
     
     .mobile-guess-section .vote-stats-row {
@@ -2555,9 +2563,9 @@
     }
     
     .mobile-guess-section .vote-pct {
-        font-size: 0.9rem !important;
+        font-size: 0.7rem !important;
         font-weight: 700 !important;
-        min-width: 45px !important;
+        min-width: 30px !important;
     }
     
     .mobile-guess-section .vote-pct.left {
@@ -2571,13 +2579,13 @@
     }
     
     .mobile-guess-section .vote-total {
-        font-size: 0.65rem !important;
-        color: rgba(255, 255, 255, 0.5) !important;
+        font-size: 0.55rem !important;
+        color: rgba(255, 255, 255, 0.4) !important;
     }
     
     .mobile-guess-section .vote-bar {
-        height: 14px !important;
-        border-radius: 7px !important;
+        height: 8px !important;
+        border-radius: 4px !important;
         overflow: hidden !important;
         background: rgba(255, 255, 255, 0.1) !important;
         display: flex !important;
@@ -2667,28 +2675,31 @@
     /* ====== INFO PANELS - Side by Side ====== */
     .t-info-panels-row {
         display: flex !important;
-        gap: 8px !important;
+        gap: 6px !important;
+        width: 100% !important;
     }
     
-    .t-info-panel {
+    /* Ensure both panels show */
+    .t-bottom-band .t-info-panel {
         display: flex !important;
         flex-direction: column !important;
         flex: 1 !important;
-        padding: 8px !important;
-        gap: 6px !important;
+        padding: 6px !important;
+        gap: 4px !important;
         background: rgba(255, 255, 255, 0.02) !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 8px !important;
+        border-radius: 6px !important;
         min-width: 0 !important;
+        max-width: 50% !important;
     }
     
-    /* Physical stats */
+    /* Physical stats - very compact */
     .t-info-panel .t-quick-info {
         display: flex !important;
-        gap: 3px !important;
-        padding: 5px !important;
+        gap: 2px !important;
+        padding: 3px !important;
         background: rgba(255, 255, 255, 0.03) !important;
-        border-radius: 5px !important;
+        border-radius: 4px !important;
     }
     
     .t-info-panel .quick-info-item {
@@ -2696,18 +2707,18 @@
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        gap: 2px !important;
-        padding: 3px 2px !important;
+        gap: 1px !important;
+        padding: 2px 1px !important;
         min-width: 0 !important;
     }
     
     .t-info-panel .quick-info-item i {
-        font-size: 0.55rem !important;
-        opacity: 0.6 !important;
+        font-size: 0.5rem !important;
+        opacity: 0.5 !important;
     }
     
     .t-info-panel .quick-info-item span {
-        font-size: 0.5rem !important;
+        font-size: 0.45rem !important;
         font-weight: 600 !important;
         white-space: nowrap !important;
         overflow: hidden !important;
@@ -2715,24 +2726,24 @@
         max-width: 100% !important;
     }
     
-    /* Abilities & Traits */
+    /* Abilities & Traits - compact */
     .t-info-panel .t-tags {
         display: flex !important;
         flex-direction: column !important;
-        gap: 4px !important;
+        gap: 3px !important;
     }
     
     .t-info-panel .t-abilities-section,
     .t-info-panel .t-traits-section {
         display: flex !important;
         flex-direction: column !important;
-        gap: 2px !important;
+        gap: 1px !important;
     }
     
     .t-info-panel .abilities-label,
     .t-info-panel .traits-label {
-        font-size: 0.45rem !important;
-        opacity: 0.6 !important;
+        font-size: 0.4rem !important;
+        opacity: 0.5 !important;
         letter-spacing: 0.5px !important;
     }
     
@@ -2745,24 +2756,25 @@
     
     .t-info-panel .ability-tag,
     .t-info-panel .trait-tag {
-        padding: 2px 5px !important;
-        font-size: 0.45rem !important;
+        padding: 1px 4px !important;
+        font-size: 0.4rem !important;
         border-radius: 3px !important;
     }
     
-    /* Tournament record */
+    /* Tournament record - very compact */
     .t-info-panel .t-tournament-dashboard {
-        padding: 5px !important;
+        padding: 3px !important;
         background: rgba(255, 255, 255, 0.02) !important;
-        border-radius: 5px !important;
+        border-radius: 4px !important;
     }
     
     .t-info-panel .dashboard-header {
-        margin-bottom: 3px !important;
+        margin-bottom: 2px !important;
+        padding: 0 !important;
     }
     
     .t-info-panel .dashboard-title {
-        font-size: 0.45rem !important;
+        font-size: 0.38rem !important;
     }
     
     .t-info-panel .dashboard-accent-left,
@@ -2770,64 +2782,74 @@
         display: none !important;
     }
     
+    .t-info-panel .dashboard-content {
+        padding: 0 !important;
+    }
+    
     .t-info-panel .medal-row {
         display: flex !important;
-        gap: 3px !important;
+        gap: 2px !important;
     }
     
     .t-info-panel .medal-card {
         flex: 1 !important;
-        padding: 3px !important;
+        padding: 2px !important;
         min-width: 0 !important;
+        flex-direction: row !important;
+        gap: 2px !important;
     }
     
     .t-info-panel .medal-icon-wrap {
-        width: 14px !important;
-        height: 14px !important;
+        width: 12px !important;
+        height: 12px !important;
     }
     
     .t-info-panel .medal-icon-wrap i {
-        font-size: 0.45rem !important;
+        font-size: 0.4rem !important;
+    }
+    
+    .t-info-panel .medal-info {
+        gap: 0 !important;
     }
     
     .t-info-panel .medal-count {
-        font-size: 0.6rem !important;
+        font-size: 0.5rem !important;
     }
     
     .t-info-panel .medal-label {
-        font-size: 0.3rem !important;
+        font-size: 0.25rem !important;
     }
     
-    /* Action buttons */
+    /* Action buttons - very compact */
     .t-info-panel .t-action-row {
         display: flex !important;
-        gap: 3px !important;
-        margin-top: auto !important;
+        gap: 2px !important;
+        margin-top: 2px !important;
     }
     
     .t-info-panel .row-vote-btn,
     .t-info-panel .row-comments-btn {
         flex: 1 !important;
-        padding: 5px 3px !important;
-        font-size: 0.55rem !important;
+        padding: 3px 2px !important;
+        font-size: 0.5rem !important;
         min-width: 0 !important;
-        gap: 2px !important;
+        gap: 1px !important;
     }
     
     .t-info-panel .row-vote-btn i,
     .t-info-panel .row-comments-btn i {
-        font-size: 0.6rem !important;
+        font-size: 0.5rem !important;
     }
     
     .t-info-panel .vote-count,
     .t-info-panel .comment-count {
-        font-size: 0.5rem !important;
+        font-size: 0.45rem !important;
     }
     
     .t-info-panel .t-details-btn {
         flex: 0 0 auto !important;
-        width: 26px !important;
-        padding: 5px !important;
+        width: 22px !important;
+        padding: 3px !important;
     }
     
     /* Details overlay */

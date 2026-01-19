@@ -405,7 +405,7 @@ class TournamentManager {
     
     /**
      * Setup mobile layout for the battle screen
-     * Creates a mobile guess section with the guess toggle and vote bar
+     * Creates a compact mobile guess section and wraps info panels
      */
     setupMobileLayout() {
         // Check if we're on mobile (max-width: 768px)
@@ -417,21 +417,20 @@ class TournamentManager {
         const bottomBand = document.querySelector('.t-bottom-band');
         if (!bottomBand) return;
         
-        // Create mobile guess section
+        // Create compact mobile guess section with button instead of toggle
         const mobileGuess = document.createElement('div');
         mobileGuess.className = 'mobile-guess-section';
         mobileGuess.innerHTML = `
             <div class="guess-header">
-                <button class="t-guess-toggle" id="mobile-guess-toggle">
+                <button class="guess-btn" id="mobile-guess-btn">
                     <i class="fas fa-brain"></i>
-                    <span>Guess Majority</span>
-                    <div class="t-toggle-switch" id="mobile-toggle-switch"></div>
+                    <span>Guess</span>
                 </button>
             </div>
             <div class="vote-bar-section">
                 <div class="vote-stats-row">
                     <span class="vote-pct left" id="mobile-majority-pct-left">?%</span>
-                    <span class="vote-total" id="mobile-majority-total">No votes yet</span>
+                    <span class="vote-total" id="mobile-majority-total">0 votes</span>
                     <span class="vote-pct right" id="mobile-majority-pct-right">?%</span>
                 </div>
                 <div class="vote-bar">
@@ -441,29 +440,33 @@ class TournamentManager {
             </div>
         `;
         
-        // Insert at the beginning of bottom band
-        bottomBand.insertBefore(mobileGuess, bottomBand.firstChild);
+        // Insert at the beginning of bottom band (before stats)
+        const statsCompact = bottomBand.querySelector('.t-stats-compact');
+        if (statsCompact) {
+            bottomBand.insertBefore(mobileGuess, statsCompact);
+        } else {
+            bottomBand.insertBefore(mobileGuess, bottomBand.firstChild);
+        }
         
-        // Create wrapper for info panels
+        // Create wrapper for info panels - IMPORTANT: wrap both panels
         const infoPanelLeft = bottomBand.querySelector('.t-info-panel.left');
         const infoPanelRight = bottomBand.querySelector('.t-info-panel.right');
         
-        if (infoPanelLeft && infoPanelRight) {
-            // Check if wrapper already exists
-            if (!bottomBand.querySelector('.t-info-panels-row')) {
-                const infoPanelsRow = document.createElement('div');
-                infoPanelsRow.className = 't-info-panels-row';
-                infoPanelsRow.appendChild(infoPanelLeft);
-                infoPanelsRow.appendChild(infoPanelRight);
-                bottomBand.appendChild(infoPanelsRow);
-            }
+        if (infoPanelLeft && infoPanelRight && !bottomBand.querySelector('.t-info-panels-row')) {
+            const infoPanelsRow = document.createElement('div');
+            infoPanelsRow.className = 't-info-panels-row';
+            
+            // Clone and append to preserve DOM order
+            infoPanelsRow.appendChild(infoPanelLeft);
+            infoPanelsRow.appendChild(infoPanelRight);
+            bottomBand.appendChild(infoPanelsRow);
         }
         
-        // Bind mobile guess toggle
-        const mobileGuessToggle = document.getElementById('mobile-guess-toggle');
-        mobileGuessToggle?.addEventListener('click', () => {
+        // Bind mobile guess button
+        const mobileGuessBtn = document.getElementById('mobile-guess-btn');
+        mobileGuessBtn?.addEventListener('click', () => {
             this.guessModeEnabled = !this.guessModeEnabled;
-            mobileGuessToggle.classList.toggle('active', this.guessModeEnabled);
+            mobileGuessBtn.classList.toggle('active', this.guessModeEnabled);
             // Also sync with original toggle
             const originalToggle = document.getElementById('t-guess-toggle');
             if (originalToggle) {
@@ -473,7 +476,7 @@ class TournamentManager {
         
         // Sync toggle state
         if (this.guessModeEnabled) {
-            mobileGuessToggle?.classList.add('active');
+            mobileGuessBtn?.classList.add('active');
         }
     }
     
