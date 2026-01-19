@@ -2406,6 +2406,8 @@
         min-width: 50px !important;
         max-width: 60px !important;
         flex-shrink: 0 !important;
+        align-self: center !important;
+        margin-top: 30px !important;
     }
     
     /* VS Badge */
@@ -2513,10 +2515,14 @@
         align-items: center !important;
         justify-content: center !important;
         gap: 6px !important;
+        opacity: 0 !important;
+        animation: none !important;
     }
     
     .t-rating-change.show {
         display: flex !important;
+        opacity: 1 !important;
+        animation: none !important;
     }
     
     .t-rating-delta {
@@ -2645,7 +2651,8 @@
     .mobile-guess-section .vote-fill {
         height: 100% !important;
         transition: width 0.3s ease !important;
-        flex-shrink: 0 !important;
+        flex-shrink: 1 !important;
+        flex-grow: 0 !important;
         min-width: 0 !important;
     }
     
@@ -2730,9 +2737,10 @@
         display: flex !important;
         gap: 6px !important;
         width: 100% !important;
+        flex-shrink: 0 !important;
     }
     
-    /* Info panels - auto height to fit content */
+    /* Info panels - constrained height to prevent overflow */
     .t-bottom-band .t-info-panel {
         display: flex !important;
         flex-direction: column !important;
@@ -2744,7 +2752,8 @@
         border-radius: 6px !important;
         min-width: 0 !important;
         max-width: 50% !important;
-        overflow: visible !important;
+        overflow: hidden !important;
+        max-height: 85px !important;
     }
     
     /* Hide quick-info in info panels (moved to fighter cards via JS) */
@@ -2830,12 +2839,14 @@
         transform: rotate(180deg) !important;
     }
     
-    /* Abilities & Traits - compact */
+    /* Abilities & Traits - compact, limit to 2 each */
     .t-info-panel .t-tags {
         display: flex !important;
         flex-direction: column !important;
-        gap: 2px !important;
-        flex: 1 !important;
+        gap: 1px !important;
+        flex: 0 0 auto !important;
+        max-height: none !important;
+        overflow: hidden !important;
     }
     
     .t-info-panel .t-abilities-section,
@@ -2843,14 +2854,13 @@
         display: flex !important;
         flex-direction: column !important;
         gap: 1px !important;
-        /* No max-height - show all abilities/traits */
     }
     
     .t-info-panel .abilities-label,
     .t-info-panel .traits-label {
-        font-size: 0.35rem !important;
+        font-size: 0.32rem !important;
         opacity: 0.5 !important;
-        letter-spacing: 0.3px !important;
+        letter-spacing: 0.2px !important;
         flex-shrink: 0 !important;
         margin: 0 !important;
     }
@@ -2858,15 +2868,26 @@
     .t-info-panel .abilities-tags-compact,
     .t-info-panel .traits-tags-compact {
         display: flex !important;
-        flex-wrap: wrap !important;
+        flex-wrap: nowrap !important;
         gap: 2px !important;
+        overflow: hidden !important;
+    }
+    
+    /* Hide abilities/traits beyond the first 2 */
+    .t-info-panel .abilities-tags-compact .ability-tag:nth-child(n+3),
+    .t-info-panel .traits-tags-compact .trait-tag:nth-child(n+3) {
+        display: none !important;
     }
     
     .t-info-panel .ability-tag,
     .t-info-panel .trait-tag {
-        padding: 0px 2px !important;
-        font-size: 0.35rem !important;
+        padding: 1px 3px !important;
+        font-size: 0.3rem !important;
         border-radius: 2px !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 55px !important;
     }
     
     /* Tournament record - very compact */
