@@ -2384,7 +2384,7 @@
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        padding: 4px !important;
+        padding: 8px 4px 4px 4px !important;
         max-width: 42% !important;
         min-width: 0 !important;
         overflow: visible !important;
@@ -2438,15 +2438,18 @@
     .t-identity-top {
         text-align: center !important;
         width: 100% !important;
+        padding-top: 2px !important;
     }
     
     .t-name {
-        font-size: 0.75rem !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
+        font-size: 0.7rem !important;
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
         margin-bottom: 0 !important;
         max-width: 100% !important;
+        line-height: 1.2 !important;
+        word-wrap: break-word !important;
     }
     
     .t-scientific {
@@ -2491,13 +2494,22 @@
         display: none !important;
     }
     
+    /* Rating change - overlay at bottom of hero image */
     .t-rating-change {
-        padding: 4px !important;
-        margin-top: 4px !important;
+        position: absolute !important;
+        bottom: 0 !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        padding: 3px 8px !important;
+        margin: 0 !important;
+        background: rgba(0, 0, 0, 0.85) !important;
+        border-radius: 4px !important;
+        z-index: 10 !important;
+        white-space: nowrap !important;
     }
     
     .t-rating-delta {
-        font-size: 0.75rem !important;
+        font-size: 0.7rem !important;
     }
     
     .t-rating-calc {
@@ -2514,28 +2526,27 @@
         flex-shrink: 0 !important;
     }
     
-    /* ====== MOBILE GUESS SECTION - Compact ====== */
+    /* ====== MOBILE GUESS SECTION - Redesigned ====== */
     .mobile-guess-section {
         display: flex !important;
-        flex-direction: column !important;
-        gap: 4px !important;
-        padding: 6px 8px !important;
-        background: rgba(255, 255, 255, 0.02) !important;
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        border-radius: 6px !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 10px !important;
+        padding: 8px 12px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.15) !important;
+        border-radius: 8px !important;
         cursor: pointer !important;
         transition: all 0.2s ease !important;
-        opacity: 0.6 !important;
     }
 
     .mobile-guess-section:hover {
-        opacity: 0.8 !important;
+        background: rgba(255, 255, 255, 0.08) !important;
     }
 
     .mobile-guess-section.active {
-        background: rgba(255, 200, 50, 0.08) !important;
-        border-color: rgba(255, 200, 50, 0.25) !important;
-        opacity: 1 !important;
+        background: rgba(255, 200, 50, 0.12) !important;
+        border-color: rgba(255, 200, 50, 0.35) !important;
     }
 
     .mobile-guess-section.active .guess-label {
@@ -2550,26 +2561,29 @@
         display: none !important;
     }
     
-    /* Guess label styling */
+    /* Guess label styling - visible white text */
     .mobile-guess-section .guess-label {
-        font-size: 0.5rem !important;
-        color: rgba(255, 255, 255, 0.4) !important;
-        letter-spacing: 0.3px !important;
-        text-transform: uppercase !important;
-        text-align: center !important;
+        font-size: 0.65rem !important;
+        color: rgba(255, 255, 255, 0.85) !important;
+        letter-spacing: 0.2px !important;
+        text-transform: none !important;
+        text-align: left !important;
         transition: color 0.2s ease !important;
+        flex-shrink: 0 !important;
+        white-space: nowrap !important;
     }
 
     .mobile-guess-section .guess-label i {
-        margin-right: 3px !important;
+        margin-right: 5px !important;
     }
     
-    /* Vote bar section - full width */
+    /* Vote bar section - inline compact */
     .mobile-guess-section .vote-bar-section {
         display: flex !important;
         flex-direction: column !important;
-        gap: 4px !important;
-        width: 100% !important;
+        gap: 2px !important;
+        flex: 1 !important;
+        min-width: 0 !important;
     }
     
     .mobile-guess-section .vote-stats-row {
@@ -2580,9 +2594,9 @@
     }
 
     .mobile-guess-section .vote-pct {
-        font-size: 0.65rem !important;
+        font-size: 0.6rem !important;
         font-weight: 700 !important;
-        min-width: 25px !important;
+        min-width: 28px !important;
     }
     
     .mobile-guess-section .vote-pct.left {
@@ -2596,13 +2610,13 @@
     }
     
     .mobile-guess-section .vote-total {
-        font-size: 0.55rem !important;
-        color: rgba(255, 255, 255, 0.4) !important;
+        font-size: 0.5rem !important;
+        color: rgba(255, 255, 255, 0.5) !important;
     }
     
     .mobile-guess-section .vote-bar {
-        height: 12px !important;
-        border-radius: 6px !important;
+        height: 8px !important;
+        border-radius: 4px !important;
         overflow: hidden !important;
         background: rgba(255, 255, 255, 0.1) !important;
         display: flex !important;
@@ -2714,7 +2728,10 @@
     
     /* Hide quick-info in info panels (moved to fighter cards via JS) */
     /* Quick-info in info panels - MUST override global .quick-info-bar fixed positioning */
-    .t-info-panel .t-quick-info {
+    .t-bottom-band .t-info-panel .t-quick-info,
+    .t-info-panel .t-quick-info,
+    .t-info-panel .quick-info-bar.t-quick-info,
+    .quick-info-bar.t-quick-info {
         position: static !important;
         display: flex !important;
         justify-content: center !important;
@@ -2732,6 +2749,7 @@
         z-index: auto !important;
         width: 100% !important;
         max-width: none !important;
+        border: none !important;
     }
     
     .t-info-panel .quick-info-item {
