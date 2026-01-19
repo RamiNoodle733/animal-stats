@@ -2467,9 +2467,8 @@
     /* Hero image - main focus */
     .t-hero-image {
         width: 100% !important;
-        height: 100px !important;
-        min-height: 80px !important;
-        margin: 2px 0 !important;
+        max-height: 100px !important;
+        margin: 0 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -2479,7 +2478,7 @@
     
     .t-hero-image img {
         max-width: 100% !important;
-        max-height: 100% !important;
+        max-height: 100px !important;
         width: auto !important;
         height: auto !important;
         object-fit: contain !important;
@@ -2641,14 +2640,12 @@
         display: flex !important;
         flex-direction: row !important;
         width: 100% !important;
-        min-width: 100% !important;
-        max-width: 100% !important;
     }
     
     .mobile-guess-section .vote-fill {
         height: 100% !important;
         transition: width 0.3s ease !important;
-        flex: none !important;
+        display: block !important;
     }
     
     .mobile-guess-section .vote-fill.left {
