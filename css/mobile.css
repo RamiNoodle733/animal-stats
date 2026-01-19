@@ -2105,9 +2105,10 @@
  * Full-screen immersive tournament experience
  * ============================================================================ */
 @media (max-width: 480px) {
-    /* Hide header and nav when tournament is active */
+    /* Hide header, nav, and stats quick-info-bar when tournament is active */
     body.tournament-active .game-header,
-    body.tournament-active .mobile-bottom-nav {
+    body.tournament-active .mobile-bottom-nav,
+    body.tournament-active .quick-info-bar:not(.t-quick-info) {
         display: none !important;
     }
     
@@ -2485,6 +2486,7 @@
     /* Quick-info when moved under animal image (via JS) */
     .t-fighter-card .t-quick-info {
         display: flex !important;
+        position: static !important; /* Override fixed positioning from .quick-info-bar */
         gap: 2px !important;
         padding: 4px !important;
         background: rgba(255, 255, 255, 0.05) !important;
@@ -2493,6 +2495,12 @@
         margin-top: 4px !important;
         width: 100% !important;
         box-sizing: border-box !important;
+        transform: none !important; /* Reset any transform */
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        top: auto !important;
+        z-index: auto !important;
     }
     
     .t-fighter-card .quick-info-item {
@@ -2645,7 +2653,7 @@
     /* ====== STAT BARS ====== */
     .t-stats-compact {
         padding: 0 !important;
-        gap: 4px !important;
+        gap: 2px !important;
     }
     
     .t-stat-row-compact {
@@ -2694,7 +2702,7 @@
     
     .t-stats-compact .t-stat-bar-left,
     .t-stats-compact .t-stat-bar-right {
-        height: 12px !important;
+        height: 8px !important;
     }
     
     .t-stats-compact .stat-bar {
@@ -2717,7 +2725,7 @@
         width: 100% !important;
     }
     
-    /* Fixed height panels so they don't change size */
+    /* Info panels - auto height to fit content */
     .t-bottom-band .t-info-panel {
         display: flex !important;
         flex-direction: column !important;
@@ -2729,9 +2737,8 @@
         border-radius: 6px !important;
         min-width: 0 !important;
         max-width: 50% !important;
-        height: 140px !important;
-        max-height: 140px !important;
-        overflow: hidden !important;
+        /* Auto height - no fixed constraints */
+        overflow: visible !important;
     }
     
     /* Hide quick-info in info panels (moved to fighter cards via JS) */
@@ -2739,13 +2746,12 @@
         display: none !important;
     }
     
-    /* Abilities & Traits - compact with max height */
+    /* Abilities & Traits - compact */
     .t-info-panel .t-tags {
         display: flex !important;
         flex-direction: column !important;
         gap: 2px !important;
         flex: 1 !important;
-        overflow: hidden !important;
     }
     
     .t-info-panel .t-abilities-section,
@@ -2753,8 +2759,7 @@
         display: flex !important;
         flex-direction: column !important;
         gap: 1px !important;
-        max-height: 32px !important;
-        overflow: hidden !important;
+        /* No max-height - show all abilities/traits */
     }
     
     .t-info-panel .abilities-label,
@@ -2770,7 +2775,6 @@
         display: flex !important;
         flex-wrap: wrap !important;
         gap: 2px !important;
-        overflow: hidden !important;
     }
     
     .t-info-panel .ability-tag,
