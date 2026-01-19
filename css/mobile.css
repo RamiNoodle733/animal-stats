@@ -2386,6 +2386,8 @@
         align-items: center !important;
         padding: 6px !important;
         max-width: 42% !important;
+        min-width: 0 !important;
+        overflow: visible !important;
     }
     
     .t-fighter-card.left { order: 1 !important; }
@@ -2553,65 +2555,57 @@
     /* ====== MOBILE GUESS SECTION - Compact ====== */
     .mobile-guess-section {
         display: flex !important;
-        flex-direction: row !important;
-        align-items: center !important;
-        gap: 8px !important;
-        padding: 6px 10px !important;
+        flex-direction: column !important;
+        gap: 6px !important;
+        padding: 8px !important;
         background: rgba(255, 255, 255, 0.03) !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         border-radius: 8px !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+
+    .mobile-guess-section:hover {
+        background: rgba(255, 255, 255, 0.05) !important;
+        border-color: rgba(255, 255, 255, 0.2) !important;
+    }
+
+    .mobile-guess-section.active {
+        background: rgba(255, 200, 50, 0.1) !important;
+        border-color: rgba(255, 200, 50, 0.3) !important;
     }
     
     .mobile-guess-section .guess-header {
-        flex-shrink: 0 !important;
+        display: none !important;
     }
     
     /* Guess button - compact pill style */
-    .mobile-guess-section .guess-btn {
-        display: flex !important;
-        align-items: center !important;
-        gap: 4px !important;
-        padding: 5px 10px !important;
-        font-size: 0.6rem !important;
-        border-radius: 14px !important;
-        background: rgba(255, 255, 255, 0.08) !important;
-        border: 1px solid rgba(255, 255, 255, 0.15) !important;
-        color: rgba(255, 255, 255, 0.7) !important;
-        cursor: pointer !important;
-        transition: all 0.2s ease !important;
-        white-space: nowrap !important;
+    .mobile-guess-section .guess-label {
+        font-size: 0.55rem !important;
+        color: rgba(255, 255, 255, 0.5) !important;
+        letter-spacing: 0.5px !important;
+        text-transform: uppercase !important;
     }
     
-    .mobile-guess-section .guess-btn:hover,
-    .mobile-guess-section .guess-btn.active {
-        background: rgba(255, 200, 50, 0.2) !important;
-        border-color: rgba(255, 200, 50, 0.5) !important;
-        color: #ffc832 !important;
-    }
-    
-    .mobile-guess-section .guess-btn i {
-        font-size: 0.65rem !important;
-    }
-    
-    /* Vote bar section - takes remaining space */
+    /* Vote bar section - full width */
     .mobile-guess-section .vote-bar-section {
-        flex: 1 !important;
         display: flex !important;
         flex-direction: column !important;
-        gap: 2px !important;
-        min-width: 0 !important;
+        gap: 4px !important;
+        width: 100% !important;
     }
     
     .mobile-guess-section .vote-stats-row {
         display: flex !important;
         justify-content: space-between !important;
         align-items: center !important;
+        width: 100% !important;
     }
-    
+
     .mobile-guess-section .vote-pct {
-        font-size: 0.7rem !important;
+        font-size: 0.65rem !important;
         font-weight: 700 !important;
-        min-width: 30px !important;
+        min-width: 25px !important;
     }
     
     .mobile-guess-section .vote-pct.left {
@@ -2630,11 +2624,12 @@
     }
     
     .mobile-guess-section .vote-bar {
-        height: 8px !important;
-        border-radius: 4px !important;
+        height: 12px !important;
+        border-radius: 6px !important;
         overflow: hidden !important;
         background: rgba(255, 255, 255, 0.1) !important;
         display: flex !important;
+        width: 100% !important;
     }
     
     .mobile-guess-section .vote-fill {
@@ -2764,10 +2759,11 @@
     
     .t-info-panel .abilities-label,
     .t-info-panel .traits-label {
-        font-size: 0.38rem !important;
+        font-size: 0.35rem !important;
         opacity: 0.5 !important;
-        letter-spacing: 0.5px !important;
+        letter-spacing: 0.3px !important;
         flex-shrink: 0 !important;
+        margin: 2px 0 0 0 !important;
     }
     
     .t-info-panel .abilities-tags-compact,
@@ -2779,9 +2775,9 @@
     
     .t-info-panel .ability-tag,
     .t-info-panel .trait-tag {
-        padding: 1px 3px !important;
-        font-size: 0.38rem !important;
-        border-radius: 3px !important;
+        padding: 0px 2px !important;
+        font-size: 0.35rem !important;
+        border-radius: 2px !important;
     }
     
     /* Tournament record - very compact */

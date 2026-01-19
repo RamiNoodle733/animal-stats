@@ -445,11 +445,8 @@ class TournamentManager {
         const mobileGuess = document.createElement('div');
         mobileGuess.className = 'mobile-guess-section';
         mobileGuess.innerHTML = `
-            <div class="guess-header">
-                <button class="guess-btn" id="mobile-guess-btn">
-                    <i class="fas fa-brain"></i>
-                    <span>Guess</span>
-                </button>
+            <div class="guess-label">
+                <i class="fas fa-brain"></i> Click to Toggle Guess Majority
             </div>
             <div class="vote-bar-section">
                 <div class="vote-stats-row">
@@ -481,11 +478,10 @@ class TournamentManager {
             bottomBand.appendChild(infoPanelsRow);
         }
         
-        // Bind mobile guess button
-        const mobileGuessBtn = document.getElementById('mobile-guess-btn');
-        mobileGuessBtn?.addEventListener('click', () => {
+        // Bind mobile guess section - click anywhere to toggle
+        mobileGuess.addEventListener('click', () => {
             this.guessModeEnabled = !this.guessModeEnabled;
-            mobileGuessBtn.classList.toggle('active', this.guessModeEnabled);
+            mobileGuess.classList.toggle('active', this.guessModeEnabled);
             const originalToggle = document.getElementById('t-guess-toggle');
             if (originalToggle) {
                 originalToggle.classList.toggle('active', this.guessModeEnabled);
@@ -493,7 +489,7 @@ class TournamentManager {
         });
         
         if (this.guessModeEnabled) {
-            mobileGuessBtn?.classList.add('active');
+            mobileGuess.classList.add('active');
         }
     }
     
