@@ -2319,29 +2319,32 @@
     
     /* ========================================
        BATTLE SCREEN - Mobile Layout
-       Animals side-by-side with VS in middle
-       Everything fits on screen - NO SCROLLING
+       Layout: Header → Animals+VS → Guess Bar → Stat Bars → Info Panels
        ======================================== */
-    /* Note: Don't override display - let JS control visibility */
     .tournament-battle {
         width: 100% !important;
         height: 100% !important;
+        display: flex !important;
         flex-direction: column !important;
-        overflow: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
     }
     
-    /* Compact battle header */
+    /* Sticky battle header */
     .t-battle-header {
-        padding: 6px 10px !important;
-        padding-top: calc(6px + env(safe-area-inset-top, 0px)) !important;
+        padding: 8px 12px !important;
+        padding-top: calc(8px + env(safe-area-inset-top, 0px)) !important;
         height: auto !important;
-        min-height: 40px !important;
+        min-height: 44px !important;
         flex-shrink: 0 !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 100 !important;
+        background: var(--bg-primary, #0a0a0f) !important;
     }
     
     .t-battle-progress {
-        gap: 6px !important;
-        flex-wrap: nowrap !important;
+        gap: 8px !important;
     }
     
     .t-round-name {
@@ -2350,81 +2353,69 @@
     }
     
     .t-progress-bar {
-        width: 50px !important;
+        width: 80px !important;
         height: 4px !important;
     }
     
     .t-match-info {
-        font-size: 0.6rem !important;
+        font-size: 0.65rem !important;
     }
     
     .t-quit-btn {
-        padding: 6px 10px !important;
+        padding: 6px 12px !important;
         font-size: 0.7rem !important;
-        min-height: 32px !important;
     }
     
-    /* Main battle area - complete redesign */
+    /* ====== ANIMALS ROW - Side by Side with VS ====== */
     .t-battle-main {
-        flex: 1 !important;
         display: flex !important;
         flex-direction: row !important;
         align-items: stretch !important;
         justify-content: center !important;
-        padding: 4px !important;
+        padding: 8px !important;
         gap: 0 !important;
-        min-height: 0 !important;
-        overflow: hidden !important;
+        flex-shrink: 0 !important;
     }
     
-    /* Fighter cards - side by side with VS between */
+    /* Fighter cards */
     .t-fighter-card {
         flex: 1 !important;
         display: flex !important;
         flex-direction: column !important;
+        align-items: center !important;
         padding: 6px !important;
-        min-height: 0 !important;
-        max-width: 45% !important;
-        overflow: hidden !important;
+        max-width: 42% !important;
     }
     
-    .t-fighter-card.left {
-        order: 1 !important;
-    }
+    .t-fighter-card.left { order: 1 !important; }
+    .t-fighter-card.right { order: 3 !important; }
     
-    .t-fighter-card.right {
-        order: 3 !important;
-    }
-    
-    /* VS and center elements between fighters */
+    /* VS Badge center column */
     .t-battle-center {
         order: 2 !important;
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 4px !important;
-        padding: 4px !important;
+        padding: 0 4px !important;
         min-width: 50px !important;
         max-width: 60px !important;
         flex-shrink: 0 !important;
     }
     
-    /* VS Section - prominent between animals */
+    /* VS Badge */
     .t-vs-section {
-        width: 40px !important;
-        height: 40px !important;
-        flex-shrink: 0 !important;
-        order: 2 !important;
+        width: 50px !important;
+        height: 50px !important;
     }
     
     .t-vs-badge {
-        width: 36px !important;
-        height: 36px !important;
+        width: 45px !important;
+        height: 45px !important;
     }
     
     .t-vs-badge span {
-        font-size: 0.8rem !important;
+        font-size: 1rem !important;
     }
     
     .t-vs-burst,
@@ -2433,115 +2424,43 @@
         display: none !important;
     }
     
-    /* Guess section - very compact */
-    .t-guess-section {
-        order: 1 !important;
-        flex-shrink: 0 !important;
-    }
-    
-    .t-guess-toggle {
-        padding: 3px 6px !important;
-        font-size: 0.5rem !important;
-        gap: 2px !important;
-        border-radius: 10px !important;
-    }
-    
-    .t-guess-toggle span {
-        display: none !important; /* Hide text, just show icon */
-    }
-    
-    .t-guess-toggle i {
-        font-size: 0.6rem !important;
-    }
-    
-    .t-toggle-switch {
-        width: 18px !important;
-        height: 10px !important;
-    }
-    
-    .t-toggle-switch::after {
-        width: 6px !important;
-        height: 6px !important;
-        top: 2px !important;
-        left: 2px !important;
-    }
-    
-    .t-guess-toggle.active .t-toggle-switch::after {
-        left: 10px !important;
-    }
-    
-    .t-guess-prompt {
-        display: none !important;
-    }
-    
-    /* Community vote - very compact */
-    .t-community-vote {
-        order: 3 !important;
-        width: 100% !important;
-        max-width: 50px !important;
-        padding: 3px !important;
-        background: transparent !important;
-        border: none !important;
-    }
-    
-    .t-vote-stats {
-        display: none !important; /* Hide percentages */
-    }
-    
-    .t-vote-bar {
-        height: 6px !important;
-        border-radius: 3px !important;
-    }
-    
-    /* Radar chart - hide */
+    /* HIDE these in center - show in bottom band */
+    .t-battle-center .t-guess-section,
+    .t-battle-center .t-community-vote,
     .t-radar-container {
         display: none !important;
     }
     
-    /* Identity section compact */
+    /* Animal names */
     .t-identity-top {
-        padding-bottom: 2px !important;
-        flex-shrink: 0 !important;
+        text-align: center !important;
+        width: 100% !important;
     }
     
     .t-name {
-        font-size: 0.7rem !important;
-        letter-spacing: 0.5px !important;
+        font-size: 0.8rem !important;
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
-        margin-bottom: 2px !important;
+        margin-bottom: 4px !important;
     }
     
     .t-scientific {
         display: none !important;
     }
     
-    /* Record badge - very compact */
+    /* Record badge compact */
     .t-record-badge {
-        transform: scale(0.7) !important;
+        transform: scale(0.75) !important;
         transform-origin: center top !important;
-        margin-bottom: -8px !important;
+        margin-bottom: -6px !important;
     }
     
-    .t-record-badge .record-item {
-        padding: 2px 4px !important;
-    }
-    
-    .t-record-badge .record-value {
-        font-size: 0.6rem !important;
-    }
-    
-    .t-record-badge .record-label {
-        font-size: 0.3rem !important;
-    }
-    
-    /* Hero image - main focus */
+    /* Hero image */
     .t-hero-image {
-        flex: 1 !important;
-        min-height: 60px !important;
-        max-height: none !important;
-        margin: 2px 0 !important;
+        width: 100% !important;
+        height: 110px !important;
+        margin: 4px 0 !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
@@ -2553,84 +2472,379 @@
         object-fit: contain !important;
     }
     
-    /* HIDE click-to-vote on mobile - no hovering */
     .t-click-hint {
         display: none !important;
     }
     
-    /* Rating change compact */
     .t-rating-change {
-        padding: 2px !important;
-        margin-top: 2px !important;
-        flex-shrink: 0 !important;
+        padding: 4px !important;
+        margin-top: 4px !important;
     }
     
     .t-rating-delta {
-        font-size: 0.7rem !important;
+        font-size: 0.75rem !important;
     }
     
     .t-rating-calc {
-        font-size: 0.45rem !important;
+        font-size: 0.5rem !important;
     }
     
-    /* ========================================
-       BOTTOM BAND - Stat Bars Only
-       NO SCROLLING - fits on screen
-       ======================================== */
+    /* ====== BOTTOM BAND - Guess + Stats + Info ====== */
     .t-bottom-band {
-        display: block !important;
-        padding: 4px 6px !important;
-        padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px)) !important;
-        max-height: none !important;
-        overflow: visible !important;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 0 12px 12px !important;
+        padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+        gap: 8px !important;
         flex-shrink: 0 !important;
     }
     
-    /* Stat bars - compact, no scroll */
+    /* ====== MOBILE GUESS SECTION - Added via JS ====== */
+    .mobile-guess-section {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        padding: 10px 12px !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 10px !important;
+    }
+    
+    .mobile-guess-section .guess-header {
+        display: flex !important;
+        justify-content: center !important;
+    }
+    
+    .mobile-guess-section .t-guess-toggle {
+        padding: 8px 16px !important;
+        font-size: 0.75rem !important;
+        gap: 8px !important;
+        border-radius: 20px !important;
+    }
+    
+    .mobile-guess-section .t-guess-toggle span {
+        display: inline !important;
+    }
+    
+    .mobile-guess-section .t-toggle-switch {
+        width: 32px !important;
+        height: 18px !important;
+    }
+    
+    .mobile-guess-section .t-toggle-switch::after {
+        width: 12px !important;
+        height: 12px !important;
+        top: 3px !important;
+        left: 3px !important;
+    }
+    
+    .mobile-guess-section .t-guess-toggle.active .t-toggle-switch::after {
+        left: 17px !important;
+    }
+    
+    .mobile-guess-section .vote-bar-section {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+    }
+    
+    .mobile-guess-section .vote-stats-row {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+    
+    .mobile-guess-section .vote-pct {
+        font-size: 0.9rem !important;
+        font-weight: 700 !important;
+        min-width: 45px !important;
+    }
+    
+    .mobile-guess-section .vote-pct.left {
+        color: var(--neon-blue, #00d4ff) !important;
+        text-align: left !important;
+    }
+    
+    .mobile-guess-section .vote-pct.right {
+        color: var(--neon-orange, #ff6b35) !important;
+        text-align: right !important;
+    }
+    
+    .mobile-guess-section .vote-total {
+        font-size: 0.65rem !important;
+        color: rgba(255, 255, 255, 0.5) !important;
+    }
+    
+    .mobile-guess-section .vote-bar {
+        height: 14px !important;
+        border-radius: 7px !important;
+        overflow: hidden !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        display: flex !important;
+    }
+    
+    .mobile-guess-section .vote-fill {
+        height: 100% !important;
+        transition: width 0.3s ease !important;
+    }
+    
+    .mobile-guess-section .vote-fill.left {
+        background: linear-gradient(90deg, var(--neon-blue, #00d4ff), #00a8cc) !important;
+    }
+    
+    .mobile-guess-section .vote-fill.right {
+        background: linear-gradient(90deg, #cc5522, var(--neon-orange, #ff6b35)) !important;
+    }
+    
+    /* ====== STAT BARS ====== */
     .t-stats-compact {
-        padding: 4px 6px !important;
-        gap: 2px !important;
-        overflow: visible !important;
+        padding: 0 !important;
+        gap: 4px !important;
     }
     
     .t-stat-row-compact {
-        gap: 2px !important;
+        gap: 4px !important;
     }
     
     .t-stat-center-cluster {
-        padding: 2px 4px !important;
-        min-width: 55px !important;
-        gap: 2px !important;
+        padding: 4px 6px !important;
+        min-width: 60px !important;
+        gap: 3px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border-radius: 6px !important;
     }
     
     .t-stat-center-cluster .t-val {
-        font-size: 0.6rem !important;
-        min-width: 16px !important;
+        font-size: 0.7rem !important;
+        font-weight: 700 !important;
+        min-width: 18px !important;
+    }
+    
+    .t-stat-center-cluster .t-val.left {
+        color: var(--neon-blue, #00d4ff) !important;
+    }
+    
+    .t-stat-center-cluster .t-val.right {
+        color: var(--neon-orange, #ff6b35) !important;
     }
     
     .t-stat-icon-label {
-        display: none !important; /* Hide icon, just show values */
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 0 !important;
+    }
+    
+    .t-stat-icon-label i {
+        font-size: 0.5rem !important;
+        opacity: 0.6 !important;
     }
     
     .t-stat-abbr {
         display: block !important;
-        font-size: 0.35rem !important;
+        font-size: 0.4rem !important;
+        opacity: 0.7 !important;
     }
     
     .t-stats-compact .t-stat-bar-left,
     .t-stats-compact .t-stat-bar-right {
-        height: 10px !important;
-        min-height: 10px !important;
+        height: 12px !important;
     }
     
-    /* Hide info panels completely */
+    .t-stats-compact .stat-bar {
+        height: 100% !important;
+        border-radius: 4px !important;
+    }
+    
+    .t-stats-compact .t-stat-bar-left .stat-bar-fill {
+        background: linear-gradient(90deg, var(--neon-blue, #00d4ff), #0099cc) !important;
+    }
+    
+    .t-stats-compact .t-stat-bar-right .stat-bar-fill {
+        background: linear-gradient(90deg, #cc5522, var(--neon-orange, #ff6b35)) !important;
+    }
+    
+    /* ====== INFO PANELS - Side by Side ====== */
+    .t-info-panels-row {
+        display: flex !important;
+        gap: 8px !important;
+    }
+    
     .t-info-panel {
+        display: flex !important;
+        flex-direction: column !important;
+        flex: 1 !important;
+        padding: 8px !important;
+        gap: 6px !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+        border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        border-radius: 8px !important;
+        min-width: 0 !important;
+    }
+    
+    /* Physical stats */
+    .t-info-panel .t-quick-info {
+        display: flex !important;
+        gap: 3px !important;
+        padding: 5px !important;
+        background: rgba(255, 255, 255, 0.03) !important;
+        border-radius: 5px !important;
+    }
+    
+    .t-info-panel .quick-info-item {
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 2px !important;
+        padding: 3px 2px !important;
+        min-width: 0 !important;
+    }
+    
+    .t-info-panel .quick-info-item i {
+        font-size: 0.55rem !important;
+        opacity: 0.6 !important;
+    }
+    
+    .t-info-panel .quick-info-item span {
+        font-size: 0.5rem !important;
+        font-weight: 600 !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 100% !important;
+    }
+    
+    /* Abilities & Traits */
+    .t-info-panel .t-tags {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+    }
+    
+    .t-info-panel .t-abilities-section,
+    .t-info-panel .t-traits-section {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 2px !important;
+    }
+    
+    .t-info-panel .abilities-label,
+    .t-info-panel .traits-label {
+        font-size: 0.45rem !important;
+        opacity: 0.6 !important;
+        letter-spacing: 0.5px !important;
+    }
+    
+    .t-info-panel .abilities-tags-compact,
+    .t-info-panel .traits-tags-compact {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 2px !important;
+    }
+    
+    .t-info-panel .ability-tag,
+    .t-info-panel .trait-tag {
+        padding: 2px 5px !important;
+        font-size: 0.45rem !important;
+        border-radius: 3px !important;
+    }
+    
+    /* Tournament record */
+    .t-info-panel .t-tournament-dashboard {
+        padding: 5px !important;
+        background: rgba(255, 255, 255, 0.02) !important;
+        border-radius: 5px !important;
+    }
+    
+    .t-info-panel .dashboard-header {
+        margin-bottom: 3px !important;
+    }
+    
+    .t-info-panel .dashboard-title {
+        font-size: 0.45rem !important;
+    }
+    
+    .t-info-panel .dashboard-accent-left,
+    .t-info-panel .dashboard-accent-right {
         display: none !important;
     }
     
+    .t-info-panel .medal-row {
+        display: flex !important;
+        gap: 3px !important;
+    }
+    
+    .t-info-panel .medal-card {
+        flex: 1 !important;
+        padding: 3px !important;
+        min-width: 0 !important;
+    }
+    
+    .t-info-panel .medal-icon-wrap {
+        width: 14px !important;
+        height: 14px !important;
+    }
+    
+    .t-info-panel .medal-icon-wrap i {
+        font-size: 0.45rem !important;
+    }
+    
+    .t-info-panel .medal-count {
+        font-size: 0.6rem !important;
+    }
+    
+    .t-info-panel .medal-label {
+        font-size: 0.3rem !important;
+    }
+    
+    /* Action buttons */
+    .t-info-panel .t-action-row {
+        display: flex !important;
+        gap: 3px !important;
+        margin-top: auto !important;
+    }
+    
+    .t-info-panel .row-vote-btn,
+    .t-info-panel .row-comments-btn {
+        flex: 1 !important;
+        padding: 5px 3px !important;
+        font-size: 0.55rem !important;
+        min-width: 0 !important;
+        gap: 2px !important;
+    }
+    
+    .t-info-panel .row-vote-btn i,
+    .t-info-panel .row-comments-btn i {
+        font-size: 0.6rem !important;
+    }
+    
+    .t-info-panel .vote-count,
+    .t-info-panel .comment-count {
+        font-size: 0.5rem !important;
+    }
+    
+    .t-info-panel .t-details-btn {
+        flex: 0 0 auto !important;
+        width: 26px !important;
+        padding: 5px !important;
+    }
+    
+    /* Details overlay */
+    .t-details-overlay {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        z-index: 1000 !important;
+        background: rgba(0, 0, 0, 0.95) !important;
+        padding: 16px !important;
+        overflow-y: auto !important;
+    }
     /* ========================================
        MATCH INTRO ANIMATION - Mobile
-       ======================================== */
+       ======================================== */ */
     .match-intro-overlay {
         z-index: 10100 !important;
     }

@@ -403,6 +403,103 @@ class TournamentManager {
         this.guessModeEnabled = false;
     }
     
+    /**
+     * Setup mobile layout for the battle screen
+     * Creates a mobile guess section with the guess toggle and vote bar
+     */
+    setupMobileLayout() {
+        // Check if we're on mobile (max-width: 768px)
+        if (window.innerWidth > 768) return;
+        
+        // Check if mobile guess section already exists
+        if (document.querySelector('.mobile-guess-section')) return;
+        
+        const bottomBand = document.querySelector('.t-bottom-band');
+        if (!bottomBand) return;
+        
+        // Create mobile guess section
+        const mobileGuess = document.createElement('div');
+        mobileGuess.className = 'mobile-guess-section';
+        mobileGuess.innerHTML = `
+            <div class="guess-header">
+                <button class="t-guess-toggle" id="mobile-guess-toggle">
+                    <i class="fas fa-brain"></i>
+                    <span>Guess Majority</span>
+                    <div class="t-toggle-switch" id="mobile-toggle-switch"></div>
+                </button>
+            </div>
+            <div class="vote-bar-section">
+                <div class="vote-stats-row">
+                    <span class="vote-pct left" id="mobile-majority-pct-left">?%</span>
+                    <span class="vote-total" id="mobile-majority-total">No votes yet</span>
+                    <span class="vote-pct right" id="mobile-majority-pct-right">?%</span>
+                </div>
+                <div class="vote-bar">
+                    <div class="vote-fill left" id="mobile-majority-left" style="width: 50%;"></div>
+                    <div class="vote-fill right" id="mobile-majority-right" style="width: 50%;"></div>
+                </div>
+            </div>
+        `;
+        
+        // Insert at the beginning of bottom band
+        bottomBand.insertBefore(mobileGuess, bottomBand.firstChild);
+        
+        // Create wrapper for info panels
+        const infoPanelLeft = bottomBand.querySelector('.t-info-panel.left');
+        const infoPanelRight = bottomBand.querySelector('.t-info-panel.right');
+        
+        if (infoPanelLeft && infoPanelRight) {
+            // Check if wrapper already exists
+            if (!bottomBand.querySelector('.t-info-panels-row')) {
+                const infoPanelsRow = document.createElement('div');
+                infoPanelsRow.className = 't-info-panels-row';
+                infoPanelsRow.appendChild(infoPanelLeft);
+                infoPanelsRow.appendChild(infoPanelRight);
+                bottomBand.appendChild(infoPanelsRow);
+            }
+        }
+        
+        // Bind mobile guess toggle
+        const mobileGuessToggle = document.getElementById('mobile-guess-toggle');
+        mobileGuessToggle?.addEventListener('click', () => {
+            this.guessModeEnabled = !this.guessModeEnabled;
+            mobileGuessToggle.classList.toggle('active', this.guessModeEnabled);
+            // Also sync with original toggle
+            const originalToggle = document.getElementById('t-guess-toggle');
+            if (originalToggle) {
+                originalToggle.classList.toggle('active', this.guessModeEnabled);
+            }
+        });
+        
+        // Sync toggle state
+        if (this.guessModeEnabled) {
+            mobileGuessToggle?.classList.add('active');
+        }
+    }
+    
+    /**
+     * Update mobile vote display
+     */
+    updateMobileVoteDisplay(leftPct, rightPct, total) {
+        const mobileLeftPct = document.getElementById('mobile-majority-pct-left');
+        const mobileRightPct = document.getElementById('mobile-majority-pct-right');
+        const mobileTotal = document.getElementById('mobile-majority-total');
+        const mobileLeftBar = document.getElementById('mobile-majority-left');
+        const mobileRightBar = document.getElementById('mobile-majority-right');
+        
+        if (mobileLeftPct) mobileLeftPct.textContent = leftPct;
+        if (mobileRightPct) mobileRightPct.textContent = rightPct;
+        if (mobileTotal) mobileTotal.textContent = total;
+        
+        if (mobileLeftBar && mobileRightBar) {
+            // Parse percentages for bar widths
+            const leftVal = parseFloat(leftPct) || 50;
+            const rightVal = parseFloat(rightPct) || 50;
+            mobileLeftBar.style.width = `${leftVal}%`;
+            mobileRightBar.style.width = `${rightVal}%`;
+        }
+    }
+    
     startTournament() {
         // Use selected bracket size
         const size = this.selectedBracketSize;
@@ -435,6 +532,9 @@ class TournamentManager {
         this.dom.setup.style.display = 'none';
         this.dom.battle.style.display = 'flex';
         this.dom.results.style.display = 'none';
+        
+        // Setup mobile layout
+        this.setupMobileLayout();
         
         // Show first matchup
         this.showCurrentMatch();
@@ -649,6 +749,9 @@ class TournamentManager {
             barRight.style.width = '50%';
         }
         
+        // Also update mobile display
+        this.updateMobileVoteDisplay('?%', '?%', 'No votes yet');
+        
         try {
             const params = new URLSearchParams({
                 action: 'matchup_votes',
@@ -665,9 +768,13 @@ class TournamentManager {
             const { animal1Votes, animal2Votes, totalVotes, animal1Percentage, animal2Percentage } = result.data;
             
             // Show vote count
+            const voteText = totalVotes === 0 ? 'No votes yet' : `${totalVotes.toLocaleString()} votes`;
             if (totalEl) {
-                totalEl.textContent = totalVotes === 0 ? 'No votes yet' : `${totalVotes.toLocaleString()} votes`;
+                totalEl.textContent = voteText;
             }
+            
+            // Update mobile display with vote count (but still hidden percentages)
+            this.updateMobileVoteDisplay('?%', '?%', voteText);
             
             // Cache for guess evaluation and reveal after voting
             this.currentMatchupVotes = {
@@ -714,8 +821,9 @@ class TournamentManager {
         const animal1Percentage = newTotal > 0 ? Math.round((animal1Votes / newTotal) * 100) : 50;
         const animal2Percentage = newTotal > 0 ? 100 - animal1Percentage : 50;
         
+        const voteText = `${newTotal.toLocaleString()} vote${newTotal !== 1 ? 's' : ''}`;
         if (totalEl) {
-            totalEl.textContent = `${newTotal.toLocaleString()} vote${newTotal !== 1 ? 's' : ''}`;
+            totalEl.textContent = voteText;
         }
         
         // Enable transitions for smooth animation
@@ -732,6 +840,9 @@ class TournamentManager {
         setTimeout(() => {
             if (pctLeft) pctLeft.textContent = `${animal1Percentage}%`;
             if (pctRight) pctRight.textContent = `${animal2Percentage}%`;
+            
+            // Also update mobile display
+            this.updateMobileVoteDisplay(`${animal1Percentage}%`, `${animal2Percentage}%`, voteText);
         }, 200);
     }
     
