@@ -2371,12 +2371,11 @@
     .t-battle-main {
         display: flex !important;
         flex-direction: row !important;
-        align-items: flex-start !important;
+        align-items: center !important;
         justify-content: center !important;
         padding: 4px 8px !important;
         gap: 0 !important;
         flex-shrink: 0 !important;
-        overflow: hidden !important;
     }
     
     /* Fighter cards */
@@ -2486,9 +2485,24 @@
         display: none !important;
     }
     
-    /* Quick-info - hidden on mobile (shown in info panels instead) */
+    /* Quick-info under animal images */
     .t-fighter-card .t-quick-info {
-        display: none !important;
+        display: flex !important;
+        position: static !important;
+        gap: 2px !important;
+        padding: 3px !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 4px !important;
+        margin-top: 2px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        transform: none !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        top: auto !important;
+        z-index: auto !important;
     }
     
     .t-fighter-card .quick-info-item {
@@ -2496,18 +2510,18 @@
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        gap: 1px !important;
-        padding: 2px !important;
+        gap: 0 !important;
+        padding: 1px !important;
         min-width: 0 !important;
     }
     
     .t-fighter-card .quick-info-item i {
-        font-size: 0.5rem !important;
-        opacity: 0.6 !important;
+        font-size: 0.4rem !important;
+        opacity: 0.5 !important;
     }
     
     .t-fighter-card .quick-info-item span {
-        font-size: 0.45rem !important;
+        font-size: 0.4rem !important;
         font-weight: 600 !important;
         white-space: nowrap !important;
         overflow: hidden !important;
@@ -2736,33 +2750,9 @@
         overflow: visible !important;
     }
     
-    /* Quick-info in info panels - compact */
+    /* Hide quick-info in info panels (moved to fighter cards via JS) */
     .t-info-panel .t-quick-info {
-        display: flex !important;
-        gap: 2px !important;
-        padding: 2px !important;
-        background: rgba(255, 255, 255, 0.03) !important;
-        border-radius: 4px !important;
-        margin-bottom: 2px !important;
-    }
-    
-    .t-info-panel .quick-info-item {
-        flex: 1 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        gap: 0 !important;
-        padding: 1px !important;
-    }
-    
-    .t-info-panel .quick-info-item i {
-        font-size: 0.4rem !important;
-        opacity: 0.5 !important;
-    }
-    
-    .t-info-panel .quick-info-item span {
-        font-size: 0.4rem !important;
-        font-weight: 600 !important;
+        display: none !important;
     }
     
     /* Abilities & Traits - compact */

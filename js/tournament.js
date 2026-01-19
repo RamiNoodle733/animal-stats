@@ -417,9 +417,28 @@ class TournamentManager {
         const bottomBand = document.querySelector('.t-bottom-band');
         if (!bottomBand) return;
         
-        // Get info panels
+        // Get info panels and fighter cards
         const infoPanelLeft = bottomBand.querySelector('.t-info-panel.left');
         const infoPanelRight = bottomBand.querySelector('.t-info-panel.right');
+        const fighter1Card = document.getElementById('tournament-fighter-1');
+        const fighter2Card = document.getElementById('tournament-fighter-2');
+        
+        // === MOVE QUICK-INFO UNDER ANIMAL IMAGES ===
+        if (fighter1Card && infoPanelLeft) {
+            const quickInfo1 = infoPanelLeft.querySelector('.t-quick-info');
+            const heroImage1 = fighter1Card.querySelector('.t-hero-image');
+            if (quickInfo1 && heroImage1) {
+                heroImage1.insertAdjacentElement('afterend', quickInfo1);
+            }
+        }
+        
+        if (fighter2Card && infoPanelRight) {
+            const quickInfo2 = infoPanelRight.querySelector('.t-quick-info');
+            const heroImage2 = fighter2Card.querySelector('.t-hero-image');
+            if (quickInfo2 && heroImage2) {
+                heroImage2.insertAdjacentElement('afterend', quickInfo2);
+            }
+        }
         
         // === CREATE COMPACT GUESS SECTION ===
         const mobileGuess = document.createElement('div');
