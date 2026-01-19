@@ -99,9 +99,130 @@ class TournamentManager {
 
     init() {
         this.bindEvents();
+        this.setupUnitToggles();
         this.updateLoginNote();
         this.populateTypeFilters();
         this.updateFilteredAnimals();
+    }
+    
+    /**
+     * Setup unit toggle click handlers for weight/speed in tournament
+     */
+    setupUnitToggles() {
+        const battleScreen = document.querySelector('.tournament-battle');
+        if (!battleScreen || battleScreen.dataset.unitTogglesSetup) return;
+        
+        battleScreen.dataset.unitTogglesSetup = 'true';
+        
+        battleScreen.addEventListener('click', (e) => {
+            const target = e.target.closest('.quick-info-item.clickable');
+            if (!target) return;
+            
+            // Prevent the click from propagating to fighter card (voting)
+            e.stopPropagation();
+            
+            const id = target.id;
+            
+            // Animate the toggle icon
+            const toggleIcon = target.querySelector('.toggle-icon');
+            if (toggleIcon) {
+                toggleIcon.style.transform = 'rotate(360deg)';
+                setTimeout(() => {
+                    toggleIcon.style.transform = '';
+                }, 300);
+            }
+            
+            // Weight toggles
+            if (id.includes('weight')) {
+                if (window.app?.toggleWeightUnit) {
+                    window.app.toggleWeightUnit();
+                    this.refreshUnitDisplays();
+                }
+            }
+            
+            // Speed toggles
+            if (id.includes('speed')) {
+                if (window.app?.toggleSpeedUnit) {
+                    window.app.toggleSpeedUnit();
+                    this.refreshUnitDisplays();
+                }
+            }
+        });
+    }
+    
+    /**
+     * Refresh weight/speed displays with current unit preferences
+     */
+    refreshUnitDisplays() {
+        if (this.currentAnimal1) {
+            this.updateFighterQuickInfo(1, this.currentAnimal1);
+        }
+        if (this.currentAnimal2) {
+            this.updateFighterQuickInfo(2, this.currentAnimal2);
+        }
+    }
+    
+    /**
+     * Update quick info (weight/speed/bite) for a fighter with unit preferences
+     */
+    updateFighterQuickInfo(fighterNum, animal) {
+        const weightEl = document.getElementById(`t-fighter-${fighterNum}-weight`);
+        const speedEl = document.getElementById(`t-fighter-${fighterNum}-speed`);
+        const biteEl = document.getElementById(`t-fighter-${fighterNum}-bite`);
+        
+        // Get user preferences
+        const weightUnit = window.app?.state?.weightUnit || localStorage.getItem('weightUnit') || 'kg';
+        const speedUnit = window.app?.state?.speedUnit || localStorage.getItem('speedUnit') || 'kmh';
+        
+        // Weight
+        if (weightEl) {
+            const weightKg = animal.weight_kg || animal.weight || animal.averageWeight;
+            const spanEl = weightEl.querySelector('span');
+            if (spanEl) {
+                if (weightKg) {
+                    if (weightUnit === 'lbs') {
+                        const weightLbs = Math.round(weightKg * 2.20462);
+                        spanEl.textContent = `${weightLbs.toLocaleString()} lbs`;
+                    } else {
+                        spanEl.textContent = `${Math.round(weightKg).toLocaleString()} kg`;
+                    }
+                } else {
+                    spanEl.textContent = '--';
+                }
+            }
+        }
+        
+        // Speed
+        if (speedEl) {
+            const speedMps = animal.speed_mps || animal.speed || animal.topSpeed;
+            const spanEl = speedEl.querySelector('span');
+            if (spanEl) {
+                if (speedMps) {
+                    if (speedUnit === 'mph') {
+                        const speedMph = Math.round(speedMps * 2.237);
+                        spanEl.textContent = `${speedMph} mph`;
+                    } else {
+                        const speedKmh = Math.round(speedMps * 3.6);
+                        spanEl.textContent = `${speedKmh} km/h`;
+                    }
+                } else {
+                    spanEl.textContent = '--';
+                }
+            }
+        }
+        
+        // Bite force (no unit toggle, always PSI)
+        if (biteEl) {
+            const bitePsi = animal.bite_force_psi || animal.biteForce || animal.bite;
+            const spanEl = biteEl.querySelector('span');
+            if (spanEl) {
+                if (bitePsi) {
+                    spanEl.textContent = `${Math.round(bitePsi).toLocaleString()} PSI`;
+                } else {
+                    spanEl.textContent = '--';
+                }
+            }
+        }
     }
 
     bindEvents() {
@@ -417,28 +538,9 @@ class TournamentManager {
         const bottomBand = document.querySelector('.t-bottom-band');
         if (!bottomBand) return;
         
-        // Get info panels and fighter cards
+        // Get info panels
         const infoPanelLeft = bottomBand.querySelector('.t-info-panel.left');
         const infoPanelRight = bottomBand.querySelector('.t-info-panel.right');
-        const fighter1Card = document.getElementById('tournament-fighter-1');
-        const fighter2Card = document.getElementById('tournament-fighter-2');
-        
-        // === MOVE QUICK-INFO UNDER ANIMAL IMAGES ===
-        if (fighter1Card && infoPanelLeft) {
-            const quickInfo1 = infoPanelLeft.querySelector('.t-quick-info');
-            const heroImage1 = fighter1Card.querySelector('.t-hero-image');
-            if (quickInfo1 && heroImage1) {
-                heroImage1.insertAdjacentElement('afterend', quickInfo1);
-            }
-        }
-        
-        if (fighter2Card && infoPanelRight) {
-            const quickInfo2 = infoPanelRight.querySelector('.t-quick-info');
-            const heroImage2 = fighter2Card.querySelector('.t-hero-image');
-            if (quickInfo2 && heroImage2) {
-                heroImage2.insertAdjacentElement('afterend', quickInfo2);
-            }
-        }
         
         // === CREATE COMPACT GUESS SECTION ===
         const mobileGuess = document.createElement('div');
@@ -1084,44 +1186,8 @@ class TournamentManager {
             battlesEl.textContent = totalBattles;
         }
         
-        // Physical specs - now use quick-info-item with span child
-        if (weightEl) {
-            const weightKg = animal.weight_kg || animal.weight || animal.averageWeight;
-            const spanEl = weightEl.querySelector('span');
-            if (spanEl) {
-                if (weightKg) {
-                    const weightLbs = Math.round(weightKg * 2.20462);
-                    spanEl.textContent = `${weightLbs.toLocaleString()} lbs`;
-                } else {
-                    spanEl.textContent = '--';
-                }
-            }
-        }
-        
-        if (speedEl) {
-            const speedMps = animal.speed_mps || animal.speed || animal.topSpeed;
-            const spanEl = speedEl.querySelector('span');
-            if (spanEl) {
-                if (speedMps) {
-                    const speedKmh = Math.round(speedMps * 3.6);
-                    spanEl.textContent = `${speedKmh} km/h`;
-                } else {
-                    spanEl.textContent = '--';
-                }
-            }
-        }
-        
-        if (biteEl) {
-            const bitePsi = animal.bite_force_psi || animal.biteForce || animal.bite;
-            const spanEl = biteEl.querySelector('span');
-            if (spanEl) {
-                if (bitePsi) {
-                    spanEl.textContent = `${Math.round(bitePsi).toLocaleString()} PSI`;
-                } else {
-                    spanEl.textContent = '--';
-                }
-            }
-        }
+        // Physical specs - use the unit-aware method
+        this.updateFighterQuickInfo(fighterNum, animal);
         
         // Stats - update both value text and stat bar fill (reuses .stat-bar from Stats page)
         const statKeys = ['attack', 'defense', 'agility', 'stamina', 'intelligence', 'special'];
