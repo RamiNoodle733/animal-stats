@@ -2379,16 +2379,19 @@
         overflow: visible !important;
     }
     
-    /* Fighter cards - contained area for clicking */
+    /* Fighter cards - FIXED SIZE, allow image overflow */
     .t-fighter-card {
-        flex: 1 !important;
+        flex: none !important;
+        width: 42% !important;
+        max-width: 42% !important;
+        min-width: 120px !important;
+        height: 150px !important; /* Fixed height for consistent sizing */
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
         padding: 8px 4px 4px 4px !important;
-        max-width: 42% !important;
-        min-width: 0 !important;
-        overflow: visible !important;
+        overflow: visible !important; /* Allow image to overflow */
+        position: relative !important;
     }
     
     .t-fighter-card.left { order: 1 !important; }
@@ -2464,28 +2467,30 @@
         margin-bottom: -10px !important;
     }
     
-    /* Hero image - MUST override desktop flex:1 and clamp() min/max heights */
+    /* Hero image - bigger, can overflow the card box */
     .t-hero-image {
-        flex: none !important; /* <-- THIS is the root fix - desktop has flex:1 causing grow */
-        width: 100% !important;
+        flex: none !important;
+        width: 120% !important; /* Bigger than container */
         height: auto !important;
         min-height: 0 !important;
-        max-height: 100px !important;
-        margin: 0 !important;
+        max-height: none !important;
+        margin: -10px 0 0 0 !important; /* Pull up to overflow top */
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
         position: relative !important;
         cursor: pointer !important;
+        z-index: 5 !important; /* Above card border */
     }
     
     .t-hero-image img {
-        max-width: 100% !important;
-        max-height: 95px !important;
+        max-width: 110% !important;
+        max-height: 120px !important; /* Bigger images */
         width: auto !important;
         height: auto !important;
         object-fit: contain !important;
         display: block !important;
+        filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5)) !important;
     }
     
     .t-click-hint {
@@ -2638,9 +2643,10 @@
     .mobile-guess-section .vote-bar {
         height: 6px !important;
         border-radius: 3px !important;
-        overflow: visible !important;
+        overflow: hidden !important;
         background: rgba(255, 255, 255, 0.1) !important;
-        display: block !important;
+        display: flex !important;
+        flex-direction: row !important;
         width: 100% !important;
         position: relative !important;
     }
@@ -2648,20 +2654,17 @@
     .mobile-guess-section .vote-fill {
         height: 100% !important;
         transition: width 0.3s ease !important;
-        display: inline-block !important;
-        position: absolute !important;
-        top: 0 !important;
+        display: block !important;
+        position: relative !important;
+        flex-shrink: 0 !important;
     }
     
     .mobile-guess-section .vote-fill.left {
         background: linear-gradient(90deg, var(--neon-blue, #00d4ff), #00a8cc) !important;
-        left: 0 !important;
     }
     
     .mobile-guess-section .vote-fill.right {
         background: linear-gradient(90deg, #cc5522, var(--neon-orange, #ff6b35)) !important;
-        right: 0 !important;
-        left: auto !important;
     }
     
     /* ====== STAT BARS ====== */
@@ -2740,7 +2743,7 @@
         flex-shrink: 0 !important;
     }
     
-    /* Info panels - constrained height to prevent overflow */
+    /* Info panels - allow content to show fully */
     .t-bottom-band .t-info-panel {
         display: flex !important;
         flex-direction: column !important;
@@ -2752,8 +2755,8 @@
         border-radius: 6px !important;
         min-width: 0 !important;
         max-width: 50% !important;
-        overflow: hidden !important;
-        max-height: 85px !important;
+        overflow: visible !important;
+        max-height: none !important;
     }
     
     /* Hide quick-info in info panels (moved to fighter cards via JS) */
