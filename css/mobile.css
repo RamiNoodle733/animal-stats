@@ -2453,9 +2453,11 @@
         display: none !important;
     }
     
-    /* Record badge compact - hide on mobile for more space */
+    /* Record badge compact - scaled down */
     .t-record-badge {
-        display: none !important;
+        transform: scale(0.65) !important;
+        transform-origin: center top !important;
+        margin-bottom: -10px !important;
     }
     
     /* Hero image - main focus */
@@ -2711,8 +2713,9 @@
     }
     
     /* Hide quick-info in info panels (moved to fighter cards via JS) */
-    /* Quick-info in info panels - clickable with toggle icons */
+    /* Quick-info in info panels - MUST override global .quick-info-bar fixed positioning */
     .t-info-panel .t-quick-info {
+        position: static !important;
         display: flex !important;
         justify-content: center !important;
         gap: 4px !important;
@@ -2720,6 +2723,15 @@
         background: rgba(255, 255, 255, 0.03) !important;
         border-radius: 4px !important;
         margin-bottom: 4px !important;
+        /* Reset all fixed positioning properties */
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        top: auto !important;
+        transform: none !important;
+        z-index: auto !important;
+        width: 100% !important;
+        max-width: none !important;
     }
     
     .t-info-panel .quick-info-item {
