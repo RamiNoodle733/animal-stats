@@ -2369,28 +2369,29 @@
     
     /* ====== ANIMALS ROW - Side by Side with VS ====== */
     .t-battle-main {
-        flex: none !important; /* CRITICAL: Desktop has flex:1 causing vertical growth */
+        flex: 1 1 auto !important; /* Fill available vertical space */
         display: flex !important;
         flex-direction: row !important;
-        align-items: center !important;
+        align-items: stretch !important; /* Stretch children to fill height */
         justify-content: center !important;
         padding: 4px 8px !important;
         gap: 0 !important;
         overflow: visible !important;
+        min-height: 0 !important;
     }
     
-    /* Fighter cards - fill available height, slight side overflow only */
+    /* Fighter cards - stretch to fill available height */
     .t-fighter-card {
         flex: 1 1 auto !important;
         width: 42% !important;
         max-width: 42% !important;
         min-width: 120px !important;
-        min-height: 180px !important; /* Taller to fill space */
         display: flex !important;
         flex-direction: column !important;
         align-items: center !important;
-        padding: 4px 4px 8px 4px !important;
-        overflow: visible !important; /* Allow slight side overflow */
+        justify-content: flex-start !important;
+        padding: 6px 4px 8px 4px !important;
+        overflow: visible !important;
         position: relative !important;
     }
     
@@ -2446,13 +2447,14 @@
     }
     
     .t-name {
-        font-size: 0.7rem !important;
+        font-size: 0.85rem !important; /* Bigger name */
+        font-weight: 700 !important;
         white-space: normal !important;
         overflow: visible !important;
         text-overflow: clip !important;
-        margin-bottom: 0 !important;
+        margin-bottom: 2px !important;
         max-width: 100% !important;
-        line-height: 1.2 !important;
+        line-height: 1.15 !important;
         word-wrap: break-word !important;
     }
     
@@ -2460,11 +2462,11 @@
         display: none !important;
     }
     
-    /* Record badge compact - can overlap image */
+    /* Record badge - bigger, can overlap image */
     .t-record-badge {
-        transform: scale(0.6) !important;
+        transform: scale(0.75) !important; /* Bigger */
         transform-origin: center top !important;
-        margin-bottom: -15px !important;
+        margin-bottom: -12px !important;
         position: relative !important;
         z-index: 10 !important;
     }
@@ -2876,25 +2878,25 @@
         display: flex !important;
         flex-wrap: wrap !important; /* Allow 2 lines */
         gap: 2px !important;
-        overflow: hidden !important;
-        max-height: 22px !important; /* Limit to ~2 lines */
+        overflow: visible !important; /* Show all */
+        max-height: none !important; /* No height limit */
     }
     
-    /* Show up to 4 tags across 2 lines */
-    .t-info-panel .abilities-tags-compact .ability-tag:nth-child(n+5),
-    .t-info-panel .traits-tags-compact .trait-tag:nth-child(n+5) {
+    /* Show up to 3 tags */
+    .t-info-panel .abilities-tags-compact .ability-tag:nth-child(n+4),
+    .t-info-panel .traits-tags-compact .trait-tag:nth-child(n+4) {
         display: none !important;
     }
     
     .t-info-panel .ability-tag,
     .t-info-panel .trait-tag {
-        padding: 1px 2px !important;
-        font-size: 0.28rem !important; /* Smaller to fit */
+        padding: 1px 3px !important;
+        font-size: 0.32rem !important; /* Slightly bigger */
         border-radius: 2px !important;
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
-        max-width: 48px !important; /* Narrower to fit more */
+        max-width: 52px !important;
     }
     
     /* Tournament record - very compact */
