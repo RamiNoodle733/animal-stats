@@ -2658,9 +2658,8 @@
     
     .mobile-guess-section .vote-fill {
         height: 100% !important;
-        transition: flex-basis 0.3s ease, width 0.3s ease !important;
-        flex-shrink: 1 !important;
-        flex-grow: 0 !important;
+        transition: width 0.3s ease !important;
+        flex: none !important; /* Don't use flex sizing, just width */
     }
     
     .mobile-guess-section .vote-fill.left {
