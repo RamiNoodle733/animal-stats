@@ -2163,8 +2163,8 @@
     .tournament-setup {
         padding: 0 !important;
         /* When visible, use flex for centering */
-        align-items: stretch !important;
-        justify-content: stretch !important;
+        align-items: flex-start !important;
+        justify-content: flex-start !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
     }
@@ -2173,16 +2173,17 @@
         width: 100% !important;
         max-width: 100% !important;
         height: auto !important;
-        min-height: 100% !important;
+        min-height: auto !important;
         max-height: none !important;
         border-radius: 0 !important;
         border: none !important;
         padding: 16px !important;
         padding-top: calc(16px + env(safe-area-inset-top, 0px)) !important;
-        padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px)) !important;
+        padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px)) !important;
         display: flex !important;
         flex-direction: column !important;
         overflow: visible !important;
+        gap: 16px !important;
     }
     
     /* Close button - larger touch target */
@@ -2201,34 +2202,35 @@
     
     /* Header compact */
     .t-setup-header {
-        margin-bottom: 16px !important;
+        margin-bottom: 8px !important;
         padding-top: 10px !important;
+        flex-shrink: 0 !important;
     }
     
     .t-crown-icon {
-        font-size: 1.8rem !important;
+        font-size: 1.5rem !important;
     }
     
     .t-title-banner {
-        padding: 8px 24px !important;
+        padding: 6px 20px !important;
     }
     
     .t-title-banner span {
-        font-size: 1.4rem !important;
-        letter-spacing: 3px !important;
+        font-size: 1.2rem !important;
+        letter-spacing: 2px !important;
     }
     
     /* Grid becomes vertical stack */
     .t-setup-grid {
         display: flex !important;
         flex-direction: column !important;
-        gap: 16px !important;
-        flex: 1 !important;
+        gap: 12px !important;
+        flex: none !important;
         min-height: 0 !important;
     }
     
     .t-setup-panel {
-        padding: 14px !important;
+        padding: 12px !important;
         flex-shrink: 0 !important;
     }
     
@@ -2250,49 +2252,70 @@
     .t-bracket-grid {
         display: grid !important;
         grid-template-columns: 1fr 1fr !important;
-        gap: 10px !important;
+        gap: 8px !important;
     }
     
     .t-bracket-card {
-        padding: 16px 12px !important;
-        min-height: 70px !important;
+        padding: 12px 10px !important;
+        min-height: 60px !important;
     }
     
     .t-bracket-num {
-        font-size: 2rem !important;
+        font-size: 1.6rem !important;
     }
     
     .t-bracket-label {
-        font-size: 0.7rem !important;
+        font-size: 0.65rem !important;
     }
     
     .t-bracket-tag {
-        top: -6px !important;
-        right: -6px !important;
-        font-size: 0.55rem !important;
-        padding: 3px 6px !important;
+        top: -5px !important;
+        right: -5px !important;
+        font-size: 0.5rem !important;
+        padding: 2px 5px !important;
     }
     
-    /* Filter chips scrollable */
+    /* Filter chips - give more vertical space and make scrollable */
     .t-filter-chips {
-        max-height: 100px !important;
-        gap: 6px !important;
-        padding-bottom: 4px !important;
+        max-height: 180px !important;
+        min-height: 100px !important;
+        gap: 8px !important;
+        padding: 4px !important;
+        overflow-y: auto !important;
     }
     
     .t-chip {
-        padding: 8px 12px !important;
-        font-size: 0.75rem !important;
-        min-height: 36px !important;
+        padding: 10px 14px !important;
+        font-size: 0.8rem !important;
+        min-height: 40px !important;
     }
     
-    /* Footer - stacked */
+    /* Filter search */
+    .t-filter-search {
+        margin-bottom: 10px !important;
+    }
+    
+    .t-filter-search input {
+        font-size: 1rem !important;
+        padding: 8px !important;
+    }
+    
+    /* Footer - fixed at bottom */
     .t-setup-footer {
         flex-direction: column !important;
         gap: 12px !important;
         padding: 14px !important;
-        margin-top: auto !important;
+        margin-top: 16px !important;
         flex-shrink: 0 !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        background: linear-gradient(180deg, rgba(10, 14, 26, 0.95), rgba(10, 14, 26, 1)) !important;
+        border-top: 1px solid rgba(255, 215, 0, 0.3) !important;
+        border-radius: 0 !important;
+        z-index: 100 !important;
+        padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
     }
     
     .t-summary {
@@ -2308,14 +2331,16 @@
     .t-start-btn {
         width: 100% !important;
         justify-content: center !important;
-        padding: 16px 24px !important;
+        padding: 14px 24px !important;
         font-size: 1rem !important;
-        min-height: 50px !important;
+        min-height: 48px !important;
     }
     
     .t-login-note {
         font-size: 0.75rem !important;
         margin-top: 8px !important;
+        text-align: center !important;
+        padding-bottom: 80px !important; /* Space for fixed footer */
     }
     
     /* ========================================
