@@ -2645,31 +2645,28 @@
         color: rgba(255, 255, 255, 0.5) !important;
     }
     
+    /* Match desktop approach exactly */
     .mobile-guess-section .vote-bar {
+        display: flex !important;
         height: 8px !important;
+        background: rgba(0, 0, 0, 0.4) !important;
         border-radius: 4px !important;
         overflow: hidden !important;
-        /* Orange background - the 'right' side color */
-        background: linear-gradient(90deg, #cc5522, var(--neon-orange, #ff6b35)) !important;
-        width: 100% !important;
-        position: relative !important;
     }
     
-    /* Only the left fill matters - it overlays the orange background */
-    .mobile-guess-section .vote-fill.left {
+    .mobile-guess-section .vote-fill {
         height: 100% !important;
-        transition: width 0.3s ease !important;
+        transition: width 0.4s ease !important;
+    }
+    
+    .mobile-guess-section .vote-fill.left {
         background: linear-gradient(90deg, var(--neon-blue, #00d4ff), #00a8cc) !important;
-        position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
     }
     
-    /* Hide the right fill - we don't need it anymore */
     .mobile-guess-section .vote-fill.right {
-        display: none !important;
+        background: linear-gradient(90deg, #cc5522, var(--neon-orange, #ff6b35)) !important;
     }
-    
+
     /* ====== STAT BARS ====== */
     .t-stats-compact {
         padding: 0 !important;
