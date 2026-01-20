@@ -2275,13 +2275,13 @@
         padding: 2px 5px !important;
     }
     
-    /* Filter chips - give more vertical space and make scrollable */
+    /* Filter chips - show all, page scrolls instead */
     .t-filter-chips {
-        max-height: 180px !important;
-        min-height: 100px !important;
+        max-height: none !important;
+        min-height: auto !important;
         gap: 8px !important;
         padding: 4px !important;
-        overflow-y: auto !important;
+        overflow: visible !important;
     }
     
     .t-chip {
