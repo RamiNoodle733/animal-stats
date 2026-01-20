@@ -556,8 +556,8 @@ class TournamentManager {
                     <span class="vote-pct right" id="mobile-majority-pct-right">?%</span>
                 </div>
                 <div class="t-vote-bar mobile-vote-bar">
-                    <div class="t-vote-fill left" id="mobile-majority-left" style="width: 50%;"></div>
-                    <div class="t-vote-fill right" id="mobile-majority-right" style="width: 50%;"></div>
+                    <div class="t-vote-fill left" id="mobile-majority-left" style="width: 50%; flex-basis: 50%;"></div>
+                    <div class="t-vote-fill right" id="mobile-majority-right" style="width: 50%; flex-basis: 50%;"></div>
                 </div>
             </div>
         `;
@@ -618,15 +618,17 @@ class TournamentManager {
         if (mobileRightPct) mobileRightPct.textContent = rightPct;
         if (mobileTotal) mobileTotal.textContent = total;
         
-        // Set BOTH bars just like desktop does
+        // Set BOTH bars with width AND flex-basis for flex compatibility
         const leftVal = parseFloat(leftPct) || 50;
         const rightVal = parseFloat(rightPct) || 50;
         
         if (mobileLeftBar) {
             mobileLeftBar.style.width = `${leftVal}%`;
+            mobileLeftBar.style.flexBasis = `${leftVal}%`;
         }
         if (mobileRightBar) {
             mobileRightBar.style.width = `${rightVal}%`;
+            mobileRightBar.style.flexBasis = `${rightVal}%`;
         }
     }
     

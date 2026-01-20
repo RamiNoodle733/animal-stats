@@ -2659,9 +2659,10 @@
     
     .mobile-guess-section .t-vote-bar.mobile-vote-bar .t-vote-fill {
         height: 100% !important;
-        min-height: 8px !important;
-        transition: width 0.4s ease !important;
-        display: block !important;
+        transition: flex-basis 0.4s ease, width 0.4s ease !important;
+        flex-shrink: 1 !important;
+        flex-grow: 0 !important;
+        min-width: 0 !important;
     }
     
     .mobile-guess-section .t-vote-bar.mobile-vote-bar .t-vote-fill.left {
