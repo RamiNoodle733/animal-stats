@@ -2659,9 +2659,7 @@
     .mobile-guess-section .vote-fill {
         height: 100% !important;
         transition: flex-basis 0.3s ease, width 0.3s ease !important;
-        display: block !important;
-        position: relative !important;
-        flex-shrink: 0 !important;
+        flex-shrink: 1 !important;
         flex-grow: 0 !important;
     }
     
@@ -2884,13 +2882,13 @@
     }
     
     /* Show only first 2 tags */
-    .t-info-panel .abilities-tags-compact .ability-tag:nth-child(n+3),
-    .t-info-panel .traits-tags-compact .trait-tag:nth-child(n+3) {
+    .t-info-panel .abilities-tags-compact .ability-tag-sm:nth-child(n+3),
+    .t-info-panel .traits-tags-compact .trait-tag-sm:nth-child(n+3) {
         display: none !important;
     }
     
-    .t-info-panel .ability-tag,
-    .t-info-panel .trait-tag {
+    .t-info-panel .ability-tag-sm,
+    .t-info-panel .trait-tag-sm {
         padding: 1px 2px !important;
         font-size: 0.25rem !important; /* SMALLER tags to fit */
         border-radius: 2px !important;
