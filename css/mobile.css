@@ -2645,31 +2645,11 @@
         color: rgba(255, 255, 255, 0.5) !important;
     }
     
-    /* VOTE BAR - Use absolute positioning, no flexbox nonsense */
-    .mobile-guess-section .vote-bar {
-        position: relative !important;
+    /* MOBILE VOTE BAR - Uses same classes as desktop, just smaller */
+    .mobile-guess-section .t-vote-bar,
+    .mobile-guess-section .mobile-vote-bar {
         height: 8px !important;
-        width: 100% !important;
-        background: linear-gradient(90deg, #cc5522, var(--neon-orange, #ff6b35)) !important; /* Orange = right side */
         border-radius: 4px !important;
-        overflow: hidden !important;
-        display: block !important;
-    }
-    
-    .mobile-guess-section .vote-fill.left {
-        position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
-        height: 100% !important;
-        width: 50%; /* Default, JS will override */
-        background: linear-gradient(90deg, var(--neon-blue, #00d4ff), #00a8cc) !important;
-        transition: width 0.4s ease !important;
-        border-radius: 4px 0 0 4px !important;
-    }
-    
-    /* Right fill not needed - orange background shows through */
-    .mobile-guess-section .vote-fill.right {
-        display: none !important;
     }
 
     /* ====== STAT BARS ====== */

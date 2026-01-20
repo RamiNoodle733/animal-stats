@@ -555,9 +555,9 @@ class TournamentManager {
                     <span class="vote-total" id="mobile-majority-total">Community Vote</span>
                     <span class="vote-pct right" id="mobile-majority-pct-right">?%</span>
                 </div>
-                <div class="vote-bar">
-                    <div class="vote-fill left" id="mobile-majority-left"></div>
-                    <div class="vote-fill right" id="mobile-majority-right"></div>
+                <div class="t-vote-bar mobile-vote-bar">
+                    <div class="t-vote-fill left" id="mobile-majority-left" style="width: 50%;"></div>
+                    <div class="t-vote-fill right" id="mobile-majority-right" style="width: 50%;"></div>
                 </div>
             </div>
         `;
@@ -612,17 +612,21 @@ class TournamentManager {
         const mobileRightPct = document.getElementById('mobile-majority-pct-right');
         const mobileTotal = document.getElementById('mobile-majority-total');
         const mobileLeftBar = document.getElementById('mobile-majority-left');
+        const mobileRightBar = document.getElementById('mobile-majority-right');
         
         if (mobileLeftPct) mobileLeftPct.textContent = leftPct;
         if (mobileRightPct) mobileRightPct.textContent = rightPct;
         if (mobileTotal) mobileTotal.textContent = total;
         
+        // Set BOTH bars just like desktop does
+        const leftVal = parseFloat(leftPct) || 50;
+        const rightVal = parseFloat(rightPct) || 50;
+        
         if (mobileLeftBar) {
-            // Parse percentage for bar width - only left bar matters (orange is background)
-            const leftVal = parseFloat(leftPct) || 50;
-            
-            // Set width directly - no flex-basis needed
             mobileLeftBar.style.width = `${leftVal}%`;
+        }
+        if (mobileRightBar) {
+            mobileRightBar.style.width = `${rightVal}%`;
         }
     }
     
