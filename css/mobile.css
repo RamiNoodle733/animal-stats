@@ -2645,26 +2645,30 @@
         color: rgba(255, 255, 255, 0.5) !important;
     }
     
-    /* MOBILE VOTE BAR - Uses same classes as desktop, just smaller */
-    .mobile-guess-section .t-vote-bar,
-    .mobile-guess-section .mobile-vote-bar {
+    /* MOBILE VOTE BAR - Complete override */
+    .mobile-guess-section .t-vote-bar.mobile-vote-bar {
         display: flex !important;
+        flex-direction: row !important;
         height: 8px !important;
+        padding: 0 !important;
         border-radius: 4px !important;
         background: rgba(0, 0, 0, 0.4) !important;
         overflow: hidden !important;
+        width: 100% !important;
     }
     
-    .mobile-guess-section .t-vote-fill {
+    .mobile-guess-section .t-vote-bar.mobile-vote-bar .t-vote-fill {
         height: 100% !important;
+        min-height: 8px !important;
         transition: width 0.4s ease !important;
+        display: block !important;
     }
     
-    .mobile-guess-section .t-vote-fill.left {
+    .mobile-guess-section .t-vote-bar.mobile-vote-bar .t-vote-fill.left {
         background: linear-gradient(90deg, #00d4ff, #00a0cc) !important;
     }
     
-    .mobile-guess-section .t-vote-fill.right {
+    .mobile-guess-section .t-vote-bar.mobile-vote-bar .t-vote-fill.right {
         background: linear-gradient(90deg, #cc5500, #ff6b35) !important;
     }
 
