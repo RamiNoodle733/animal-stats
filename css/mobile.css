@@ -2646,28 +2646,28 @@
     }
     
     .mobile-guess-section .vote-bar {
-        height: 8px !important; /* Slightly taller */
+        height: 8px !important;
         border-radius: 4px !important;
         overflow: hidden !important;
-        background: rgba(255, 255, 255, 0.1) !important;
-        display: flex !important;
-        flex-direction: row !important;
+        /* Orange background - the 'right' side color */
+        background: linear-gradient(90deg, #cc5522, var(--neon-orange, #ff6b35)) !important;
         width: 100% !important;
         position: relative !important;
     }
     
-    .mobile-guess-section .vote-fill {
+    /* Only the left fill matters - it overlays the orange background */
+    .mobile-guess-section .vote-fill.left {
         height: 100% !important;
         transition: width 0.3s ease !important;
-        flex: none !important; /* Don't use flex sizing, just width */
-    }
-    
-    .mobile-guess-section .vote-fill.left {
         background: linear-gradient(90deg, var(--neon-blue, #00d4ff), #00a8cc) !important;
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
     }
     
+    /* Hide the right fill - we don't need it anymore */
     .mobile-guess-section .vote-fill.right {
-        background: linear-gradient(90deg, #cc5522, var(--neon-orange, #ff6b35)) !important;
+        display: none !important;
     }
     
     /* ====== STAT BARS ====== */
