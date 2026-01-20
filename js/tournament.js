@@ -618,15 +618,19 @@ class TournamentManager {
         if (mobileRightPct) mobileRightPct.textContent = rightPct;
         if (mobileTotal) mobileTotal.textContent = total;
         
-        // Set width only - exactly like desktop does
-        const leftVal = parseFloat(leftPct) || 50;
-        const rightVal = parseFloat(rightPct) || 50;
+        // Set width - handle 0 correctly (don't fall back to 50 for zero!)
+        const leftVal = parseFloat(leftPct);
+        const rightVal = parseFloat(rightPct);
+        
+        // Only use defaults if values are NaN (not if they're 0)
+        const finalLeftVal = isNaN(leftVal) ? 50 : leftVal;
+        const finalRightVal = isNaN(rightVal) ? 50 : rightVal;
         
         if (mobileLeftBar) {
-            mobileLeftBar.style.width = `${leftVal}%`;
+            mobileLeftBar.style.width = `${finalLeftVal}%`;
         }
         if (mobileRightBar) {
-            mobileRightBar.style.width = `${rightVal}%`;
+            mobileRightBar.style.width = `${finalRightVal}%`;
         }
     }
     
