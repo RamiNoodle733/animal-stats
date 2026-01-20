@@ -2648,7 +2648,6 @@
     /* Match desktop approach exactly */
     .mobile-guess-section .vote-bar {
         display: flex !important;
-        flex-direction: row !important;
         height: 8px !important;
         width: 100% !important;
         background: rgba(0, 0, 0, 0.4) !important;
@@ -2659,9 +2658,7 @@
     .mobile-guess-section .vote-fill {
         height: 100% !important;
         transition: width 0.4s ease !important;
-        min-width: 0 !important; /* Allow shrinking to 0 */
-        flex-shrink: 0 !important; /* Don't auto-shrink, respect width */
-        flex-grow: 0 !important; /* Don't auto-grow, respect width */
+        /* NO flex-shrink/grow - let width control everything like desktop */
     }
     
     .mobile-guess-section .vote-fill.left {
