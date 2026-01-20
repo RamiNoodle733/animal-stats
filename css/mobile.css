@@ -2648,8 +2648,24 @@
     /* MOBILE VOTE BAR - Uses same classes as desktop, just smaller */
     .mobile-guess-section .t-vote-bar,
     .mobile-guess-section .mobile-vote-bar {
+        display: flex !important;
         height: 8px !important;
         border-radius: 4px !important;
+        background: rgba(0, 0, 0, 0.4) !important;
+        overflow: hidden !important;
+    }
+    
+    .mobile-guess-section .t-vote-fill {
+        height: 100% !important;
+        transition: width 0.4s ease !important;
+    }
+    
+    .mobile-guess-section .t-vote-fill.left {
+        background: linear-gradient(90deg, #00d4ff, #00a0cc) !important;
+    }
+    
+    .mobile-guess-section .t-vote-fill.right {
+        background: linear-gradient(90deg, #cc5500, #ff6b35) !important;
     }
 
     /* ====== STAT BARS ====== */
