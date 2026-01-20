@@ -2661,6 +2661,7 @@
         left: 0 !important;
         top: 0 !important;
         height: 100% !important;
+        width: 50%; /* Default, JS will override */
         background: linear-gradient(90deg, var(--neon-blue, #00d4ff), #00a8cc) !important;
         transition: width 0.4s ease !important;
         border-radius: 4px 0 0 4px !important;

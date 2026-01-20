@@ -556,8 +556,8 @@ class TournamentManager {
                     <span class="vote-pct right" id="mobile-majority-pct-right">?%</span>
                 </div>
                 <div class="vote-bar">
-                    <div class="vote-fill left" id="mobile-majority-left" style="width: 50%;"></div>
-                    <div class="vote-fill right" id="mobile-majority-right" style="width: 50%;"></div>
+                    <div class="vote-fill left" id="mobile-majority-left"></div>
+                    <div class="vote-fill right" id="mobile-majority-right"></div>
                 </div>
             </div>
         `;
