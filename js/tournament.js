@@ -622,8 +622,16 @@ class TournamentManager {
             // Parse percentages for bar widths
             const leftVal = parseFloat(leftPct) || 50;
             const rightVal = parseFloat(rightPct) || 50;
+            
+            // Set both width and flex-basis for maximum compatibility
             mobileLeftBar.style.width = `${leftVal}%`;
+            mobileLeftBar.style.flexBasis = `${leftVal}%`;
             mobileRightBar.style.width = `${rightVal}%`;
+            mobileRightBar.style.flexBasis = `${rightVal}%`;
+            
+            // Force reflow to ensure styles apply
+            mobileLeftBar.offsetHeight;
+            mobileRightBar.offsetHeight;
         }
     }
     
