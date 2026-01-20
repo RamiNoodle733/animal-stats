@@ -1147,10 +1147,15 @@ class TournamentManager {
         const speedEl = document.getElementById(`t-fighter-${fighterNum}-speed`);
         const biteEl = document.getElementById(`t-fighter-${fighterNum}-bite`);
         
-        // Image
+        // Image - ALWAYS reset first to prevent showing previous animal
         if (imgEl) {
-            imgEl.src = animal.image || '';
+            // Clear previous image immediately
+            imgEl.src = '';
             imgEl.alt = animal.name || 'Unknown';
+            
+            // Set new image or fallback
+            const imageUrl = animal.image || FALLBACK_IMAGE;
+            imgEl.src = imageUrl;
             imgEl.onerror = () => { imgEl.src = FALLBACK_IMAGE; };
         }
         

@@ -2380,7 +2380,7 @@
         min-height: 0 !important;
     }
     
-    /* Fighter cards - stretch to fill available height */
+    /* Fighter cards - stretch to fill, CONTAIN images */
     .t-fighter-card {
         flex: 1 1 auto !important;
         width: 42% !important;
@@ -2391,7 +2391,7 @@
         align-items: center !important;
         justify-content: flex-start !important;
         padding: 6px 4px 8px 4px !important;
-        overflow: visible !important;
+        overflow: hidden !important; /* Contain images */
         position: relative !important;
     }
     
@@ -2471,13 +2471,13 @@
         z-index: 10 !important;
     }
     
-    /* Hero image - balanced sizing, slight side overflow ok */
+    /* Hero image - fill space but NEVER overflow bottom */
     .t-hero-image {
         flex: 1 1 auto !important;
-        width: 105% !important; /* Slight overflow on sides only */
+        width: 100% !important;
         height: auto !important;
-        min-height: 80px !important;
-        max-height: none !important;
+        min-height: 0 !important;
+        max-height: 100% !important; /* Never exceed card bounds */
         margin: 0 !important;
         display: flex !important;
         align-items: center !important;
@@ -2485,12 +2485,12 @@
         position: relative !important;
         cursor: pointer !important;
         z-index: 5 !important;
+        overflow: hidden !important; /* Clip any overflow */
     }
     
     .t-hero-image img {
         max-width: 100% !important;
-        min-height: 70px !important; /* Minimum size for small images */
-        max-height: 100px !important; /* Cap large images */
+        max-height: 100% !important; /* Fill available space */
         width: auto !important;
         height: auto !important;
         object-fit: contain !important;
@@ -2748,7 +2748,7 @@
         flex-shrink: 0 !important;
     }
     
-    /* Info panels - allow content to show fully */
+    /* Info panels - FIXED HEIGHT to always reach bottom */
     .t-bottom-band .t-info-panel {
         display: flex !important;
         flex-direction: column !important;
@@ -2760,8 +2760,8 @@
         border-radius: 6px !important;
         min-width: 0 !important;
         max-width: 50% !important;
-        overflow: visible !important;
-        max-height: none !important;
+        overflow: hidden !important;
+        min-height: 75px !important; /* Fixed minimum height */
     }
     
     /* Hide quick-info in info panels (moved to fighter cards via JS) */
@@ -2876,22 +2876,21 @@
     .t-info-panel .abilities-tags-compact,
     .t-info-panel .traits-tags-compact {
         display: flex !important;
-        flex-wrap: wrap !important; /* Allow 2 lines */
+        flex-wrap: nowrap !important; /* Single line */
         gap: 2px !important;
-        overflow: visible !important; /* Show all */
-        max-height: none !important; /* No height limit */
+        overflow: hidden !important;
     }
     
-    /* Show up to 3 tags */
-    .t-info-panel .abilities-tags-compact .ability-tag:nth-child(n+4),
-    .t-info-panel .traits-tags-compact .trait-tag:nth-child(n+4) {
+    /* Show only first 2 tags */
+    .t-info-panel .abilities-tags-compact .ability-tag:nth-child(n+3),
+    .t-info-panel .traits-tags-compact .trait-tag:nth-child(n+3) {
         display: none !important;
     }
     
     .t-info-panel .ability-tag,
     .t-info-panel .trait-tag {
         padding: 1px 3px !important;
-        font-size: 0.32rem !important; /* Slightly bigger */
+        font-size: 0.32rem !important;
         border-radius: 2px !important;
         white-space: nowrap !important;
         overflow: hidden !important;
