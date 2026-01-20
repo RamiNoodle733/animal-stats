@@ -612,26 +612,17 @@ class TournamentManager {
         const mobileRightPct = document.getElementById('mobile-majority-pct-right');
         const mobileTotal = document.getElementById('mobile-majority-total');
         const mobileLeftBar = document.getElementById('mobile-majority-left');
-        const mobileRightBar = document.getElementById('mobile-majority-right');
         
         if (mobileLeftPct) mobileLeftPct.textContent = leftPct;
         if (mobileRightPct) mobileRightPct.textContent = rightPct;
         if (mobileTotal) mobileTotal.textContent = total;
         
-        if (mobileLeftBar && mobileRightBar) {
-            // Parse percentages for bar widths
+        if (mobileLeftBar) {
+            // Parse percentage for bar width - only left bar matters (orange is background)
             const leftVal = parseFloat(leftPct) || 50;
-            const rightVal = parseFloat(rightPct) || 50;
             
-            // Set both width and flex-basis for maximum compatibility
+            // Set width directly - no flex-basis needed
             mobileLeftBar.style.width = `${leftVal}%`;
-            mobileLeftBar.style.flexBasis = `${leftVal}%`;
-            mobileRightBar.style.width = `${rightVal}%`;
-            mobileRightBar.style.flexBasis = `${rightVal}%`;
-            
-            // Force reflow to ensure styles apply
-            mobileLeftBar.offsetHeight;
-            mobileRightBar.offsetHeight;
         }
     }
     
