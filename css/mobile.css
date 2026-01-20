@@ -2645,32 +2645,10 @@
         color: rgba(255, 255, 255, 0.5) !important;
     }
     
-    /* MOBILE VOTE BAR - Complete override */
-    .mobile-guess-section .t-vote-bar.mobile-vote-bar {
-        display: flex !important;
-        flex-direction: row !important;
+    /* MOBILE VOTE BAR - Minimal overrides, let desktop CSS do the work */
+    .mobile-guess-section .t-vote-bar {
         height: 8px !important;
         padding: 0 !important;
-        border-radius: 4px !important;
-        background: rgba(0, 0, 0, 0.4) !important;
-        overflow: hidden !important;
-        width: 100% !important;
-    }
-    
-    .mobile-guess-section .t-vote-bar.mobile-vote-bar .t-vote-fill {
-        height: 100% !important;
-        transition: flex-basis 0.4s ease, width 0.4s ease !important;
-        flex-shrink: 1 !important;
-        flex-grow: 0 !important;
-        min-width: 0 !important;
-    }
-    
-    .mobile-guess-section .t-vote-bar.mobile-vote-bar .t-vote-fill.left {
-        background: linear-gradient(90deg, #00d4ff, #00a0cc) !important;
-    }
-    
-    .mobile-guess-section .t-vote-bar.mobile-vote-bar .t-vote-fill.right {
-        background: linear-gradient(90deg, #cc5500, #ff6b35) !important;
     }
 
     /* ====== STAT BARS ====== */
