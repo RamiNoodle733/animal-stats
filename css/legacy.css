@@ -7040,8 +7040,8 @@ body {
 
 .rankings-list-header {
     display: grid;
-    grid-template-columns: 60px 1fr minmax(180px, 240px) 90px 90px;
-    gap: 10px;
+    grid-template-columns: 60px minmax(80px, 120px) 1fr 90px 90px;
+    gap: 8px;
     padding: 8px 15px 8px 20px;
     background: linear-gradient(95deg, rgba(255, 45, 45, 0.1) 0%, rgba(15, 20, 35, 0.95) 30%);
     border-bottom: 2px solid rgba(255, 45, 45, 0.25);
@@ -7060,16 +7060,45 @@ body {
 }
 
 .rankings-list-header .header-search {
-    max-width: none;
-    flex: none;
+    justify-self: start;
     width: 100%;
+    max-width: none;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.rankings-list-header .header-search i {
+    position: absolute;
+    left: 12px;
+    color: rgba(255, 45, 45, 0.5);
+    font-size: 0.75rem;
+    pointer-events: none;
+    z-index: 1;
 }
 
 .rankings-list-header .rankings-search-inline {
-    padding: 8px 12px 8px 32px;
-    font-size: 0.85rem;
     width: 100%;
-    border-radius: 8px;
+    padding: 10px 14px 10px 34px;
+    font-size: 0.85rem;
+    font-family: 'Inter', sans-serif;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 45, 45, 0.2);
+    border-radius: 6px;
+    color: #fff;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.rankings-list-header .rankings-search-inline:focus {
+    border-color: rgba(255, 45, 45, 0.5);
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 0 2px rgba(255, 45, 45, 0.1);
+}
+
+.rankings-list-header .rankings-search-inline::placeholder {
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.8rem;
 }
 
 .rankings-list-header span {
