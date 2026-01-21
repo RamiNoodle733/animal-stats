@@ -7040,7 +7040,7 @@ body {
 
 .rankings-list-header {
     display: grid;
-    grid-template-columns: 70px 1fr minmax(120px, 160px) 90px 90px;
+    grid-template-columns: minmax(180px, 220px) 60px 1fr 90px 90px;
     gap: 10px;
     padding: 8px 15px 8px 20px;
     background: linear-gradient(95deg, rgba(255, 45, 45, 0.1) 0%, rgba(15, 20, 35, 0.95) 30%);
@@ -7062,11 +7062,14 @@ body {
 .rankings-list-header .header-search {
     max-width: none;
     flex: none;
+    width: 100%;
 }
 
 .rankings-list-header .rankings-search-inline {
-    padding: 4px 10px 4px 28px;
-    font-size: 0.75rem;
+    padding: 8px 12px 8px 32px;
+    font-size: 0.85rem;
+    width: 100%;
+    border-radius: 8px;
 }
 
 .rankings-list-header span {

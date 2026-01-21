@@ -1517,21 +1517,21 @@
         display: none !important; /* Hide column headers on mobile */
     }
     
-    /* Mobile Search Bar - Rankings */
+    /* Mobile Search Bar - Rankings - Compact */
     .rankings-mobile-search {
         display: flex !important;
         align-items: center !important;
-        gap: 10px !important;
-        padding: 8px 12px !important;
-        margin: 0 4px 8px 4px !important;
-        background: rgba(0, 20, 40, 0.8) !important;
-        border: 1px solid rgba(0, 212, 255, 0.3) !important;
-        border-radius: 10px !important;
+        gap: 8px !important;
+        padding: 6px 10px !important;
+        margin: 0 4px 6px 4px !important;
+        background: rgba(0, 20, 40, 0.7) !important;
+        border: 1px solid rgba(0, 212, 255, 0.25) !important;
+        border-radius: 8px !important;
     }
     
     .rankings-mobile-search i {
-        color: rgba(0, 212, 255, 0.6) !important;
-        font-size: 0.9rem !important;
+        color: rgba(0, 212, 255, 0.5) !important;
+        font-size: 0.75rem !important;
         flex-shrink: 0 !important;
     }
     
@@ -1541,12 +1541,13 @@
         border: none !important;
         outline: none !important;
         color: #fff !important;
-        font-size: 16px !important; /* Prevents iOS zoom */
-        padding: 6px 0 !important;
+        font-size: 14px !important;
+        padding: 4px 0 !important;
     }
     
     .rankings-mobile-search input::placeholder {
-        color: rgba(255, 255, 255, 0.4) !important;
+        color: rgba(255, 255, 255, 0.35) !important;
+        font-size: 0.8rem !important;
     }
     
     .rankings-search-wrapper.header-search {
@@ -1572,21 +1573,20 @@
     
     /* ========================================
        RANKING ROW - Mobile Card Layout
+       Fixed layout: Rank | Animal | Votes (no wrap)
        ======================================== */
     .ranking-row {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: wrap !important;
+        display: grid !important;
+        grid-template-columns: 38px 1fr auto !important;
+        grid-template-rows: auto auto !important;
         align-items: center !important;
-        padding: 10px !important;
-        gap: 8px !important;
+        padding: 8px 10px !important;
+        gap: 6px 8px !important;
         margin-bottom: 6px !important;
         position: relative !important;
         overflow: hidden !important;
         max-width: 100% !important;
         box-sizing: border-box !important;
-        /* Override desktop grid */
-        grid-template-columns: unset !important;
     }
     
     /* Remove skew transform on mobile */
@@ -1599,52 +1599,54 @@
         display: none !important;
     }
     
-    /* Row Rank - Left side */
+    /* Row Rank - Grid column 1, spans both rows */
     .row-rank {
-        flex: 0 0 40px !important;
-        min-width: 40px !important;
+        grid-column: 1 !important;
+        grid-row: 1 / 3 !important;
         display: flex !important;
         flex-direction: column !important;
-        align-items: flex-start !important;
+        align-items: center !important;
+        justify-content: center !important;
         gap: 2px !important;
     }
     
     .row-rank-num {
-        font-size: 1.1rem !important;
+        font-size: 1rem !important;
     }
     
     .row-rank-icon {
         position: static !important;
         transform: none !important;
-        font-size: 0.7rem !important;
+        font-size: 0.65rem !important;
     }
     
     .row-crown {
         position: static !important;
         transform: none !important;
-        font-size: 0.8rem !important;
+        font-size: 0.7rem !important;
     }
     
     .row-streak-badge {
-        font-size: 0.5rem !important;
-        padding: 1px 4px !important;
+        font-size: 0.45rem !important;
+        padding: 1px 3px !important;
     }
     
-    /* Row Animal - Image and Name */
+    /* Row Animal - Grid column 2, row 1 */
     .row-animal {
-        flex: 1 1 auto !important;
-        min-width: 0 !important;
+        grid-column: 2 !important;
+        grid-row: 1 !important;
         display: flex !important;
         align-items: center !important;
-        gap: 8px !important;
+        gap: 6px !important;
         overflow: hidden !important;
+        min-width: 0 !important;
     }
     
     .row-animal-img {
-        width: 44px !important;
-        height: 44px !important;
+        width: 40px !important;
+        height: 40px !important;
         flex-shrink: 0 !important;
-        border-radius: 8px !important;
+        border-radius: 6px !important;
         object-fit: contain !important;
         background: rgba(0, 0, 0, 0.4) !important;
     }
@@ -1654,27 +1656,31 @@
         min-width: 0 !important;
         display: flex !important;
         flex-direction: column !important;
-        gap: 2px !important;
+        gap: 1px !important;
+        overflow: hidden !important;
     }
     
     .row-animal-name-line {
         display: flex !important;
-        flex-wrap: wrap !important;
+        flex-wrap: nowrap !important;
         align-items: center !important;
         gap: 4px !important;
+        overflow: hidden !important;
     }
     
     .row-animal-name {
-        font-size: 0.85rem !important;
+        font-size: 0.8rem !important;
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
-        max-width: 120px !important;
+        flex: 0 1 auto !important;
+        min-width: 0 !important;
     }
     
     .row-elo-badge {
-        font-size: 0.55rem !important;
-        padding: 2px 5px !important;
+        font-size: 0.5rem !important;
+        padding: 1px 4px !important;
+        flex-shrink: 0 !important;
     }
     
     /* Hide inline status badge on mobile */
@@ -1705,17 +1711,17 @@
         font-size: 0.45rem !important;
     }
     
-    /* Row Win Rate - Below animal info */
+    /* Row Win Rate - Grid columns 2-3, row 2 */
     .row-winrate {
-        flex: 0 0 100% !important;
-        order: 10 !important;
+        grid-column: 2 / 4 !important;
+        grid-row: 2 !important;
         display: flex !important;
         flex-direction: row !important;
         align-items: center !important;
-        gap: 8px !important;
-        padding-top: 6px !important;
-        margin-top: 4px !important;
-        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+        gap: 6px !important;
+        padding-top: 4px !important;
+        margin-top: 2px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
     }
     
     .winrate-display {
@@ -1723,50 +1729,52 @@
         display: flex !important;
         flex-direction: row !important;
         align-items: baseline !important;
-        gap: 4px !important;
+        gap: 3px !important;
     }
     
     .row-winrate-value {
-        font-size: 0.9rem !important;
+        font-size: 0.85rem !important;
         font-weight: 700 !important;
     }
     
     .row-battles {
-        font-size: 0.65rem !important;
+        font-size: 0.6rem !important;
         color: rgba(255, 255, 255, 0.5) !important;
     }
     
     /* Win rate bar - horizontal, takes remaining space */
     .winrate-bar {
         flex: 1 1 auto !important;
-        height: 6px !important;
+        height: 5px !important;
         transform: none !important;
         border-radius: 3px !important;
-        max-width: 120px !important;
+        max-width: 100px !important;
     }
     
     .winrate-fill {
         border-radius: 3px !important;
     }
     
-    /* Row Votes - Right side */
+    /* Row Votes - Grid column 3, row 1 - ALWAYS on right */
     .row-votes {
-        flex: 0 0 auto !important;
+        grid-column: 3 !important;
+        grid-row: 1 !important;
         display: flex !important;
         flex-direction: row !important;
         align-items: center !important;
-        gap: 4px !important;
+        gap: 3px !important;
+        flex-shrink: 0 !important;
     }
     
     .row-votes.control-pad {
-        gap: 4px !important;
+        gap: 3px !important;
     }
     
     .vote-pad-cluster {
         display: flex !important;
         flex-direction: row !important;
-        padding: 2px !important;
-        gap: 2px !important;
+        padding: 1px !important;
+        gap: 1px !important;
     }
     
     .vote-pad-cluster::before {
@@ -1774,28 +1782,28 @@
     }
     
     .row-vote-btn {
-        padding: 6px 8px !important;
-        font-size: 0.7rem !important;
-        min-height: 32px !important;
-        gap: 3px !important;
+        padding: 5px 6px !important;
+        font-size: 0.65rem !important;
+        min-height: 28px !important;
+        gap: 2px !important;
     }
     
     .row-vote-btn i {
-        font-size: 0.8rem !important;
+        font-size: 0.7rem !important;
     }
     
     .vote-count {
-        font-size: 0.65rem !important;
+        font-size: 0.6rem !important;
     }
     
     .row-comments-btn {
-        padding: 6px 8px !important;
-        font-size: 0.7rem !important;
-        min-height: 32px !important;
+        padding: 5px 6px !important;
+        font-size: 0.65rem !important;
+        min-height: 28px !important;
     }
     
     .comment-count {
-        font-size: 0.65rem !important;
+        font-size: 0.6rem !important;
     }
     
     /* Inline comments panel - mobile optimized */
