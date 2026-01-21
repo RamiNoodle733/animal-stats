@@ -737,11 +737,11 @@ class CommunityManager {
                 <div class="feed-post-content">${this.escapeHtml(item.content)}</div>
                 <div class="feed-post-actions">
                     <button class="feed-action-btn vote-up ${hasUpvoted ? 'voted' : ''}" data-msg-id="${item._id}" title="Upvote">
-                        <i class="fas fa-arrow-up"></i>
+                        <span class="vote-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4L4 14h5v6h6v-6h5L12 4z"/></svg></span>
                     </button>
                     <span class="feed-action-btn ${scoreClass}">${score}</span>
                     <button class="feed-action-btn vote-down ${hasDownvoted ? 'voted' : ''}" data-msg-id="${item._id}" title="Downvote">
-                        <i class="fas fa-arrow-down"></i>
+                        <span class="vote-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4L4 14h5v6h6v-6h5L12 4z"/></svg></span>
                     </button>
                     ${isChat ? `
                         <button class="feed-action-btn reply-btn" data-msg-id="${item._id}" data-username="${this.escapeHtml(username)}" title="Reply">
@@ -1113,11 +1113,11 @@ class CommunityManager {
                         <div class="feed-comment-content">${this.escapeHtml(comment.content)}</div>
                         <div class="feed-comment-actions">
                             <button class="feed-upvote-btn ${hasUpvoted ? 'active' : ''}" data-comment-id="${comment._id}" title="Upvote">
-                                <i class="fas fa-arrow-up"></i>
+                                <span class="vote-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4L4 14h5v6h6v-6h5L12 4z"/></svg></span>
                             </button>
                             <span class="feed-vote-score ${scoreClass}">${score}</span>
                             <button class="feed-downvote-btn ${hasDownvoted ? 'active' : ''}" data-comment-id="${comment._id}" title="Downvote">
-                                <i class="fas fa-arrow-down"></i>
+                                <span class="vote-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4L4 14h5v6h6v-6h5L12 4z"/></svg></span>
                             </button>
                             <button class="feed-reply-btn" data-comment-id="${comment._id}" data-animal="${this.escapeHtml(comment.animalName)}" data-animal-id="${animalId}" data-animal-image="${animalImage}" title="Reply">
                                 <i class="fas fa-reply"></i> ${comment.replyCount || 0}

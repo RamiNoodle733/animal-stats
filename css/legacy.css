@@ -8073,6 +8073,50 @@ body {
     letter-spacing: 0.5px;
 }
 
+/* Custom SVG Vote Arrow Icon */
+.row-vote-btn .vote-icon {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    flex-shrink: 0;
+    transition: transform 0.15s ease;
+}
+
+.row-vote-btn .vote-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Upvote icon - green, pointing up */
+.row-vote-btn.row-vote-up .vote-icon {
+    color: currentColor;
+}
+
+.row-vote-btn.row-vote-up .vote-icon svg {
+    fill: currentColor;
+}
+
+/* Downvote icon - red, rotated 180deg to point down */
+.row-vote-btn.row-vote-down .vote-icon {
+    color: currentColor;
+    transform: rotate(180deg);
+}
+
+.row-vote-btn.row-vote-down .vote-icon svg {
+    fill: currentColor;
+}
+
+/* Hover effects */
+.row-vote-btn.row-vote-up:hover .vote-icon {
+    transform: translateY(-2px);
+}
+
+.row-vote-btn.row-vote-down:hover .vote-icon {
+    transform: rotate(180deg) translateY(-2px);
+}
+
+/* Legacy fallback for FontAwesome icons */
 .row-vote-btn i {
     font-size: 0.9rem;
 }
@@ -9198,6 +9242,35 @@ body {
     border-color: #ff3366;
 }
 
+/* Custom SVG Vote Icons for Detail Panel */
+.vote-btn .vote-icon {
+    width: 14px;
+    height: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.vote-btn .vote-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+    display: block;
+}
+
+.vote-btn.up .vote-icon svg {
+    fill: currentColor;
+}
+
+.vote-btn.down .vote-icon {
+    transform: rotate(180deg);
+}
+
+.vote-btn.down .vote-icon svg {
+    fill: currentColor;
+}
+
 .action-btn-sm {
     padding: 4px 8px;
     background: rgba(0, 212, 255, 0.1);
@@ -9958,6 +10031,37 @@ body {
 
 .comment-action-btn.liked i {
     animation: heartBeat 0.3s ease;
+}
+
+/* Custom SVG Vote Icons for Comment Buttons */
+.comment-action-btn .vote-icon {
+    width: 14px;
+    height: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.comment-action-btn .vote-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+    display: block;
+}
+
+.comment-action-btn.upvote-btn .vote-icon svg,
+.comment-action-btn.upvoted .vote-icon svg {
+    fill: currentColor;
+}
+
+.comment-action-btn.downvote-btn .vote-icon {
+    transform: rotate(180deg);
+}
+
+.comment-action-btn.downvote-btn .vote-icon svg,
+.comment-action-btn.downvoted .vote-icon svg {
+    fill: currentColor;
 }
 
 @keyframes heartBeat {
@@ -10999,6 +11103,29 @@ body {
     color: #ff4444;
 }
 
+/* Custom SVG Vote Icons for Feed Buttons */
+.feed-upvote-btn .vote-icon,
+.feed-downvote-btn .vote-icon {
+    width: 14px;
+    height: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.feed-upvote-btn .vote-icon svg,
+.feed-downvote-btn .vote-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+    display: block;
+}
+
+.feed-downvote-btn .vote-icon {
+    transform: rotate(180deg);
+}
+
 .feed-vote-score {
     font-weight: 600;
     font-size: 0.85rem;
@@ -11310,6 +11437,45 @@ body {
 
 .feed-action-btn i {
     font-size: 0.9rem;
+}
+
+/* Custom SVG Vote Icons for Feed Action Buttons */
+.feed-action-btn .vote-icon {
+    width: 14px;
+    height: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.feed-action-btn .vote-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+    display: block;
+}
+
+.feed-action-btn.vote-up .vote-icon svg {
+    fill: currentColor;
+}
+
+.feed-action-btn.vote-down .vote-icon {
+    transform: rotate(180deg);
+}
+
+.feed-action-btn.vote-down .vote-icon svg {
+    fill: currentColor;
+}
+
+.feed-action-btn.vote-up:hover,
+.feed-action-btn.vote-up.voted {
+    color: #00ff88;
+}
+
+.feed-action-btn.vote-down:hover,
+.feed-action-btn.vote-down.voted {
+    color: #ff4444;
 }
 
 /* ========================================

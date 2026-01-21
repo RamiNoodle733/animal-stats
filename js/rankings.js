@@ -648,11 +648,11 @@ class RankingsManager {
             <div class="row-votes control-pad">
                 <div class="vote-pad-cluster">
                     <button class="row-vote-btn row-vote-up ${upActiveClass} ${votedTodayClass}" data-animal-id="${animalId}" data-animal-name="${animal.name}" data-vote="up" title="Underrated">
-                        <i class="fas fa-caret-up"></i>
+                        <span class="vote-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4L4 14h5v6h6v-6h5L12 4z"/></svg></span>
                         <span class="vote-count">${upvotes}</span>
                     </button>
                     <button class="row-vote-btn row-vote-down ${downActiveClass} ${votedTodayClass}" data-animal-id="${animalId}" data-animal-name="${animal.name}" data-vote="down" title="Overrated">
-                        <i class="fas fa-caret-down"></i>
+                        <span class="vote-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4L4 14h5v6h6v-6h5L12 4z"/></svg></span>
                         <span class="vote-count">${downvotes}</span>
                     </button>
                 </div>
@@ -1653,7 +1653,7 @@ class RankingsManager {
             </div>
             <div class="comment-content">${this.escapeHtml(comment.content)}</div>
             <div class="comment-actions">
-                <button class="comment-action-btn upvote-btn ${hasUpvoted ? 'upvoted' : ''}" data-comment-id="${comment._id}"><i class="fas fa-thumbs-up"></i></button><span class="vote-score ${scoreClass}">${score}</span><button class="comment-action-btn downvote-btn ${hasDownvoted ? 'downvoted' : ''}" data-comment-id="${comment._id}"><i class="fas fa-thumbs-down"></i></button>
+                <button class="comment-action-btn upvote-btn ${hasUpvoted ? 'upvoted' : ''}" data-comment-id="${comment._id}"><span class="vote-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4L4 14h5v6h6v-6h5L12 4z"/></svg></span></button><span class="vote-score ${scoreClass}">${score}</span><button class="comment-action-btn downvote-btn ${hasDownvoted ? 'downvoted' : ''}" data-comment-id="${comment._id}"><span class="vote-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 4L4 14h5v6h6v-6h5L12 4z"/></svg></span></button>
                 <button class="comment-action-btn reply-btn" data-comment-id="${comment._id}">
                     <i class="fas fa-reply"></i>
                     Reply
