@@ -104,6 +104,7 @@ class RankingsManager {
         this.bindEvents();
         this.bindDetailPanelEvents();
         this.setHeroBannerCompact(); // Always compact, no scroll behavior
+        this.setupMobileDetailClose(); // Setup mobile close handlers
     }
     
     setHeroBannerCompact() {
@@ -112,6 +113,40 @@ class RankingsManager {
         if (heroBanner) {
             heroBanner.classList.add('compact');
         }
+    }
+    
+    setupMobileDetailClose() {
+        // Add close button dynamically for mobile bottom sheet
+        const rightColumn = document.querySelector('.rankings-right-column');
+        if (rightColumn && !rightColumn.querySelector('.mobile-sheet-close')) {
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'mobile-sheet-close';
+            closeBtn.innerHTML = '<i class="fas fa-times"></i>';
+            closeBtn.setAttribute('aria-label', 'Close panel');
+            closeBtn.addEventListener('click', () => this.closeMobileDetailPanel());
+            rightColumn.insertBefore(closeBtn, rightColumn.firstChild);
+        }
+        
+        // Click on drag handle area to close
+        const rightColumnElement = document.querySelector('.rankings-right-column');
+        if (rightColumnElement) {
+            rightColumnElement.addEventListener('click', (e) => {
+                // Close when clicking on the pseudo-element area (top part with drag handle)
+                if (e.target === rightColumnElement && e.offsetY < 20) {
+                    this.closeMobileDetailPanel();
+                }
+            });
+        }
+    }
+    
+    closeMobileDetailPanel() {
+        const rightColumn = document.querySelector('.rankings-right-column');
+        if (rightColumn) {
+            rightColumn.classList.remove('mobile-visible');
+        }
+        // Clear selection on mobile
+        this.dom.rankingsList.querySelectorAll('.ranking-row').forEach(r => r.classList.remove('selected'));
+        this.selectedRankIndex = -1;
     }
 
     bindEvents() {
@@ -485,8 +520,8 @@ class RankingsManager {
         this.dom.rankingsList.innerHTML = '';
         this.dom.rankingsList.appendChild(fragment);
         
-        // Auto-select first animal
-        if (this.rankings.length > 0) {
+        // Auto-select first animal on desktop only (not on mobile)
+        if (this.rankings.length > 0 && !window.matchMedia('(max-width: 480px)').matches) {
             this.selectRankingRow(0);
         }
     }

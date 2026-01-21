@@ -1302,73 +1302,93 @@
  * RANKINGS PAGE - Mobile Layout
  * ============================================================================ */
 @media (max-width: 480px) {
+    /* Rankings view - prevent horizontal scroll */
     #rankings-view.active-view {
         padding-bottom: calc(var(--mobile-nav-height) + var(--mobile-safe-bottom)) !important;
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
     }
     
     .rankings-console {
         padding: 8px !important;
+        overflow-x: hidden !important;
+        max-width: 100% !important;
     }
     
-    /* Hero banner compact */
+    /* Hero banner - fixed trophy layout */
     .rankings-hero-banner {
-        padding: 20px 16px !important;
+        padding: 16px 12px !important;
         margin-bottom: 12px !important;
+        overflow: hidden !important;
     }
     
     .hero-top-row {
-        flex-wrap: wrap !important;
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        align-items: center !important;
+        justify-content: center !important;
         gap: 8px !important;
-    }
-    
-    .hero-trophy-badge {
-        width: 32px !important;
-        height: 32px !important;
-    }
-    
-    .hero-trophy-badge i {
-        font-size: 0.9rem !important;
-    }
-    
-    .hero-title {
-        font-size: 0.9rem !important;
-        text-align: center !important;
         width: 100% !important;
-        order: 1 !important;
+    }
+    
+    /* Trophy badges on SIDES of title */
+    .hero-trophy-badge {
+        width: 28px !important;
+        height: 28px !important;
+        flex-shrink: 0 !important;
+        order: unset !important;
     }
     
     .hero-trophy-badge:first-child {
+        order: 1 !important;
+    }
+    
+    .hero-title {
+        font-size: 0.75rem !important;
+        text-align: center !important;
         order: 2 !important;
+        flex: 0 1 auto !important;
+        white-space: nowrap !important;
     }
     
     .hero-trophy-badge.mirror {
         order: 3 !important;
     }
     
+    .hero-trophy-badge i {
+        font-size: 0.8rem !important;
+    }
+    
     .hero-play-btn-big {
-        padding: 14px 32px !important;
-        font-size: 0.9rem !important;
+        padding: 12px 28px !important;
+        font-size: 0.85rem !important;
         min-height: var(--mobile-touch-min) !important;
+        margin-top: 10px !important;
     }
     
     .hero-subtitle {
-        font-size: 0.65rem !important;
+        font-size: 0.6rem !important;
         padding: 0 8px !important;
+        display: none !important; /* Hide on mobile for cleaner look */
     }
     
     /* Main content - single column */
     .rankings-main-content {
         flex-direction: column !important;
-        gap: 12px !important;
+        gap: 0 !important;
+        overflow-x: hidden !important;
+        max-width: 100% !important;
     }
     
     .rankings-list-column {
         width: 100% !important;
         max-width: 100% !important;
+        overflow-x: hidden !important;
     }
     
     .rankings-right-column {
-        display: none !important; /* Hidden by default on mobile */
+        display: none !important;
     }
     
     /* Show detail panel as bottom sheet when animal selected */
@@ -1391,12 +1411,8 @@
     }
     
     @keyframes slideUpSheet {
-        from {
-            transform: translateY(100%);
-        }
-        to {
-            transform: translateY(0);
-        }
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
     }
     
     /* Drag handle for bottom sheet */
@@ -1410,28 +1426,46 @@
         margin: 0 auto 12px;
     }
     
+    /* Mobile close button for bottom sheet */
+    .mobile-sheet-close {
+        position: absolute !important;
+        top: 10px !important;
+        right: 12px !important;
+        width: 32px !important;
+        height: 32px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-radius: 50% !important;
+        color: rgba(255, 255, 255, 0.7) !important;
+        font-size: 0.9rem !important;
+        cursor: pointer !important;
+        z-index: 10 !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    .mobile-sheet-close:hover,
+    .mobile-sheet-close:active {
+        background: rgba(255, 255, 255, 0.2) !important;
+        color: #fff !important;
+    }
+    
     /* Rankings list header */
     .rankings-list-toolbar {
-        padding: 8px 12px !important;
+        padding: 8px 10px !important;
     }
     
     .rankings-list-title {
-        font-size: 0.85rem !important;
+        font-size: 0.8rem !important;
     }
     
     .rankings-list-header {
-        padding: 8px 12px !important;
-        font-size: 0.65rem !important;
+        padding: 6px 10px !important;
+        font-size: 0.6rem !important;
         gap: 4px !important;
-    }
-    
-    .list-header-rank {
-        min-width: 35px !important;
-    }
-    
-    .list-header-stats,
-    .list-header-votes {
-        min-width: 50px !important;
+        display: none !important; /* Hide column headers on mobile */
     }
     
     .rankings-search-wrapper.header-search {
@@ -1443,46 +1477,310 @@
         padding: 6px 8px !important;
     }
     
-    /* Rankings list items */
+    /* Rankings list container - CRITICAL: vertical scroll only */
     .rankings-list {
-        max-height: 50vh !important;
+        max-height: calc(100vh - 280px) !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        -webkit-overflow-scrolling: touch !important;
+        overscroll-behavior-x: none !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 4px !important;
     }
     
-    .ranking-item {
-        padding: 10px 12px !important;
+    /* ========================================
+       RANKING ROW - Mobile Card Layout
+       ======================================== */
+    .ranking-row {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        padding: 10px !important;
         gap: 8px !important;
-        min-height: var(--mobile-touch-min) !important;
+        margin-bottom: 6px !important;
+        position: relative !important;
+        overflow: hidden !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        /* Override desktop grid */
+        grid-template-columns: unset !important;
     }
     
-    .rank-badge {
+    /* Remove skew transform on mobile */
+    .ranking-row:hover {
+        transform: none !important;
+    }
+    
+    /* Disable diagonal ribbon on mobile - too cluttered */
+    .ranking-row .row-diagonal-badge {
+        display: none !important;
+    }
+    
+    /* Row Rank - Left side */
+    .row-rank {
+        flex: 0 0 40px !important;
+        min-width: 40px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 2px !important;
+    }
+    
+    .row-rank-num {
+        font-size: 1.1rem !important;
+    }
+    
+    .row-rank-icon {
+        position: static !important;
+        transform: none !important;
+        font-size: 0.7rem !important;
+    }
+    
+    .row-crown {
+        position: static !important;
+        transform: none !important;
+        font-size: 0.8rem !important;
+    }
+    
+    .row-streak-badge {
+        font-size: 0.5rem !important;
+        padding: 1px 4px !important;
+    }
+    
+    /* Row Animal - Image and Name */
+    .row-animal {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        overflow: hidden !important;
+    }
+    
+    .row-animal-img {
+        width: 44px !important;
+        height: 44px !important;
+        flex-shrink: 0 !important;
+        border-radius: 8px !important;
+        object-fit: contain !important;
+        background: rgba(0, 0, 0, 0.4) !important;
+    }
+    
+    .row-animal-info {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 2px !important;
+    }
+    
+    .row-animal-name-line {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        gap: 4px !important;
+    }
+    
+    .row-animal-name {
+        font-size: 0.85rem !important;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        text-overflow: ellipsis !important;
+        max-width: 120px !important;
+    }
+    
+    .row-elo-badge {
+        font-size: 0.55rem !important;
+        padding: 2px 5px !important;
+    }
+    
+    /* Hide inline status badge on mobile */
+    .row-status-badge {
+        display: none !important;
+    }
+    
+    /* Tournament chips - smaller, horizontal */
+    .row-tournament-chips {
+        display: flex !important;
+        gap: 4px !important;
+        margin-top: 2px !important;
+    }
+    
+    .tournament-chip {
+        padding: 2px 4px !important;
+        font-size: 0.5rem !important;
+        transform: none !important;
+        clip-path: none !important;
+        border-radius: 3px !important;
+    }
+    
+    .tournament-chip > * {
+        transform: none !important;
+    }
+    
+    .tournament-chip i {
+        font-size: 0.45rem !important;
+    }
+    
+    /* Row Win Rate - Below animal info */
+    .row-winrate {
+        flex: 0 0 100% !important;
+        order: 10 !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 8px !important;
+        padding-top: 6px !important;
+        margin-top: 4px !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .winrate-display {
+        flex: 0 0 auto !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: baseline !important;
+        gap: 4px !important;
+    }
+    
+    .row-winrate-value {
+        font-size: 0.9rem !important;
+        font-weight: 700 !important;
+    }
+    
+    .row-battles {
+        font-size: 0.65rem !important;
+        color: rgba(255, 255, 255, 0.5) !important;
+    }
+    
+    /* Win rate bar - horizontal, takes remaining space */
+    .winrate-bar {
+        flex: 1 1 auto !important;
+        height: 6px !important;
+        transform: none !important;
+        border-radius: 3px !important;
+        max-width: 120px !important;
+    }
+    
+    .winrate-fill {
+        border-radius: 3px !important;
+    }
+    
+    /* Row Votes - Right side */
+    .row-votes {
+        flex: 0 0 auto !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 4px !important;
+    }
+    
+    .row-votes.control-pad {
+        gap: 4px !important;
+    }
+    
+    .vote-pad-cluster {
+        display: flex !important;
+        flex-direction: row !important;
+        padding: 2px !important;
+        gap: 2px !important;
+    }
+    
+    .vote-pad-cluster::before {
+        display: none !important;
+    }
+    
+    .row-vote-btn {
+        padding: 6px 8px !important;
+        font-size: 0.7rem !important;
+        min-height: 32px !important;
+        gap: 3px !important;
+    }
+    
+    .row-vote-btn i {
+        font-size: 0.8rem !important;
+    }
+    
+    .vote-count {
+        font-size: 0.65rem !important;
+    }
+    
+    .row-comments-btn {
+        padding: 6px 8px !important;
+        font-size: 0.7rem !important;
+        min-height: 32px !important;
+    }
+    
+    .comment-count {
+        font-size: 0.65rem !important;
+    }
+    
+    /* Inline comments panel - mobile optimized */
+    .inline-comments-panel {
+        margin: 6px 0 !important;
+        padding: 10px !important;
+        border-radius: 8px !important;
+    }
+    
+    .inline-comments-header {
+        padding-bottom: 8px !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .inline-comments-title {
         font-size: 0.75rem !important;
-        min-width: 30px !important;
     }
     
-    .ranking-portrait {
-        width: 36px !important;
-        height: 36px !important;
+    .inline-view-all-btn {
+        font-size: 0.65rem !important;
+        padding: 4px 8px !important;
     }
     
-    .ranking-name {
-        font-size: 0.75rem !important;
+    .inline-comments-close {
+        width: 28px !important;
+        height: 28px !important;
     }
     
-    .ranking-scientific {
+    .inline-comment-item {
+        padding: 8px !important;
+        gap: 8px !important;
+    }
+    
+    .inline-comment-avatar {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 0.7rem !important;
+    }
+    
+    .inline-comment-author {
+        font-size: 0.7rem !important;
+    }
+    
+    .inline-comment-time {
         font-size: 0.55rem !important;
     }
     
-    .ranking-winrate,
-    .ranking-votes {
-        font-size: 0.7rem !important;
-        min-width: 45px !important;
+    .inline-comment-text {
+        font-size: 0.75rem !important;
     }
     
-    .ranking-grade {
-        font-size: 0.65rem !important;
-        padding: 3px 6px !important;
+    .inline-comment-input-row {
+        gap: 8px !important;
+        padding-top: 8px !important;
     }
     
+    .inline-panel-comment-input {
+        font-size: 16px !important; /* Prevents zoom on iOS */
+        padding: 10px 12px !important;
+    }
+    
+    .inline-panel-send-btn {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
     /* Detail panel content */
     .detail-header-compact {
         padding: 12px !important;
