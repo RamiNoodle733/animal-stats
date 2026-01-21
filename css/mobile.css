@@ -25,10 +25,27 @@
  * GLOBAL MOBILE STYLES (max-width: 480px)
  * ============================================================================ */
 @media (max-width: 480px) {
-    /* Prevent horizontal scroll */
+    /* Prevent horizontal scroll AND overscroll bounce */
     html, body {
         overflow-x: hidden;
         max-width: 100vw;
+        overscroll-behavior: none;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+    }
+    
+    /* Allow main content to scroll */
+    .main-content {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
     }
     
     * {
@@ -43,6 +60,36 @@
     .feed-scroll-region {
         -webkit-overflow-scrolling: touch;
         overscroll-behavior: contain;
+    }
+    
+    /* ========================================
+       STANDARDIZED CLOSE BUTTON - Red X
+       ======================================== */
+    .panel-close-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 50, 50, 0.15);
+        border: 1px solid rgba(255, 50, 50, 0.4);
+        border-radius: 50%;
+        color: #ff4444;
+        font-size: 1rem;
+        cursor: pointer;
+        z-index: 100;
+        transition: all 0.2s ease;
+    }
+    
+    .panel-close-btn:hover,
+    .panel-close-btn:active {
+        background: rgba(255, 50, 50, 0.3);
+        border-color: #ff4444;
+        color: #ff6666;
+        transform: scale(1.05);
     }
 }
 
@@ -1426,30 +1473,32 @@
         margin: 0 auto 12px;
     }
     
-    /* Mobile close button for bottom sheet */
+    /* Mobile close button for bottom sheet - Red X style */
     .mobile-sheet-close {
         position: absolute !important;
-        top: 10px !important;
-        right: 12px !important;
-        width: 32px !important;
-        height: 32px !important;
+        top: 8px !important;
+        right: 10px !important;
+        width: 34px !important;
+        height: 34px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        background: rgba(255, 255, 255, 0.1) !important;
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        background: rgba(255, 50, 50, 0.15) !important;
+        border: 1px solid rgba(255, 50, 50, 0.4) !important;
         border-radius: 50% !important;
-        color: rgba(255, 255, 255, 0.7) !important;
-        font-size: 0.9rem !important;
+        color: #ff4444 !important;
+        font-size: 1rem !important;
         cursor: pointer !important;
-        z-index: 10 !important;
+        z-index: 100 !important;
         transition: all 0.2s ease !important;
     }
     
     .mobile-sheet-close:hover,
     .mobile-sheet-close:active {
-        background: rgba(255, 255, 255, 0.2) !important;
-        color: #fff !important;
+        background: rgba(255, 50, 50, 0.3) !important;
+        border-color: #ff4444 !important;
+        color: #ff6666 !important;
+        transform: scale(1.05) !important;
     }
     
     /* Rankings list header */
@@ -1466,6 +1515,38 @@
         font-size: 0.6rem !important;
         gap: 4px !important;
         display: none !important; /* Hide column headers on mobile */
+    }
+    
+    /* Mobile Search Bar - Rankings */
+    .rankings-mobile-search {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        padding: 8px 12px !important;
+        margin: 0 4px 8px 4px !important;
+        background: rgba(0, 20, 40, 0.8) !important;
+        border: 1px solid rgba(0, 212, 255, 0.3) !important;
+        border-radius: 10px !important;
+    }
+    
+    .rankings-mobile-search i {
+        color: rgba(0, 212, 255, 0.6) !important;
+        font-size: 0.9rem !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .rankings-mobile-search input {
+        flex: 1 !important;
+        background: transparent !important;
+        border: none !important;
+        outline: none !important;
+        color: #fff !important;
+        font-size: 16px !important; /* Prevents iOS zoom */
+        padding: 6px 0 !important;
+    }
+    
+    .rankings-mobile-search input::placeholder {
+        color: rgba(255, 255, 255, 0.4) !important;
     }
     
     .rankings-search-wrapper.header-search {

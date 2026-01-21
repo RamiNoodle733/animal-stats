@@ -150,9 +150,24 @@ class RankingsManager {
     }
 
     bindEvents() {
-        // Rankings search
+        // Rankings search - Desktop
         this.dom.rankingsSearch?.addEventListener('input', (e) => {
             this.filterRankings(e.target.value);
+            // Sync mobile search
+            const mobileSearch = document.getElementById('rankings-search-mobile');
+            if (mobileSearch && mobileSearch.value !== e.target.value) {
+                mobileSearch.value = e.target.value;
+            }
+        });
+        
+        // Rankings search - Mobile
+        const mobileSearchInput = document.getElementById('rankings-search-mobile');
+        mobileSearchInput?.addEventListener('input', (e) => {
+            this.filterRankings(e.target.value);
+            // Sync desktop search
+            if (this.dom.rankingsSearch && this.dom.rankingsSearch.value !== e.target.value) {
+                this.dom.rankingsSearch.value = e.target.value;
+            }
         });
 
         // Comments modal close

@@ -7040,7 +7040,7 @@ body {
 
 .rankings-list-header {
     display: grid;
-    grid-template-columns: 70px 1fr 90px 90px minmax(100px, 130px);
+    grid-template-columns: 70px 1fr minmax(120px, 160px) 90px 90px;
     gap: 10px;
     padding: 8px 15px 8px 20px;
     background: linear-gradient(95deg, rgba(255, 45, 45, 0.1) 0%, rgba(15, 20, 35, 0.95) 30%);
@@ -7052,6 +7052,11 @@ body {
     flex-shrink: 0;
     text-transform: uppercase;
     align-items: center;
+}
+
+/* Hide mobile search on desktop */
+.rankings-mobile-search {
+    display: none;
 }
 
 .rankings-list-header .header-search {
@@ -7120,7 +7125,7 @@ body {
 /* Ranking Row - Persona 5 Dynamic Card Style */
 .ranking-row {
     display: grid;
-    grid-template-columns: 70px 1fr 90px 220px;
+    grid-template-columns: 70px 1fr 90px 180px;
     gap: 10px;
     padding: 10px 14px 10px 16px;
     background: linear-gradient(95deg, rgba(15, 20, 35, 0.95) 0%, rgba(20, 25, 45, 0.9) 100%);
