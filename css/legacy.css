@@ -2923,16 +2923,16 @@ body {
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 16px 20px;
+    padding: 24px 20px;
     background: rgba(0, 0, 0, 0.3);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .avatar-picker-modal .avatar-preview-current {
-    width: 56px;
-    height: 56px;
-    min-width: 56px;
-    min-height: 56px;
+    width: 70px;
+    height: 70px;
+    min-width: 70px;
+    min-height: 70px;
     flex-shrink: 0;
     border-radius: 50%;
     background: linear-gradient(135deg, #1a1f2e, #0f1419);
