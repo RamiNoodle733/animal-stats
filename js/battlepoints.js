@@ -14,10 +14,10 @@ class BattlepointsManager {
         
         // Preview packs (static, not purchasable)
         this.previewPacks = [
-            { id: 'pack_1000', name: '1,000 BP', bpAmount: 1000, priceDisplay: '$4.99', ribbon: null, isBestValue: false },
-            { id: 'pack_2800', name: '2,800 BP', bpAmount: 2800, priceDisplay: '$12.99', ribbon: '10% EXTRA', isBestValue: false },
-            { id: 'pack_5000', name: '5,000 BP', bpAmount: 5000, priceDisplay: '$19.99', ribbon: '22% EXTRA', isBestValue: false },
-            { id: 'pack_13500', name: '13,500 BP', bpAmount: 13500, priceDisplay: '$49.99', ribbon: '35% EXTRA', isBestValue: true }
+            { id: 'pack_1000', name: '1,000 BP', bpAmount: 1000, priceDisplay: '$0.00', ribbon: null, isBestValue: false },
+            { id: 'pack_2800', name: '2,800 BP', bpAmount: 2800, priceDisplay: '$0.00', ribbon: '10% EXTRA', isBestValue: false },
+            { id: 'pack_5000', name: '5,000 BP', bpAmount: 5000, priceDisplay: '$0.00', ribbon: '22% EXTRA', isBestValue: false },
+            { id: 'pack_13500', name: '13,500 BP', bpAmount: 13500, priceDisplay: '$0.00', ribbon: '35% EXTRA', isBestValue: true }
         ];
         
         // DOM elements
@@ -99,7 +99,7 @@ class BattlepointsManager {
                 <div class="bp-pack-label">Battle Points</div>
                 <div class="bp-pack-price">${pack.priceDisplay}</div>
                 <button class="bp-pack-btn" disabled>
-                    COMING SOON
+                    NOT AVAILABLE
                 </button>
             </div>
         `;

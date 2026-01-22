@@ -1,8 +1,7 @@
 /**
  * Battle Points Shop Styles
  * 
- * Design: In-game currency store inspired by modern game shops
- * Matches ABS visual style with cyan/orange accents
+ * Design: NOT AVAILABLE placeholder with greyed-out pack preview
  */
 
 /* ==================== SHOP PAGE CONTAINER ==================== */
@@ -15,40 +14,57 @@
     overflow-x: hidden;
 }
 
-/* ==================== HERO SECTION ==================== */
-.bp-shop-hero {
+/* ==================== UNAVAILABLE MODE ==================== */
+.bp-shop-page.bp-shop-unavailable {
     position: relative;
-    padding: 60px 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.bp-unavailable-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 10;
+}
+
+.bp-unavailable-content {
     text-align: center;
-    overflow: hidden;
+    padding: 40px;
 }
 
-.bp-hero-bg {
-    position: absolute;
-    inset: 0;
-    background: 
-        radial-gradient(ellipse at center top, rgba(255, 107, 0, 0.15) 0%, transparent 60%),
-        radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
-    pointer-events: none;
-}
-
-.bp-hero-bg::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 17.32v25.36L30 60 0 42.68V17.32z' fill='none' stroke='%23ff6b00' stroke-opacity='0.05' stroke-width='0.5'/%3E%3C/svg%3E");
-    background-size: 60px 60px;
-    opacity: 0.5;
-}
-
-.bp-hero-content {
-    position: relative;
-    z-index: 1;
-}
-
-.bp-hero-icon {
+.bp-unavailable-content i {
+    font-size: 4rem;
+    color: #ff4444;
     margin-bottom: 20px;
-    animation: bpHeroFloat 3s ease-in-out infinite;
+    opacity: 0.8;
+}
+
+.bp-unavailable-content h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #ff4444;
+    letter-spacing: 6px;
+    margin: 0 0 16px;
+    text-shadow: 0 0 30px rgba(255, 68, 68, 0.5);
+}
+
+.bp-unavailable-content p {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+}
+
+.bp-shop-unavailable .bp-packs-section {
+    filter: blur(3px) grayscale(60%);
+    opacity: 0.4;
 }
 
 @keyframes bpHeroFloat {
