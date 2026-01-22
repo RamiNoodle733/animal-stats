@@ -65,6 +65,13 @@ function buildCommentTree(comments) {
         }
     });
     
+    // Sort replies by oldest first (ascending createdAt)
+    Object.values(commentMap).forEach(comment => {
+        if (comment.replies.length > 0) {
+            comment.replies.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+        }
+    });
+    
     return rootComments;
 }
 
@@ -129,11 +136,12 @@ async function handleGet(req, res) {
         });
         
         const tree = buildCommentTree(updatedComments);
-        const count = await Comment.countDocuments({ ...query, parentId: null });
+        // Count ALL comments (including replies) for the total
+        const totalCount = await Comment.countDocuments(query);
 
         return res.status(200).json({
             success: true,
-            count,
+            count: totalCount,
             data: tree
         });
     } catch (error) {

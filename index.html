@@ -1709,18 +1709,47 @@
         </div>
     </div>
     
-    <!-- Avatar Picker Popup -->
+    <!-- Avatar Picker Modal - Redesigned -->
     <div class="avatar-picker-modal" id="avatar-picker-modal">
         <div class="avatar-picker-content">
             <div class="avatar-picker-header">
-                <h3><i class="fas fa-paw"></i> Choose Your Avatar</h3>
-                <button class="avatar-picker-close" id="avatar-picker-close">&times;</button>
+                <div class="avatar-picker-title">
+                    <i class="fas fa-paw"></i>
+                    <span>CHOOSE AVATAR</span>
+                </div>
+                <button class="avatar-picker-close" id="avatar-picker-close">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
+            
+            <!-- Current Selection Preview -->
+            <div class="avatar-picker-preview">
+                <div class="avatar-preview-current" id="avatar-preview-current">
+                    <span class="avatar-preview-initial">?</span>
+                </div>
+                <div class="avatar-preview-info">
+                    <span class="avatar-preview-label">Selected</span>
+                    <span class="avatar-preview-name" id="avatar-preview-name">None</span>
+                </div>
+            </div>
+            
+            <!-- Search -->
             <div class="avatar-search-container">
+                <i class="fas fa-search"></i>
                 <input type="text" id="avatar-search" placeholder="Search animals..." class="avatar-search-input">
             </div>
+            
+            <!-- Animal Grid -->
             <div class="avatar-grid" id="avatar-grid">
                 <!-- Animal avatars will be populated by JavaScript -->
+            </div>
+            
+            <!-- Footer with Save Button -->
+            <div class="avatar-picker-footer">
+                <button class="avatar-cancel-btn" id="avatar-cancel-btn">Cancel</button>
+                <button class="avatar-save-btn" id="avatar-save-btn" disabled>
+                    <i class="fas fa-check"></i> Save Avatar
+                </button>
             </div>
         </div>
     </div>

@@ -86,7 +86,11 @@ const Auth = {
             avatarPickerModal: document.getElementById('avatar-picker-modal'),
             avatarPickerClose: document.getElementById('avatar-picker-close'),
             avatarGrid: document.getElementById('avatar-grid'),
-            avatarSearch: document.getElementById('avatar-search')
+            avatarSearch: document.getElementById('avatar-search'),
+            avatarPreviewCurrent: document.getElementById('avatar-preview-current'),
+            avatarPreviewName: document.getElementById('avatar-preview-name'),
+            avatarSaveBtn: document.getElementById('avatar-save-btn'),
+            avatarCancelBtn: document.getElementById('avatar-cancel-btn')
         };
     },
 
@@ -145,6 +149,12 @@ const Auth = {
         this.elements.avatarPickerModal?.addEventListener('click', (e) => {
             if (e.target === this.elements.avatarPickerModal) this.closeAvatarPicker();
         });
+        
+        // Avatar picker cancel button
+        this.elements.avatarCancelBtn?.addEventListener('click', () => this.closeAvatarPicker());
+        
+        // Avatar picker save button
+        this.elements.avatarSaveBtn?.addEventListener('click', () => this.saveAvatarSelection());
 
         // Avatar search
         this.elements.avatarSearch?.addEventListener('input', (e) => this.filterAvatars(e.target.value));
@@ -855,12 +865,26 @@ const Auth = {
      * Open avatar picker popup
      */
     openAvatarPicker() {
+        // Store the current selection to restore if cancelled
+        this.tempAvatarSelection = null;
+        
         // Populate the avatar grid
         this.populateAvatarGrid();
+        
+        // Update preview with current avatar
+        this.updateAvatarPickerPreview(this.user?.profileAnimal);
+        
+        // Disable save button initially (no selection made yet)
+        if (this.elements.avatarSaveBtn) {
+            this.elements.avatarSaveBtn.disabled = true;
+        }
+        
         this.elements.avatarPickerModal?.classList.add('active');
+        
         // Clear search and focus it
         if (this.elements.avatarSearch) {
             this.elements.avatarSearch.value = '';
+            this.elements.avatarSearch.focus();
         }
     },
 
@@ -868,7 +892,29 @@ const Auth = {
      * Close avatar picker popup
      */
     closeAvatarPicker() {
+        this.tempAvatarSelection = null;
         this.elements.avatarPickerModal?.classList.remove('active');
+    },
+    
+    /**
+     * Update the preview in the avatar picker
+     */
+    updateAvatarPickerPreview(animalName) {
+        const animals = window.app?.state?.animals || [];
+        const animal = animals.find(a => a.name.toLowerCase() === animalName?.toLowerCase());
+        
+        if (this.elements.avatarPreviewCurrent) {
+            if (animal?.image) {
+                this.elements.avatarPreviewCurrent.innerHTML = `<img src="${animal.image}" alt="${animal.name}">`;
+            } else {
+                const initial = this.user?.displayName?.[0]?.toUpperCase() || '?';
+                this.elements.avatarPreviewCurrent.innerHTML = `<span class="avatar-preview-initial">${initial}</span>`;
+            }
+        }
+        
+        if (this.elements.avatarPreviewName) {
+            this.elements.avatarPreviewName.textContent = animal?.name || 'None';
+        }
     },
 
     /**
@@ -941,7 +987,7 @@ const Auth = {
             ? animals.filter(a => a.name.toLowerCase().includes(filter.toLowerCase()))
             : animals;
 
-        // Sort: selected first, then alphabetically
+        // Sort: current avatar first, then alphabetically
         const sorted = [...filteredAnimals].sort((a, b) => {
             const aSelected = a.name.toLowerCase() === currentAnimal;
             const bSelected = b.name.toLowerCase() === currentAnimal;
@@ -950,8 +996,8 @@ const Auth = {
             return a.name.localeCompare(b.name);
         });
 
-        // Render grid - show pending selection if any
-        const selectedAnimal = this.pendingChanges.profileAnimal ?? currentAnimal;
+        // Render grid - show temp selection if any, otherwise current
+        const selectedAnimal = this.tempAvatarSelection?.toLowerCase() ?? currentAnimal;
         this.elements.avatarGrid.innerHTML = sorted.slice(0, 100).map(animal => {
             const isSelected = animal.name.toLowerCase() === selectedAnimal?.toLowerCase();
             return `
@@ -978,27 +1024,83 @@ const Auth = {
     },
 
     /**
-     * Select an avatar (just marks as pending, doesn't save yet)
+     * Select an avatar (marks as temp selection in picker)
      */
     selectAvatar(animalName) {
-        this.pendingChanges.profileAnimal = animalName;
+        this.tempAvatarSelection = animalName;
 
         // Update visual selection in grid
         this.elements.avatarGrid?.querySelectorAll('.avatar-option').forEach(option => {
             option.classList.toggle('selected', option.dataset.animal === animalName);
         });
 
-        // Update preview avatar on profile page
-        const profilePic = document.getElementById('retro-profile-pic');
-        if (profilePic) {
-            this.updateAvatarDisplay(profilePic, animalName);
+        // Update the preview in the picker
+        this.updateAvatarPickerPreview(animalName);
+        
+        // Enable save button
+        if (this.elements.avatarSaveBtn) {
+            this.elements.avatarSaveBtn.disabled = false;
         }
-
-        // Close the avatar picker popup
-        this.closeAvatarPicker();
-
-        // Update save button state
-        this.updateSaveButtonState();
+    },
+    
+    /**
+     * Save the avatar selection (called when clicking Save in picker)
+     */
+    async saveAvatarSelection() {
+        if (!this.tempAvatarSelection || !this.token) return;
+        
+        const animalName = this.tempAvatarSelection;
+        const btn = this.elements.avatarSaveBtn;
+        
+        // Show loading state
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        }
+        
+        try {
+            const response = await fetch('/api/auth?action=updateProfile', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.token}`
+                },
+                body: JSON.stringify({ profileAnimal: animalName })
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                // Update local user data
+                this.user.profileAnimal = animalName;
+                
+                // Update avatar display on profile page
+                const profilePic = document.getElementById('retro-profile-pic');
+                if (profilePic) {
+                    this.updateAvatarDisplay(profilePic, animalName);
+                }
+                
+                // Update avatar in the stats bar
+                this.updateUserStatsBar();
+                
+                // Close the picker
+                this.closeAvatarPicker();
+                
+                // Show success message
+                this.showToast('Avatar updated!');
+            } else {
+                this.showToast(result.error || 'Failed to update avatar');
+            }
+        } catch (error) {
+            console.error('Avatar save error:', error);
+            this.showToast('Failed to save avatar');
+        } finally {
+            // Reset button
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-check"></i> Save Avatar';
+            }
+        }
     },
 
     /**
