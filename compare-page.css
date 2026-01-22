@@ -1127,12 +1127,13 @@
     color: var(--cv-team-right);
 }
 
-.intro-vs-badge {
+/* Scoped to compare overlay only - don't affect tournament intro */
+#compareIntroOverlay .intro-vs-badge {
     opacity: 0;
     transform: scale(0);
 }
 
-.intro-vs-badge.animate-in {
+#compareIntroOverlay .intro-vs-badge.animate-in {
     animation: vsPop 0.3s ease-out forwards;
 }
 

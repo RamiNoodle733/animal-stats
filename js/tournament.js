@@ -721,19 +721,22 @@ class TournamentManager {
         this.currentAnimal1 = animal1;
         this.currentAnimal2 = animal2;
         
-        // Get fighter cards and reset all visual states BEFORE updating content
+        // Get fighter cards and reset all visual states
         const fighter1Card = this.getFighterCard(1);
         const fighter2Card = this.getFighterCard(2);
         
-        // Clear all classes from previous match (including mobile selection glow)
+        // Clear all classes from previous match
         if (fighter1Card) {
-            fighter1Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected', 'slide-in-left');
+            fighter1Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected', 'slide-in-left', 'slide-in-right', 'entrance-ready');
+            // Hide cards initially for entrance animation after intro
+            fighter1Card.classList.add('entrance-ready');
         }
         if (fighter2Card) {
-            fighter2Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected', 'slide-in-right');
+            fighter2Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected', 'slide-in-left', 'slide-in-right', 'entrance-ready');
+            fighter2Card.classList.add('entrance-ready');
         }
         
-        // Update fighter cards BEFORE showing intro so old content doesn't flash
+        // Update fighter cards with new animals (cards are hidden via entrance-ready class)
         this.updateFighterCard(1, animal1);
         this.updateFighterCard(2, animal2);
         
@@ -857,7 +860,7 @@ class TournamentManager {
     }
     
     /**
-     * Display the actual match UI (called after intro)
+     * Display the actual match UI (called after intro fades out)
      */
     displayMatch(animal1, animal2) {
         // Reset guess for new match
@@ -871,22 +874,8 @@ class TournamentManager {
         const fighter1Card = this.getFighterCard(1);
         const fighter2Card = this.getFighterCard(2);
         
-        // Reset any previous selection/winner/loser styling and prepare for entrance
-        if (fighter1Card) {
-            fighter1Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected', 'slide-in-left');
-        }
-        if (fighter2Card) {
-            fighter2Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected', 'slide-in-right');
-        }
-        
         // Hide rating change displays
         this.hideRatingChanges();
-        
-        // Update fighter 1
-        this.updateFighterCard(1, animal1);
-        
-        // Update fighter 2
-        this.updateFighterCard(2, animal2);
         
         // Highlight stat winners for each row
         this.highlightStatWinners(animal1, animal2);
@@ -897,14 +886,14 @@ class TournamentManager {
         // Load majority vote data for this matchup
         this.loadMatchupVotes(animal1.name, animal2.name);
         
-        // Play entrance animation - force reflow then add classes
+        // Trigger entrance animation - remove entrance-ready and add slide-in
         requestAnimationFrame(() => {
             if (fighter1Card) {
-                fighter1Card.offsetHeight; // Force reflow
+                fighter1Card.classList.remove('entrance-ready');
                 fighter1Card.classList.add('slide-in-left');
             }
             if (fighter2Card) {
-                fighter2Card.offsetHeight; // Force reflow
+                fighter2Card.classList.remove('entrance-ready');
                 fighter2Card.classList.add('slide-in-right');
             }
             
@@ -1333,7 +1322,7 @@ class TournamentManager {
         
         // Battles count (now inside .record-value span)
         if (battlesEl) {
-            const totalBattles = (rankingItem?.wins || 0) + (rankingItem?.losses || 0) || animal.totalBattles || 0;
+            const totalBattles = rankingItem?.totalFights || animal.totalBattles || 0;
             battlesEl.textContent = totalBattles;
         }
         
@@ -1884,11 +1873,11 @@ class TournamentManager {
         
         // Remove entrance animation classes before adding winner/loser
         if (winnerEl) {
-            winnerEl.classList.remove('slide-in-left', 'slide-in-right');
+            winnerEl.classList.remove('slide-in-left', 'slide-in-right', 'entrance-ready');
             winnerEl.classList.add('winner');
         }
         if (loserEl) {
-            loserEl.classList.remove('slide-in-left', 'slide-in-right');
+            loserEl.classList.remove('slide-in-left', 'slide-in-right', 'entrance-ready');
             loserEl.classList.add('loser');
         }
         
@@ -1987,10 +1976,10 @@ class TournamentManager {
         const fighter2Card = this.getFighterCard(2);
         
         if (fighter1Card) {
-            fighter1Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected', 'slide-in-left', 'slide-in-right');
+            fighter1Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected', 'slide-in-left', 'slide-in-right', 'entrance-ready');
         }
         if (fighter2Card) {
-            fighter2Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected', 'slide-in-left', 'slide-in-right');
+            fighter2Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected', 'slide-in-left', 'slide-in-right', 'entrance-ready');
         }
         
         this.currentMatch++;
