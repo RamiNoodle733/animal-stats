@@ -1059,7 +1059,7 @@ const Auth = {
         }
         
         try {
-            const response = await fetch('/api/auth?action=updateProfile', {
+            const response = await fetch('/api/auth?action=profile', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
