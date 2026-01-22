@@ -2787,7 +2787,8 @@ body {
     color: rgba(255, 255, 255, 0.3);
 }
 
-.avatar-picker-preview img {
+/* Profile page trigger preview image */
+.avatar-picker-trigger .avatar-picker-preview img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -2944,9 +2945,9 @@ body {
 }
 
 .avatar-picker-modal .avatar-preview-current img {
-    width: 85%;
-    height: 85%;
-    object-fit: contain;
+    width: 85% !important;
+    height: 85% !important;
+    object-fit: contain !important;
 }
 
 .avatar-picker-modal .avatar-preview-current .avatar-preview-initial {
