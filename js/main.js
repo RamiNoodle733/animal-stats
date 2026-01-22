@@ -2529,8 +2529,35 @@ class AnimalStatsApp {
      */
     goToUserProfile(username) {
         if (username) {
+            // Close any open modals first
+            this.closeAllModals();
             window.Router?.navigate(`/profile/${encodeURIComponent(username)}`);
         }
+    }
+    
+    /**
+     * Close all open modals
+     */
+    closeAllModals() {
+        // Close comments modal
+        const commentsModal = document.getElementById('comments-modal');
+        if (commentsModal) commentsModal.classList.remove('show');
+        
+        // Close auth modal
+        const authModal = document.getElementById('auth-modal');
+        if (authModal) authModal.classList.remove('show');
+        
+        // Close avatar picker
+        const avatarPicker = document.getElementById('avatar-picker-modal');
+        if (avatarPicker) avatarPicker.classList.remove('show');
+        
+        // Close inline comments panels
+        document.querySelectorAll('.inline-comments-panel').forEach(panel => panel.remove());
+        document.querySelectorAll('.ranking-row.comments-expanded').forEach(row => row.classList.remove('comments-expanded'));
+        
+        // Close any thread detail view in community
+        const threadDetail = document.getElementById('thread-detail');
+        if (threadDetail) threadDetail.classList.remove('active');
     }
     
     /**

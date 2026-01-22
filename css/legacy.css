@@ -17794,6 +17794,19 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     display: flex !important;
 }
 
+/* Glow effect at the top of the public profile view (mimics header shadow) */
+#public-profile-view::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: linear-gradient(180deg, rgba(0, 212, 255, 0.15) 0%, transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
 .public-profile-page {
     position: relative;
     width: 100%;
