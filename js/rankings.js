@@ -851,6 +851,17 @@ class RankingsManager {
                     if (result.data.length > 3) {
                         listEl.innerHTML += `<div class="inline-more-comments">+ ${result.data.length - 3} more comments</div>`;
                     }
+                    
+                    // Add click handlers for clickable avatars/authors
+                    listEl.querySelectorAll('.clickable-avatar, .clickable-author').forEach(el => {
+                        el.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const username = el.dataset.username;
+                            if (username && window.app?.goToUserProfile) {
+                                window.app.goToUserProfile(username);
+                            }
+                        });
+                    });
                 }
             }
         } catch (error) {
@@ -867,6 +878,7 @@ class RankingsManager {
     createInlineCommentHTML(comment) {
         const displayName = comment.isAnonymous ? 'Anonymous' : 
             (comment.authorUsername || comment.author?.displayName || 'Unknown');
+        const authorUsername = comment.author?.username || comment.authorUsername || null;
         const timeAgo = this.getTimeAgo(new Date(comment.createdAt));
         const profileAnimal = comment.author?.profileAnimal || comment.profileAnimal;
         
@@ -880,21 +892,32 @@ class RankingsManager {
             avatarHtml = `<span>${displayName[0].toUpperCase()}</span>`;
         }
         
+        // Clickable author
+        const isClickable = !comment.isAnonymous && authorUsername;
+        const avatarClass = isClickable ? 'inline-comment-avatar clickable-avatar' : 'inline-comment-avatar';
+        const nameClass = isClickable ? 'inline-comment-author clickable-author' : 'inline-comment-author';
+        const usernameAttr = isClickable ? `data-username="${authorUsername}"` : '';
+        
         // Replies HTML
         let repliesHtml = '';
         if (comment.replies && comment.replies.length > 0) {
             repliesHtml = `<div class="inline-comment-replies">
                 ${comment.replies.slice(0, 2).map(r => {
                     const rName = r.isAnonymous ? 'Anonymous' : (r.authorUsername || 'Unknown');
+                    const rUsername = r.author?.username || r.authorUsername || null;
                     const rTime = this.getTimeAgo(new Date(r.createdAt));
                     const rProfile = r.author?.profileAnimal || r.profileAnimal;
                     let rAvatar = r.isAnonymous ? '<i class="fas fa-user-secret"></i>' : 
                         (rProfile?.image ? `<img src="${rProfile.image}" alt="">` : `<span>${rName[0].toUpperCase()}</span>`);
+                    const rIsClickable = !r.isAnonymous && rUsername;
+                    const rAvatarClass = rIsClickable ? 'inline-comment-avatar small clickable-avatar' : 'inline-comment-avatar small';
+                    const rNameClass = rIsClickable ? 'inline-comment-author clickable-author' : 'inline-comment-author';
+                    const rUsernameAttr = rIsClickable ? `data-username="${rUsername}"` : '';
                     return `
                         <div class="inline-reply-item">
-                            <div class="inline-comment-avatar small">${rAvatar}</div>
+                            <div class="${rAvatarClass}" ${rUsernameAttr}>${rAvatar}</div>
                             <div class="inline-reply-content">
-                                <span class="inline-comment-author">${rName}</span>
+                                <span class="${rNameClass}" ${rUsernameAttr}>${rName}</span>
                                 <span class="inline-comment-time">${rTime}</span>
                                 <p class="inline-comment-text">${this.escapeHtml(r.content)}</p>
                             </div>
@@ -907,10 +930,10 @@ class RankingsManager {
         
         return `
             <div class="inline-comment-item ${comment.isAnonymous ? 'anonymous' : ''}">
-                <div class="inline-comment-avatar">${avatarHtml}</div>
+                <div class="${avatarClass}" ${usernameAttr}>${avatarHtml}</div>
                 <div class="inline-comment-content">
                     <div class="inline-comment-meta">
-                        <span class="inline-comment-author">${displayName}</span>
+                        <span class="${nameClass}" ${usernameAttr}>${displayName}</span>
                         <span class="inline-comment-time">${timeAgo}</span>
                     </div>
                     <p class="inline-comment-text">${this.escapeHtml(comment.content)}</p>
@@ -1625,6 +1648,7 @@ class RankingsManager {
         // Handle anonymous vs regular display
         const displayName = comment.isAnonymous ? 'Anonymous' : 
             (comment.authorUsername || comment.author?.displayName || comment.author?.username || 'Unknown');
+        const authorUsername = comment.author?.username || comment.authorUsername || null;
         const authorInitial = comment.isAnonymous ? '?' : displayName[0].toUpperCase();
         const timeAgo = this.getTimeAgo(new Date(comment.createdAt));
         const authorId = comment.authorId || comment.author?.userId;
@@ -1651,11 +1675,17 @@ class RankingsManager {
         const roleBadge = comment.author?.role === 'admin' ? '<span class="comment-badge admin">Admin</span>' : 
                           comment.author?.role === 'moderator' ? '<span class="comment-badge mod">Mod</span>' : '';
         
+        // Clickable author (if not anonymous and has username)
+        const isClickable = !comment.isAnonymous && authorUsername;
+        const avatarClass = isClickable ? 'comment-avatar clickable-avatar' : 'comment-avatar';
+        const nameClass = isClickable ? 'comment-author-name clickable-author' : 'comment-author-name';
+        const usernameAttr = isClickable ? `data-username="${authorUsername}"` : '';
+        
         div.innerHTML = `
             <div class="comment-header" ${userIdAttr}>
                 <div class="comment-author">
-                    <span class="comment-avatar">${avatarHtml}</span>
-                    <span class="comment-author-name">${displayName}</span>
+                    <span class="${avatarClass}" ${usernameAttr}>${avatarHtml}</span>
+                    <span class="${nameClass}" ${usernameAttr}>${displayName}</span>
                     ${roleBadge}
                     <span class="comment-dot">•</span>
                     <span class="comment-date">${timeAgo}</span>
@@ -1688,6 +1718,17 @@ class RankingsManager {
         div.querySelector('.downvote-btn').addEventListener('click', () => this.handleCommentVote(comment._id, 'downvote'));
         div.querySelector('.reply-btn').addEventListener('click', () => this.handleReply(comment));
         div.querySelector('.delete-btn')?.addEventListener('click', (e) => this.handleDelete(e));
+
+        // Add click handlers for clickable avatars and names
+        div.querySelectorAll('.clickable-avatar, .clickable-author').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const username = el.dataset.username;
+                if (username && window.app?.goToUserProfile) {
+                    window.app.goToUserProfile(username);
+                }
+            });
+        });
 
         // Render nested replies
         if (comment.replies && comment.replies.length > 0) {

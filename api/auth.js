@@ -75,8 +75,14 @@ module.exports = async function handler(req, res) {
                 }
                 return await handlePrestige(req, res);
             
+            case 'user':
+                if (req.method !== 'GET') {
+                    return res.status(405).json({ success: false, error: 'Method not allowed' });
+                }
+                return await handleGetPublicProfile(req, res);
+            
             default:
-                return res.status(400).json({ success: false, error: 'Invalid action. Use ?action=login, signup, me, profile, rewards, or prestige' });
+                return res.status(400).json({ success: false, error: 'Invalid action. Use ?action=login, signup, me, profile, rewards, prestige, or user' });
         }
     } catch (error) {
         console.error('Auth error:', error);
@@ -629,5 +635,49 @@ async function handlePrestige(req, res) {
         success: true,
         data: buildProgressionPayload(updatedUser),
         message: `🌟 Prestige ${updatedUser.prestige}! You earned ${prestigeResult.prestigeReward.bp} BP!`
+    });
+}
+
+// ==================== GET PUBLIC PROFILE ====================
+async function handleGetPublicProfile(req, res) {
+    const { username } = req.query;
+    
+    if (!username) {
+        return res.status(400).json({ success: false, error: 'Username is required' });
+    }
+
+    // Find user by username (case-insensitive)
+    const user = await User.findOne({ 
+        username: { $regex: new RegExp(`^${username}$`, 'i') }
+    });
+    
+    if (!user) {
+        return res.status(404).json({ success: false, error: 'User not found' });
+    }
+
+    // XP calculations
+    const xpProgress = user.xp || 0;
+    const xpNeeded = xpToNext(user.level || 1);
+
+    // Return public profile data (no sensitive info like email)
+    res.status(200).json({
+        success: true,
+        data: {
+            user: {
+                id: user._id,
+                username: user.username,
+                displayName: user.displayName || user.username,
+                profileAnimal: user.profileAnimal || null,
+                level: user.level || 1,
+                prestige: user.prestige || 0,
+                xp: user.xp || 0,
+                xpToNext: xpNeeded,
+                xpProgress,
+                xpNeeded,
+                xpPercentage: Math.min(100, Math.round((xpProgress / xpNeeded) * 100)),
+                role: user.role,
+                createdAt: user.createdAt
+            }
+        }
     });
 }

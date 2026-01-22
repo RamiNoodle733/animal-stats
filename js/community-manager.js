@@ -667,17 +667,35 @@ class CommunityManager {
                 }
             });
         });
+        
+        // Clickable avatars and author names (navigate to profile)
+        container.querySelectorAll('.clickable-avatar, .clickable-author').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const username = e.currentTarget.dataset.username;
+                if (username && window.app?.goToUserProfile) {
+                    window.app.goToUserProfile(username);
+                }
+            });
+        });
     }
     
     // Unified post card renderer for both chat and comments
     renderFeedPostCard(item, type = 'chat') {
         const isChat = type === 'chat';
         const username = item.authorUsername || item.author?.username || 'Anonymous';
+        const authorUsername = item.author?.username || item.authorUsername || null;
         const initial = username.charAt(0).toUpperCase();
         const time = this.formatTime(item.createdAt);
         const profileAnimal = item.author?.profileAnimal || item.profileAnimal;
         const avatarHtml = this.getUserAvatarHtml(profileAnimal, initial);
         const authorId = item.authorId || item.author?._id;
+        
+        // Clickable author
+        const isClickable = authorUsername && username !== 'Anonymous';
+        const avatarClass = isClickable ? 'feed-post-avatar clickable-avatar' : 'feed-post-avatar';
+        const usernameClass = isClickable ? 'feed-post-username clickable-author' : 'feed-post-username';
+        const usernameAttr = isClickable ? `data-username="${authorUsername}"` : '';
         
         // Score calculation
         const score = item.score || 0;
@@ -737,10 +755,10 @@ class CommunityManager {
             <div class="feed-post-card thread-comment ${hasAnimalContext ? 'has-animal-context' : ''} ${hasReplies ? 'has-replies' : ''}" data-id="${item._id}">
                 <div class="thread-content">
                     <div class="feed-post-header">
-                        <div class="feed-post-avatar">${avatarHtml}</div>
+                        <div class="${avatarClass}" ${usernameAttr}>${avatarHtml}</div>
                         <div class="feed-post-meta">
                             <div class="feed-post-author">
-                                <span class="feed-post-username">${this.escapeHtml(username)}</span>
+                                <span class="${usernameClass}" ${usernameAttr}>${this.escapeHtml(username)}</span>
                                 ${item.author?.role === 'admin' ? '<span class="feed-post-badge admin">Admin</span>' : ''}
                                 ${item.author?.role === 'moderator' ? '<span class="feed-post-badge mod">Mod</span>' : ''}
                             </div>
@@ -778,10 +796,17 @@ class CommunityManager {
     // Render a threaded reply (Reddit-style)
     renderThreadReply(reply) {
         const username = reply.authorUsername || reply.author?.username || 'Anonymous';
+        const authorUsername = reply.author?.username || reply.authorUsername || null;
         const initial = username.charAt(0).toUpperCase();
         const time = this.formatTime(reply.createdAt);
         const profileAnimal = reply.author?.profileAnimal || reply.profileAnimal;
         const avatarHtml = this.getUserAvatarHtml(profileAnimal, initial);
+        
+        // Clickable author
+        const isClickable = authorUsername && username !== 'Anonymous';
+        const avatarClass = isClickable ? 'thread-reply-avatar clickable-avatar' : 'thread-reply-avatar';
+        const usernameClass = isClickable ? 'thread-reply-username clickable-author' : 'thread-reply-username';
+        const usernameAttr = isClickable ? `data-username="${authorUsername}"` : '';
         
         // Score calculation
         const score = reply.score || 0;
@@ -813,8 +838,8 @@ class CommunityManager {
                 <div class="thread-line"></div>
                 <div class="thread-content">
                     <div class="thread-reply-header">
-                        <div class="thread-reply-avatar">${avatarHtml}</div>
-                        <span class="thread-reply-username">${this.escapeHtml(username)}</span>
+                        <div class="${avatarClass}" ${usernameAttr}>${avatarHtml}</div>
+                        <span class="${usernameClass}" ${usernameAttr}>${this.escapeHtml(username)}</span>
                         ${reply.author?.role === 'admin' ? '<span class="feed-post-badge admin">Admin</span>' : ''}
                         ${reply.author?.role === 'moderator' ? '<span class="feed-post-badge mod">Mod</span>' : ''}
                         <span class="thread-reply-dot">•</span>
@@ -1137,11 +1162,23 @@ class CommunityManager {
                 this.openAnimalComments(animalName, animalId, animalImage, commentId);
             });
         });
+        
+        // Add click handlers for clickable avatars and author names
+        container.querySelectorAll('.clickable-avatar, .clickable-author').forEach(el => {
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const username = e.currentTarget.dataset.username;
+                if (username && window.app?.goToUserProfile) {
+                    window.app.goToUserProfile(username);
+                }
+            });
+        });
     }
 
     renderFeedItem(comment) {
         const initial = comment.isAnonymous ? '?' : (comment.authorUsername?.charAt(0).toUpperCase() || '?');
         const authorName = comment.isAnonymous ? 'Anonymous' : comment.authorUsername;
+        const authorUsername = comment.author?.username || comment.authorUsername || null;
         const time = this.formatTime(comment.createdAt);
         const animalImage = comment.animalImage || FALLBACK_IMAGE;
         const animalId = comment.animalId || '';
@@ -1151,6 +1188,12 @@ class CommunityManager {
         const avatarHtml = this.getUserAvatarHtml(profileAnimal, initial, comment.isAnonymous);
         const authorId = comment.authorId || comment.author?._id;
         const userIdAttr = authorId ? `data-user-id="${authorId}"` : '';
+        
+        // Clickable author (if not anonymous)
+        const isClickable = !comment.isAnonymous && authorUsername;
+        const avatarClass = isClickable ? 'feed-comment-avatar clickable-avatar' : 'feed-comment-avatar';
+        const nameClass = isClickable ? 'feed-comment-author-name clickable-author' : 'feed-comment-author-name';
+        const usernameAttr = isClickable ? `data-username="${authorUsername}"` : '';
         
         // Score display
         const score = comment.score || 0;
@@ -1190,10 +1233,10 @@ class CommunityManager {
                     </button>
                 </div>
                 <div class="feed-comment-main" ${userIdAttr}>
-                    <div class="feed-comment-avatar">${avatarHtml}</div>
+                    <div class="${avatarClass}" ${usernameAttr}>${avatarHtml}</div>
                     <div class="feed-comment-body">
                         <div class="feed-comment-author">
-                            <span class="feed-comment-author-name">${this.escapeHtml(authorName)}</span>
+                            <span class="${nameClass}" ${usernameAttr}>${this.escapeHtml(authorName)}</span>
                             <span class="feed-comment-time">${time}</span>
                         </div>
                         <div class="feed-comment-content">${this.escapeHtml(comment.content)}</div>
@@ -1219,6 +1262,7 @@ class CommunityManager {
     renderFeedReply(reply) {
         const initial = reply.isAnonymous ? '?' : (reply.authorUsername?.charAt(0).toUpperCase() || '?');
         const authorName = reply.isAnonymous ? 'Anonymous' : reply.authorUsername;
+        const authorUsername = reply.author?.username || reply.authorUsername || null;
         const time = this.formatTime(reply.createdAt);
         
         // Profile animal for avatar
@@ -1227,11 +1271,17 @@ class CommunityManager {
         const authorId = reply.authorId || reply.author?._id;
         const userIdAttr = authorId ? `data-user-id="${authorId}"` : '';
         
+        // Clickable author (if not anonymous)
+        const isClickable = !reply.isAnonymous && authorUsername;
+        const avatarClass = isClickable ? 'feed-reply-avatar clickable-avatar' : 'feed-reply-avatar';
+        const nameClass = isClickable ? 'feed-reply-author clickable-author' : 'feed-reply-author';
+        const usernameAttr = isClickable ? `data-username="${authorUsername}"` : '';
+        
         return `
             <div class="feed-reply" ${userIdAttr}>
                 <div class="feed-reply-header">
-                    <div class="feed-reply-avatar">${avatarHtml}</div>
-                    <span class="feed-reply-author">${this.escapeHtml(authorName)}</span>
+                    <div class="${avatarClass}" ${usernameAttr}>${avatarHtml}</div>
+                    <span class="${nameClass}" ${usernameAttr}>${this.escapeHtml(authorName)}</span>
                     <span class="feed-reply-time">${time}</span>
                 </div>
                 <div class="feed-reply-content">${this.escapeHtml(reply.content)}</div>

@@ -372,21 +372,37 @@ class AnimalStatsApp {
             }
         });
 
-        // Profile route
+        // Profile route - own profile (redirects to /profile/username)
         router.on('/profile', () => {
             // If not logged in, redirect to login
             if (!window.Auth || !window.Auth.isLoggedIn()) {
                 router.navigate('/login');
                 return;
             }
-            // Show profile view
-            this.switchView('profile', false);
-            // Initialize profile page with fresh data
-            if (window.Auth.initProfilePage) {
-                window.Auth.initProfilePage();
+            // Redirect to /profile/username for consistency
+            const user = window.Auth.getUser();
+            if (user?.username) {
+                router.navigate(`/profile/${encodeURIComponent(user.username)}`, { replace: true });
             }
-            // Update profile page data
-            this.updateProfilePage();
+        });
+
+        // Profile route - view specific user profile
+        router.on('/profile/:username', (params) => {
+            const username = params.username;
+            const currentUser = window.Auth?.getUser();
+            const isOwnProfile = currentUser && currentUser.username.toLowerCase() === username.toLowerCase();
+            
+            if (isOwnProfile) {
+                // Show editable own profile
+                this.switchView('profile', false);
+                if (window.Auth.initProfilePage) {
+                    window.Auth.initProfilePage();
+                }
+                this.updateProfilePage();
+            } else {
+                // Show public profile view
+                this.showPublicProfile(username);
+            }
         });
 
         // Login route
@@ -844,6 +860,21 @@ class AnimalStatsApp {
             retroProfilePic.addEventListener('click', () => {
                 if (window.Auth) {
                     window.Auth.openAvatarPicker();
+                }
+            });
+        }
+        
+        // Public profile modal close button
+        const publicProfileClose = document.getElementById('public-profile-close');
+        const publicProfileModal = document.getElementById('public-profile-modal');
+        if (publicProfileClose) {
+            publicProfileClose.addEventListener('click', () => this.closePublicProfile());
+        }
+        // Close on backdrop click
+        if (publicProfileModal) {
+            publicProfileModal.addEventListener('click', (e) => {
+                if (e.target === publicProfileModal) {
+                    this.closePublicProfile();
                 }
             });
         }
@@ -2314,6 +2345,127 @@ class AnimalStatsApp {
         const editUsername = document.getElementById('retro-username');
         if (editDisplayName) editDisplayName.value = displayName;
         if (editUsername) editUsername.value = user.username || '';
+    }
+    
+    /**
+     * Show public profile for a user
+     */
+    async showPublicProfile(username) {
+        const modal = document.getElementById('public-profile-modal');
+        const loading = document.getElementById('public-profile-loading');
+        const error = document.getElementById('public-profile-error');
+        const errorText = document.getElementById('public-profile-error-text');
+        const data = document.getElementById('public-profile-data');
+        
+        if (!modal) return;
+        
+        // Show modal with loading state
+        modal.classList.add('active');
+        loading.style.display = 'flex';
+        error.style.display = 'none';
+        data.style.display = 'none';
+        
+        try {
+            const response = await fetch(`/api/auth?action=user&username=${encodeURIComponent(username)}`);
+            const result = await response.json();
+            
+            if (!result.success) {
+                throw new Error(result.error || 'Failed to load profile');
+            }
+            
+            const user = result.data.user;
+            
+            // Update avatar
+            const avatar = document.getElementById('public-profile-avatar');
+            if (avatar) {
+                if (user.profileAnimal && this.state?.animals) {
+                    const animal = this.state.animals.find(a => 
+                        a.name.toLowerCase() === user.profileAnimal.toLowerCase()
+                    );
+                    if (animal?.image) {
+                        avatar.innerHTML = `<img src="${animal.image}" alt="${user.profileAnimal}">`;
+                    } else {
+                        avatar.innerHTML = `<i class="fas fa-user-circle"></i>`;
+                    }
+                } else {
+                    avatar.innerHTML = `<i class="fas fa-user-circle"></i>`;
+                }
+            }
+            
+            // Update name
+            const name = document.getElementById('public-profile-name');
+            if (name) name.textContent = user.displayName || user.username;
+            
+            // Update badges
+            const badges = document.getElementById('public-profile-badges');
+            if (badges) {
+                let badgeHtml = '';
+                if (user.role === 'admin') {
+                    badgeHtml += '<span class="public-profile-badge admin">Admin</span>';
+                } else if (user.role === 'moderator') {
+                    badgeHtml += '<span class="public-profile-badge mod">Moderator</span>';
+                }
+                if (user.prestige > 0) {
+                    badgeHtml += `<span class="public-profile-badge" style="background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000;">⭐ Prestige ${user.prestige}</span>`;
+                }
+                badges.innerHTML = badgeHtml;
+            }
+            
+            // Update stats
+            const level = document.getElementById('public-profile-level');
+            const prestige = document.getElementById('public-profile-prestige');
+            if (level) level.textContent = user.level || 1;
+            if (prestige) prestige.textContent = user.prestige || 0;
+            
+            // Update XP bar
+            const xpFill = document.getElementById('public-profile-xp-fill');
+            const xpText = document.getElementById('public-profile-xp-text');
+            const xpPercentage = user.xpPercentage || 0;
+            if (xpFill) xpFill.style.width = `${xpPercentage}%`;
+            if (xpText) xpText.textContent = `${user.xp || 0} / ${user.xpNeeded || 100} XP`;
+            
+            // Update joined date
+            const joined = document.getElementById('public-profile-joined');
+            if (joined && user.createdAt) {
+                const date = new Date(user.createdAt);
+                joined.textContent = date.toLocaleDateString('en-US', { 
+                    month: 'long', 
+                    day: 'numeric', 
+                    year: 'numeric' 
+                });
+            }
+            
+            // Show data
+            loading.style.display = 'none';
+            data.style.display = 'flex';
+            
+        } catch (err) {
+            console.error('Error loading public profile:', err);
+            loading.style.display = 'none';
+            error.style.display = 'flex';
+            errorText.textContent = err.message || 'User not found';
+        }
+    }
+    
+    /**
+     * Close public profile modal
+     */
+    closePublicProfile() {
+        const modal = document.getElementById('public-profile-modal');
+        if (modal) {
+            modal.classList.remove('active');
+        }
+        // Navigate back
+        window.Router?.back();
+    }
+    
+    /**
+     * Navigate to a user's profile
+     */
+    goToUserProfile(username) {
+        if (username) {
+            window.Router?.navigate(`/profile/${encodeURIComponent(username)}`);
+        }
     }
     
     /**

@@ -1709,6 +1709,69 @@
         </div>
     </div>
     
+    <!-- Public Profile Modal -->
+    <div class="public-profile-modal" id="public-profile-modal">
+        <div class="public-profile-content">
+            <div class="public-profile-header">
+                <div class="public-profile-title">
+                    <i class="fas fa-user"></i>
+                    <span>USER PROFILE</span>
+                </div>
+                <button class="public-profile-close" id="public-profile-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="public-profile-body">
+                <!-- Loading State -->
+                <div class="public-profile-loading" id="public-profile-loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <span>Loading profile...</span>
+                </div>
+                
+                <!-- Error State -->
+                <div class="public-profile-error" id="public-profile-error" style="display: none;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span id="public-profile-error-text">User not found</span>
+                </div>
+                
+                <!-- Profile Content -->
+                <div class="public-profile-data" id="public-profile-data" style="display: none;">
+                    <div class="public-profile-avatar" id="public-profile-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="public-profile-name" id="public-profile-name">Username</div>
+                    <div class="public-profile-badges" id="public-profile-badges"></div>
+                    
+                    <div class="public-profile-stats">
+                        <div class="public-profile-stat">
+                            <span class="stat-value" id="public-profile-level">1</span>
+                            <span class="stat-label">Level</span>
+                        </div>
+                        <div class="public-profile-stat">
+                            <span class="stat-value" id="public-profile-prestige">0</span>
+                            <span class="stat-label">Prestige</span>
+                        </div>
+                    </div>
+                    
+                    <div class="public-profile-xp">
+                        <div class="xp-bar-container">
+                            <div class="xp-bar-fill" id="public-profile-xp-fill"></div>
+                        </div>
+                        <div class="xp-text" id="public-profile-xp-text">0 / 100 XP</div>
+                    </div>
+                    
+                    <div class="public-profile-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>Joined <span id="public-profile-joined">Unknown</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Avatar Picker Modal - Redesigned -->
     <div class="avatar-picker-modal" id="avatar-picker-modal">
         <div class="avatar-picker-content">
