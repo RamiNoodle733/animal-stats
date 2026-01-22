@@ -271,8 +271,16 @@ class TournamentManager {
         this.dom.playAgainBtn?.addEventListener('click', () => this.showSetup());
         this.dom.closeResultsBtn?.addEventListener('click', () => this.hideModal());
         
-        // Guess mode toggle
-        this.dom.guessToggle?.addEventListener('click', () => this.toggleGuessMode());
+        // Guess mode toggle - make entire section clickable
+        const guessSection = document.getElementById('t-guess-section');
+        if (guessSection) {
+            guessSection.addEventListener('click', () => this.toggleGuessMode());
+        }
+        // Also keep toggle button working for backwards compatibility
+        this.dom.guessToggle?.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent double-toggle
+            this.toggleGuessMode();
+        });
         
         // Filter search input
         this.dom.filterSearch?.addEventListener('input', (e) => this.filterChips(e.target.value));
@@ -296,7 +304,11 @@ class TournamentManager {
      */
     toggleGuessMode() {
         this.guessModeEnabled = !this.guessModeEnabled;
+        
+        // Update both the toggle button and section active state
         this.dom.guessToggle?.classList.toggle('active', this.guessModeEnabled);
+        const guessSection = document.getElementById('t-guess-section');
+        guessSection?.classList.toggle('active', this.guessModeEnabled);
         
         if (this.dom.guessPrompt) {
             this.dom.guessPrompt.style.display = this.guessModeEnabled ? 'block' : 'none';
@@ -981,6 +993,53 @@ class TournamentManager {
     }
     
     /**
+     * Show visual feedback for guess result (correct/incorrect)
+     */
+    showGuessResultFeedback(result) {
+        // Create or get feedback element
+        let feedback = document.getElementById('t-guess-result');
+        if (!feedback) {
+            feedback = document.createElement('div');
+            feedback.id = 't-guess-result';
+            feedback.className = 't-guess-result';
+            document.body.appendChild(feedback);
+        }
+        
+        // Set content based on result
+        if (result === 'correct') {
+            feedback.innerHTML = `
+                <div class="guess-result-icon correct">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="guess-result-text">
+                    <span class="guess-result-title">Correct!</span>
+                    <span class="guess-result-subtitle">You predicted the majority</span>
+                </div>
+            `;
+            feedback.className = 't-guess-result correct';
+        } else {
+            feedback.innerHTML = `
+                <div class="guess-result-icon incorrect">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <div class="guess-result-text">
+                    <span class="guess-result-title">Wrong</span>
+                    <span class="guess-result-subtitle">Better luck next time!</span>
+                </div>
+            `;
+            feedback.className = 't-guess-result incorrect';
+        }
+        
+        // Show with animation
+        feedback.classList.add('show');
+        
+        // Hide after delay
+        setTimeout(() => {
+            feedback.classList.remove('show');
+        }, 1800);
+    }
+    
+    /**
      * Hide rating change displays on fighter cards
      */
     hideRatingChanges() {
@@ -1433,7 +1492,9 @@ class TournamentManager {
                     Auth.showModal('login');
                     return;
                 }
-                await this.handleTournamentVote(animal, 'up', upvoteBtn, downvoteBtn, fighterNum);
+                // If already active, clear the vote instead
+                const voteType = upvoteBtn.classList.contains('active') ? 'clear' : 'up';
+                await this.handleTournamentVote(animal, voteType, upvoteBtn, downvoteBtn, fighterNum);
             };
         }
         
@@ -1445,22 +1506,34 @@ class TournamentManager {
                     Auth.showModal('login');
                     return;
                 }
-                await this.handleTournamentVote(animal, 'down', upvoteBtn, downvoteBtn, fighterNum);
+                // If already active, clear the vote instead
+                const voteType = downvoteBtn.classList.contains('active') ? 'clear' : 'down';
+                await this.handleTournamentVote(animal, voteType, upvoteBtn, downvoteBtn, fighterNum);
             };
         }
         
         // Comments handler - use RankingsManager openCommentsModal
         if (commentsBtn) {
-            commentsBtn.onclick = () => {
-                const rankingsManager = this.app.rankingsManager;
-                if (rankingsManager && rankingsManager.openCommentsModal) {
-                    // Create a fake event with the button as currentTarget
-                    rankingsManager.openCommentsModal({ currentTarget: commentsBtn });
-                } else {
-                    // Fallback: Navigate to rankings tab and show comments
-                    this.app.switchView('rankings');
-                    Auth.showToast('View comments on the Rankings page');
+            const openComments = () => {
+                try {
+                    const rankingsManager = this.app.rankingsManager;
+                    if (rankingsManager && rankingsManager.openCommentsModal && rankingsManager.dom?.commentsModal) {
+                        // Create a fake event with the button as currentTarget
+                        rankingsManager.openCommentsModal({ currentTarget: commentsBtn });
+                    } else {
+                        // Fallback: show toast with instructions
+                        Auth.showToast(`View ${animalName} comments on Rankings page`);
+                    }
+                } catch (error) {
+                    console.error('Error opening comments modal:', error);
+                    Auth.showToast(`View ${animalName} comments on Rankings page`);
                 }
+            };
+            commentsBtn.onclick = openComments;
+            // Also handle touch events for mobile
+            commentsBtn.ontouchend = (e) => {
+                e.preventDefault();
+                openComments();
             };
         }
         
@@ -1688,13 +1761,19 @@ class TournamentManager {
         
         // If guess mode is active, check guess before recording battle
         // Only count guesses if there were prior votes (can't guess majority of nothing)
+        let guessResult = null;
         if (this.guessModeEnabled && this.currentGuess !== null && this.currentMatchupVotes && this.currentMatchupVotes.totalVotes > 0) {
             this.totalGuesses++;
             // Check if user guessed the majority choice
             const majorityIndex = this.getMajorityWinner();
             if (this.currentGuess === majorityIndex) {
                 this.correctGuesses++;
+                guessResult = 'correct';
+            } else {
+                guessResult = 'incorrect';
             }
+            // Show guess result feedback
+            this.showGuessResultFeedback(guessResult);
         }
         
         // Reveal community vote percentages with animation (pass which fighter was selected)
@@ -1815,8 +1894,29 @@ class TournamentManager {
         if (fighter1Card) fighter1Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected');
         if (fighter2Card) fighter2Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected');
         
+        // Clear old content immediately before showing intro to prevent flash of old animals
+        this.clearFighterCardsForTransition();
+        
         this.currentMatch++;
         this.showCurrentMatch();
+    }
+    
+    /**
+     * Clear fighter cards content to prevent flash of old animals during transition
+     */
+    clearFighterCardsForTransition() {
+        // Fade out current content
+        const fighter1Card = this.getFighterCard(1);
+        const fighter2Card = this.getFighterCard(2);
+        
+        if (fighter1Card) fighter1Card.style.opacity = '0';
+        if (fighter2Card) fighter2Card.style.opacity = '0';
+        
+        // Reset opacity after a small delay (intro animation will cover this)
+        setTimeout(() => {
+            if (fighter1Card) fighter1Card.style.opacity = '';
+            if (fighter2Card) fighter2Card.style.opacity = '';
+        }, 100);
     }
     
     async recordBattle(winnerName, loserName) {

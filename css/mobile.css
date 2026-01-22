@@ -3281,13 +3281,22 @@
     
     .t-info-panel .ability-tag-sm,
     .t-info-panel .trait-tag-sm {
-        padding: 1px 2px !important;
-        font-size: 0.25rem !important; /* SMALLER tags to fit */
-        border-radius: 2px !important;
+        padding: 2px 4px !important;
+        font-size: 0.55rem !important;
+        border-radius: 3px !important;
         white-space: nowrap !important;
+        flex-shrink: 1 !important;
+        min-width: 0 !important;
+    }
+    
+    /* Container for abilities/traits - ensure proper layout */
+    .t-info-panel .abilities-tags-compact,
+    .t-info-panel .traits-tags-compact {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        gap: 3px !important;
         overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        max-width: 42px !important; /* Narrower to fit */
+        max-width: 100% !important;
     }
     
     /* Tournament record - very compact */
