@@ -104,6 +104,46 @@
     letter-spacing: 1px;
 }
 
+/* ==================== COMING SOON BANNER ==================== */
+.bp-coming-soon-banner {
+    max-width: 600px;
+    margin: 0 auto 30px;
+    padding: 30px 40px;
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 107, 0, 0.1) 100%);
+    border: 2px solid rgba(255, 193, 7, 0.4);
+    border-radius: 16px;
+    text-align: center;
+    animation: comingSoonPulse 3s ease-in-out infinite;
+}
+
+@keyframes comingSoonPulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(255, 193, 7, 0.2); }
+    50% { box-shadow: 0 0 40px rgba(255, 193, 7, 0.4); }
+}
+
+.bp-coming-soon-icon {
+    font-size: 2.5rem;
+    color: #ffc107;
+    margin-bottom: 12px;
+}
+
+.bp-coming-soon-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ffc107;
+    letter-spacing: 4px;
+    margin: 0 0 8px;
+    text-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
+}
+
+.bp-coming-soon-text {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+}
+
 /* ==================== BALANCE SECTION ==================== */
 .bp-balance-section {
     padding: 0 20px 30px;
@@ -174,6 +214,12 @@
     padding: 0 20px 40px;
     max-width: 1200px;
     margin: 0 auto;
+}
+
+/* Preview mode (greyed out) */
+.bp-packs-section.bp-packs-preview {
+    opacity: 0.6;
+    pointer-events: none;
 }
 
 .bp-packs-title {
@@ -253,6 +299,22 @@
 .bp-pack-card.best-value:hover {
     border-color: rgba(255, 215, 0, 0.8);
     box-shadow: 0 8px 40px rgba(255, 107, 0, 0.3);
+}
+
+/* Disabled pack card (Coming Soon) */
+.bp-pack-card.bp-pack-disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    filter: grayscale(30%);
+}
+
+.bp-pack-card.bp-pack-disabled:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.bp-pack-card.bp-pack-disabled .bp-pack-coin {
+    filter: grayscale(40%);
 }
 
 /* Ribbon */

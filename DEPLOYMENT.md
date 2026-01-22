@@ -243,59 +243,18 @@ Defines:
 |----------|----------|-------------|
 | `MONGODB_URI` | Yes | MongoDB connection string |
 | `JWT_SECRET` | Yes | Secret key for JWT authentication |
-| `STRIPE_SECRET_KEY` | For payments | Stripe API secret key (starts with `sk_`) |
-| `STRIPE_WEBHOOK_SECRET` | For payments | Stripe webhook signing secret (starts with `whsec_`) |
-| `APP_BASE_URL` | For payments | Base URL for redirects (e.g., `https://animalbattlestats.com`) |
 | `NODE_ENV` | No | Environment (development/production) |
 
-### Stripe Payment Setup
+### Battle Points Shop (Coming Soon)
 
-To enable the Battle Points shop with Stripe payments:
+The Battle Points shop is currently disabled due to Vercel Hobby plan limits (max 12 serverless functions).
+When upgrading to Vercel Pro, the following will need to be configured:
 
-1. **Create a Stripe Account**
-   - Go to [Stripe Dashboard](https://dashboard.stripe.com/)
-   - Sign up for an account
+- `STRIPE_SECRET_KEY` - Stripe API secret key
+- `STRIPE_WEBHOOK_SECRET` - Stripe webhook signing secret
+- `APP_BASE_URL` - Base URL for redirects
 
-2. **Get API Keys**
-   - In the Stripe Dashboard, go to Developers > API Keys
-   - Copy your **Secret key** (starts with `sk_test_` for test mode or `sk_live_` for production)
-   - Add it to Vercel as `STRIPE_SECRET_KEY`
-
-3. **Set Up Webhooks**
-   - Go to Developers > Webhooks > Add endpoint
-   - Endpoint URL: `https://animalbattlestats.com/api/battlepoints?action=webhook`
-   - Events to listen for:
-     - `checkout.session.completed`
-     - `charge.refunded`
-     - `charge.dispute.created`
-   - Copy the **Signing secret** (starts with `whsec_`)
-   - Add it to Vercel as `STRIPE_WEBHOOK_SECRET`
-
-4. **Testing Payments Locally**
-   ```bash
-   # Install Stripe CLI
-   brew install stripe/stripe-cli/stripe
-   
-   # Login to Stripe
-   stripe login
-   
-   # Forward webhooks to your local server
-   stripe listen --forward-to localhost:3000/api/battlepoints?action=webhook
-   
-   # The CLI will display a webhook signing secret - use that for local testing
-   ```
-
-5. **Test Card Numbers**
-   - Success: `4242 4242 4242 4242`
-   - Requires authentication: `4000 0025 0000 3155`
-   - Declined: `4000 0000 0000 0002`
-   - Use any future expiry date and any 3-digit CVC
-
-6. **Verifying BP Is Granted Only After Webhook**
-   - Make a test purchase
-   - Check MongoDB `purchases` collection for status transitions: `pending` → `paid` → `fulfilled`
-   - Check `bptransactions` collection for the grant record
-   - BP should only appear after status is `fulfilled`
+See git history for the full Stripe integration code that was prepared.
 
 ## 🛠️ Development
 
