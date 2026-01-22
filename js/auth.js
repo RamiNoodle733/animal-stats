@@ -904,8 +904,10 @@ const Auth = {
         const animal = animals.find(a => a.name.toLowerCase() === animalName?.toLowerCase());
         
         if (this.elements.avatarPreviewCurrent) {
-            if (animal?.image) {
-                this.elements.avatarPreviewCurrent.innerHTML = `<img src="${animal.image}" alt="${animal.name}">`;
+            if (animal?.image && !animal.image.includes('via.placeholder')) {
+                this.elements.avatarPreviewCurrent.innerHTML = `<img src="${animal.image}" alt="${animal.name}" onerror="this.src=FALLBACK_IMAGE">`;
+            } else if (animal) {
+                this.elements.avatarPreviewCurrent.innerHTML = `<img src="${FALLBACK_IMAGE}" alt="${animal.name}">`;
             } else {
                 const initial = this.user?.displayName?.[0]?.toUpperCase() || '?';
                 this.elements.avatarPreviewCurrent.innerHTML = `<span class="avatar-preview-initial">${initial}</span>`;
@@ -1000,12 +1002,13 @@ const Auth = {
         const selectedAnimal = this.tempAvatarSelection?.toLowerCase() ?? currentAnimal;
         this.elements.avatarGrid.innerHTML = sorted.slice(0, 100).map(animal => {
             const isSelected = animal.name.toLowerCase() === selectedAnimal?.toLowerCase();
+            const imgSrc = (animal.image && !animal.image.includes('via.placeholder')) ? animal.image : FALLBACK_IMAGE;
             return `
                 <div class="avatar-option ${isSelected ? 'selected' : ''}" 
                      data-animal="${animal.name}" 
                      title="${animal.name}">
-                    <img src="${animal.image}" alt="${animal.name}" loading="lazy"
-                         onerror="this.src='https://via.placeholder.com/70?text=?'">
+                    <img src="${imgSrc}" alt="${animal.name}" loading="lazy"
+                         onerror="this.src=FALLBACK_IMAGE">
                 </div>
             `;
         }).join('');
