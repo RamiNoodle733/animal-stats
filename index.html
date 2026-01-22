@@ -1692,30 +1692,18 @@
                     <span class="reply-text">Replying to...</span>
                     <button class="cancel-reply-btn" id="cancel-reply"><i class="fas fa-times"></i></button>
                 </div>
-                <div class="comment-input-wrapper">
-                    <textarea id="comment-input" placeholder="Share your thoughts about this animal..." maxlength="500" autocomplete="off" data-lpignore="true" data-1p-ignore="true" data-form-type="other" name="animal-comment-field"></textarea>
-                    <div class="comment-input-actions">
-                        <div class="comment-input-icons">
-                            <button class="comment-emoji-btn" title="Add emoji" type="button">
-                                <i class="far fa-smile"></i>
-                            </button>
-                            <button class="comment-gif-btn" title="Add GIF" type="button">
-                                <i class="fas fa-image"></i>
-                            </button>
-                        </div>
-                    </div>
+                <div class="comment-input-row">
+                    <textarea id="comment-input" placeholder="Share your thoughts..." maxlength="500" autocomplete="off" data-lpignore="true" data-1p-ignore="true" data-form-type="other" name="animal-comment-field"></textarea>
+                    <button class="comment-submit-btn" id="comment-submit">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
                 </div>
                 <div class="comment-form-footer">
                     <label class="anonymous-toggle">
                         <input type="checkbox" id="anonymous-checkbox">
                         <i class="fas fa-mask"></i><span>Anonymous</span>
                     </label>
-                    <div class="comment-form-right">
-                        <span class="char-count"><span id="char-count">0</span>/500</span>
-                        <button class="comment-submit-btn" id="comment-submit">
-                            <i class="fas fa-paper-plane"></i> Post
-                        </button>
-                    </div>
+                    <span class="char-count"><span id="char-count">0</span>/500</span>
                 </div>
             </div>
         </div>
