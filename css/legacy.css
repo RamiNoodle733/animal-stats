@@ -2926,6 +2926,9 @@ body {
 .avatar-preview-current {
     width: 64px;
     height: 64px;
+    min-width: 64px;
+    min-height: 64px;
+    flex-shrink: 0;
     border-radius: 50%;
     background: linear-gradient(135deg, #1a1f2e, #0f1419);
     border: 3px solid rgba(0, 212, 255, 0.4);
@@ -2934,6 +2937,8 @@ body {
     justify-content: center;
     overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+    position: relative;
+    z-index: 1;
 }
 
 .avatar-preview-current img {
@@ -2952,6 +2957,9 @@ body {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    overflow: hidden;
+    flex: 1;
+    min-width: 0;
 }
 
 .avatar-preview-label {
@@ -2966,6 +2974,9 @@ body {
     font-size: 1.1rem;
     font-weight: 600;
     color: #00d4ff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Search Container */
