@@ -2805,6 +2805,16 @@
         padding: 6px 4px 8px 4px !important;
         overflow: hidden !important; /* Contain images */
         position: relative !important;
+        /* Reset tap/focus effects to prevent lingering glow */
+        -webkit-tap-highlight-color: transparent !important;
+        outline: none !important;
+    }
+    
+    /* Clear focus state that could cause lingering glow */
+    .t-fighter-card:focus,
+    .t-fighter-card:active {
+        outline: none !important;
+        -webkit-tap-highlight-color: transparent !important;
     }
     
     .t-fighter-card.left { order: 1 !important; }
@@ -3478,8 +3488,8 @@
     
     /* VS in center */
     .intro-vs-container {
-        width: 60px !important;
-        height: 60px !important;
+        width: 70px !important;
+        height: 70px !important;
         flex-shrink: 0 !important;
         order: 0 !important; /* Keep in middle */
         position: absolute !important;
@@ -3490,15 +3500,24 @@
     }
     
     .intro-vs-badge {
-        width: 60px !important;
-        height: 60px !important;
+        width: 65px !important;
+        height: 65px !important;
+        overflow: visible !important;
     }
     
     .intro-vs-badge span {
-        font-size: 1.5rem !important;
+        font-size: 1.6rem !important;
+        font-weight: 700 !important;
+        color: #ffffff !important;
         text-shadow: 
-            2px 2px 0 rgba(0, 0, 0, 0.7),
-            0 0 20px rgba(255, 255, 255, 0.8) !important;
+            2px 2px 0 #000,
+            -1px -1px 0 #000,
+            1px -1px 0 #000,
+            -1px 1px 0 #000,
+            0 0 20px rgba(255, 255, 255, 0.9) !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        z-index: 10 !important;
     }
     
     .intro-vs-burst {

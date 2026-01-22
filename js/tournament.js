@@ -41,6 +41,10 @@ class TournamentManager {
         this.totalGuesses = 0;
         this.hasVotedOnMatchup = false;  // Track if user has voted on current matchup
         
+        // Vote protection flags
+        this.isVotingLocked = false;    // Prevents spam clicking
+        this.isMatchReady = false;      // Prevents voting before intro finishes
+        
         // DOM Elements - V4 Tournament UI
         this.dom = {
             modal: document.getElementById('tournament-modal'),
@@ -523,6 +527,9 @@ class TournamentManager {
         this.correctGuesses = 0;
         this.totalGuesses = 0;
         this.currentMatchupVotes = null;
+        // Reset vote protection
+        this.isVotingLocked = false;
+        this.isMatchReady = false;
     }
     
     reset() {
@@ -703,12 +710,28 @@ class TournamentManager {
             return;
         }
         
+        // Lock voting until match is fully ready
+        this.isMatchReady = false;
+        this.isVotingLocked = false;
+        
         const match = this.bracket[this.currentMatch];
         const [animal1, animal2] = match;
         
         // Store current animals
         this.currentAnimal1 = animal1;
         this.currentAnimal2 = animal2;
+        
+        // Get fighter cards and reset all visual states BEFORE updating content
+        const fighter1Card = this.getFighterCard(1);
+        const fighter2Card = this.getFighterCard(2);
+        
+        // Clear all classes from previous match (including mobile selection glow)
+        if (fighter1Card) {
+            fighter1Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected', 'slide-in-left');
+        }
+        if (fighter2Card) {
+            fighter2Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected', 'slide-in-right');
+        }
         
         // Update fighter cards BEFORE showing intro so old content doesn't flash
         this.updateFighterCard(1, animal1);
@@ -848,9 +871,13 @@ class TournamentManager {
         const fighter1Card = this.getFighterCard(1);
         const fighter2Card = this.getFighterCard(2);
         
-        // Reset any previous selection styling
-        if (fighter1Card) fighter1Card.classList.remove('selected', 'eliminated', 'winner', 'loser');
-        if (fighter2Card) fighter2Card.classList.remove('selected', 'eliminated', 'winner', 'loser');
+        // Reset any previous selection/winner/loser styling and prepare for entrance
+        if (fighter1Card) {
+            fighter1Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected', 'slide-in-left');
+        }
+        if (fighter2Card) {
+            fighter2Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected', 'slide-in-right');
+        }
         
         // Hide rating change displays
         this.hideRatingChanges();
@@ -870,7 +897,22 @@ class TournamentManager {
         // Load majority vote data for this matchup
         this.loadMatchupVotes(animal1.name, animal2.name);
         
-        // Cards ready - no extra animation delay needed (intro already provided transition)
+        // Play entrance animation - force reflow then add classes
+        requestAnimationFrame(() => {
+            if (fighter1Card) {
+                fighter1Card.offsetHeight; // Force reflow
+                fighter1Card.classList.add('slide-in-left');
+            }
+            if (fighter2Card) {
+                fighter2Card.offsetHeight; // Force reflow
+                fighter2Card.classList.add('slide-in-right');
+            }
+            
+            // Enable voting after entrance animation completes (400ms)
+            setTimeout(() => {
+                this.isMatchReady = true;
+            }, 400);
+        });
     }
     
     /**
@@ -1000,6 +1042,7 @@ class TournamentManager {
     
     /**
      * Show visual feedback for guess result (correct/incorrect)
+     * Also triggers vote bar animation
      */
     showGuessResultFeedback(result) {
         // Create or get feedback element
@@ -1035,10 +1078,45 @@ class TournamentManager {
         // Show with animation
         feedback.classList.add('show');
         
+        // Trigger vote bar celebration/shake animation
+        this.animateVoteBarResult(result === 'correct' || result === 'tie');
+        
         // Hide after delay
         setTimeout(() => {
             feedback.classList.remove('show');
         }, 1800);
+    }
+    
+    /**
+     * Animate the vote bar based on guess result
+     */
+    animateVoteBarResult(isWin) {
+        const voteBar = document.querySelector('.t-vote-bar');
+        const voteSection = document.querySelector('.t-guess-vote-row');
+        
+        if (!voteBar) return;
+        
+        // Remove any existing animation classes
+        voteBar.classList.remove('guess-win', 'guess-lose');
+        if (voteSection) voteSection.classList.remove('guess-win-section', 'guess-lose-section');
+        
+        // Force reflow
+        voteBar.offsetHeight;
+        
+        // Add appropriate animation class
+        if (isWin) {
+            voteBar.classList.add('guess-win');
+            if (voteSection) voteSection.classList.add('guess-win-section');
+        } else {
+            voteBar.classList.add('guess-lose');
+            if (voteSection) voteSection.classList.add('guess-lose-section');
+        }
+        
+        // Remove animation classes after animation completes
+        setTimeout(() => {
+            voteBar.classList.remove('guess-win', 'guess-lose');
+            if (voteSection) voteSection.classList.remove('guess-win-section', 'guess-lose-section');
+        }, 1500);
     }
     
     /**
@@ -1742,6 +1820,19 @@ class TournamentManager {
     }
 
     selectWinner(fighterIndex) {
+        // Prevent spam clicking - check voting lock
+        if (this.isVotingLocked) {
+            return;
+        }
+        
+        // Prevent voting before match is ready (intro still playing)
+        if (!this.isMatchReady) {
+            return;
+        }
+        
+        // Lock voting immediately to prevent double clicks
+        this.isVotingLocked = true;
+        
         const match = this.bracket[this.currentMatch];
         const winner = match[fighterIndex];
         const loser = match[1 - fighterIndex];
@@ -1791,8 +1882,15 @@ class TournamentManager {
         const winnerEl = this.getFighterCard(fighterIndex === 0 ? 1 : 2);
         const loserEl = this.getFighterCard(fighterIndex === 0 ? 2 : 1);
         
-        if (winnerEl) winnerEl.classList.add('winner');
-        if (loserEl) loserEl.classList.add('loser');
+        // Remove entrance animation classes before adding winner/loser
+        if (winnerEl) {
+            winnerEl.classList.remove('slide-in-left', 'slide-in-right');
+            winnerEl.classList.add('winner');
+        }
+        if (loserEl) {
+            loserEl.classList.remove('slide-in-left', 'slide-in-right');
+            loserEl.classList.add('loser');
+        }
         
         // Record battle to API and show in-card animation
         this.recordBattleWithInCardAnimation(winner, loser, fighterIndex);
@@ -1884,12 +1982,16 @@ class TournamentManager {
      * Proceed to the next match after rating animation
      */
     proceedToNextMatch() {
-        // Reset fighter card classes
+        // Reset fighter card classes (clear ALL possible visual states)
         const fighter1Card = this.getFighterCard(1);
         const fighter2Card = this.getFighterCard(2);
         
-        if (fighter1Card) fighter1Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected');
-        if (fighter2Card) fighter2Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected');
+        if (fighter1Card) {
+            fighter1Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected', 'slide-in-left', 'slide-in-right');
+        }
+        if (fighter2Card) {
+            fighter2Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected', 'slide-in-left', 'slide-in-right');
+        }
         
         this.currentMatch++;
         this.showCurrentMatch();
