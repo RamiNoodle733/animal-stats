@@ -2163,26 +2163,25 @@
                 
                 <!-- Center Column: Guess → Vote → VS -->
                 <div class="t-battle-center">
-                    <div class="t-guess-section" id="t-guess-section">
-                        <button class="t-guess-toggle" id="t-guess-toggle">
-                            <i class="fas fa-brain"></i>
-                            <span>Guess Majority</span>
-                            <div class="t-toggle-switch" id="t-toggle-switch"></div>
-                        </button>
-                        <div class="t-guess-prompt" id="t-guess-prompt" style="display: none;">
-                            <span>Who did the crowd pick?</span>
+                    <!-- Unified Guess + Vote Row (matches mobile design) -->
+                    <div class="t-guess-vote-row" id="t-guess-vote-row">
+                        <div class="t-guess-section" id="t-guess-section">
+                            <button class="t-guess-toggle" id="t-guess-toggle">
+                                <i class="fas fa-brain"></i>
+                                <span>Guess Majority</span>
+                            </button>
                         </div>
-                    </div>
-                    
-                    <div class="t-community-vote">
-                        <div class="t-vote-stats">
-                            <span class="t-vote-pct" id="t-majority-pct-left">?%</span>
-                            <span class="t-vote-total" id="t-majority-total">No votes yet</span>
-                            <span class="t-vote-pct" id="t-majority-pct-right">?%</span>
-                        </div>
-                        <div class="t-vote-bar">
-                            <div class="t-vote-fill left" id="t-majority-left" style="width: 50%;"></div>
-                            <div class="t-vote-fill right" id="t-majority-right" style="width: 50%;"></div>
+                        
+                        <div class="t-community-vote">
+                            <div class="t-vote-stats">
+                                <span class="t-vote-pct" id="t-majority-pct-left">?%</span>
+                                <span class="t-vote-total" id="t-majority-total">Community Vote</span>
+                                <span class="t-vote-pct" id="t-majority-pct-right">?%</span>
+                            </div>
+                            <div class="t-vote-bar">
+                                <div class="t-vote-fill left" id="t-majority-left" style="width: 50%;"></div>
+                                <div class="t-vote-fill right" id="t-majority-right" style="width: 50%;"></div>
+                            </div>
                         </div>
                     </div>
                     

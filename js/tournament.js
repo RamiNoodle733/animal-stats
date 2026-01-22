@@ -271,16 +271,11 @@ class TournamentManager {
         this.dom.playAgainBtn?.addEventListener('click', () => this.showSetup());
         this.dom.closeResultsBtn?.addEventListener('click', () => this.hideModal());
         
-        // Guess mode toggle - make entire section clickable
-        const guessSection = document.getElementById('t-guess-section');
-        if (guessSection) {
-            guessSection.addEventListener('click', () => this.toggleGuessMode());
+        // Guess mode toggle - make entire row clickable (desktop)
+        const guessVoteRow = document.getElementById('t-guess-vote-row');
+        if (guessVoteRow) {
+            guessVoteRow.addEventListener('click', () => this.toggleGuessMode());
         }
-        // Also keep toggle button working for backwards compatibility
-        this.dom.guessToggle?.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent double-toggle
-            this.toggleGuessMode();
-        });
         
         // Filter search input
         this.dom.filterSearch?.addEventListener('input', (e) => this.filterChips(e.target.value));
@@ -305,19 +300,20 @@ class TournamentManager {
     toggleGuessMode() {
         this.guessModeEnabled = !this.guessModeEnabled;
         
-        // Update both the toggle button and section active state
-        this.dom.guessToggle?.classList.toggle('active', this.guessModeEnabled);
-        const guessSection = document.getElementById('t-guess-section');
-        guessSection?.classList.toggle('active', this.guessModeEnabled);
+        // Update the wrapper row active state (desktop)
+        const guessVoteRow = document.getElementById('t-guess-vote-row');
+        guessVoteRow?.classList.toggle('active', this.guessModeEnabled);
         
-        if (this.dom.guessPrompt) {
-            this.dom.guessPrompt.style.display = this.guessModeEnabled ? 'block' : 'none';
-        }
-        
-        // Highlight majority section when guess mode is active
-        const majoritySection = document.querySelector('.t-majority-section');
-        if (majoritySection) {
-            majoritySection.classList.toggle('guess-mode-active', this.guessModeEnabled);
+        // Also toggle mobile guess section
+        const mobileGuess = document.querySelector('.mobile-guess-section');
+        if (mobileGuess) {
+            mobileGuess.classList.toggle('active', this.guessModeEnabled);
+            const labelSpan = document.querySelector('#mobile-guess-label span');
+            if (labelSpan) {
+                labelSpan.textContent = this.guessModeEnabled 
+                    ? 'Guess mode on!\nPick who you think won' 
+                    : 'Tap to guess majority\nvote';
+            }
         }
         
         // Reset current guess when toggling
@@ -714,6 +710,10 @@ class TournamentManager {
         this.currentAnimal1 = animal1;
         this.currentAnimal2 = animal2;
         
+        // Update fighter cards BEFORE showing intro so old content doesn't flash
+        this.updateFighterCard(1, animal1);
+        this.updateFighterCard(2, animal2);
+        
         // Play intro animation for EVERY match
         this.playMatchIntro(animal1, animal2, () => {
             this.displayMatch(animal1, animal2);
@@ -756,6 +756,20 @@ class TournamentManager {
         
         // Reset animation states
         overlay.classList.remove('fade-out', 'shake');
+        
+        // Reset VS badge animation by briefly removing and re-adding animation class
+        const vsBadge = document.querySelector('.intro-vs-badge');
+        const vsBurst = document.querySelector('.intro-vs-burst');
+        if (vsBadge) {
+            vsBadge.style.animation = 'none';
+            vsBadge.offsetHeight; // Force reflow
+            vsBadge.style.animation = '';
+        }
+        if (vsBurst) {
+            vsBurst.style.animation = 'none';
+            vsBurst.offsetHeight; // Force reflow
+            vsBurst.style.animation = '';
+        }
         
         // Show overlay
         overlay.classList.add('active');
@@ -1514,26 +1528,11 @@ class TournamentManager {
         
         // Comments handler - use RankingsManager openCommentsModal
         if (commentsBtn) {
-            const openComments = () => {
-                try {
-                    const rankingsManager = this.app.rankingsManager;
-                    if (rankingsManager && rankingsManager.openCommentsModal && rankingsManager.dom?.commentsModal) {
-                        // Create a fake event with the button as currentTarget
-                        rankingsManager.openCommentsModal({ currentTarget: commentsBtn });
-                    } else {
-                        // Fallback: show toast with instructions
-                        Auth.showToast(`View ${animalName} comments on Rankings page`);
-                    }
-                } catch (error) {
-                    console.error('Error opening comments modal:', error);
-                    Auth.showToast(`View ${animalName} comments on Rankings page`);
+            commentsBtn.onclick = () => {
+                const rankingsManager = this.app.rankingsManager;
+                if (rankingsManager && rankingsManager.openCommentsModal) {
+                    rankingsManager.openCommentsModal({ currentTarget: commentsBtn });
                 }
-            };
-            commentsBtn.onclick = openComments;
-            // Also handle touch events for mobile
-            commentsBtn.ontouchend = (e) => {
-                e.preventDefault();
-                openComments();
             };
         }
         
@@ -1894,29 +1893,8 @@ class TournamentManager {
         if (fighter1Card) fighter1Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected');
         if (fighter2Card) fighter2Card.classList.remove('selected', 'eliminated', 'winner', 'loser', 'guess-selected');
         
-        // Clear old content immediately before showing intro to prevent flash of old animals
-        this.clearFighterCardsForTransition();
-        
         this.currentMatch++;
         this.showCurrentMatch();
-    }
-    
-    /**
-     * Clear fighter cards content to prevent flash of old animals during transition
-     */
-    clearFighterCardsForTransition() {
-        // Fade out current content
-        const fighter1Card = this.getFighterCard(1);
-        const fighter2Card = this.getFighterCard(2);
-        
-        if (fighter1Card) fighter1Card.style.opacity = '0';
-        if (fighter2Card) fighter2Card.style.opacity = '0';
-        
-        // Reset opacity after a small delay (intro animation will cover this)
-        setTimeout(() => {
-            if (fighter1Card) fighter1Card.style.opacity = '';
-            if (fighter2Card) fighter2Card.style.opacity = '';
-        }, 100);
     }
     
     async recordBattle(winnerName, loserName) {

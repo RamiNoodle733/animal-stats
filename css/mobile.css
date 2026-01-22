@@ -2369,9 +2369,9 @@
         min-height: var(--mobile-touch-min) !important;
     }
     
-    /* Comments modal - must be above everything */
+    /* Comments modal - must be above tournament modal (z-index 2000) */
     .comments-modal {
-        z-index: 10000 !important;
+        z-index: 100000 !important;
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
@@ -2845,6 +2845,7 @@
     }
     
     /* HIDE these in center - show in bottom band */
+    .t-battle-center .t-guess-vote-row,
     .t-battle-center .t-guess-section,
     .t-battle-center .t-community-vote,
     .t-radar-container {
