@@ -1657,39 +1657,25 @@
         </div>
     </div>
     
-    <!-- Comments Modal -->
+    <!-- Comments Modal - Redesigned -->
     <div class="comments-modal" id="comments-modal">
         <div class="comments-modal-content">
-            <button class="comments-modal-close" id="comments-modal-close">&times;</button>
-            
-            <!-- Minimal Comments Header -->
-            <div class="comments-header-minimal">
-                <img id="comments-animal-image" src="" alt="" class="comments-animal-img-hidden" style="display: none;">
-                <span class="comments-title" id="comments-animal-name">Comments</span>
-                <span class="comments-count-badge" id="comments-count">0</span>
+            <!-- Modal Header with HUD styling -->
+            <div class="comments-modal-header">
+                <div class="comments-header-left">
+                    <i class="fas fa-comments"></i>
+                    <span class="comments-title" id="comments-animal-name">COMMENTS</span>
+                    <span class="comments-count-badge" id="comments-count">0</span>
+                </div>
+                <button class="comments-modal-close" id="comments-modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+                <img id="comments-animal-image" src="" alt="" style="display: none;">
             </div>
             
-            <!-- Add Comment Form -->
-            <div class="add-comment-form" id="add-comment-form">
-                <div class="reply-indicator" id="reply-indicator" style="display: none;">
-                    <span class="reply-text">Replying to...</span>
-                    <button class="cancel-reply-btn" id="cancel-reply">&times;</button>
-                </div>
-                <textarea id="comment-input" placeholder="Share your thoughts about this animal..." maxlength="500" autocomplete="off" data-lpignore="true" data-1p-ignore="true" data-form-type="other" name="animal-comment-field"></textarea>
-                <div class="comment-form-footer">
-                    <div class="comment-options">
-                        <label class="anonymous-toggle">
-                            <input type="checkbox" id="anonymous-checkbox">
-                            <i class="fas fa-mask"></i><span>Anonymous</span>
-                        </label>
-                    </div>
-                    <div class="comment-form-right">
-                        <span class="char-count"><span id="char-count">0</span>/500</span>
-                        <button class="comment-submit-btn" id="comment-submit">
-                            <i class="fas fa-paper-plane"></i> Post
-                        </button>
-                    </div>
-                </div>
+            <!-- Comments List (scrollable) -->
+            <div class="comments-list" id="comments-list">
+                <!-- Comments will be populated by JavaScript -->
             </div>
             
             <!-- Comments Login Prompt -->
@@ -1699,9 +1685,38 @@
                 <button class="login-prompt-btn" id="comments-login-btn">LOG IN</button>
             </div>
             
-            <!-- Comments List -->
-            <div class="comments-list" id="comments-list">
-                <!-- Comments will be populated by JavaScript -->
+            <!-- Add Comment Form (at bottom) -->
+            <div class="add-comment-form" id="add-comment-form">
+                <div class="reply-indicator" id="reply-indicator" style="display: none;">
+                    <i class="fas fa-reply"></i>
+                    <span class="reply-text">Replying to...</span>
+                    <button class="cancel-reply-btn" id="cancel-reply"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="comment-input-wrapper">
+                    <textarea id="comment-input" placeholder="Share your thoughts about this animal..." maxlength="500" autocomplete="off" data-lpignore="true" data-1p-ignore="true" data-form-type="other" name="animal-comment-field"></textarea>
+                    <div class="comment-input-actions">
+                        <div class="comment-input-icons">
+                            <button class="comment-emoji-btn" title="Add emoji" type="button">
+                                <i class="far fa-smile"></i>
+                            </button>
+                            <button class="comment-gif-btn" title="Add GIF" type="button">
+                                <i class="fas fa-image"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="comment-form-footer">
+                    <label class="anonymous-toggle">
+                        <input type="checkbox" id="anonymous-checkbox">
+                        <i class="fas fa-mask"></i><span>Anonymous</span>
+                    </label>
+                    <div class="comment-form-right">
+                        <span class="char-count"><span id="char-count">0</span>/500</span>
+                        <button class="comment-submit-btn" id="comment-submit">
+                            <i class="fas fa-paper-plane"></i> Post
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

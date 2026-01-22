@@ -731,10 +731,10 @@ class CommunityManager {
         
         // Reply count for display
         const replyCount = item.replies?.length || 0;
+        const hasReplies = replyCount > 0;
         
         return `
-            <div class="feed-post-card thread-comment ${hasAnimalContext ? 'has-animal-context' : ''}" data-id="${item._id}">
-                <div class="thread-line"></div>
+            <div class="feed-post-card thread-comment ${hasAnimalContext ? 'has-animal-context' : ''} ${hasReplies ? 'has-replies' : ''}" data-id="${item._id}">
                 <div class="thread-content">
                     <div class="feed-post-header">
                         <div class="feed-post-avatar">${avatarHtml}</div>

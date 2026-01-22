@@ -1618,7 +1618,8 @@ class RankingsManager {
 
     createCommentElement(comment, isReply = false) {
         const div = document.createElement('div');
-        div.className = 'comment-item thread-comment' + (isReply ? ' reply-item' : '') + (comment.isAnonymous ? ' anonymous' : '');
+        const hasReplies = comment.replies && comment.replies.length > 0;
+        div.className = 'comment-item' + (isReply ? ' reply-item' : '') + (comment.isAnonymous ? ' anonymous' : '') + (hasReplies ? ' has-replies' : '');
         div.dataset.commentId = comment._id;
 
         // Handle anonymous vs regular display
