@@ -2498,9 +2498,9 @@ class AnimalStatsApp {
         // Show public profile view
         this.dom.publicProfileView?.classList.add('active-view');
         
-        // Hide header, grid, and bottom bar
+        // Keep header visible, but hide grid and bottom bar
         const gameHeader = document.querySelector('.game-header');
-        if (gameHeader) gameHeader.style.display = 'none';
+        if (gameHeader) gameHeader.style.display = '';
         this.dom.gridWrapper?.classList.add('hidden');
         if (this.dom.toggleGridBtn) this.dom.toggleGridBtn.style.display = 'none';
         if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'none';

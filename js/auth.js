@@ -131,10 +131,12 @@ const Auth = {
             if (e.key === 'Enter') this.handleSignup();
         });
 
-        // Profile link - use router for navigation
+        // Profile link - use router for navigation with username
         this.elements.userProfileMini?.addEventListener('click', (e) => {
             e.preventDefault();
-            if (window.Router) {
+            if (window.Router && this.user?.username) {
+                window.Router.navigate(`/profile/${encodeURIComponent(this.user.username)}`);
+            } else if (window.Router) {
                 window.Router.navigate('/profile');
             }
         });
@@ -605,8 +607,8 @@ const Auth = {
                     homeProfileLink.href = `/profile/${encodeURIComponent(this.user.username)}`;
                 }
                 // Update avatar if user has one
-                if (homeProfileAvatar && this.user.profileAnimal) {
-                    homeProfileAvatar.innerHTML = `<img src="/images/animals/${this.user.profileAnimal}.png" alt="Profile">`;
+                if (homeProfileAvatar) {
+                    this.updateAvatarDisplay(homeProfileAvatar, this.user.profileAnimal);
                 }
             }
             
@@ -683,6 +685,11 @@ const Auth = {
 
         // Update avatar
         this.updateAvatarDisplay(this.elements.userAvatarMini, profileAnimal);
+        
+        // Update profile link href with username
+        if (this.elements.userProfileMini && this.user?.username) {
+            this.elements.userProfileMini.href = `/profile/${encodeURIComponent(this.user.username)}`;
+        }
     },
 
     /**
