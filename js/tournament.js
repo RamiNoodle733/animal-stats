@@ -870,15 +870,7 @@ class TournamentManager {
         // Load majority vote data for this matchup
         this.loadMatchupVotes(animal1.name, animal2.name);
         
-        // Add entrance animation
-        if (fighter1Card) fighter1Card.style.animation = 'none';
-        if (fighter2Card) fighter2Card.style.animation = 'none';
-        setTimeout(() => {
-            const f1 = this.getFighterCard(1);
-            const f2 = this.getFighterCard(2);
-            if (f1) f1.style.animation = 'slideInLeft 0.5s ease';
-            if (f2) f2.style.animation = 'slideInRight 0.5s ease';
-        }, 10);
+        // Cards ready - no extra animation delay needed (intro already provided transition)
     }
     
     /**
@@ -1022,24 +1014,20 @@ class TournamentManager {
         // Set content based on result
         if (result === 'correct') {
             feedback.innerHTML = `
-                <div class="guess-result-icon correct">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                <div class="guess-result-text">
-                    <span class="guess-result-title">Correct!</span>
-                    <span class="guess-result-subtitle">You predicted the majority</span>
-                </div>
+                <i class="fas fa-trophy"></i>
+                <span>+10 STREAK</span>
+            `;
+            feedback.className = 't-guess-result correct';
+        } else if (result === 'tie') {
+            feedback.innerHTML = `
+                <i class="fas fa-handshake"></i>
+                <span>TIE - YOU WIN!</span>
             `;
             feedback.className = 't-guess-result correct';
         } else {
             feedback.innerHTML = `
-                <div class="guess-result-icon incorrect">
-                    <i class="fas fa-times-circle"></i>
-                </div>
-                <div class="guess-result-text">
-                    <span class="guess-result-title">Wrong</span>
-                    <span class="guess-result-subtitle">Better luck next time!</span>
-                </div>
+                <i class="fas fa-times"></i>
+                <span>WRONG</span>
             `;
             feedback.className = 't-guess-result incorrect';
         }
@@ -1759,17 +1747,27 @@ class TournamentManager {
         const loser = match[1 - fighterIndex];
         
         // If guess mode is active, check guess before recording battle
-        // Only count guesses if there were prior votes (can't guess majority of nothing)
         let guessResult = null;
-        if (this.guessModeEnabled && this.currentGuess !== null && this.currentMatchupVotes && this.currentMatchupVotes.totalVotes > 0) {
+        if (this.guessModeEnabled && this.currentGuess !== null) {
             this.totalGuesses++;
-            // Check if user guessed the majority choice
-            const majorityIndex = this.getMajorityWinner();
-            if (this.currentGuess === majorityIndex) {
+            
+            // If no votes yet or 50/50 tie, treat user's guess as correct (reward for participating)
+            const hasVotes = this.currentMatchupVotes && this.currentMatchupVotes.totalVotes > 0;
+            const isTie = hasVotes && this.currentMatchupVotes.animal1Votes === this.currentMatchupVotes.animal2Votes;
+            
+            if (!hasVotes || isTie) {
+                // No data or tie - user wins for participating!
                 this.correctGuesses++;
-                guessResult = 'correct';
+                guessResult = 'tie';
             } else {
-                guessResult = 'incorrect';
+                // Check if user guessed the majority choice
+                const majorityIndex = this.getMajorityWinner();
+                if (this.currentGuess === majorityIndex) {
+                    this.correctGuesses++;
+                    guessResult = 'correct';
+                } else {
+                    guessResult = 'incorrect';
+                }
             }
             // Show guess result feedback
             this.showGuessResultFeedback(guessResult);
