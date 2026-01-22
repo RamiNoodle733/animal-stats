@@ -7,11 +7,10 @@
 /* ==================== SHOP PAGE CONTAINER ==================== */
 .bp-shop-page {
     width: 100%;
-    min-height: 100%;
+    height: 100%;
     padding: 0;
     background: linear-gradient(180deg, #0a1525 0%, #050a12 50%, #020408 100%);
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 /* ==================== UNAVAILABLE MODE ==================== */
@@ -20,7 +19,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    height: 100%;
+    overflow: hidden;
 }
 
 .bp-unavailable-overlay {
@@ -29,42 +29,56 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.5);
     z-index: 10;
 }
 
 .bp-unavailable-content {
     text-align: center;
     padding: 40px;
+    background: linear-gradient(135deg, rgba(60, 60, 70, 0.4) 0%, rgba(40, 40, 50, 0.5) 100%);
+    border: 2px solid rgba(180, 180, 200, 0.3);
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+    box-shadow: 
+        0 0 40px rgba(150, 150, 170, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .bp-unavailable-content i {
-    font-size: 4rem;
-    color: #ff4444;
-    margin-bottom: 20px;
-    opacity: 0.8;
+    font-size: 3.5rem;
+    color: #a0a0b0;
+    margin-bottom: 16px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
 }
 
 .bp-unavailable-content h2 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 900;
-    color: #ff4444;
+    color: #c0c0d0;
     letter-spacing: 6px;
-    margin: 0 0 16px;
-    text-shadow: 0 0 30px rgba(255, 68, 68, 0.5);
+    margin: 0 0 12px;
+    text-shadow: 
+        0 0 20px rgba(180, 180, 200, 0.4),
+        0 2px 4px rgba(0, 0, 0, 0.5);
+    background: linear-gradient(180deg, #e0e0f0 0%, #a0a0b0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .bp-unavailable-content p {
     font-family: 'Rajdhani', sans-serif;
-    font-size: 1rem;
-    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.5);
     margin: 0;
 }
 
 .bp-shop-unavailable .bp-packs-section {
-    filter: blur(3px) grayscale(60%);
-    opacity: 0.4;
+    filter: blur(1px) grayscale(30%);
+    opacity: 0.6;
+    pointer-events: none;
 }
 
 @keyframes bpHeroFloat {
@@ -227,14 +241,16 @@
 
 /* ==================== PACKS SECTION ==================== */
 .bp-packs-section {
-    padding: 0 20px 40px;
-    max-width: 1200px;
-    margin: 0 auto;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Preview mode (greyed out) */
 .bp-packs-section.bp-packs-preview {
-    opacity: 0.6;
+    opacity: 0.7;
     pointer-events: none;
 }
 
@@ -250,10 +266,12 @@
 }
 
 .bp-packs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
     justify-content: center;
+    align-items: stretch;
+    flex-wrap: nowrap;
 }
 
 .bp-packs-loading {
@@ -278,12 +296,14 @@
     position: relative;
     background: linear-gradient(180deg, rgba(0, 30, 60, 0.8) 0%, rgba(0, 15, 30, 0.9) 100%);
     border: 2px solid rgba(0, 212, 255, 0.3);
-    border-radius: 16px;
-    padding: 24px 20px;
+    border-radius: 12px;
+    padding: 16px 14px;
     text-align: center;
     transition: all 0.3s ease;
     overflow: hidden;
     cursor: pointer;
+    width: 160px;
+    flex-shrink: 0;
 }
 
 .bp-pack-card::before {
@@ -341,8 +361,8 @@
     background: linear-gradient(90deg, #00d4ff, #00a8cc);
     color: #fff;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.75rem;
-    padding: 4px 40px;
+    font-size: 0.65rem;
+    padding: 3px 36px;
     transform: rotate(45deg);
     letter-spacing: 1px;
     box-shadow: 0 2px 10px rgba(0, 212, 255, 0.3);
@@ -355,12 +375,12 @@
 
 /* Pack Icon */
 .bp-pack-icon {
-    margin-bottom: 16px;
+    margin-bottom: 10px;
 }
 
 .bp-pack-coin {
-    width: 56px;
-    height: 56px;
+    width: 44px;
+    height: 44px;
     margin: 0 auto;
     background: linear-gradient(135deg, #ff6b00, #ff8c00, #ffd700);
     border-radius: 50%;
@@ -378,50 +398,50 @@
 }
 
 .bp-pack-coin .bp-icon {
-    font-size: 1.4rem;
+    font-size: 1.1rem;
     color: #fff;
 }
 
 /* Pack Amount */
 .bp-pack-amount {
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.8rem;
+    font-size: 1.3rem;
     font-weight: 700;
     color: #ffd700;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
     text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
 
 .bp-pack-label {
     font-family: 'Rajdhani', sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     color: rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
     letter-spacing: 2px;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
 }
 
 /* Pack Price */
 .bp-pack-price {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     color: #fff;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     letter-spacing: 1px;
 }
 
 /* Buy Button */
 .bp-pack-btn {
     width: 100%;
-    padding: 12px 24px;
+    padding: 8px 12px;
     background: linear-gradient(180deg, #00d4ff 0%, #0099cc 100%);
     border: none;
-    border-radius: 8px;
+    border-radius: 6px;
     color: #fff;
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.7rem;
     font-weight: 600;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.3s ease;
     text-transform: uppercase;
@@ -666,82 +686,141 @@
 
 /* ==================== RESPONSIVE ==================== */
 @media (max-width: 768px) {
-    .bp-shop-hero {
-        padding: 40px 16px 30px;
+    .bp-unavailable-content {
+        padding: 24px 20px;
+        margin: 0 16px;
     }
     
-    .bp-shop-title {
-        font-size: 1.8rem;
-        letter-spacing: 2px;
+    .bp-unavailable-content i {
+        font-size: 2.5rem;
+        margin-bottom: 12px;
     }
     
-    .bp-shop-subtitle {
-        font-size: 0.95rem;
+    .bp-unavailable-content h2 {
+        font-size: 1.4rem;
+        letter-spacing: 4px;
     }
     
-    .bp-coin-large {
-        width: 64px;
-        height: 64px;
-    }
-    
-    .bp-coin-large .bp-icon {
-        font-size: 1.6rem;
-    }
-    
-    .bp-balance-card {
-        padding: 16px 24px;
-    }
-    
-    .bp-balance-value {
-        font-size: 1.6rem;
-    }
-    
-    .bp-packs-section {
-        padding: 0 16px 30px;
+    .bp-unavailable-content p {
+        font-size: 0.85rem;
     }
     
     .bp-packs-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
+        gap: 10px;
     }
     
     .bp-pack-card {
-        padding: 20px 16px;
+        width: 130px;
+        padding: 12px 10px;
+        border-radius: 10px;
+    }
+    
+    .bp-pack-coin {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .bp-pack-coin .bp-icon {
+        font-size: 1rem;
     }
     
     .bp-pack-amount {
-        font-size: 1.4rem;
+        font-size: 1.1rem;
+    }
+    
+    .bp-pack-label {
+        font-size: 0.65rem;
+        margin-bottom: 8px;
     }
     
     .bp-pack-price {
-        font-size: 1.2rem;
+        font-size: 1rem;
+        margin-bottom: 10px;
     }
     
     .bp-pack-btn {
-        padding: 10px 16px;
-        font-size: 0.8rem;
+        padding: 8px 10px;
+        font-size: 0.65rem;
+        letter-spacing: 1px;
     }
     
-    .bp-faq-grid {
-        grid-template-columns: 1fr;
+    .bp-pack-ribbon {
+        font-size: 0.6rem;
+        padding: 3px 30px;
+        top: 8px;
+        right: -28px;
     }
 }
 
 @media (max-width: 480px) {
     .bp-packs-grid {
-        grid-template-columns: 1fr;
-        max-width: 300px;
-        margin: 0 auto;
+        gap: 6px;
     }
     
-    .bp-message {
-        flex-direction: column;
-        text-align: center;
+    .bp-pack-card {
+        width: 80px;
+        padding: 10px 6px;
+        border-radius: 8px;
+    }
+    
+    .bp-pack-icon {
+        margin-bottom: 8px;
+    }
+    
+    .bp-pack-coin {
+        width: 28px;
+        height: 28px;
+        border-width: 2px;
+    }
+    
+    .bp-pack-coin .bp-icon {
+        font-size: 0.7rem;
+    }
+    
+    .bp-pack-amount {
+        font-size: 0.85rem;
+        margin-bottom: 2px;
+    }
+    
+    .bp-pack-label {
+        font-size: 0.5rem;
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+    }
+    
+    .bp-pack-price {
+        font-size: 0.75rem;
+        margin-bottom: 8px;
+    }
+    
+    .bp-pack-btn {
+        padding: 6px 4px;
+        font-size: 0.5rem;
+        letter-spacing: 0.5px;
+        border-radius: 4px;
+    }
+    
+    .bp-pack-ribbon {
+        font-size: 0.45rem;
+        padding: 2px 22px;
+        top: 6px;
+        right: -22px;
+    }
+    
+    .bp-unavailable-content {
         padding: 20px 16px;
     }
     
-    .bp-message-close {
-        top: 8px;
-        right: 8px;
+    .bp-unavailable-content i {
+        font-size: 2rem;
+    }
+    
+    .bp-unavailable-content h2 {
+        font-size: 1.1rem;
+        letter-spacing: 3px;
+    }
+    
+    .bp-unavailable-content p {
+        font-size: 0.75rem;
     }
 }
