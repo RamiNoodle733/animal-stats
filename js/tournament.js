@@ -1080,31 +1080,43 @@ class TournamentManager {
      * Animate the vote bar based on guess result
      */
     animateVoteBarResult(isWin) {
+        // Desktop vote bar
         const voteBar = document.querySelector('.t-vote-bar');
         const voteSection = document.querySelector('.t-guess-vote-row');
         
-        if (!voteBar) return;
+        // Mobile guess section
+        const mobileSection = document.querySelector('.mobile-guess-section');
+        const mobileVoteBar = mobileSection?.querySelector('.t-vote-bar');
         
         // Remove any existing animation classes
-        voteBar.classList.remove('guess-win', 'guess-lose');
+        if (voteBar) voteBar.classList.remove('guess-win', 'guess-lose');
+        if (mobileVoteBar) mobileVoteBar.classList.remove('guess-win', 'guess-lose');
         if (voteSection) voteSection.classList.remove('guess-win-section', 'guess-lose-section');
+        if (mobileSection) mobileSection.classList.remove('guess-win-section', 'guess-lose-section');
         
         // Force reflow
-        voteBar.offsetHeight;
+        if (voteBar) voteBar.offsetHeight;
+        if (mobileVoteBar) mobileVoteBar.offsetHeight;
         
         // Add appropriate animation class
         if (isWin) {
-            voteBar.classList.add('guess-win');
+            if (voteBar) voteBar.classList.add('guess-win');
+            if (mobileVoteBar) mobileVoteBar.classList.add('guess-win');
             if (voteSection) voteSection.classList.add('guess-win-section');
+            if (mobileSection) mobileSection.classList.add('guess-win-section');
         } else {
-            voteBar.classList.add('guess-lose');
+            if (voteBar) voteBar.classList.add('guess-lose');
+            if (mobileVoteBar) mobileVoteBar.classList.add('guess-lose');
             if (voteSection) voteSection.classList.add('guess-lose-section');
+            if (mobileSection) mobileSection.classList.add('guess-lose-section');
         }
         
         // Remove animation classes after animation completes
         setTimeout(() => {
-            voteBar.classList.remove('guess-win', 'guess-lose');
+            if (voteBar) voteBar.classList.remove('guess-win', 'guess-lose');
+            if (mobileVoteBar) mobileVoteBar.classList.remove('guess-win', 'guess-lose');
             if (voteSection) voteSection.classList.remove('guess-win-section', 'guess-lose-section');
+            if (mobileSection) mobileSection.classList.remove('guess-win-section', 'guess-lose-section');
         }, 1500);
     }
     

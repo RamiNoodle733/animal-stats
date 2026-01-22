@@ -3081,6 +3081,27 @@
         background: rgba(0, 0, 0, 0.5) !important;
         border-radius: 3px !important;
         border: 1px solid rgba(255, 255, 255, 0.08) !important;
+        position: relative !important;
+    }
+    
+    /* Mobile guess result animations - scale down text */
+    .mobile-guess-section .t-vote-bar.guess-win::before,
+    .mobile-guess-section .t-vote-bar.guess-lose::before {
+        font-size: 0.85rem !important;
+        padding: 6px 14px !important;
+    }
+    
+    /* Mobile guess section glow */
+    .mobile-guess-section.guess-win-section {
+        background: linear-gradient(135deg, rgba(46, 213, 115, 0.2), rgba(39, 174, 96, 0.15)) !important;
+        border-color: rgba(46, 213, 115, 0.5) !important;
+        box-shadow: 0 0 15px rgba(46, 213, 115, 0.3) !important;
+    }
+    
+    .mobile-guess-section.guess-lose-section {
+        background: linear-gradient(135deg, rgba(255, 71, 87, 0.2), rgba(192, 57, 43, 0.15)) !important;
+        border-color: rgba(255, 71, 87, 0.5) !important;
+        box-shadow: 0 0 15px rgba(255, 71, 87, 0.3) !important;
     }
 
     /* ====== STAT BARS ====== */
