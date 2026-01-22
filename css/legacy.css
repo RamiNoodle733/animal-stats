@@ -2913,8 +2913,12 @@ body {
     color: #ff3366;
 }
 
-/* Current Selection Preview */
-.avatar-picker-preview {
+/* Current Selection Preview - inside modal only */
+.avatar-picker-modal .avatar-picker-preview {
+    width: auto;
+    height: auto;
+    border-radius: 0;
+    border: none;
     display: flex;
     align-items: center;
     gap: 16px;
