@@ -235,8 +235,9 @@ class AnimalStatsApp {
             this.dom.loginView = document.getElementById('login-view');
             this.dom.signupView = document.getElementById('signup-view');
             
-            // Cache profile view element
+            // Cache profile view elements
             this.dom.profileView = document.getElementById('profile-view');
+            this.dom.publicProfileView = document.getElementById('public-profile-view');
 
             // Track site visit
             this.trackSiteVisit();
@@ -834,8 +835,10 @@ class AnimalStatsApp {
         if (homeProfileLink) {
             homeProfileLink.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (window.Router) {
-                    window.Router.navigate('/profile');
+                // Navigate to the link's href directly (which includes username)
+                const href = homeProfileLink.getAttribute('href');
+                if (window.Router && href) {
+                    window.Router.navigate(href);
                 }
             });
         }
@@ -864,19 +867,10 @@ class AnimalStatsApp {
             });
         }
         
-        // Public profile modal close button
+        // Public profile view close button
         const publicProfileClose = document.getElementById('public-profile-close');
-        const publicProfileModal = document.getElementById('public-profile-modal');
         if (publicProfileClose) {
             publicProfileClose.addEventListener('click', () => this.closePublicProfile());
-        }
-        // Close on backdrop click
-        if (publicProfileModal) {
-            publicProfileModal.addEventListener('click', (e) => {
-                if (e.target === publicProfileModal) {
-                    this.closePublicProfile();
-                }
-            });
         }
         
         // Setup profile page dropdown toggles
@@ -1680,11 +1674,12 @@ class AnimalStatsApp {
         // Reset scroll position on any scrollable elements before switching
         this.resetScrollPositions();
         
-        // Update UI classes - include home view, auth views, and profile view
+        // Update UI classes - include home view, auth views, and profile views
         this.dom.homeView?.classList.toggle('active-view', viewName === 'home');
         this.dom.loginView?.classList.toggle('active-view', viewName === 'login');
         this.dom.signupView?.classList.toggle('active-view', viewName === 'signup');
         this.dom.profileView?.classList.toggle('active-view', viewName === 'profile');
+        this.dom.publicProfileView?.classList.remove('active-view'); // Always hide public profile when switching
         this.dom.statsView.classList.toggle('active-view', viewName === 'stats');
         this.dom.compareView.classList.toggle('active-view', viewName === 'compare');
         this.dom.rankingsView?.classList.toggle('active-view', viewName === 'rankings');
@@ -2348,22 +2343,22 @@ class AnimalStatsApp {
     }
     
     /**
-     * Show public profile for a user
+     * Show public profile for a user (full page view)
      */
     async showPublicProfile(username) {
-        const modal = document.getElementById('public-profile-modal');
+        // Switch to public profile view
+        this.switchToPublicProfileView();
+        
         const loading = document.getElementById('public-profile-loading');
         const error = document.getElementById('public-profile-error');
         const errorText = document.getElementById('public-profile-error-text');
         const data = document.getElementById('public-profile-data');
+        const page = document.getElementById('public-profile-page');
         
-        if (!modal) return;
-        
-        // Show modal with loading state
-        modal.classList.add('active');
-        loading.style.display = 'flex';
-        error.style.display = 'none';
-        data.style.display = 'none';
+        // Show loading state
+        if (loading) loading.style.display = 'flex';
+        if (error) error.style.display = 'none';
+        if (data) data.style.display = 'none';
         
         try {
             const response = await fetch(`/api/auth?action=user&username=${encodeURIComponent(username)}`);
@@ -2374,6 +2369,11 @@ class AnimalStatsApp {
             }
             
             const user = result.data.user;
+            
+            // Set prestige tier on page for styling
+            if (page) {
+                page.setAttribute('data-prestige', user.prestige || 0);
+            }
             
             // Update avatar
             const avatar = document.getElementById('public-profile-avatar');
@@ -2401,62 +2401,127 @@ class AnimalStatsApp {
             if (badges) {
                 let badgeHtml = '';
                 if (user.role === 'admin') {
-                    badgeHtml += '<span class="public-profile-badge admin">Admin</span>';
+                    badgeHtml += '<span class="abs-role-badge admin"><i class="fas fa-shield-alt"></i> Admin</span>';
                 } else if (user.role === 'moderator') {
-                    badgeHtml += '<span class="public-profile-badge mod">Moderator</span>';
-                }
-                if (user.prestige > 0) {
-                    badgeHtml += `<span class="public-profile-badge" style="background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000;">⭐ Prestige ${user.prestige}</span>`;
+                    badgeHtml += '<span class="abs-role-badge mod"><i class="fas fa-gavel"></i> Mod</span>';
                 }
                 badges.innerHTML = badgeHtml;
             }
             
-            // Update stats
-            const level = document.getElementById('public-profile-level');
-            const prestige = document.getElementById('public-profile-prestige');
-            if (level) level.textContent = user.level || 1;
-            if (prestige) prestige.textContent = user.prestige || 0;
+            // Calculate XP values
+            const level = user.level || 1;
+            const prestige = user.prestige || 0;
+            const xp = user.xp || 0;
+            const xpNeeded = this.calculateXpNeeded ? this.calculateXpNeeded(level) : 100;
+            const xpPercentage = Math.min((xp / xpNeeded) * 100, 100);
+            const totalXp = user.totalXp || xp;
             
-            // Update XP bar
-            const xpFill = document.getElementById('public-profile-xp-fill');
-            const xpText = document.getElementById('public-profile-xp-text');
-            const xpPercentage = user.xpPercentage || 0;
-            if (xpFill) xpFill.style.width = `${xpPercentage}%`;
-            if (xpText) xpText.textContent = `${user.xp || 0} / ${user.xpNeeded || 100} XP`;
+            // Update sidebar stats
+            const levelEl = document.getElementById('public-profile-level');
+            const prestigeEl = document.getElementById('public-profile-prestige');
+            const bpEl = document.getElementById('public-profile-bp');
+            if (levelEl) levelEl.textContent = level;
+            if (prestigeEl) {
+                prestigeEl.textContent = prestige;
+                prestigeEl.setAttribute('data-tier', prestige);
+            }
+            if (bpEl) bpEl.textContent = totalXp.toLocaleString();
             
-            // Update joined date
-            const joined = document.getElementById('public-profile-joined');
-            if (joined && user.createdAt) {
+            // Update statistics panel
+            const totalXpEl = document.getElementById('public-profile-total-xp');
+            const currentXpEl = document.getElementById('public-profile-current-xp');
+            const battlesWonEl = document.getElementById('public-profile-battles-won');
+            const votesCastEl = document.getElementById('public-profile-votes-cast');
+            if (totalXpEl) totalXpEl.textContent = totalXp.toLocaleString();
+            if (currentXpEl) currentXpEl.textContent = `${xp.toLocaleString()} / ${xpNeeded.toLocaleString()}`;
+            if (battlesWonEl) battlesWonEl.textContent = (user.battlesWon || 0).toLocaleString();
+            if (votesCastEl) votesCastEl.textContent = (user.votesCast || 0).toLocaleString();
+            
+            // Update XP progress panel
+            const xpLevelEl = document.getElementById('public-xp-level');
+            const xpBarFill = document.getElementById('public-xp-bar-fill');
+            const xpTextEl = document.getElementById('public-xp-text');
+            const xpNextLevelEl = document.getElementById('public-xp-next-level');
+            if (xpLevelEl) xpLevelEl.textContent = level;
+            if (xpBarFill) xpBarFill.style.width = `${xpPercentage}%`;
+            if (xpTextEl) xpTextEl.textContent = `${xp.toLocaleString()} / ${xpNeeded.toLocaleString()} XP`;
+            if (xpNextLevelEl) xpNextLevelEl.textContent = level + 1;
+            
+            // Update member since date
+            const memberSince = document.getElementById('public-profile-member-since');
+            const feedJoinDate = document.getElementById('public-feed-join-date');
+            const feedUsername = document.getElementById('public-feed-username');
+            if (user.createdAt) {
                 const date = new Date(user.createdAt);
-                joined.textContent = date.toLocaleDateString('en-US', { 
+                const dateStr = date.toLocaleDateString('en-US', { 
                     month: 'long', 
                     day: 'numeric', 
                     year: 'numeric' 
                 });
+                if (memberSince) memberSince.textContent = dateStr;
+                if (feedJoinDate) feedJoinDate.textContent = dateStr;
             }
+            if (feedUsername) feedUsername.textContent = user.displayName || user.username;
             
-            // Show data
-            loading.style.display = 'none';
-            data.style.display = 'flex';
+            // Update status indicator (we'll show "Offline" for now since we don't track online status)
+            const statusDot = document.getElementById('public-profile-status-dot');
+            const statusText = document.getElementById('public-profile-status');
+            if (statusDot) statusDot.className = 'abs-status-dot offline';
+            if (statusText) statusText.textContent = 'Offline';
+            
+            // Show data, hide loading
+            if (loading) loading.style.display = 'none';
+            if (data) data.style.display = 'flex';
             
         } catch (err) {
             console.error('Error loading public profile:', err);
-            loading.style.display = 'none';
-            error.style.display = 'flex';
-            errorText.textContent = err.message || 'User not found';
+            if (loading) loading.style.display = 'none';
+            if (error) error.style.display = 'flex';
+            if (errorText) errorText.textContent = err.message || 'User not found';
         }
     }
     
     /**
-     * Close public profile modal
+     * Switch to public profile view
+     */
+    switchToPublicProfileView() {
+        // Hide all other views
+        this.dom.homeView?.classList.remove('active-view');
+        this.dom.loginView?.classList.remove('active-view');
+        this.dom.signupView?.classList.remove('active-view');
+        this.dom.profileView?.classList.remove('active-view');
+        this.dom.statsView?.classList.remove('active-view');
+        this.dom.compareView?.classList.remove('active-view');
+        this.dom.rankingsView?.classList.remove('active-view');
+        this.dom.communityView?.classList.remove('active-view');
+        
+        // Show public profile view
+        this.dom.publicProfileView?.classList.add('active-view');
+        
+        // Hide header, grid, and bottom bar
+        const gameHeader = document.querySelector('.game-header');
+        if (gameHeader) gameHeader.style.display = 'none';
+        this.dom.gridWrapper?.classList.add('hidden');
+        if (this.dom.toggleGridBtn) this.dom.toggleGridBtn.style.display = 'none';
+        if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'none';
+        
+        // Remove active states from nav buttons
+        this.dom.navBtns.stats?.classList.remove('active');
+        this.dom.navBtns.compare?.classList.remove('active');
+        this.dom.navBtns.rankings?.classList.remove('active');
+        this.dom.navBtns.community?.classList.remove('active');
+    }
+    
+    /**
+     * Close public profile and go back
      */
     closePublicProfile() {
-        const modal = document.getElementById('public-profile-modal');
-        if (modal) {
-            modal.classList.remove('active');
-        }
         // Navigate back
-        window.Router?.back();
+        if (window.history.length > 1) {
+            window.history.back();
+        } else {
+            window.Router?.navigate('/');
+        }
     }
     
     /**

@@ -124,10 +124,11 @@
         html.is-home .shared-bottom-bar { display: none !important; }
         
         /* Show correct view based on route - only during initial load */
-        html.is-home:not(.is-login):not(.is-signup):not(.is-profile) #home-view { display: flex !important; }
+        html.is-home:not(.is-login):not(.is-signup):not(.is-profile):not(.is-public-profile) #home-view { display: flex !important; }
         html.is-login #login-view { display: flex !important; }
         html.is-signup #signup-view { display: flex !important; }
         html.is-profile #profile-view { display: flex !important; }
+        html.is-public-profile #public-profile-view { display: flex !important; }
         
         /* Hide other views on home/auth pages - only during initial load */
         html.is-home #stats-view,
@@ -136,7 +137,8 @@
         html.is-home #community-view { display: none !important; }
         html.is-login #home-view,
         html.is-signup #home-view,
-        html.is-profile #home-view { display: none !important; }
+        html.is-profile #home-view,
+        html.is-public-profile #home-view { display: none !important; }
     </style>
 </head>
 <body>
@@ -1709,66 +1711,202 @@
         </div>
     </div>
     
-    <!-- Public Profile Modal -->
-    <div class="public-profile-modal" id="public-profile-modal">
-        <div class="public-profile-content">
-            <div class="public-profile-header">
-                <div class="public-profile-title">
-                    <i class="fas fa-user"></i>
-                    <span>USER PROFILE</span>
-                </div>
-                <button class="public-profile-close" id="public-profile-close">
-                    <i class="fas fa-times"></i>
+    <!-- Public Profile View (Full Page - like own profile but read-only) -->
+    <div id="public-profile-view" class="view-container">
+        <div class="abs-profile-page public-profile-page" id="public-profile-page" data-prestige="0">
+            <!-- Loading State -->
+            <div class="public-profile-loading-state" id="public-profile-loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <span>Loading profile...</span>
+            </div>
+            
+            <!-- Error State -->
+            <div class="public-profile-error-state" id="public-profile-error" style="display: none;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <span id="public-profile-error-text">User not found</span>
+                <button class="abs-back-btn" onclick="window.history.back()">
+                    <i class="fas fa-arrow-left"></i> Go Back
                 </button>
             </div>
             
-            <div class="public-profile-body">
-                <!-- Loading State -->
-                <div class="public-profile-loading" id="public-profile-loading">
-                    <i class="fas fa-spinner fa-spin"></i>
-                    <span>Loading profile...</span>
-                </div>
-                
-                <!-- Error State -->
-                <div class="public-profile-error" id="public-profile-error" style="display: none;">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <span id="public-profile-error-text">User not found</span>
-                </div>
-                
-                <!-- Profile Content -->
-                <div class="public-profile-data" id="public-profile-data" style="display: none;">
-                    <div class="public-profile-avatar" id="public-profile-avatar">
-                        <i class="fas fa-user-circle"></i>
-                    </div>
-                    <div class="public-profile-name" id="public-profile-name">Username</div>
-                    <div class="public-profile-badges" id="public-profile-badges"></div>
-                    
-                    <div class="public-profile-stats">
-                        <div class="public-profile-stat">
-                            <span class="stat-value" id="public-profile-level">1</span>
-                            <span class="stat-label">Level</span>
+            <!-- Main Content Area -->
+            <div class="abs-profile-content" id="public-profile-data" style="display: none;">
+                <!-- Left Sidebar -->
+                <div class="abs-sidebar">
+                    <!-- Profile Picture Box -->
+                    <div class="abs-panel abs-profile-card">
+                        <div class="abs-avatar-frame" id="public-profile-avatar">
+                            <i class="fas fa-user-circle"></i>
                         </div>
-                        <div class="public-profile-stat">
-                            <span class="stat-value" id="public-profile-prestige">0</span>
-                            <span class="stat-label">Prestige</span>
+                        <div class="abs-gamertag-plate">
+                            <span class="abs-username" id="public-profile-name">Username</span>
+                            <div class="abs-role-badges" id="public-profile-badges"></div>
                         </div>
-                    </div>
-                    
-                    <div class="public-profile-xp">
-                        <div class="xp-bar-container">
-                            <div class="xp-bar-fill" id="public-profile-xp-fill"></div>
+                        <div class="abs-identity-stats">
+                            <div class="abs-identity-row abs-identity-primary">
+                                <span class="abs-identity-label"><i class="fas fa-layer-group"></i> Level</span>
+                                <span class="abs-identity-value" id="public-profile-level">1</span>
+                            </div>
+                            <div class="abs-identity-row abs-identity-secondary">
+                                <span class="abs-identity-label"><i class="fas fa-bolt"></i> Battle Points</span>
+                                <span class="abs-identity-value" id="public-profile-bp">0</span>
+                            </div>
+                            <div class="abs-identity-row abs-identity-prestige">
+                                <span class="abs-identity-label"><i class="fas fa-gem"></i> Prestige</span>
+                                <span class="abs-identity-value">
+                                    <span class="abs-prestige-badge" id="public-profile-prestige" data-tier="0">0</span>
+                                </span>
+                            </div>
                         </div>
-                        <div class="xp-text" id="public-profile-xp-text">0 / 100 XP</div>
                     </div>
                     
-                    <div class="public-profile-meta">
-                        <div class="meta-item">
+                    <!-- Status Box -->
+                    <div class="abs-panel">
+                        <div class="abs-panel-header">
+                            <i class="fas fa-signal"></i>
+                            <span class="abs-panel-title">Status</span>
+                        </div>
+                        <div class="abs-panel-content">
+                            <div class="abs-status-indicator">
+                                <span class="abs-status-dot" id="public-profile-status-dot"></span>
+                                <span class="abs-status-text" id="public-profile-status">Offline</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Stats Box -->
+                    <div class="abs-panel">
+                        <div class="abs-panel-header">
+                            <i class="fas fa-chart-bar"></i>
+                            <span class="abs-panel-title">Statistics</span>
+                        </div>
+                        <div class="abs-panel-content">
+                            <div class="abs-stat-list">
+                                <div class="abs-stat-row">
+                                    <span class="abs-stat-label">Total XP</span>
+                                    <span class="abs-stat-value" id="public-profile-total-xp">0</span>
+                                </div>
+                                <div class="abs-stat-row">
+                                    <span class="abs-stat-label">Current XP</span>
+                                    <span class="abs-stat-value" id="public-profile-current-xp">0 / 100</span>
+                                </div>
+                                <div class="abs-stat-row">
+                                    <span class="abs-stat-label">Battles Won</span>
+                                    <span class="abs-stat-value" id="public-profile-battles-won">0</span>
+                                </div>
+                                <div class="abs-stat-row">
+                                    <span class="abs-stat-label">Votes Cast</span>
+                                    <span class="abs-stat-value" id="public-profile-votes-cast">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Achievements Box -->
+                    <div class="abs-panel">
+                        <div class="abs-panel-header">
+                            <i class="fas fa-trophy"></i>
+                            <span class="abs-panel-title">Achievements</span>
+                        </div>
+                        <div class="abs-panel-content" id="public-profile-achievements">
+                            <div class="abs-achievement-list">
+                                <div class="abs-achievement locked">
+                                    <span class="abs-achievement-icon">🔒</span>
+                                    <span class="abs-achievement-name">Coming Soon</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Member Info -->
+                    <div class="abs-panel abs-member-panel">
+                        <div class="abs-member-info">
                             <i class="fas fa-calendar-alt"></i>
-                            <span>Joined <span id="public-profile-joined">Unknown</span></span>
+                            <span>Member since <strong id="public-profile-member-since">---</strong></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Main Content Area -->
+                <div class="abs-main">
+                    <!-- XP Progress Section -->
+                    <div class="abs-panel abs-xp-panel">
+                        <div class="abs-panel-header">
+                            <i class="fas fa-arrow-up"></i>
+                            <span class="abs-panel-title">Level Progress</span>
+                        </div>
+                        <div class="abs-panel-content">
+                            <div class="abs-xp-display">
+                                <div class="abs-xp-level">
+                                    <span class="abs-xp-label">Level</span>
+                                    <span class="abs-xp-value" id="public-xp-level">1</span>
+                                </div>
+                                <div class="abs-xp-bar-wrapper">
+                                    <div class="abs-xp-bar">
+                                        <div class="abs-xp-bar-fill" id="public-xp-bar-fill" style="width: 0%;"></div>
+                                        <div class="abs-xp-bar-segments"></div>
+                                    </div>
+                                    <div class="abs-xp-text" id="public-xp-text">0 / 100 XP</div>
+                                </div>
+                                <div class="abs-xp-next">
+                                    <span class="abs-xp-label">Next</span>
+                                    <span class="abs-xp-value" id="public-xp-next-level">2</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Activity Feed -->
+                    <div class="abs-panel abs-feed-panel">
+                        <div class="abs-panel-header">
+                            <i class="fas fa-stream"></i>
+                            <span class="abs-panel-title">Activity Feed</span>
+                        </div>
+                        <div class="abs-panel-content abs-feed-content">
+                            <div class="abs-feed-section">
+                                <div class="abs-feed-date">Activity</div>
+                                <div class="abs-feed-items" id="public-profile-feed">
+                                    <div class="abs-feed-item abs-feed-placeholder">
+                                        <span class="abs-feed-icon">📊</span>
+                                        <span class="abs-feed-text">No recent activity.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="abs-feed-section">
+                                <div class="abs-feed-date">Account</div>
+                                <div class="abs-feed-items">
+                                    <div class="abs-feed-item">
+                                        <span class="abs-feed-icon">🎉</span>
+                                        <span class="abs-feed-text"><strong id="public-feed-username">User</strong> joined Animal Battle Stats on <span id="public-feed-join-date">---</span>.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Favorite Animals Section -->
+                    <div class="abs-panel">
+                        <div class="abs-panel-header">
+                            <i class="fas fa-heart"></i>
+                            <span class="abs-panel-title">Favorite Animals</span>
+                        </div>
+                        <div class="abs-panel-content">
+                            <div class="abs-favorites-grid" id="public-profile-favorites">
+                                <div class="abs-no-favorites">
+                                    <i class="fas fa-heart"></i>
+                                    <span>No favorites yet</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <!-- Close/Back Button -->
+            <button class="abs-back-btn" id="public-profile-close">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
         </div>
     </div>
     

@@ -600,6 +600,10 @@ const Auth = {
                 if (homeProfileName) {
                     homeProfileName.textContent = this.user.displayName || 'Profile';
                 }
+                // Update profile link href to include username
+                if (this.user.username) {
+                    homeProfileLink.href = `/profile/${encodeURIComponent(this.user.username)}`;
+                }
                 // Update avatar if user has one
                 if (homeProfileAvatar && this.user.profileAnimal) {
                     homeProfileAvatar.innerHTML = `<img src="/images/animals/${this.user.profileAnimal}.png" alt="Profile">`;

@@ -17778,235 +17778,113 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     }
 }
 
-/* ==================== PUBLIC PROFILE MODAL ==================== */
-.public-profile-modal {
+/* ==================== PUBLIC PROFILE VIEW ==================== */
+#public-profile-view {
     display: none;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(8px);
-    z-index: 10000;
-    align-items: center;
-    justify-content: center;
+    background: linear-gradient(135deg, #0a0f14 0%, #0d1318 50%, #0a0d12 100%);
+    z-index: 100;
 }
 
-.public-profile-modal.active {
-    display: flex;
+#public-profile-view.active-view {
+    display: flex !important;
 }
 
-.public-profile-content {
-    background: linear-gradient(145deg, #1a1f2e 0%, #0f1419 100%);
-    border: 1px solid rgba(0, 212, 255, 0.3);
-    border-radius: 16px;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 0 40px rgba(0, 212, 255, 0.15), inset 0 0 60px rgba(0, 0, 0, 0.3);
-    overflow: hidden;
+.public-profile-page {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
 }
 
-.public-profile-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
-    background: rgba(0, 0, 0, 0.4);
-    border-bottom: 1px solid rgba(0, 212, 255, 0.2);
-}
-
-.public-profile-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #00d4ff;
-}
-
-.public-profile-title i {
-    font-size: 1rem;
-}
-
-.public-profile-close {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #888;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.public-profile-close:hover {
-    background: rgba(255, 51, 102, 0.15);
-    border-color: rgba(255, 51, 102, 0.3);
-    color: #ff3366;
-}
-
-.public-profile-body {
-    padding: 24px;
-}
-
-.public-profile-loading,
-.public-profile-error {
+/* Loading and Error States for Public Profile */
+.public-profile-loading-state,
+.public-profile-error-state {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    padding: 40px 20px;
+    gap: 16px;
+    padding: 60px 20px;
     color: #888;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-.public-profile-loading i {
-    font-size: 2rem;
-    color: #00d4ff;
-}
-
-.public-profile-error i {
-    font-size: 2rem;
-    color: #ff6b6b;
-}
-
-.public-profile-data {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-}
-
-.public-profile-avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #1a1f2e, #0f1419);
-    border: 3px solid rgba(0, 212, 255, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
-    margin-bottom: 16px;
-}
-
-.public-profile-avatar i {
+.public-profile-loading-state i {
     font-size: 3rem;
     color: #00d4ff;
 }
 
-.public-profile-avatar img {
-    width: 90%;
-    height: 90%;
-    object-fit: contain;
+.public-profile-error-state i {
+    font-size: 3rem;
+    color: #ff6b6b;
 }
 
-.public-profile-name {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 8px;
+.public-profile-error-state span {
+    font-size: 1.2rem;
 }
 
-.public-profile-badges {
+/* Role badges in public profile */
+.abs-role-badges {
     display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 8px;
 }
 
-.public-profile-badge {
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 0.75rem;
+.abs-role-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
-.public-profile-badge.admin {
+.abs-role-badge.admin {
     background: linear-gradient(135deg, #ff3366, #ff6b9d);
     color: #fff;
 }
 
-.public-profile-badge.mod {
+.abs-role-badge.mod {
     background: linear-gradient(135deg, #00d4ff, #00a8cc);
     color: #000;
 }
 
-.public-profile-stats {
-    display: flex;
-    gap: 32px;
-    margin-bottom: 20px;
+/* Status dot variants */
+.abs-status-dot.online {
+    background: #00ff88;
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
 }
 
-.public-profile-stat {
+.abs-status-dot.offline {
+    background: #666;
+}
+
+/* No favorites placeholder */
+.abs-no-favorites {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.public-profile-stat .stat-value {
-    font-family: 'Rajdhani', sans-serif;
-    font-size: 2rem;
-    font-weight: 700;
-    color: #00d4ff;
-    line-height: 1;
-}
-
-.public-profile-stat .stat-label {
-    font-size: 0.75rem;
-    color: #666;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.public-profile-xp {
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.public-profile-xp .xp-bar-container {
-    width: 100%;
-    height: 8px;
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 8px;
-}
-
-.public-profile-xp .xp-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #00d4ff, #00ff88);
-    border-radius: 4px;
-    transition: width 0.3s ease;
-}
-
-.public-profile-xp .xp-text {
-    font-size: 0.8rem;
-    color: #888;
-}
-
-.public-profile-meta {
-    display: flex;
-    flex-direction: column;
     gap: 8px;
-    color: #666;
-    font-size: 0.85rem;
+    padding: 24px;
+    color: #555;
+    font-size: 0.9rem;
 }
 
-.public-profile-meta .meta-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.abs-no-favorites i {
+    font-size: 1.5rem;
+    opacity: 0.5;
 }
 
 .public-profile-meta .meta-item i {
