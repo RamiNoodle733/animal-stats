@@ -141,6 +141,23 @@ const Auth = {
             }
         });
         
+        // Battle Points display - navigate to BP shop
+        const bpDisplay = document.getElementById('battle-points-display');
+        if (bpDisplay) {
+            bpDisplay.style.cursor = 'pointer';
+            bpDisplay.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (window.Router) {
+                    // Only navigate if not already on battlepoints
+                    const currentPath = window.location.pathname;
+                    if (currentPath !== '/battlepoints') {
+                        window.Router.navigate('/battlepoints');
+                    }
+                }
+            });
+        }
+        
         // Logout button on profile page
         this.elements.retroLogoutBtn?.addEventListener('click', () => {
             this.logout();

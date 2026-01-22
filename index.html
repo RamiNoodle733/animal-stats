@@ -41,6 +41,7 @@
     <link rel="stylesheet" href="tournament-v4.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="compare-page.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="community-page.css" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="css/pages/battlepoints.css" media="print" onload="this.media='all'">
     
     <!-- Mobile-specific styles (loaded last to override) -->
     <link rel="stylesheet" href="css/mobile.css" media="print" onload="this.media='all'">
@@ -1385,6 +1386,98 @@
             </div>
         </div>
         
+        <!-- Battle Points Shop View -->
+        <div id="battlepoints-view" class="view-container">
+            <div class="bp-shop-page">
+                <!-- Hero Section -->
+                <div class="bp-shop-hero">
+                    <div class="bp-hero-bg"></div>
+                    <div class="bp-hero-content">
+                        <div class="bp-hero-icon">
+                            <div class="bp-coin-large">
+                                <span class="bp-icon">⚔</span>
+                            </div>
+                        </div>
+                        <h1 class="bp-shop-title">BATTLE POINTS</h1>
+                        <p class="bp-shop-subtitle">Power up your Animal Battle Stats experience</p>
+                    </div>
+                </div>
+                
+                <!-- Current Balance -->
+                <div class="bp-balance-section">
+                    <div class="bp-balance-card">
+                        <div class="bp-balance-label">Your Balance</div>
+                        <div class="bp-balance-amount">
+                            <div class="bp-coin-mini">
+                                <span class="bp-icon">⚔</span>
+                            </div>
+                            <span class="bp-balance-value" id="bp-shop-balance">0</span>
+                            <span class="bp-balance-suffix">BP</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pack Grid -->
+                <div class="bp-packs-section">
+                    <h2 class="bp-packs-title">Choose Your Pack</h2>
+                    <div class="bp-packs-grid" id="bp-packs-grid">
+                        <!-- Packs loaded dynamically -->
+                        <div class="bp-packs-loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <span>Loading packs...</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Success/Cancel Messages -->
+                <div class="bp-message bp-message-success" id="bp-message-success" style="display: none;">
+                    <div class="bp-message-icon"><i class="fas fa-check-circle"></i></div>
+                    <div class="bp-message-content">
+                        <h3>Purchase Complete!</h3>
+                        <p>Your Battle Points have been added to your account.</p>
+                    </div>
+                    <button class="bp-message-close" id="bp-message-success-close"><i class="fas fa-times"></i></button>
+                </div>
+                
+                <div class="bp-message bp-message-cancel" id="bp-message-cancel" style="display: none;">
+                    <div class="bp-message-icon"><i class="fas fa-info-circle"></i></div>
+                    <div class="bp-message-content">
+                        <h3>Purchase Canceled</h3>
+                        <p>No worries! You can complete your purchase anytime.</p>
+                    </div>
+                    <button class="bp-message-close" id="bp-message-cancel-close"><i class="fas fa-times"></i></button>
+                </div>
+                
+                <!-- FAQ Section -->
+                <div class="bp-faq-section">
+                    <h3 class="bp-faq-title">Information</h3>
+                    <div class="bp-faq-grid">
+                        <div class="bp-faq-item">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Battle Points (BP) are a digital item and are not redeemable for cash.</p>
+                        </div>
+                        <div class="bp-faq-item">
+                            <i class="fas fa-undo"></i>
+                            <p><strong>Refund Policy:</strong> Refunds are processed through Stripe. If a refund is issued, the corresponding BP will be deducted from your account. If BP has been spent, your balance may go negative until resolved.</p>
+                        </div>
+                        <div class="bp-faq-item">
+                            <i class="fas fa-lock"></i>
+                            <p>Secure checkout powered by <strong>Stripe</strong>. We never store your payment information.</p>
+                        </div>
+                        <div class="bp-faq-item">
+                            <i class="fas fa-mobile-alt"></i>
+                            <p>Apple Pay and Google Pay available where supported.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <div class="bp-shop-footer">
+                    <p>Questions? Contact us at support@animalbattlestats.com</p>
+                </div>
+            </div>
+        </div>
+        
         <!-- Floating Show Menu Button removed - toggle button in bottom bar handles this -->
         
         <!-- Shared Bottom Action Bar (outside view containers for consistent positioning) -->
@@ -2675,6 +2768,7 @@
     <script src="js/rankings.js"></script>
     <script src="js/tournament.js"></script>
     <script src="js/community-manager.js"></script>
+    <script src="js/battlepoints.js"></script>
     
     <!-- Main app (initializes everything) -->
     <script src="js/main.js" defer></script>

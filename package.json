@@ -23,7 +23,8 @@
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.3.0",
-    "mongoose": "^8.0.3"
+    "mongoose": "^8.0.3",
+    "stripe": "^14.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",

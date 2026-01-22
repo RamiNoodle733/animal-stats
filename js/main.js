@@ -198,6 +198,9 @@ class AnimalStatsApp {
             // Community View
             communityView: document.getElementById('community-view'),
             
+            // Battle Points View
+            battlepointsView: document.getElementById('battlepoints-view'),
+            
             // Shared bottom bar (now outside view containers)
             sharedBottomBar: document.getElementById('shared-bottom-bar')
         };
@@ -256,6 +259,13 @@ class AnimalStatsApp {
             this.communityManager = new CommunityManager(this);
             this.communityManager.init();
             window.communityManager = this.communityManager;
+            
+            // Initialize Battle Points Manager
+            if (window.BattlepointsManager) {
+                this.battlepointsManager = new BattlepointsManager(this);
+                this.battlepointsManager.init();
+                window.battlepointsManager = this.battlepointsManager;
+            }
             
             // Fetch rankings data to get power ranks for sorting
             await this.rankingsManager.fetchRankings();
@@ -359,6 +369,11 @@ class AnimalStatsApp {
         // Community route
         router.on('/community', () => {
             this.switchView('community', false);
+        });
+
+        // Battle Points route
+        router.on('/battlepoints', () => {
+            this.switchView('battlepoints', false);
         });
 
         // Tournament route
@@ -1663,6 +1678,7 @@ class AnimalStatsApp {
             compare: 'COMPARE',
             rankings: 'RANKINGS',
             community: 'COMMUNITY',
+            battlepoints: 'POINTS',
             login: 'LOGIN',
             signup: 'SIGNUP',
             profile: 'PROFILE'
@@ -1684,6 +1700,7 @@ class AnimalStatsApp {
         this.dom.compareView.classList.toggle('active-view', viewName === 'compare');
         this.dom.rankingsView?.classList.toggle('active-view', viewName === 'rankings');
         this.dom.communityView?.classList.toggle('active-view', viewName === 'community');
+        this.dom.battlepointsView?.classList.toggle('active-view', viewName === 'battlepoints');
         
         // Update nav button active states
         this.dom.navBtns.stats.classList.toggle('active', viewName === 'stats');
@@ -1691,8 +1708,8 @@ class AnimalStatsApp {
         this.dom.navBtns.rankings?.classList.toggle('active', viewName === 'rankings');
         this.dom.navBtns.community?.classList.toggle('active', viewName === 'community');
         
-        // No nav button for home/login/signup/profile - none should be active
-        if (viewName === 'home' || viewName === 'login' || viewName === 'signup' || viewName === 'profile') {
+        // No nav button for home/login/signup/profile/battlepoints - none should be active
+        if (viewName === 'home' || viewName === 'login' || viewName === 'signup' || viewName === 'profile' || viewName === 'battlepoints') {
             this.dom.navBtns.stats.classList.remove('active');
         }
 
@@ -1704,6 +1721,7 @@ class AnimalStatsApp {
                 compare: '/compare',
                 rankings: '/rankings',
                 community: '/community',
+                battlepoints: '/battlepoints',
                 login: '/login',
                 signup: '/signup',
                 profile: '/profile'
@@ -1768,6 +1786,16 @@ class AnimalStatsApp {
             // Load community content when entering
             if (this.communityManager) {
                 this.communityManager.onViewEnter();
+            }
+        } else if (viewName === 'battlepoints') {
+            // Hide grid and bottom bar in battlepoints view
+            this.dom.gridWrapper.classList.add('hidden');
+            if (this.dom.toggleGridBtn) this.dom.toggleGridBtn.style.display = 'none';
+            if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'none';
+            
+            // Initialize battlepoints manager when entering
+            if (this.battlepointsManager) {
+                this.battlepointsManager.onViewEnter();
             }
         } else {
             // Stats view - show bottom bar

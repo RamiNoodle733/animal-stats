@@ -1,0 +1,669 @@
+/**
+ * Battle Points Shop Styles
+ * 
+ * Design: In-game currency store inspired by modern game shops
+ * Matches ABS visual style with cyan/orange accents
+ */
+
+/* ==================== SHOP PAGE CONTAINER ==================== */
+.bp-shop-page {
+    width: 100%;
+    min-height: 100%;
+    padding: 0;
+    background: linear-gradient(180deg, #0a1525 0%, #050a12 50%, #020408 100%);
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* ==================== HERO SECTION ==================== */
+.bp-shop-hero {
+    position: relative;
+    padding: 60px 20px 40px;
+    text-align: center;
+    overflow: hidden;
+}
+
+.bp-hero-bg {
+    position: absolute;
+    inset: 0;
+    background: 
+        radial-gradient(ellipse at center top, rgba(255, 107, 0, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at center, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.bp-hero-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 17.32v25.36L30 60 0 42.68V17.32z' fill='none' stroke='%23ff6b00' stroke-opacity='0.05' stroke-width='0.5'/%3E%3C/svg%3E");
+    background-size: 60px 60px;
+    opacity: 0.5;
+}
+
+.bp-hero-content {
+    position: relative;
+    z-index: 1;
+}
+
+.bp-hero-icon {
+    margin-bottom: 20px;
+    animation: bpHeroFloat 3s ease-in-out infinite;
+}
+
+@keyframes bpHeroFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.bp-coin-large {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #ff6b00, #ff8c00, #ffd700);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid #ffd700;
+    box-shadow: 
+        0 0 30px rgba(255, 107, 0, 0.6),
+        0 0 60px rgba(255, 107, 0, 0.3),
+        inset 0 0 20px rgba(255, 215, 0, 0.4);
+    animation: bpCoinPulse 2s ease-in-out infinite;
+}
+
+@keyframes bpCoinPulse {
+    0%, 100% { box-shadow: 0 0 30px rgba(255, 107, 0, 0.6), 0 0 60px rgba(255, 107, 0, 0.3), inset 0 0 20px rgba(255, 215, 0, 0.4); }
+    50% { box-shadow: 0 0 40px rgba(255, 107, 0, 0.8), 0 0 80px rgba(255, 107, 0, 0.4), inset 0 0 25px rgba(255, 215, 0, 0.6); }
+}
+
+.bp-coin-large .bp-icon {
+    font-size: 2rem;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.bp-shop-title {
+    font-family: 'Orbitron', 'Bebas Neue', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #fff;
+    letter-spacing: 4px;
+    margin: 0 0 10px;
+    text-shadow: 
+        0 0 20px rgba(255, 107, 0, 0.5),
+        0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.bp-shop-subtitle {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+/* ==================== BALANCE SECTION ==================== */
+.bp-balance-section {
+    padding: 0 20px 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.bp-balance-card {
+    background: linear-gradient(135deg, rgba(255, 107, 0, 0.15) 0%, rgba(255, 107, 0, 0.05) 100%);
+    border: 2px solid rgba(255, 107, 0, 0.4);
+    border-radius: 16px;
+    padding: 20px 40px;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 4px 30px rgba(255, 107, 0, 0.1);
+}
+
+.bp-balance-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+}
+
+.bp-balance-amount {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.bp-coin-mini {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #ff6b00, #ff8c00, #ffd700);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #ffd700;
+    box-shadow: 0 0 15px rgba(255, 107, 0, 0.5);
+}
+
+.bp-coin-mini .bp-icon {
+    font-size: 0.9rem;
+    color: #fff;
+}
+
+.bp-balance-value {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffd700;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.bp-balance-suffix {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    color: rgba(255, 215, 0, 0.7);
+    letter-spacing: 2px;
+}
+
+/* ==================== PACKS SECTION ==================== */
+.bp-packs-section {
+    padding: 0 20px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.bp-packs-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    letter-spacing: 2px;
+    margin: 0 0 24px;
+    text-transform: uppercase;
+}
+
+.bp-packs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    justify-content: center;
+}
+
+.bp-packs-loading {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: rgba(255, 255, 255, 0.5);
+    font-family: 'Rajdhani', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+}
+
+.bp-packs-loading i {
+    font-size: 2rem;
+    color: var(--primary-color);
+}
+
+/* ==================== PACK CARD ==================== */
+.bp-pack-card {
+    position: relative;
+    background: linear-gradient(180deg, rgba(0, 30, 60, 0.8) 0%, rgba(0, 15, 30, 0.9) 100%);
+    border: 2px solid rgba(0, 212, 255, 0.3);
+    border-radius: 16px;
+    padding: 24px 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.bp-pack-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 212, 255, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.bp-pack-card:hover {
+    border-color: rgba(0, 212, 255, 0.6);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 40px rgba(0, 212, 255, 0.2);
+}
+
+.bp-pack-card:hover::before {
+    opacity: 1;
+}
+
+/* Best Value Card */
+.bp-pack-card.best-value {
+    border-color: rgba(255, 215, 0, 0.5);
+    background: linear-gradient(180deg, rgba(255, 107, 0, 0.1) 0%, rgba(0, 15, 30, 0.9) 100%);
+}
+
+.bp-pack-card.best-value:hover {
+    border-color: rgba(255, 215, 0, 0.8);
+    box-shadow: 0 8px 40px rgba(255, 107, 0, 0.3);
+}
+
+/* Ribbon */
+.bp-pack-ribbon {
+    position: absolute;
+    top: 12px;
+    right: -32px;
+    background: linear-gradient(90deg, #00d4ff, #00a8cc);
+    color: #fff;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 0.75rem;
+    padding: 4px 40px;
+    transform: rotate(45deg);
+    letter-spacing: 1px;
+    box-shadow: 0 2px 10px rgba(0, 212, 255, 0.3);
+}
+
+.bp-pack-card.best-value .bp-pack-ribbon {
+    background: linear-gradient(90deg, #ffd700, #ff8c00);
+    box-shadow: 0 2px 10px rgba(255, 107, 0, 0.3);
+}
+
+/* Pack Icon */
+.bp-pack-icon {
+    margin-bottom: 16px;
+}
+
+.bp-pack-coin {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #ff6b00, #ff8c00, #ffd700);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #ffd700;
+    box-shadow: 0 0 20px rgba(255, 107, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bp-pack-card:hover .bp-pack-coin {
+    transform: scale(1.1);
+    box-shadow: 0 0 30px rgba(255, 107, 0, 0.6);
+}
+
+.bp-pack-coin .bp-icon {
+    font-size: 1.4rem;
+    color: #fff;
+}
+
+/* Pack Amount */
+.bp-pack-amount {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ffd700;
+    margin-bottom: 4px;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.bp-pack-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+}
+
+/* Pack Price */
+.bp-pack-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 16px;
+    letter-spacing: 1px;
+}
+
+/* Buy Button */
+.bp-pack-btn {
+    width: 100%;
+    padding: 12px 24px;
+    background: linear-gradient(180deg, #00d4ff 0%, #0099cc 100%);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.bp-pack-btn:hover {
+    background: linear-gradient(180deg, #00e5ff 0%, #00aadd 100%);
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.bp-pack-btn:active {
+    transform: translateY(0);
+}
+
+.bp-pack-card.best-value .bp-pack-btn {
+    background: linear-gradient(180deg, #ffd700 0%, #ff8c00 100%);
+    color: #1a1a1a;
+}
+
+.bp-pack-card.best-value .bp-pack-btn:hover {
+    background: linear-gradient(180deg, #ffe44d 0%, #ffa500 100%);
+    box-shadow: 0 4px 20px rgba(255, 107, 0, 0.4);
+}
+
+.bp-pack-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.bp-pack-btn.loading {
+    pointer-events: none;
+}
+
+.bp-pack-btn.loading::after {
+    content: '';
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: btnSpin 0.8s linear infinite;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+@keyframes btnSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* ==================== SUCCESS/CANCEL MESSAGES ==================== */
+.bp-message {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 600px;
+    margin: 0 auto 30px;
+    padding: 20px 24px;
+    border-radius: 12px;
+    position: relative;
+}
+
+.bp-message-success {
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.15) 0%, rgba(0, 255, 136, 0.05) 100%);
+    border: 2px solid rgba(0, 255, 136, 0.4);
+}
+
+.bp-message-cancel {
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.15) 0%, rgba(255, 193, 7, 0.05) 100%);
+    border: 2px solid rgba(255, 193, 7, 0.4);
+}
+
+.bp-message-icon {
+    font-size: 2rem;
+}
+
+.bp-message-success .bp-message-icon {
+    color: #00ff88;
+}
+
+.bp-message-cancel .bp-message-icon {
+    color: #ffc107;
+}
+
+.bp-message-content h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    color: #fff;
+    margin: 0 0 4px;
+}
+
+.bp-message-content p {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+}
+
+.bp-message-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.2s ease;
+}
+
+.bp-message-close:hover {
+    color: #fff;
+}
+
+/* ==================== FAQ SECTION ==================== */
+.bp-faq-section {
+    padding: 30px 20px 40px;
+    max-width: 800px;
+    margin: 0 auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bp-faq-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+    letter-spacing: 2px;
+    margin: 0 0 20px;
+    text-transform: uppercase;
+}
+
+.bp-faq-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px;
+}
+
+.bp-faq-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+}
+
+.bp-faq-item i {
+    color: var(--primary-color);
+    font-size: 1rem;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.bp-faq-item p {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0;
+    line-height: 1.5;
+}
+
+.bp-faq-item strong {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* ==================== FOOTER ==================== */
+.bp-shop-footer {
+    padding: 20px;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.bp-shop-footer p {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.4);
+    margin: 0;
+}
+
+/* ==================== LOGIN PROMPT ==================== */
+.bp-login-prompt {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+.bp-login-card {
+    background: linear-gradient(180deg, rgba(10, 25, 47, 0.98) 0%, rgba(5, 15, 30, 0.98) 100%);
+    border: 2px solid var(--primary-color);
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+}
+
+.bp-login-card h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem;
+    color: #fff;
+    margin: 0 0 12px;
+}
+
+.bp-login-card p {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin: 0 0 24px;
+}
+
+.bp-login-btn {
+    padding: 14px 32px;
+    background: linear-gradient(180deg, #00d4ff 0%, #0099cc 100%);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+}
+
+.bp-login-btn:hover {
+    background: linear-gradient(180deg, #00e5ff 0%, #00aadd 100%);
+    box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 768px) {
+    .bp-shop-hero {
+        padding: 40px 16px 30px;
+    }
+    
+    .bp-shop-title {
+        font-size: 1.8rem;
+        letter-spacing: 2px;
+    }
+    
+    .bp-shop-subtitle {
+        font-size: 0.95rem;
+    }
+    
+    .bp-coin-large {
+        width: 64px;
+        height: 64px;
+    }
+    
+    .bp-coin-large .bp-icon {
+        font-size: 1.6rem;
+    }
+    
+    .bp-balance-card {
+        padding: 16px 24px;
+    }
+    
+    .bp-balance-value {
+        font-size: 1.6rem;
+    }
+    
+    .bp-packs-section {
+        padding: 0 16px 30px;
+    }
+    
+    .bp-packs-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+    
+    .bp-pack-card {
+        padding: 20px 16px;
+    }
+    
+    .bp-pack-amount {
+        font-size: 1.4rem;
+    }
+    
+    .bp-pack-price {
+        font-size: 1.2rem;
+    }
+    
+    .bp-pack-btn {
+        padding: 10px 16px;
+        font-size: 0.8rem;
+    }
+    
+    .bp-faq-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .bp-packs-grid {
+        grid-template-columns: 1fr;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+    
+    .bp-message {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px 16px;
+    }
+    
+    .bp-message-close {
+        top: 8px;
+        right: 8px;
+    }
+}
