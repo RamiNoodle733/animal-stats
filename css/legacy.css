@@ -9943,6 +9943,28 @@ body {
     border-radius: 10px;
     padding: 15px;
     margin-bottom: 12px;
+    position: relative;
+}
+
+/* Reddit-style thread line for root comments */
+.comment-item:not(.reply-item) {
+    padding-left: 24px;
+}
+
+.comment-item:not(.reply-item)::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 50px;
+    bottom: 16px;
+    width: 2px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 1px;
+    transition: background 0.2s ease;
+}
+
+.comment-item:not(.reply-item):hover::before {
+    background: rgba(0, 212, 255, 0.25);
 }
 
 .comment-header {
@@ -9983,6 +10005,35 @@ body {
 .comment-author-name {
     font-weight: 600;
     color: var(--primary-color);
+}
+
+/* Reddit-style inline header elements */
+.comment-dot {
+    color: #444;
+    font-size: 0.5rem;
+    margin: 0 4px;
+}
+
+.comment-badge {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-left: 6px;
+}
+
+.comment-badge.admin {
+    background: rgba(255, 107, 0, 0.2);
+    color: #ff6b00;
+    border: 1px solid rgba(255, 107, 0, 0.3);
+}
+
+.comment-badge.mod {
+    background: rgba(0, 212, 255, 0.15);
+    color: #00d4ff;
+    border: 1px solid rgba(0, 212, 255, 0.3);
 }
 
 .comment-date {
@@ -10407,17 +10458,37 @@ body {
     color: #ff4444;
 }
 
-/* Nested Replies */
+/* Nested Replies - Reddit style */
 .comment-replies {
     margin-top: 12px;
-    margin-left: 20px;
-    padding-left: 15px;
-    border-left: 2px solid rgba(0, 212, 255, 0.2);
+    margin-left: 24px;
+    padding-left: 16px;
+    border-left: 2px solid rgba(255, 255, 255, 0.08);
+    transition: border-color 0.2s ease;
+}
+
+.comment-replies:hover {
+    border-left-color: rgba(0, 212, 255, 0.2);
 }
 
 .comment-replies .comment-item {
     background: rgba(0, 0, 0, 0.15);
     margin-bottom: 8px;
+    padding-left: 15px;
+}
+
+.comment-replies .comment-item::before {
+    display: none;
+}
+
+/* Deeply nested replies */
+.comment-replies .comment-replies {
+    margin-left: 16px;
+    padding-left: 12px;
+}
+
+.comment-replies .comment-replies .comment-item {
+    background: rgba(0, 0, 0, 0.1);
 }
 
 /* Anonymous comment styling */

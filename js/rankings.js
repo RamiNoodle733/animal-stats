@@ -1618,7 +1618,7 @@ class RankingsManager {
 
     createCommentElement(comment, isReply = false) {
         const div = document.createElement('div');
-        div.className = 'comment-item' + (isReply ? ' reply-item' : '') + (comment.isAnonymous ? ' anonymous' : '');
+        div.className = 'comment-item thread-comment' + (isReply ? ' reply-item' : '') + (comment.isAnonymous ? ' anonymous' : '');
         div.dataset.commentId = comment._id;
 
         // Handle anonymous vs regular display
@@ -1639,24 +1639,39 @@ class RankingsManager {
         const hasDownvoted = comment.downvotes?.some(id => id.toString() === currentUserId);
         const score = comment.score ?? ((comment.upvotes?.length || 0) - (comment.downvotes?.length || 0));
         const scoreClass = score > 0 ? 'positive' : score < 0 ? 'negative' : '';
+        
+        // Reply count
+        const replyCount = comment.replies?.length || 0;
 
         // Add user ID for avatar refresh
         const userIdAttr = authorId ? `data-user-id="${authorId}"` : '';
+        
+        // Admin/mod badge
+        const roleBadge = comment.author?.role === 'admin' ? '<span class="comment-badge admin">Admin</span>' : 
+                          comment.author?.role === 'moderator' ? '<span class="comment-badge mod">Mod</span>' : '';
         
         div.innerHTML = `
             <div class="comment-header" ${userIdAttr}>
                 <div class="comment-author">
                     <span class="comment-avatar">${avatarHtml}</span>
                     <span class="comment-author-name">${displayName}</span>
+                    ${roleBadge}
+                    <span class="comment-dot">•</span>
+                    <span class="comment-date">${timeAgo}</span>
                 </div>
-                <span class="comment-date">${timeAgo}</span>
             </div>
             <div class="comment-content">${this.escapeHtml(comment.content)}</div>
             <div class="comment-actions">
-                <button class="comment-action-btn upvote-btn ${hasUpvoted ? 'upvoted' : ''}" data-comment-id="${comment._id}"><span class="vote-icon"><svg viewBox="0 0 3000 3000" fill="currentColor"><path d="m1500 233l-1267 1364 377-97 106.15-167.32 103.54 189.82 396.91-22.5 43.14-301.06 90.6 204.06 52.66 97-16.31 97-27.01 248.64-69.05 167.36-56.03 754h542.33l-57.64-754-74.55-173.01-32.94-242.99-14.8-97 51.02-97 43.14-182.49 60.4 279.49 399.76 26.47 79.11-154.97 159.57 128.5 194 97h272z"/></svg></span></button><span class="vote-score ${scoreClass}">${score}</span><button class="comment-action-btn downvote-btn ${hasDownvoted ? 'downvoted' : ''}" data-comment-id="${comment._id}"><span class="vote-icon"><svg viewBox="0 0 3000 3000" fill="currentColor"><path d="m1500 233l-1267 1364 377-97 106.15-167.32 103.54 189.82 396.91-22.5 43.14-301.06 90.6 204.06 52.66 97-16.31 97-27.01 248.64-69.05 167.36-56.03 754h542.33l-57.64-754-74.55-173.01-32.94-242.99-14.8-97 51.02-97 43.14-182.49 60.4 279.49 399.76 26.47 79.11-154.97 159.57 128.5 194 97h272z"/></svg></span></button>
+                <button class="comment-action-btn upvote-btn ${hasUpvoted ? 'upvoted' : ''}" data-comment-id="${comment._id}">
+                    <span class="vote-icon"><svg viewBox="0 0 3000 3000" fill="currentColor"><path d="m1500 233l-1267 1364 377-97 106.15-167.32 103.54 189.82 396.91-22.5 43.14-301.06 90.6 204.06 52.66 97-16.31 97-27.01 248.64-69.05 167.36-56.03 754h542.33l-57.64-754-74.55-173.01-32.94-242.99-14.8-97 51.02-97 43.14-182.49 60.4 279.49 399.76 26.47 79.11-154.97 159.57 128.5 194 97h272z"/></svg></span>
+                </button>
+                <span class="vote-score ${scoreClass}">${score}</span>
+                <button class="comment-action-btn downvote-btn ${hasDownvoted ? 'downvoted' : ''}" data-comment-id="${comment._id}">
+                    <span class="vote-icon"><svg viewBox="0 0 3000 3000" fill="currentColor"><path d="m1500 233l-1267 1364 377-97 106.15-167.32 103.54 189.82 396.91-22.5 43.14-301.06 90.6 204.06 52.66 97-16.31 97-27.01 248.64-69.05 167.36-56.03 754h542.33l-57.64-754-74.55-173.01-32.94-242.99-14.8-97 51.02-97 43.14-182.49 60.4 279.49 399.76 26.47 79.11-154.97 159.57 128.5 194 97h272z"/></svg></span>
+                </button>
                 <button class="comment-action-btn reply-btn" data-comment-id="${comment._id}">
                     <i class="fas fa-reply"></i>
-                    Reply
+                    Reply${replyCount > 0 ? ` (${replyCount})` : ''}
                 </button>
                 ${isOwn ? `
                     <button class="comment-action-btn delete-btn" data-comment-id="${comment._id}">

@@ -719,40 +719,126 @@ class CommunityManager {
         
         const hasAnimalContext = !isChat && item.animal;
         
-        return `
-            <div class="feed-post-card ${hasAnimalContext ? 'has-animal-context' : ''}" data-id="${item._id}">
-                <div class="feed-post-header">
-                    <div class="feed-post-avatar">${avatarHtml}</div>
-                    <div class="feed-post-meta">
-                        <div class="feed-post-author">
-                            <span class="feed-post-username">${this.escapeHtml(username)}</span>
-                            ${item.author?.role === 'admin' ? '<span class="feed-post-badge">Admin</span>' : ''}
-                            ${item.author?.role === 'moderator' ? '<span class="feed-post-badge">Mod</span>' : ''}
-                        </div>
-                        <div class="feed-post-time">${time}</div>
-                        ${animalContextHtml}
-                    </div>
+        // Render nested replies for chat messages (Reddit-style threading)
+        let repliesHtml = '';
+        if (isChat && item.replies && item.replies.length > 0) {
+            repliesHtml = `
+                <div class="thread-replies">
+                    ${item.replies.map(reply => this.renderThreadReply(reply)).join('')}
                 </div>
-                ${replyContextHtml}
-                <div class="feed-post-content">${this.escapeHtml(item.content)}</div>
-                <div class="feed-post-actions">
-                    <button class="feed-action-btn vote-up ${hasUpvoted ? 'voted' : ''}" data-msg-id="${item._id}" title="Upvote">
-                        <span class="vote-icon"><svg viewBox="0 0 3000 3000" fill="currentColor"><path d="m1500 233l-1267 1364 377-97 106.15-167.32 103.54 189.82 396.91-22.5 43.14-301.06 90.6 204.06 52.66 97-16.31 97-27.01 248.64-69.05 167.36-56.03 754h542.33l-57.64-754-74.55-173.01-32.94-242.99-14.8-97 51.02-97 43.14-182.49 60.4 279.49 399.76 26.47 79.11-154.97 159.57 128.5 194 97h272z"/></svg></span>
-                    </button>
-                    <span class="feed-action-btn ${scoreClass}">${score}</span>
-                    <button class="feed-action-btn vote-down ${hasDownvoted ? 'voted' : ''}" data-msg-id="${item._id}" title="Downvote">
-                        <span class="vote-icon"><svg viewBox="0 0 3000 3000" fill="currentColor"><path d="m1500 233l-1267 1364 377-97 106.15-167.32 103.54 189.82 396.91-22.5 43.14-301.06 90.6 204.06 52.66 97-16.31 97-27.01 248.64-69.05 167.36-56.03 754h542.33l-57.64-754-74.55-173.01-32.94-242.99-14.8-97 51.02-97 43.14-182.49 60.4 279.49 399.76 26.47 79.11-154.97 159.57 128.5 194 97h272z"/></svg></span>
-                    </button>
-                    ${isChat ? `
-                        <button class="feed-action-btn reply-btn" data-msg-id="${item._id}" data-username="${this.escapeHtml(username)}" title="Reply">
+            `;
+        }
+        
+        // Reply count for display
+        const replyCount = item.replies?.length || 0;
+        
+        return `
+            <div class="feed-post-card thread-comment ${hasAnimalContext ? 'has-animal-context' : ''}" data-id="${item._id}">
+                <div class="thread-line"></div>
+                <div class="thread-content">
+                    <div class="feed-post-header">
+                        <div class="feed-post-avatar">${avatarHtml}</div>
+                        <div class="feed-post-meta">
+                            <div class="feed-post-author">
+                                <span class="feed-post-username">${this.escapeHtml(username)}</span>
+                                ${item.author?.role === 'admin' ? '<span class="feed-post-badge admin">Admin</span>' : ''}
+                                ${item.author?.role === 'moderator' ? '<span class="feed-post-badge mod">Mod</span>' : ''}
+                            </div>
+                            <span class="feed-post-dot">•</span>
+                            <div class="feed-post-time">${time}</div>
+                        </div>
+                    </div>
+                    ${replyContextHtml}
+                    <div class="feed-post-content">${this.escapeHtml(item.content)}</div>
+                    <div class="feed-post-actions">
+                        <button class="feed-action-btn vote-up ${hasUpvoted ? 'voted' : ''}" data-msg-id="${item._id}" title="Upvote">
+                            <span class="vote-icon"><svg viewBox="0 0 3000 3000" fill="currentColor"><path d="m1500 233l-1267 1364 377-97 106.15-167.32 103.54 189.82 396.91-22.5 43.14-301.06 90.6 204.06 52.66 97-16.31 97-27.01 248.64-69.05 167.36-56.03 754h542.33l-57.64-754-74.55-173.01-32.94-242.99-14.8-97 51.02-97 43.14-182.49 60.4 279.49 399.76 26.47 79.11-154.97 159.57 128.5 194 97h272z"/></svg></span>
+                        </button>
+                        <span class="feed-action-score ${scoreClass}">${score}</span>
+                        <button class="feed-action-btn vote-down ${hasDownvoted ? 'voted' : ''}" data-msg-id="${item._id}" title="Downvote">
+                            <span class="vote-icon"><svg viewBox="0 0 3000 3000" fill="currentColor"><path d="m1500 233l-1267 1364 377-97 106.15-167.32 103.54 189.82 396.91-22.5 43.14-301.06 90.6 204.06 52.66 97-16.31 97-27.01 248.64-69.05 167.36-56.03 754h542.33l-57.64-754-74.55-173.01-32.94-242.99-14.8-97 51.02-97 43.14-182.49 60.4 279.49 399.76 26.47 79.11-154.97 159.57 128.5 194 97h272z"/></svg></span>
+                        </button>
+                        ${isChat ? `
+                            <button class="feed-action-btn reply-btn" data-msg-id="${item._id}" data-username="${this.escapeHtml(username)}" title="Reply">
+                                <i class="fas fa-reply"></i> Reply${replyCount > 0 ? ` (${replyCount})` : ''}
+                            </button>
+                        ` : ''}
+                        ${canDelete ? `
+                            <button class="feed-action-btn delete-btn" data-msg-id="${item._id}" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                    ${repliesHtml}
+                </div>
+            </div>
+        `;
+    }
+    
+    // Render a threaded reply (Reddit-style)
+    renderThreadReply(reply) {
+        const username = reply.authorUsername || reply.author?.username || 'Anonymous';
+        const initial = username.charAt(0).toUpperCase();
+        const time = this.formatTime(reply.createdAt);
+        const profileAnimal = reply.author?.profileAnimal || reply.profileAnimal;
+        const avatarHtml = this.getUserAvatarHtml(profileAnimal, initial);
+        
+        // Score calculation
+        const score = reply.score || 0;
+        const scoreClass = score > 0 ? 'positive' : score < 0 ? 'negative' : '';
+        
+        // Check if user has voted
+        const userId = Auth.user?.id;
+        const hasUpvoted = userId && reply.upvotes?.some(id => id.toString() === userId);
+        const hasDownvoted = userId && reply.downvotes?.some(id => id.toString() === userId);
+        
+        // Can delete if owner or admin
+        const authorId = reply.authorId || reply.author?._id;
+        const isOwner = userId && authorId === userId;
+        const isAdmin = Auth.user?.role === 'admin' || Auth.user?.role === 'moderator';
+        const canDelete = isOwner || isAdmin;
+        
+        // Nested replies (if any)
+        let nestedRepliesHtml = '';
+        if (reply.replies && reply.replies.length > 0) {
+            nestedRepliesHtml = `
+                <div class="thread-replies">
+                    ${reply.replies.map(r => this.renderThreadReply(r)).join('')}
+                </div>
+            `;
+        }
+        
+        return `
+            <div class="thread-reply" data-id="${reply._id}">
+                <div class="thread-line"></div>
+                <div class="thread-content">
+                    <div class="thread-reply-header">
+                        <div class="thread-reply-avatar">${avatarHtml}</div>
+                        <span class="thread-reply-username">${this.escapeHtml(username)}</span>
+                        ${reply.author?.role === 'admin' ? '<span class="feed-post-badge admin">Admin</span>' : ''}
+                        ${reply.author?.role === 'moderator' ? '<span class="feed-post-badge mod">Mod</span>' : ''}
+                        <span class="thread-reply-dot">•</span>
+                        <span class="thread-reply-time">${time}</span>
+                    </div>
+                    <div class="thread-reply-content">${this.escapeHtml(reply.content)}</div>
+                    <div class="thread-reply-actions">
+                        <button class="feed-action-btn vote-up ${hasUpvoted ? 'voted' : ''}" data-msg-id="${reply._id}" title="Upvote">
+                            <span class="vote-icon"><svg viewBox="0 0 3000 3000" fill="currentColor"><path d="m1500 233l-1267 1364 377-97 106.15-167.32 103.54 189.82 396.91-22.5 43.14-301.06 90.6 204.06 52.66 97-16.31 97-27.01 248.64-69.05 167.36-56.03 754h542.33l-57.64-754-74.55-173.01-32.94-242.99-14.8-97 51.02-97 43.14-182.49 60.4 279.49 399.76 26.47 79.11-154.97 159.57 128.5 194 97h272z"/></svg></span>
+                        </button>
+                        <span class="feed-action-score ${scoreClass}">${score}</span>
+                        <button class="feed-action-btn vote-down ${hasDownvoted ? 'voted' : ''}" data-msg-id="${reply._id}" title="Downvote">
+                            <span class="vote-icon"><svg viewBox="0 0 3000 3000" fill="currentColor"><path d="m1500 233l-1267 1364 377-97 106.15-167.32 103.54 189.82 396.91-22.5 43.14-301.06 90.6 204.06 52.66 97-16.31 97-27.01 248.64-69.05 167.36-56.03 754h542.33l-57.64-754-74.55-173.01-32.94-242.99-14.8-97 51.02-97 43.14-182.49 60.4 279.49 399.76 26.47 79.11-154.97 159.57 128.5 194 97h272z"/></svg></span>
+                        </button>
+                        <button class="feed-action-btn reply-btn" data-msg-id="${reply._id}" data-username="${this.escapeHtml(username)}" title="Reply">
                             <i class="fas fa-reply"></i> Reply
                         </button>
-                    ` : ''}
-                    ${canDelete ? `
-                        <button class="feed-action-btn delete-btn" data-msg-id="${item._id}" title="Delete">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    ` : ''}
+                        ${canDelete ? `
+                            <button class="feed-action-btn delete-btn" data-msg-id="${reply._id}" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                    ${nestedRepliesHtml}
                 </div>
             </div>
         `;
