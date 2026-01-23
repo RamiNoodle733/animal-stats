@@ -128,7 +128,7 @@ const HomepageController = {
     },
     
     /**
-     * Play true whoosh sound using filtered noise
+     * Play true whoosh sound using filtered noise with pitch/duration variation
      */
     playWhoosh(intensity) {
         if (!this.audioContext || !this.noiseBuffer) return;
@@ -143,29 +143,33 @@ const HomepageController = {
             const noiseSource = ctx.createBufferSource();
             noiseSource.buffer = this.noiseBuffer;
             
-            // Bandpass filter for whoosh character
+            // Playback rate affects pitch - higher intensity = lower swoosh
+            noiseSource.playbackRate.value = 1.2 - intensity * 0.3;
+            
+            // Bandpass filter for whoosh character - lower for more dramatic
             const bandpass = ctx.createBiquadFilter();
             bandpass.type = 'bandpass';
-            bandpass.frequency.setValueAtTime(800 + intensity * 400, ctx.currentTime);
-            bandpass.frequency.exponentialRampToValueAtTime(200, ctx.currentTime + 0.25);
-            bandpass.Q.value = 0.5;
+            bandpass.frequency.setValueAtTime(600 + intensity * 500, ctx.currentTime);
+            bandpass.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.3 + intensity * 0.1);
+            bandpass.Q.value = 0.7;
             
             // Highpass to remove rumble
             const highpass = ctx.createBiquadFilter();
             highpass.type = 'highpass';
-            highpass.frequency.value = 100;
+            highpass.frequency.value = 80;
             
-            // Lowpass for air sound
+            // Lowpass for air sound - more bass at higher intensity
             const lowpass = ctx.createBiquadFilter();
             lowpass.type = 'lowpass';
-            lowpass.frequency.setValueAtTime(3000 + intensity * 2000, ctx.currentTime);
-            lowpass.frequency.exponentialRampToValueAtTime(500, ctx.currentTime + 0.3);
+            lowpass.frequency.setValueAtTime(2500 + intensity * 2500, ctx.currentTime);
+            lowpass.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.35);
             
-            // Gain envelope
+            // Gain envelope - louder and longer at higher intensity
             const gainNode = ctx.createGain();
+            const duration = 0.25 + intensity * 0.15;
             gainNode.gain.setValueAtTime(0, ctx.currentTime);
-            gainNode.gain.linearRampToValueAtTime(0.3 * intensity, ctx.currentTime + 0.02);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25 + intensity * 0.1);
+            gainNode.gain.linearRampToValueAtTime(0.25 + intensity * 0.15, ctx.currentTime + 0.025);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
             
             // Connect chain
             noiseSource.connect(highpass);
@@ -175,7 +179,7 @@ const HomepageController = {
             gainNode.connect(ctx.destination);
             
             noiseSource.start(ctx.currentTime);
-            noiseSource.stop(ctx.currentTime + 0.35);
+            noiseSource.stop(ctx.currentTime + duration + 0.05);
         } catch (e) {}
     },
     
@@ -221,10 +225,10 @@ const HomepageController = {
         if (tension > 0.95) {
             return { 
                 level: 'extreme', 
-                color1: '#000000', 
-                color2: '#1a0a15',
-                glowColor: '20, 0, 15',
-                shadowColor: 'rgba(0, 0, 0, 0.9)'
+                color1: '#ff3020', 
+                color2: '#cc1010',
+                glowColor: '255, 50, 30',
+                shadowColor: 'rgba(255, 50, 30, 0.8)'
             };
         } else if (tension > 0.8) {
             return { 
@@ -329,7 +333,8 @@ const HomepageController = {
             /* Slingshot dragging state - keep silhouettes WHITE */
             .silhouette-panel.slingshot-active .silhouette-img {
                 filter: brightness(0) invert(1) drop-shadow(0 0 12px rgba(0, 255, 204, 0.5)) !important;
-                transition: opacity 0.15s ease, filter 0.15s ease !important;
+                transition: opacity 0.15s ease !important;
+                /* NO filter transition to prevent black flash */
             }
             
             /* Low tension - cyan glow */
@@ -356,14 +361,25 @@ const HomepageController = {
                 opacity: 0.3 !important;
             }
             
-            /* EXTREME tension - dark/void with inverted glow */
+            /* EXTREME tension - burnt ember/crimson void with pulsing glow */
             .silhouette-panel.slingshot-level-extreme .silhouette-img {
-                filter: brightness(0) invert(1) drop-shadow(0 0 30px rgba(255, 0, 50, 1)) drop-shadow(0 0 60px rgba(0, 0, 0, 1)) !important;
-                opacity: 0.2 !important;
+                filter: brightness(0) invert(1) drop-shadow(0 0 35px rgba(255, 50, 50, 1)) drop-shadow(0 0 20px rgba(255, 100, 50, 0.8)) !important;
+                opacity: 0.25 !important;
+                animation: extremePulse 0.15s ease-in-out infinite alternate;
+            }
+            
+            @keyframes extremePulse {
+                0% { filter: brightness(0) invert(1) drop-shadow(0 0 35px rgba(255, 50, 50, 1)) drop-shadow(0 0 20px rgba(255, 100, 50, 0.8)); }
+                100% { filter: brightness(0) invert(1) drop-shadow(0 0 45px rgba(255, 30, 30, 1)) drop-shadow(0 0 30px rgba(255, 80, 30, 1)); }
             }
             
             .silhouette-panel.slingshot-level-extreme {
-                background: radial-gradient(ellipse at center, rgba(30, 0, 20, 0.95) 0%, rgba(0, 0, 0, 0.98) 100%) !important;
+                background: radial-gradient(ellipse at center, rgba(60, 10, 15, 0.95) 0%, rgba(25, 5, 10, 0.98) 100%) !important;
+                border-color: rgba(255, 60, 40, 0.6) !important;
+                box-shadow: 
+                    0 0 40px rgba(255, 50, 30, 0.4),
+                    0 0 80px rgba(255, 30, 20, 0.2),
+                    inset 0 0 30px rgba(255, 50, 30, 0.15) !important;
             }
             
             /* Motion blur during fast movement - keep WHITE */
@@ -374,6 +390,31 @@ const HomepageController = {
             .silhouette-panel.slingshot-blur .silhouette-img {
                 filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(0, 212, 255, 0.4)) !important;
                 opacity: 0.6 !important;
+            }
+            
+            /* Panel bounce animation on release */
+            @keyframes panelBounce {
+                0% { transform: translateY(-50%) scale(1.08); }
+                30% { transform: translateY(-50%) scale(0.96); }
+                50% { transform: translateY(-50%) scale(1.02); }
+                70% { transform: translateY(-50%) scale(0.99); }
+                100% { transform: translateY(-50%) scale(1); }
+            }
+            
+            @keyframes panelBounceMobile {
+                0% { transform: scale(1.06); }
+                30% { transform: scale(0.97); }
+                50% { transform: scale(1.02); }
+                70% { transform: scale(0.99); }
+                100% { transform: scale(1); }
+            }
+            
+            .silhouette-panel.slingshot-bounce {
+                animation: panelBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+            }
+            
+            .silhouette-panel.panel-mobile.slingshot-bounce {
+                animation: panelBounceMobile 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
             }
             
             /* Flash animations */
@@ -389,9 +430,24 @@ const HomepageController = {
             }
             
             @keyframes extremeFlash {
-                0% { opacity: 1; background: rgba(255, 255, 255, 0.9); }
-                30% { opacity: 0.8; background: rgba(255, 0, 50, 0.6); }
+                0% { opacity: 1; background: radial-gradient(circle, rgba(255, 255, 255, 1) 0%, rgba(255, 50, 30, 0.8) 30%, transparent 70%); }
+                30% { opacity: 0.9; background: radial-gradient(circle, rgba(255, 100, 50, 0.9) 0%, rgba(255, 30, 20, 0.5) 50%, transparent 80%); }
                 100% { opacity: 0; background: transparent; }
+            }
+            
+            /* Screen ripple effect */
+            .slingshot-ripple {
+                position: fixed;
+                border-radius: 50%;
+                border: 3px solid rgba(0, 255, 204, 0.6);
+                pointer-events: none;
+                animation: rippleExpand 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+                z-index: 9998;
+            }
+            
+            @keyframes rippleExpand {
+                0% { width: 0; height: 0; opacity: 1; }
+                100% { width: 300px; height: 300px; opacity: 0; margin: -150px; }
             }
             
             /* Particles container */
@@ -417,6 +473,18 @@ const HomepageController = {
                 width: 10px;
                 height: 10px;
                 box-shadow: 0 0 12px #00ffcc, 0 0 24px #00d4ff, 0 0 36px #00d4ff;
+            }
+            
+            .slingshot-particle.trail {
+                width: 4px;
+                height: 4px;
+                background: rgba(0, 255, 204, 0.8);
+                box-shadow: 0 0 6px rgba(0, 255, 204, 0.6);
+            }
+            
+            .slingshot-particle.ember {
+                background: #ff6030;
+                box-shadow: 0 0 8px #ff4020, 0 0 16px #ff2010;
             }
             
             @keyframes particleFly {
@@ -447,84 +515,92 @@ const HomepageController = {
                 z-index: 40;
             }
             
-            /* Vertical speed lines - full edge coverage */
+            /* Vertical speed lines - positioned at EXACT edges */
             .speed-lines.vertical-top {
                 top: 0;
                 left: 0;
                 right: 0;
-                height: 50%;
+                height: 60%;
             }
             
             .speed-lines.vertical-bottom {
                 bottom: 0;
                 left: 0;
                 right: 0;
-                height: 50%;
+                height: 60%;
             }
             
             .speed-lines.vertical-top .speed-line,
             .speed-lines.vertical-bottom .speed-line {
                 position: absolute;
-                background: linear-gradient(to bottom, transparent, rgba(0, 212, 255, 0.6), transparent);
-                width: 3px;
+                background: linear-gradient(to bottom, transparent, rgba(0, 212, 255, 0.7), transparent);
+                width: 2px;
+                border-radius: 2px;
+                box-shadow: 0 0 6px rgba(0, 212, 255, 0.5);
             }
             
             .speed-lines.vertical-top .speed-line {
-                animation: speedLineDown 0.2s linear infinite;
+                top: 0;
+                animation: speedLineDown 0.18s linear infinite;
             }
             
             .speed-lines.vertical-bottom .speed-line {
-                animation: speedLineUp 0.2s linear infinite;
+                bottom: 0;
+                animation: speedLineUp 0.18s linear infinite;
             }
             
             @keyframes speedLineDown {
-                0% { transform: translateY(-100%); opacity: 1; }
-                100% { transform: translateY(200%); opacity: 0; }
+                0% { transform: translateY(0); opacity: 1; }
+                100% { transform: translateY(100%); opacity: 0; }
             }
             
             @keyframes speedLineUp {
-                0% { transform: translateY(100%); opacity: 1; }
-                100% { transform: translateY(-200%); opacity: 0; }
+                0% { transform: translateY(0); opacity: 1; }
+                100% { transform: translateY(-100%); opacity: 0; }
             }
             
-            /* Horizontal speed lines - full edge coverage */
+            /* Horizontal speed lines - positioned at EXACT edges */
             .speed-lines.horizontal-left {
                 left: 0;
                 top: 0;
                 bottom: 0;
-                width: 50%;
+                width: 60%;
             }
             
             .speed-lines.horizontal-right {
                 right: 0;
                 top: 0;
                 bottom: 0;
-                width: 50%;
+                width: 60%;
             }
             
             .speed-lines.horizontal-left .speed-line,
             .speed-lines.horizontal-right .speed-line {
                 position: absolute;
-                background: linear-gradient(to right, transparent, rgba(0, 212, 255, 0.6), transparent);
-                height: 3px;
+                background: linear-gradient(to right, transparent, rgba(0, 212, 255, 0.7), transparent);
+                height: 2px;
+                border-radius: 2px;
+                box-shadow: 0 0 6px rgba(0, 212, 255, 0.5);
             }
             
             .speed-lines.horizontal-left .speed-line {
-                animation: speedLineRight 0.2s linear infinite;
+                left: 0;
+                animation: speedLineRight 0.18s linear infinite;
             }
             
             .speed-lines.horizontal-right .speed-line {
-                animation: speedLineLeft 0.2s linear infinite;
+                right: 0;
+                animation: speedLineLeft 0.18s linear infinite;
             }
             
             @keyframes speedLineRight {
-                0% { transform: translateX(-100%); opacity: 1; }
-                100% { transform: translateX(200%); opacity: 0; }
+                0% { transform: translateX(0); opacity: 1; }
+                100% { transform: translateX(100%); opacity: 0; }
             }
             
             @keyframes speedLineLeft {
-                0% { transform: translateX(100%); opacity: 1; }
-                100% { transform: translateX(-200%); opacity: 0; }
+                0% { transform: translateX(0); opacity: 1; }
+                100% { transform: translateX(-100%); opacity: 0; }
             }
             
             /* Shockwave effect */
@@ -1085,7 +1161,7 @@ const HomepageController = {
     },
     
     /**
-     * Update speed lines on correct side
+     * Update speed lines on correct side - lines spawn from the edge
      */
     updateSpeedLines(panel, velocity, position) {
         if (!panel || velocity < 10) return;
@@ -1097,7 +1173,7 @@ const HomepageController = {
         container.className = `speed-lines ${position}`;
         panel.appendChild(container);
         
-        const lineCount = Math.min(Math.floor(velocity / 4), 12);
+        const lineCount = Math.min(Math.floor(velocity / 3), 15);
         const isVertical = position.startsWith('vertical');
         
         for (let i = 0; i < lineCount; i++) {
@@ -1105,13 +1181,16 @@ const HomepageController = {
             line.className = 'speed-line';
             
             if (isVertical) {
+                // Position lines randomly along width, spawn from edge
                 line.style.left = `${Math.random() * 100}%`;
-                line.style.height = `${30 + Math.random() * 40}px`;
+                line.style.height = `${20 + Math.random() * 35}px`;
             } else {
+                // Position lines randomly along height, spawn from edge
                 line.style.top = `${Math.random() * 100}%`;
-                line.style.width = `${30 + Math.random() * 40}px`;
+                line.style.width = `${20 + Math.random() * 35}px`;
             }
-            line.style.animationDuration = `${0.15 + Math.random() * 0.15}s`;
+            line.style.animationDuration = `${0.12 + Math.random() * 0.12}s`;
+            line.style.animationDelay = `${Math.random() * 0.1}s`;
             
             container.appendChild(line);
         }
@@ -1409,11 +1488,12 @@ const HomepageController = {
             const glowIntensity = 0.2 + s.tension * 0.6;
             
             if (s.tension > 0.95) {
-                // Extreme: dark void with subtle red edge glow
+                // Extreme: burnt ember with pulsing crimson glow
+                const pulse = 0.5 + Math.sin(Date.now() * 0.01) * 0.3;
                 anim.panel.style.boxShadow = `
-                    0 0 ${60 + s.tension * 40}px rgba(0, 0, 0, 0.9),
-                    0 0 ${20}px rgba(255, 0, 50, 0.4),
-                    inset 0 0 ${40 + s.tension * 30}px rgba(0, 0, 0, 0.8)
+                    0 0 ${50 + s.tension * 50}px rgba(255, 50, 30, ${0.4 + pulse * 0.2}),
+                    0 0 ${80}px rgba(255, 30, 20, 0.25),
+                    inset 0 0 ${30 + s.tension * 30}px rgba(255, 50, 30, 0.2)
                 `;
             } else {
                 anim.panel.style.boxShadow = `
@@ -1436,26 +1516,37 @@ const HomepageController = {
             
             anim.velocity = velocity;
             
+            // Bounce effect on panel
+            if (anim?.panel && s.tension > 0.2) {
+                anim.panel.classList.add('slingshot-bounce');
+                setTimeout(() => anim.panel?.classList.remove('slingshot-bounce'), 400);
+            }
+            
+            // Screen ripple effect
+            if (s.tension > 0.4) {
+                this.spawnRipple(s.startX, s.startY, s.tension);
+            }
+            
             // Effects based on power
             if (s.tension > 0.95) {
                 // EXTREME release
                 this.triggerScreenShake(this.physics.screenShakeIntensity * 1.5);
                 this.playWhoosh(1);
-                this.spawnReleaseParticles(anim.panel, s.panelKey === 'mobile', 35);
+                this.spawnReleaseParticles(anim.panel, s.panelKey === 'mobile', 40, true);
                 this.spawnShockwave(anim.panel, s.startX, s.startY);
                 this.flashReleaseEffect(anim.panel, 'extreme');
             } else if (s.tension > 0.7) {
                 this.triggerScreenShake(this.physics.screenShakeIntensity * s.tension);
                 this.playWhoosh(s.tension);
-                this.spawnReleaseParticles(anim.panel, s.panelKey === 'mobile', 25);
+                this.spawnReleaseParticles(anim.panel, s.panelKey === 'mobile', 28);
                 this.spawnShockwave(anim.panel, s.startX, s.startY);
                 this.flashReleaseEffect(anim.panel, 'power');
             } else if (s.tension > 0.3) {
                 this.playWhoosh(s.tension * 0.7);
-                this.spawnReleaseParticles(anim.panel, s.panelKey === 'mobile', 15);
+                this.spawnReleaseParticles(anim.panel, s.panelKey === 'mobile', 18);
                 this.flashReleaseEffect(anim.panel, 'normal');
             } else {
-                this.spawnReleaseParticles(anim.panel, s.panelKey === 'mobile', 8);
+                this.spawnReleaseParticles(anim.panel, s.panelKey === 'mobile', 10);
             }
             
             this.playHapticFeedback('release');
@@ -1480,6 +1571,31 @@ const HomepageController = {
         }
         
         anim.targetSpeed = 1;
+    },
+    
+    /**
+     * Spawn screen ripple effect at release point
+     */
+    spawnRipple(x, y, tension) {
+        const ripple = document.createElement('div');
+        ripple.className = 'slingshot-ripple';
+        ripple.style.left = `${x}px`;
+        ripple.style.top = `${y}px`;
+        
+        const size = 200 + tension * 200;
+        ripple.style.setProperty('--size', `${size}px`);
+        
+        // Color based on tension
+        if (tension > 0.95) {
+            ripple.style.borderColor = 'rgba(255, 80, 50, 0.8)';
+        } else if (tension > 0.7) {
+            ripple.style.borderColor = 'rgba(255, 150, 50, 0.7)';
+        } else {
+            ripple.style.borderColor = 'rgba(0, 255, 204, 0.6)';
+        }
+        
+        document.body.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
     },
     
     animateSnapBack() {
@@ -1530,7 +1646,7 @@ const HomepageController = {
         setTimeout(() => wave.remove(), 500);
     },
     
-    spawnReleaseParticles(panel, isMobile, count = 15) {
+    spawnReleaseParticles(panel, isMobile, count = 15, isExtreme = false) {
         if (!panel) return;
         
         let container = panel.querySelector('.slingshot-particles');
@@ -1543,7 +1659,18 @@ const HomepageController = {
         for (let i = 0; i < count; i++) {
             const particle = document.createElement('div');
             particle.className = 'slingshot-particle';
-            if (i < count / 4) particle.classList.add('big');
+            
+            // Vary particle types
+            if (i < count / 5) {
+                particle.classList.add('big');
+            } else if (i < count / 3) {
+                particle.classList.add('trail');
+            }
+            
+            // Add ember particles for extreme tension
+            if (isExtreme && i % 3 === 0) {
+                particle.classList.add('ember');
+            }
             
             particle.style.left = `${Math.random() * 100}%`;
             particle.style.top = `${Math.random() * 100}%`;
@@ -1553,16 +1680,17 @@ const HomepageController = {
                 (this.slingshot.direction > 0 ? Math.PI/2 : -Math.PI/2);
             
             const angle = baseAngle + (Math.random() - 0.5) * Math.PI;
-            const distance = 80 + Math.random() * 120;
+            const distance = 60 + Math.random() * 150;
             const px = Math.cos(angle) * distance;
             const py = Math.sin(angle) * distance;
             
             particle.style.setProperty('--px', `${px}px`);
             particle.style.setProperty('--py', `${py}px`);
+            particle.style.animationDuration = `${0.4 + Math.random() * 0.2}s`;
             
             container.appendChild(particle);
             
-            setTimeout(() => particle.remove(), 500);
+            setTimeout(() => particle.remove(), 600);
         }
         
         setTimeout(() => {
