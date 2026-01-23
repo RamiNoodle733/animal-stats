@@ -325,8 +325,8 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
 
 .portal-logo-frame {
     position: relative;
-    width: 160px;
-    height: 160px;
+    width: 240px;
+    height: 240px;
 }
 
 .portal-logo-glow {
@@ -353,8 +353,8 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
 
 .portal-tagline {
     font-family: var(--font-display, 'Bebas Neue', sans-serif);
-    font-size: clamp(2.2rem, 6vw, 3.5rem);
-    letter-spacing: 8px;
+    font-size: clamp(2.5rem, 7vw, 4.5rem);
+    letter-spacing: 10px;
     color: #fff;
     margin: 0;
     text-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
@@ -608,36 +608,30 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         display: none !important;
     }
     
-    /* Show mobile bottom panel */
+    /* Show mobile bottom panel - horizontal scrolling bar */
     .silhouette-panel.panel-mobile {
         display: block !important;
         position: fixed !important;
-        bottom: auto !important;
         top: auto !important;
-        /* Position relative to bottom of viewport minus more space */
-        bottom: 80px !important;
+        bottom: 40px !important;
         left: 10px !important;
         right: 10px !important;
         transform: none !important;
         width: auto !important;
-        height: 85px !important;
+        height: 80px !important;
         max-height: none !important;
+        border-radius: 12px;
         
-        /* Completely disable all interactions */
+        /* No interactions on mobile panel */
         pointer-events: none !important;
         user-select: none !important;
         -webkit-user-select: none !important;
         -webkit-touch-callout: none !important;
         touch-action: none !important;
         cursor: default !important;
-        
-        /* Disable hover/active states */
         transition: none !important;
         
-        /* Horizontal scroll instead of vertical */
-        border-radius: 12px;
-        
-        /* Adjust vignette for horizontal */
+        /* Hologram background */
         background: 
             linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
             radial-gradient(ellipse at center, rgba(0, 20, 40, 0.85) 0%, rgba(0, 10, 20, 0.95) 100%);
@@ -647,21 +641,23 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         padding-bottom: env(safe-area-inset-bottom, 0);
     }
     
-    /* Mobile track - horizontal scroll (JS controlled) */
+    /* Mobile track - horizontal scroll, JS moves via translateX */
     .silhouette-panel.panel-mobile .silhouette-track {
+        display: flex;
         flex-direction: row;
         width: max-content;
         height: 100%;
-        padding: 8px;
+        padding: 6px;
         will-change: transform;
         pointer-events: none !important;
     }
     
+    /* Mobile silhouette images - fixed size squares */
     .silhouette-panel.panel-mobile .silhouette-img {
-        width: auto;
-        height: 80px;
-        aspect-ratio: 1/1;
-        padding: 6px;
+        width: 68px;
+        height: 68px;
+        flex-shrink: 0;
+        padding: 4px;
         opacity: 0.4;
         pointer-events: none !important;
         -webkit-user-drag: none;
@@ -692,7 +688,7 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     
     /* Portal adjustments for mobile with bottom panel */
     .home-portal {
-        padding-bottom: 120px !important; /* Space for mobile panel */
+        padding-bottom: 100px !important; /* Space for mobile panel */
         padding-top: 0 !important;
         padding-left: 10px !important;
         padding-right: 10px !important;
@@ -700,15 +696,15 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         justify-content: flex-start !important; /* Align to top */
     }
     
-    /* Auth corner - move up on mobile */
+    /* Auth corner - positioned at very top on mobile */
     .home-auth-corner {
-        top: 5px;
-        right: 8px;
+        top: 2px;
+        right: 6px;
     }
     
     .portal-logo-section {
-        margin-top: 35px; /* Below auth buttons */
-        margin-bottom: 10px;
+        margin-top: 25px; /* Below auth buttons */
+        margin-bottom: 8px;
         gap: 4px;
     }
     
@@ -718,8 +714,8 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     }
     
     .portal-tagline {
-        font-size: 1.6rem;
-        letter-spacing: 4px;
+        font-size: 2rem;
+        letter-spacing: 5px;
     }
     
     .portal-subtitle {
@@ -781,8 +777,8 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
 /* Extra small screens (320px) */
 @media (max-width: 360px) {
     .portal-tagline {
-        font-size: 1.1rem;
-        letter-spacing: 2px;
+        font-size: 1.5rem;
+        letter-spacing: 3px;
     }
     
     .portal-description {
@@ -806,17 +802,19 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     }
     
     .silhouette-panel.panel-mobile {
-        height: 80px !important;
+        height: 70px !important;
+        bottom: 30px !important;
         left: 5px !important;
         right: 5px !important;
     }
     
     .silhouette-panel.panel-mobile .silhouette-img {
-        height: 60px;
+        width: 58px;
+        height: 58px;
     }
     
     .home-portal {
-        padding-bottom: 95px !important;
+        padding-bottom: 85px !important;
     }
 }
 

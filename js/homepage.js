@@ -1,6 +1,10 @@
 /**
  * HOMEPAGE - Hologram Silhouette Controller
- * Premium panels with smooth JS-based animation and speed-up interactions
+ * 
+ * DESKTOP: Two side panels (left & right) scrolling UP with hover speed-up
+ * MOBILE: One bottom panel scrolling LEFT with no interactions
+ * 
+ * Animation uses requestAnimationFrame for smooth 60fps performance
  */
 
 'use strict';
@@ -9,7 +13,6 @@ const HomepageController = {
     initialized: false,
     animalImages: [],
     mobilePanel: null,
-    speedUpTimeout: null,
     
     // Animation state for each track
     animations: {
@@ -18,8 +21,8 @@ const HomepageController = {
         mobile: { position: 0, speed: 1, targetSpeed: 1, track: null, width: 0 }
     },
     animationFrame: null,
-    baseSpeed: 1.5, // pixels per frame at 60fps
-    fastMultiplier: 3.5,
+    baseSpeed: 1.5,       // Pixels per frame at 60fps
+    fastMultiplier: 3.5,  // Speed multiplier when hovering (desktop only)
     
     /**
      * Initialize and populate panels
@@ -162,26 +165,27 @@ const HomepageController = {
     },
     
     /**
-     * Start the JavaScript animation loop
+     * Start the JavaScript animation loop (requestAnimationFrame)
+     * Desktop: Both panels scroll UP (translateY)
+     * Mobile: Single panel scrolls LEFT (translateX)
      */
     startAnimationLoop() {
         const self = this;
         
-        // Animation function that handles both desktop and mobile
         const animate = () => {
             const isMobile = window.innerWidth <= 600;
             
-            // Smoothly interpolate speed towards target
+            // Smoothly interpolate speed towards target (easing)
             for (const key of ['left', 'right', 'mobile']) {
                 const anim = self.animations[key];
                 anim.speed += (anim.targetSpeed - anim.speed) * 0.1;
             }
             
             if (isMobile) {
-                // MOBILE: Horizontal animation
+                // MOBILE: Horizontal animation (scroll left)
                 const mobile = self.animations.mobile;
                 if (mobile.track) {
-                    // Re-measure width if needed (panel might have just become visible)
+                    // Measure width if not yet measured
                     if (mobile.width < 100) {
                         mobile.width = mobile.track.scrollWidth / 2;
                     }
@@ -189,7 +193,7 @@ const HomepageController = {
                     if (mobile.width > 0) {
                         mobile.position -= self.baseSpeed * mobile.speed;
                         
-                        // Loop when reaching left edge
+                        // Seamless loop: reset when scrolled half the content
                         if (mobile.position <= -mobile.width) {
                             mobile.position += mobile.width;
                         }
@@ -198,11 +202,11 @@ const HomepageController = {
                     }
                 }
             } else {
-                // DESKTOP: Vertical animation for both panels
+                // DESKTOP: Vertical animation (scroll up) for both panels
                 for (const key of ['left', 'right']) {
                     const anim = self.animations[key];
                     if (anim.track) {
-                        // Re-measure height if needed
+                        // Measure height if not yet measured
                         if (anim.height < 100) {
                             anim.height = anim.track.scrollHeight / 2;
                         }
@@ -210,7 +214,7 @@ const HomepageController = {
                         if (anim.height > 0) {
                             anim.position -= self.baseSpeed * anim.speed;
                             
-                            // Loop when reaching top
+                            // Seamless loop: reset when scrolled half the content
                             if (anim.position <= -anim.height) {
                                 anim.position += anim.height;
                             }
@@ -224,20 +228,20 @@ const HomepageController = {
             self.animationFrame = requestAnimationFrame(animate);
         };
         
-        // Start after a short delay for images to load
+        // Start after short delay for images to load
         setTimeout(animate, 300);
     },
     
     /**
-     * Setup speed-up interactions
+     * Setup desktop hover interactions for speed-up effect
+     * Mobile has NO interactions (disabled)
      */
     setupInteractions() {
         const panelLeft = document.getElementById('silhouette-left');
         const panelRight = document.getElementById('silhouette-right');
         const portalNav = document.getElementById('portal-nav');
-        const mobilePanel = document.getElementById('silhouette-mobile');
         
-        // Desktop: Hover on panel speeds up that panel
+        // DESKTOP ONLY: Hover on panel speeds up that panel
         if (panelLeft) {
             panelLeft.addEventListener('mouseenter', () => this.speedUp('left'));
             panelLeft.addEventListener('mouseleave', () => this.speedNormal('left'));
@@ -248,7 +252,7 @@ const HomepageController = {
             panelRight.addEventListener('mouseleave', () => this.speedNormal('right'));
         }
         
-        // Desktop: Hover on nav area speeds up BOTH panels
+        // DESKTOP ONLY: Hover on nav area speeds up BOTH panels
         if (portalNav) {
             portalNav.addEventListener('mouseenter', () => {
                 this.speedUp('left');
@@ -260,7 +264,7 @@ const HomepageController = {
             });
         }
         
-        // Mobile: Touch speed-up disabled for now (will be replaced with different interaction)
+        // MOBILE: No interactions (panel has pointer-events: none in CSS)
     },
     
     /**
