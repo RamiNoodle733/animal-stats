@@ -14,9 +14,9 @@
    CSS VARIABLES FOR HOMEPAGE
    ======================================== */
 :root {
-    --home-anim-speed: 12s;
+    --home-anim-speed: 10s;
     --home-anim-speed-fast: 4s;
-    --portal-max-width: 520px;
+    --portal-max-width: 560px;
 }
 
 /* ========================================
@@ -56,13 +56,13 @@ body:has(#home-view.active-view) .shared-bottom-bar {
    SILHOUETTE PANELS (LEFT & RIGHT)
    ======================================== */
 .silhouette-panel {
-    position: absolute;
+    position: fixed;
     top: 0;
     bottom: 0;
-    width: clamp(100px, 18vw, 280px);
+    width: clamp(120px, 18vw, 260px);
     overflow: hidden;
     pointer-events: none;
-    z-index: 1;
+    z-index: 5;
     --anim-duration: var(--home-anim-speed);
 }
 
@@ -115,15 +115,15 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     height: auto;
     aspect-ratio: 1/1;
     object-fit: contain;
-    padding: 10%;
-    opacity: 0.25;
+    padding: 12%;
+    opacity: 0.15;
     filter: brightness(0) invert(1) blur(0.5px);
     transition: opacity 0.3s ease;
 }
 
 .silhouette-panel:hover .silhouette-img,
 .silhouette-panel.speed-up .silhouette-img {
-    opacity: 0.35;
+    opacity: 0.25;
 }
 
 /* Vignette overlays on panels */
@@ -159,12 +159,11 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     justify-content: center;
     min-height: 100vh;
     max-height: 100vh;
-    padding: clamp(20px, 4vh, 40px) clamp(20px, 6vw, 60px);
+    padding: clamp(15px, 3vh, 35px) clamp(15px, 5vw, 50px);
     position: relative;
     z-index: 10;
     box-sizing: border-box;
     overflow: hidden;
-    gap: clamp(8px, 1.5vh, 16px);
 }
 
 /* ========================================
@@ -284,14 +283,14 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: clamp(8px, 1.8vh, 18px);
-    margin-bottom: clamp(16px, 3vh, 32px);
+    gap: clamp(6px, 1.5vh, 14px);
+    margin-bottom: clamp(12px, 2.5vh, 28px);
 }
 
 .portal-logo-frame {
     position: relative;
-    width: clamp(80px, 14vh, 140px);
-    height: clamp(80px, 14vh, 140px);
+    width: clamp(70px, 12vh, 120px);
+    height: clamp(70px, 12vh, 120px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -364,10 +363,10 @@ body:has(#home-view.active-view) .shared-bottom-bar {
 .portal-nav {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: clamp(12px, 2.5vw, 20px);
+    gap: clamp(10px, 2vw, 16px);
     width: 100%;
     max-width: var(--portal-max-width);
-    margin-bottom: clamp(16px, 3vh, 28px);
+    margin-bottom: clamp(12px, 2.5vh, 22px);
 }
 
 /* Main nav button - THE STAR OF THE PAGE */
