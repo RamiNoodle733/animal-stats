@@ -260,33 +260,7 @@ const HomepageController = {
             });
         }
         
-        // Mobile: Touch/press speeds up, release returns to normal
-        if (mobilePanel) {
-            // Touch start
-            mobilePanel.addEventListener('touchstart', () => {
-                this.speedUp('mobile');
-            }, { passive: true });
-            
-            // Touch end - brief delay then return to normal
-            mobilePanel.addEventListener('touchend', () => {
-                clearTimeout(this.speedUpTimeout);
-                this.speedUpTimeout = setTimeout(() => {
-                    this.speedNormal('mobile');
-                }, 300);
-            }, { passive: true });
-            
-            // Also support mouse for testing
-            mobilePanel.addEventListener('mousedown', () => {
-                this.speedUp('mobile');
-            });
-            
-            mobilePanel.addEventListener('mouseup', () => {
-                clearTimeout(this.speedUpTimeout);
-                this.speedUpTimeout = setTimeout(() => {
-                    this.speedNormal('mobile');
-                }, 300);
-            });
-        }
+        // Mobile: Touch speed-up disabled for now (will be replaced with different interaction)
     },
     
     /**
