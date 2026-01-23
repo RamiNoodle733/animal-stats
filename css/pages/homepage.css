@@ -674,25 +674,32 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     
     /* Portal adjustments for mobile with bottom panel */
     .home-portal {
-        padding-bottom: 130px !important; /* Space for mobile panel */
-        padding-top: 10px !important; /* Move content up */
-        padding-left: 10px !important; /* Reset side padding on mobile */
+        padding-bottom: 120px !important; /* Space for mobile panel */
+        padding-top: 0 !important; /* No extra top padding */
+        padding-left: 10px !important;
         padding-right: 10px !important;
-        pointer-events: auto; /* Re-enable on mobile since no side panels */
+        pointer-events: auto;
         justify-content: flex-start !important; /* Align to top */
     }
     
+    /* Auth corner - move up on mobile */
+    .home-auth-corner {
+        top: 8px;
+        right: 10px;
+    }
+    
     .portal-logo-section {
-        margin-top: 40px;
+        margin-top: 50px; /* Below auth buttons */
+        margin-bottom: 15px;
     }
     
     .portal-logo-frame {
-        width: 60px;
-        height: 60px;
+        width: 55px;
+        height: 55px;
     }
     
     .portal-tagline {
-        font-size: 1.2rem;
+        font-size: 1.15rem;
         letter-spacing: 3px;
     }
     
@@ -710,10 +717,11 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     .portal-nav {
         gap: 8px;
         max-width: calc(100vw - 20px);
+        margin-bottom: 10px;
     }
     
     .portal-nav-btn {
-        padding: 14px 10px;
+        padding: 12px 10px;
         gap: 8px;
     }
     
@@ -742,12 +750,6 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     
     .portal-tournament-btn .btn-chevron {
         display: none;
-    }
-    
-    /* Auth corner mobile */
-    .home-auth-corner {
-        top: 10px;
-        right: 10px;
     }
     
     .home-auth-btn {

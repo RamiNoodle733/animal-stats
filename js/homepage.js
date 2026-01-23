@@ -165,76 +165,67 @@ const HomepageController = {
      * Start the JavaScript animation loop
      */
     startAnimationLoop() {
-        // Wait a bit longer for images to load and get proper dimensions
-        const initAnimation = () => {
-            const leftTrack = this.animations.left.track;
-            const rightTrack = this.animations.right.track;
-            const mobileTrack = this.animations.mobile.track;
+        const self = this;
+        
+        // Animation function that handles both desktop and mobile
+        const animate = () => {
+            const isMobile = window.innerWidth <= 600;
             
-            // Measure track heights/widths for looping
-            if (leftTrack) {
-                this.animations.left.height = leftTrack.scrollHeight / 2;
-                // If height is too small, images haven't loaded yet
-                if (this.animations.left.height < 100) {
-                    setTimeout(initAnimation, 200);
-                    return;
-                }
-            }
-            if (rightTrack) {
-                this.animations.right.height = rightTrack.scrollHeight / 2;
-            }
-            if (mobileTrack) {
-                this.animations.mobile.width = mobileTrack.scrollWidth / 2;
-                // If mobile width is too small, retry
-                if (this.animations.mobile.width < 100 && window.innerWidth <= 600) {
-                    setTimeout(initAnimation, 200);
-                    return;
-                }
+            // Smoothly interpolate speed towards target
+            for (const key of ['left', 'right', 'mobile']) {
+                const anim = self.animations[key];
+                anim.speed += (anim.targetSpeed - anim.speed) * 0.1;
             }
             
-            // Start animation
-            const animate = () => {
-                // Smoothly interpolate speed towards target
-                for (const key of ['left', 'right', 'mobile']) {
-                    const anim = this.animations[key];
-                    anim.speed += (anim.targetSpeed - anim.speed) * 0.1;
-                }
-                
-                // Update vertical tracks (both go UP)
-                for (const key of ['left', 'right']) {
-                    const anim = this.animations[key];
-                    if (anim.track && anim.height > 0) {
-                        anim.position -= this.baseSpeed * anim.speed;
+            if (isMobile) {
+                // MOBILE: Horizontal animation
+                const mobile = self.animations.mobile;
+                if (mobile.track) {
+                    // Re-measure width if needed (panel might have just become visible)
+                    if (mobile.width < 100) {
+                        mobile.width = mobile.track.scrollWidth / 2;
+                    }
+                    
+                    if (mobile.width > 0) {
+                        mobile.position -= self.baseSpeed * mobile.speed;
                         
-                        // Loop when reaching top
-                        if (anim.position <= -anim.height) {
-                            anim.position += anim.height;
+                        // Loop when reaching left edge
+                        if (mobile.position <= -mobile.width) {
+                            mobile.position += mobile.width;
                         }
                         
-                        anim.track.style.transform = `translateY(${anim.position}px)`;
+                        mobile.track.style.transform = `translateX(${mobile.position}px)`;
                     }
                 }
-                
-                // Update mobile track (horizontal)
-                const mobile = this.animations.mobile;
-                if (mobile.track && mobile.width > 0) {
-                    mobile.position -= this.baseSpeed * mobile.speed;
-                    
-                    // Loop when reaching left edge
-                    if (mobile.position <= -mobile.width) {
-                        mobile.position += mobile.width;
+            } else {
+                // DESKTOP: Vertical animation for both panels
+                for (const key of ['left', 'right']) {
+                    const anim = self.animations[key];
+                    if (anim.track) {
+                        // Re-measure height if needed
+                        if (anim.height < 100) {
+                            anim.height = anim.track.scrollHeight / 2;
+                        }
+                        
+                        if (anim.height > 0) {
+                            anim.position -= self.baseSpeed * anim.speed;
+                            
+                            // Loop when reaching top
+                            if (anim.position <= -anim.height) {
+                                anim.position += anim.height;
+                            }
+                            
+                            anim.track.style.transform = `translateY(${anim.position}px)`;
+                        }
                     }
-                    
-                    mobile.track.style.transform = `translateX(${mobile.position}px)`;
                 }
-                
-                this.animationFrame = requestAnimationFrame(animate);
-            };
+            }
             
-            animate();
+            self.animationFrame = requestAnimationFrame(animate);
         };
         
-        initAnimation();
+        // Start after a short delay for images to load
+        setTimeout(animate, 300);
     },
     
     /**
