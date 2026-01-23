@@ -14,9 +14,9 @@
    CSS VARIABLES FOR HOMEPAGE
    ======================================== */
 :root {
-    --home-anim-speed: 10s;
-    --home-anim-speed-fast: 4s;
-    --portal-max-width: 560px;
+    --home-anim-speed: 15s;
+    --home-anim-speed-fast: 6s;
+    --portal-max-width: 680px;
 }
 
 /* ========================================
@@ -89,27 +89,29 @@ body:has(#home-view.active-view) .shared-bottom-bar {
 /* Silhouette images container */
 .silhouette-track {
     position: absolute;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
     display: flex;
     flex-direction: column;
-    animation: silhouetteScroll var(--anim-duration) linear infinite;
+    will-change: transform;
 }
 
 .panel-left .silhouette-track {
-    animation-name: silhouetteScrollDown;
+    animation: silhouetteScrollDown var(--anim-duration) linear infinite;
 }
 
 .panel-right .silhouette-track {
-    animation-name: silhouetteScrollUp;
+    animation: silhouetteScrollUp var(--anim-duration) linear infinite;
 }
 
 @keyframes silhouetteScrollDown {
     0% { transform: translateY(-50%); }
-    100% { transform: translateY(0%); }
+    100% { transform: translateY(0); }
 }
 
 @keyframes silhouetteScrollUp {
-    0% { transform: translateY(0%); }
+    0% { transform: translateY(0); }
     100% { transform: translateY(-50%); }
 }
 
@@ -296,8 +298,8 @@ body:has(#home-view.active-view) .shared-bottom-bar {
 
 .portal-logo-frame {
     position: relative;
-    width: clamp(70px, 12vh, 120px);
-    height: clamp(70px, 12vh, 120px);
+    width: clamp(80px, 14vh, 140px);
+    height: clamp(80px, 14vh, 140px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -331,8 +333,8 @@ body:has(#home-view.active-view) .shared-bottom-bar {
 
 .portal-tagline {
     font-family: var(--font-display, 'Bebas Neue', sans-serif);
-    font-size: clamp(1.4rem, 4.5vw, 2.8rem);
-    letter-spacing: clamp(3px, 0.5vw, 8px);
+    font-size: clamp(1.6rem, 5vw, 3.2rem);
+    letter-spacing: clamp(4px, 0.6vw, 10px);
     color: #fff;
     text-align: center;
     margin: 0;
@@ -370,10 +372,10 @@ body:has(#home-view.active-view) .shared-bottom-bar {
 .portal-nav {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: clamp(10px, 2vw, 16px);
+    gap: clamp(14px, 2.5vw, 22px);
     width: 100%;
     max-width: var(--portal-max-width);
-    margin-bottom: clamp(12px, 2.5vh, 22px);
+    margin-bottom: clamp(16px, 3vh, 28px);
 }
 
 /* Main nav button - THE STAR OF THE PAGE */
@@ -382,10 +384,10 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    padding: clamp(16px, 3vh, 28px) clamp(14px, 2vw, 24px);
+    gap: 14px;
+    padding: clamp(20px, 3.5vh, 34px) clamp(18px, 2.5vw, 30px);
     text-decoration: none;
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
