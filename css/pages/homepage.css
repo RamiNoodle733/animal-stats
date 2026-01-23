@@ -219,11 +219,19 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     justify-content: center !important;
     height: 100vh !important;
     padding: 20px !important;
+    padding-left: clamp(160px, 20vw, 240px) !important; /* Leave space for left panel */
+    padding-right: clamp(160px, 20vw, 240px) !important; /* Leave space for right panel */
     position: relative !important;
     z-index: 10 !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
     background: transparent !important;
+    pointer-events: none; /* Allow clicks through to panels */
+}
+
+/* Re-enable pointer events on interactive elements */
+.home-portal > * {
+    pointer-events: auto;
 }
 
 /* ========================================
@@ -237,6 +245,7 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     display: flex;
     align-items: center;
     gap: 10px;
+    pointer-events: auto;
 }
 
 .home-auth-buttons {
@@ -694,6 +703,9 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     /* Portal adjustments for mobile with bottom panel */
     .home-portal {
         padding-bottom: 115px !important; /* Space for mobile panel */
+        padding-left: 10px !important; /* Reset side padding on mobile */
+        padding-right: 10px !important;
+        pointer-events: auto; /* Re-enable on mobile since no side panels */
     }
     
     .portal-logo-frame {
