@@ -556,7 +556,7 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
 }
 
 /* ========================================
-   ABOUT PAGE (stub)
+   ABOUT PAGE
    ======================================== */
 #about-view {
     display: none;
@@ -566,14 +566,15 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     display: flex !important;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     min-height: 100vh;
     padding: 40px 20px;
+    padding-bottom: 80px;
     background: radial-gradient(ellipse at top center, #0d1525 0%, #060a10 50%, #020305 100%);
+    overflow-y: auto;
 }
 
 .about-page {
-    max-width: 600px;
+    max-width: 800px;
     width: 100%;
     text-align: center;
 }
@@ -586,23 +587,120 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     text-decoration: none;
     font-size: 0.9rem;
     margin-bottom: 40px;
+    transition: all 0.2s ease;
 }
 
 .about-back-link:hover {
     opacity: 0.8;
+    transform: translateX(-4px);
 }
 
 .about-content h1 {
     font-family: var(--font-display, 'Bebas Neue', sans-serif);
-    font-size: 2rem;
-    letter-spacing: 3px;
+    font-size: 2.5rem;
+    letter-spacing: 4px;
     color: #fff;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
+    text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
 }
 
-.about-content p {
-    color: rgba(255, 255, 255, 0.6);
+.about-intro {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.75);
+    line-height: 1.7;
+    max-width: 650px;
+    margin: 0 auto 40px;
+}
+
+.about-intro strong {
+    color: #00d4ff;
+}
+
+/* About Section Titles */
+.about-section-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: var(--font-display, 'Bebas Neue', sans-serif);
+    font-size: 1.5rem;
+    letter-spacing: 3px;
+    color: #fff;
+    margin-bottom: 16px;
+}
+
+.about-section-title i {
+    color: #00d4ff;
+}
+
+/* Features Section */
+.about-features-section {
+    margin: 40px 0;
+    padding: 24px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+}
+
+.about-features-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    text-align: left;
+}
+
+.about-features-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.about-features-list li:hover {
+    background: rgba(0, 212, 255, 0.05);
+    border-color: rgba(0, 212, 255, 0.2);
+}
+
+.about-features-list li i {
+    color: #00d4ff;
     font-size: 1rem;
+    width: 20px;
+    text-align: center;
+}
+
+/* Creator Section */
+.about-creator-section {
+    margin: 40px 0;
+}
+
+.about-creator-section p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.about-creator-section strong {
+    color: #fff;
+}
+
+/* Version Section */
+.about-version-section {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.about-version {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
 }
 
 /* ========================================
@@ -610,6 +708,19 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
    Single bottom hologram panel layout
    ======================================== */
 @media (max-width: 600px) {
+    /* About page mobile adjustments */
+    .about-content h1 {
+        font-size: 2rem;
+    }
+    
+    .about-intro {
+        font-size: 0.95rem;
+    }
+    
+    .about-features-list {
+        grid-template-columns: 1fr;
+    }
+    
     /* Hide side panels on mobile */
     .silhouette-panel.panel-left,
     .silhouette-panel.panel-right {
