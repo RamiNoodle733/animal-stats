@@ -61,14 +61,13 @@ const HomepageController = {
         // Add panel decorations (scanlines, frame highlight)
         this.addPanelDecorations();
         
-        // Populate desktop panels (double images for seamless loop)
-        // Split images between left and right panels for variety
+        // Populate desktop panels (split images for variety)
         const half = Math.ceil(allImages.length / 2);
         const leftImages = allImages.slice(0, half);
         const rightImages = allImages.slice(half);
         
-        this.populateTrack(trackLeft, leftImages, true);
-        this.populateTrack(trackRight, rightImages.length > 0 ? rightImages : leftImages, true);
+        this.populateTrack(trackLeft, leftImages);
+        this.populateTrack(trackRight, rightImages.length > 0 ? rightImages : leftImages);
         
         // Store track references
         this.animations.left.track = trackLeft;
@@ -136,48 +135,47 @@ const HomepageController = {
             homeView.appendChild(mobilePanel);
         }
         
-        // Populate with exactly 2 copies for seamless loop (same as desktop)
-        const allImages = [...images, ...images];
-        allImages.forEach(src => {
-            const img = document.createElement('img');
-            img.className = 'silhouette-img';
-            img.loading = 'lazy';
-            img.alt = '';
-            img.draggable = false;
-            img.onerror = () => { img.style.display = 'none'; };
-            // Check for square/non-transparent images on load
-            img.onload = () => this.validateImageTransparency(img);
-            img.src = src;
-            track.appendChild(img);
-        });
+        // Populate using shared helper
+        this.populateTrack(track, images);
         
         this.mobilePanel = mobilePanel;
         this.animations.mobile.track = track;
     },
     
     /**
-     * Populate a track with images
-     * @param {HTMLElement} track - The track element to populate
-     * @param {string[]} images - Array of image URLs
-     * @param {boolean} validate - Whether to validate transparency (default: false)
+     * Create a silhouette image element with validation
      */
-    populateTrack(track, images, validate = false) {
+    createSilhouetteImage(src) {
+        const img = document.createElement('img');
+        img.className = 'silhouette-img';
+        img.loading = 'lazy';
+        img.alt = '';
+        img.draggable = false;
+        
+        // Enable CORS for transparency check (works if server allows it)
+        img.crossOrigin = 'anonymous';
+        
+        img.onerror = () => { 
+            img.style.display = 'none'; 
+        };
+        
+        img.onload = () => this.validateImageTransparency(img);
+        img.src = src;
+        
+        return img;
+    },
+    
+    /**
+     * Populate a track with images (doubled for seamless loop)
+     */
+    populateTrack(track, images) {
         track.innerHTML = '';
         
         // Double for seamless loop
         const allImages = [...images, ...images];
         
         allImages.forEach(src => {
-            const img = document.createElement('img');
-            img.className = 'silhouette-img';
-            img.loading = 'lazy';
-            img.alt = '';
-            img.draggable = false;
-            img.onerror = () => { img.style.display = 'none'; };
-            if (validate) {
-                img.onload = () => this.validateImageTransparency(img);
-            }
-            img.src = src;
+            const img = this.createSilhouetteImage(src);
             track.appendChild(img);
         });
     },
@@ -193,6 +191,27 @@ const HomepageController = {
             return;
         }
         
+        // First check: URL-based filtering for known problematic patterns
+        const src = img.src.toLowerCase();
+        const badPatterns = [
+            'white-background',
+            'white_background', 
+            'on-white',
+            'on_white',
+            '-white.',
+            '_white.',
+            'solid-background',
+            'background-image',
+            '/full/',  // Often indicates non-transparent versions
+            'nicepng.com/png/full'  // This site serves non-transparent "full" versions
+        ];
+        
+        if (badPatterns.some(pattern => src.includes(pattern))) {
+            img.style.display = 'none';
+            return;
+        }
+        
+        // Second check: Try canvas pixel analysis (only works if CORS allows)
         try {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d', { willReadFrequently: true });
@@ -204,28 +223,27 @@ const HomepageController = {
             
             ctx.drawImage(img, 0, 0, size, size);
             
-            // Check corners for transparency
+            // This will throw if CORS blocks it
             const corners = [
-                ctx.getImageData(0, 0, 1, 1).data,           // Top-left
-                ctx.getImageData(size - 1, 0, 1, 1).data,    // Top-right
-                ctx.getImageData(0, size - 1, 1, 1).data,    // Bottom-left
-                ctx.getImageData(size - 1, size - 1, 1, 1).data // Bottom-right
+                ctx.getImageData(0, 0, 1, 1).data,
+                ctx.getImageData(size - 1, 0, 1, 1).data,
+                ctx.getImageData(0, size - 1, 1, 1).data,
+                ctx.getImageData(size - 1, size - 1, 1, 1).data
             ];
             
-            // Count how many corners are opaque (alpha > 200)
+            // Count opaque corners (alpha > 200)
             let opaqueCorners = 0;
             for (const pixel of corners) {
                 if (pixel[3] > 200) opaqueCorners++;
             }
             
-            // If all 4 corners are opaque, it's likely a square image with background
+            // If all 4 corners are opaque, check edges too
             if (opaqueCorners === 4) {
-                // Double check: sample edges too
                 const edgeSamples = [
-                    ctx.getImageData(size / 2, 0, 1, 1).data,        // Top middle
-                    ctx.getImageData(size / 2, size - 1, 1, 1).data, // Bottom middle
-                    ctx.getImageData(0, size / 2, 1, 1).data,        // Left middle
-                    ctx.getImageData(size - 1, size / 2, 1, 1).data  // Right middle
+                    ctx.getImageData(size / 2, 0, 1, 1).data,
+                    ctx.getImageData(size / 2, size - 1, 1, 1).data,
+                    ctx.getImageData(0, size / 2, 1, 1).data,
+                    ctx.getImageData(size - 1, size / 2, 1, 1).data
                 ];
                 
                 let opaqueEdges = 0;
@@ -233,15 +251,15 @@ const HomepageController = {
                     if (pixel[3] > 200) opaqueEdges++;
                 }
                 
-                // If corners AND edges are all opaque, definitely a square - hide it
+                // All corners + most edges opaque = square background
                 if (opaqueEdges >= 3) {
                     img.style.display = 'none';
                     return;
                 }
             }
         } catch (e) {
-            // CORS or other error - keep the image visible
-            // (silhouette filter will still make it look okay)
+            // CORS blocked - can't verify, keep the image
+            // The silhouette filter will still work on it
         }
     },
     
