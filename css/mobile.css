@@ -281,6 +281,7 @@
     html.is-home .mobile-bottom-nav,
     html.is-login .mobile-bottom-nav,
     html.is-signup .mobile-bottom-nav,
+    html.is-about .mobile-bottom-nav,
     html.is-profile .mobile-bottom-nav {
         display: none !important;
     }

@@ -133,7 +133,7 @@ class Router {
         const html = document.documentElement;
         
         // Clear all route-specific classes first
-        html.classList.remove('is-home', 'is-login', 'is-signup');
+        html.classList.remove('is-home', 'is-login', 'is-signup', 'is-about');
         
         // Add appropriate classes based on route
         if (path === '/' || path === '') {
@@ -142,6 +142,8 @@ class Router {
             html.classList.add('is-home', 'is-login');
         } else if (path === '/signup') {
             html.classList.add('is-home', 'is-signup');
+        } else if (path === '/about') {
+            html.classList.add('is-home', 'is-about');
         }
 
         // Find matching route

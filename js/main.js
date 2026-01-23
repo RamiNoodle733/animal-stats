@@ -238,6 +238,9 @@ class AnimalStatsApp {
             this.dom.loginView = document.getElementById('login-view');
             this.dom.signupView = document.getElementById('signup-view');
             
+            // Cache about view element
+            this.dom.aboutView = document.getElementById('about-view');
+            
             // Cache profile view elements
             this.dom.profileView = document.getElementById('profile-view');
             this.dom.publicProfileView = document.getElementById('public-profile-view');
@@ -374,6 +377,11 @@ class AnimalStatsApp {
         // Battle Points route
         router.on('/battlepoints', () => {
             this.switchView('battlepoints', false);
+        });
+
+        // About route
+        router.on('/about', () => {
+            this.switchView('about', false);
         });
 
         // Tournament route
@@ -1679,6 +1687,7 @@ class AnimalStatsApp {
             rankings: 'RANKINGS',
             community: 'COMMUNITY',
             battlepoints: 'POINTS',
+            about: 'ABOUT',
             login: 'LOGIN',
             signup: 'SIGNUP',
             profile: 'PROFILE'
@@ -1690,10 +1699,16 @@ class AnimalStatsApp {
         // Reset scroll position on any scrollable elements before switching
         this.resetScrollPositions();
         
+        // Activate homepage controller when switching to home
+        if (viewName === 'home' && window.HomepageController) {
+            window.HomepageController.activate(this.state.animals);
+        }
+        
         // Update UI classes - include home view, auth views, and profile views
         this.dom.homeView?.classList.toggle('active-view', viewName === 'home');
         this.dom.loginView?.classList.toggle('active-view', viewName === 'login');
         this.dom.signupView?.classList.toggle('active-view', viewName === 'signup');
+        this.dom.aboutView?.classList.toggle('active-view', viewName === 'about');
         this.dom.profileView?.classList.toggle('active-view', viewName === 'profile');
         this.dom.publicProfileView?.classList.remove('active-view'); // Always hide public profile when switching
         this.dom.statsView.classList.toggle('active-view', viewName === 'stats');
@@ -1722,6 +1737,7 @@ class AnimalStatsApp {
                 rankings: '/rankings',
                 community: '/community',
                 battlepoints: '/battlepoints',
+                about: '/about',
                 login: '/login',
                 signup: '/signup',
                 profile: '/profile'
@@ -1738,7 +1754,7 @@ class AnimalStatsApp {
         }
 
         // Grid visibility logic - preserve user's hidden/shown preference across stats/compare
-        const isFullscreenView = viewName === 'home' || viewName === 'login' || viewName === 'signup';
+        const isFullscreenView = viewName === 'home' || viewName === 'login' || viewName === 'signup' || viewName === 'about';
         const isProfileView = viewName === 'profile';
         
         // Show/hide header for different view types
@@ -1749,7 +1765,7 @@ class AnimalStatsApp {
         }
         
         if (isFullscreenView || isProfileView) {
-            // Hide grid and bottom bar on home, auth, and profile pages
+            // Hide grid and bottom bar on home, auth, about, and profile pages
             this.dom.gridWrapper?.classList.add('hidden');
             if (this.dom.toggleGridBtn) this.dom.toggleGridBtn.style.display = 'none';
             if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'none';
