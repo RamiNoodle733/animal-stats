@@ -60,7 +60,7 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     position: fixed !important;
     top: 0 !important;
     bottom: 0 !important;
-    width: clamp(120px, 18vw, 260px) !important;
+    width: clamp(200px, 25vw, 400px) !important;
     overflow: hidden !important;
     pointer-events: none;
     z-index: 5 !important;
@@ -119,15 +119,16 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     height: auto;
     aspect-ratio: 1/1;
     object-fit: contain;
-    padding: 12%;
-    opacity: 0.15;
-    filter: brightness(0) invert(1) blur(0.5px);
+    padding: 8%;
+    opacity: 0.18;
+    filter: brightness(0) invert(1) blur(0.3px);
     transition: opacity 0.3s ease;
+    flex-shrink: 0;
 }
 
 .silhouette-panel:hover .silhouette-img,
 .silhouette-panel.speed-up .silhouette-img {
-    opacity: 0.25;
+    opacity: 0.28;
 }
 
 /* Vignette overlays on panels */
