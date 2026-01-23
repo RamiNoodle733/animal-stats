@@ -669,6 +669,11 @@ class AnimalStatsApp {
             // Update homepage animal count
             this.updateHomeStats();
             
+            // Initialize homepage silhouette panels with animal data
+            if (window.HomepageController) {
+                window.HomepageController.activate(this.state.animals);
+            }
+            
         } catch (error) {
             console.error('Failed to load animal data:', error.message);
             this.state.apiAvailable = false;
