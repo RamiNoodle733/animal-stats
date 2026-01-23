@@ -613,7 +613,7 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         display: block !important;
         position: fixed !important;
         top: auto !important;
-        bottom: 15px !important;
+        bottom: 100px !important;
         left: 10px !important;
         right: 10px !important;
         transform: none !important;
@@ -621,6 +621,7 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         height: 75px !important;
         max-height: none !important;
         border-radius: 12px;
+        z-index: 25 !important; /* Above footer (z-index 20) */
         
         /* No interactions on mobile panel */
         pointer-events: none !important;
@@ -773,10 +774,10 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         font-size: 0.75rem;
     }
     
-    /* Footer - fixed above the silhouette panel */
+    /* Footer - fixed at very bottom */
     .portal-footer {
         position: fixed !important;
-        bottom: 95px !important; /* Above the silhouette panel */
+        bottom: 10px !important; /* At the very bottom */
         left: 0 !important;
         right: 0 !important;
         margin: 0 !important;
