@@ -126,8 +126,8 @@ const HomepageController = {
             homeView.appendChild(mobilePanel);
         }
         
-        // Populate (horizontal scroll needs more images)
-        const allImages = [...images, ...images, ...images];
+        // Populate with exactly 2 copies for seamless loop (same as desktop)
+        const allImages = [...images, ...images];
         allImages.forEach(src => {
             const img = document.createElement('img');
             img.className = 'silhouette-img';
@@ -171,9 +171,11 @@ const HomepageController = {
      */
     startAnimationLoop() {
         const self = this;
+        let frameCount = 0;
         
         const animate = () => {
             const isMobile = window.innerWidth <= 600;
+            frameCount++;
             
             // Smoothly interpolate speed towards target (easing)
             for (const key of ['left', 'right', 'mobile']) {
@@ -185,15 +187,18 @@ const HomepageController = {
                 // MOBILE: Horizontal animation (scroll left)
                 const mobile = self.animations.mobile;
                 if (mobile.track) {
-                    // Measure width if not yet measured
-                    if (mobile.width < 100) {
-                        mobile.width = mobile.track.scrollWidth / 2;
+                    // Re-measure width periodically (every 60 frames) to handle late image loading
+                    if (mobile.width < 100 || frameCount % 60 === 0) {
+                        const newWidth = mobile.track.scrollWidth / 2;
+                        if (newWidth > 100) {
+                            mobile.width = newWidth;
+                        }
                     }
                     
                     if (mobile.width > 0) {
                         mobile.position -= self.baseSpeed * mobile.speed;
                         
-                        // Seamless loop: reset when scrolled half the content
+                        // Seamless loop: reset when scrolled past half the content
                         if (mobile.position <= -mobile.width) {
                             mobile.position += mobile.width;
                         }
@@ -206,15 +211,18 @@ const HomepageController = {
                 for (const key of ['left', 'right']) {
                     const anim = self.animations[key];
                     if (anim.track) {
-                        // Measure height if not yet measured
-                        if (anim.height < 100) {
-                            anim.height = anim.track.scrollHeight / 2;
+                        // Re-measure height periodically (every 60 frames) to handle late image loading
+                        if (anim.height < 100 || frameCount % 60 === 0) {
+                            const newHeight = anim.track.scrollHeight / 2;
+                            if (newHeight > 100) {
+                                anim.height = newHeight;
+                            }
                         }
                         
                         if (anim.height > 0) {
                             anim.position -= self.baseSpeed * anim.speed;
                             
-                            // Seamless loop: reset when scrolled half the content
+                            // Seamless loop: reset when scrolled past half the content
                             if (anim.position <= -anim.height) {
                                 anim.position += anim.height;
                             }
