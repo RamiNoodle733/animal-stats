@@ -165,61 +165,71 @@ const HomepageController = {
      * Start the JavaScript animation loop
      */
     startAnimationLoop() {
-        // Measure track heights/widths for looping
-        const leftTrack = this.animations.left.track;
-        const rightTrack = this.animations.right.track;
-        const mobileTrack = this.animations.mobile.track;
-        
-        if (leftTrack) {
-            this.animations.left.height = leftTrack.scrollHeight / 2;
-        }
-        if (rightTrack) {
-            this.animations.right.height = rightTrack.scrollHeight / 2;
-        }
-        if (mobileTrack) {
-            this.animations.mobile.width = mobileTrack.scrollWidth / 2;
-        }
-        
-        // Start animation
-        const animate = () => {
-            // Smoothly interpolate speed towards target
-            for (const key of ['left', 'right', 'mobile']) {
-                const anim = this.animations[key];
-                anim.speed += (anim.targetSpeed - anim.speed) * 0.1;
+        // Wait a bit longer for images to load and get proper dimensions
+        const initAnimation = () => {
+            const leftTrack = this.animations.left.track;
+            const rightTrack = this.animations.right.track;
+            const mobileTrack = this.animations.mobile.track;
+            
+            // Measure track heights/widths for looping
+            if (leftTrack) {
+                this.animations.left.height = leftTrack.scrollHeight / 2;
+                // If height is too small, images haven't loaded yet
+                if (this.animations.left.height < 100) {
+                    setTimeout(initAnimation, 200);
+                    return;
+                }
+            }
+            if (rightTrack) {
+                this.animations.right.height = rightTrack.scrollHeight / 2;
+            }
+            if (mobileTrack) {
+                this.animations.mobile.width = mobileTrack.scrollWidth / 2;
             }
             
-            // Update vertical tracks (both go UP)
-            for (const key of ['left', 'right']) {
-                const anim = this.animations[key];
-                if (anim.track && anim.height > 0) {
-                    anim.position -= this.baseSpeed * anim.speed;
+            // Start animation
+            const animate = () => {
+                // Smoothly interpolate speed towards target
+                for (const key of ['left', 'right', 'mobile']) {
+                    const anim = this.animations[key];
+                    anim.speed += (anim.targetSpeed - anim.speed) * 0.1;
+                }
+                
+                // Update vertical tracks (both go UP)
+                for (const key of ['left', 'right']) {
+                    const anim = this.animations[key];
+                    if (anim.track && anim.height > 0) {
+                        anim.position -= this.baseSpeed * anim.speed;
+                        
+                        // Loop when reaching top
+                        if (anim.position <= -anim.height) {
+                            anim.position += anim.height;
+                        }
+                        
+                        anim.track.style.transform = `translateY(${anim.position}px)`;
+                    }
+                }
+                
+                // Update mobile track (horizontal)
+                const mobile = this.animations.mobile;
+                if (mobile.track && mobile.width > 0) {
+                    mobile.position -= this.baseSpeed * mobile.speed;
                     
-                    // Loop when reaching top
-                    if (anim.position <= -anim.height) {
-                        anim.position += anim.height;
+                    // Loop when reaching left edge
+                    if (mobile.position <= -mobile.width) {
+                        mobile.position += mobile.width;
                     }
                     
-                    anim.track.style.transform = `translateY(${anim.position}px)`;
-                }
-            }
-            
-            // Update mobile track (horizontal)
-            const mobile = this.animations.mobile;
-            if (mobile.track && mobile.width > 0) {
-                mobile.position -= this.baseSpeed * mobile.speed;
-                
-                // Loop when reaching left edge
-                if (mobile.position <= -mobile.width) {
-                    mobile.position += mobile.width;
+                    mobile.track.style.transform = `translateX(${mobile.position}px)`;
                 }
                 
-                mobile.track.style.transform = `translateX(${mobile.position}px)`;
-            }
+                this.animationFrame = requestAnimationFrame(animate);
+            };
             
-            this.animationFrame = requestAnimationFrame(animate);
+            animate();
         };
         
-        animate();
+        initAnimation();
     },
     
     /**
