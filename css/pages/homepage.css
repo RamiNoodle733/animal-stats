@@ -610,17 +610,19 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     .silhouette-panel.panel-mobile {
         display: block !important;
         position: fixed !important;
-        bottom: 20px !important;
+        bottom: auto !important;
+        top: auto !important;
+        /* Position relative to bottom of viewport minus more space */
+        bottom: 80px !important;
         left: 10px !important;
         right: 10px !important;
-        top: auto !important;
         transform: none !important;
         width: auto !important;
-        height: 90px !important;
+        height: 85px !important;
         max-height: none !important;
         
         /* Horizontal scroll instead of vertical */
-        border-radius: 12px 12px 0 0;
+        border-radius: 12px;
         
         /* Adjust vignette for horizontal */
         background: 
