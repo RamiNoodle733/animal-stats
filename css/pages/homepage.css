@@ -772,6 +772,23 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         padding: 6px 12px;
         font-size: 0.75rem;
     }
+    
+    /* Footer - fixed above the silhouette panel */
+    .portal-footer {
+        position: fixed !important;
+        bottom: 95px !important; /* Above the silhouette panel */
+        left: 0 !important;
+        right: 0 !important;
+        margin: 0 !important;
+        padding: 8px 10px !important;
+        gap: 12px;
+        z-index: 20;
+        background: transparent;
+    }
+    
+    .portal-footer-link {
+        font-size: 0.65rem;
+    }
 }
 
 /* Extra small screens (320px) */
