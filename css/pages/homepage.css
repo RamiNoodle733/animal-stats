@@ -325,8 +325,8 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
 
 .portal-logo-frame {
     position: relative;
-    width: 240px !important;
-    height: 240px !important;
+    width: 200px !important;
+    height: 200px !important;
 }
 
 .portal-logo-glow {
@@ -353,8 +353,8 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
 
 .portal-tagline {
     font-family: var(--font-display, 'Bebas Neue', sans-serif);
-    font-size: clamp(2.5rem, 7vw, 4.5rem);
-    letter-spacing: 10px;
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    letter-spacing: 12px;
     color: #fff;
     margin: 0;
     text-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
