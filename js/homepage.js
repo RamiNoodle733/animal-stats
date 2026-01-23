@@ -29,6 +29,8 @@ class HomepageController {
     init() {
         if (this.initialized) return;
         
+        console.log('[Homepage] Initializing...');
+        
         // Cache DOM elements
         this.panels.left = document.getElementById('silhouette-left');
         this.panels.right = document.getElementById('silhouette-right');
@@ -37,6 +39,13 @@ class HomepageController {
         this.portalEl = document.getElementById('home-portal');
         this.navEl = document.getElementById('portal-nav');
         this.tournamentBtn = document.getElementById('portal-tournament-btn');
+        
+        console.log('[Homepage] Found elements:', {
+            panelLeft: !!this.panels.left,
+            panelRight: !!this.panels.right,
+            trackLeft: !!this.trackLeft,
+            trackRight: !!this.trackRight
+        });
         
         if (!this.panels.left || !this.panels.right) {
             console.warn('Homepage panels not found');
@@ -55,16 +64,23 @@ class HomepageController {
      * @param {Array} animals - Array of animal objects with image URLs
      */
     loadAnimalImages(animals) {
-        if (!animals || !animals.length) return;
+        console.log('[Homepage] loadAnimalImages called with', animals?.length, 'animals');
+        
+        if (!animals || !animals.length) {
+            console.warn('[Homepage] No animals provided');
+            return;
+        }
         
         // Filter to animals with valid images, shuffle and pick a subset
         const validAnimals = animals.filter(a => a.image && !a.image.includes('fallback'));
+        console.log('[Homepage] Valid animals with images:', validAnimals.length);
         
         // Shuffle and pick 12-16 for variety
         const shuffled = this.shuffleArray([...validAnimals]);
         const selected = shuffled.slice(0, Math.min(16, shuffled.length));
         
         this.animalImages = selected.map(a => a.image);
+        console.log('[Homepage] Selected images:', this.animalImages.length);
         
         // Populate both panels
         this.populatePanel(this.trackLeft, this.animalImages);
@@ -75,7 +91,12 @@ class HomepageController {
      * Populate a panel track with silhouette images
      */
     populatePanel(track, images) {
-        if (!track || !images.length) return;
+        console.log('[Homepage] populatePanel called', track?.id, images?.length, 'images');
+        
+        if (!track || !images.length) {
+            console.warn('[Homepage] Track or images missing', track, images?.length);
+            return;
+        }
         
         track.innerHTML = '';
         
