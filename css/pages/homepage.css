@@ -613,12 +613,12 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         display: block !important;
         position: fixed !important;
         top: auto !important;
-        bottom: 40px !important;
+        bottom: 15px !important;
         left: 10px !important;
         right: 10px !important;
         transform: none !important;
         width: auto !important;
-        height: 80px !important;
+        height: 75px !important;
         max-height: none !important;
         border-radius: 12px;
         
@@ -654,8 +654,8 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     
     /* Mobile silhouette images - fixed size squares */
     .silhouette-panel.panel-mobile .silhouette-img {
-        width: 68px;
-        height: 68px;
+        width: 62px;
+        height: 62px;
         flex-shrink: 0;
         padding: 4px;
         opacity: 0.4;
@@ -688,7 +688,7 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     
     /* Portal adjustments for mobile with bottom panel */
     .home-portal {
-        padding-bottom: 100px !important; /* Space for mobile panel */
+        padding-bottom: 80px !important; /* Space for mobile panel */
         padding-top: 0 !important;
         padding-left: 10px !important;
         padding-right: 10px !important;
@@ -703,14 +703,14 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     }
     
     .portal-logo-section {
-        margin-top: 25px; /* Below auth buttons */
-        margin-bottom: 8px;
-        gap: 4px;
+        margin-top: 20px; /* Below auth buttons */
+        margin-bottom: 6px;
+        gap: 2px;
     }
     
     .portal-logo-frame {
-        width: 80px;
-        height: 80px;
+        width: 55px !important;
+        height: 55px !important;
     }
     
     .portal-tagline {
