@@ -323,8 +323,8 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
 
 .portal-logo-frame {
     position: relative;
-    width: 90px;
-    height: 90px;
+    width: 120px;
+    height: 120px;
 }
 
 .portal-logo-glow {
@@ -351,7 +351,7 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
 
 .portal-tagline {
     font-family: var(--font-display, 'Bebas Neue', sans-serif);
-    font-size: clamp(1.5rem, 4vw, 2.5rem);
+    font-size: clamp(2rem, 5vw, 3rem);
     letter-spacing: 6px;
     color: #fff;
     margin: 0;
@@ -697,13 +697,13 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     }
     
     .portal-logo-frame {
-        width: 50px;
-        height: 50px;
+        width: 70px;
+        height: 70px;
     }
     
     .portal-tagline {
-        font-size: 1.1rem;
-        letter-spacing: 2px;
+        font-size: 1.4rem;
+        letter-spacing: 3px;
     }
     
     .portal-subtitle {

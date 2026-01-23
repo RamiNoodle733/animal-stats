@@ -235,7 +235,7 @@ const HomepageController = {
         const panelLeft = document.getElementById('silhouette-left');
         const panelRight = document.getElementById('silhouette-right');
         const portalNav = document.getElementById('portal-nav');
-        const mobilePanel = this.mobilePanel;
+        const mobilePanel = document.getElementById('silhouette-mobile');
         
         // Desktop: Hover on panel speeds up that panel
         if (panelLeft) {
