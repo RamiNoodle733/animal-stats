@@ -538,6 +538,22 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     transition: color 0.2s ease;
 }
 
+.portal-footer-link[href="/about"] {
+    padding: 5px 12px;
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    border-radius: 14px;
+    color: rgba(0, 212, 255, 0.7);
+    font-weight: 500;
+}
+
+.portal-footer-link[href="/about"]:hover {
+    background: rgba(0, 212, 255, 0.15);
+    border-color: rgba(0, 212, 255, 0.4);
+    color: #00d4ff;
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.2);
+}
+
 .portal-footer-link:hover {
     color: #00d4ff;
 }
@@ -571,6 +587,13 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     padding-bottom: 80px;
     background: radial-gradient(ellipse at top center, #0d1525 0%, #060a10 50%, #020305 100%);
     overflow-y: auto;
+    z-index: 50;
+}
+
+/* Ensure home view and silhouette panels are hidden when about is active */
+body:has(#about-view.active-view) #home-view,
+body:has(#about-view.active-view) .silhouette-panel {
+    display: none !important;
 }
 
 .about-page {

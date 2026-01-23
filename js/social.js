@@ -28,7 +28,8 @@ const SocialLinks = {
             id: 'x',
             name: 'X',
             url: 'https://x.com/AnimalBattStats',
-            icon: 'fa-brands fa-square-x-twitter',
+            icon: 'fab fa-x-twitter',
+            iconFallback: 'X',
             color: '#ffffff',
             description: 'Fast updates + matchup posts',
             ariaLabel: 'Follow us on X (Twitter)'
@@ -61,11 +62,11 @@ const SocialLinks = {
             children: [
                 {
                     id: 'linkedin-personal',
-                    name: 'Creator',
-                    fullName: 'LinkedIn (Creator)',
+                    name: 'Founder',
+                    fullName: 'LinkedIn (Founder)',
                     url: 'https://www.linkedin.com/in/rami-abdelrazzaq-6742541bb/',
-                    description: 'Creator updates and behind-the-scenes',
-                    ariaLabel: 'Connect with the creator on LinkedIn'
+                    description: 'Founder updates and behind-the-scenes',
+                    ariaLabel: 'Connect with the founder on LinkedIn'
                 },
                 {
                     id: 'linkedin-company',
@@ -91,7 +92,47 @@ const SocialLinks = {
         this.renderHomepageFollow();
         this.renderAboutSection();
         this.setupEventListeners();
+        this.setupAboutLinkNavigation();
         this.injectStyles();
+        this.fixXIcon();
+    },
+
+    /**
+     * Setup About link to use router navigation
+     */
+    setupAboutLinkNavigation() {
+        const aboutLinks = document.querySelectorAll('a[href="/about"]');
+        aboutLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (window.Router) {
+                    window.Router.navigate('/about');
+                } else {
+                    window.location.href = '/about';
+                }
+            });
+        });
+    },
+
+    /**
+     * Fix X icon display by checking if Font Awesome loaded it properly
+     */
+    fixXIcon() {
+        // Check after a short delay if the X icons are empty
+        setTimeout(() => {
+            document.querySelectorAll('[data-platform="x"] i').forEach(icon => {
+                // Check if the icon is rendering as empty
+                const computedStyle = window.getComputedStyle(icon, ':before');
+                if (!computedStyle.content || computedStyle.content === 'none' || computedStyle.content === '""') {
+                    // Replace with text fallback
+                    icon.className = '';
+                    icon.textContent = '𝕏';
+                    icon.style.fontFamily = 'system-ui, sans-serif';
+                    icon.style.fontWeight = '900';
+                    icon.style.fontSize = '1.2rem';
+                }
+            });
+        }, 500);
     },
 
     /**
@@ -614,6 +655,7 @@ const SocialLinks = {
                 bottom: calc(100% + 15px);
                 right: 0;
                 width: 180px;
+                min-height: 160px;
                 padding: 16px;
                 padding-top: 40px;
                 background: linear-gradient(180deg, rgba(10, 20, 35, 0.98) 0%, rgba(5, 10, 20, 0.98) 100%);
