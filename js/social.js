@@ -28,21 +28,10 @@ const SocialLinks = {
             id: 'x',
             name: 'X',
             url: 'https://x.com/AnimalBattStats',
-            icon: 'fab fa-x-twitter',
+            icon: 'fa-brands fa-square-x-twitter',
             color: '#ffffff',
             description: 'Fast updates + matchup posts',
             ariaLabel: 'Follow us on X (Twitter)'
-        },
-        {
-            id: 'patreon',
-            name: 'Patreon',
-            url: '#',
-            icon: 'fab fa-patreon',
-            color: '#FF424D',
-            description: 'Support ABS and unlock extras',
-            ariaLabel: 'Support us on Patreon',
-            disabled: true,
-            disabledReason: 'Coming Soon'
         },
         {
             id: 'reddit',
@@ -170,18 +159,6 @@ const SocialLinks = {
      */
     renderPopoverIcons() {
         return this.platforms.map(platform => {
-            if (platform.disabled) {
-                return `
-                    <button class="social-popover-icon social-popover-icon--disabled"
-                            data-platform="${platform.id}"
-                            aria-label="${platform.ariaLabel} - ${platform.disabledReason}"
-                            disabled>
-                        <i class="${platform.icon}"></i>
-                        <span class="social-tooltip">${platform.disabledReason}</span>
-                    </button>
-                `;
-            }
-            
             if (platform.hasChildren) {
                 return `
                     <button class="social-popover-icon social-popover-icon--linkedin"
@@ -255,19 +232,6 @@ const SocialLinks = {
                         </a>
                     `);
                 });
-            } else if (platform.disabled) {
-                items.push(`
-                    <div class="social-bottom-sheet-item social-bottom-sheet-item--disabled">
-                        <div class="social-bottom-sheet-item-icon" style="--platform-color: ${platform.color}">
-                            <i class="${platform.icon}"></i>
-                        </div>
-                        <div class="social-bottom-sheet-item-info">
-                            <span class="social-bottom-sheet-item-name">${platform.name}</span>
-                            <span class="social-bottom-sheet-item-desc">${platform.disabledReason}</span>
-                        </div>
-                        <span class="social-bottom-sheet-item-badge">Soon</span>
-                    </div>
-                `);
             } else {
                 items.push(`
                     <a href="${platform.url}"
@@ -353,22 +317,6 @@ const SocialLinks = {
      * Create a single About page card
      */
     createAboutCard(platform) {
-        if (platform.disabled) {
-            return `
-                <div class="about-connect-card about-connect-card--disabled" data-platform="${platform.id}">
-                    <div class="about-connect-card-icon" style="--platform-color: ${platform.color}">
-                        <i class="${platform.icon}"></i>
-                    </div>
-                    <div class="about-connect-card-content">
-                        <h3 class="about-connect-card-name">${platform.name}</h3>
-                        <p class="about-connect-card-desc">${platform.description}</p>
-                    </div>
-                    <div class="about-connect-card-badge">${platform.disabledReason}</div>
-                    <div class="about-connect-card-glow"></div>
-                </div>
-            `;
-        }
-        
         return `
             <a href="${platform.url}" 
                class="about-connect-card" 
@@ -665,8 +613,9 @@ const SocialLinks = {
                 position: absolute;
                 bottom: calc(100% + 15px);
                 right: 0;
-                width: 220px;
+                width: 180px;
                 padding: 16px;
+                padding-top: 40px;
                 background: linear-gradient(180deg, rgba(10, 20, 35, 0.98) 0%, rgba(5, 10, 20, 0.98) 100%);
                 border: 1px solid rgba(0, 212, 255, 0.3);
                 border-radius: 12px;
@@ -679,7 +628,7 @@ const SocialLinks = {
                 transform: translateY(10px) scale(0.95);
                 transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
                 z-index: 1000;
-                overflow: hidden;
+                overflow: visible;
             }
             
             .social-popover--open {
@@ -702,7 +651,7 @@ const SocialLinks = {
             
             .social-popover-grid {
                 display: grid;
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(3, 1fr);
                 gap: 8px;
                 transition: opacity 0.2s ease, transform 0.2s ease;
             }
@@ -741,18 +690,6 @@ const SocialLinks = {
             .social-popover-icon:focus-visible {
                 outline: 2px solid #00d4ff;
                 outline-offset: 2px;
-            }
-            
-            .social-popover-icon--disabled {
-                opacity: 0.4;
-                cursor: not-allowed;
-            }
-            
-            .social-popover-icon--disabled:hover {
-                transform: none;
-                background: rgba(255, 255, 255, 0.05);
-                border-color: rgba(255, 255, 255, 0.1);
-                box-shadow: none;
             }
             
             .social-popover-icon-badge {
@@ -799,13 +736,19 @@ const SocialLinks = {
             /* LinkedIn Sub-menu */
             .social-linkedin-sub {
                 position: absolute;
-                inset: 0;
-                padding: 12px;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                padding: 16px;
                 background: linear-gradient(180deg, rgba(10, 20, 35, 0.98) 0%, rgba(5, 10, 20, 0.98) 100%);
+                border-radius: 12px;
                 opacity: 0;
                 visibility: hidden;
                 transform: translateX(20px);
                 transition: all 0.2s ease;
+                display: flex;
+                flex-direction: column;
             }
             
             .social-popover--linkedin-active .social-linkedin-sub {
@@ -888,7 +831,7 @@ const SocialLinks = {
             .social-bottom-sheet {
                 position: fixed;
                 inset: 0;
-                z-index: 9999;
+                z-index: 99999;
                 display: flex;
                 align-items: flex-end;
                 opacity: 0;
@@ -968,11 +911,6 @@ const SocialLinks = {
                 transform: scale(0.98);
             }
             
-            .social-bottom-sheet-item--disabled {
-                opacity: 0.5;
-                pointer-events: none;
-            }
-            
             .social-bottom-sheet-item-icon {
                 display: flex;
                 align-items: center;
@@ -1013,17 +951,6 @@ const SocialLinks = {
                 font-size: 0.75rem;
                 color: rgba(255, 255, 255, 0.3);
                 flex-shrink: 0;
-            }
-            
-            .social-bottom-sheet-item-badge {
-                padding: 4px 8px;
-                background: rgba(255, 255, 255, 0.1);
-                border-radius: 4px;
-                font-size: 0.65rem;
-                font-weight: 600;
-                color: rgba(255, 255, 255, 0.6);
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
             }
             
             /* ========================================
@@ -1087,17 +1014,6 @@ const SocialLinks = {
                     0 0 20px rgba(0, 212, 255, 0.1);
             }
             
-            .about-connect-card--disabled {
-                opacity: 0.6;
-                cursor: not-allowed;
-            }
-            
-            .about-connect-card--disabled:hover {
-                transform: none;
-                border-color: rgba(255, 255, 255, 0.08);
-                box-shadow: none;
-            }
-            
             .about-connect-card-icon {
                 display: flex;
                 align-items: center;
@@ -1153,20 +1069,6 @@ const SocialLinks = {
                 transform: translateX(3px);
             }
             
-            .about-connect-card-badge {
-                position: absolute;
-                top: 12px;
-                right: 12px;
-                padding: 4px 8px;
-                background: rgba(255, 255, 255, 0.1);
-                border-radius: 4px;
-                font-size: 0.6rem;
-                font-weight: 600;
-                color: rgba(255, 255, 255, 0.6);
-                text-transform: uppercase;
-                letter-spacing: 0.5px;
-            }
-            
             .about-connect-card-glow {
                 position: absolute;
                 inset: -50%;
@@ -1213,11 +1115,6 @@ const SocialLinks = {
                 }
                 
                 .about-connect-card-arrow {
-                    position: static;
-                    margin-left: auto;
-                }
-                
-                .about-connect-card-badge {
                     position: static;
                     margin-left: auto;
                 }
