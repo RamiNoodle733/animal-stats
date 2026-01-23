@@ -675,7 +675,7 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     /* Portal adjustments for mobile with bottom panel */
     .home-portal {
         padding-bottom: 120px !important; /* Space for mobile panel */
-        padding-top: 0 !important; /* No extra top padding */
+        padding-top: 0 !important;
         padding-left: 10px !important;
         padding-right: 10px !important;
         pointer-events: auto;
@@ -684,40 +684,42 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     
     /* Auth corner - move up on mobile */
     .home-auth-corner {
-        top: 8px;
-        right: 10px;
+        top: 5px;
+        right: 8px;
     }
     
     .portal-logo-section {
-        margin-top: 50px; /* Below auth buttons */
-        margin-bottom: 15px;
+        margin-top: 35px; /* Below auth buttons */
+        margin-bottom: 10px;
+        gap: 4px;
     }
     
     .portal-logo-frame {
-        width: 55px;
-        height: 55px;
+        width: 50px;
+        height: 50px;
     }
     
     .portal-tagline {
-        font-size: 1.15rem;
-        letter-spacing: 3px;
+        font-size: 1.1rem;
+        letter-spacing: 2px;
     }
     
     .portal-subtitle {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         letter-spacing: 1px;
     }
     
     .portal-description {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
         max-width: 90%;
-        line-height: 1.3;
+        line-height: 1.2;
+        margin-top: 4px;
     }
     
     .portal-nav {
-        gap: 8px;
+        gap: 6px;
         max-width: calc(100vw - 20px);
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
     
     .portal-nav-btn {
