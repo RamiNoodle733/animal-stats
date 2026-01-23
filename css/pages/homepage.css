@@ -57,6 +57,7 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     pointer-events: auto;
     z-index: 5 !important;
     display: block !important;
+    cursor: grab;
     
     /* Premium frame */
     border: 1px solid rgba(0, 212, 255, 0.3);
@@ -77,8 +78,8 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         inset 0 0 20px rgba(0, 212, 255, 0.05),
         inset 0 1px 0 rgba(255, 255, 255, 0.08);
     
-    /* Speed-up transition */
-    transition: box-shadow 0.3s ease;
+    /* Smooth transitions for glow effects */
+    transition: box-shadow 0.2s ease;
 }
 
 .silhouette-panel.panel-left {
@@ -608,7 +609,7 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         display: none !important;
     }
     
-    /* Show mobile bottom panel - horizontal scrolling bar */
+    /* Show mobile bottom panel - horizontal scrolling bar with slingshot */
     .silhouette-panel.panel-mobile {
         display: block !important;
         position: fixed !important;
@@ -621,16 +622,15 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         height: 75px !important;
         max-height: none !important;
         border-radius: 12px;
-        z-index: 25 !important; /* Above footer (z-index 20) */
+        z-index: 25 !important;
         
-        /* No interactions on mobile panel */
-        pointer-events: none !important;
+        /* Enable touch for slingshot interaction */
+        pointer-events: auto !important;
+        touch-action: none !important;
+        cursor: grab !important;
         user-select: none !important;
         -webkit-user-select: none !important;
         -webkit-touch-callout: none !important;
-        touch-action: none !important;
-        cursor: default !important;
-        transition: none !important;
         
         /* Hologram background */
         background: 
@@ -640,9 +640,12 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         
         /* Safe area padding */
         padding-bottom: env(safe-area-inset-bottom, 0);
+        
+        /* Smooth transitions for glow effects */
+        transition: box-shadow 0.2s ease !important;
     }
     
-    /* Mobile track - horizontal scroll, JS moves via translateX */
+    /* Mobile track - disable pointer events on children */
     .silhouette-panel.panel-mobile .silhouette-track {
         display: flex;
         flex-direction: row;
