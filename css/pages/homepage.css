@@ -89,8 +89,9 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     right: 20px !important;
 }
 
-/* Hover effect - glow intensifies */
-.silhouette-panel:hover {
+/* Hover effect - glow intensifies (desktop only) */
+.silhouette-panel.panel-left:hover,
+.silhouette-panel.panel-right:hover {
     box-shadow: 
         0 0 50px rgba(0, 212, 255, 0.2),
         inset 0 0 30px rgba(0, 212, 255, 0.1),
@@ -133,8 +134,9 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     transition: opacity 0.3s ease, filter 0.3s ease;
 }
 
-/* Brighter on panel hover */
-.silhouette-panel:hover .silhouette-img {
+/* Brighter on panel hover (desktop only) */
+.silhouette-panel.panel-left:hover .silhouette-img,
+.silhouette-panel.panel-right:hover .silhouette-img {
     opacity: 0.5;
     filter: brightness(0) invert(1) drop-shadow(0 0 12px rgba(0, 212, 255, 0.5));
 }
@@ -621,12 +623,16 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         height: 85px !important;
         max-height: none !important;
         
-        /* Touch-friendly */
+        /* Completely disable all interactions */
+        pointer-events: none !important;
         user-select: none !important;
         -webkit-user-select: none !important;
         -webkit-touch-callout: none !important;
-        touch-action: manipulation !important;
-        cursor: pointer;
+        touch-action: none !important;
+        cursor: default !important;
+        
+        /* Disable hover/active states */
+        transition: none !important;
         
         /* Horizontal scroll instead of vertical */
         border-radius: 12px;
@@ -648,9 +654,7 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         height: 100%;
         padding: 8px;
         will-change: transform;
-        user-select: none !important;
-        -webkit-user-select: none !important;
-        pointer-events: none; /* Let parent handle touch */
+        pointer-events: none !important;
     }
     
     .silhouette-panel.panel-mobile .silhouette-img {
@@ -659,9 +663,8 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         aspect-ratio: 1/1;
         padding: 6px;
         opacity: 0.4;
-        user-select: none !important;
+        pointer-events: none !important;
         -webkit-user-drag: none;
-        pointer-events: none; /* Let parent handle touch */
     }
     
     /* Mobile vignette - left/right fade */
