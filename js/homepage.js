@@ -447,19 +447,19 @@ const HomepageController = {
                 z-index: 40;
             }
             
-            /* Vertical speed lines */
+            /* Vertical speed lines - full edge coverage */
             .speed-lines.vertical-top {
                 top: 0;
                 left: 0;
                 right: 0;
-                height: 40%;
+                height: 50%;
             }
             
             .speed-lines.vertical-bottom {
                 bottom: 0;
                 left: 0;
                 right: 0;
-                height: 40%;
+                height: 50%;
             }
             
             .speed-lines.vertical-top .speed-line,
@@ -487,19 +487,19 @@ const HomepageController = {
                 100% { transform: translateY(-200%); opacity: 0; }
             }
             
-            /* Horizontal speed lines */
+            /* Horizontal speed lines - full edge coverage */
             .speed-lines.horizontal-left {
                 left: 0;
                 top: 0;
                 bottom: 0;
-                width: 40%;
+                width: 50%;
             }
             
             .speed-lines.horizontal-right {
                 right: 0;
                 top: 0;
                 bottom: 0;
-                width: 40%;
+                width: 50%;
             }
             
             .speed-lines.horizontal-left .speed-line,
@@ -541,13 +541,22 @@ const HomepageController = {
                 100% { width: 200px; height: 200px; opacity: 0; margin: -100px; }
             }
             
-            /* Mobile panel visibility fix */
+            /* Mobile panel visibility fix - ALWAYS visible */
             @media (max-width: 600px) {
-                .silhouette-panel.panel-mobile {
+                .silhouette-panel.panel-mobile,
+                .silhouette-panel.panel-mobile.slingshot-active,
+                .silhouette-panel.panel-mobile.slingshot-blur,
+                .silhouette-panel.panel-mobile.slingshot-level-low,
+                .silhouette-panel.panel-mobile.slingshot-level-medium,
+                .silhouette-panel.panel-mobile.slingshot-level-high,
+                .silhouette-panel.panel-mobile.slingshot-level-max,
+                .silhouette-panel.panel-mobile.slingshot-level-extreme {
                     display: block !important;
                     visibility: visible !important;
                     opacity: 1 !important;
                     pointer-events: auto !important;
+                    position: fixed !important;
+                    bottom: 100px !important;
                     touch-action: none !important;
                     cursor: grab !important;
                 }
@@ -858,17 +867,18 @@ const HomepageController = {
     },
     
     applyScreenShake() {
-        const homeView = document.getElementById('home-view');
-        if (!homeView) return;
+        // Only shake the portal content, not fixed elements like footer
+        const portalContent = document.querySelector('.home-portal');
+        if (!portalContent) return;
         
         const shake = this.screenShake;
         if (shake.intensity > 0.5) {
             const x = (Math.random() - 0.5) * shake.intensity;
             const y = (Math.random() - 0.5) * shake.intensity;
-            homeView.style.transform = `translate(${x}px, ${y}px)`;
+            portalContent.style.transform = `translate(${x}px, ${y}px)`;
             shake.intensity *= shake.decay;
         } else {
-            homeView.style.transform = '';
+            portalContent.style.transform = '';
             shake.active = false;
             shake.intensity = 0;
         }
@@ -912,9 +922,10 @@ const HomepageController = {
             mobile.position += mobile.velocity;
             mobile.velocity *= this.physics.friction;
             
-            // Speed lines on OPPOSITE side of movement direction
+            // Speed lines TRAIL BEHIND movement (same side as movement direction)
+            // If moving right, lines trail on right. If moving left, lines trail on left.
             const movingRight = mobile.velocity > 0;
-            this.updateSpeedLines(mobile.panel, Math.abs(mobile.velocity), movingRight ? 'horizontal-left' : 'horizontal-right');
+            this.updateSpeedLines(mobile.panel, Math.abs(mobile.velocity), movingRight ? 'horizontal-right' : 'horizontal-left');
             
             if (Math.abs(mobile.velocity) > 15 && this.frameCount % 3 === 0) {
                 this.spawnTrailSpark(mobile.panel);
@@ -980,9 +991,10 @@ const HomepageController = {
                 anim.position += anim.velocity;
                 anim.velocity *= this.physics.friction;
                 
-                // Speed lines on OPPOSITE side of movement direction
+                // Speed lines TRAIL BEHIND movement (same side as movement direction)
+                // If moving down, lines trail on bottom. If moving up, lines trail on top.
                 const movingDown = anim.velocity > 0;
-                this.updateSpeedLines(anim.panel, Math.abs(anim.velocity), movingDown ? 'vertical-top' : 'vertical-bottom');
+                this.updateSpeedLines(anim.panel, Math.abs(anim.velocity), movingDown ? 'vertical-bottom' : 'vertical-top');
                 
                 if (Math.abs(anim.velocity) > 15 && this.frameCount % 3 === 0) {
                     this.spawnTrailSpark(anim.panel);

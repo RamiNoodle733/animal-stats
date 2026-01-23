@@ -663,6 +663,7 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         flex-shrink: 0;
         padding: 4px;
         opacity: 0.4;
+        filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(0, 212, 255, 0.3)) !important;
         pointer-events: none !important;
         -webkit-user-drag: none;
     }
@@ -832,6 +833,7 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     .silhouette-panel.panel-mobile .silhouette-img {
         width: 58px;
         height: 58px;
+        filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(0, 212, 255, 0.3)) !important;
     }
     
     .home-portal {
