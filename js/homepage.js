@@ -571,6 +571,18 @@ const HomepageController = {
                 .silhouette-panel.panel-mobile .silhouette-img {
                     pointer-events: none !important;
                 }
+                
+                /* Mobile silhouettes MUST stay white during all slingshot states */
+                .silhouette-panel.panel-mobile .silhouette-img,
+                .silhouette-panel.panel-mobile.slingshot-active .silhouette-img,
+                .silhouette-panel.panel-mobile.slingshot-blur .silhouette-img,
+                .silhouette-panel.panel-mobile.slingshot-level-low .silhouette-img,
+                .silhouette-panel.panel-mobile.slingshot-level-medium .silhouette-img,
+                .silhouette-panel.panel-mobile.slingshot-level-high .silhouette-img,
+                .silhouette-panel.panel-mobile.slingshot-level-max .silhouette-img,
+                .silhouette-panel.panel-mobile.slingshot-level-extreme .silhouette-img {
+                    filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(0, 212, 255, 0.3)) !important;
+                }
             }
         `;
         document.head.appendChild(style);
