@@ -106,7 +106,7 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     pointer-events: none;
 }
 
-/* Silhouette track container */
+/* Silhouette track container - JS controls transform */
 .silhouette-track {
     position: absolute;
     top: 0;
@@ -115,34 +115,7 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     display: flex;
     flex-direction: column;
     padding: 10px;
-    /* Animation with variable speed */
-    animation-timing-function: linear;
-    animation-iteration-count: infinite;
-    /* Smooth speed transition */
-    transition: animation-duration 0.5s ease-out;
-}
-
-.panel-left .silhouette-track {
-    animation: scrollDown var(--home-anim-speed) linear infinite;
-}
-
-.panel-right .silhouette-track {
-    animation: scrollUp var(--home-anim-speed) linear infinite;
-}
-
-/* Speed-up state (controlled by JS) */
-.silhouette-panel.speed-up .silhouette-track {
-    animation-duration: var(--home-anim-speed-fast) !important;
-}
-
-@keyframes scrollDown {
-    from { transform: translateY(-50%); }
-    to { transform: translateY(0); }
-}
-
-@keyframes scrollUp {
-    from { transform: translateY(0); }
-    to { transform: translateY(-50%); }
+    will-change: transform;
 }
 
 /* Silhouette images with depth effect */
@@ -656,17 +629,13 @@ body:has(#home-view.active-view) .shared-bottom-bar {
         padding-bottom: env(safe-area-inset-bottom, 0);
     }
     
-    /* Mobile track - horizontal scroll */
+    /* Mobile track - horizontal scroll (JS controlled) */
     .silhouette-panel.panel-mobile .silhouette-track {
         flex-direction: row;
         width: max-content;
         height: 100%;
         padding: 8px;
-        animation: scrollLeft var(--home-anim-speed) linear infinite;
-    }
-    
-    .silhouette-panel.panel-mobile.speed-up .silhouette-track {
-        animation-duration: var(--home-anim-speed-fast) !important;
+        will-change: transform;
     }
     
     .silhouette-panel.panel-mobile .silhouette-img {
@@ -776,12 +745,6 @@ body:has(#home-view.active-view) .shared-bottom-bar {
         padding: 6px 12px;
         font-size: 0.75rem;
     }
-}
-
-/* Horizontal scroll animation for mobile */
-@keyframes scrollLeft {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
 }
 
 /* Extra small screens (320px) */

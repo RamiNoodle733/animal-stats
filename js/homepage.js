@@ -1,6 +1,6 @@
 /**
  * HOMEPAGE - Hologram Silhouette Controller
- * Premium panels with speed-up interactions
+ * Premium panels with smooth JS-based animation and speed-up interactions
  */
 
 'use strict';
@@ -10,6 +10,16 @@ const HomepageController = {
     animalImages: [],
     mobilePanel: null,
     speedUpTimeout: null,
+    
+    // Animation state for each track
+    animations: {
+        left: { position: 0, speed: 1, targetSpeed: 1, track: null, height: 0 },
+        right: { position: 0, speed: 1, targetSpeed: 1, track: null, height: 0 },
+        mobile: { position: 0, speed: 1, targetSpeed: 1, track: null, width: 0 }
+    },
+    animationFrame: null,
+    baseSpeed: 0.5, // pixels per frame at 60fps
+    fastMultiplier: 3.5,
     
     /**
      * Initialize and populate panels
@@ -47,11 +57,18 @@ const HomepageController = {
         this.populateTrack(trackLeft, images);
         this.populateTrack(trackRight, [...images].reverse());
         
+        // Store track references
+        this.animations.left.track = trackLeft;
+        this.animations.right.track = trackRight;
+        
         // Create mobile panel (hidden on desktop)
         this.createMobilePanel(images);
         
         // Setup speed-up interactions
         this.setupInteractions();
+        
+        // Start animation loop after images load
+        setTimeout(() => this.startAnimationLoop(), 100);
     },
     
     /**
@@ -84,6 +101,7 @@ const HomepageController = {
         let mobilePanel = document.getElementById('silhouette-mobile');
         if (mobilePanel) {
             this.mobilePanel = mobilePanel;
+            this.animations.mobile.track = mobilePanel.querySelector('.silhouette-track');
             return;
         }
         
@@ -119,6 +137,7 @@ const HomepageController = {
         });
         
         this.mobilePanel = mobilePanel;
+        this.animations.mobile.track = track;
     },
     
     /**
@@ -143,6 +162,67 @@ const HomepageController = {
     },
     
     /**
+     * Start the JavaScript animation loop
+     */
+    startAnimationLoop() {
+        // Measure track heights/widths for looping
+        const leftTrack = this.animations.left.track;
+        const rightTrack = this.animations.right.track;
+        const mobileTrack = this.animations.mobile.track;
+        
+        if (leftTrack) {
+            this.animations.left.height = leftTrack.scrollHeight / 2;
+        }
+        if (rightTrack) {
+            this.animations.right.height = rightTrack.scrollHeight / 2;
+        }
+        if (mobileTrack) {
+            this.animations.mobile.width = mobileTrack.scrollWidth / 2;
+        }
+        
+        // Start animation
+        const animate = () => {
+            // Smoothly interpolate speed towards target
+            for (const key of ['left', 'right', 'mobile']) {
+                const anim = this.animations[key];
+                anim.speed += (anim.targetSpeed - anim.speed) * 0.1;
+            }
+            
+            // Update vertical tracks (both go UP)
+            for (const key of ['left', 'right']) {
+                const anim = this.animations[key];
+                if (anim.track && anim.height > 0) {
+                    anim.position -= this.baseSpeed * anim.speed;
+                    
+                    // Loop when reaching top
+                    if (anim.position <= -anim.height) {
+                        anim.position += anim.height;
+                    }
+                    
+                    anim.track.style.transform = `translateY(${anim.position}px)`;
+                }
+            }
+            
+            // Update mobile track (horizontal)
+            const mobile = this.animations.mobile;
+            if (mobile.track && mobile.width > 0) {
+                mobile.position -= this.baseSpeed * mobile.speed;
+                
+                // Loop when reaching left edge
+                if (mobile.position <= -mobile.width) {
+                    mobile.position += mobile.width;
+                }
+                
+                mobile.track.style.transform = `translateX(${mobile.position}px)`;
+            }
+            
+            this.animationFrame = requestAnimationFrame(animate);
+        };
+        
+        animate();
+    },
+    
+    /**
      * Setup speed-up interactions
      */
     setupInteractions() {
@@ -153,24 +233,24 @@ const HomepageController = {
         
         // Desktop: Hover on panel speeds up that panel
         if (panelLeft) {
-            panelLeft.addEventListener('mouseenter', () => this.speedUp(panelLeft));
-            panelLeft.addEventListener('mouseleave', () => this.speedNormal(panelLeft));
+            panelLeft.addEventListener('mouseenter', () => this.speedUp('left'));
+            panelLeft.addEventListener('mouseleave', () => this.speedNormal('left'));
         }
         
         if (panelRight) {
-            panelRight.addEventListener('mouseenter', () => this.speedUp(panelRight));
-            panelRight.addEventListener('mouseleave', () => this.speedNormal(panelRight));
+            panelRight.addEventListener('mouseenter', () => this.speedUp('right'));
+            panelRight.addEventListener('mouseleave', () => this.speedNormal('right'));
         }
         
         // Desktop: Hover on nav area speeds up BOTH panels
         if (portalNav) {
             portalNav.addEventListener('mouseenter', () => {
-                this.speedUp(panelLeft);
-                this.speedUp(panelRight);
+                this.speedUp('left');
+                this.speedUp('right');
             });
             portalNav.addEventListener('mouseleave', () => {
-                this.speedNormal(panelLeft);
-                this.speedNormal(panelRight);
+                this.speedNormal('left');
+                this.speedNormal('right');
             });
         }
         
@@ -178,26 +258,62 @@ const HomepageController = {
         if (mobilePanel) {
             // Touch start
             mobilePanel.addEventListener('touchstart', () => {
-                this.speedUp(mobilePanel);
+                this.speedUp('mobile');
             }, { passive: true });
             
             // Touch end - brief delay then return to normal
             mobilePanel.addEventListener('touchend', () => {
                 clearTimeout(this.speedUpTimeout);
                 this.speedUpTimeout = setTimeout(() => {
-                    this.speedNormal(mobilePanel);
+                    this.speedNormal('mobile');
                 }, 300);
             }, { passive: true });
             
             // Also support mouse for testing
             mobilePanel.addEventListener('mousedown', () => {
-                this.speedUp(mobilePanel);
+                this.speedUp('mobile');
             });
             
             mobilePanel.addEventListener('mouseup', () => {
                 clearTimeout(this.speedUpTimeout);
                 this.speedUpTimeout = setTimeout(() => {
-                    this.speedNormal(mobilePanel);
+                    this.speedNormal('mobile');
+                }, 300);
+            });
+        }
+    },
+    
+    /**
+     * Speed up animation (smooth transition)
+     */
+    speedUp(key) {
+        if (this.animations[key]) {
+            this.animations[key].targetSpeed = this.fastMultiplier;
+        }
+    },
+    
+    /**
+     * Return to normal speed (smooth transition)
+     */
+    speedNormal(key) {
+        if (this.animations[key]) {
+            this.animations[key].targetSpeed = 1;
+        }
+    },
+    
+    /**
+     * Fisher-Yates shuffle
+     */
+    shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+};
+
+window.HomepageController = HomepageController;
                 }, 300);
             });
         }
