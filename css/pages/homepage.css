@@ -323,8 +323,8 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
 
 .portal-logo-frame {
     position: relative;
-    width: 120px;
-    height: 120px;
+    width: 160px;
+    height: 160px;
 }
 
 .portal-logo-glow {
@@ -351,8 +351,8 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
 
 .portal-tagline {
     font-family: var(--font-display, 'Bebas Neue', sans-serif);
-    font-size: clamp(2rem, 5vw, 3rem);
-    letter-spacing: 6px;
+    font-size: clamp(2.2rem, 6vw, 3.5rem);
+    letter-spacing: 8px;
     color: #fff;
     margin: 0;
     text-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
@@ -621,6 +621,13 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         height: 85px !important;
         max-height: none !important;
         
+        /* Touch-friendly */
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        -webkit-touch-callout: none !important;
+        touch-action: manipulation !important;
+        cursor: pointer;
+        
         /* Horizontal scroll instead of vertical */
         border-radius: 12px;
         
@@ -641,6 +648,9 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         height: 100%;
         padding: 8px;
         will-change: transform;
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        pointer-events: none; /* Let parent handle touch */
     }
     
     .silhouette-panel.panel-mobile .silhouette-img {
@@ -649,6 +659,9 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
         aspect-ratio: 1/1;
         padding: 6px;
         opacity: 0.4;
+        user-select: none !important;
+        -webkit-user-drag: none;
+        pointer-events: none; /* Let parent handle touch */
     }
     
     /* Mobile vignette - left/right fade */
@@ -697,13 +710,13 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     }
     
     .portal-logo-frame {
-        width: 70px;
-        height: 70px;
+        width: 80px;
+        height: 80px;
     }
     
     .portal-tagline {
-        font-size: 1.4rem;
-        letter-spacing: 3px;
+        font-size: 1.6rem;
+        letter-spacing: 4px;
     }
     
     .portal-subtitle {
