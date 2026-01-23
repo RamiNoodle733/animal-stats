@@ -32,10 +32,13 @@
     overflow: hidden !important;
 }
 
-/* Hide header on home */
+/* Hide header and bottom bars on home */
 body:has(#home-view.active-view) .game-header,
 body:has(#home-view.active-view) .bottom-bar,
-body:has(#home-view.active-view) .shared-bottom-bar {
+body:has(#home-view.active-view) .shared-bottom-bar,
+body:has(#home-view.active-view) .mobile-bottom-bar,
+body:has(#home-view.active-view) [class*="bottom-bar"],
+body:has(#home-view.active-view) nav[class*="mobile"] {
     display: none !important;
 }
 
@@ -607,13 +610,13 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     .silhouette-panel.panel-mobile {
         display: block !important;
         position: fixed !important;
-        bottom: 0 !important;
+        bottom: 20px !important;
         left: 10px !important;
         right: 10px !important;
         top: auto !important;
         transform: none !important;
         width: auto !important;
-        height: 100px !important;
+        height: 90px !important;
         max-height: none !important;
         
         /* Horizontal scroll instead of vertical */
@@ -671,10 +674,16 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     
     /* Portal adjustments for mobile with bottom panel */
     .home-portal {
-        padding-bottom: 115px !important; /* Space for mobile panel */
+        padding-bottom: 130px !important; /* Space for mobile panel */
+        padding-top: 10px !important; /* Move content up */
         padding-left: 10px !important; /* Reset side padding on mobile */
         padding-right: 10px !important;
         pointer-events: auto; /* Re-enable on mobile since no side panels */
+        justify-content: flex-start !important; /* Align to top */
+    }
+    
+    .portal-logo-section {
+        margin-top: 40px;
     }
     
     .portal-logo-frame {

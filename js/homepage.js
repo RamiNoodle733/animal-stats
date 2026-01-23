@@ -18,7 +18,7 @@ const HomepageController = {
         mobile: { position: 0, speed: 1, targetSpeed: 1, track: null, width: 0 }
     },
     animationFrame: null,
-    baseSpeed: 0.5, // pixels per frame at 60fps
+    baseSpeed: 1.5, // pixels per frame at 60fps
     fastMultiplier: 3.5,
     
     /**
@@ -185,6 +185,11 @@ const HomepageController = {
             }
             if (mobileTrack) {
                 this.animations.mobile.width = mobileTrack.scrollWidth / 2;
+                // If mobile width is too small, retry
+                if (this.animations.mobile.width < 100 && window.innerWidth <= 600) {
+                    setTimeout(initAnimation, 200);
+                    return;
+                }
             }
             
             // Start animation
