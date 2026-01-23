@@ -13,6 +13,7 @@ const HomepageController = {
     initialized: false,
     animalImages: [],
     mobilePanel: null,
+    validatedImages: [], // Cache of validated transparent images
     
     // Animation state for each track
     animations: {
@@ -25,9 +26,9 @@ const HomepageController = {
     fastMultiplier: 3.5,  // Speed multiplier when hovering (desktop only)
     
     /**
-     * Initialize and populate panels
+     * Initialize and populate panels with ALL animals (shuffled, validated)
      */
-    activate(animals) {
+    async activate(animals) {
         if (!animals || !animals.length) return;
         
         const trackLeft = document.getElementById('silhouette-track-left');
@@ -42,30 +43,39 @@ const HomepageController = {
         if (this.initialized) return;
         this.initialized = true;
         
-        // Filter to animals with valid images
-        const validAnimals = animals.filter(a => a.image && !a.image.includes('fallback'));
+        // Filter to animals with valid image URLs (basic check)
+        const validAnimals = animals.filter(a => 
+            a.image && 
+            !a.image.includes('fallback') && 
+            !a.image.includes('placeholder') &&
+            a.image.trim() !== ''
+        );
         
-        // Shuffle and pick animals
+        // Shuffle ALL animals randomly
         const shuffled = this.shuffle([...validAnimals]);
-        const selected = shuffled.slice(0, 16);
-        const images = selected.map(a => a.image);
+        const allImages = shuffled.map(a => a.image);
         
         // Store for mobile panel
-        this.animalImages = images;
+        this.animalImages = allImages;
         
         // Add panel decorations (scanlines, frame highlight)
         this.addPanelDecorations();
         
         // Populate desktop panels (double images for seamless loop)
-        this.populateTrack(trackLeft, images);
-        this.populateTrack(trackRight, [...images].reverse());
+        // Split images between left and right panels for variety
+        const half = Math.ceil(allImages.length / 2);
+        const leftImages = allImages.slice(0, half);
+        const rightImages = allImages.slice(half);
+        
+        this.populateTrack(trackLeft, leftImages, true);
+        this.populateTrack(trackRight, rightImages.length > 0 ? rightImages : leftImages, true);
         
         // Store track references
         this.animations.left.track = trackLeft;
         this.animations.right.track = trackRight;
         
-        // Create mobile panel (hidden on desktop)
-        this.createMobilePanel(images);
+        // Create mobile panel (hidden on desktop) - uses all images
+        this.createMobilePanel(allImages);
         
         // Setup speed-up interactions
         this.setupInteractions();
@@ -135,6 +145,8 @@ const HomepageController = {
             img.alt = '';
             img.draggable = false;
             img.onerror = () => { img.style.display = 'none'; };
+            // Check for square/non-transparent images on load
+            img.onload = () => this.validateImageTransparency(img);
             img.src = src;
             track.appendChild(img);
         });
@@ -145,8 +157,11 @@ const HomepageController = {
     
     /**
      * Populate a track with images
+     * @param {HTMLElement} track - The track element to populate
+     * @param {string[]} images - Array of image URLs
+     * @param {boolean} validate - Whether to validate transparency (default: false)
      */
-    populateTrack(track, images) {
+    populateTrack(track, images, validate = false) {
         track.innerHTML = '';
         
         // Double for seamless loop
@@ -159,9 +174,75 @@ const HomepageController = {
             img.alt = '';
             img.draggable = false;
             img.onerror = () => { img.style.display = 'none'; };
+            if (validate) {
+                img.onload = () => this.validateImageTransparency(img);
+            }
             img.src = src;
             track.appendChild(img);
         });
+    },
+    
+    /**
+     * Check if an image has transparency (is not a solid square)
+     * Hides images that appear to be squares with backgrounds
+     */
+    validateImageTransparency(img) {
+        // Skip if already hidden or not loaded
+        if (!img || !img.complete || img.naturalWidth === 0) {
+            img.style.display = 'none';
+            return;
+        }
+        
+        try {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d', { willReadFrequently: true });
+            
+            // Use small size for performance
+            const size = 50;
+            canvas.width = size;
+            canvas.height = size;
+            
+            ctx.drawImage(img, 0, 0, size, size);
+            
+            // Check corners for transparency
+            const corners = [
+                ctx.getImageData(0, 0, 1, 1).data,           // Top-left
+                ctx.getImageData(size - 1, 0, 1, 1).data,    // Top-right
+                ctx.getImageData(0, size - 1, 1, 1).data,    // Bottom-left
+                ctx.getImageData(size - 1, size - 1, 1, 1).data // Bottom-right
+            ];
+            
+            // Count how many corners are opaque (alpha > 200)
+            let opaqueCorners = 0;
+            for (const pixel of corners) {
+                if (pixel[3] > 200) opaqueCorners++;
+            }
+            
+            // If all 4 corners are opaque, it's likely a square image with background
+            if (opaqueCorners === 4) {
+                // Double check: sample edges too
+                const edgeSamples = [
+                    ctx.getImageData(size / 2, 0, 1, 1).data,        // Top middle
+                    ctx.getImageData(size / 2, size - 1, 1, 1).data, // Bottom middle
+                    ctx.getImageData(0, size / 2, 1, 1).data,        // Left middle
+                    ctx.getImageData(size - 1, size / 2, 1, 1).data  // Right middle
+                ];
+                
+                let opaqueEdges = 0;
+                for (const pixel of edgeSamples) {
+                    if (pixel[3] > 200) opaqueEdges++;
+                }
+                
+                // If corners AND edges are all opaque, definitely a square - hide it
+                if (opaqueEdges >= 3) {
+                    img.style.display = 'none';
+                    return;
+                }
+            }
+        } catch (e) {
+            // CORS or other error - keep the image visible
+            // (silhouette filter will still make it look okay)
+        }
     },
     
     /**
