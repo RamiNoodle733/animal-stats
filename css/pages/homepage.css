@@ -1,6 +1,6 @@
 /**
- * HOMEPAGE - Simplified Portal Style
- * Zero-scroll layout with silhouette panels
+ * HOMEPAGE - Premium Portal Style
+ * Zero-scroll layout with hologram silhouette panels
  */
 
 /* ========================================
@@ -8,7 +8,10 @@
    ======================================== */
 :root {
     --home-anim-speed: 20s;
+    --home-anim-speed-fast: 6s;
     --portal-max-width: 600px;
+    --panel-accent: rgba(0, 212, 255, 0.5);
+    --panel-accent-glow: rgba(0, 212, 255, 0.15);
 }
 
 /* ========================================
@@ -37,30 +40,73 @@ body:has(#home-view.active-view) .shared-bottom-bar {
 }
 
 /* ========================================
-   SILHOUETTE PANELS
+   HOLOGRAM SILHOUETTE PANELS (Desktop)
+   Premium framed glass panels with depth
    ======================================== */
 .silhouette-panel {
     position: fixed !important;
-    top: 0 !important;
-    bottom: 0 !important;
-    width: clamp(150px, 20vw, 300px) !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    width: clamp(140px, 18vw, 220px) !important;
+    height: 70vh !important;
+    max-height: 600px !important;
     overflow: hidden !important;
-    pointer-events: none;
+    pointer-events: auto;
     z-index: 5 !important;
     display: block !important;
+    
+    /* Premium frame */
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 12px;
+    
+    /* Glass/hologram background */
+    background: 
+        /* Subtle grid pattern */
+        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+        /* Inner depth gradient */
+        radial-gradient(ellipse at center, rgba(0, 20, 40, 0.8) 0%, rgba(0, 10, 20, 0.95) 100%);
+    background-size: 20px 20px, 20px 20px, 100% 100%;
+    
+    /* Outer glow */
+    box-shadow: 
+        0 0 30px rgba(0, 212, 255, 0.1),
+        inset 0 0 20px rgba(0, 212, 255, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    
+    /* Speed-up transition */
+    transition: box-shadow 0.3s ease;
 }
 
 .silhouette-panel.panel-left {
-    left: 0 !important;
-    background: linear-gradient(90deg, rgba(0, 10, 20, 0.9) 0%, transparent 100%);
+    left: 20px !important;
 }
 
 .silhouette-panel.panel-right {
-    right: 0 !important;
-    background: linear-gradient(-90deg, rgba(0, 10, 20, 0.9) 0%, transparent 100%);
+    right: 20px !important;
 }
 
-/* Silhouette track - simple continuous scroll */
+/* Hover effect - glow intensifies */
+.silhouette-panel:hover {
+    box-shadow: 
+        0 0 50px rgba(0, 212, 255, 0.2),
+        inset 0 0 30px rgba(0, 212, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Inner bevel/highlight at top */
+.silhouette-panel .panel-frame-highlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.4), transparent);
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* Silhouette track container */
 .silhouette-track {
     position: absolute;
     top: 0;
@@ -68,6 +114,12 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     right: 0;
     display: flex;
     flex-direction: column;
+    padding: 10px;
+    /* Animation with variable speed */
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    /* Smooth speed transition */
+    transition: animation-duration 0.5s ease-out;
 }
 
 .panel-left .silhouette-track {
@@ -76,6 +128,11 @@ body:has(#home-view.active-view) .shared-bottom-bar {
 
 .panel-right .silhouette-track {
     animation: scrollUp var(--home-anim-speed) linear infinite;
+}
+
+/* Speed-up state (controlled by JS) */
+.silhouette-panel.speed-up .silhouette-track {
+    animation-duration: var(--home-anim-speed-fast) !important;
 }
 
 @keyframes scrollDown {
@@ -88,37 +145,67 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     to { transform: translateY(-50%); }
 }
 
-/* Silhouette images */
+/* Silhouette images with depth effect */
 .silhouette-img {
     width: 100%;
     aspect-ratio: 1/1;
     object-fit: contain;
-    padding: 10%;
-    opacity: 0.15;
-    filter: brightness(0) invert(1);
+    padding: 12%;
+    opacity: 0.35;
+    filter: brightness(0) invert(1) drop-shadow(0 0 8px rgba(0, 212, 255, 0.3));
     flex-shrink: 0;
+    transition: opacity 0.3s ease, filter 0.3s ease;
 }
 
-/* Top/bottom fade on panels */
+/* Brighter on panel hover */
+.silhouette-panel:hover .silhouette-img {
+    opacity: 0.5;
+    filter: brightness(0) invert(1) drop-shadow(0 0 12px rgba(0, 212, 255, 0.5));
+}
+
+/* Vignette mask - top and bottom fade */
 .silhouette-panel::before,
 .silhouette-panel::after {
     content: '';
     position: absolute;
     left: 0;
     right: 0;
-    height: 20%;
-    z-index: 2;
+    height: 25%;
+    z-index: 3;
     pointer-events: none;
 }
 
 .silhouette-panel::before {
     top: 0;
-    background: linear-gradient(180deg, rgba(5, 10, 15, 1) 0%, transparent 100%);
+    background: linear-gradient(180deg, rgba(0, 10, 20, 0.95) 0%, rgba(0, 10, 20, 0.5) 40%, transparent 100%);
+    border-radius: 12px 12px 0 0;
 }
 
 .silhouette-panel::after {
     bottom: 0;
-    background: linear-gradient(0deg, rgba(5, 10, 15, 1) 0%, transparent 100%);
+    background: linear-gradient(0deg, rgba(0, 10, 20, 0.95) 0%, rgba(0, 10, 20, 0.5) 40%, transparent 100%);
+    border-radius: 0 0 12px 12px;
+}
+
+/* Scanline overlay for extra depth */
+.silhouette-panel .panel-scanlines {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.03) 2px,
+        rgba(0, 0, 0, 0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 4;
+    border-radius: 12px;
+}
+
+/* Mobile panel - hidden on desktop (created by JS) */
+.silhouette-panel.panel-mobile {
+    display: none !important;
 }
 
 /* ========================================
@@ -525,56 +612,205 @@ body:has(#home-view.active-view) .shared-bottom-bar {
 
 /* ========================================
    RESPONSIVE - MOBILE
+   Single bottom hologram panel layout
    ======================================== */
 @media (max-width: 600px) {
-    .silhouette-panel {
-        width: clamp(60px, 15vw, 100px) !important;
+    /* Hide side panels on mobile */
+    .silhouette-panel.panel-left,
+    .silhouette-panel.panel-right {
+        display: none !important;
     }
     
-    .silhouette-img {
-        opacity: 0.1;
+    /* Show mobile bottom panel */
+    .silhouette-panel.panel-mobile {
+        display: block !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 10px !important;
+        right: 10px !important;
+        top: auto !important;
+        transform: none !important;
+        width: auto !important;
+        height: 100px !important;
+        max-height: none !important;
+        
+        /* Horizontal scroll instead of vertical */
+        border-radius: 12px 12px 0 0;
+        
+        /* Adjust vignette for horizontal */
+        background: 
+            linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+            radial-gradient(ellipse at center, rgba(0, 20, 40, 0.85) 0%, rgba(0, 10, 20, 0.95) 100%);
+        background-size: 15px 15px, 100% 100%;
+        
+        /* Safe area padding */
+        padding-bottom: env(safe-area-inset-bottom, 0);
+    }
+    
+    /* Mobile track - horizontal scroll */
+    .silhouette-panel.panel-mobile .silhouette-track {
+        flex-direction: row;
+        width: max-content;
+        height: 100%;
+        padding: 8px;
+        animation: scrollLeft var(--home-anim-speed) linear infinite;
+    }
+    
+    .silhouette-panel.panel-mobile.speed-up .silhouette-track {
+        animation-duration: var(--home-anim-speed-fast) !important;
+    }
+    
+    .silhouette-panel.panel-mobile .silhouette-img {
+        width: auto;
+        height: 80px;
+        aspect-ratio: 1/1;
+        padding: 6px;
+        opacity: 0.4;
+    }
+    
+    /* Mobile vignette - left/right fade */
+    .silhouette-panel.panel-mobile::before,
+    .silhouette-panel.panel-mobile::after {
+        top: 0;
+        bottom: 0;
+        height: auto;
+        width: 20%;
+    }
+    
+    .silhouette-panel.panel-mobile::before {
+        left: 0;
+        right: auto;
+        background: linear-gradient(90deg, rgba(0, 10, 20, 0.95) 0%, transparent 100%);
+        border-radius: 12px 0 0 0;
+    }
+    
+    .silhouette-panel.panel-mobile::after {
+        right: 0;
+        left: auto;
+        background: linear-gradient(-90deg, rgba(0, 10, 20, 0.95) 0%, transparent 100%);
+        border-radius: 0 12px 0 0;
+    }
+    
+    /* Portal adjustments for mobile with bottom panel */
+    .home-portal {
+        padding-bottom: 115px !important; /* Space for mobile panel */
     }
     
     .portal-logo-frame {
-        width: 70px;
-        height: 70px;
+        width: 60px;
+        height: 60px;
     }
     
     .portal-tagline {
-        font-size: 1.3rem;
-        letter-spacing: 4px;
+        font-size: 1.2rem;
+        letter-spacing: 3px;
     }
     
     .portal-subtitle {
-        font-size: 0.75rem;
+        font-size: 0.7rem;
+        letter-spacing: 1px;
     }
     
     .portal-description {
-        font-size: 0.8rem;
+        font-size: 0.75rem;
+        max-width: 90%;
+        line-height: 1.3;
     }
     
     .portal-nav {
-        gap: 10px;
+        gap: 8px;
+        max-width: calc(100vw - 20px);
     }
     
     .portal-nav-btn {
-        padding: 16px 14px;
+        padding: 14px 10px;
+        gap: 8px;
     }
     
     .portal-nav-btn .btn-icon {
-        font-size: 1.1rem;
-    }
-    
-    .portal-nav-btn .btn-label {
         font-size: 1rem;
     }
     
+    .portal-nav-btn .btn-label {
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+    
+    .portal-nav-btn .btn-chevron {
+        display: none;
+    }
+    
     .portal-tournament-btn {
-        padding: 14px 20px;
+        padding: 12px 16px;
+        max-width: calc(100vw - 20px);
     }
     
     .portal-tournament-btn .btn-label {
+        font-size: 1rem;
+        letter-spacing: 2px;
+    }
+    
+    .portal-tournament-btn .btn-chevron {
+        display: none;
+    }
+    
+    /* Auth corner mobile */
+    .home-auth-corner {
+        top: 10px;
+        right: 10px;
+    }
+    
+    .home-auth-btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+    }
+}
+
+/* Horizontal scroll animation for mobile */
+@keyframes scrollLeft {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+/* Extra small screens (320px) */
+@media (max-width: 360px) {
+    .portal-tagline {
         font-size: 1.1rem;
+        letter-spacing: 2px;
+    }
+    
+    .portal-description {
+        font-size: 0.7rem;
+    }
+    
+    .portal-nav-btn {
+        padding: 12px 8px;
+    }
+    
+    .portal-nav-btn .btn-label {
+        font-size: 0.8rem;
+    }
+    
+    .portal-tournament-btn {
+        padding: 10px 12px;
+    }
+    
+    .portal-tournament-btn .btn-label {
+        font-size: 0.9rem;
+    }
+    
+    .silhouette-panel.panel-mobile {
+        height: 80px !important;
+        left: 5px !important;
+        right: 5px !important;
+    }
+    
+    .silhouette-panel.panel-mobile .silhouette-img {
+        height: 60px;
+    }
+    
+    .home-portal {
+        padding-bottom: 95px !important;
     }
 }
 
@@ -635,5 +871,39 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     
     .portal-tournament-btn {
         padding: 12px 20px;
+    }
+}
+
+/* Combined: mobile + short screen */
+@media (max-width: 600px) and (max-height: 700px) {
+    .portal-logo-section {
+        margin-bottom: 8px;
+    }
+    
+    .portal-logo-frame {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .portal-tagline {
+        font-size: 1.1rem;
+    }
+    
+    .portal-description {
+        display: none;
+    }
+    
+    .portal-nav {
+        gap: 6px;
+        margin-bottom: 10px;
+    }
+    
+    .portal-nav-btn {
+        padding: 10px 8px;
+    }
+    
+    .portal-tournament-btn {
+        padding: 10px 14px;
+        margin-bottom: 10px;
     }
 }
