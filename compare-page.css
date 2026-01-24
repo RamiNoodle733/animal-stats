@@ -1418,19 +1418,11 @@
     position: relative;
     width: 140px;
     height: 140px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     cursor: pointer;
     opacity: 0;
     transform: scale(0.5);
     transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
     flex-shrink: 0;
-    /* CRITICAL: Allow children to overflow */
-    overflow: visible !important;
-    z-index: 10;
-    /* Create isolated stacking context */
-    isolation: isolate;
 }
 
 #fightResultOverlay.reveal .champion-showcase {
@@ -1445,12 +1437,13 @@
 
 .champion-aura {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, rgba(147, 51, 234, 0.2) 40%, transparent 70%);
     border-radius: 50%;
     animation: auraPulse 3s ease-in-out infinite;
-    z-index: 1;
 }
 
 @keyframes auraPulse {
@@ -1460,10 +1453,12 @@
 
 .champion-ring {
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     border: 2px solid rgba(168, 85, 247, 0.4);
     border-radius: 50%;
     animation: ringExpand 3s ease-in-out infinite;
-    z-index: 2;
 }
 
 .ring-1 { width: 90%; height: 90%; animation-delay: 0s; }
@@ -1477,11 +1472,13 @@
 
 .champion-spotlight {
     position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 120%;
     height: 120%;
     background: radial-gradient(ellipse at center, rgba(250, 204, 21, 0.15) 0%, transparent 60%);
     animation: spotlightPulse 4s ease-in-out infinite;
-    z-index: 1;
 }
 
 @keyframes spotlightPulse {
@@ -1489,26 +1486,27 @@
     50% { opacity: 1; }
 }
 
-/* Champion Image - uses negative margins to extend beyond container */
+/* Champion Image - MUST be in front of all decorations */
 .champion-image {
     position: absolute;
-    /* Center the image and extend beyond container using calc */
     top: 50%;
     left: 50%;
-    width: 400px;
-    height: 400px;
-    margin-top: -200px;
-    margin-left: -200px;
+    /* Fixed large size that extends well beyond container */
+    width: 350px;
+    height: 350px;
+    /* Use transform to center - this is the KEY */
+    transform: translate(-50%, -50%);
     object-fit: contain;
     filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.6)) drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
     animation: championFloat 4s ease-in-out infinite;
-    z-index: 100;
+    /* VERY HIGH z-index to be above everything */
+    z-index: 9999;
     pointer-events: auto;
 }
 
 @keyframes championFloat {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-10px) scale(1.02); }
+    0%, 100% { transform: translate(-50%, -50%) translateY(0) scale(1); }
+    50% { transform: translate(-50%, -50%) translateY(-10px) scale(1.02); }
 }
 
 .champion-particles {
@@ -2012,8 +2010,8 @@
     }
     
     .champion-image {
-        width: 240%;
-        height: 240%;
+        width: 320px;
+        height: 320px;
     }
     
     .champion-name {
@@ -2143,8 +2141,8 @@
     }
     
     .champion-image {
-        width: 220%;
-        height: 220%;
+        width: 280px;
+        height: 280px;
     }
     
     .champion-name {
