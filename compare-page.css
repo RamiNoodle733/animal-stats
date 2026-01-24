@@ -1155,8 +1155,9 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
     z-index: 10001;
     display: none;
     overflow: hidden;
@@ -1266,12 +1267,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    padding: 20px;
+    justify-content: space-evenly;
+    padding: 15px 20px;
     box-sizing: border-box;
     overflow: hidden;
     z-index: 2;
-    gap: 12px;
+    gap: 6px;
 }
 
 /* Close Button */
@@ -1312,11 +1313,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 2px;
     position: relative;
     opacity: 0;
     transform: translateY(-30px) scale(0.8);
     transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    flex-shrink: 0;
 }
 
 #fightResultOverlay.reveal .victory-header {
@@ -1330,8 +1332,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     background: conic-gradient(from 0deg, transparent, rgba(250, 204, 21, 0.2), transparent, rgba(250, 204, 21, 0.2), transparent, rgba(250, 204, 21, 0.2), transparent);
     border-radius: 50%;
     animation: raysRotate 20s linear infinite;
@@ -1342,7 +1344,7 @@
 }
 
 .victory-crown {
-    font-size: 2.5rem;
+    font-size: 2rem;
     color: #facc15;
     filter: drop-shadow(0 0 30px rgba(250, 204, 21, 0.8));
     animation: crownBounce 2s ease-in-out infinite;
@@ -1357,7 +1359,7 @@
 
 .victory-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 3rem;
+    font-size: 2.2rem;
     font-weight: 900;
     letter-spacing: 0.4em;
     background: linear-gradient(180deg, #fff 0%, #facc15 40%, #f59e0b 100%);
@@ -1367,22 +1369,23 @@
     filter: drop-shadow(0 4px 20px rgba(250, 204, 21, 0.5));
     position: relative;
     z-index: 2;
+    line-height: 1;
 }
 
 .victory-subtitle {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     font-weight: 600;
     color: rgba(250, 204, 21, 0.8);
     letter-spacing: 0.2em;
     text-transform: uppercase;
 }
 
-/* Champion Showcase - Main Focus */
+/* Champion Showcase - Main Focus with overflow */
 .champion-showcase {
     position: relative;
-    width: 280px;
-    height: 280px;
+    width: 180px;
+    height: 180px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1390,6 +1393,9 @@
     opacity: 0;
     transform: scale(0.5);
     transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    flex-shrink: 0;
+    /* Allow image to overflow */
+    overflow: visible;
 }
 
 #fightResultOverlay.reveal .champion-showcase {
@@ -1446,18 +1452,20 @@
 }
 
 .champion-image {
-    position: relative;
-    width: 220%;
-    height: 220%;
+    position: absolute;
+    width: 280%;
+    height: 280%;
     object-fit: contain;
     filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.6)) drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
     animation: championFloat 4s ease-in-out infinite;
     z-index: 5;
+    /* Image overflows the container */
+    pointer-events: auto;
 }
 
 @keyframes championFloat {
     0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-15px) scale(1.02); }
+    50% { transform: translateY(-10px) scale(1.02); }
 }
 
 .champion-particles {
@@ -1495,10 +1503,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.5s ease;
+    flex-shrink: 0;
 }
 
 #fightResultOverlay.reveal .champion-info {
@@ -1509,41 +1518,22 @@
 
 .champion-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     font-weight: 900;
     letter-spacing: 0.15em;
     color: white;
     text-shadow: 0 0 30px rgba(168, 85, 247, 0.6), 0 4px 20px rgba(0, 0, 0, 0.5);
-}
-
-.champion-title-badge {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 16px;
-    background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(147, 51, 234, 0.2));
-    border: 1px solid rgba(168, 85, 247, 0.5);
-    border-radius: 20px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.6rem;
-    font-weight: 700;
-    color: #c4b5fd;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-}
-
-.champion-title-badge i {
-    color: #facc15;
-    font-size: 0.7rem;
+    line-height: 1;
 }
 
 /* Battle Summary Cards */
 .battle-summary {
     display: flex;
-    gap: 15px;
+    gap: 12px;
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.5s ease;
+    flex-shrink: 0;
 }
 
 #fightResultOverlay.reveal .battle-summary {
@@ -1601,207 +1591,221 @@
 
 .summary-card .card-value {
     font-family: 'Orbitron', monospace;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 700;
     color: white;
 }
 
-/* Stat Breakdown */
-.stat-breakdown {
+/* Statistical Analysis Section */
+.stat-analysis {
     width: 100%;
-    max-width: 500px;
+    max-width: 450px;
     background: rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    overflow: hidden;
+    border-radius: 10px;
+    padding: 10px 14px;
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.5s ease;
+    flex-shrink: 0;
 }
 
-#fightResultOverlay.reveal .stat-breakdown {
+#fightResultOverlay.reveal .stat-analysis {
     opacity: 1;
     transform: translateY(0);
-    transition-delay: 0.6s;
+    transition-delay: 0.55s;
 }
 
-.breakdown-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    background: rgba(0, 0, 0, 0.3);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    cursor: pointer;
-}
-
-.breakdown-title {
+.analysis-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.65rem;
+    font-size: 0.55rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.5);
     letter-spacing: 0.15em;
+    text-align: center;
+    margin-bottom: 8px;
 }
 
-.breakdown-toggle {
-    width: 28px;
-    height: 28px;
+.analysis-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.analysis-stat {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(255, 255, 255, 0.1);
-    border: none;
+    flex-direction: column;
+    gap: 3px;
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.03);
     border-radius: 6px;
-    color: rgba(255, 255, 255, 0.6);
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.breakdown-toggle:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-}
-
-.breakdown-toggle i {
-    transition: transform 0.3s ease;
-}
-
-.stat-breakdown.expanded .breakdown-toggle i {
-    transform: rotate(180deg);
-}
-
-.breakdown-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s ease;
-}
-
-.stat-breakdown.expanded .breakdown-content {
-    max-height: 400px;
-}
-
-.breakdown-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 16px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     opacity: 0;
-    transform: translateX(-20px);
-    animation: rowSlideIn 0.4s ease-out calc(var(--delay) + 0.1s) forwards;
+    animation: statFadeIn 0.3s ease forwards;
+    animation-delay: var(--delay, 0s);
 }
 
-.stat-breakdown.expanded .breakdown-row {
-    animation: rowSlideIn 0.4s ease-out calc(var(--delay) + 0.1s) forwards;
+#fightResultOverlay.reveal .analysis-stat {
+    animation: statFadeIn 0.3s ease forwards;
+    animation-delay: calc(var(--delay, 0s) + 0.6s);
 }
 
-@keyframes rowSlideIn {
-    to { opacity: 1; transform: translateX(0); }
+@keyframes statFadeIn {
+    to { opacity: 1; }
 }
 
-.breakdown-row:last-child {
-    border-bottom: none;
+.stat-header {
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
-.breakdown-stat-icon {
-    width: 28px;
-    height: 28px;
+.stat-abbr {
+    width: 18px;
+    height: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
-    font-size: 0.7rem;
+    background: rgba(168, 85, 247, 0.2);
+    border-radius: 4px;
+    font-size: 0.5rem;
+    color: #a855f7;
+}
+
+.stat-name {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.5rem;
+    font-weight: 700;
     color: rgba(255, 255, 255, 0.6);
+    letter-spacing: 0.05em;
 }
 
-.breakdown-row.stat-win .breakdown-stat-icon {
-    background: rgba(34, 197, 94, 0.2);
-    color: #22c55e;
+.stat-comparison {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
-.breakdown-row.stat-loss .breakdown-stat-icon {
-    background: rgba(239, 68, 68, 0.2);
+.stat-bar-container {
+    display: flex;
+    height: 4px;
+    border-radius: 2px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.stat-bar {
+    height: 100%;
+    transition: width 0.5s ease;
+}
+
+.stat-bar.winner-bar {
+    background: linear-gradient(90deg, #a855f7, #c084fc);
+}
+
+.stat-bar.winner-bar.leading {
+    background: linear-gradient(90deg, #a855f7, #facc15);
+}
+
+.stat-bar.loser-bar {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.stat-bar.loser-bar.leading {
+    background: rgba(239, 68, 68, 0.4);
+}
+
+.stat-values {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.55rem;
+}
+
+.winner-val {
+    color: #a855f7;
+    font-weight: 600;
+}
+
+.winner-val.higher {
+    color: #facc15;
+}
+
+.vs-divider {
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 0.45rem;
+}
+
+.loser-val {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.loser-val.higher {
     color: #ef4444;
 }
 
-.breakdown-stat-name {
-    flex: 1;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.8);
+/* Analysis Summary Row */
+.analysis-summary {
+    grid-column: 1 / -1;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding-top: 8px;
+    margin-top: 4px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.summary-label {
+    font-size: 0.45rem;
+    color: rgba(255, 255, 255, 0.4);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
-.breakdown-values {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.summary-value {
     font-family: 'Orbitron', monospace;
-    font-size: 0.75rem;
-}
-
-.winner-value {
-    color: #a855f7;
-    font-weight: 700;
-}
-
-.value-separator {
-    color: rgba(255, 255, 255, 0.3);
-    font-size: 0.6rem;
-}
-
-.loser-value {
-    color: rgba(255, 255, 255, 0.4);
-}
-
-.breakdown-status {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    padding: 4px 10px;
-    border-radius: 12px;
     font-size: 0.6rem;
     font-weight: 700;
+    color: white;
 }
 
-.stat-win .breakdown-status {
-    background: rgba(34, 197, 94, 0.2);
+.summary-value.positive {
     color: #22c55e;
 }
 
-.stat-loss .breakdown-status {
-    background: rgba(239, 68, 68, 0.15);
+.summary-value.negative {
     color: #ef4444;
-}
-
-.stat-tie .breakdown-status {
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.5);
 }
 
 /* Defeated Section */
 .defeated-section {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.5s ease;
+    flex-shrink: 0;
 }
 
 #fightResultOverlay.reveal .defeated-section {
     opacity: 1;
     transform: translateY(0);
-    transition-delay: 0.7s;
+    transition-delay: 0.65s;
 }
 
 .defeated-label {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.5);
     letter-spacing: 0.15em;
 }
 
@@ -1811,7 +1815,7 @@
     gap: 10px;
     padding: 8px 14px;
     background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 30px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -1819,39 +1823,39 @@
 }
 
 .defeated-card:hover {
-    background: rgba(239, 68, 68, 0.1);
-    border-color: rgba(239, 68, 68, 0.4);
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.3);
     transform: translateY(-2px);
 }
 
 .defeated-image {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     object-fit: contain;
-    filter: grayscale(80%) opacity(0.7);
-    transition: filter 0.3s ease;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    transition: transform 0.3s ease;
 }
 
 .defeated-card:hover .defeated-image {
-    filter: grayscale(50%) opacity(0.9);
+    transform: scale(1.1);
 }
 
 .defeated-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    color: white;
     letter-spacing: 0.1em;
 }
 
 .defeated-x {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.25);
     border-radius: 50%;
-    font-size: 0.5rem;
+    font-size: 0.45rem;
     color: #ef4444;
 }
 
@@ -1859,51 +1863,53 @@
 .cage-fight-badge {
     display: flex;
     align-items: center;
-    gap: 10px;
-    font-size: 0.55rem;
-    color: rgba(255, 255, 255, 0.25);
+    gap: 8px;
+    font-size: 0.5rem;
+    color: rgba(255, 255, 255, 0.2);
     text-transform: uppercase;
     letter-spacing: 0.1em;
     opacity: 0;
     transition: all 0.5s ease;
+    flex-shrink: 0;
 }
 
 #fightResultOverlay.reveal .cage-fight-badge {
     opacity: 1;
-    transition-delay: 0.8s;
+    transition-delay: 0.7s;
 }
 
 .badge-dot {
     width: 3px;
     height: 3px;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.15);
     border-radius: 50%;
 }
 
 /* Action Buttons */
 .result-actions {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.5s ease;
+    flex-shrink: 0;
 }
 
 #fightResultOverlay.reveal .result-actions {
     opacity: 1;
     transform: translateY(0);
-    transition-delay: 0.9s;
+    transition-delay: 0.75s;
 }
 
 .result-btn {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    padding: 10px 20px;
+    gap: 6px;
+    padding: 8px 16px;
     border-radius: 8px;
     font-family: 'Inter', sans-serif;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -1934,20 +1940,20 @@
 }
 
 .primary-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(168, 85, 247, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
 }
 
-.secondary-btn {
-    background: rgba(34, 197, 94, 0.2);
-    color: #22c55e;
-    border: 1px solid rgba(34, 197, 94, 0.3);
+.share-btn {
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+    border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
-.secondary-btn:hover {
-    background: rgba(34, 197, 94, 0.3);
-    border-color: rgba(34, 197, 94, 0.5);
-    transform: translateY(-3px);
+.share-btn:hover {
+    background: rgba(59, 130, 246, 0.3);
+    border-color: rgba(59, 130, 246, 0.5);
+    transform: translateY(-2px);
 }
 
 .ghost-btn {
@@ -1959,7 +1965,7 @@
 .ghost-btn:hover {
     background: rgba(255, 255, 255, 0.1);
     color: white;
-    transform: translateY(-3px);
+    transform: translateY(-2px);
 }
 
 /* ==========================
@@ -1967,122 +1973,48 @@
    ========================== */
 @media (max-width: 768px) {
     .result-arena {
-        padding: 15px;
-        padding-top: 60px;
-        gap: 10px;
+        padding: 10px 15px;
+        gap: 6px;
     }
     
     .result-close-x {
-        top: 15px;
-        right: 15px;
-        width: 40px;
-        height: 40px;
+        top: 10px;
+        right: 10px;
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
     }
     
     .victory-crown {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
     }
     
     .victory-title {
-        font-size: 2rem;
+        font-size: 1.8rem;
         letter-spacing: 0.3em;
     }
     
     .victory-subtitle {
-        font-size: 0.6rem;
+        font-size: 0.55rem;
     }
     
     .champion-showcase {
-        width: 200px;
-        height: 200px;
+        width: 140px;
+        height: 140px;
     }
     
     .champion-image {
-        width: 180%;
-        height: 180%;
+        width: 240%;
+        height: 240%;
     }
     
     .champion-name {
-        font-size: 1.6rem;
-    }
-    
-    .champion-title-badge {
-        font-size: 0.5rem;
-        padding: 5px 12px;
+        font-size: 1.4rem;
     }
     
     .battle-summary {
         flex-wrap: wrap;
         justify-content: center;
-        gap: 8px;
-    }
-    
-    .summary-card {
-        padding: 8px 12px;
-    }
-    
-    .summary-card .card-icon {
-        width: 30px;
-        height: 30px;
-        font-size: 0.75rem;
-    }
-    
-    .summary-card .card-label {
-        font-size: 0.5rem;
-    }
-    
-    .summary-card .card-value {
-        font-size: 0.75rem;
-    }
-    
-    .stat-breakdown {
-        max-width: 100%;
-    }
-    
-    .breakdown-row {
-        padding: 8px 12px;
-        gap: 8px;
-    }
-    
-    .defeated-section {
-        flex-direction: column;
-        gap: 6px;
-    }
-    
-    .result-actions {
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-    
-    .result-btn {
-        padding: 8px 16px;
-        font-size: 0.65rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .result-arena {
-        gap: 8px;
-    }
-    
-    .victory-crown {
-        font-size: 1.5rem;
-    }
-    
-    .victory-title {
-        font-size: 1.6rem;
-    }
-    
-    .champion-showcase {
-        width: 160px;
-        height: 160px;
-    }
-    
-    .champion-name {
-        font-size: 1.3rem;
-    }
-    
-    .battle-summary {
         gap: 6px;
     }
     
@@ -2091,20 +2023,183 @@
     }
     
     .summary-card .card-icon {
-        width: 26px;
-        height: 26px;
+        width: 28px;
+        height: 28px;
+        font-size: 0.7rem;
+    }
+    
+    .summary-card .card-label {
+        font-size: 0.45rem;
+    }
+    
+    .summary-card .card-value {
         font-size: 0.65rem;
     }
     
+    .stat-analysis {
+        padding: 8px 10px;
+    }
+    
+    .analysis-title {
+        font-size: 0.5rem;
+        margin-bottom: 6px;
+    }
+    
+    .analysis-grid {
+        gap: 4px;
+    }
+    
+    .analysis-stat {
+        padding: 4px;
+    }
+    
+    .stat-abbr {
+        width: 14px;
+        height: 14px;
+        font-size: 0.45rem;
+    }
+    
+    .stat-name {
+        font-size: 0.45rem;
+    }
+    
+    .stat-values {
+        font-size: 0.5rem;
+    }
+    
+    .analysis-summary {
+        gap: 12px;
+        padding-top: 6px;
+    }
+    
+    .summary-label {
+        font-size: 0.4rem;
+    }
+    
+    .summary-value {
+        font-size: 0.55rem;
+    }
+    
+    .defeated-section {
+        flex-direction: row;
+        gap: 8px;
+    }
+    
+    .defeated-label {
+        font-size: 0.5rem;
+    }
+    
+    .defeated-card {
+        padding: 6px 10px;
+    }
+    
+    .defeated-image {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .defeated-name {
+        font-size: 0.75rem;
+    }
+    
+    .cage-fight-badge {
+        font-size: 0.45rem;
+        gap: 6px;
+    }
+    
     .result-actions {
-        flex-direction: column;
-        width: 100%;
-        max-width: 280px;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
     }
     
     .result-btn {
-        width: 100%;
-        justify-content: center;
+        padding: 7px 12px;
+        font-size: 0.6rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .result-arena {
+        gap: 5px;
+        padding: 8px 12px;
+    }
+    
+    .victory-header {
+        gap: 1px;
+    }
+    
+    .victory-crown {
+        font-size: 1.4rem;
+    }
+    
+    .victory-title {
+        font-size: 1.5rem;
+    }
+    
+    .champion-showcase {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .champion-image {
+        width: 220%;
+        height: 220%;
+    }
+    
+    .champion-name {
+        font-size: 1.2rem;
+    }
+    
+    .battle-summary {
+        gap: 5px;
+    }
+    
+    .summary-card {
+        padding: 5px 8px;
+    }
+    
+    .summary-card .card-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 0.6rem;
+    }
+    
+    .summary-card .card-label {
+        font-size: 0.4rem;
+    }
+    
+    .summary-card .card-value {
+        font-size: 0.6rem;
+    }
+    
+    .stat-analysis {
+        padding: 6px 8px;
+    }
+    
+    .analysis-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 3px;
+    }
+    
+    .analysis-summary {
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .defeated-section {
+        flex-direction: row;
+    }
+    
+    .result-actions {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+    
+    .result-btn {
+        padding: 6px 10px;
+        font-size: 0.55rem;
     }
 }
 

@@ -624,6 +624,11 @@
                 <div class="result-particles" id="resultParticles"></div>
                 <div class="result-confetti" id="resultConfetti"></div>
                 
+                <!-- Close Button -->
+                <button class="result-close-x" id="resultCloseX">
+                    <i class="fas fa-times"></i>
+                </button>
+                
                 <div class="result-arena">
                     <!-- Victory Header -->
                     <div class="victory-header">
@@ -647,10 +652,6 @@
                     <!-- Champion Info -->
                     <div class="champion-info">
                         <div class="champion-name" id="championName">CHAMPION</div>
-                        <div class="champion-title-badge">
-                            <i class="fas fa-trophy"></i>
-                            <span>UNDISPUTED CHAMPION</span>
-                        </div>
                     </div>
                     
                     <!-- Battle Stats Summary -->
@@ -663,14 +664,6 @@
                             </div>
                         </div>
                         
-                        <div class="summary-card dominance-card" id="dominanceCard">
-                            <div class="card-icon"><i class="fas fa-chart-line"></i></div>
-                            <div class="card-content">
-                                <div class="card-label">STAT ADVANTAGES</div>
-                                <div class="card-value" id="advantageCount">0 / 0</div>
-                            </div>
-                        </div>
-                        
                         <div class="summary-card margin-card" id="marginCard">
                             <div class="card-icon"><i class="fas fa-percentage"></i></div>
                             <div class="card-content">
@@ -680,15 +673,10 @@
                         </div>
                     </div>
                     
-                    <!-- Stat Breakdown -->
-                    <div class="stat-breakdown" id="statBreakdown">
-                        <div class="breakdown-header">
-                            <span class="breakdown-title">BATTLE BREAKDOWN</span>
-                            <button class="breakdown-toggle" id="breakdownToggle">
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
-                        </div>
-                        <div class="breakdown-content" id="breakdownContent"></div>
+                    <!-- Statistical Analysis -->
+                    <div class="stat-analysis" id="statAnalysis">
+                        <div class="analysis-title">STATISTICAL ANALYSIS</div>
+                        <div class="analysis-grid" id="analysisGrid"></div>
                     </div>
                     
                     <!-- Defeated Opponent Mini -->
@@ -714,11 +702,11 @@
                     <div class="result-actions">
                         <button class="result-btn primary-btn" id="exploreWinnerBtn">
                             <i class="fas fa-search"></i>
-                            <span>Explore Champion</span>
+                            <span>Explore Winner</span>
                         </button>
-                        <button class="result-btn secondary-btn" id="rematchBtn">
-                            <i class="fas fa-redo"></i>
-                            <span>New Matchup</span>
+                        <button class="result-btn share-btn" id="shareResultBtn">
+                            <i class="fas fa-share-alt"></i>
+                            <span>Share</span>
                         </button>
                         <button class="result-btn ghost-btn" id="resultBackBtn">
                             <i class="fas fa-arrow-left"></i>
@@ -726,11 +714,6 @@
                         </button>
                     </div>
                 </div>
-                
-                <!-- Close Button -->
-                <button class="result-close-x" id="resultCloseX">
-                    <i class="fas fa-times"></i>
-                </button>
             `;
 
             document.body.appendChild(overlay);
@@ -745,8 +728,11 @@
                     window.app.selectAnimal(this._lastWinner);
                 }
             });
-            document.getElementById('rematchBtn').addEventListener('click', () => {
-                this.hideResult();
+            
+            // Share button (placeholder functionality for now)
+            document.getElementById('shareResultBtn').addEventListener('click', () => {
+                // TODO: Implement share functionality
+                console.log('Share button clicked');
             });
             
             // Champion showcase click
@@ -765,15 +751,6 @@
                     window.app.switchView('stats');
                     window.app.selectAnimal(this._lastLoser);
                 }
-            });
-            
-            // Breakdown toggle
-            document.getElementById('breakdownToggle').addEventListener('click', () => {
-                const content = document.getElementById('breakdownContent');
-                const toggle = document.getElementById('breakdownToggle');
-                const breakdown = document.getElementById('statBreakdown');
-                breakdown.classList.toggle('expanded');
-                toggle.classList.toggle('expanded');
             });
             
             // Backdrop click to close
@@ -1208,22 +1185,6 @@
             if (diffIcon) diffIcon.className = `fas ${difficulty.icon}`;
             if (diffLevel) diffLevel.textContent = difficulty.level;
 
-            // Calculate stat advantages
-            const stats = ['attack', 'defense', 'agility', 'stamina', 'intelligence', 'special'];
-            let winnerAdvantages = 0;
-            let ties = 0;
-            stats.forEach(stat => {
-                const wVal = result.winner[stat] || 0;
-                const lVal = result.loser[stat] || 0;
-                if (wVal > lVal) winnerAdvantages++;
-                else if (wVal === lVal) ties++;
-            });
-            
-            const advantageCount = document.getElementById('advantageCount');
-            if (advantageCount) {
-                advantageCount.textContent = `${winnerAdvantages} / ${stats.length}`;
-            }
-
             // Win margin
             const totalScore = result.winnerScore + result.loserScore;
             const winMarginPct = totalScore > 0 ? Math.round((result.winnerScore / totalScore) * 100) : 50;
@@ -1232,8 +1193,8 @@
                 winMargin.textContent = `${winMarginPct}%`;
             }
 
-            // Generate stat breakdown
-            this.generateStatBreakdown(result);
+            // Generate statistical analysis
+            this.generateStatAnalysis(result);
 
             // Show overlay with animation sequence
             overlay.classList.add('active');
@@ -1250,59 +1211,94 @@
         },
 
         /**
-         * Generate stat breakdown comparison
+         * Generate statistical analysis
          */
-        generateStatBreakdown(result) {
-            const container = document.getElementById('breakdownContent');
+        generateStatAnalysis(result) {
+            const container = document.getElementById('analysisGrid');
             if (!container) return;
 
             const stats = [
-                { name: 'Attack', key: 'attack', icon: 'fa-fist-raised' },
-                { name: 'Defense', key: 'defense', icon: 'fa-shield-alt' },
-                { name: 'Speed', key: 'agility', icon: 'fa-bolt' },
-                { name: 'Stamina', key: 'stamina', icon: 'fa-heart' },
-                { name: 'Intelligence', key: 'intelligence', icon: 'fa-brain' },
-                { name: 'Special', key: 'special', icon: 'fa-star' }
+                { name: 'ATK', key: 'attack', icon: 'fa-fist-raised', fullName: 'Attack' },
+                { name: 'DEF', key: 'defense', icon: 'fa-shield-alt', fullName: 'Defense' },
+                { name: 'SPD', key: 'agility', icon: 'fa-bolt', fullName: 'Speed' },
+                { name: 'STA', key: 'stamina', icon: 'fa-heart', fullName: 'Stamina' },
+                { name: 'INT', key: 'intelligence', icon: 'fa-brain', fullName: 'Intelligence' },
+                { name: 'SPC', key: 'special', icon: 'fa-star', fullName: 'Special' }
             ];
 
+            // Calculate totals and stats
+            let winnerTotal = 0;
+            let loserTotal = 0;
+            let winnerWins = 0;
+            let loserWins = 0;
+            let biggestGap = { stat: '', diff: 0, winner: true };
+            
+            stats.forEach(stat => {
+                const wVal = result.winner[stat.key] || 0;
+                const lVal = result.loser[stat.key] || 0;
+                winnerTotal += wVal;
+                loserTotal += lVal;
+                
+                if (wVal > lVal) winnerWins++;
+                else if (lVal > wVal) loserWins++;
+                
+                const diff = Math.abs(wVal - lVal);
+                if (diff > biggestGap.diff) {
+                    biggestGap = { stat: stat.fullName, diff, winner: wVal > lVal };
+                }
+            });
+
             let html = '';
+            
+            // Stat comparison mini bars
             stats.forEach((stat, index) => {
                 const winnerVal = result.winner[stat.key] || 0;
                 const loserVal = result.loser[stat.key] || 0;
-                const diff = winnerVal - loserVal;
-                const winnerWins = diff > 0;
-                const tie = diff === 0;
-                
-                let statusClass = 'stat-tie';
-                let statusIcon = 'fa-equals';
-                let statusText = 'TIE';
-                
-                if (winnerWins) {
-                    statusClass = 'stat-win';
-                    statusIcon = 'fa-crown';
-                    statusText = `+${diff}`;
-                } else if (diff < 0) {
-                    statusClass = 'stat-loss';
-                    statusIcon = 'fa-minus';
-                    statusText = `${diff}`;
-                }
+                const total = winnerVal + loserVal || 1;
+                const winnerPct = Math.round((winnerVal / total) * 100);
+                const loserPct = 100 - winnerPct;
+                const isWinnerBetter = winnerVal > loserVal;
+                const isTie = winnerVal === loserVal;
                 
                 html += `
-                    <div class="breakdown-row ${statusClass}" style="--delay: ${index * 0.08}s">
-                        <div class="breakdown-stat-icon"><i class="fas ${stat.icon}"></i></div>
-                        <div class="breakdown-stat-name">${stat.name}</div>
-                        <div class="breakdown-values">
-                            <span class="winner-value">${winnerVal}</span>
-                            <span class="value-separator">vs</span>
-                            <span class="loser-value">${loserVal}</span>
+                    <div class="analysis-stat" style="--delay: ${index * 0.05}s">
+                        <div class="stat-header">
+                            <span class="stat-abbr" title="${stat.fullName}"><i class="fas ${stat.icon}"></i></span>
+                            <span class="stat-name">${stat.name}</span>
                         </div>
-                        <div class="breakdown-status">
-                            <i class="fas ${statusIcon}"></i>
-                            <span>${statusText}</span>
+                        <div class="stat-comparison">
+                            <div class="stat-bar-container">
+                                <div class="stat-bar winner-bar ${isWinnerBetter ? 'leading' : ''}" style="width: ${winnerPct}%"></div>
+                                <div class="stat-bar loser-bar ${!isWinnerBetter && !isTie ? 'leading' : ''}" style="width: ${loserPct}%"></div>
+                            </div>
+                            <div class="stat-values">
+                                <span class="winner-val ${isWinnerBetter ? 'higher' : ''}">${winnerVal}</span>
+                                <span class="vs-divider">-</span>
+                                <span class="loser-val ${!isWinnerBetter && !isTie ? 'higher' : ''}">${loserVal}</span>
+                            </div>
                         </div>
                     </div>
                 `;
             });
+
+            // Summary row
+            const totalDiff = winnerTotal - loserTotal;
+            html += `
+                <div class="analysis-summary">
+                    <div class="summary-item">
+                        <span class="summary-label">Total Stats</span>
+                        <span class="summary-value">${winnerTotal} vs ${loserTotal}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Stat Lead</span>
+                        <span class="summary-value ${totalDiff > 0 ? 'positive' : totalDiff < 0 ? 'negative' : ''}">+${Math.abs(totalDiff)}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Categories Won</span>
+                        <span class="summary-value">${winnerWins}/${stats.length}</span>
+                    </div>
+                </div>
+            `;
 
             container.innerHTML = html;
         },
@@ -1322,10 +1318,6 @@
                 if (particles) particles.innerHTML = '';
                 if (confetti) confetti.innerHTML = '';
                 if (champParticles) champParticles.innerHTML = '';
-                
-                // Reset breakdown state
-                const breakdown = document.getElementById('statBreakdown');
-                if (breakdown) breakdown.classList.remove('expanded');
                 
                 setTimeout(() => {
                     overlay.classList.remove('active');
