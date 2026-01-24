@@ -624,134 +624,47 @@
                 <div class="result-particles" id="resultParticles"></div>
                 
                 <div class="result-arena">
-                    <!-- Victory Banner -->
-                    <div class="victory-banner" id="victoryBanner">
-                        <div class="banner-glow"></div>
-                        <div class="banner-content">
-                            <div class="crown-container">
-                                <div class="crown-rays"></div>
-                                <i class="fas fa-crown crown-icon"></i>
+                    <!-- Main Battle Result Layout -->
+                    <div class="battle-result-layout">
+                        <!-- Left Fighter (Winner) -->
+                        <div class="result-fighter result-winner" id="resultWinnerSide">
+                            <div class="fighter-glow winner-glow"></div>
+                            <div class="fighter-image-container">
+                                <img class="fighter-result-image" id="winnerResultImg" src="" alt="">
                             </div>
-                            <div class="victory-text">VICTORY</div>
+                            <div class="fighter-info-panel">
+                                <div class="fighter-crown"><i class="fas fa-crown"></i></div>
+                                <div class="fighter-result-name" id="winnerResultName">WINNER</div>
+                                <div class="fighter-result-tag winner-tag">VICTORY</div>
+                            </div>
+                            <div class="fighter-stats-mini" id="winnerStatsMini"></div>
                         </div>
-                    </div>
-                    
-                    <!-- Champion Showcase -->
-                    <div class="champion-showcase">
-                        <div class="champion-pedestal">
-                            <div class="pedestal-glow"></div>
-                            <div class="pedestal-rings">
-                                <div class="ring ring-1"></div>
-                                <div class="ring ring-2"></div>
-                                <div class="ring ring-3"></div>
+                        
+                        <!-- Center VS & Difficulty -->
+                        <div class="result-center">
+                            <div class="result-vs-badge">VS</div>
+                            <div class="difficulty-compact" id="difficultyCompact">
+                                <div class="diff-icon-wrap">
+                                    <i class="fas fa-bolt diff-icon" id="diffIcon"></i>
+                                </div>
+                                <div class="diff-level" id="diffLevel">MODERATE</div>
                             </div>
-                        </div>
-                        <div class="champion-image-wrap">
-                            <div class="champion-aura"></div>
-                            <div class="champion-shine"></div>
-                            <img class="champion-image" id="championImg" src="" alt="">
-                        </div>
-                        <div class="champion-nameplate">
-                            <div class="nameplate-bg"></div>
-                            <div class="champion-name" id="championName">CHAMPION</div>
-                            <div class="champion-scientific" id="championScientific"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Difficulty Badge -->
-                    <div class="difficulty-section">
-                        <div class="difficulty-badge" id="difficultyBadge">
-                            <div class="diff-icon-wrap">
-                                <i class="fas fa-skull diff-icon" id="diffIcon"></i>
-                            </div>
-                            <div class="diff-info">
-                                <div class="diff-label">VICTORY DIFFICULTY</div>
-                                <div class="diff-level" id="diffLevel">EASY</div>
-                            </div>
-                            <div class="diff-meter">
-                                <div class="diff-meter-fill" id="diffMeterFill"></div>
-                                <div class="diff-meter-glow"></div>
-                            </div>
-                        </div>
-                        <div class="diff-description" id="diffDescription">
-                            A decisive victory with clear dominance
-                        </div>
-                    </div>
-                    
-                    <!-- Versus Display -->
-                    <div class="versus-display">
-                        <div class="fighter-card winner" id="winnerCard">
-                            <div class="card-rank winner-rank">
-                                <i class="fas fa-trophy"></i>
-                                <span>WINNER</span>
-                            </div>
-                            <div class="card-avatar">
-                                <img id="winnerCardImg" src="" alt="">
-                            </div>
-                            <div class="card-name" id="winnerCardName">Winner</div>
-                            <div class="card-score">
-                                <span class="score-label">POWER</span>
-                                <span class="score-value" id="winnerPower">0</span>
+                            <div class="cage-fight-text">
+                                No weapons • Bloodlusted • 1v1 to the death
                             </div>
                         </div>
                         
-                        <div class="vs-connector">
-                            <div class="vs-line top"></div>
-                            <div class="vs-badge-mini">VS</div>
-                            <div class="vs-line bottom"></div>
-                        </div>
-                        
-                        <div class="fighter-card loser" id="loserCard">
-                            <div class="card-rank loser-rank">
-                                <i class="fas fa-shield-alt"></i>
-                                <span>DEFEATED</span>
+                        <!-- Right Fighter (Loser) -->
+                        <div class="result-fighter result-loser" id="resultLoserSide">
+                            <div class="fighter-glow loser-glow"></div>
+                            <div class="fighter-image-container">
+                                <img class="fighter-result-image" id="loserResultImg" src="" alt="">
                             </div>
-                            <div class="card-avatar">
-                                <img id="loserCardImg" src="" alt="">
+                            <div class="fighter-info-panel">
+                                <div class="fighter-result-name" id="loserResultName">LOSER</div>
+                                <div class="fighter-result-tag loser-tag">DEFEATED</div>
                             </div>
-                            <div class="card-name" id="loserCardName">Loser</div>
-                            <div class="card-score">
-                                <span class="score-label">POWER</span>
-                                <span class="score-value" id="loserPower">0</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Stats Breakdown -->
-                    <div class="stats-arena" id="statsArena">
-                        <div class="stats-header">
-                            <i class="fas fa-chart-bar"></i>
-                            <span>BATTLE ANALYSIS</span>
-                            <button class="stats-toggle" id="statsToggle">
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
-                        </div>
-                        <div class="stats-content" id="statsContent">
-                            <div class="power-comparison">
-                                <div class="power-bar-container">
-                                    <div class="power-bar winner-bar" id="winnerBar">
-                                        <div class="bar-fill"></div>
-                                        <div class="bar-shine"></div>
-                                    </div>
-                                    <div class="power-bar loser-bar" id="loserBar">
-                                        <div class="bar-fill"></div>
-                                    </div>
-                                </div>
-                                <div class="power-labels">
-                                    <span class="power-pct winner-pct" id="winnerPct">50%</span>
-                                    <span class="power-vs">POWER</span>
-                                    <span class="power-pct loser-pct" id="loserPct">50%</span>
-                                </div>
-                            </div>
-                            <div class="stat-bars" id="statBars"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- Fun Facts -->
-                    <div class="fun-facts-section" id="funFactsSection">
-                        <div class="fact-card" id="factCard">
-                            <div class="fact-icon"><i class="fas fa-lightbulb"></i></div>
-                            <div class="fact-text" id="factText">Loading fun fact...</div>
+                            <div class="fighter-stats-mini" id="loserStatsMini"></div>
                         </div>
                     </div>
                     
@@ -788,23 +701,15 @@
                 }
             });
             
-            // Stats toggle
-            document.getElementById('statsToggle').addEventListener('click', () => {
-                const content = document.getElementById('statsContent');
-                const toggle = document.getElementById('statsToggle');
-                content.classList.toggle('collapsed');
-                toggle.classList.toggle('collapsed');
-            });
-            
-            // Card interactions
-            document.getElementById('winnerCard').addEventListener('click', () => {
+            // Fighter click interactions
+            document.getElementById('resultWinnerSide').addEventListener('click', () => {
                 if (this._lastWinner && window.app) {
                     this.hideResult();
                     window.app.switchView('stats');
                     window.app.selectAnimal(this._lastWinner);
                 }
             });
-            document.getElementById('loserCard').addEventListener('click', () => {
+            document.getElementById('resultLoserSide').addEventListener('click', () => {
                 if (this._lastLoser && window.app) {
                     this.hideResult();
                     window.app.switchView('stats');
@@ -1092,7 +997,7 @@
             };
             return { 
                 level: 'EXTREME', 
-                icon: 'fa-skull-crossbones', 
+                icon: 'fa-bolt', 
                 color: '#dc2626', 
                 meter: 95,
                 description: 'A razor-thin margin. This fight could go either way in nature.'
@@ -1154,66 +1059,37 @@
             // Get difficulty info
             const difficulty = this.getDifficultyInfo(result.winnerProb);
 
-            // Champion section
-            const championImg = document.getElementById('championImg');
-            const championName = document.getElementById('championName');
-            const championScientific = document.getElementById('championScientific');
+            // Winner side
+            const winnerImg = document.getElementById('winnerResultImg');
+            const winnerName = document.getElementById('winnerResultName');
             
-            if (championImg) {
-                championImg.src = result.winner.image || '';
-                championImg.onerror = () => { championImg.src = 'images/fallback.png'; };
+            if (winnerImg) {
+                winnerImg.src = result.winner.image || '';
+                winnerImg.onerror = () => { winnerImg.src = 'images/fallback.png'; };
             }
-            if (championName) championName.textContent = result.winner.name.toUpperCase();
-            if (championScientific) championScientific.textContent = result.winner.scientific_name || '';
+            if (winnerName) winnerName.textContent = result.winner.name.toUpperCase();
 
-            // Difficulty badge
-            const diffBadge = document.getElementById('difficultyBadge');
+            // Loser side
+            const loserImg = document.getElementById('loserResultImg');
+            const loserName = document.getElementById('loserResultName');
+            
+            if (loserImg) {
+                loserImg.src = result.loser.image || '';
+                loserImg.onerror = () => { loserImg.src = 'images/fallback.png'; };
+            }
+            if (loserName) loserName.textContent = result.loser.name.toUpperCase();
+
+            // Difficulty badge (compact)
+            const diffCompact = document.getElementById('difficultyCompact');
             const diffIcon = document.getElementById('diffIcon');
             const diffLevel = document.getElementById('diffLevel');
-            const diffMeterFill = document.getElementById('diffMeterFill');
-            const diffDescription = document.getElementById('diffDescription');
             
-            if (diffBadge) diffBadge.style.setProperty('--diff-color', difficulty.color);
+            if (diffCompact) diffCompact.style.setProperty('--diff-color', difficulty.color);
             if (diffIcon) diffIcon.className = `fas ${difficulty.icon} diff-icon`;
             if (diffLevel) diffLevel.textContent = difficulty.level;
-            if (diffDescription) diffDescription.textContent = difficulty.description;
 
-            // Fighter cards
-            const winnerCardImg = document.getElementById('winnerCardImg');
-            const winnerCardName = document.getElementById('winnerCardName');
-            const winnerPower = document.getElementById('winnerPower');
-            const loserCardImg = document.getElementById('loserCardImg');
-            const loserCardName = document.getElementById('loserCardName');
-            const loserPower = document.getElementById('loserPower');
-            
-            if (winnerCardImg) {
-                winnerCardImg.src = result.winner.image || '';
-                winnerCardImg.onerror = () => { winnerCardImg.src = 'images/fallback.png'; };
-            }
-            if (winnerCardName) winnerCardName.textContent = result.winner.name;
-            if (winnerPower) winnerPower.textContent = result.winnerScore.toFixed(1);
-            
-            if (loserCardImg) {
-                loserCardImg.src = result.loser.image || '';
-                loserCardImg.onerror = () => { loserCardImg.src = 'images/fallback.png'; };
-            }
-            if (loserCardName) loserCardName.textContent = result.loser.name;
-            if (loserPower) loserPower.textContent = result.loserScore.toFixed(1);
-
-            // Power comparison
-            const totalScore = result.winnerScore + result.loserScore;
-            const winnerPct = totalScore > 0 ? (result.winnerScore / totalScore * 100) : 50;
-            const loserPct = 100 - winnerPct;
-            
-            document.getElementById('winnerPct').textContent = `${winnerPct.toFixed(0)}%`;
-            document.getElementById('loserPct').textContent = `${loserPct.toFixed(0)}%`;
-
-            // Fun fact
-            const factText = document.getElementById('factText');
-            if (factText) factText.textContent = this.getFunFact(result.winner, result.loser);
-
-            // Generate stat bars
-            this.generateStatBars(result);
+            // Generate mini stat bars for both fighters
+            this.generateMiniStats(result);
 
             // Show overlay with animation sequence
             overlay.classList.add('active');
@@ -1225,79 +1101,59 @@
             requestAnimationFrame(() => {
                 overlay.classList.add('reveal');
                 
-                // Animate difficulty meter
-                setTimeout(() => {
-                    if (diffMeterFill) diffMeterFill.style.width = `${difficulty.meter}%`;
-                }, 500);
-                
-                // Animate power bars
-                setTimeout(() => {
-                    const winnerBar = document.querySelector('#winnerBar .bar-fill');
-                    const loserBar = document.querySelector('#loserBar .bar-fill');
-                    if (winnerBar) winnerBar.style.width = `${winnerPct}%`;
-                    if (loserBar) loserBar.style.width = `${loserPct}%`;
-                }, 700);
-                
                 // Animate stat bars
-                setTimeout(() => this.animateStatBars(), 900);
+                setTimeout(() => this.animateMiniStats(), 500);
             });
         },
 
         /**
-         * Generate the stat comparison bars
+         * Generate mini stat displays for both fighters
          */
-        generateStatBars(result) {
-            const container = document.getElementById('statBars');
-            if (!container) return;
+        generateMiniStats(result) {
+            const winnerContainer = document.getElementById('winnerStatsMini');
+            const loserContainer = document.getElementById('loserStatsMini');
+            if (!winnerContainer || !loserContainer) return;
 
             const stats = [
-                { name: 'Attack', key: 'attack', icon: 'fa-sword' },
-                { name: 'Defense', key: 'defense', icon: 'fa-shield-alt' },
-                { name: 'Agility', key: 'agility', icon: 'fa-running' },
-                { name: 'Stamina', key: 'stamina', icon: 'fa-heart' },
-                { name: 'Intelligence', key: 'intelligence', icon: 'fa-brain' },
-                { name: 'Special', key: 'special', icon: 'fa-star' }
+                { name: 'ATK', key: 'attack', icon: 'fa-fist-raised' },
+                { name: 'DEF', key: 'defense', icon: 'fa-shield-alt' },
+                { name: 'SPD', key: 'agility', icon: 'fa-bolt' },
+                { name: 'STM', key: 'stamina', icon: 'fa-heart' },
+                { name: 'INT', key: 'intelligence', icon: 'fa-brain' }
             ];
 
-            let html = '';
-            stats.forEach((stat, index) => {
-                const winnerVal = result.winner[stat.key] || 0;
-                const loserVal = result.loser[stat.key] || 0;
-                const winnerWins = winnerVal > loserVal;
-                const tie = winnerVal === loserVal;
-                
-                html += `
-                    <div class="stat-bar-row" style="--delay: ${index * 0.1}s">
-                        <div class="stat-bar-label">
-                            <i class="fas ${stat.icon}"></i>
-                            <span>${stat.name}</span>
-                        </div>
-                        <div class="stat-bar-values">
-                            <span class="stat-val winner-val ${winnerWins ? 'higher' : ''}">${winnerVal}</span>
-                            <div class="stat-bar-visual">
-                                <div class="stat-bar-bg">
-                                    <div class="stat-bar-winner" data-width="${winnerVal}"></div>
-                                    <div class="stat-bar-loser" data-width="${loserVal}"></div>
-                                </div>
+            const generateBars = (animal, isWinner) => {
+                return stats.map((stat, i) => {
+                    const value = animal[stat.key] || 0;
+                    const otherVal = isWinner ? (result.loser[stat.key] || 0) : (result.winner[stat.key] || 0);
+                    const isHigher = isWinner ? value > otherVal : value > (result.winner[stat.key] || 0);
+                    const isTie = value === otherVal;
+                    
+                    return `
+                        <div class="mini-stat-row ${isHigher ? 'stat-advantage' : ''}" style="--delay: ${i * 0.08}s">
+                            <div class="mini-stat-icon"><i class="fas ${stat.icon}"></i></div>
+                            <div class="mini-stat-bar-wrap">
+                                <div class="mini-stat-bar" data-width="${value}"></div>
                             </div>
-                            <span class="stat-val loser-val ${!winnerWins && !tie ? 'higher' : ''}">${loserVal}</span>
+                            <div class="mini-stat-value ${isHigher && !isTie ? 'higher' : ''}">${value}</div>
                         </div>
-                        ${winnerWins ? '<div class="stat-winner-indicator"><i class="fas fa-crown"></i></div>' : ''}
-                    </div>
-                `;
-            });
+                    `;
+                }).join('');
+            };
 
-            container.innerHTML = html;
+            winnerContainer.innerHTML = generateBars(result.winner, true);
+            loserContainer.innerHTML = generateBars(result.loser, false);
         },
 
         /**
-         * Animate the stat bars
+         * Animate mini stat bars
          */
-        animateStatBars() {
-            document.querySelectorAll('.stat-bar-winner').forEach(bar => {
+        animateMiniStats() {
+            document.querySelectorAll('.mini-stat-bar').forEach(bar => {
                 const width = bar.dataset.width;
                 bar.style.width = `${width}%`;
             });
+        },
             document.querySelectorAll('.stat-bar-loser').forEach(bar => {
                 const width = bar.dataset.width;
                 bar.style.width = `${width}%`;
