@@ -1195,34 +1195,36 @@
     z-index: 1;
 }
 
-.celebration-particle {
+/* Metallic Shards - Rising slowly */
+.metallic-shard {
     position: absolute;
     left: var(--x);
     bottom: -20px;
     width: var(--size);
     height: var(--size);
-    background: var(--color);
-    border-radius: 50%;
-    animation: particleRise var(--duration) ease-out var(--delay) infinite;
+    background: linear-gradient(135deg, var(--color) 0%, rgba(255, 255, 255, 0.9) 50%, var(--color) 100%);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    animation: shardRise var(--duration) ease-out var(--delay) infinite;
     opacity: 0;
+    box-shadow: 0 0 10px var(--color), 0 0 20px rgba(255, 255, 255, 0.3);
 }
 
-@keyframes particleRise {
+@keyframes shardRise {
     0% { 
         opacity: 0;
-        transform: translateY(0) scale(0);
+        transform: translateY(0) rotate(0deg) scale(0);
     }
     10% {
         opacity: 1;
-        transform: scale(1);
+        transform: rotate(45deg) scale(1);
     }
     100% { 
         opacity: 0; 
-        transform: translateY(-100vh) scale(0.3);
+        transform: translateY(-100vh) rotate(720deg) scale(0.3);
     }
 }
 
-/* Confetti */
+/* Explosion Debris Container */
 .result-confetti {
     position: absolute;
     top: 0;
@@ -1234,26 +1236,56 @@
     z-index: 3;
 }
 
-.confetti-piece {
+/* Explosion Debris - Metallic fragments exploding from center */
+.explosion-debris {
     position: absolute;
-    left: var(--x);
-    top: -20px;
-    width: 10px;
-    height: 15px;
-    background: var(--color);
-    transform: rotate(var(--rotation));
-    animation: confettiFall var(--duration) ease-out var(--delay) forwards;
+    left: var(--startX);
+    top: var(--startY);
+    width: 8px;
+    height: 12px;
+    background: linear-gradient(180deg, var(--color) 0%, rgba(255, 255, 255, 0.8) 50%, var(--color) 100%);
+    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+    animation: debrisExplode var(--duration) cubic-bezier(0.25, 0.46, 0.45, 0.94) var(--delay) forwards;
     opacity: 0;
+    box-shadow: 0 0 8px var(--color);
 }
 
-@keyframes confettiFall {
+@keyframes debrisExplode {
     0% { 
         opacity: 1;
-        transform: translateY(0) translateX(0) rotate(var(--rotation)) scale(1);
+        transform: translate(0, 0) rotate(0deg) scale(1);
     }
     100% { 
         opacity: 0; 
-        transform: translateY(100vh) translateX(var(--drift)) rotate(1080deg) scale(0.5);
+        transform: translate(var(--endX), var(--endY)) rotate(var(--rotation)) scale(0.2);
+    }
+}
+
+/* Metallic Sparks - orbiting champion */
+.metallic-spark {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--color);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    animation: sparkOrbit 3s ease-in-out infinite var(--delay);
+    box-shadow: 0 0 15px var(--color), 0 0 30px var(--color);
+}
+
+@keyframes sparkOrbit {
+    0%, 100% {
+        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(60px) scale(0);
+        opacity: 0;
+    }
+    25% {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(100px) scale(1.5);
+    }
+    75% {
+        opacity: 1;
+        transform: translate(-50%, -50%) rotate(calc(var(--angle) + 180deg)) translateX(120px) scale(1);
     }
 }
 
@@ -1268,11 +1300,11 @@
     flex-direction: column;
     align-items: center;
     justify-content: space-evenly;
-    padding: 15px 20px;
+    padding: 10px 20px;
     box-sizing: border-box;
     overflow: hidden;
     z-index: 2;
-    gap: 6px;
+    gap: 4px;
 }
 
 /* Close Button */
@@ -1415,6 +1447,7 @@
     background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, rgba(147, 51, 234, 0.2) 40%, transparent 70%);
     border-radius: 50%;
     animation: auraPulse 3s ease-in-out infinite;
+    z-index: 1;
 }
 
 @keyframes auraPulse {
@@ -1427,6 +1460,7 @@
     border: 2px solid rgba(168, 85, 247, 0.4);
     border-radius: 50%;
     animation: ringExpand 3s ease-in-out infinite;
+    z-index: 2;
 }
 
 .ring-1 { width: 90%; height: 90%; animation-delay: 0s; }
@@ -1458,8 +1492,8 @@
     object-fit: contain;
     filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.6)) drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
     animation: championFloat 4s ease-in-out infinite;
-    z-index: 5;
-    /* Image overflows the container */
+    z-index: 10;
+    /* Image overflows the container and sits ABOVE rings */
     pointer-events: auto;
 }
 
@@ -1626,162 +1660,125 @@
     margin-bottom: 8px;
 }
 
+/* Stat Analysis Table Layout */
 .analysis-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 6px;
-}
-
-.analysis-stat {
     display: flex;
     flex-direction: column;
-    gap: 3px;
-    padding: 6px;
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: 6px;
-    opacity: 0;
-    animation: statFadeIn 0.3s ease forwards;
-    animation-delay: var(--delay, 0s);
+    gap: 2px;
 }
 
-#fightResultOverlay.reveal .analysis-stat {
-    animation: statFadeIn 0.3s ease forwards;
-    animation-delay: calc(var(--delay, 0s) + 0.6s);
+/* Header Row */
+.analysis-header-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    padding: 6px 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px 6px 0 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-@keyframes statFadeIn {
-    to { opacity: 1; }
-}
-
-.stat-header {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.stat-abbr {
-    width: 18px;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(168, 85, 247, 0.2);
-    border-radius: 4px;
-    font-size: 0.5rem;
-    color: #a855f7;
-}
-
-.stat-name {
+.analysis-col {
     font-family: 'Orbitron', sans-serif;
     font-size: 0.5rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.6);
-    letter-spacing: 0.05em;
-}
-
-.stat-comparison {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.stat-bar-container {
-    display: flex;
-    height: 4px;
-    border-radius: 2px;
-    overflow: hidden;
-    background: rgba(0, 0, 0, 0.3);
-}
-
-.stat-bar {
-    height: 100%;
-    transition: width 0.5s ease;
-}
-
-.stat-bar.winner-bar {
-    background: linear-gradient(90deg, #a855f7, #c084fc);
-}
-
-.stat-bar.winner-bar.leading {
-    background: linear-gradient(90deg, #a855f7, #facc15);
-}
-
-.stat-bar.loser-bar {
-    background: rgba(255, 255, 255, 0.15);
-}
-
-.stat-bar.loser-bar.leading {
-    background: rgba(239, 68, 68, 0.4);
-}
-
-.stat-values {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-family: 'Orbitron', monospace;
-    font-size: 0.55rem;
-}
-
-.winner-val {
-    color: #a855f7;
-    font-weight: 600;
-}
-
-.winner-val.higher {
-    color: #facc15;
-}
-
-.vs-divider {
-    color: rgba(255, 255, 255, 0.2);
-    font-size: 0.45rem;
-}
-
-.loser-val {
-    color: rgba(255, 255, 255, 0.4);
-}
-
-.loser-val.higher {
-    color: #ef4444;
-}
-
-/* Analysis Summary Row */
-.analysis-summary {
-    grid-column: 1 / -1;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    padding-top: 8px;
-    margin-top: 4px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.summary-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-}
-
-.summary-label {
-    font-size: 0.45rem;
-    color: rgba(255, 255, 255, 0.4);
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
-.summary-value {
-    font-family: 'Orbitron', monospace;
-    font-size: 0.6rem;
-    font-weight: 700;
-    color: white;
+.analysis-col.stat-col {
+    color: rgba(255, 255, 255, 0.5);
 }
 
-.summary-value.positive {
+.analysis-col.winner-col {
+    color: #facc15;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.analysis-col.winner-col i {
+    font-size: 0.55rem;
+}
+
+.analysis-col.loser-col {
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+}
+
+/* Stat Rows */
+.analysis-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    padding: 5px 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 3px;
+    transition: background 0.2s ease;
+}
+
+.analysis-row:nth-child(odd) {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.analysis-row:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.analysis-row .analysis-col {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.55rem;
+    font-weight: 500;
+    text-transform: none;
+}
+
+.analysis-row .stat-col {
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+}
+
+.analysis-row .winner-col,
+.analysis-row .loser-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.stat-num {
+    font-family: 'Orbitron', monospace;
+    font-weight: 600;
+}
+
+/* Winning stat highlight */
+.analysis-row .winner-col.winning .stat-num {
     color: #22c55e;
 }
 
-.summary-value.negative {
+.analysis-row .loser-col.losing-better .stat-num {
     color: #ef4444;
+}
+
+.analysis-row .winner-col:not(.winning) .stat-num {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.analysis-row .loser-col:not(.losing-better) .stat-num {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Win/Lose indicators */
+.win-indicator {
+    color: #22c55e;
+    font-size: 0.5rem;
+}
+
+.lose-indicator {
+    color: #ef4444;
+    font-size: 0.5rem;
 }
 
 /* Defeated Section */
@@ -1865,12 +1862,13 @@
     align-items: center;
     gap: 8px;
     font-size: 0.5rem;
-    color: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.65);
     text-transform: uppercase;
     letter-spacing: 0.1em;
     opacity: 0;
     transition: all 0.5s ease;
     flex-shrink: 0;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 #fightResultOverlay.reveal .cage-fight-badge {
@@ -1881,7 +1879,7 @@
 .badge-dot {
     width: 3px;
     height: 3px;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.5);
     border-radius: 50%;
 }
 
@@ -2046,38 +2044,30 @@
     }
     
     .analysis-grid {
-        gap: 4px;
+        gap: 2px;
     }
     
-    .analysis-stat {
-        padding: 4px;
+    .analysis-header-row,
+    .analysis-row {
+        padding: 4px 6px;
+        gap: 6px;
     }
     
-    .stat-abbr {
-        width: 14px;
-        height: 14px;
+    .analysis-col {
         font-size: 0.45rem;
     }
     
-    .stat-name {
-        font-size: 0.45rem;
-    }
-    
-    .stat-values {
+    .analysis-row .analysis-col {
         font-size: 0.5rem;
     }
     
-    .analysis-summary {
-        gap: 12px;
-        padding-top: 6px;
+    .stat-num {
+        font-size: 0.5rem;
     }
     
-    .summary-label {
-        font-size: 0.4rem;
-    }
-    
-    .summary-value {
-        font-size: 0.55rem;
+    .win-indicator,
+    .lose-indicator {
+        font-size: 0.45rem;
     }
     
     .defeated-section {
@@ -2121,8 +2111,8 @@
 
 @media (max-width: 480px) {
     .result-arena {
-        gap: 5px;
-        padding: 8px 12px;
+        gap: 3px;
+        padding: 6px 10px;
     }
     
     .victory-header {
@@ -2178,13 +2168,21 @@
     }
     
     .analysis-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 3px;
+        gap: 1px;
     }
     
-    .analysis-summary {
-        gap: 10px;
-        flex-wrap: wrap;
+    .analysis-header-row,
+    .analysis-row {
+        padding: 3px 5px;
+        gap: 4px;
+    }
+    
+    .analysis-col {
+        font-size: 0.4rem;
+    }
+    
+    .analysis-row .analysis-col {
+        font-size: 0.45rem;
     }
     
     .defeated-section {

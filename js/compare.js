@@ -693,6 +693,8 @@
                     <div class="cage-fight-badge">
                         <span>No weapons</span>
                         <span class="badge-dot"></span>
+                        <span>No escape</span>
+                        <span class="badge-dot"></span>
                         <span>Bloodlusted</span>
                         <span class="badge-dot"></span>
                         <span>1v1 to the death</span>
@@ -1066,17 +1068,19 @@
             
             container.innerHTML = '';
             
-            const colors = ['#facc15', '#a855f7', '#3b82f6', '#f97316', '#ec4899', '#22c55e'];
+            // Metallic colors - silver, gold, platinum, bronze
+            const colors = ['#c0c0c0', '#d4af37', '#e5e4e2', '#cd7f32', '#b8860b', '#aaa9ad'];
             
-            // Floating particles
-            for (let i = 0; i < 60; i++) {
+            // Metallic shrapnel pieces - slower, more dramatic
+            for (let i = 0; i < 40; i++) {
                 const particle = document.createElement('div');
-                particle.className = 'celebration-particle';
+                particle.className = 'metallic-shard';
                 particle.style.setProperty('--x', (Math.random() * 100) + '%');
-                particle.style.setProperty('--delay', (Math.random() * 2) + 's');
-                particle.style.setProperty('--duration', (3 + Math.random() * 3) + 's');
+                particle.style.setProperty('--delay', (Math.random() * 1.5) + 's');
+                particle.style.setProperty('--duration', (4 + Math.random() * 4) + 's');
                 particle.style.setProperty('--color', colors[Math.floor(Math.random() * colors.length)]);
-                particle.style.setProperty('--size', (3 + Math.random() * 6) + 'px');
+                particle.style.setProperty('--size', (4 + Math.random() * 8) + 'px');
+                particle.style.setProperty('--rotation', (Math.random() * 360) + 'deg');
                 container.appendChild(particle);
             }
         },
@@ -1090,18 +1094,25 @@
             
             container.innerHTML = '';
             
-            const colors = ['#facc15', '#a855f7', '#22c55e', '#3b82f6', '#f97316', '#ec4899'];
+            // Metallic debris colors
+            const colors = ['#c0c0c0', '#d4af37', '#e5e4e2', '#b8860b', '#848482', '#aaa9ad'];
             
-            for (let i = 0; i < 100; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti-piece';
-                confetti.style.setProperty('--x', (Math.random() * 100) + '%');
-                confetti.style.setProperty('--delay', (Math.random() * 0.5) + 's');
-                confetti.style.setProperty('--duration', (2 + Math.random() * 2) + 's');
-                confetti.style.setProperty('--color', colors[Math.floor(Math.random() * colors.length)]);
-                confetti.style.setProperty('--rotation', (Math.random() * 360) + 'deg');
-                confetti.style.setProperty('--drift', (Math.random() * 200 - 100) + 'px');
-                container.appendChild(confetti);
+            // Explosion debris - starts from center, explodes outward in slow motion
+            for (let i = 0; i < 60; i++) {
+                const debris = document.createElement('div');
+                debris.className = 'explosion-debris';
+                // Start from center
+                debris.style.setProperty('--startX', '50%');
+                debris.style.setProperty('--startY', '40%');
+                // End position - random spread
+                debris.style.setProperty('--endX', (Math.random() * 100) + '%');
+                debris.style.setProperty('--endY', (Math.random() * 100) + '%');
+                debris.style.setProperty('--delay', (Math.random() * 0.3) + 's');
+                debris.style.setProperty('--duration', (2 + Math.random() * 3) + 's');
+                debris.style.setProperty('--color', colors[Math.floor(Math.random() * colors.length)]);
+                debris.style.setProperty('--size', (3 + Math.random() * 6) + 'px');
+                debris.style.setProperty('--rotation', (Math.random() * 720) + 'deg');
+                container.appendChild(debris);
             }
         },
 
@@ -1114,12 +1125,15 @@
             
             container.innerHTML = '';
             
-            for (let i = 0; i < 20; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'champion-particle';
-                particle.style.setProperty('--angle', (i * 18) + 'deg');
-                particle.style.setProperty('--delay', (Math.random() * 2) + 's');
-                container.appendChild(particle);
+            // Metallic sparks around the champion
+            const colors = ['#d4af37', '#c0c0c0', '#e5e4e2', '#ffd700'];
+            for (let i = 0; i < 24; i++) {
+                const spark = document.createElement('div');
+                spark.className = 'metallic-spark';
+                spark.style.setProperty('--angle', (i * 15) + 'deg');
+                spark.style.setProperty('--delay', (Math.random() * 3) + 's');
+                spark.style.setProperty('--color', colors[Math.floor(Math.random() * colors.length)]);
+                container.appendChild(spark);
             }
         },
 
@@ -1185,9 +1199,9 @@
             if (diffIcon) diffIcon.className = `fas ${difficulty.icon}`;
             if (diffLevel) diffLevel.textContent = difficulty.level;
 
-            // Win margin
+            // Win margin - show exact with decimals
             const totalScore = result.winnerScore + result.loserScore;
-            const winMarginPct = totalScore > 0 ? Math.round((result.winnerScore / totalScore) * 100) : 50;
+            const winMarginPct = totalScore > 0 ? ((result.winnerScore / totalScore) * 100).toFixed(1) : '50.0';
             const winMargin = document.getElementById('winMargin');
             if (winMargin) {
                 winMargin.textContent = `${winMarginPct}%`;
@@ -1226,79 +1240,46 @@
                 { name: 'SPC', key: 'special', icon: 'fa-star', fullName: 'Special' }
             ];
 
-            // Calculate totals and stats
-            let winnerTotal = 0;
-            let loserTotal = 0;
-            let winnerWins = 0;
-            let loserWins = 0;
-            let biggestGap = { stat: '', diff: 0, winner: true };
-            
-            stats.forEach(stat => {
-                const wVal = result.winner[stat.key] || 0;
-                const lVal = result.loser[stat.key] || 0;
-                winnerTotal += wVal;
-                loserTotal += lVal;
-                
-                if (wVal > lVal) winnerWins++;
-                else if (lVal > wVal) loserWins++;
-                
-                const diff = Math.abs(wVal - lVal);
-                if (diff > biggestGap.diff) {
-                    biggestGap = { stat: stat.fullName, diff, winner: wVal > lVal };
-                }
-            });
+            // Get short names for animals
+            const winnerShort = result.winner.name.length > 8 ? result.winner.name.substring(0, 7) + '.' : result.winner.name;
+            const loserShort = result.loser.name.length > 8 ? result.loser.name.substring(0, 7) + '.' : result.loser.name;
 
             let html = '';
             
-            // Stat comparison mini bars
+            // Header row with animal names
+            html += `
+                <div class="analysis-header-row">
+                    <div class="analysis-col stat-col">STAT</div>
+                    <div class="analysis-col winner-col"><i class="fas fa-crown"></i> ${winnerShort.toUpperCase()}</div>
+                    <div class="analysis-col loser-col">${loserShort.toUpperCase()}</div>
+                </div>
+            `;
+            
+            // Stat rows
             stats.forEach((stat, index) => {
                 const winnerVal = result.winner[stat.key] || 0;
                 const loserVal = result.loser[stat.key] || 0;
-                const total = winnerVal + loserVal || 1;
-                const winnerPct = Math.round((winnerVal / total) * 100);
-                const loserPct = 100 - winnerPct;
                 const isWinnerBetter = winnerVal > loserVal;
+                const isLoserBetter = loserVal > winnerVal;
                 const isTie = winnerVal === loserVal;
                 
                 html += `
-                    <div class="analysis-stat" style="--delay: ${index * 0.05}s">
-                        <div class="stat-header">
-                            <span class="stat-abbr" title="${stat.fullName}"><i class="fas ${stat.icon}"></i></span>
-                            <span class="stat-name">${stat.name}</span>
+                    <div class="analysis-row" style="--delay: ${index * 0.04}s">
+                        <div class="analysis-col stat-col">
+                            <i class="fas ${stat.icon}"></i>
+                            <span>${stat.name}</span>
                         </div>
-                        <div class="stat-comparison">
-                            <div class="stat-bar-container">
-                                <div class="stat-bar winner-bar ${isWinnerBetter ? 'leading' : ''}" style="width: ${winnerPct}%"></div>
-                                <div class="stat-bar loser-bar ${!isWinnerBetter && !isTie ? 'leading' : ''}" style="width: ${loserPct}%"></div>
-                            </div>
-                            <div class="stat-values">
-                                <span class="winner-val ${isWinnerBetter ? 'higher' : ''}">${winnerVal}</span>
-                                <span class="vs-divider">-</span>
-                                <span class="loser-val ${!isWinnerBetter && !isTie ? 'higher' : ''}">${loserVal}</span>
-                            </div>
+                        <div class="analysis-col winner-col ${isWinnerBetter ? 'winning' : ''}">
+                            ${isWinnerBetter ? '<i class="fas fa-caret-up win-indicator"></i>' : ''}
+                            <span class="stat-num">${winnerVal}</span>
+                        </div>
+                        <div class="analysis-col loser-col ${isLoserBetter ? 'losing-better' : ''}">
+                            ${isLoserBetter ? '<i class="fas fa-caret-up lose-indicator"></i>' : ''}
+                            <span class="stat-num">${loserVal}</span>
                         </div>
                     </div>
                 `;
             });
-
-            // Summary row
-            const totalDiff = winnerTotal - loserTotal;
-            html += `
-                <div class="analysis-summary">
-                    <div class="summary-item">
-                        <span class="summary-label">Total Stats</span>
-                        <span class="summary-value">${winnerTotal} vs ${loserTotal}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Stat Lead</span>
-                        <span class="summary-value ${totalDiff > 0 ? 'positive' : totalDiff < 0 ? 'negative' : ''}">+${Math.abs(totalDiff)}</span>
-                    </div>
-                    <div class="summary-item">
-                        <span class="summary-label">Categories Won</span>
-                        <span class="summary-value">${winnerWins}/${stats.length}</span>
-                    </div>
-                </div>
-            `;
 
             container.innerHTML = html;
         },
