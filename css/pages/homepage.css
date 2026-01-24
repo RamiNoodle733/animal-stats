@@ -327,8 +327,9 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
 
 .portal-logo-frame {
     position: relative;
-    width: 140px;
-    height: 140px;
+    /* Smooth scaling: min 50px, preferred 10vw, max 120px */
+    width: clamp(50px, 10vw, 120px);
+    height: clamp(50px, 10vw, 120px);
 }
 
 .portal-logo-glow {
@@ -355,8 +356,10 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
 
 .portal-tagline {
     font-family: var(--font-display, 'Bebas Neue', sans-serif);
-    font-size: 2.8rem;
-    letter-spacing: 8px;
+    /* Smooth scaling: min 1.4rem, preferred 3vw, max 2.8rem */
+    font-size: clamp(1.4rem, 3vw, 2.8rem);
+    /* Smooth letter-spacing: min 3px, preferred 0.6vw, max 8px */
+    letter-spacing: clamp(3px, 0.6vw, 8px);
     color: #fff;
     margin: 0;
     text-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
@@ -854,15 +857,7 @@ body:has(#about-view.active-view) .silhouette-panel {
         gap: 2px;
     }
     
-    .portal-logo-frame {
-        width: 50px;
-        height: 50px;
-    }
-    
-    .portal-tagline {
-        font-size: 2rem;
-        letter-spacing: 5px;
-    }
+    /* Logo and tagline use clamp() for smooth scaling - no fixed overrides needed */
     
     .portal-subtitle {
         font-size: 0.65rem;
@@ -939,10 +934,7 @@ body:has(#about-view.active-view) .silhouette-panel {
 
 /* Extra small screens (320px) */
 @media (max-width: 360px) {
-    .portal-tagline {
-        font-size: 1.5rem;
-        letter-spacing: 3px;
-    }
+    /* Tagline uses clamp() - no fixed override needed */
     
     .portal-description {
         font-size: 0.7rem;
@@ -988,13 +980,14 @@ body:has(#about-view.active-view) .silhouette-panel {
         margin-bottom: 12px;
     }
     
+    /* Use vh for short screens to scale with available height */
     .portal-logo-frame {
-        width: 60px;
-        height: 60px;
+        width: clamp(45px, 8vh, 80px);
+        height: clamp(45px, 8vh, 80px);
     }
     
     .portal-tagline {
-        font-size: 1.4rem;
+        font-size: clamp(1.2rem, 2.5vh, 1.8rem);
     }
     
     .portal-description {
@@ -1020,12 +1013,12 @@ body:has(#about-view.active-view) .silhouette-panel {
 /* Very short screens */
 @media (max-height: 600px) {
     .portal-logo-frame {
-        width: 50px;
-        height: 50px;
+        width: clamp(40px, 7vh, 60px);
+        height: clamp(40px, 7vh, 60px);
     }
     
     .portal-tagline {
-        font-size: 1.2rem;
+        font-size: clamp(1rem, 2vh, 1.4rem);
     }
     
     .portal-subtitle,
@@ -1049,12 +1042,12 @@ body:has(#about-view.active-view) .silhouette-panel {
     }
     
     .portal-logo-frame {
-        width: 50px;
-        height: 50px;
+        width: clamp(40px, min(8vw, 7vh), 55px);
+        height: clamp(40px, min(8vw, 7vh), 55px);
     }
     
     .portal-tagline {
-        font-size: 1.1rem;
+        font-size: clamp(1rem, min(2.5vw, 2vh), 1.3rem);
     }
     
     .portal-description {

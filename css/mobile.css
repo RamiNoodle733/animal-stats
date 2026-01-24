@@ -367,23 +367,17 @@
     }
     
     .portal-main-logo {
-        width: 80px !important;
-        height: 80px !important;
+        width: clamp(60px, 15vw, 80px) !important;
+        height: clamp(60px, 15vw, 80px) !important;
     }
-    
+
     .portal-title {
-        font-size: 1.5rem !important;
-        letter-spacing: 3px !important;
+        font-size: clamp(1.2rem, 4vw, 1.5rem) !important;
+        letter-spacing: clamp(2px, 0.5vw, 3px) !important;
     }
-    
+
     .portal-tagline {
-        font-size: 0.8rem !important;
-    }
-    
-    .portal-description {
-        font-size: 0.75rem !important;
-        padding: 0 10px !important;
-        line-height: 1.5 !important;
+        font-size: clamp(0.7rem, 2vw, 0.8rem) !important;
     }
     
     /* Portal navigation - 2x2 grid */
