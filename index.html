@@ -39,6 +39,7 @@
     
     <!-- Page-specific CSS (loaded async) -->
     <link rel="stylesheet" href="css/pages/homepage.css">
+    <link rel="stylesheet" href="css/components/about-info-btn.css">
     <link rel="stylesheet" href="tournament-v4.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="compare-page.css" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="community-page.css" media="print" onload="this.media='all'">
@@ -171,6 +172,11 @@
                 <button type="button" class="mode-btn nav-tab" id="community-mode-btn" data-mode="community">
                     <i class="fas fa-users"></i> <span class="mode-text nav-tab__text">COMMUNITY</span>
                 </button>
+                <!-- About Info Icon (Desktop) -->
+                <button type="button" class="about-info-btn desktop-about-btn" id="about-info-btn-desktop" aria-label="About" title="About">
+                    <span class="about-info-icon">i</span>
+                    <span class="about-tooltip">About</span>
+                </button>
             </nav>
             
             <!-- Auth Area - Shows login button when logged out, stats bar when logged in -->
@@ -205,6 +211,11 @@
                         <span class="bp-label">BP</span>
                     </div>
                 </div>
+                
+                <!-- About Info Icon (Mobile) - Outside user-stats-bar to always be visible -->
+                <button type="button" class="about-info-btn mobile-about-btn" id="about-info-btn-mobile" aria-label="About">
+                    <span class="about-info-icon">i</span>
+                </button>
             </div>
         </header>
         

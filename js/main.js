@@ -871,6 +871,9 @@ class AnimalStatsApp {
             });
         }
         
+        // About Info Button click handlers (desktop and mobile)
+        this.setupAboutInfoButtons();
+        
         // Profile page event listeners
         const retroProfileClose = document.getElementById('retro-profile-close');
         const retroProfilePic = document.getElementById('retro-profile-pic');
@@ -2634,6 +2637,62 @@ class AnimalStatsApp {
                 }
             });
         });
+    }
+    
+    /**
+     * Setup About info button click handlers for navigation
+     * Desktop: In nav tabs after Community
+     * Mobile: Top-right after BP pill
+     */
+    setupAboutInfoButtons() {
+        const desktopBtn = document.getElementById('about-info-btn-desktop');
+        const mobileBtn = document.getElementById('about-info-btn-mobile');
+        
+        // Click handler function
+        const navigateToAbout = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Add click ripple effect
+            const btn = e.currentTarget;
+            btn.classList.add('about-btn-clicked');
+            setTimeout(() => btn.classList.remove('about-btn-clicked'), 300);
+            
+            // Navigate to about page
+            if (window.Router) {
+                window.Router.navigate('/about');
+            } else {
+                window.location.href = '/about';
+            }
+        };
+        
+        // Keyboard handler for accessibility (Enter/Space)
+        const handleKeydown = (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                navigateToAbout(e);
+            }
+        };
+        
+        // Attach handlers to both buttons
+        if (desktopBtn) {
+            desktopBtn.addEventListener('click', navigateToAbout);
+            desktopBtn.addEventListener('keydown', handleKeydown);
+        }
+        
+        if (mobileBtn) {
+            mobileBtn.addEventListener('click', navigateToAbout);
+            mobileBtn.addEventListener('keydown', handleKeydown);
+            
+            // Add touch feedback for mobile
+            mobileBtn.addEventListener('touchstart', () => {
+                mobileBtn.classList.add('about-btn-touched');
+            }, { passive: true });
+            
+            mobileBtn.addEventListener('touchend', () => {
+                setTimeout(() => mobileBtn.classList.remove('about-btn-touched'), 150);
+            }, { passive: true });
+        }
     }
 
     /**

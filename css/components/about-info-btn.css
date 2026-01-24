@@ -1,0 +1,440 @@
+/* ============================================================================
+ * ABOUT INFO BUTTON
+ * Small circular "i" icon for navigating to the About page
+ * Desktop: In nav tabs after Community
+ * Mobile: Top-right after BP pill
+ * ============================================================================ */
+
+/* ========================
+   BASE STYLES (Shared)
+   ======================== */
+.about-info-btn {
+    /* Reset */
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    background: none;
+    padding: 0;
+    margin: 0;
+    font: inherit;
+    
+    /* Sizing - slightly larger for better tap target */
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    
+    /* Layout */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    
+    /* Appearance - subtle dark glass effect */
+    background: linear-gradient(
+        145deg, 
+        rgba(0, 20, 35, 0.8) 0%,
+        rgba(0, 10, 20, 0.9) 100%
+    );
+    border: 1.5px solid rgba(0, 212, 255, 0.45);
+    border-radius: 50%;
+    
+    /* Inner highlight for depth */
+    box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.05),
+        0 0 8px rgba(0, 212, 255, 0.2);
+    
+    /* Interaction */
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    
+    /* Transitions */
+    transition: 
+        transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease;
+    
+    /* Contain glow effects */
+    overflow: visible;
+    z-index: 10;
+}
+
+/* The "i" icon inside */
+.about-info-icon {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    font-size: 17px;
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1;
+    
+    /* Text gradient effect */
+    background: linear-gradient(135deg, #00d4ff 0%, #00ff88 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    
+    /* Glow */
+    filter: drop-shadow(0 0 4px rgba(0, 212, 255, 0.5));
+    
+    /* Smooth transitions */
+    transition: 
+        filter 0.25s ease,
+        transform 0.2s ease;
+}
+
+/* ========================
+   HOVER STATE (Desktop)
+   ======================== */
+@media (hover: hover) {
+    .about-info-btn:hover {
+        transform: scale(1.12);
+        border-color: rgba(0, 212, 255, 0.9);
+        background: linear-gradient(
+            145deg,
+            rgba(0, 50, 80, 0.9) 0%,
+            rgba(0, 30, 50, 0.95) 100%
+        );
+        box-shadow: 
+            0 0 18px rgba(0, 212, 255, 0.5),
+            0 0 30px rgba(0, 212, 255, 0.25),
+            inset 0 0 12px rgba(0, 212, 255, 0.15),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    
+    .about-info-btn:hover .about-info-icon {
+        filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.9));
+        transform: scale(1.1);
+    }
+}
+
+/* ========================
+   ACTIVE/PRESSED STATE
+   ======================== */
+.about-info-btn:active {
+    transform: scale(0.95);
+    border-color: rgba(0, 255, 136, 0.8);
+    background: rgba(0, 255, 136, 0.2);
+    box-shadow: 
+        0 0 20px rgba(0, 255, 136, 0.5),
+        inset 0 0 10px rgba(0, 255, 136, 0.15);
+}
+
+.about-info-btn:active .about-info-icon {
+    filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.9));
+}
+
+/* ========================
+   FOCUS STATE (Accessibility)
+   ======================== */
+.about-info-btn:focus {
+    outline: none;
+}
+
+.about-info-btn:focus-visible {
+    outline: 2px solid #00d4ff;
+    outline-offset: 3px;
+    box-shadow: 
+        0 0 0 4px rgba(0, 212, 255, 0.25),
+        0 0 15px rgba(0, 212, 255, 0.4);
+}
+
+/* ========================
+   TOOLTIP (Desktop Only)
+   ======================== */
+.about-tooltip {
+    /* Positioning */
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%) translateY(8px);
+    
+    /* Appearance - premium glass effect */
+    padding: 8px 16px;
+    background: linear-gradient(
+        135deg,
+        rgba(5, 20, 40, 0.98) 0%,
+        rgba(10, 30, 50, 0.95) 100%
+    );
+    border: 1px solid rgba(0, 212, 255, 0.6);
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    
+    /* Typography */
+    font-family: 'Orbitron', 'Bebas Neue', sans-serif;
+    font-size: 0.75rem;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: #fff;
+    white-space: nowrap;
+    text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+    
+    /* Reset gradient text from icon */
+    background-clip: border-box;
+    -webkit-background-clip: border-box;
+    -webkit-text-fill-color: #fff;
+    
+    /* Shadow - elevated feel */
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.5),
+        0 0 30px rgba(0, 212, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    
+    /* Hidden by default */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    
+    /* Transitions */
+    transition: 
+        opacity 0.25s ease,
+        transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+        visibility 0.25s ease;
+    
+    /* Layer */
+    z-index: 1000;
+}
+
+/* Tooltip arrow */
+.about-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    /* Triangle */
+    border: 6px solid transparent;
+    border-top-color: rgba(5, 15, 30, 0.95);
+    
+    /* Match border */
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.2));
+}
+
+/* Show tooltip on hover (desktop) */
+@media (hover: hover) {
+    .about-info-btn:hover .about-tooltip,
+    .about-info-btn:focus-visible .about-tooltip {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* ========================
+   DESKTOP SPECIFIC
+   ======================== */
+.desktop-about-btn {
+    /* Position in nav tabs */
+    margin-left: 8px;
+    flex-shrink: 0;
+}
+
+/* Hide mobile version on desktop by default */
+.mobile-about-btn {
+    display: none;
+}
+
+/* ========================
+   MOBILE SPECIFIC
+   ======================== */
+@media (max-width: 480px) {
+    /* Hide desktop version on mobile */
+    .desktop-about-btn {
+        display: none !important;
+    }
+    
+    /* Show mobile version */
+    .mobile-about-btn {
+        display: flex !important;
+        
+        /* Larger tap target for mobile */
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
+        
+        /* Adjusted spacing - positioned to right edge */
+        margin-left: auto;
+        flex-shrink: 0;
+        order: 999; /* Push to end */
+    }
+    
+    .mobile-about-btn .about-info-icon {
+        font-size: 18px;
+    }
+    
+    /* Hide tooltip on mobile */
+    .mobile-about-btn .about-tooltip {
+        display: none !important;
+    }
+    
+    /* Mobile tap feedback */
+    .mobile-about-btn:active {
+        transform: scale(0.9);
+        background: rgba(0, 212, 255, 0.25);
+    }
+}
+
+/* ========================
+   PULSE ANIMATION (Subtle Attention)
+   ======================== */
+@keyframes aboutInfoPulse {
+    0%, 100% {
+        box-shadow: 
+            inset 0 1px 0 rgba(255, 255, 255, 0.05),
+            0 0 8px rgba(0, 212, 255, 0.2);
+        border-color: rgba(0, 212, 255, 0.45);
+    }
+    50% {
+        box-shadow: 
+            inset 0 1px 0 rgba(255, 255, 255, 0.08),
+            0 0 12px rgba(0, 212, 255, 0.35),
+            0 0 20px rgba(0, 212, 255, 0.15);
+        border-color: rgba(0, 212, 255, 0.6);
+    }
+}
+
+/* Subtle pulse when idle - only on desktop */
+@media (hover: hover) {
+    .about-info-btn:not(:hover):not(:active):not(:focus-visible) {
+        animation: aboutInfoPulse 3.5s ease-in-out infinite;
+    }
+}
+
+/* ========================
+   GLOW RING EFFECT (Hover)
+   ======================== */
+.about-info-btn::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0%,
+        rgba(0, 212, 255, 0.4) 25%,
+        transparent 50%,
+        rgba(0, 255, 136, 0.4) 75%,
+        transparent 100%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+    animation: aboutRingSpin 3s linear infinite;
+    animation-play-state: paused;
+    filter: blur(1px);
+}
+
+@keyframes aboutRingSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@media (hover: hover) {
+    .about-info-btn:hover::before {
+        opacity: 1;
+        animation-play-state: running;
+    }
+}
+
+/* ========================
+   RIPPLE EFFECT ON CLICK
+   ======================== */
+.about-info-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(
+        circle,
+        rgba(0, 212, 255, 0.4) 0%,
+        transparent 70%
+    );
+    opacity: 0;
+    transform: scale(0);
+    transition: none;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.about-info-btn:active::after {
+    opacity: 1;
+    transform: scale(2);
+    transition: 
+        transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        opacity 0.4s ease;
+}
+
+/* ========================
+   DARK MODE / HIGH CONTRAST
+   ======================== */
+@media (prefers-contrast: high) {
+    .about-info-btn {
+        border-width: 2px;
+        border-color: #00d4ff;
+    }
+    
+    .about-info-icon {
+        -webkit-text-fill-color: #00d4ff;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .about-info-btn,
+    .about-info-btn::before,
+    .about-info-btn::after,
+    .about-info-icon,
+    .about-tooltip {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ========================
+   HIDE ON HOMEPAGE/ABOUT/AUTH PAGES
+   ======================== */
+html.is-home .about-info-btn,
+html.is-about .about-info-btn,
+html.is-login .about-info-btn,
+html.is-signup .about-info-btn,
+body:has(#home-view.active-view) .about-info-btn,
+body:has(#about-view.active-view) .about-info-btn,
+body:has(#login-view.active-view) .about-info-btn,
+body:has(#signup-view.active-view) .about-info-btn {
+    display: none !important;
+}
+
+/* ========================
+   CLICK/TOUCH FEEDBACK
+   ======================== */
+.about-info-btn.about-btn-clicked {
+    transform: scale(0.9);
+}
+
+.about-info-btn.about-btn-touched {
+    background: rgba(0, 212, 255, 0.25);
+    border-color: rgba(0, 212, 255, 0.7);
+}
+
+/* ========================
+   SUCCESS FLASH ON NAV
+   ======================== */
+@keyframes aboutNavSuccess {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7);
+    }
+    50% {
+        box-shadow: 0 0 20px 5px rgba(0, 255, 136, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 136, 0);
+    }
+}
+
+.about-info-btn.about-btn-clicked {
+    animation: aboutNavSuccess 0.3s ease-out;
+}
