@@ -1299,12 +1299,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-evenly;
-    padding: 10px 20px;
+    justify-content: center;
+    padding: 8px 20px;
     box-sizing: border-box;
-    overflow: hidden;
+    overflow: visible;
     z-index: 2;
-    gap: 4px;
+    gap: 3px;
 }
 
 /* Close Button */
@@ -1376,7 +1376,7 @@
 }
 
 .victory-crown {
-    font-size: 2rem;
+    font-size: 1.6rem;
     color: #facc15;
     filter: drop-shadow(0 0 30px rgba(250, 204, 21, 0.8));
     animation: crownBounce 2s ease-in-out infinite;
@@ -1391,7 +1391,7 @@
 
 .victory-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     font-weight: 900;
     letter-spacing: 0.4em;
     background: linear-gradient(180deg, #fff 0%, #facc15 40%, #f59e0b 100%);
@@ -1406,7 +1406,7 @@
 
 .victory-subtitle {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.6rem;
+    font-size: 0.5rem;
     font-weight: 600;
     color: rgba(250, 204, 21, 0.8);
     letter-spacing: 0.2em;
@@ -1416,8 +1416,8 @@
 /* Champion Showcase - Main Focus with overflow */
 .champion-showcase {
     position: relative;
-    width: 180px;
-    height: 180px;
+    width: 140px;
+    height: 140px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1428,6 +1428,7 @@
     flex-shrink: 0;
     /* Allow image to overflow */
     overflow: visible;
+    z-index: 10;
 }
 
 #fightResultOverlay.reveal .champion-showcase {
@@ -1552,7 +1553,7 @@
 
 .champion-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     font-weight: 900;
     letter-spacing: 0.15em;
     color: white;
@@ -1579,11 +1580,11 @@
 .summary-card {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 16px;
+    gap: 8px;
+    padding: 6px 12px;
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
+    border-radius: 8px;
     backdrop-filter: blur(10px);
     transition: all 0.3s ease;
 }
@@ -1595,14 +1596,14 @@
 }
 
 .summary-card .card-icon {
-    width: 36px;
-    height: 36px;
+    width: 28px;
+    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, var(--card-color, #facc15) 0%, rgba(0, 0, 0, 0.3) 100%);
-    border-radius: 8px;
-    font-size: 0.9rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
     color: white;
 }
 
@@ -1633,11 +1634,11 @@
 /* Statistical Analysis Section */
 .stat-analysis {
     width: 100%;
-    max-width: 450px;
+    max-width: 400px;
     background: rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 10px;
-    padding: 10px 14px;
+    border-radius: 8px;
+    padding: 6px 10px;
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.5s ease;
@@ -1652,12 +1653,12 @@
 
 .analysis-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.55rem;
+    font-size: 0.45rem;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.5);
     letter-spacing: 0.15em;
     text-align: center;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 /* Stat Analysis Table Layout */
@@ -1785,7 +1786,7 @@
 .defeated-section {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.5s ease;
@@ -1800,7 +1801,7 @@
 
 .defeated-label {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.55rem;
+    font-size: 0.45rem;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.5);
     letter-spacing: 0.15em;
@@ -1809,11 +1810,11 @@
 .defeated-card {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 8px 14px;
+    gap: 8px;
+    padding: 6px 10px;
     background: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 30px;
+    border-radius: 20px;
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
@@ -1826,8 +1827,8 @@
 }
 
 .defeated-image {
-    width: 28px;
-    height: 28px;
+    width: 22px;
+    height: 22px;
     object-fit: contain;
     filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
     transition: transform 0.3s ease;
@@ -1839,20 +1840,20 @@
 
 .defeated-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     color: white;
     letter-spacing: 0.1em;
 }
 
 .defeated-x {
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: rgba(239, 68, 68, 0.25);
     border-radius: 50%;
-    font-size: 0.45rem;
+    font-size: 0.4rem;
     color: #ef4444;
 }
 
@@ -1860,8 +1861,8 @@
 .cage-fight-badge {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 0.5rem;
+    gap: 6px;
+    font-size: 0.4rem;
     color: rgba(255, 255, 255, 0.65);
     text-transform: uppercase;
     letter-spacing: 0.1em;
@@ -1877,8 +1878,8 @@
 }
 
 .badge-dot {
-    width: 3px;
-    height: 3px;
+    width: 2px;
+    height: 2px;
     background: rgba(255, 255, 255, 0.5);
     border-radius: 50%;
 }
@@ -1886,7 +1887,7 @@
 /* Action Buttons */
 .result-actions {
     display: flex;
-    gap: 8px;
+    gap: 6px;
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.5s ease;
@@ -1903,11 +1904,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 8px 16px;
-    border-radius: 8px;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 6px;
     font-family: 'Inter', sans-serif;
-    font-size: 0.65rem;
+    font-size: 0.55rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
