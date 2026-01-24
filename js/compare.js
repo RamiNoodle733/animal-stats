@@ -1154,11 +1154,6 @@
                 bar.style.width = `${width}%`;
             });
         },
-            document.querySelectorAll('.stat-bar-loser').forEach(bar => {
-                const width = bar.dataset.width;
-                bar.style.width = `${width}%`;
-            });
-        },
 
         /**
          * Hide the result overlay
