@@ -2040,6 +2040,16 @@
         overflow-y: auto !important;
         padding: 12px !important;
         gap: 12px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    /* All modules inside sidebar should take full width */
+    .community-sidebar-column > *,
+    .community__sidebar > * {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
     }
     
     /* When sidebar is active (via tab) */

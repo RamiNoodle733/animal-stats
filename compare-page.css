@@ -1040,26 +1040,22 @@
 }
 
 /* ==========================
-   INTRO OVERLAY
+   INTRO OVERLAY - Uses tournament-v4.css styles via .match-intro-overlay class
+   The compare intro now uses the same HTML structure and CSS as the tournament
    ========================== */
 #matchupIntroOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.95);
+    /* Base styles - rest inherited from .match-intro-overlay in tournament-v4.css */
     z-index: 10000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
 }
 
-#matchupIntroOverlay.active {
-    display: flex;
+#matchupIntroOverlay .intro-skip-hint {
+    position: absolute;
+    bottom: 2rem;
+    color: var(--cv-text-dim, rgba(255, 255, 255, 0.5));
+    font-size: 0.75rem;
 }
 
+/* Legacy styles below - kept for compatibility but main styling from tournament-v4.css */
 .intro-light-sweep {
     position: absolute;
     top: 0;

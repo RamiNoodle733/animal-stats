@@ -559,26 +559,49 @@
         },
 
         /**
-         * Inject the matchup intro overlay HTML
+         * Inject the matchup intro overlay HTML (same as tournament intro)
          */
         injectIntroOverlay() {
             if (document.getElementById('matchupIntroOverlay')) return;
 
             const overlay = document.createElement('div');
             overlay.id = 'matchupIntroOverlay';
+            overlay.className = 'match-intro-overlay';
             overlay.innerHTML = `
-                <div class="intro-light-sweep"></div>
-                <div class="intro-matchup-stage">
-                    <div class="intro-fighter left">
-                        <img class="intro-fighter-image" id="introFighter1Img" src="" alt="">
-                        <div class="intro-fighter-name" id="introFighter1Name">???</div>
+                <div class="intro-speed-lines"></div>
+                <div class="intro-sparks" id="compare-intro-sparks"></div>
+                
+                <div class="intro-content">
+                    <!-- Left Fighter Plate -->
+                    <div class="intro-fighter-plate left" id="compare-plate-left">
+                        <div class="intro-fighter-image-wrap">
+                            <div class="intro-fighter-glow left"></div>
+                            <img src="" alt="" class="intro-fighter-image" id="introFighter1Img">
+                        </div>
+                        <div class="intro-fighter-info">
+                            <div class="intro-fighter-name" id="introFighter1Name">ANIMAL NAME</div>
+                            <div class="intro-fighter-scientific" id="introFighter1Scientific">Scientific name</div>
+                        </div>
                     </div>
-                    <div class="intro-vs-badge">
-                        <div class="intro-vs-text">VS</div>
+                    
+                    <!-- VS Badge Center -->
+                    <div class="intro-vs-container" id="compare-vs-container">
+                        <div class="intro-vs-burst"></div>
+                        <div class="intro-vs-badge">
+                            <span>VS</span>
+                        </div>
                     </div>
-                    <div class="intro-fighter right">
-                        <img class="intro-fighter-image" id="introFighter2Img" src="" alt="">
-                        <div class="intro-fighter-name" id="introFighter2Name">???</div>
+                    
+                    <!-- Right Fighter Plate -->
+                    <div class="intro-fighter-plate right" id="compare-plate-right">
+                        <div class="intro-fighter-image-wrap">
+                            <div class="intro-fighter-glow right"></div>
+                            <img src="" alt="" class="intro-fighter-image" id="introFighter2Img">
+                        </div>
+                        <div class="intro-fighter-info">
+                            <div class="intro-fighter-name" id="introFighter2Name">ANIMAL NAME</div>
+                            <div class="intro-fighter-scientific" id="introFighter2Scientific">Scientific name</div>
+                        </div>
                     </div>
                 </div>
                 <div class="intro-skip-hint">Click or press ESC to skip</div>
@@ -769,7 +792,7 @@
         },
 
         /**
-         * Trigger the matchup intro animation
+         * Trigger the matchup intro animation (tournament-style)
          */
         triggerMatchupIntro(left, right) {
             if (this.introPlaying) return;
@@ -777,45 +800,77 @@
             const overlay = document.getElementById('matchupIntroOverlay');
             if (!overlay) return;
 
-            // Set fighter data
+            // Set fighter data - using tournament-style element IDs
             const img1 = document.getElementById('introFighter1Img');
             const name1 = document.getElementById('introFighter1Name');
+            const scientific1 = document.getElementById('introFighter1Scientific');
             const img2 = document.getElementById('introFighter2Img');
             const name2 = document.getElementById('introFighter2Name');
+            const scientific2 = document.getElementById('introFighter2Scientific');
 
-            if (img1) img1.src = left.image || '';
-            if (name1) name1.textContent = left.name.toUpperCase();
-            if (img2) img2.src = right.image || '';
-            if (name2) name2.textContent = right.name.toUpperCase();
+            if (img1) {
+                img1.src = left.image || '';
+                img1.onerror = () => { img1.src = 'images/fallback.png'; };
+            }
+            if (name1) name1.textContent = (left.name || 'FIGHTER 1').toUpperCase();
+            if (scientific1) scientific1.textContent = left.scientific_name || '';
+            if (img2) {
+                img2.src = right.image || '';
+                img2.onerror = () => { img2.src = 'images/fallback.png'; };
+            }
+            if (name2) name2.textContent = (right.name || 'FIGHTER 2').toUpperCase();
+            if (scientific2) scientific2.textContent = right.scientific_name || '';
 
-            // Reset animation classes
-            const fighters = overlay.querySelectorAll('.intro-fighter');
+            // Reset animation states (tournament-style)
+            overlay.classList.remove('fade-out', 'shake');
+            
+            // Reset VS badge animation
             const vsBadge = overlay.querySelector('.intro-vs-badge');
-            const lightSweep = overlay.querySelector('.intro-light-sweep');
-
-            fighters.forEach(f => f.classList.remove('animate-in'));
-            if (vsBadge) vsBadge.classList.remove('animate-in');
-            if (lightSweep) lightSweep.classList.remove('animate');
+            const vsBurst = overlay.querySelector('.intro-vs-burst');
+            if (vsBadge) {
+                vsBadge.style.animation = 'none';
+                vsBadge.offsetHeight; // Force reflow
+                vsBadge.style.animation = '';
+            }
+            if (vsBurst) {
+                vsBurst.style.animation = 'none';
+                vsBurst.offsetHeight; // Force reflow
+                vsBurst.style.animation = '';
+            }
 
             // Show overlay
             this.introPlaying = true;
             overlay.classList.add('active');
 
-            // Animate sequence
-            setTimeout(() => fighters[0]?.classList.add('animate-in'), 100);
-            setTimeout(() => fighters[1]?.classList.add('animate-in'), 250);
-            setTimeout(() => {
-                if (vsBadge) vsBadge.classList.add('animate-in');
-                if (lightSweep) lightSweep.classList.add('animate');
-            }, 500);
+            // Check for reduced motion preference
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // Spawn sparks after VS appears (tournament-style)
+            if (!prefersReducedMotion) {
+                setTimeout(() => {
+                    this.spawnIntroSparks();
+                }, 800);
+                
+                // Add screen shake when VS appears
+                setTimeout(() => {
+                    overlay.classList.add('shake');
+                }, 750);
+            }
+
+            // Duration before fade out
+            const introDuration = prefersReducedMotion ? 800 : 2000;
+            const fadeOutDuration = prefersReducedMotion ? 200 : 500;
 
             // Auto-hide and show result
             this.introTimeout = setTimeout(() => {
-                this.hideIntro();
-                if (this._pendingResult) {
-                    setTimeout(() => this.showResult(this._pendingResult), 100);
-                }
-            }, 1200);
+                overlay.classList.add('fade-out');
+                setTimeout(() => {
+                    this.hideIntro();
+                    if (this._pendingResult) {
+                        setTimeout(() => this.showResult(this._pendingResult), 100);
+                    }
+                }, fadeOutDuration);
+            }, introDuration);
             
             // Safety timeout
             setTimeout(() => {
@@ -825,7 +880,26 @@
                         setTimeout(() => this.showResult(this._pendingResult), 100);
                     }
                 }
-            }, 3000);
+            }, 5000);
+        },
+
+        /**
+         * Spawn intro sparks effect
+         */
+        spawnIntroSparks() {
+            const container = document.getElementById('compare-intro-sparks');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            for (let i = 0; i < 20; i++) {
+                const spark = document.createElement('div');
+                spark.className = 'intro-spark';
+                spark.style.setProperty('--angle', Math.random() * 360 + 'deg');
+                spark.style.setProperty('--distance', (50 + Math.random() * 150) + 'px');
+                spark.style.setProperty('--delay', Math.random() * 0.3 + 's');
+                container.appendChild(spark);
+            }
         },
 
         /**
