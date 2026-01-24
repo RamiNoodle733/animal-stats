@@ -1437,8 +1437,8 @@
 
 .champion-aura {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
+    margin: auto;
     width: 100%;
     height: 100%;
     background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, rgba(147, 51, 234, 0.2) 40%, transparent 70%);
@@ -1453,9 +1453,9 @@
 
 .champion-ring {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    /* Use inset + margin:auto for centering - doesn't conflict with animation transforms */
+    inset: 0;
+    margin: auto;
     border: 2px solid rgba(168, 85, 247, 0.4);
     border-radius: 50%;
     animation: ringExpand 3s ease-in-out infinite;
@@ -1472,9 +1472,9 @@
 
 .champion-spotlight {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    /* Use inset + margin:auto for centering */
+    inset: -10%;
+    margin: auto;
     width: 120%;
     height: 120%;
     background: radial-gradient(ellipse at center, rgba(250, 204, 21, 0.15) 0%, transparent 60%);
@@ -1487,16 +1487,21 @@
 }
 
 /* Champion Image - MUST be in front of all decorations */
-.champion-image {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+/* Use #fightResultOverlay to override legacy.css styles */
+#fightResultOverlay .champion-showcase .champion-image {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
     /* Fixed large size that extends well beyond container */
-    width: 350px;
-    height: 350px;
-    /* Use transform to center - this is the KEY */
+    width: 350px !important;
+    height: 350px !important;
+    /* OVERRIDE legacy.css circular styles */
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+    /* Use transform to center */
     transform: translate(-50%, -50%);
-    object-fit: contain;
+    object-fit: contain !important;
     filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.6)) drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
     animation: championFloat 4s ease-in-out infinite;
     /* VERY HIGH z-index to be above everything */
@@ -1507,7 +1512,6 @@
 @keyframes championFloat {
     0%, 100% { transform: translate(-50%, -50%) translateY(0) scale(1); }
     50% { transform: translate(-50%, -50%) translateY(-10px) scale(1.02); }
-}
 
 .champion-particles {
     position: absolute;
@@ -2009,9 +2013,9 @@
         height: 140px;
     }
     
-    .champion-image {
-        width: 320px;
-        height: 320px;
+    #fightResultOverlay .champion-showcase .champion-image {
+        width: 320px !important;
+        height: 320px !important;
     }
     
     .champion-name {
@@ -2140,9 +2144,9 @@
         height: 120px;
     }
     
-    .champion-image {
-        width: 280px;
-        height: 280px;
+    #fightResultOverlay .champion-showcase .champion-image {
+        width: 280px !important;
+        height: 280px !important;
     }
     
     .champion-name {
