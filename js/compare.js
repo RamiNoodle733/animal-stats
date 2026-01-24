@@ -612,7 +612,7 @@
         },
 
         /**
-         * Inject the result reveal overlay HTML
+         * Inject the result reveal overlay HTML - Premium Winner Screen
          */
         injectResultOverlay() {
             if (document.getElementById('fightResultOverlay')) return;
@@ -621,87 +621,198 @@
             overlay.id = 'fightResultOverlay';
             overlay.innerHTML = `
                 <div class="result-backdrop"></div>
-                <div class="result-container">
-                    <div class="result-header-sticky">
-                        <button class="result-close-btn" id="resultCloseBtn"><i class="fas fa-times"></i></button>
-                        <div class="result-banner-slot">
-                            <div class="result-banner-default">
-                                <div class="result-crown"><i class="fas fa-crown"></i></div>
-                                <div class="result-title">WINNER</div>
+                <div class="result-particles" id="resultParticles"></div>
+                
+                <div class="result-arena">
+                    <!-- Victory Banner -->
+                    <div class="victory-banner" id="victoryBanner">
+                        <div class="banner-glow"></div>
+                        <div class="banner-content">
+                            <div class="crown-container">
+                                <div class="crown-rays"></div>
+                                <i class="fas fa-crown crown-icon"></i>
+                            </div>
+                            <div class="victory-text">VICTORY</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Champion Showcase -->
+                    <div class="champion-showcase">
+                        <div class="champion-pedestal">
+                            <div class="pedestal-glow"></div>
+                            <div class="pedestal-rings">
+                                <div class="ring ring-1"></div>
+                                <div class="ring ring-2"></div>
+                                <div class="ring ring-3"></div>
+                            </div>
+                        </div>
+                        <div class="champion-image-wrap">
+                            <div class="champion-aura"></div>
+                            <div class="champion-shine"></div>
+                            <img class="champion-image" id="championImg" src="" alt="">
+                        </div>
+                        <div class="champion-nameplate">
+                            <div class="nameplate-bg"></div>
+                            <div class="champion-name" id="championName">CHAMPION</div>
+                            <div class="champion-scientific" id="championScientific"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Difficulty Badge -->
+                    <div class="difficulty-section">
+                        <div class="difficulty-badge" id="difficultyBadge">
+                            <div class="diff-icon-wrap">
+                                <i class="fas fa-skull diff-icon" id="diffIcon"></i>
+                            </div>
+                            <div class="diff-info">
+                                <div class="diff-label">VICTORY DIFFICULTY</div>
+                                <div class="diff-level" id="diffLevel">EASY</div>
+                            </div>
+                            <div class="diff-meter">
+                                <div class="diff-meter-fill" id="diffMeterFill"></div>
+                                <div class="diff-meter-glow"></div>
+                            </div>
+                        </div>
+                        <div class="diff-description" id="diffDescription">
+                            A decisive victory with clear dominance
+                        </div>
+                    </div>
+                    
+                    <!-- Versus Display -->
+                    <div class="versus-display">
+                        <div class="fighter-card winner" id="winnerCard">
+                            <div class="card-rank winner-rank">
+                                <i class="fas fa-trophy"></i>
+                                <span>WINNER</span>
+                            </div>
+                            <div class="card-avatar">
+                                <img id="winnerCardImg" src="" alt="">
+                            </div>
+                            <div class="card-name" id="winnerCardName">Winner</div>
+                            <div class="card-score">
+                                <span class="score-label">POWER</span>
+                                <span class="score-value" id="winnerPower">0</span>
+                            </div>
+                        </div>
+                        
+                        <div class="vs-connector">
+                            <div class="vs-line top"></div>
+                            <div class="vs-badge-mini">VS</div>
+                            <div class="vs-line bottom"></div>
+                        </div>
+                        
+                        <div class="fighter-card loser" id="loserCard">
+                            <div class="card-rank loser-rank">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>DEFEATED</span>
+                            </div>
+                            <div class="card-avatar">
+                                <img id="loserCardImg" src="" alt="">
+                            </div>
+                            <div class="card-name" id="loserCardName">Loser</div>
+                            <div class="card-score">
+                                <span class="score-label">POWER</span>
+                                <span class="score-value" id="loserPower">0</span>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="result-content-scroll">
-                        <div class="result-winner-section">
-                            <div class="result-winner-glow"></div>
-                            <img class="result-winner-image" id="resultWinnerImg" src="" alt="">
-                            <div class="result-winner-name" id="resultWinnerName">???</div>
-                            <div class="result-probability-badge" id="resultProbBadge">
-                                <span class="prob-value">50%</span>
-                                <span class="prob-label">WIN CHANCE</span>
-                            </div>
+                    <!-- Stats Breakdown -->
+                    <div class="stats-arena" id="statsArena">
+                        <div class="stats-header">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>BATTLE ANALYSIS</span>
+                            <button class="stats-toggle" id="statsToggle">
+                                <i class="fas fa-chevron-down"></i>
+                            </button>
                         </div>
-                        
-                        <div class="result-vs-divider">
-                            <div class="result-vs-line"></div>
-                            <span class="result-vs-text">VS</span>
-                            <div class="result-vs-line"></div>
-                        </div>
-                        
-                        <div class="result-loser-section">
-                            <img class="result-loser-image" id="resultLoserImg" src="" alt="">
-                            <div class="result-loser-info">
-                                <div class="result-loser-name" id="resultLoserName">???</div>
-                                <div class="result-loser-prob" id="resultLoserProb">50% chance</div>
-                            </div>
-                        </div>
-                        
-                        <div class="result-breakdown">
-                            <div class="breakdown-header">
-                                <i class="fas fa-chart-bar"></i>
-                                <span>FIGHT BREAKDOWN</span>
-                            </div>
-                            <div class="breakdown-scores">
-                                <div class="score-item winner">
-                                    <span class="score-name" id="breakdownWinnerName">Winner</span>
-                                    <span class="score-value" id="breakdownWinnerScore">0.0</span>
+                        <div class="stats-content" id="statsContent">
+                            <div class="power-comparison">
+                                <div class="power-bar-container">
+                                    <div class="power-bar winner-bar" id="winnerBar">
+                                        <div class="bar-fill"></div>
+                                        <div class="bar-shine"></div>
+                                    </div>
+                                    <div class="power-bar loser-bar" id="loserBar">
+                                        <div class="bar-fill"></div>
+                                    </div>
                                 </div>
-                                <div class="score-item loser">
-                                    <span class="score-name" id="breakdownLoserName">Loser</span>
-                                    <span class="score-value" id="breakdownLoserScore">0.0</span>
+                                <div class="power-labels">
+                                    <span class="power-pct winner-pct" id="winnerPct">50%</span>
+                                    <span class="power-vs">POWER</span>
+                                    <span class="power-pct loser-pct" id="loserPct">50%</span>
                                 </div>
                             </div>
-                            <div class="breakdown-bar">
-                                <div class="breakdown-bar-fill winner" id="breakdownBarWinner"></div>
-                                <div class="breakdown-bar-fill loser" id="breakdownBarLoser"></div>
-                            </div>
-                            <div class="breakdown-stats" id="breakdownStats"></div>
+                            <div class="stat-bars" id="statBars"></div>
                         </div>
                     </div>
                     
-                    <div class="result-actions">
-                        <button class="result-btn primary" id="resultRunAgainBtn">
-                            <i class="fas fa-redo"></i> REMATCH
+                    <!-- Fun Facts -->
+                    <div class="fun-facts-section" id="funFactsSection">
+                        <div class="fact-card" id="factCard">
+                            <div class="fact-icon"><i class="fas fa-lightbulb"></i></div>
+                            <div class="fact-text" id="factText">Loading fun fact...</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="result-actions-premium">
+                        <button class="action-btn explore-btn" id="exploreWinnerBtn">
+                            <i class="fas fa-search"></i>
+                            <span>EXPLORE WINNER</span>
                         </button>
-                        <button class="result-btn secondary" id="resultCloseBtn2">
-                            <i class="fas fa-arrow-left"></i> BACK
+                        <button class="action-btn back-btn" id="resultBackBtn">
+                            <i class="fas fa-arrow-left"></i>
+                            <span>BACK TO COMPARE</span>
                         </button>
                     </div>
                 </div>
+                
+                <!-- Close Button -->
+                <button class="result-close-x" id="resultCloseX">
+                    <i class="fas fa-times"></i>
+                </button>
             `;
 
             document.body.appendChild(overlay);
 
             // Event listeners
-            document.getElementById('resultCloseBtn').addEventListener('click', () => this.hideResult());
-            document.getElementById('resultCloseBtn2').addEventListener('click', () => this.hideResult());
-            document.getElementById('resultRunAgainBtn').addEventListener('click', () => {
+            document.getElementById('resultCloseX').addEventListener('click', () => this.hideResult());
+            document.getElementById('resultBackBtn').addEventListener('click', () => this.hideResult());
+            document.getElementById('exploreWinnerBtn').addEventListener('click', () => {
                 this.hideResult();
-                if (typeof window.app !== 'undefined' && window.app.startFight) {
-                    setTimeout(() => window.app.startFight(), 300);
+                // Navigate to winner's stats page
+                if (this._lastWinner && window.app) {
+                    window.app.switchView('stats');
+                    window.app.selectAnimal(this._lastWinner);
                 }
             });
+            
+            // Stats toggle
+            document.getElementById('statsToggle').addEventListener('click', () => {
+                const content = document.getElementById('statsContent');
+                const toggle = document.getElementById('statsToggle');
+                content.classList.toggle('collapsed');
+                toggle.classList.toggle('collapsed');
+            });
+            
+            // Card interactions
+            document.getElementById('winnerCard').addEventListener('click', () => {
+                if (this._lastWinner && window.app) {
+                    this.hideResult();
+                    window.app.switchView('stats');
+                    window.app.selectAnimal(this._lastWinner);
+                }
+            });
+            document.getElementById('loserCard').addEventListener('click', () => {
+                if (this._lastLoser && window.app) {
+                    this.hideResult();
+                    window.app.switchView('stats');
+                    window.app.selectAnimal(this._lastLoser);
+                }
+            });
+            
+            // Backdrop click to close
             overlay.querySelector('.result-backdrop').addEventListener('click', () => this.hideResult());
         },
 
@@ -940,7 +1051,96 @@
         },
 
         /**
-         * Show the result overlay
+         * Calculate difficulty level based on win probability
+         */
+        getDifficultyInfo(winnerProb) {
+            const prob = winnerProb;
+            if (prob >= 90) return { 
+                level: 'EFFORTLESS', 
+                icon: 'fa-feather', 
+                color: '#22c55e', 
+                meter: 5,
+                description: 'An overwhelming mismatch. The winner dominates in virtually every category.'
+            };
+            if (prob >= 80) return { 
+                level: 'EASY', 
+                icon: 'fa-shield-alt', 
+                color: '#4ade80', 
+                meter: 20,
+                description: 'A clear advantage. The winner has superior stats across most categories.'
+            };
+            if (prob >= 70) return { 
+                level: 'MODERATE', 
+                icon: 'fa-balance-scale', 
+                color: '#facc15', 
+                meter: 40,
+                description: 'A solid victory. The winner holds meaningful advantages in key areas.'
+            };
+            if (prob >= 60) return { 
+                level: 'CHALLENGING', 
+                icon: 'fa-fist-raised', 
+                color: '#f97316', 
+                meter: 60,
+                description: 'A competitive matchup. The outcome was determined by a few critical stats.'
+            };
+            if (prob >= 55) return { 
+                level: 'HARD', 
+                icon: 'fa-fire', 
+                color: '#ef4444', 
+                meter: 80,
+                description: 'An intense battle. Victory came down to marginal differences.'
+            };
+            return { 
+                level: 'EXTREME', 
+                icon: 'fa-skull-crossbones', 
+                color: '#dc2626', 
+                meter: 95,
+                description: 'A razor-thin margin. This fight could go either way in nature.'
+            };
+        },
+
+        /**
+         * Get fun facts based on the matchup
+         */
+        getFunFact(winner, loser) {
+            const facts = [
+                `${winner.name}s can be found in ${winner.habitat || 'various habitats'} around the world.`,
+                `The average ${winner.name.toLowerCase()} weighs about ${winner.weight_kg || winner.averageWeight || '?'}kg.`,
+                `${winner.name}s are known for their incredible ${winner.attack > 80 ? 'offensive power' : winner.defense > 80 ? 'defensive capabilities' : winner.agility > 80 ? 'speed and agility' : 'survival instincts'}.`,
+                `In a real encounter, ${winner.name.toLowerCase()}s typically ${winner.attack > winner.defense ? 'strike first' : 'wait for the right moment'}.`,
+                `${loser.name}s put up a fight with their ${loser.defense > loser.attack ? 'strong defenses' : 'aggressive tactics'}.`,
+                `Both species have evolved remarkable adaptations for survival.`,
+                `${winner.name}s have been around for millions of years.`,
+                `This matchup showcases nature's incredible diversity.`
+            ];
+            return facts[Math.floor(Math.random() * facts.length)];
+        },
+
+        /**
+         * Spawn celebration particles
+         */
+        spawnCelebrationParticles() {
+            const container = document.getElementById('resultParticles');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const colors = ['#facc15', '#22c55e', '#3b82f6', '#f97316', '#ec4899'];
+            
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'celebration-particle';
+                particle.style.setProperty('--x', (Math.random() * 100) + '%');
+                particle.style.setProperty('--delay', (Math.random() * 0.5) + 's');
+                particle.style.setProperty('--duration', (1.5 + Math.random() * 1.5) + 's');
+                particle.style.setProperty('--color', colors[Math.floor(Math.random() * colors.length)]);
+                particle.style.setProperty('--size', (4 + Math.random() * 8) + 'px');
+                container.appendChild(particle);
+            }
+        },
+
+        /**
+         * Show the result overlay - Premium Version
          */
         showResult(result) {
             const overlay = document.getElementById('fightResultOverlay');
@@ -948,84 +1148,160 @@
 
             this._pendingResult = null;
             this.resultOverlayActive = true;
+            this._lastWinner = result.winner;
+            this._lastLoser = result.loser;
 
-            // Populate winner section
-            const winnerImg = document.getElementById('resultWinnerImg');
-            const winnerName = document.getElementById('resultWinnerName');
-            const probBadge = document.getElementById('resultProbBadge');
+            // Get difficulty info
+            const difficulty = this.getDifficultyInfo(result.winnerProb);
 
-            if (winnerImg) winnerImg.src = result.winner.image || '';
-            if (winnerName) winnerName.textContent = result.winner.name.toUpperCase();
-            if (probBadge) {
-                probBadge.querySelector('.prob-value').textContent = `${result.winnerProb.toFixed(1)}%`;
+            // Champion section
+            const championImg = document.getElementById('championImg');
+            const championName = document.getElementById('championName');
+            const championScientific = document.getElementById('championScientific');
+            
+            if (championImg) {
+                championImg.src = result.winner.image || '';
+                championImg.onerror = () => { championImg.src = 'images/fallback.png'; };
             }
+            if (championName) championName.textContent = result.winner.name.toUpperCase();
+            if (championScientific) championScientific.textContent = result.winner.scientific_name || '';
 
-            // Populate loser section
-            const loserImg = document.getElementById('resultLoserImg');
-            const loserName = document.getElementById('resultLoserName');
-            const loserProb = document.getElementById('resultLoserProb');
+            // Difficulty badge
+            const diffBadge = document.getElementById('difficultyBadge');
+            const diffIcon = document.getElementById('diffIcon');
+            const diffLevel = document.getElementById('diffLevel');
+            const diffMeterFill = document.getElementById('diffMeterFill');
+            const diffDescription = document.getElementById('diffDescription');
+            
+            if (diffBadge) diffBadge.style.setProperty('--diff-color', difficulty.color);
+            if (diffIcon) diffIcon.className = `fas ${difficulty.icon} diff-icon`;
+            if (diffLevel) diffLevel.textContent = difficulty.level;
+            if (diffDescription) diffDescription.textContent = difficulty.description;
 
-            if (loserImg) loserImg.src = result.loser.image || '';
-            if (loserName) loserName.textContent = result.loser.name;
-            if (loserProb) loserProb.textContent = `${result.loserProb.toFixed(1)}% chance`;
+            // Fighter cards
+            const winnerCardImg = document.getElementById('winnerCardImg');
+            const winnerCardName = document.getElementById('winnerCardName');
+            const winnerPower = document.getElementById('winnerPower');
+            const loserCardImg = document.getElementById('loserCardImg');
+            const loserCardName = document.getElementById('loserCardName');
+            const loserPower = document.getElementById('loserPower');
+            
+            if (winnerCardImg) {
+                winnerCardImg.src = result.winner.image || '';
+                winnerCardImg.onerror = () => { winnerCardImg.src = 'images/fallback.png'; };
+            }
+            if (winnerCardName) winnerCardName.textContent = result.winner.name;
+            if (winnerPower) winnerPower.textContent = result.winnerScore.toFixed(1);
+            
+            if (loserCardImg) {
+                loserCardImg.src = result.loser.image || '';
+                loserCardImg.onerror = () => { loserCardImg.src = 'images/fallback.png'; };
+            }
+            if (loserCardName) loserCardName.textContent = result.loser.name;
+            if (loserPower) loserPower.textContent = result.loserScore.toFixed(1);
 
-            // Populate breakdown scores
-            document.getElementById('breakdownWinnerName').textContent = result.winner.name;
-            document.getElementById('breakdownLoserName').textContent = result.loser.name;
-            document.getElementById('breakdownWinnerScore').textContent = result.winnerScore.toFixed(1);
-            document.getElementById('breakdownLoserScore').textContent = result.loserScore.toFixed(1);
-
-            // Calculate bar widths
+            // Power comparison
             const totalScore = result.winnerScore + result.loserScore;
             const winnerPct = totalScore > 0 ? (result.winnerScore / totalScore * 100) : 50;
             const loserPct = 100 - winnerPct;
+            
+            document.getElementById('winnerPct').textContent = `${winnerPct.toFixed(0)}%`;
+            document.getElementById('loserPct').textContent = `${loserPct.toFixed(0)}%`;
 
-            document.getElementById('breakdownBarWinner').style.width = `${winnerPct}%`;
-            document.getElementById('breakdownBarLoser').style.width = `${loserPct}%`;
+            // Fun fact
+            const factText = document.getElementById('factText');
+            if (factText) factText.textContent = this.getFunFact(result.winner, result.loser);
 
-            // Generate stat breakdown
-            this.generateStatBreakdown(result);
+            // Generate stat bars
+            this.generateStatBars(result);
 
-            // Show overlay with animation
+            // Show overlay with animation sequence
             overlay.classList.add('active');
-            requestAnimationFrame(() => overlay.classList.add('reveal'));
+            
+            // Spawn particles
+            setTimeout(() => this.spawnCelebrationParticles(), 300);
+            
+            // Animate reveal sequence
+            requestAnimationFrame(() => {
+                overlay.classList.add('reveal');
+                
+                // Animate difficulty meter
+                setTimeout(() => {
+                    if (diffMeterFill) diffMeterFill.style.width = `${difficulty.meter}%`;
+                }, 500);
+                
+                // Animate power bars
+                setTimeout(() => {
+                    const winnerBar = document.querySelector('#winnerBar .bar-fill');
+                    const loserBar = document.querySelector('#loserBar .bar-fill');
+                    if (winnerBar) winnerBar.style.width = `${winnerPct}%`;
+                    if (loserBar) loserBar.style.width = `${loserPct}%`;
+                }, 700);
+                
+                // Animate stat bars
+                setTimeout(() => this.animateStatBars(), 900);
+            });
         },
 
         /**
-         * Generate the detailed stat breakdown
+         * Generate the stat comparison bars
          */
-        generateStatBreakdown(result) {
-            const container = document.getElementById('breakdownStats');
+        generateStatBars(result) {
+            const container = document.getElementById('statBars');
             if (!container) return;
 
             const stats = [
-                { name: 'Attack', key: 'attack' },
-                { name: 'Defense', key: 'defense' },
-                { name: 'Agility', key: 'agility' },
-                { name: 'Stamina', key: 'stamina' },
-                { name: 'Intelligence', key: 'intelligence' },
-                { name: 'Special', key: 'special' }
+                { name: 'Attack', key: 'attack', icon: 'fa-sword' },
+                { name: 'Defense', key: 'defense', icon: 'fa-shield-alt' },
+                { name: 'Agility', key: 'agility', icon: 'fa-running' },
+                { name: 'Stamina', key: 'stamina', icon: 'fa-heart' },
+                { name: 'Intelligence', key: 'intelligence', icon: 'fa-brain' },
+                { name: 'Special', key: 'special', icon: 'fa-star' }
             ];
 
-            let html = '<div class="stat-comparison-grid">';
-
-            stats.forEach(stat => {
+            let html = '';
+            stats.forEach((stat, index) => {
                 const winnerVal = result.winner[stat.key] || 0;
                 const loserVal = result.loser[stat.key] || 0;
-                const winnerHigher = winnerVal > loserVal;
-                const loserHigher = loserVal > winnerVal;
-
+                const winnerWins = winnerVal > loserVal;
+                const tie = winnerVal === loserVal;
+                
                 html += `
-                    <div class="stat-row">
-                        <span class="stat-val ${winnerHigher ? 'higher' : ''}">${winnerVal.toFixed ? winnerVal.toFixed(0) : winnerVal}</span>
-                        <span class="stat-name">${stat.name}</span>
-                        <span class="stat-val ${loserHigher ? 'higher' : ''}">${loserVal.toFixed ? loserVal.toFixed(0) : loserVal}</span>
+                    <div class="stat-bar-row" style="--delay: ${index * 0.1}s">
+                        <div class="stat-bar-label">
+                            <i class="fas ${stat.icon}"></i>
+                            <span>${stat.name}</span>
+                        </div>
+                        <div class="stat-bar-values">
+                            <span class="stat-val winner-val ${winnerWins ? 'higher' : ''}">${winnerVal}</span>
+                            <div class="stat-bar-visual">
+                                <div class="stat-bar-bg">
+                                    <div class="stat-bar-winner" data-width="${winnerVal}"></div>
+                                    <div class="stat-bar-loser" data-width="${loserVal}"></div>
+                                </div>
+                            </div>
+                            <span class="stat-val loser-val ${!winnerWins && !tie ? 'higher' : ''}">${loserVal}</span>
+                        </div>
+                        ${winnerWins ? '<div class="stat-winner-indicator"><i class="fas fa-crown"></i></div>' : ''}
                     </div>
                 `;
             });
 
-            html += '</div>';
             container.innerHTML = html;
+        },
+
+        /**
+         * Animate the stat bars
+         */
+        animateStatBars() {
+            document.querySelectorAll('.stat-bar-winner').forEach(bar => {
+                const width = bar.dataset.width;
+                bar.style.width = `${width}%`;
+            });
+            document.querySelectorAll('.stat-bar-loser').forEach(bar => {
+                const width = bar.dataset.width;
+                bar.style.width = `${width}%`;
+            });
         },
 
         /**
@@ -1035,10 +1311,24 @@
             const overlay = document.getElementById('fightResultOverlay');
             if (overlay) {
                 overlay.classList.remove('reveal');
+                
+                // Reset animations
+                const diffMeterFill = document.getElementById('diffMeterFill');
+                if (diffMeterFill) diffMeterFill.style.width = '0%';
+                
+                const winnerBar = document.querySelector('#winnerBar .bar-fill');
+                const loserBar = document.querySelector('#loserBar .bar-fill');
+                if (winnerBar) winnerBar.style.width = '0%';
+                if (loserBar) loserBar.style.width = '0%';
+                
+                document.querySelectorAll('.stat-bar-winner, .stat-bar-loser').forEach(bar => {
+                    bar.style.width = '0%';
+                });
+                
                 setTimeout(() => {
                     overlay.classList.remove('active');
                     this.resultOverlayActive = false;
-                }, 300);
+                }, 400);
             }
         }
     };
