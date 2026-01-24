@@ -638,15 +638,18 @@
                         <div class="victory-subtitle" id="victorySubtitle">Dominant Performance</div>
                     </div>
                     
-                    <!-- Champion Showcase - Main Focus -->
+                    <!-- Champion Showcase - Decorations only -->
                     <div class="champion-showcase" id="championShowcase">
                         <div class="champion-aura"></div>
                         <div class="champion-ring ring-1"></div>
                         <div class="champion-ring ring-2"></div>
                         <div class="champion-ring ring-3"></div>
                         <div class="champion-spotlight"></div>
-                        <img class="champion-image" id="championImg" src="" alt="">
                         <div class="champion-particles" id="championParticles"></div>
+                        <!-- Image wrapper sits on top of everything -->
+                        <div class="champion-image-wrapper">
+                            <img class="champion-image" id="championImg" src="" alt="">
+                        </div>
                     </div>
                     
                     <!-- Champion Info -->
