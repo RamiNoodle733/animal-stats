@@ -510,19 +510,34 @@ class CommunityManager {
             tab.classList.toggle('active', tab.dataset.tab === tabName);
         });
         
-        // Show/hide compose box (only for chat)
-        const composeBox = document.getElementById('feed-compose-box');
-        if (composeBox) {
-            composeBox.style.display = tabName === 'chat' ? 'block' : 'none';
-        }
+        // Handle mobile sidebar/feed visibility
+        const sidebar = document.querySelector('.community-sidebar-column');
+        const feedColumn = document.querySelector('.community-feed-column');
         
-        // Load content for the tab
-        if (tabName === 'chat') {
-            this.loadChat();
-            this.startChatPolling();
-        } else {
+        if (tabName === 'hub') {
+            // Show sidebar (stats hub), hide feed
+            if (sidebar) sidebar.classList.add('mobile-sidebar-active');
+            if (feedColumn) feedColumn.classList.add('mobile-feed-hidden');
             this.stopChatPolling();
-            this.loadFeed();
+        } else {
+            // Hide sidebar, show feed
+            if (sidebar) sidebar.classList.remove('mobile-sidebar-active');
+            if (feedColumn) feedColumn.classList.remove('mobile-feed-hidden');
+            
+            // Show/hide compose box (only for chat)
+            const composeBox = document.getElementById('feed-compose-box');
+            if (composeBox) {
+                composeBox.style.display = tabName === 'chat' ? 'block' : 'none';
+            }
+            
+            // Load content for the tab
+            if (tabName === 'chat') {
+                this.loadChat();
+                this.startChatPolling();
+            } else {
+                this.stopChatPolling();
+                this.loadFeed();
+            }
         }
     }
 
@@ -547,6 +562,12 @@ class CommunityManager {
     onViewLeave() {
         this.stopChatPolling();
         this.stopPresencePing();
+        
+        // Reset mobile sidebar state
+        const sidebar = document.querySelector('.community-sidebar-column');
+        const feedColumn = document.querySelector('.community-feed-column');
+        if (sidebar) sidebar.classList.remove('mobile-sidebar-active');
+        if (feedColumn) feedColumn.classList.remove('mobile-feed-hidden');
     }
 
     // ==================== CHAT ====================
