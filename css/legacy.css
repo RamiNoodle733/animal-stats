@@ -1970,51 +1970,210 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 6px 12px;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(0, 212, 255, 0.3);
-    border-radius: 25px;
+    padding: 6px 12px 6px 6px;
     cursor: pointer;
-    transition: all 0.3s ease;
     position: relative;
     text-decoration: none;
     color: inherit;
+    overflow: hidden;
+    
+    /* Boxy rectangle - matching homepage */
+    border-radius: 6px;
+    
+    /* Metallic layered background */
+    background: 
+        /* Top highlight edge */
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, transparent 40%),
+        /* Base dark glass */
+        linear-gradient(180deg, rgba(20, 35, 55, 0.95) 0%, rgba(10, 20, 35, 0.98) 100%);
+    
+    /* Metallic border */
+    border: 1px solid rgba(100, 130, 160, 0.4);
+    box-shadow: 
+        0 2px 10px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    
+    transition: 
+        transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
+    
+    /* Subtle breathing animation */
+    animation: profileMiniBreathing 4s ease-in-out infinite;
+}
+
+@keyframes profileMiniBreathing {
+    0%, 100% { 
+        box-shadow: 
+            0 2px 10px rgba(0, 0, 0, 0.35),
+            inset 0 1px 0 rgba(255, 255, 255, 0.06),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    }
+    50% { 
+        box-shadow: 
+            0 2px 14px rgba(0, 212, 255, 0.1),
+            inset 0 1px 0 rgba(255, 255, 255, 0.08),
+            inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    }
+}
+
+/* Metallic shine sweep */
+.user-profile-mini::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+        90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.06), 
+        rgba(255, 255, 255, 0.12),
+        rgba(255, 255, 255, 0.06),
+        transparent
+    );
+    transform: skewX(-20deg);
+    transition: left 0.5s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Accent line at bottom */
+.user-profile-mini::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 15%;
+    right: 15%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.35), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
 }
 
 .user-profile-mini:hover {
-    background: rgba(0, 212, 255, 0.1);
-    border-color: var(--primary-color);
-    box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+    transform: translateY(-2px) scale(1.02);
+    border-color: rgba(0, 212, 255, 0.5);
+    animation: none; /* Pause breathing on hover */
+    box-shadow: 
+        0 5px 20px rgba(0, 0, 0, 0.45),
+        0 0 15px rgba(0, 212, 255, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
+.user-profile-mini:hover::before {
+    left: 100%;
+}
+
+.user-profile-mini:hover::after {
+    opacity: 1;
+}
+
+.user-profile-mini:active {
+    transform: translateY(0) scale(0.98);
+    transition-duration: 0.1s;
+}
+
+/* Avatar - boxy metallic frame */
 .user-avatar-mini {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    width: 34px;
+    height: 34px;
+    border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
-    border: 2px solid var(--primary-color);
-    box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+    overflow: visible; /* Allow corner accents to show */
+    position: relative;
+    z-index: 2;
+    
+    /* Subtle dark bg - no gradient */
+    background: rgba(0, 20, 40, 0.85);
+    
+    /* Metallic frame border */
+    border: 1px solid rgba(0, 212, 255, 0.35);
+    box-shadow: 
+        0 0 8px rgba(0, 212, 255, 0.12),
+        inset 0 0 8px rgba(0, 0, 0, 0.4);
+    
+    transition: all 0.3s ease;
+}
+
+/* Corner accents for avatar */
+.user-avatar-mini::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: 5px;
+    height: 5px;
+    border-top: 2px solid rgba(0, 212, 255, 0.6);
+    border-left: 2px solid rgba(0, 212, 255, 0.6);
+    pointer-events: none;
+    z-index: 3;
+    transition: all 0.3s ease;
+}
+
+.user-avatar-mini::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 5px;
+    height: 5px;
+    border-bottom: 2px solid rgba(0, 212, 255, 0.6);
+    border-right: 2px solid rgba(0, 212, 255, 0.6);
+    pointer-events: none;
+    z-index: 3;
+    transition: all 0.3s ease;
+}
+
+.user-profile-mini:hover .user-avatar-mini {
+    border-color: rgba(0, 212, 255, 0.6);
+    box-shadow: 
+        0 0 12px rgba(0, 212, 255, 0.2),
+        inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.user-profile-mini:hover .user-avatar-mini::before,
+.user-profile-mini:hover .user-avatar-mini::after {
+    border-color: #00d4ff;
+    width: 7px;
+    height: 7px;
 }
 
 .user-avatar-mini i {
-    font-size: 1.2rem;
-    color: #fff;
+    font-size: 1.15rem;
+    color: rgba(0, 212, 255, 0.7);
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.user-profile-mini:hover .user-avatar-mini i {
+    color: #00d4ff;
+    transform: scale(1.1);
 }
 
 .user-avatar-mini img {
-    width: 100%;
-    height: 100%;
+    width: calc(100% - 2px);
+    height: calc(100% - 2px);
     object-fit: cover;
+    border-radius: 3px;
+    transition: filter 0.3s ease, transform 0.3s ease;
+}
+
+.user-profile-mini:hover .user-avatar-mini img {
+    filter: brightness(1.1);
+    transform: scale(1.05);
 }
 
 .user-level-info {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 4px;
+    position: relative;
+    z-index: 2;
 }
 
 .user-name-level {
@@ -2027,39 +2186,95 @@ body {
 .user-name-mini {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 0.9rem;
-    letter-spacing: 1px;
-    color: var(--text-light);
+    letter-spacing: 1.5px;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    transition: color 0.3s ease;
 }
 
+.user-profile-mini:hover .user-name-mini {
+    color: #fff;
+}
+
+/* Level badge - metallic gold design */
 .user-level-badge {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     padding: 2px 6px;
-    background: linear-gradient(135deg, #ffd700, #ff8c00);
-    color: #000;
-    border-radius: 4px;
+    border-radius: 3px;
     font-weight: bold;
     letter-spacing: 0.5px;
-    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
     white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    
+    /* Metallic gold background */
+    background: 
+        linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, transparent 50%),
+        linear-gradient(135deg, #b8860b 0%, #ffd700 50%, #b8860b 100%);
+    color: #1a1a0a;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+    
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    box-shadow: 
+        0 2px 6px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 0 8px rgba(255, 215, 0, 0.3);
+    
+    transition: all 0.3s ease;
 }
 
+.user-profile-mini:hover .user-level-badge {
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        0 0 15px rgba(255, 215, 0, 0.5);
+}
+
+/* XP bar - sleek metallic style */
 .xp-bar-container {
-    width: 120px;
-    height: 8px;
-    background: rgba(0, 0, 0, 0.6);
-    border-radius: 4px;
+    width: 110px;
+    height: 6px;
+    border-radius: 3px;
     overflow: hidden;
     position: relative;
-    border: 1px solid rgba(255, 215, 0, 0.3);
+    
+    /* Dark metallic background */
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 215, 0, 0.25);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
 }
 
 .xp-bar-fill {
     height: 100%;
-    background: linear-gradient(90deg, #ffd700, #ff8c00);
-    border-radius: 3px;
-    transition: width 0.5s ease;
-    box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+    border-radius: 2px;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    
+    /* Metallic gold gradient */
+    background: 
+        linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%),
+        linear-gradient(90deg, #b8860b, #ffd700, #ffed4a, #ffd700);
+    box-shadow: 
+        0 0 8px rgba(255, 215, 0, 0.5),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Animated shine on XP bar */
+.xp-bar-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -50%;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: xpShine 2s ease-in-out infinite;
+}
+
+@keyframes xpShine {
+    0%, 100% { left: -50%; }
+    50% { left: 120%; }
 }
 
 .xp-bar-text {
@@ -2067,31 +2282,40 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 0.5rem;
+    font-size: 0.45rem;
     font-family: 'Inter', sans-serif;
-    color: rgba(255, 255, 255, 0.9);
-    text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
     white-space: nowrap;
+    letter-spacing: 0.5px;
 }
 
-/* Profile Dropdown */
+/* Profile Dropdown - Metallic design */
 .profile-dropdown {
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
     margin-top: 8px;
-    background: rgba(10, 25, 47, 0.98);
-    border: 1px solid rgba(0, 212, 255, 0.4);
-    border-radius: 12px;
-    padding: 8px 0;
+    padding: 6px 0;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     z-index: 1000;
     min-width: 160px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 212, 255, 0.2);
+    
+    /* Boxy metallic design */
+    border-radius: 6px;
+    background: 
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 30%),
+        linear-gradient(180deg, rgba(15, 30, 50, 0.98) 0%, rgba(10, 20, 35, 0.99) 100%);
+    border: 1px solid rgba(100, 130, 160, 0.35);
+    box-shadow: 
+        0 10px 40px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(0, 212, 255, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .user-profile-mini:hover .profile-dropdown,
@@ -2105,17 +2329,46 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    padding: 10px 16px;
-    color: var(--text-light);
+    padding: 10px 14px;
+    color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
     font-family: 'Inter', sans-serif;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.3px;
     transition: all 0.2s ease;
+    position: relative;
+}
+
+.profile-dropdown-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 2px;
+    height: 0;
+    background: linear-gradient(180deg, #00d4ff, #0088aa);
+    transition: height 0.2s ease;
 }
 
 .profile-dropdown-item:hover {
-    background: rgba(0, 212, 255, 0.15);
-    color: var(--primary-color);
+    background: rgba(0, 212, 255, 0.1);
+    color: #fff;
+}
+
+.profile-dropdown-item:hover::before {
+    height: 60%;
+}
+
+.profile-dropdown-item i {
+    width: 16px;
+    text-align: center;
+    color: rgba(0, 212, 255, 0.6);
+    transition: color 0.2s ease;
+}
+
+.profile-dropdown-item:hover i {
+    color: #00d4ff;
 }
 
 .profile-dropdown-item i {

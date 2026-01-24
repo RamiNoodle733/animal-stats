@@ -182,16 +182,21 @@
         justify-content: center !important;
     }
     
-    /* Profile mini section - bigger */
+    /* Profile mini section - metallic boxy design */
     .user-profile-mini {
-        padding: 4px 8px !important;
-        gap: 6px !important;
+        padding: 5px 10px 5px 5px !important;
+        gap: 8px !important;
+        border-radius: 5px !important;
     }
     
     .user-avatar-mini {
-        width: 34px !important;
-        height: 34px !important;
-        font-size: 1.4rem !important;
+        width: 32px !important;
+        height: 32px !important;
+        border-radius: 4px !important;
+    }
+    
+    .user-avatar-mini i {
+        font-size: 1.1rem !important;
     }
     
     .user-level-info {
@@ -200,23 +205,26 @@
     
     .user-name-mini {
         font-size: 0.75rem !important;
-        max-width: 70px !important;
+        max-width: 65px !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
+        letter-spacing: 1px !important;
     }
     
     .user-level-badge {
-        font-size: 0.6rem !important;
+        font-size: 0.55rem !important;
         padding: 2px 5px !important;
+        border-radius: 2px !important;
     }
     
     .xp-bar-container {
-        width: 60px !important;
-        height: 8px !important;
+        width: 55px !important;
+        height: 5px !important;
+        border-radius: 2px !important;
     }
     
     .xp-bar-text {
-        font-size: 0.5rem !important;
+        font-size: 0.4rem !important;
     }
     
     /* Battle points display - bigger */
