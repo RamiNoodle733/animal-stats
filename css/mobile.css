@@ -2058,8 +2058,9 @@
         width: 100% !important;
     }
     
-    /* Hide feed column when viewing sidebar content */
-    .community-feed-column.mobile-feed-hidden {
+    /* Hide feed scroll region when viewing sidebar (keep tab bar visible) */
+    .community-feed-column.mobile-feed-hidden .feed-scroll-region,
+    .community-feed-column.mobile-feed-hidden .feed-compose-box {
         display: none !important;
     }
     
@@ -2434,10 +2435,10 @@
         padding-bottom: calc(var(--mobile-safe-bottom) + var(--mobile-padding)) !important;
     }
     
-    /* Profile page - no bottom nav, so just safe area */
+    /* Profile page - needs header clearance and bottom padding */
     #profile-view {
         padding: var(--mobile-padding) !important;
-        padding-top: calc(var(--mobile-safe-top) + 20px) !important;
+        padding-top: calc(var(--mobile-header-height) + 20px) !important;
         padding-bottom: calc(var(--mobile-safe-bottom) + 30px) !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;

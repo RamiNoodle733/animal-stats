@@ -1142,6 +1142,7 @@
     font-weight: 900;
     color: var(--cv-cta);
     text-shadow: 0 0 24px var(--cv-cta-glow);
+    transform: rotate(-45deg); /* Counteract parent's 45deg rotation */
 }
 
 .intro-skip-hint {
@@ -1778,6 +1779,7 @@
     
     .intro-vs-text {
         font-size: 2rem;
+        transform: rotate(-45deg); /* Keep rotation fix on mobile */
     }
 }
 
@@ -2320,6 +2322,7 @@
     
     #compare-view .intro-vs-text {
         font-size: 1.5rem !important;
+        transform: rotate(-45deg) !important; /* Keep rotation fix on small screens */
     }
 }
 
