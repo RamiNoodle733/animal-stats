@@ -1479,6 +1479,7 @@
     height: 120%;
     background: radial-gradient(ellipse at center, rgba(250, 204, 21, 0.15) 0%, transparent 60%);
     animation: spotlightPulse 4s ease-in-out infinite;
+    z-index: 1;
 }
 
 @keyframes spotlightPulse {
@@ -1493,8 +1494,8 @@
     object-fit: contain;
     filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.6)) drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
     animation: championFloat 4s ease-in-out infinite;
-    z-index: 10;
-    /* Image overflows the container and sits ABOVE rings */
+    z-index: 20;
+    /* Image overflows the container and sits ABOVE all rings/spotlight */
     pointer-events: auto;
 }
 
