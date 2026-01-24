@@ -724,14 +724,26 @@ const Auth = {
 
     /**
      * Update avatar display element with animal image or default icon
+     * Handles profileAnimal as either:
+     * - Object with .image property (from API responses)
+     * - String name (needs lookup in animals array)
      */
-    updateAvatarDisplay(element, animalName) {
+    updateAvatarDisplay(element, profileAnimal) {
         if (!element) return;
 
         // Check if this element has an overlay (like the profile pic)
         const hasOverlay = element.classList.contains('clickable');
         const overlayHtml = hasOverlay ? `<div class="abs-avatar-overlay"><i class="fas fa-camera"></i><span>Change</span></div>` : '';
 
+        // Case 1: profileAnimal is an object with .image property
+        if (profileAnimal && typeof profileAnimal === 'object' && profileAnimal.image) {
+            element.innerHTML = `<img src="${profileAnimal.image}" alt="${profileAnimal.name || 'Avatar'}">${overlayHtml}`;
+            return;
+        }
+        
+        // Case 2: profileAnimal is a string name - need to find image
+        const animalName = typeof profileAnimal === 'string' ? profileAnimal : profileAnimal?.name;
+        
         if (animalName && window.app?.state?.animals) {
             const animal = window.app.state.animals.find(a => 
                 a.name.toLowerCase() === animalName.toLowerCase()
@@ -741,8 +753,35 @@ const Auth = {
                 return;
             }
         }
+        
+        // Case 3: Animals not loaded yet but we have an animal name - schedule retry
+        if (animalName && !window.app?.state?.animals) {
+            // Store element reference for later update
+            element._pendingAnimalName = animalName;
+            element._hasOverlay = hasOverlay;
+        }
+        
         // Default icon
         element.innerHTML = `<i class="fas fa-user-circle"></i>${overlayHtml}`;
+    },
+    
+    /**
+     * Retry updating avatars that were pending animals data
+     * Called when animals data finishes loading
+     */
+    retryPendingAvatars() {
+        // Home profile avatar
+        const homeProfileAvatar = document.getElementById('home-profile-avatar');
+        if (homeProfileAvatar?._pendingAnimalName) {
+            this.updateAvatarDisplay(homeProfileAvatar, homeProfileAvatar._pendingAnimalName);
+            delete homeProfileAvatar._pendingAnimalName;
+        }
+        
+        // Header avatar
+        if (this.elements.userAvatarMini?._pendingAnimalName) {
+            this.updateAvatarDisplay(this.elements.userAvatarMini, this.elements.userAvatarMini._pendingAnimalName);
+            delete this.elements.userAvatarMini._pendingAnimalName;
+        }
     },
 
     /**

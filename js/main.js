@@ -674,6 +674,11 @@ class AnimalStatsApp {
                 window.HomepageController.activate(this.state.animals);
             }
             
+            // Now that animals are loaded, retry any pending avatar displays
+            if (window.Auth?.retryPendingAvatars) {
+                window.Auth.retryPendingAvatars();
+            }
+            
         } catch (error) {
             console.error('Failed to load animal data:', error.message);
             this.state.apiAvailable = false;
@@ -1725,7 +1730,7 @@ class AnimalStatsApp {
         this.dom.communityView?.classList.toggle('active-view', viewName === 'community');
         this.dom.battlepointsView?.classList.toggle('active-view', viewName === 'battlepoints');
         
-        // Update nav button active states
+        // Update nav button active states (desktop header)
         this.dom.navBtns.stats.classList.toggle('active', viewName === 'stats');
         this.dom.navBtns.compare.classList.toggle('active', viewName === 'compare');
         this.dom.navBtns.rankings?.classList.toggle('active', viewName === 'rankings');
@@ -1735,6 +1740,14 @@ class AnimalStatsApp {
         if (viewName === 'home' || viewName === 'login' || viewName === 'signup' || viewName === 'profile' || viewName === 'battlepoints') {
             this.dom.navBtns.stats.classList.remove('active');
         }
+        
+        // Update mobile bottom nav active states
+        const mobileNavItems = document.querySelectorAll('.mobile-nav-item');
+        mobileNavItems.forEach(item => {
+            const itemView = item.getAttribute('data-view');
+            const isActive = itemView === viewName;
+            item.classList.toggle('active', isActive);
+        });
 
         // Update URL if requested
         if (updateUrl && window.Router) {

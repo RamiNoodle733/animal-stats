@@ -2234,8 +2234,8 @@ body {
 /* XP bar - sleek metallic style */
 .xp-bar-container {
     width: 110px;
-    height: 6px;
-    border-radius: 3px;
+    height: 12px;
+    border-radius: 4px;
     overflow: hidden;
     position: relative;
     
@@ -2247,7 +2247,7 @@ body {
 
 .xp-bar-fill {
     height: 100%;
-    border-radius: 2px;
+    border-radius: 3px;
     transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     
@@ -2282,12 +2282,13 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 0.45rem;
+    font-size: 0.55rem;
     font-family: 'Inter', sans-serif;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.95);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
     white-space: nowrap;
+    line-height: 1;
     letter-spacing: 0.5px;
 }
 

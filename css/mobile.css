@@ -219,12 +219,13 @@
     
     .xp-bar-container {
         width: 55px !important;
-        height: 5px !important;
-        border-radius: 2px !important;
+        height: 10px !important;
+        border-radius: 3px !important;
     }
     
     .xp-bar-text {
-        font-size: 0.4rem !important;
+        font-size: 0.5rem !important;
+        line-height: 1 !important;
     }
     
     /* Battle points display - bigger */
