@@ -503,9 +503,9 @@ class TournamentManager {
         // Restore header and nav on mobile
         document.body.classList.remove('tournament-active');
         
-        // Navigate back using router if on tournament route
+        // Always navigate to rankings when exiting tournament (not back to home)
         if (window.Router && window.Router.getCurrentPath() === '/tournament') {
-            window.Router.back();
+            window.Router.navigate('/rankings');
         }
     }
 
