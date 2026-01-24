@@ -17163,10 +17163,17 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     gap: 16px;
 }
 
-.portal-logo-frame {
+/* Portal logo and tagline - MOVED TO homepage.css */
+/* .portal-logo-frame {
     position: relative;
     width: 140px;
     height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+} */
+
+.portal-logo-frame {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -17197,9 +17204,10 @@ body:has(#home-view.active-view) .shared-bottom-bar {
     filter: drop-shadow(0 0 30px rgba(0, 212, 255, 0.4));
 }
 
+/* Portal tagline - MOVED TO homepage.css for smooth scaling */
 .portal-tagline {
     font-family: var(--font-heading);
-    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    /* font-size handled by homepage.css clamp() */
     letter-spacing: 6px;
     color: #fff;
     text-align: center;
@@ -17696,9 +17704,7 @@ body:has(#home-view.active-view) .shared-bottom-bar {
         max-width: 500px;
     }
     
-    .portal-tagline {
-        letter-spacing: 4px;
-    }
+    /* Letter-spacing handled by homepage.css clamp() */
 }
 
 /* ========================================
@@ -17716,19 +17722,11 @@ body:has(#home-view.active-view) .shared-bottom-bar {
         letter-spacing: 2px;
     }
     
-    .portal-logo-frame {
-        width: 100px;
-        height: 100px;
-    }
+    /* Logo and tagline sizes handled by homepage.css clamp() - no fixed overrides */
     
     .portal-logo {
         width: 80px;
         height: 80px;
-    }
-    
-    .portal-tagline {
-        font-size: 1.4rem;
-        letter-spacing: 2px;
     }
     
     .portal-subtitle {

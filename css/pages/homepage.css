@@ -327,9 +327,9 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
 
 .portal-logo-frame {
     position: relative;
-    /* Smooth scaling: min 50px, preferred 10vw, max 120px */
-    width: clamp(50px, 10vw, 120px);
-    height: clamp(50px, 10vw, 120px);
+    /* Smooth scaling: min 50px, preferred 8vw, max 110px */
+    width: clamp(50px, 8vw, 110px) !important;
+    height: clamp(50px, 8vw, 110px) !important;
 }
 
 .portal-logo-glow {
@@ -356,10 +356,10 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
 
 .portal-tagline {
     font-family: var(--font-display, 'Bebas Neue', sans-serif);
-    /* Smooth scaling: min 1.4rem, preferred 3vw, max 2.8rem */
-    font-size: clamp(1.4rem, 3vw, 2.8rem);
-    /* Smooth letter-spacing: min 3px, preferred 0.6vw, max 8px */
-    letter-spacing: clamp(3px, 0.6vw, 8px);
+    /* Smooth scaling: min 1.4rem, preferred 2.5vw, max 2.5rem */
+    font-size: clamp(1.4rem, 2.5vw, 2.5rem) !important;
+    /* Smooth letter-spacing: min 3px, preferred 0.5vw, max 6px */
+    letter-spacing: clamp(3px, 0.5vw, 6px) !important;
     color: #fff;
     margin: 0;
     text-shadow: 0 0 30px rgba(0, 212, 255, 0.4);
