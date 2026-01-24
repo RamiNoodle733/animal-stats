@@ -1160,7 +1160,7 @@
     height: 100dvh;
     z-index: 10001;
     display: none;
-    overflow: hidden;
+    overflow: visible;
 }
 
 #fightResultOverlay.active {
@@ -1489,6 +1489,8 @@
 
 .champion-image {
     position: absolute;
+    top: 50%;
+    left: 50%;
     width: 280%;
     height: 280%;
     object-fit: contain;
@@ -1500,8 +1502,8 @@
 }
 
 @keyframes championFloat {
-    0%, 100% { transform: translateY(0) scale(1); }
-    50% { transform: translateY(-10px) scale(1.02); }
+    0%, 100% { transform: translate(-50%, -50%) translateY(0) scale(1); }
+    50% { transform: translate(-50%, -50%) translateY(-10px) scale(1.02); }
 }
 
 .champion-particles {
