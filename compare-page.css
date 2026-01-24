@@ -1477,12 +1477,15 @@
     margin: auto;
     width: 120%;
     height: 120%;
-    background: radial-gradient(ellipse at center, rgba(250, 204, 21, 0.15) 0%, transparent 60%);
+    /* More visible gold circle */
+    background: radial-gradient(ellipse at center, rgba(250, 204, 21, 0.3) 0%, rgba(250, 204, 21, 0.15) 40%, transparent 70%);
+    border: 2px solid rgba(250, 204, 21, 0.5);
+    border-radius: 50%;
     animation: spotlightPulse 4s ease-in-out infinite;
 }
 
 @keyframes spotlightPulse {
-    0%, 100% { opacity: 0.5; }
+    0%, 100% { opacity: 0.6; }
     50% { opacity: 1; }
 }
 
@@ -1492,9 +1495,9 @@
     position: absolute !important;
     top: 50% !important;
     left: 50% !important;
-    /* Fixed large size that extends well beyond container */
-    width: 350px !important;
-    height: 350px !important;
+    /* Reduced size - still extends beyond container */
+    width: 280px !important;
+    height: 280px !important;
     /* OVERRIDE legacy.css circular styles */
     border-radius: 0 !important;
     border: none !important;
@@ -2015,8 +2018,8 @@
     }
     
     #fightResultOverlay .champion-showcase .champion-image {
-        width: 320px !important;
-        height: 320px !important;
+        width: 260px !important;
+        height: 260px !important;
     }
     
     .champion-name {
@@ -2146,8 +2149,8 @@
     }
     
     #fightResultOverlay .champion-showcase .champion-image {
-        width: 280px !important;
-        height: 280px !important;
+        width: 220px !important;
+        height: 220px !important;
     }
     
     .champion-name {
