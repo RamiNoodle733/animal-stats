@@ -612,7 +612,7 @@
         },
 
         /**
-         * Inject the result reveal overlay HTML - Premium Winner Screen
+         * Inject the result reveal overlay HTML - METALLIC FORGE EDITION
          */
         injectResultOverlay() {
             if (document.getElementById('fightResultOverlay')) return;
@@ -620,7 +620,23 @@
             const overlay = document.createElement('div');
             overlay.id = 'fightResultOverlay';
             overlay.innerHTML = `
-                <div class="result-backdrop"></div>
+                <div class="result-backdrop">
+                    <!-- Metal structural elements -->
+                    <div class="metal-pillar pillar-left"></div>
+                    <div class="metal-pillar pillar-right"></div>
+                    <div class="metal-beam beam-top"></div>
+                    <div class="metal-beam beam-bottom"></div>
+                    <div class="metal-corner corner-tl"></div>
+                    <div class="metal-corner corner-tr"></div>
+                    <div class="metal-corner corner-bl"></div>
+                    <div class="metal-corner corner-br"></div>
+                    <div class="metal-grate"></div>
+                </div>
+                
+                <!-- Initial explosion flash -->
+                <div class="explosion-flash" id="explosionFlash"></div>
+                
+                <!-- Metal shards layer -->
                 <div class="result-particles" id="resultParticles"></div>
                 <div class="result-confetti" id="resultConfetti"></div>
                 
@@ -632,13 +648,12 @@
                 <div class="result-arena">
                     <!-- Victory Header -->
                     <div class="victory-header">
-                        <div class="victory-crown-rays"></div>
+                        <div class="metal-crown-frame"></div>
                         <div class="victory-crown"><i class="fas fa-crown"></i></div>
                         <div class="victory-title">VICTORY</div>
-                        <div class="victory-subtitle" id="victorySubtitle">Dominant Performance</div>
                     </div>
                     
-                    <!-- Champion Showcase - Decorations only -->
+                    <!-- Champion Showcase -->
                     <div class="champion-showcase" id="championShowcase">
                         <div class="champion-aura"></div>
                         <div class="champion-ring ring-1"></div>
@@ -657,6 +672,7 @@
                     <!-- Battle Stats Summary -->
                     <div class="battle-summary">
                         <div class="summary-card difficulty-card" id="difficultyCard">
+                            <div class="card-shine"></div>
                             <div class="card-icon"><i class="fas fa-bolt" id="diffIcon"></i></div>
                             <div class="card-content">
                                 <div class="card-label">DIFFICULTY</div>
@@ -665,6 +681,7 @@
                         </div>
                         
                         <div class="summary-card margin-card" id="marginCard">
+                            <div class="card-shine"></div>
                             <div class="card-icon"><i class="fas fa-percentage"></i></div>
                             <div class="card-content">
                                 <div class="card-label">WIN MARGIN</div>
@@ -683,6 +700,7 @@
                     <div class="defeated-section" id="defeatedSection">
                         <div class="defeated-label">DEFEATED</div>
                         <div class="defeated-card" id="defeatedCard">
+                            <div class="card-shine"></div>
                             <img class="defeated-image" id="defeatedImg" src="" alt="">
                             <div class="defeated-name" id="defeatedName">OPPONENT</div>
                             <div class="defeated-x"><i class="fas fa-times"></i></div>
@@ -703,14 +721,17 @@
                     <!-- Action Buttons -->
                     <div class="result-actions">
                         <button class="result-btn primary-btn" id="exploreWinnerBtn">
+                            <div class="btn-shine"></div>
                             <i class="fas fa-search"></i>
                             <span>Explore Winner</span>
                         </button>
                         <button class="result-btn share-btn" id="shareResultBtn">
+                            <div class="btn-shine"></div>
                             <i class="fas fa-share-alt"></i>
                             <span>Share</span>
                         </button>
                         <button class="result-btn ghost-btn" id="resultBackBtn">
+                            <div class="btn-shine"></div>
                             <i class="fas fa-arrow-left"></i>
                             <span>Back</span>
                         </button>
@@ -1060,7 +1081,7 @@
         },
 
         /**
-         * Spawn celebration particles
+         * Spawn celebration particles - METALLIC EXPLOSION
          */
         spawnCelebrationParticles() {
             const container = document.getElementById('resultParticles');
@@ -1068,25 +1089,32 @@
             
             container.innerHTML = '';
             
-            // Metallic colors - silver, gold, platinum, bronze
-            const colors = ['#c0c0c0', '#d4af37', '#e5e4e2', '#cd7f32', '#b8860b', '#aaa9ad'];
+            // Trigger explosion flash
+            const flash = document.getElementById('explosionFlash');
+            if (flash) {
+                flash.classList.add('active');
+                setTimeout(() => flash.classList.remove('active'), 600);
+            }
             
-            // Metallic shrapnel pieces - slower, more dramatic
-            for (let i = 0; i < 40; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'metallic-shard';
-                particle.style.setProperty('--x', (Math.random() * 100) + '%');
-                particle.style.setProperty('--delay', (Math.random() * 1.5) + 's');
-                particle.style.setProperty('--duration', (4 + Math.random() * 4) + 's');
-                particle.style.setProperty('--color', colors[Math.floor(Math.random() * colors.length)]);
-                particle.style.setProperty('--size', (4 + Math.random() * 8) + 'px');
-                particle.style.setProperty('--rotation', (Math.random() * 360) + 'deg');
-                container.appendChild(particle);
+            // Metallic colors - steel, gold, chrome, bronze, titanium
+            const colors = ['#c0c0c0', '#d4af37', '#e8e8e8', '#cd7f32', '#878681', '#b8860b', '#a8a9ad'];
+            
+            // More dramatic metallic shards
+            for (let i = 0; i < 50; i++) {
+                const shard = document.createElement('div');
+                shard.className = 'metallic-shard';
+                shard.style.setProperty('--x', (Math.random() * 100) + '%');
+                shard.style.setProperty('--delay', (Math.random() * 0.8) + 's');
+                shard.style.setProperty('--duration', (5 + Math.random() * 5) + 's');
+                shard.style.setProperty('--color', colors[Math.floor(Math.random() * colors.length)]);
+                shard.style.setProperty('--size', (6 + Math.random() * 12) + 'px');
+                shard.style.setProperty('--rotation', (Math.random() * 360) + 'deg');
+                container.appendChild(shard);
             }
         },
 
         /**
-         * Spawn confetti burst
+         * Spawn confetti burst - METAL DEBRIS EXPLOSION
          */
         spawnConfetti() {
             const container = document.getElementById('resultConfetti');
@@ -1095,29 +1123,38 @@
             container.innerHTML = '';
             
             // Metallic debris colors
-            const colors = ['#c0c0c0', '#d4af37', '#e5e4e2', '#b8860b', '#848482', '#aaa9ad'];
+            const colors = ['#c0c0c0', '#d4af37', '#e8e8e8', '#b8860b', '#878681', '#a8a9ad', '#ffd700'];
             
-            // Explosion debris - starts from center, explodes outward in slow motion
-            for (let i = 0; i < 60; i++) {
+            // Explosion from center - slow motion feel
+            for (let i = 0; i < 80; i++) {
                 const debris = document.createElement('div');
                 debris.className = 'explosion-debris';
+                
                 // Start from center
-                debris.style.setProperty('--startX', '50%');
-                debris.style.setProperty('--startY', '40%');
-                // End position - random spread
-                debris.style.setProperty('--endX', (Math.random() * 100) + '%');
-                debris.style.setProperty('--endY', (Math.random() * 100) + '%');
-                debris.style.setProperty('--delay', (Math.random() * 0.3) + 's');
-                debris.style.setProperty('--duration', (2 + Math.random() * 3) + 's');
+                const startX = 50;
+                const startY = 35;
+                
+                // Calculate end position in a radial explosion pattern
+                const angle = (Math.random() * Math.PI * 2);
+                const distance = 30 + Math.random() * 70;
+                const endX = startX + Math.cos(angle) * distance;
+                const endY = startY + Math.sin(angle) * distance;
+                
+                debris.style.setProperty('--startX', startX + '%');
+                debris.style.setProperty('--startY', startY + '%');
+                debris.style.setProperty('--endX', (endX - startX) + 'vw');
+                debris.style.setProperty('--endY', (endY - startY) + 'vh');
+                debris.style.setProperty('--delay', (Math.random() * 0.15) + 's');
+                debris.style.setProperty('--duration', (2.5 + Math.random() * 2.5) + 's');
                 debris.style.setProperty('--color', colors[Math.floor(Math.random() * colors.length)]);
-                debris.style.setProperty('--size', (3 + Math.random() * 6) + 'px');
-                debris.style.setProperty('--rotation', (Math.random() * 720) + 'deg');
+                debris.style.setProperty('--size', (4 + Math.random() * 8) + 'px');
+                debris.style.setProperty('--rotation', (720 + Math.random() * 720) + 'deg');
                 container.appendChild(debris);
             }
         },
 
         /**
-         * Spawn champion aura particles
+         * Spawn champion aura particles - METALLIC ORBIT
          */
         spawnChampionParticles() {
             const container = document.getElementById('championParticles');
@@ -1126,13 +1163,14 @@
             container.innerHTML = '';
             
             // Metallic sparks around the champion
-            const colors = ['#d4af37', '#c0c0c0', '#e5e4e2', '#ffd700'];
-            for (let i = 0; i < 24; i++) {
+            const colors = ['#d4af37', '#c0c0c0', '#e8e8e8', '#ffd700', '#b8860b'];
+            for (let i = 0; i < 20; i++) {
                 const spark = document.createElement('div');
                 spark.className = 'metallic-spark';
-                spark.style.setProperty('--angle', (i * 15) + 'deg');
-                spark.style.setProperty('--delay', (Math.random() * 3) + 's');
+                spark.style.setProperty('--angle', (i * 18) + 'deg');
+                spark.style.setProperty('--delay', (Math.random() * 2) + 's');
                 spark.style.setProperty('--color', colors[Math.floor(Math.random() * colors.length)]);
+                spark.style.setProperty('--size', (3 + Math.random() * 4) + 'px');
                 container.appendChild(spark);
             }
         },
@@ -1146,7 +1184,7 @@
             if (prob >= 70) return "Clear Winner";
             if (prob >= 60) return "Hard-Fought Victory";
             if (prob >= 55) return "Narrow Victory";
-            return "Photo Finish";
+            return "Close Battle";
         },
 
         /**

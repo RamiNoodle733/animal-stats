@@ -1149,7 +1149,8 @@
 }
 
 /* ==========================
-   PREMIUM RESULT OVERLAY - CHAMPION SHOWCASE
+   ⚔️ METALLIC FORGE RESULT OVERLAY ⚔️
+   Industrial Metal Champion Showcase
    ========================== */
 #fightResultOverlay {
     position: fixed;
@@ -1160,27 +1161,294 @@
     height: 100dvh;
     z-index: 10001;
     display: none;
-    overflow: visible;
+    overflow: hidden;
 }
 
 #fightResultOverlay.active {
     display: block;
 }
 
-/* Backdrop */
+/* Explosion Flash - Initial burst */
+.explosion-flash {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, 
+        rgba(255, 255, 255, 1) 0%, 
+        rgba(255, 215, 100, 0.9) 20%, 
+        rgba(255, 140, 0, 0.6) 40%, 
+        transparent 70%);
+    z-index: 100000;
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.5);
+}
+
+.explosion-flash.active {
+    animation: explosionBurst 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes explosionBurst {
+    0% {
+        opacity: 1;
+        transform: scale(0.3);
+    }
+    20% {
+        opacity: 1;
+        transform: scale(1.5);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(2);
+    }
+}
+
+/* Metallic Backdrop with Forge Glow */
 .result-backdrop {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(ellipse at center top, rgba(20, 10, 40, 0.95) 0%, rgba(5, 5, 15, 0.98) 100%);
+    background: 
+        /* Center forge glow */
+        radial-gradient(ellipse 80% 60% at center, rgba(255, 140, 0, 0.15) 0%, transparent 50%),
+        /* Subtle metallic sheen */
+        linear-gradient(135deg, rgba(60, 60, 70, 0.3) 0%, transparent 50%, rgba(60, 60, 70, 0.2) 100%),
+        /* Base dark metal */
+        linear-gradient(180deg, #1a1a22 0%, #0d0d12 50%, #0a0a0f 100%);
     opacity: 0;
     transition: opacity 0.5s ease;
 }
 
 #fightResultOverlay.reveal .result-backdrop {
     opacity: 1;
+}
+
+/* Metal Grate Background Pattern */
+.metal-grate {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        repeating-linear-gradient(90deg, transparent, transparent 30px, rgba(40, 40, 50, 0.3) 30px, rgba(40, 40, 50, 0.3) 31px),
+        repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(40, 40, 50, 0.3) 30px, rgba(40, 40, 50, 0.3) 31px);
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.6s ease 0.2s;
+}
+
+#fightResultOverlay.reveal .metal-grate {
+    opacity: 1;
+}
+
+/* Metal Pillars - Industrial Columns */
+.metal-pillar {
+    position: absolute;
+    top: 0;
+    width: 60px;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        #1a1a1f 0%, 
+        #3a3a45 15%, 
+        #5a5a65 30%,
+        #4a4a55 50%, 
+        #3a3a45 70%, 
+        #2a2a35 85%, 
+        #1a1a1f 100%);
+    z-index: 1;
+    box-shadow: 
+        inset 0 0 30px rgba(0, 0, 0, 0.5),
+        0 0 50px rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transition: opacity 0.5s ease 0.1s, transform 0.5s ease 0.1s;
+}
+
+.metal-pillar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 100%;
+    background: linear-gradient(180deg, 
+        rgba(255, 200, 100, 0.1) 0%, 
+        rgba(255, 200, 100, 0.3) 50%, 
+        rgba(255, 200, 100, 0.1) 100%);
+    animation: pillarGlow 3s ease-in-out infinite;
+}
+
+@keyframes pillarGlow {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+}
+
+.metal-pillar::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(180deg, 
+        #4a4a55 0%, 
+        #6a6a75 50%, 
+        #4a4a55 100%);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+}
+
+.pillar-left {
+    left: 0;
+    transform: translateX(-100%);
+}
+
+.pillar-right {
+    right: 0;
+    transform: translateX(100%);
+}
+
+#fightResultOverlay.reveal .pillar-left {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+#fightResultOverlay.reveal .pillar-right {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Metal Beams - Top and Bottom */
+.metal-beam {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(180deg, 
+        #2a2a35 0%, 
+        #4a4a55 20%, 
+        #5a5a65 50%, 
+        #4a4a55 80%, 
+        #2a2a35 100%);
+    z-index: 2;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+    opacity: 0;
+    transition: opacity 0.5s ease 0.15s, transform 0.5s ease 0.15s;
+}
+
+.metal-beam::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, 
+        transparent 0%, 
+        rgba(255, 200, 100, 0.4) 20%, 
+        rgba(255, 200, 100, 0.6) 50%, 
+        rgba(255, 200, 100, 0.4) 80%, 
+        transparent 100%);
+    animation: beamShine 4s ease-in-out infinite;
+}
+
+@keyframes beamShine {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+.beam-top {
+    top: 0;
+    transform: translateY(-100%);
+}
+
+.beam-top::before {
+    bottom: 0;
+}
+
+.beam-bottom {
+    bottom: 0;
+    transform: translateY(100%);
+}
+
+.beam-bottom::before {
+    top: 0;
+}
+
+#fightResultOverlay.reveal .beam-top,
+#fightResultOverlay.reveal .beam-bottom {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Metal Corner Brackets */
+.metal-corner {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    z-index: 3;
+    opacity: 0;
+    transition: all 0.4s ease 0.3s;
+}
+
+.metal-corner::before,
+.metal-corner::after {
+    content: '';
+    position: absolute;
+    background: linear-gradient(135deg, #5a5a65 0%, #3a3a45 100%);
+    box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.2),
+        0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.metal-corner::before {
+    width: 100%;
+    height: 8px;
+}
+
+.metal-corner::after {
+    width: 8px;
+    height: 100%;
+}
+
+.corner-tl {
+    top: 40px;
+    left: 60px;
+    transform: scale(0) rotate(-45deg);
+}
+
+.corner-tr {
+    top: 40px;
+    right: 60px;
+    transform: scale(0) rotate(45deg);
+}
+
+.corner-tr::before { right: 0; }
+.corner-tr::after { right: 0; }
+
+.corner-bl {
+    bottom: 40px;
+    left: 60px;
+    transform: scale(0) rotate(-45deg);
+}
+
+.corner-bl::before { bottom: 0; }
+.corner-bl::after { bottom: 0; }
+
+.corner-br {
+    bottom: 40px;
+    right: 60px;
+    transform: scale(0) rotate(45deg);
+}
+
+.corner-br::before { right: 0; bottom: 0; }
+.corner-br::after { right: 0; bottom: 0; }
+
+#fightResultOverlay.reveal .metal-corner {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
 }
 
 /* Particles Container */
@@ -1192,21 +1460,24 @@
     height: 100%;
     pointer-events: none;
     overflow: hidden;
-    z-index: 1;
+    z-index: 4;
 }
 
-/* Metallic Shards - Rising slowly */
+/* Metallic Shards - Forge sparks rising */
 .metallic-shard {
     position: absolute;
     left: var(--x);
     bottom: -20px;
     width: var(--size);
     height: var(--size);
-    background: linear-gradient(135deg, var(--color) 0%, rgba(255, 255, 255, 0.9) 50%, var(--color) 100%);
+    background: linear-gradient(135deg, var(--color) 0%, rgba(255, 255, 255, 0.95) 50%, var(--color) 100%);
     clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
     animation: shardRise var(--duration) ease-out var(--delay) infinite;
     opacity: 0;
-    box-shadow: 0 0 10px var(--color), 0 0 20px rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 0 15px var(--color), 
+        0 0 30px rgba(255, 200, 100, 0.5),
+        inset 0 0 5px rgba(255, 255, 255, 0.8);
 }
 
 @keyframes shardRise {
@@ -1214,13 +1485,13 @@
         opacity: 0;
         transform: translateY(0) rotate(0deg) scale(0);
     }
-    10% {
+    15% {
         opacity: 1;
-        transform: rotate(45deg) scale(1);
+        transform: rotate(90deg) scale(1.2);
     }
     100% { 
         opacity: 0; 
-        transform: translateY(-100vh) rotate(720deg) scale(0.3);
+        transform: translateY(-100vh) rotate(1080deg) scale(0.2);
     }
 }
 
@@ -1233,91 +1504,110 @@
     height: 100%;
     pointer-events: none;
     overflow: hidden;
-    z-index: 3;
+    z-index: 5;
 }
 
-/* Explosion Debris - Metallic fragments exploding from center */
+/* Explosion Debris - Metallic fragments with slow-mo */
 .explosion-debris {
     position: absolute;
     left: var(--startX);
     top: var(--startY);
-    width: 8px;
-    height: 12px;
-    background: linear-gradient(180deg, var(--color) 0%, rgba(255, 255, 255, 0.8) 50%, var(--color) 100%);
-    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-    animation: debrisExplode var(--duration) cubic-bezier(0.25, 0.46, 0.45, 0.94) var(--delay) forwards;
+    width: 10px;
+    height: 16px;
+    background: linear-gradient(180deg, 
+        var(--color) 0%, 
+        rgba(255, 255, 255, 0.9) 30%,
+        rgba(255, 255, 255, 1) 50%, 
+        var(--color) 100%);
+    clip-path: polygon(20% 0%, 80% 0%, 100% 30%, 90% 100%, 10% 100%, 0% 30%);
+    animation: debrisExplode var(--duration) cubic-bezier(0.25, 0.1, 0.25, 1) var(--delay) forwards;
     opacity: 0;
-    box-shadow: 0 0 8px var(--color);
+    box-shadow: 
+        0 0 12px var(--color),
+        0 0 25px rgba(255, 200, 100, 0.6);
 }
 
 @keyframes debrisExplode {
     0% { 
         opacity: 1;
-        transform: translate(0, 0) rotate(0deg) scale(1);
+        transform: translate(0, 0) rotate(0deg) scale(1.5);
+    }
+    20% {
+        opacity: 1;
+        transform: translate(calc(var(--endX) * 0.3), calc(var(--endY) * 0.3)) rotate(calc(var(--rotation) * 0.3)) scale(1.2);
     }
     100% { 
         opacity: 0; 
-        transform: translate(var(--endX), var(--endY)) rotate(var(--rotation)) scale(0.2);
+        transform: translate(var(--endX), var(--endY)) rotate(var(--rotation)) scale(0.1);
     }
 }
 
 /* Metallic Sparks - orbiting champion */
 .metallic-spark {
     position: absolute;
-    width: 4px;
-    height: 4px;
-    background: var(--color);
+    width: var(--sparkSize, 5px);
+    height: var(--sparkSize, 5px);
+    background: radial-gradient(circle, var(--color) 0%, rgba(255, 255, 255, 0.9) 50%, var(--color) 100%);
     border-radius: 50%;
     top: 50%;
     left: 50%;
-    animation: sparkOrbit 3s ease-in-out infinite var(--delay);
-    box-shadow: 0 0 15px var(--color), 0 0 30px var(--color);
+    animation: sparkOrbit 3.5s ease-in-out infinite var(--delay);
+    box-shadow: 
+        0 0 20px var(--color), 
+        0 0 40px var(--color),
+        0 0 60px rgba(255, 200, 100, 0.5);
 }
 
 @keyframes sparkOrbit {
     0%, 100% {
-        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(60px) scale(0);
+        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(70px) scale(0);
         opacity: 0;
     }
-    25% {
+    20% {
         opacity: 1;
-        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(100px) scale(1.5);
+        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(110px) scale(1.8);
     }
-    75% {
+    80% {
         opacity: 1;
-        transform: translate(-50%, -50%) rotate(calc(var(--angle) + 180deg)) translateX(120px) scale(1);
+        transform: translate(-50%, -50%) rotate(calc(var(--angle) + 200deg)) translateX(130px) scale(0.8);
     }
 }
 
-/* Main Arena - No Scroll */
+/* Main Arena - Metallic Container */
 .result-arena {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 40px;
+    left: 60px;
+    right: 60px;
+    bottom: 40px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 8px 20px;
+    padding: 15px 30px;
     box-sizing: border-box;
     overflow: visible;
-    z-index: 2;
-    gap: 3px;
+    z-index: 10;
+    gap: 6px;
+    /* Metallic inner frame */
+    background: 
+        linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 50%, rgba(255, 255, 255, 0.02) 100%),
+        radial-gradient(ellipse 80% 60% at center 40%, rgba(255, 200, 100, 0.08) 0%, transparent 60%);
+    border: 1px solid rgba(80, 80, 90, 0.5);
+    border-radius: 4px;
 }
 
-/* Close Button */
+/* Close Button - Metallic */
 .result-close-x {
     position: fixed;
-    top: 20px;
-    right: 20px;
+    top: 50px;
+    right: 75px;
     width: 44px;
     height: 44px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: rgba(255, 255, 255, 0.7);
+    background: linear-gradient(145deg, #3a3a45 0%, #2a2a35 50%, #3a3a45 100%);
+    border: 2px solid #4a4a55;
+    color: rgba(255, 200, 100, 0.8);
     font-size: 1.2rem;
     cursor: pointer;
     z-index: 100;
@@ -1325,8 +1615,11 @@
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
     opacity: 0;
+    box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.1),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.3),
+        0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
 #fightResultOverlay.reveal .result-close-x {
@@ -1335,12 +1628,17 @@
 }
 
 .result-close-x:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    transform: rotate(90deg) scale(1.1);
+    background: linear-gradient(145deg, #4a4a55 0%, #3a3a45 50%, #4a4a55 100%);
+    border-color: rgba(255, 200, 100, 0.5);
+    color: #ffd700;
+    transform: rotate(90deg) scale(1.15);
+    box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.2),
+        0 0 20px rgba(255, 200, 100, 0.4),
+        0 4px 20px rgba(0, 0, 0, 0.6);
 }
 
-/* Victory Header */
+/* Victory Header - Metallic Crown */
 .victory-header {
     display: flex;
     flex-direction: column;
@@ -1364,21 +1662,40 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 150px;
-    height: 150px;
-    background: conic-gradient(from 0deg, transparent, rgba(250, 204, 21, 0.2), transparent, rgba(250, 204, 21, 0.2), transparent, rgba(250, 204, 21, 0.2), transparent);
+    width: 180px;
+    height: 180px;
+    background: conic-gradient(from 0deg, 
+        transparent, rgba(255, 200, 100, 0.25), 
+        transparent, rgba(255, 200, 100, 0.25), 
+        transparent, rgba(255, 200, 100, 0.25), 
+        transparent);
     border-radius: 50%;
-    animation: raysRotate 20s linear infinite;
+    animation: raysRotate 15s linear infinite;
+    filter: blur(2px);
 }
 
 @keyframes raysRotate {
     to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
+/* Metal Crown Frame */
+.metal-crown-frame {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 50px;
+    border: 3px solid transparent;
+    border-top: 3px solid #5a5a65;
+    border-radius: 50% 50% 0 0;
+    opacity: 0.6;
+}
+
 .victory-crown {
-    font-size: 1.6rem;
-    color: #facc15;
-    filter: drop-shadow(0 0 30px rgba(250, 204, 21, 0.8));
+    font-size: 2rem;
+    color: #ffd700;
+    filter: drop-shadow(0 0 35px rgba(255, 200, 100, 0.9)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
     animation: crownBounce 2s ease-in-out infinite;
     position: relative;
     z-index: 2;
@@ -1386,42 +1703,55 @@
 
 @keyframes crownBounce {
     0%, 100% { transform: translateY(0) rotate(-3deg); }
-    50% { transform: translateY(-8px) rotate(3deg); }
+    50% { transform: translateY(-10px) rotate(3deg); }
 }
 
 .victory-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem;
+    font-size: 2.2rem;
     font-weight: 900;
-    letter-spacing: 0.4em;
-    background: linear-gradient(180deg, #fff 0%, #facc15 40%, #f59e0b 100%);
+    letter-spacing: 0.5em;
+    /* Metallic gold text */
+    background: linear-gradient(180deg, 
+        #fff 0%, 
+        #ffe680 20%,
+        #ffd700 40%, 
+        #ffb300 60%,
+        #ffd700 80%,
+        #fff 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 4px 20px rgba(250, 204, 21, 0.5));
+    filter: drop-shadow(0 4px 25px rgba(255, 200, 100, 0.6));
     position: relative;
     z-index: 2;
     line-height: 1;
+    animation: titleShimmer 3s ease-in-out infinite;
+}
+
+@keyframes titleShimmer {
+    0%, 100% { filter: drop-shadow(0 4px 25px rgba(255, 200, 100, 0.6)); }
+    50% { filter: drop-shadow(0 4px 35px rgba(255, 215, 0, 0.9)); }
 }
 
 .victory-subtitle {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.5rem;
+    font-size: 0.55rem;
     font-weight: 600;
-    color: rgba(250, 204, 21, 0.8);
-    letter-spacing: 0.2em;
+    color: rgba(255, 200, 100, 0.7);
+    letter-spacing: 0.25em;
     text-transform: uppercase;
 }
 
-/* Champion Showcase - Main Focus with overflow */
+/* Champion Showcase - Metal Forge Platform */
 .champion-showcase {
     position: relative;
-    width: 140px;
-    height: 140px;
+    width: 160px;
+    height: 160px;
     cursor: pointer;
     opacity: 0;
     transform: scale(0.5);
-    transition: all 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     flex-shrink: 0;
 }
 
@@ -1432,7 +1762,7 @@
 }
 
 .champion-showcase:hover {
-    transform: scale(1.05);
+    transform: scale(1.1) translateY(-5px);
 }
 
 .champion-aura {
@@ -1441,80 +1771,91 @@
     margin: auto;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle, rgba(168, 85, 247, 0.4) 0%, rgba(147, 51, 234, 0.2) 40%, transparent 70%);
+    /* Forge fire glow */
+    background: radial-gradient(circle, 
+        rgba(255, 140, 0, 0.4) 0%, 
+        rgba(255, 100, 0, 0.2) 40%, 
+        transparent 70%);
     border-radius: 50%;
-    animation: auraPulse 3s ease-in-out infinite;
+    animation: auraPulse 2.5s ease-in-out infinite;
 }
 
 @keyframes auraPulse {
     0%, 100% { transform: scale(1); opacity: 0.6; }
-    50% { transform: scale(1.15); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 1; }
 }
 
 .champion-ring {
     position: absolute;
-    /* Use inset + margin:auto for centering - doesn't conflict with animation transforms */
     inset: 0;
     margin: auto;
-    border: 2px solid rgba(168, 85, 247, 0.4);
+    /* Metallic ring style */
+    border: 2px solid rgba(200, 180, 140, 0.4);
     border-radius: 50%;
     animation: ringExpand 3s ease-in-out infinite;
+    box-shadow: 
+        inset 0 0 10px rgba(255, 200, 100, 0.2),
+        0 0 15px rgba(255, 200, 100, 0.1);
 }
 
-.ring-1 { width: 90%; height: 90%; animation-delay: 0s; }
-.ring-2 { width: 100%; height: 100%; animation-delay: 0.5s; }
-.ring-3 { width: 110%; height: 110%; animation-delay: 1s; }
+.ring-1 { width: 90%; height: 90%; animation-delay: 0s; border-color: rgba(255, 200, 100, 0.3); }
+.ring-2 { width: 100%; height: 100%; animation-delay: 0.5s; border-color: rgba(200, 180, 140, 0.35); }
+.ring-3 { width: 110%; height: 110%; animation-delay: 1s; border-color: rgba(150, 140, 120, 0.3); }
 
 @keyframes ringExpand {
     0%, 100% { opacity: 0.3; transform: scale(0.95); }
-    50% { opacity: 0.6; transform: scale(1.05); }
+    50% { opacity: 0.7; transform: scale(1.08); }
 }
 
 .champion-spotlight {
     position: absolute;
-    /* Use inset + margin:auto for centering */
     inset: -10%;
     margin: auto;
     width: 120%;
     height: 120%;
-    /* More visible gold circle */
-    background: radial-gradient(ellipse at center, rgba(250, 204, 21, 0.3) 0%, rgba(250, 204, 21, 0.15) 40%, transparent 70%);
-    border: 2px solid rgba(250, 204, 21, 0.5);
+    /* Metallic gold spotlight circle */
+    background: radial-gradient(ellipse at center, 
+        rgba(255, 200, 100, 0.3) 0%, 
+        rgba(255, 180, 80, 0.15) 40%, 
+        transparent 70%);
+    border: 3px solid rgba(255, 200, 100, 0.5);
     border-radius: 50%;
-    animation: spotlightPulse 4s ease-in-out infinite;
+    animation: spotlightPulse 3s ease-in-out infinite;
+    box-shadow: 
+        inset 0 0 30px rgba(255, 200, 100, 0.3),
+        0 0 40px rgba(255, 200, 100, 0.2);
 }
 
 @keyframes spotlightPulse {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
+    0%, 100% { opacity: 0.6; box-shadow: inset 0 0 30px rgba(255, 200, 100, 0.3), 0 0 40px rgba(255, 200, 100, 0.2); }
+    50% { opacity: 1; box-shadow: inset 0 0 50px rgba(255, 200, 100, 0.5), 0 0 60px rgba(255, 200, 100, 0.4); }
 }
 
 /* Champion Image - MUST be in front of all decorations */
-/* Use #fightResultOverlay to override legacy.css styles */
 #fightResultOverlay .champion-showcase .champion-image {
     position: absolute !important;
     top: 50% !important;
     left: 50% !important;
-    /* Reduced size - still extends beyond container */
-    width: 280px !important;
-    height: 280px !important;
-    /* OVERRIDE legacy.css circular styles */
+    width: 300px !important;
+    height: 300px !important;
     border-radius: 0 !important;
     border: none !important;
     box-shadow: none !important;
-    /* Use transform to center */
     transform: translate(-50%, -50%);
     object-fit: contain !important;
-    filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.6)) drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
+    /* Metallic glow filter */
+    filter: 
+        drop-shadow(0 0 50px rgba(255, 180, 80, 0.6)) 
+        drop-shadow(0 0 80px rgba(255, 140, 0, 0.3))
+        drop-shadow(0 25px 50px rgba(0, 0, 0, 0.6));
     animation: championFloat 4s ease-in-out infinite;
-    /* VERY HIGH z-index to be above everything */
     z-index: 9999;
     pointer-events: auto;
 }
 
 @keyframes championFloat {
     0%, 100% { transform: translate(-50%, -50%) translateY(0) scale(1); }
-    50% { transform: translate(-50%, -50%) translateY(-10px) scale(1.02); }
+    50% { transform: translate(-50%, -50%) translateY(-12px) scale(1.03); }
 }
 
 .champion-particles {
@@ -1529,26 +1870,27 @@
     position: absolute;
     width: 6px;
     height: 6px;
-    background: #facc15;
+    /* Hot metal spark gradient */
+    background: radial-gradient(circle, #ffd700 0%, #ff8c00 50%, #ff4500 100%);
     border-radius: 50%;
     top: 50%;
     left: 50%;
     animation: championParticle 3s ease-in-out infinite var(--delay);
-    box-shadow: 0 0 10px rgba(250, 204, 21, 0.8);
+    box-shadow: 0 0 15px rgba(255, 140, 0, 0.9), 0 0 30px rgba(255, 200, 100, 0.5);
 }
 
 @keyframes championParticle {
     0%, 100% {
-        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(80px) scale(0);
+        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(90px) scale(0);
         opacity: 0;
     }
     50% {
-        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(140px) scale(1);
+        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(160px) scale(1.2);
         opacity: 1;
     }
 }
 
-/* Champion Info */
+/* Champion Info - Metallic Name Plate */
 .champion-info {
     display: flex;
     flex-direction: column;
@@ -1568,15 +1910,41 @@
 
 .champion-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-weight: 900;
-    letter-spacing: 0.15em;
-    color: white;
-    text-shadow: 0 0 30px rgba(168, 85, 247, 0.6), 0 4px 20px rgba(0, 0, 0, 0.5);
+    letter-spacing: 0.2em;
+    /* Metallic chrome text */
+    background: linear-gradient(180deg, 
+        #ffffff 0%, 
+        #e0e0e0 20%,
+        #ffffff 40%,
+        #c0c0c0 60%,
+        #ffffff 80%,
+        #e0e0e0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 20px rgba(255, 200, 100, 0.4));
     line-height: 1;
+    padding: 4px 20px;
+    position: relative;
 }
 
-/* Battle Summary Cards */
+.champion-name::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: nameShine 3s ease-in-out infinite;
+    border-radius: 4px;
+}
+
+@keyframes nameShine {
+    0%, 100% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+}
+
+/* Battle Summary Cards - Metallic Plates */
 .battle-summary {
     display: flex;
     gap: 12px;
@@ -1595,34 +1963,81 @@
 .summary-card {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 12px;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 10px;
+    padding: 8px 14px;
+    /* Metallic card background */
+    background: linear-gradient(145deg, 
+        rgba(60, 60, 70, 0.9) 0%, 
+        rgba(40, 40, 50, 0.95) 50%, 
+        rgba(50, 50, 60, 0.9) 100%);
+    border: 1px solid rgba(100, 100, 110, 0.5);
     border-radius: 8px;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+        0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Card Shine Effect on Hover */
+.card-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.6s ease;
+}
+
+.summary-card:hover .card-shine {
+    left: 150%;
 }
 
 .summary-card:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.2);
-    transform: translateY(-3px);
+    background: linear-gradient(145deg, 
+        rgba(70, 70, 80, 0.95) 0%, 
+        rgba(50, 50, 60, 0.98) 50%, 
+        rgba(60, 60, 70, 0.95) 100%);
+    border-color: rgba(255, 200, 100, 0.4);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        0 0 25px rgba(255, 200, 100, 0.2),
+        0 8px 25px rgba(0, 0, 0, 0.5);
 }
 
 .summary-card .card-icon {
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, var(--card-color, #facc15) 0%, rgba(0, 0, 0, 0.3) 100%);
+    /* Metallic icon background */
+    background: linear-gradient(145deg, 
+        var(--card-color, #ffd700) 0%, 
+        color-mix(in srgb, var(--card-color, #ffd700) 60%, #000) 100%);
     border-radius: 6px;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     color: white;
+    box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.3),
+        0 2px 8px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
 }
 
-.difficulty-card { --card-color: #facc15; }
+.summary-card:hover .card-icon {
+    transform: scale(1.15) rotate(-5deg);
+    box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.4),
+        0 0 15px var(--card-color, #ffd700),
+        0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.difficulty-card { --card-color: #ffd700; }
 .dominance-card { --card-color: #22c55e; }
 .margin-card { --card-color: #3b82f6; }
 
@@ -1641,23 +2056,47 @@
 
 .summary-card .card-value {
     font-family: 'Orbitron', monospace;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 700;
-    color: white;
+    /* Metallic text */
+    background: linear-gradient(180deg, #fff 0%, #c0c0c0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-/* Statistical Analysis Section */
+/* Statistical Analysis Section - Metal Data Panel */
 .stat-analysis {
     width: 100%;
-    max-width: 400px;
-    background: rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 6px 10px;
+    max-width: 420px;
+    /* Metallic panel */
+    background: linear-gradient(145deg, 
+        rgba(45, 45, 55, 0.95) 0%, 
+        rgba(30, 30, 40, 0.98) 50%, 
+        rgba(40, 40, 50, 0.95) 100%);
+    border: 1px solid rgba(80, 80, 90, 0.6);
+    border-radius: 10px;
+    padding: 8px 12px;
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.5s ease;
     flex-shrink: 0;
+    box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.3),
+        0 6px 25px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-analysis::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 200, 100, 0.4), transparent);
 }
 
 #fightResultOverlay.reveal .stat-analysis {
@@ -1668,12 +2107,16 @@
 
 .analysis-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.45rem;
+    font-size: 0.5rem;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.5);
-    letter-spacing: 0.15em;
+    /* Metallic gold title */
+    background: linear-gradient(90deg, rgba(255, 200, 100, 0.6), #ffd700, rgba(255, 200, 100, 0.6));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.2em;
     text-align: center;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 
 /* Stat Analysis Table Layout */
@@ -1683,15 +2126,15 @@
     gap: 2px;
 }
 
-/* Header Row */
+/* Header Row - Metallic */
 .analysis-header-row {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 8px;
-    padding: 6px 8px;
-    background: rgba(0, 0, 0, 0.3);
+    padding: 6px 10px;
+    background: linear-gradient(145deg, rgba(50, 50, 60, 0.8) 0%, rgba(35, 35, 45, 0.9) 100%);
     border-radius: 6px 6px 0 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 200, 100, 0.2);
 }
 
 .analysis-col {
@@ -1707,7 +2150,11 @@
 }
 
 .analysis-col.winner-col {
-    color: #facc15;
+    /* Gold metallic */
+    background: linear-gradient(180deg, #ffd700 0%, #ffb300 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     text-align: center;
     display: flex;
     align-items: center;
@@ -1717,6 +2164,7 @@
 
 .analysis-col.winner-col i {
     font-size: 0.55rem;
+    -webkit-text-fill-color: #ffd700;
 }
 
 .analysis-col.loser-col {
@@ -1724,15 +2172,16 @@
     text-align: center;
 }
 
-/* Stat Rows */
+/* Stat Rows - Interactive */
 .analysis-row {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 8px;
-    padding: 5px 8px;
+    padding: 6px 10px;
     background: rgba(255, 255, 255, 0.02);
     border-radius: 3px;
-    transition: background 0.2s ease;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: default;
 }
 
 .analysis-row:nth-child(odd) {
@@ -1740,7 +2189,11 @@
 }
 
 .analysis-row:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 200, 100, 0.1);
+    transform: scale(1.02) translateX(3px);
+    box-shadow: 
+        -3px 0 0 rgba(255, 200, 100, 0.5),
+        0 0 15px rgba(255, 200, 100, 0.1);
 }
 
 .analysis-row .analysis-col {
@@ -1754,6 +2207,11 @@
     color: rgba(255, 255, 255, 0.7);
     display: flex;
     align-items: center;
+    transition: color 0.3s ease;
+}
+
+.analysis-row:hover .stat-col {
+    color: rgba(255, 255, 255, 0.95);
 }
 
 .analysis-row .winner-col,
@@ -1767,15 +2225,26 @@
 .stat-num {
     font-family: 'Orbitron', monospace;
     font-weight: 600;
+    transition: all 0.3s ease;
 }
 
-/* Winning stat highlight */
+/* Winning stat highlight - Green metallic */
 .analysis-row .winner-col.winning .stat-num {
-    color: #22c55e;
+    background: linear-gradient(180deg, #4ade80 0%, #22c55e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.analysis-row:hover .winner-col.winning .stat-num {
+    filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.6));
 }
 
 .analysis-row .loser-col.losing-better .stat-num {
-    color: #ef4444;
+    background: linear-gradient(180deg, #f87171 0%, #ef4444 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .analysis-row .winner-col:not(.winning) .stat-num {
@@ -1790,18 +2259,20 @@
 .win-indicator {
     color: #22c55e;
     font-size: 0.5rem;
+    filter: drop-shadow(0 0 4px rgba(34, 197, 94, 0.5));
 }
 
 .lose-indicator {
     color: #ef4444;
     font-size: 0.5rem;
+    filter: drop-shadow(0 0 4px rgba(239, 68, 68, 0.5));
 }
 
-/* Defeated Section */
+/* Defeated Section - Metallic Loser Badge */
 .defeated-section {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.5s ease;
@@ -1816,7 +2287,7 @@
 
 .defeated-label {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.45rem;
+    font-size: 0.5rem;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.5);
     letter-spacing: 0.15em;
@@ -1825,66 +2296,120 @@
 .defeated-card {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 10px;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 20px;
+    gap: 10px;
+    padding: 8px 14px;
+    /* Dark metallic plate */
+    background: linear-gradient(145deg, 
+        rgba(50, 50, 60, 0.9) 0%, 
+        rgba(35, 35, 45, 0.95) 50%, 
+        rgba(45, 45, 55, 0.9) 100%);
+    border: 1px solid rgba(80, 80, 90, 0.5);
+    border-radius: 25px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
+    overflow: hidden;
+    box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.defeated-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: skewX(-20deg);
+    transition: left 0.5s ease;
+}
+
+.defeated-card:hover::before {
+    left: 150%;
 }
 
 .defeated-card:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: translateY(-2px);
+    background: linear-gradient(145deg, 
+        rgba(60, 60, 70, 0.95) 0%, 
+        rgba(45, 45, 55, 0.98) 50%, 
+        rgba(55, 55, 65, 0.95) 100%);
+    border-color: rgba(239, 68, 68, 0.4);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.12),
+        0 0 20px rgba(239, 68, 68, 0.15),
+        0 8px 20px rgba(0, 0, 0, 0.5);
 }
 
 .defeated-image {
-    width: 22px;
-    height: 22px;
+    width: 26px;
+    height: 26px;
     object-fit: contain;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
-    transition: transform 0.3s ease;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.4)) grayscale(30%);
+    transition: all 0.35s ease;
 }
 
 .defeated-card:hover .defeated-image {
-    transform: scale(1.1);
+    transform: scale(1.15);
+    filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.5)) grayscale(0%);
 }
 
 .defeated-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.7rem;
-    color: white;
-    letter-spacing: 0.1em;
+    font-size: 0.8rem;
+    /* Silver metallic text */
+    background: linear-gradient(180deg, #d0d0d0 0%, #909090 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 0.12em;
+    transition: all 0.3s ease;
+}
+
+.defeated-card:hover .defeated-name {
+    background: linear-gradient(180deg, #ffffff 0%, #c0c0c0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
 }
 
 .defeated-x {
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(239, 68, 68, 0.25);
+    background: linear-gradient(145deg, rgba(239, 68, 68, 0.3) 0%, rgba(185, 28, 28, 0.4) 100%);
     border-radius: 50%;
-    font-size: 0.4rem;
+    font-size: 0.45rem;
     color: #ef4444;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-/* Cage Fight Badge */
+.defeated-card:hover .defeated-x {
+    background: linear-gradient(145deg, rgba(239, 68, 68, 0.5) 0%, rgba(185, 28, 28, 0.6) 100%);
+    transform: rotate(90deg);
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.4);
+}
+
+/* Cage Fight Badge - Metallic Accent */
 .cage-fight-badge {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-size: 0.4rem;
-    color: rgba(255, 255, 255, 0.65);
+    gap: 8px;
+    font-size: 0.45rem;
+    /* Subtle metallic */
+    background: linear-gradient(90deg, rgba(150, 150, 160, 0.6), rgba(200, 200, 200, 0.7), rgba(150, 150, 160, 0.6));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.15em;
     opacity: 0;
     transition: all 0.5s ease;
     flex-shrink: 0;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 #fightResultOverlay.reveal .cage-fight-badge {
@@ -1893,16 +2418,17 @@
 }
 
 .badge-dot {
-    width: 2px;
-    height: 2px;
-    background: rgba(255, 255, 255, 0.5);
+    width: 3px;
+    height: 3px;
+    background: linear-gradient(145deg, rgba(255, 200, 100, 0.6), rgba(200, 160, 80, 0.8));
     border-radius: 50%;
+    box-shadow: 0 0 6px rgba(255, 200, 100, 0.4);
 }
 
-/* Action Buttons */
+/* Action Buttons - Metallic Industrial */
 .result-actions {
     display: flex;
-    gap: 6px;
+    gap: 8px;
     opacity: 0;
     transform: translateY(20px);
     transition: all 0.5s ease;
@@ -1919,97 +2445,165 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
-    padding: 6px 12px;
-    border-radius: 6px;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.55rem;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.6rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
     border: none;
     position: relative;
     overflow: hidden;
+    letter-spacing: 0.1em;
 }
 
-.result-btn::before {
-    content: '';
+/* Button Shine Effect */
+.btn-shine {
     position: absolute;
     top: 0;
     left: -100%;
-    width: 100%;
+    width: 40%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+    transform: skewX(-20deg);
     transition: left 0.5s ease;
 }
 
-.result-btn:hover::before {
-    left: 100%;
+.result-btn:hover .btn-shine {
+    left: 150%;
 }
 
 .primary-btn {
-    background: linear-gradient(135deg, #a855f7, #9333ea);
-    color: white;
-    box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
+    /* Metallic gold/bronze gradient */
+    background: linear-gradient(145deg, 
+        #c9a227 0%, 
+        #a67c00 30%,
+        #c9a227 50%,
+        #8b6914 70%,
+        #c9a227 100%);
+    color: #1a1a1f;
+    box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.3),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2),
+        0 4px 15px rgba(201, 162, 39, 0.4),
+        0 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .primary-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.5);
+    background: linear-gradient(145deg, 
+        #d4af37 0%, 
+        #b8860b 30%,
+        #ffd700 50%,
+        #b8860b 70%,
+        #d4af37 100%);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.4),
+        0 0 30px rgba(255, 215, 0, 0.5),
+        0 8px 25px rgba(201, 162, 39, 0.5),
+        0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .share-btn {
-    background: rgba(59, 130, 246, 0.2);
-    color: #3b82f6;
-    border: 1px solid rgba(59, 130, 246, 0.3);
+    /* Steel blue metallic */
+    background: linear-gradient(145deg, 
+        rgba(59, 130, 246, 0.25) 0%, 
+        rgba(37, 99, 235, 0.35) 50%, 
+        rgba(59, 130, 246, 0.25) 100%);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .share-btn:hover {
-    background: rgba(59, 130, 246, 0.3);
-    border-color: rgba(59, 130, 246, 0.5);
-    transform: translateY(-2px);
+    background: linear-gradient(145deg, 
+        rgba(59, 130, 246, 0.35) 0%, 
+        rgba(37, 99, 235, 0.5) 50%, 
+        rgba(59, 130, 246, 0.35) 100%);
+    border-color: rgba(96, 165, 250, 0.6);
+    color: #93c5fd;
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        0 0 25px rgba(59, 130, 246, 0.3),
+        0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
 .ghost-btn {
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    /* Dark chrome metallic */
+    background: linear-gradient(145deg, 
+        rgba(60, 60, 70, 0.8) 0%, 
+        rgba(40, 40, 50, 0.9) 50%, 
+        rgba(50, 50, 60, 0.8) 100%);
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(100, 100, 110, 0.5);
+    box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .ghost-btn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    transform: translateY(-2px);
+    background: linear-gradient(145deg, 
+        rgba(70, 70, 80, 0.9) 0%, 
+        rgba(50, 50, 60, 0.95) 50%, 
+        rgba(60, 60, 70, 0.9) 100%);
+    color: #fff;
+    border-color: rgba(255, 200, 100, 0.4);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        0 0 20px rgba(255, 200, 100, 0.15),
+        0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
 /* ==========================
-   RESULT OVERLAY - RESPONSIVE
+   RESULT OVERLAY - RESPONSIVE METALLIC
    ========================== */
 @media (max-width: 768px) {
+    /* Adjust for tablet - pillars narrower */
+    .metal-pillar {
+        width: 40px;
+    }
+    
     .result-arena {
+        top: 35px;
+        left: 40px;
+        right: 40px;
+        bottom: 35px;
         padding: 10px 15px;
-        gap: 6px;
+        gap: 5px;
     }
     
     .result-close-x {
-        top: 10px;
-        right: 10px;
-        width: 36px;
-        height: 36px;
+        top: 42px;
+        right: 50px;
+        width: 38px;
+        height: 38px;
         font-size: 1rem;
     }
     
+    .metal-corner {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .corner-tl { top: 35px; left: 40px; }
+    .corner-tr { top: 35px; right: 40px; }
+    .corner-bl { bottom: 35px; left: 40px; }
+    .corner-br { bottom: 35px; right: 40px; }
+    
     .victory-crown {
-        font-size: 1.6rem;
+        font-size: 1.8rem;
     }
     
     .victory-title {
-        font-size: 1.8rem;
-        letter-spacing: 0.3em;
-    }
-    
-    .victory-subtitle {
-        font-size: 0.55rem;
+        font-size: 1.9rem;
+        letter-spacing: 0.35em;
     }
     
     .champion-showcase {
@@ -2023,17 +2617,17 @@
     }
     
     .champion-name {
-        font-size: 1.4rem;
+        font-size: 1.5rem;
     }
     
     .battle-summary {
         flex-wrap: wrap;
         justify-content: center;
-        gap: 6px;
+        gap: 8px;
     }
     
     .summary-card {
-        padding: 6px 10px;
+        padding: 7px 12px;
     }
     
     .summary-card .card-icon {
@@ -2043,29 +2637,26 @@
     }
     
     .summary-card .card-label {
-        font-size: 0.45rem;
+        font-size: 0.5rem;
     }
     
     .summary-card .card-value {
-        font-size: 0.65rem;
+        font-size: 0.7rem;
     }
     
     .stat-analysis {
         padding: 8px 10px;
+        max-width: 380px;
     }
     
     .analysis-title {
         font-size: 0.5rem;
-        margin-bottom: 6px;
-    }
-    
-    .analysis-grid {
-        gap: 2px;
+        margin-bottom: 5px;
     }
     
     .analysis-header-row,
     .analysis-row {
-        padding: 4px 6px;
+        padding: 5px 8px;
         gap: 6px;
     }
     
@@ -2081,22 +2672,8 @@
         font-size: 0.5rem;
     }
     
-    .win-indicator,
-    .lose-indicator {
-        font-size: 0.45rem;
-    }
-    
-    .defeated-section {
-        flex-direction: row;
-        gap: 8px;
-    }
-    
-    .defeated-label {
-        font-size: 0.5rem;
-    }
-    
     .defeated-card {
-        padding: 6px 10px;
+        padding: 7px 12px;
     }
     
     .defeated-image {
@@ -2109,8 +2686,7 @@
     }
     
     .cage-fight-badge {
-        font-size: 0.45rem;
-        gap: 6px;
+        font-size: 0.4rem;
     }
     
     .result-actions {
@@ -2120,41 +2696,91 @@
     }
     
     .result-btn {
-        padding: 7px 12px;
-        font-size: 0.6rem;
+        padding: 8px 14px;
+        font-size: 0.55rem;
     }
 }
 
 @media (max-width: 480px) {
+    /* Mobile - minimal pillars, compact layout */
+    .metal-pillar {
+        width: 25px;
+    }
+    
+    .metal-beam {
+        height: 30px;
+    }
+    
     .result-arena {
-        gap: 3px;
-        padding: 6px 10px;
+        top: 30px;
+        left: 25px;
+        right: 25px;
+        bottom: 30px;
+        padding: 8px 10px;
+        gap: 4px;
+    }
+    
+    .result-close-x {
+        top: 35px;
+        right: 32px;
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+    }
+    
+    .metal-corner {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .corner-tl { top: 30px; left: 25px; }
+    .corner-tr { top: 30px; right: 25px; }
+    .corner-bl { bottom: 30px; left: 25px; }
+    .corner-br { bottom: 30px; right: 25px; }
+    
+    .metal-grate {
+        background-image: 
+            repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(40, 40, 50, 0.2) 20px, rgba(40, 40, 50, 0.2) 21px),
+            repeating-linear-gradient(0deg, transparent, transparent 20px, rgba(40, 40, 50, 0.2) 20px, rgba(40, 40, 50, 0.2) 21px);
     }
     
     .victory-header {
         gap: 1px;
     }
     
-    .victory-crown {
-        font-size: 1.4rem;
-    }
-    
-    .victory-title {
-        font-size: 1.5rem;
-    }
-    
-    .champion-showcase {
+    .victory-crown-rays {
         width: 120px;
         height: 120px;
     }
     
+    .victory-crown {
+        font-size: 1.5rem;
+    }
+    
+    .victory-title {
+        font-size: 1.4rem;
+        letter-spacing: 0.25em;
+    }
+    
+    .metal-crown-frame {
+        width: 70px;
+        height: 35px;
+        top: -15px;
+    }
+    
+    .champion-showcase {
+        width: 110px;
+        height: 110px;
+    }
+    
     #fightResultOverlay .champion-showcase .champion-image {
-        width: 220px !important;
-        height: 220px !important;
+        width: 200px !important;
+        height: 200px !important;
     }
     
     .champion-name {
         font-size: 1.2rem;
+        padding: 3px 12px;
     }
     
     .battle-summary {
@@ -2162,7 +2788,8 @@
     }
     
     .summary-card {
-        padding: 5px 8px;
+        padding: 5px 10px;
+        gap: 6px;
     }
     
     .summary-card .card-icon {
@@ -2181,6 +2808,7 @@
     
     .stat-analysis {
         padding: 6px 8px;
+        max-width: 320px;
     }
     
     .analysis-grid {
@@ -2189,7 +2817,7 @@
     
     .analysis-header-row,
     .analysis-row {
-        padding: 3px 5px;
+        padding: 4px 6px;
         gap: 4px;
     }
     
@@ -2201,19 +2829,55 @@
         font-size: 0.45rem;
     }
     
+    .analysis-row:hover {
+        transform: scale(1.01) translateX(2px);
+    }
+    
     .defeated-section {
-        flex-direction: row;
+        gap: 6px;
+    }
+    
+    .defeated-label {
+        font-size: 0.45rem;
+    }
+    
+    .defeated-card {
+        padding: 6px 10px;
+        gap: 6px;
+    }
+    
+    .defeated-image {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .defeated-name {
+        font-size: 0.65rem;
+    }
+    
+    .defeated-x {
+        width: 14px;
+        height: 14px;
+        font-size: 0.4rem;
+    }
+    
+    .cage-fight-badge {
+        font-size: 0.35rem;
+        gap: 5px;
+    }
+    
+    .badge-dot {
+        width: 2px;
+        height: 2px;
     }
     
     .result-actions {
-        flex-direction: row;
-        flex-wrap: wrap;
         gap: 5px;
     }
     
     .result-btn {
-        padding: 6px 10px;
-        font-size: 0.55rem;
+        padding: 7px 12px;
+        font-size: 0.5rem;
     }
 }
 
