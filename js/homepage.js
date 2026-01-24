@@ -84,8 +84,8 @@ const HomepageController = {
     
     // Physics constants
     physics: {
-        baseSpeed: 1.5,
-        hoverMultiplier: 3.5,
+        baseSpeed: 3.5,        // FAST idle speed (was 1.5)
+        hoverMultiplier: 0.3,  // SLOW on hover (inverted - was 3.5 to speed up)
         friction: 0.94,
         minVelocity: 2,
         shakeIntensity: 4,
@@ -1206,7 +1206,9 @@ const HomepageController = {
         const panelRight = document.getElementById('silhouette-right');
         const mobilePanel = document.getElementById('silhouette-mobile');
         const portalNav = document.getElementById('portal-nav');
+        const tournamentBtn = document.getElementById('portal-tournament-btn');
         
+        // Panel hover - SLOW DOWN silhouettes (inverted from original)
         if (panelLeft) {
             panelLeft.addEventListener('mouseenter', () => {
                 if (!this.slingshot.active) this.speedUp('left');
@@ -1225,6 +1227,7 @@ const HomepageController = {
             });
         }
         
+        // Nav buttons hover - SLOW DOWN silhouettes + focus effect
         if (portalNav) {
             portalNav.addEventListener('mouseenter', () => {
                 if (!this.slingshot.active) {
@@ -1237,6 +1240,31 @@ const HomepageController = {
                     this.speedNormal('left');
                     this.speedNormal('right');
                 }
+            });
+            
+            // Individual button focus effects
+            const navButtons = portalNav.querySelectorAll('.portal-nav-btn');
+            navButtons.forEach(btn => {
+                btn.addEventListener('mouseenter', () => this.activateButtonFocus(btn));
+                btn.addEventListener('mouseleave', () => this.deactivateButtonFocus(btn));
+            });
+        }
+        
+        // Tournament button - same slow down effect + focus
+        if (tournamentBtn) {
+            tournamentBtn.addEventListener('mouseenter', () => {
+                if (!this.slingshot.active) {
+                    this.speedUp('left');
+                    this.speedUp('right');
+                }
+                this.activateButtonFocus(tournamentBtn);
+            });
+            tournamentBtn.addEventListener('mouseleave', () => {
+                if (!this.slingshot.active) {
+                    this.speedNormal('left');
+                    this.speedNormal('right');
+                }
+                this.deactivateButtonFocus(tournamentBtn);
             });
         }
         
@@ -1755,6 +1783,48 @@ const HomepageController = {
         if (this.animations[key] && !this.slingshot.active) {
             this.animations[key].targetSpeed = 1;
         }
+    },
+    
+    /**
+     * Activate dramatic focus effect on button hover
+     * - Button scales up dramatically
+     * - Background blurs and dims
+     * - Everything feels slow-motion
+     */
+    activateButtonFocus(btn) {
+        if (!btn) return;
+        
+        // Add focused class to button
+        btn.classList.add('portal-btn-focused');
+        
+        // Add slow-mo class to home view for blur/dim effect
+        const homeView = document.getElementById('home-view');
+        if (homeView) {
+            homeView.classList.add('slow-motion-active');
+        }
+        
+        // Dim other buttons
+        const allBtns = document.querySelectorAll('.portal-nav-btn, .portal-tournament-btn');
+        allBtns.forEach(b => {
+            if (b !== btn) b.classList.add('portal-btn-dimmed');
+        });
+    },
+    
+    /**
+     * Deactivate focus effect
+     */
+    deactivateButtonFocus(btn) {
+        if (!btn) return;
+        
+        btn.classList.remove('portal-btn-focused');
+        
+        const homeView = document.getElementById('home-view');
+        if (homeView) {
+            homeView.classList.remove('slow-motion-active');
+        }
+        
+        const allBtns = document.querySelectorAll('.portal-nav-btn, .portal-tournament-btn');
+        allBtns.forEach(b => b.classList.remove('portal-btn-dimmed'));
     },
     
     shuffle(array) {
