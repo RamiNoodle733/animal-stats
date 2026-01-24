@@ -1489,28 +1489,20 @@
     50% { opacity: 1; }
 }
 
-/* Image wrapper - ensures image is above all decorations */
-.champion-image-wrapper {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 280%;
-    height: 280%;
-    z-index: 100;
-    pointer-events: none;
-    overflow: visible;
-}
-
+/* Champion Image - uses negative margins to extend beyond container */
 .champion-image {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    /* Center the image and extend beyond container using calc */
+    top: 50%;
+    left: 50%;
+    width: 400px;
+    height: 400px;
+    margin-top: -200px;
+    margin-left: -200px;
     object-fit: contain;
     filter: drop-shadow(0 0 40px rgba(168, 85, 247, 0.6)) drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
     animation: championFloat 4s ease-in-out infinite;
+    z-index: 100;
     pointer-events: auto;
 }
 
