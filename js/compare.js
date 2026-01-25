@@ -905,6 +905,11 @@
 
             const overlay = document.getElementById('matchupIntroOverlay');
             if (!overlay) return;
+            
+            // Play intro whoosh sound
+            if (window.AudioManager) {
+                AudioManager.whoosh();
+            }
 
             // Set fighter data - using tournament-style element IDs
             const img1 = document.getElementById('introFighter1Img');
@@ -955,6 +960,10 @@
             if (!prefersReducedMotion) {
                 setTimeout(() => {
                     this.spawnIntroSparks();
+                    // Play impact sound when sparks appear
+                    if (window.AudioManager) {
+                        AudioManager.slam();
+                    }
                 }, 800);
                 
                 // Add screen shake when VS appears
@@ -1368,6 +1377,11 @@
         showResult(result) {
             const overlay = document.getElementById('fightResultOverlay');
             if (!overlay) return;
+            
+            // Play victory sound!
+            if (window.AudioManager) {
+                AudioManager.victory();
+            }
 
             this._pendingResult = null;
             this.resultOverlayActive = true;
@@ -1503,6 +1517,11 @@
         hideResult() {
             const overlay = document.getElementById('fightResultOverlay');
             if (overlay) {
+                // Play close sound
+                if (window.AudioManager) {
+                    AudioManager.modalClose();
+                }
+                
                 overlay.classList.remove('reveal');
                 
                 // Clear particles

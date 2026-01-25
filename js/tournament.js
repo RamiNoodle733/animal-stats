@@ -512,6 +512,11 @@ class TournamentManager {
         this.selectedBracketSize = 0;
         this.updatePreview();
         
+        // Play modal open sound
+        if (window.AudioManager) {
+            AudioManager.modalOpen();
+        }
+        
         this.dom.setup.style.display = 'flex';
         this.dom.battle.style.display = 'none';
         this.dom.results.style.display = 'none';
@@ -531,6 +536,12 @@ class TournamentManager {
         if (this.isActive && this.completedMatches > 0) {
             this.notifyTournamentQuit();
         }
+        
+        // Play modal close sound
+        if (window.AudioManager) {
+            AudioManager.modalClose();
+        }
+        
         this.dom.modal.classList.remove('show');
         this.isActive = false;
         
@@ -790,6 +801,11 @@ class TournamentManager {
             return;
         }
         
+        // Play whoosh sound for intro
+        if (window.AudioManager) {
+            AudioManager.whoosh();
+        }
+        
         // Check for reduced motion preference
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         
@@ -838,6 +854,10 @@ class TournamentManager {
         if (!prefersReducedMotion) {
             setTimeout(() => {
                 this.spawnIntroSparks();
+                // Play impact sound when sparks appear
+                if (window.AudioManager) {
+                    AudioManager.slam();
+                }
             }, 800);
             
             // Add screen shake when VS appears
@@ -1868,6 +1888,11 @@ class TournamentManager {
         // Lock voting immediately to prevent double clicks
         this.isVotingLocked = true;
         
+        // Play impact/punch sound for selecting winner
+        if (window.AudioManager) {
+            AudioManager.impact();
+        }
+        
         const match = this.bracket[this.currentMatch];
         const winner = match[fighterIndex];
         const loser = match[1 - fighterIndex];
@@ -2085,6 +2110,11 @@ class TournamentManager {
     showResults() {
         this.isActive = false;
         const champion = this.winners[0];
+        
+        // Play victory sound for champion reveal!
+        if (window.AudioManager) {
+            AudioManager.victory();
+        }
         
         // Get final four (semi-finalists + finalists)
         const finalFour = this.getFinalFour();

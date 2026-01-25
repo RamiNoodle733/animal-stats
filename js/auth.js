@@ -501,8 +501,19 @@ const Auth = {
                 localStorage.setItem('auth_token', this.token);
                 this.updateUI();
                 this.hideModal();
+                
+                // Play success sound
+                if (window.AudioManager) {
+                    AudioManager.success();
+                }
+                
                 this.showToast(`Welcome back, ${this.user.displayName}!`);
             } else {
+                // Play error sound
+                if (window.AudioManager) {
+                    AudioManager.error();
+                }
+                
                 this.showError('login', result.error || 'Login failed');
             }
         } catch (error) {
@@ -560,8 +571,19 @@ const Auth = {
                 localStorage.setItem('auth_token', this.token);
                 this.updateUI();
                 this.hideModal();
+                
+                // Play success sound
+                if (window.AudioManager) {
+                    AudioManager.success();
+                }
+                
                 this.showToast(`Welcome to Animal Stats, ${this.user.displayName}!`);
             } else {
+                // Play error sound
+                if (window.AudioManager) {
+                    AudioManager.error();
+                }
+                
                 this.showError('signup', result.error || 'Signup failed');
             }
         } catch (error) {

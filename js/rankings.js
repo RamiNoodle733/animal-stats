@@ -964,6 +964,11 @@ class RankingsManager {
     selectRankingRow(index) {
         console.log('[Rankings] selectRankingRow called, index:', index);
         
+        // Play select sound
+        if (window.AudioManager) {
+            AudioManager.select();
+        }
+        
         // Remove previous selection
         this.dom.rankingsList.querySelectorAll('.ranking-row').forEach(r => r.classList.remove('selected'));
         
@@ -1176,6 +1181,11 @@ class RankingsManager {
             Auth.showToast('Please log in to vote!');
             Auth.showModal('login');
             return;
+        }
+        
+        // Play vote sound
+        if (window.AudioManager) {
+            AudioManager.click();
         }
         
         // Check if clicking same vote to clear it

@@ -505,6 +505,11 @@ class CommunityManager {
     switchTab(tabName) {
         this.currentTab = tabName;
         
+        // Play tab switch sound
+        if (window.AudioManager) {
+            AudioManager.click();
+        }
+        
         // Update tab buttons (new unified tabs)
         document.querySelectorAll('.community-tab-btn').forEach(tab => {
             tab.classList.toggle('active', tab.dataset.tab === tabName);
@@ -988,6 +993,11 @@ class CommunityManager {
         if (!token) {
             Auth.showToast('Please log in to send messages');
             return;
+        }
+
+        // Play send sound
+        if (window.AudioManager) {
+            AudioManager.swoosh();
         }
 
         try {

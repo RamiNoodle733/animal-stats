@@ -176,6 +176,10 @@
                 <button type="button" class="about-info-btn desktop-about-btn" id="about-info-btn-desktop" aria-label="About" title="About">
                     <span class="about-info-icon">i</span>
                 </button>
+                <!-- Audio Mute Toggle -->
+                <button type="button" class="audio-toggle-btn" id="audio-toggle-btn" aria-label="Toggle Audio" title="Toggle Sound Effects">
+                    <i class="fas fa-volume-up" id="audio-toggle-icon"></i>
+                </button>
             </nav>
             
             <!-- Auth Area - Shows login button when logged out, stats bar when logged in -->
@@ -2823,6 +2827,9 @@
     <!-- Application modules - load order matters -->
     <script src="js/router.js"></script>
     <script src="js/auth.js"></script>
+    
+    <!-- Audio Manager (must load before other scripts) -->
+    <script src="js/audio.js"></script>
     
     <!-- Page managers (must load before main.js initializes them) -->
     <script src="js/rankings.js"></script>

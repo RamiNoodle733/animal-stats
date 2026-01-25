@@ -725,6 +725,19 @@ class AnimalStatsApp {
      * Set up all event listeners
      */
     setupEventListeners() {
+        // Initialize AudioManager on first user interaction
+        const initAudioOnce = () => {
+            if (window.AudioManager) {
+                window.AudioManager.init();
+            }
+            document.removeEventListener('click', initAudioOnce);
+            document.removeEventListener('touchstart', initAudioOnce);
+            document.removeEventListener('keydown', initAudioOnce);
+        };
+        document.addEventListener('click', initAudioOnce);
+        document.addEventListener('touchstart', initAudioOnce);
+        document.addEventListener('keydown', initAudioOnce);
+        
         // Search & Filter
         this.dom.searchInput.addEventListener('input', this.debouncedSearch);
         this.dom.classFilter.addEventListener('change', this.handleFilter);
@@ -793,6 +806,7 @@ class AnimalStatsApp {
         
         // Navigation - use router if available
         this.dom.navBtns.stats.addEventListener('click', () => {
+            if (window.AudioManager) AudioManager.click();
             if (window.Router) {
                 window.Router.navigate('/stats');
             } else {
@@ -800,6 +814,7 @@ class AnimalStatsApp {
             }
         });
         this.dom.navBtns.compare.addEventListener('click', () => {
+            if (window.AudioManager) AudioManager.click();
             if (window.Router) {
                 window.Router.navigate('/compare');
             } else {
@@ -807,6 +822,7 @@ class AnimalStatsApp {
             }
         });
         this.dom.navBtns.rankings?.addEventListener('click', () => {
+            if (window.AudioManager) AudioManager.click();
             if (window.Router) {
                 window.Router.navigate('/rankings');
             } else {
@@ -814,6 +830,7 @@ class AnimalStatsApp {
             }
         });
         this.dom.navBtns.community?.addEventListener('click', () => {
+            if (window.AudioManager) AudioManager.click();
             if (window.Router) {
                 window.Router.navigate('/community');
             } else {
@@ -1266,6 +1283,11 @@ class AnimalStatsApp {
      * Handle category filter
      */
     handleFilter = (e) => {
+        // Play filter sound
+        if (window.AudioManager) {
+            AudioManager.click();
+        }
+        
         // Check which filter triggered the event
         if (e.target.id === 'class-filter') this.state.filters.class = e.target.value;
         if (e.target.id === 'diet-filter') this.state.filters.diet = e.target.value;
@@ -1277,6 +1299,11 @@ class AnimalStatsApp {
      * Handle sort
      */
     handleSort = (e) => {
+        // Play filter sound
+        if (window.AudioManager) {
+            AudioManager.click();
+        }
+        
         this.state.filters.sort = e.target.value;
         this.applyFilters();
     }
@@ -1464,6 +1491,11 @@ class AnimalStatsApp {
         const prevSelected = this.state.selectedAnimal;
         this.state.selectedAnimal = animal;
         this.updateStatsView(animal);
+        
+        // Play selection sound
+        if (window.AudioManager) {
+            window.AudioManager.select();
+        }
         
         // Update URL to reflect selected animal
         if (updateUrl && window.Router) {
@@ -1694,6 +1726,11 @@ class AnimalStatsApp {
     switchView(viewName, updateUrl = true) {
         const previousView = this.state.view;
         this.state.view = viewName;
+        
+        // Play page transition sound
+        if (window.AudioManager && previousView !== viewName) {
+            window.AudioManager.swoosh(1);
+        }
         
         // Update the main title based on current view
         const titleModes = {
@@ -2269,6 +2306,11 @@ class AnimalStatsApp {
     toggleGrid() {
         this.state.isGridVisible = !this.state.isGridVisible;
         
+        // Play toggle sound
+        if (window.AudioManager) {
+            window.AudioManager.toggle_sound(this.state.isGridVisible);
+        }
+        
         // Persist state to localStorage
         localStorage.setItem('isGridVisible', this.state.isGridVisible);
         
@@ -2709,6 +2751,43 @@ class AnimalStatsApp {
                 setTimeout(() => mobileBtn.classList.remove('about-btn-touched'), 150);
             }, { passive: true });
         }
+        
+        // Setup audio toggle button
+        this.setupAudioToggle();
+    }
+    
+    /**
+     * Setup the audio mute toggle button
+     */
+    setupAudioToggle() {
+        const audioBtn = document.getElementById('audio-toggle-btn');
+        const audioIcon = document.getElementById('audio-toggle-icon');
+        
+        if (!audioBtn || !audioIcon) return;
+        
+        // Update icon based on current state
+        const updateIcon = () => {
+            if (window.AudioManager) {
+                const enabled = AudioManager.isEnabled();
+                audioIcon.className = enabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+                audioBtn.title = enabled ? 'Mute Sound Effects' : 'Unmute Sound Effects';
+            }
+        };
+        
+        // Initial state
+        updateIcon();
+        
+        // Toggle on click
+        audioBtn.addEventListener('click', () => {
+            if (window.AudioManager) {
+                AudioManager.toggleMute();
+                updateIcon();
+                // Play a small click to confirm unmute
+                if (AudioManager.isEnabled()) {
+                    AudioManager.click();
+                }
+            }
+        });
     }
 
     /**

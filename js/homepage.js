@@ -93,129 +93,36 @@ const HomepageController = {
         screenShakeIntensity: 8
     },
     
-    // Audio for whoosh
-    audioContext: null,
-    noiseBuffer: null,
-    
+    // Audio now handled by AudioManager
     animationFrame: null,
     frameCount: 0,
     screenShake: { active: false, intensity: 0, decay: 0.9 },
     
     /**
-     * Initialize audio context and create noise buffer
+     * Initialize audio - now delegates to AudioManager
      */
     initAudio() {
-        if (this.audioContext) return;
-        try {
-            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            this.createNoiseBuffer();
-        } catch (e) {}
-    },
-    
-    /**
-     * Create white noise buffer for whoosh sound
-     */
-    createNoiseBuffer() {
-        if (!this.audioContext) return;
-        
-        const bufferSize = this.audioContext.sampleRate * 0.5; // 0.5 second of noise
-        this.noiseBuffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
-        const output = this.noiseBuffer.getChannelData(0);
-        
-        for (let i = 0; i < bufferSize; i++) {
-            output[i] = Math.random() * 2 - 1;
+        if (window.AudioManager) {
+            window.AudioManager.init();
         }
     },
     
     /**
-     * Play true whoosh sound using filtered noise with pitch/duration variation
+     * Play whoosh sound - delegates to AudioManager
      */
     playWhoosh(intensity) {
-        if (!this.audioContext || !this.noiseBuffer) return;
-        
-        try {
-            const ctx = this.audioContext;
-            
-            // Resume if suspended
-            if (ctx.state === 'suspended') ctx.resume();
-            
-            // Create noise source
-            const noiseSource = ctx.createBufferSource();
-            noiseSource.buffer = this.noiseBuffer;
-            
-            // Playback rate affects pitch - higher intensity = lower swoosh
-            noiseSource.playbackRate.value = 1.2 - intensity * 0.3;
-            
-            // Bandpass filter for whoosh character - lower for more dramatic
-            const bandpass = ctx.createBiquadFilter();
-            bandpass.type = 'bandpass';
-            bandpass.frequency.setValueAtTime(600 + intensity * 500, ctx.currentTime);
-            bandpass.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.3 + intensity * 0.1);
-            bandpass.Q.value = 0.7;
-            
-            // Highpass to remove rumble
-            const highpass = ctx.createBiquadFilter();
-            highpass.type = 'highpass';
-            highpass.frequency.value = 80;
-            
-            // Lowpass for air sound - more bass at higher intensity
-            const lowpass = ctx.createBiquadFilter();
-            lowpass.type = 'lowpass';
-            lowpass.frequency.setValueAtTime(2500 + intensity * 2500, ctx.currentTime);
-            lowpass.frequency.exponentialRampToValueAtTime(400, ctx.currentTime + 0.35);
-            
-            // Gain envelope - louder and longer at higher intensity
-            const gainNode = ctx.createGain();
-            const duration = 0.25 + intensity * 0.15;
-            gainNode.gain.setValueAtTime(0, ctx.currentTime);
-            gainNode.gain.linearRampToValueAtTime(0.25 + intensity * 0.15, ctx.currentTime + 0.025);
-            gainNode.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
-            
-            // Connect chain
-            noiseSource.connect(highpass);
-            highpass.connect(bandpass);
-            bandpass.connect(lowpass);
-            lowpass.connect(gainNode);
-            gainNode.connect(ctx.destination);
-            
-            noiseSource.start(ctx.currentTime);
-            noiseSource.stop(ctx.currentTime + duration + 0.05);
-        } catch (e) {}
+        if (window.AudioManager) {
+            window.AudioManager.releaseBurst(intensity);
+        }
     },
     
     /**
-     * Play tension click/creak sound
+     * Play tension creak sound - now uses noise, no oscillators (non-musical)
      */
     playTensionCreak(tension) {
-        if (!this.audioContext) return;
-        
-        try {
-            const ctx = this.audioContext;
-            if (ctx.state === 'suspended') ctx.resume();
-            
-            // Create a short creak/click
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            const filter = ctx.createBiquadFilter();
-            
-            // More creaky/stretchy sound
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(200 + tension * 300, ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(100, ctx.currentTime + 0.08);
-            
-            filter.type = 'lowpass';
-            filter.frequency.value = 800;
-            
-            gain.gain.setValueAtTime(0.08, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-            
-            osc.connect(filter);
-            filter.connect(gain);
-            gain.connect(ctx.destination);
-            
-            osc.start(ctx.currentTime);
-            osc.stop(ctx.currentTime + 0.1);
-        } catch (e) {}
+        if (window.AudioManager) {
+            window.AudioManager.tensionRumble(tension);
+        }
     },
     
     /**
@@ -1793,6 +1700,11 @@ const HomepageController = {
      */
     activateButtonFocus(btn) {
         if (!btn) return;
+        
+        // Play hover sound
+        if (window.AudioManager) {
+            AudioManager.hover();
+        }
         
         // Add focused class to button
         btn.classList.add('portal-btn-focused');

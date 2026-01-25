@@ -245,6 +245,47 @@
 }
 
 /* ========================
+   AUDIO TOGGLE BUTTON
+   ======================== */
+
+.audio-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    width: 36px;
+    height: 36px;
+    
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    
+    color: var(--color-cyan);
+    font-size: var(--text-base);
+    
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.audio-toggle-btn:hover {
+    background: var(--bg-hover);
+    border-color: var(--color-cyan);
+    box-shadow: 0 0 10px var(--color-cyan-glow);
+}
+
+.audio-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+.audio-toggle-btn i {
+    transition: color var(--transition-fast);
+}
+
+.audio-toggle-btn .fa-volume-mute {
+    color: var(--text-muted);
+}
+
+/* ========================
    RESPONSIVE HEADER
    ======================== */
 
