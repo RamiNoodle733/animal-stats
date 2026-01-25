@@ -785,8 +785,16 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     opacity: 0.6;
 }
 
+/* Active/click state - maintain scale with satisfying press effect */
 .portal-nav-btn:active {
-    transform: translateY(0) scale(0.98);
+    transform: translateY(-2px) scale(1.04);
+    filter: brightness(1.2);
+    transition: transform 0.05s ease, filter 0.05s ease;
+}
+
+.portal-nav-btn.portal-btn-focused:active {
+    transform: scale(1.28) translateY(-6px);
+    filter: brightness(1.25);
 }
 
 .portal-nav-btn .btn-icon {
@@ -986,6 +994,18 @@ body:has(#home-view.active-view) nav[class*="mobile"] {
     transform: scale(0.95);
     opacity: 0.6;
     animation: none;
+}
+
+/* Active/click state - maintain scale with satisfying press effect */
+.portal-tournament-btn:active {
+    transform: translateY(-2px) scale(1.05);
+    filter: brightness(1.2);
+    transition: transform 0.05s ease, filter 0.05s ease;
+}
+
+.portal-tournament-btn.portal-btn-focused:active {
+    transform: scale(1.28) translateY(-6px);
+    filter: brightness(1.25);
 }
 
 .portal-tournament-btn .btn-icon {
