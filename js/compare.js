@@ -633,8 +633,21 @@
                     <div class="metal-grate"></div>
                 </div>
                 
-                <!-- Large Metal Rays - Extending from center outward -->
-                <div class="metal-rays-container" id="metalRaysContainer"></div>
+                <!-- Atmospheric fog layer -->
+                <div class="atmosphere-layer" id="atmosphereLayer">
+                    <div class="fog-layer fog-1"></div>
+                    <div class="fog-layer fog-2"></div>
+                    <div class="fog-layer fog-3"></div>
+                </div>
+                
+                <!-- Floating metal debris - subtle, slow, 3D -->
+                <div class="metal-debris-container" id="metalDebrisContainer"></div>
+                
+                <!-- Ambient dust particles -->
+                <div class="dust-particles-container" id="dustParticlesContainer"></div>
+                
+                <!-- Ambient lighting effects -->
+                <div class="ambient-light-rays" id="ambientLightRays"></div>
                 
                 <!-- Initial explosion flash -->
                 <div class="explosion-flash" id="explosionFlash"></div>
@@ -649,8 +662,9 @@
                 </button>
                 
                 <div class="result-arena">
-                    <!-- Victory Header -->
+                    <!-- Victory Header - Now with solid background -->
                     <div class="victory-header">
+                        <div class="victory-header-bg"></div>
                         <div class="victory-crown-rays"></div>
                         <div class="metal-crown-frame"></div>
                         <div class="victory-crown"><i class="fas fa-crown"></i></div>
@@ -666,10 +680,12 @@
                         <div class="champion-spotlight"></div>
                         <img class="champion-image" id="championImg" src="" alt="">
                         <div class="champion-particles" id="championParticles"></div>
-                        <div class="champion-click-hint">
-                            <i class="fas fa-search-plus"></i>
-                            <span>View Details</span>
-                        </div>
+                    </div>
+                    
+                    <!-- Click hint moved outside showcase for better z-index -->
+                    <div class="champion-click-hint" id="championClickHint">
+                        <i class="fas fa-search-plus"></i>
+                        <span>View Details</span>
                     </div>
                     
                     <!-- Champion Info -->
@@ -1092,37 +1108,139 @@
         },
 
         /**
-         * Spawn large metal rays extending from center outward - CONTINUOUS LOOP
+         * Spawn floating metal debris - SUBTLE, SLOW, REALISTIC
+         * Large broken chunks that drift slowly with depth
          */
-        spawnMetalRays() {
-            const container = document.getElementById('metalRaysContainer');
+        spawnMetalDebris() {
+            const container = document.getElementById('metalDebrisContainer');
             if (!container) return;
             
             container.innerHTML = '';
             
-            // Create 12 large metal rays at different angles
-            const rayCount = 12;
-            const colors = [
-                'linear-gradient(90deg, #3a3a45 0%, #6a6a75 30%, #8a8a95 50%, #6a6a75 70%, #3a3a45 100%)',
-                'linear-gradient(90deg, #4a4a55 0%, #7a7a85 30%, #9a9a9f 50%, #7a7a85 70%, #4a4a55 100%)',
-                'linear-gradient(90deg, #5a5a65 0%, #8a8a95 30%, #aaaaaf 50%, #8a8a95 70%, #5a5a65 100%)',
-                'linear-gradient(90deg, #d4af37 0%, #ffd700 30%, #ffed80 50%, #ffd700 70%, #d4af37 100%)'
-            ];
+            // Create 8-10 large, irregular metal chunks
+            const debrisCount = 8 + Math.floor(Math.random() * 3);
             
-            for (let i = 0; i < rayCount; i++) {
-                const ray = document.createElement('div');
-                ray.className = 'metal-ray';
-                const angle = (i * 360 / rayCount);
-                const width = 40 + Math.random() * 60; // 40-100px wide
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                const delay = (i * 0.15); // Staggered
-                const duration = 3 + Math.random() * 2; // 3-5 seconds
+            for (let i = 0; i < debrisCount; i++) {
+                const debris = document.createElement('div');
+                debris.className = 'floating-debris';
                 
-                ray.style.setProperty('--angle', angle + 'deg');
-                ray.style.setProperty('--width', width + 'px');
-                ray.style.setProperty('--ray-gradient', color);
-                ray.style.setProperty('--delay', delay + 's');
-                ray.style.setProperty('--duration', duration + 's');
+                // Random positioning around edges (not center)
+                const side = Math.random();
+                let x, y;
+                if (side < 0.25) {
+                    x = Math.random() * 25; // Left side
+                    y = Math.random() * 100;
+                } else if (side < 0.5) {
+                    x = 75 + Math.random() * 25; // Right side
+                    y = Math.random() * 100;
+                } else if (side < 0.75) {
+                    x = Math.random() * 100;
+                    y = Math.random() * 25; // Top
+                } else {
+                    x = Math.random() * 100;
+                    y = 75 + Math.random() * 25; // Bottom
+                }
+                
+                // Varied sizes - large chunks
+                const size = 60 + Math.random() * 100; // 60-160px
+                const rotation = Math.random() * 360;
+                const rotationSpeed = 15 + Math.random() * 25; // Very slow rotation
+                const driftX = (Math.random() - 0.5) * 40; // Subtle drift
+                const driftY = (Math.random() - 0.5) * 30;
+                const duration = 25 + Math.random() * 20; // 25-45 seconds - very slow
+                const delay = Math.random() * 10;
+                const depth = 0.3 + Math.random() * 0.7; // For parallax/depth
+                
+                // Irregular polygon shapes
+                const shapes = [
+                    'polygon(15% 0%, 85% 5%, 100% 40%, 90% 100%, 20% 95%, 0% 50%)',
+                    'polygon(5% 15%, 70% 0%, 100% 30%, 85% 90%, 30% 100%, 0% 60%)',
+                    'polygon(20% 0%, 90% 10%, 100% 70%, 70% 100%, 10% 85%, 0% 30%)',
+                    'polygon(0% 25%, 60% 0%, 100% 35%, 90% 100%, 25% 90%, 5% 50%)',
+                    'polygon(10% 10%, 80% 0%, 100% 50%, 75% 100%, 0% 80%)'
+                ];
+                
+                debris.style.cssText = `
+                    --x: ${x}%;
+                    --y: ${y}%;
+                    --size: ${size}px;
+                    --rotation: ${rotation}deg;
+                    --rotation-speed: ${rotationSpeed}s;
+                    --drift-x: ${driftX}px;
+                    --drift-y: ${driftY}px;
+                    --duration: ${duration}s;
+                    --delay: ${delay}s;
+                    --depth: ${depth};
+                    --shape: ${shapes[Math.floor(Math.random() * shapes.length)]};
+                `;
+                
+                container.appendChild(debris);
+            }
+        },
+
+        /**
+         * Spawn ambient dust particles - floating specs with light
+         */
+        spawnDustParticles() {
+            const container = document.getElementById('dustParticlesContainer');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            // Create many small dust particles
+            for (let i = 0; i < 40; i++) {
+                const dust = document.createElement('div');
+                dust.className = 'dust-particle';
+                
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const size = 2 + Math.random() * 4;
+                const duration = 15 + Math.random() * 20;
+                const delay = Math.random() * 15;
+                const drift = (Math.random() - 0.5) * 50;
+                const opacity = 0.2 + Math.random() * 0.4;
+                
+                dust.style.cssText = `
+                    --x: ${x}%;
+                    --y: ${y}%;
+                    --size: ${size}px;
+                    --duration: ${duration}s;
+                    --delay: ${delay}s;
+                    --drift: ${drift}px;
+                    --opacity: ${opacity};
+                `;
+                
+                container.appendChild(dust);
+            }
+        },
+
+        /**
+         * Spawn ambient light rays - subtle volumetric lighting
+         */
+        spawnLightRays() {
+            const container = document.getElementById('ambientLightRays');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            // Create 3-4 subtle light shafts
+            for (let i = 0; i < 4; i++) {
+                const ray = document.createElement('div');
+                ray.className = 'ambient-ray';
+                
+                const x = 20 + (i * 20) + (Math.random() * 10);
+                const width = 80 + Math.random() * 120;
+                const angle = -15 + Math.random() * 30;
+                const duration = 20 + Math.random() * 15;
+                const delay = i * 3;
+                
+                ray.style.cssText = `
+                    --x: ${x}%;
+                    --width: ${width}px;
+                    --angle: ${angle}deg;
+                    --duration: ${duration}s;
+                    --delay: ${delay}s;
+                `;
                 
                 container.appendChild(ray);
             }
@@ -1144,8 +1262,10 @@
                 setTimeout(() => flash.classList.remove('active'), 600);
             }
             
-            // Spawn metal rays
-            this.spawnMetalRays();
+            // Spawn atmospheric effects
+            this.spawnMetalDebris();
+            this.spawnDustParticles();
+            this.spawnLightRays();
             
             // Metallic colors - steel, gold, chrome, bronze, titanium
             const colors = ['#c0c0c0', '#d4af37', '#e8e8e8', '#cd7f32', '#878681', '#b8860b', '#a8a9ad'];
