@@ -2914,38 +2914,152 @@ class AnimalStatsApp {
         let title = siteName;
         let description = baseDescription;
         let canonicalPath = '/';
+        let jsonLd = null;
         
         switch (view) {
             case 'home':
                 title = `${siteName} - The Ultimate Animal Powerscaling Database`;
                 description = baseDescription;
                 canonicalPath = '/';
+                // Website schema for home
+                jsonLd = {
+                    "@context": "https://schema.org",
+                    "@type": "WebSite",
+                    "name": siteName,
+                    "url": "https://animalbattlestats.com",
+                    "description": baseDescription,
+                    "potentialAction": {
+                        "@type": "SearchAction",
+                        "target": "https://animalbattlestats.com/stats/{search_term_string}",
+                        "query-input": "required name=search_term_string"
+                    }
+                };
                 break;
                 
             case 'stats':
                 if (animal) {
                     title = `${animal.name} Stats & Abilities | ${siteName}`;
-                    description = `Discover ${animal.name}'s combat abilities, strengths, and weaknesses. The ultimate animal powerscaling database.`;
-                    // Use the same slugify logic as Router class
+                    description = `${animal.name} (${animal.scientific_name || 'Unknown Species'}) combat stats: Attack ${animal.attack || 0}, Defense ${animal.defense || 0}, Agility ${animal.agility || 0}. Weight: ${animal.weight_kg ? animal.weight_kg + ' kg' : 'Unknown'}. ${animal.description || ''}`;
                     const slug = animal.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
                     canonicalPath = `/stats/${slug}`;
+                    
+                    // Rich Animal schema for AI crawlers
+                    jsonLd = {
+                        "@context": "https://schema.org",
+                        "@type": "Dataset",
+                        "name": `${animal.name} Combat Statistics`,
+                        "description": description,
+                        "url": `https://animalbattlestats.com/stats/${slug}`,
+                        "keywords": [animal.name, animal.scientific_name, animal.type, "animal stats", "combat stats", "who would win"].filter(Boolean),
+                        "creator": {
+                            "@type": "Organization",
+                            "name": "Animal Battle Stats"
+                        },
+                        "variableMeasured": [
+                            { "@type": "PropertyValue", "name": "Attack", "value": animal.attack || 0, "maxValue": 100, "unitText": "points" },
+                            { "@type": "PropertyValue", "name": "Defense", "value": animal.defense || 0, "maxValue": 100, "unitText": "points" },
+                            { "@type": "PropertyValue", "name": "Agility", "value": animal.agility || 0, "maxValue": 100, "unitText": "points" },
+                            { "@type": "PropertyValue", "name": "Stamina", "value": animal.stamina || 0, "maxValue": 100, "unitText": "points" },
+                            { "@type": "PropertyValue", "name": "Intelligence", "value": animal.intelligence || 0, "maxValue": 100, "unitText": "points" },
+                            { "@type": "PropertyValue", "name": "Special", "value": animal.special || 0, "maxValue": 100, "unitText": "points" },
+                            animal.weight_kg ? { "@type": "PropertyValue", "name": "Weight", "value": animal.weight_kg, "unitText": "kg" } : null,
+                            animal.speed_mps ? { "@type": "PropertyValue", "name": "Speed", "value": animal.speed_mps, "unitText": "m/s" } : null,
+                            animal.lifespan_years ? { "@type": "PropertyValue", "name": "Lifespan", "value": animal.lifespan_years, "unitText": "years" } : null
+                        ].filter(Boolean),
+                        "about": {
+                            "@type": "Thing",
+                            "name": animal.name,
+                            "alternateName": animal.scientific_name || undefined,
+                            "description": animal.description || `${animal.name} is a ${animal.type || 'animal'} with unique combat abilities.`
+                        }
+                    };
+                    
+                    // Add FAQ schema for common questions (great for AI)
+                    const faqSchema = {
+                        "@context": "https://schema.org",
+                        "@type": "FAQPage",
+                        "mainEntity": [
+                            {
+                                "@type": "Question",
+                                "name": `What are ${animal.name}'s stats?`,
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": `${animal.name} has Attack: ${animal.attack || 0}/100, Defense: ${animal.defense || 0}/100, Agility: ${animal.agility || 0}/100, Stamina: ${animal.stamina || 0}/100, Intelligence: ${animal.intelligence || 0}/100, Special: ${animal.special || 0}/100.`
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": `How much does a ${animal.name} weigh?`,
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": animal.weight_kg ? `A ${animal.name} weighs approximately ${animal.weight_kg} kg (${(animal.weight_kg * 2.205).toFixed(1)} lbs).` : `Weight data for ${animal.name} is not currently available.`
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": `How fast is a ${animal.name}?`,
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": animal.speed_mps ? `A ${animal.name} can reach speeds of ${animal.speed_mps} m/s (${(animal.speed_mps * 3.6).toFixed(1)} km/h or ${(animal.speed_mps * 2.237).toFixed(1)} mph).` : `Speed data for ${animal.name} is not currently available.`
+                                }
+                            }
+                        ]
+                    };
+                    
+                    // Combine schemas
+                    jsonLd = [jsonLd, faqSchema];
                 } else {
                     title = `Animal Stats Database | ${siteName}`;
-                    description = 'Browse detailed stats for over 225 animals. Attack, defense, speed, intelligence, and more.';
+                    description = 'Browse detailed combat stats for over 225 animals. Attack, defense, agility, stamina, intelligence, and special abilities.';
                     canonicalPath = '/stats';
+                    jsonLd = {
+                        "@context": "https://schema.org",
+                        "@type": "CollectionPage",
+                        "name": "Animal Stats Database",
+                        "description": description,
+                        "url": "https://animalbattlestats.com/stats",
+                        "numberOfItems": 225,
+                        "mainEntity": {
+                            "@type": "ItemList",
+                            "name": "Animal Combat Statistics",
+                            "description": "Comprehensive database of animal combat statistics"
+                        }
+                    };
                 }
                 break;
                 
             case 'compare':
-                title = `Compare Animals | ${siteName}`;
-                description = 'Compare any two animals head-to-head. See who would win in a battle based on stats, abilities, and more.';
+                title = `Compare Animals - Who Would Win? | ${siteName}`;
+                description = 'Compare any two animals head-to-head. See who would win in a hypothetical battle based on stats, abilities, weight, speed, and more.';
                 canonicalPath = '/compare';
+                jsonLd = {
+                    "@context": "https://schema.org",
+                    "@type": "WebApplication",
+                    "name": "Animal Battle Comparison Tool",
+                    "description": description,
+                    "url": "https://animalbattlestats.com/compare",
+                    "applicationCategory": "Entertainment",
+                    "offers": {
+                        "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD"
+                    }
+                };
                 break;
                 
             case 'rankings':
-                title = `Power Rankings | ${siteName}`;
-                description = 'See the community-voted power rankings for all animals. Who is the ultimate apex predator?';
+                title = `Power Rankings - Top Animals | ${siteName}`;
+                description = 'Community-voted power rankings for all 225+ animals. See which animals are considered the most powerful apex predators.';
                 canonicalPath = '/rankings';
+                jsonLd = {
+                    "@context": "https://schema.org",
+                    "@type": "ItemList",
+                    "name": "Animal Power Rankings",
+                    "description": description,
+                    "url": "https://animalbattlestats.com/rankings",
+                    "numberOfItems": 225,
+                    "itemListOrder": "https://schema.org/ItemListOrderDescending"
+                };
                 break;
                 
             case 'community':
@@ -2955,15 +3069,36 @@ class AnimalStatsApp {
                 break;
                 
             case 'tournament':
-                title = `Tournament | ${siteName}`;
-                description = 'Run bracket-style tournaments to crown the ultimate animal champion.';
+                title = `Tournament Mode | ${siteName}`;
+                description = 'Run bracket-style tournaments with 4, 8, 16, or 32 animals to crown the ultimate animal champion.';
                 canonicalPath = '/tournament';
+                jsonLd = {
+                    "@context": "https://schema.org",
+                    "@type": "WebApplication",
+                    "name": "Animal Battle Tournament",
+                    "description": description,
+                    "url": "https://animalbattlestats.com/tournament",
+                    "applicationCategory": "Game"
+                };
                 break;
                 
             case 'about':
                 title = `About | ${siteName}`;
-                description = 'Learn about Animal Battle Stats - the ultimate database for animal combat analysis and powerscaling.';
+                description = 'Learn about Animal Battle Stats - how we calculate combat stats, our methodology, and the team behind the ultimate animal powerscaling database.';
                 canonicalPath = '/about';
+                jsonLd = {
+                    "@context": "https://schema.org",
+                    "@type": "AboutPage",
+                    "name": "About Animal Battle Stats",
+                    "description": description,
+                    "url": "https://animalbattlestats.com/about",
+                    "mainEntity": {
+                        "@type": "Organization",
+                        "name": "Animal Battle Stats",
+                        "url": "https://animalbattlestats.com",
+                        "description": "The ultimate animal powerscaling database with combat statistics for 225+ animals."
+                    }
+                };
                 break;
                 
             case 'login':
@@ -2999,6 +3134,13 @@ class AnimalStatsApp {
             ogUrl.setAttribute('content', `https://animalbattlestats.com${canonicalPath}`);
         }
         
+        // Update OG image for animal pages
+        let ogImage = document.querySelector('meta[property="og:image"]');
+        if (ogImage && animal && animal.image) {
+            const imageUrl = animal.image.startsWith('http') ? animal.image : `https://animalbattlestats.com${animal.image}`;
+            ogImage.setAttribute('content', imageUrl);
+        }
+        
         // Update canonical link (create if doesn't exist)
         let canonical = document.querySelector('link[rel="canonical"]');
         if (!canonical) {
@@ -3007,6 +3149,32 @@ class AnimalStatsApp {
             document.head.appendChild(canonical);
         }
         canonical.setAttribute('href', `https://animalbattlestats.com${canonicalPath}`);
+        
+        // Update JSON-LD structured data for AI/search engines
+        this.updateJsonLd(jsonLd);
+    }
+    
+    /**
+     * Update JSON-LD structured data in the document head
+     * Critical for GEO (Generative Engine Optimization) - helps AI crawlers understand content
+     */
+    updateJsonLd(data) {
+        // Remove existing JSON-LD scripts
+        const existingScripts = document.querySelectorAll('script[type="application/ld+json"][data-dynamic="true"]');
+        existingScripts.forEach(script => script.remove());
+        
+        if (!data) return;
+        
+        // Handle array of schemas (e.g., Dataset + FAQPage)
+        const schemas = Array.isArray(data) ? data : [data];
+        
+        schemas.forEach(schema => {
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.setAttribute('data-dynamic', 'true');
+            script.textContent = JSON.stringify(schema);
+            document.head.appendChild(script);
+        });
     }
 
     /**

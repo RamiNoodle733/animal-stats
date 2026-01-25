@@ -31,6 +31,58 @@
     <meta name="twitter:description" content="The animal powerscaling database. Compare matchups, rank the roster, and run tournaments to see who comes out on top.">
     <meta name="twitter:image" content="https://animalbattlestats.com/images/og-image.png">
     
+    <!-- JSON-LD Structured Data for AI/Search Engines (GEO Optimization) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Animal Battle Stats",
+        "alternateName": "ABS",
+        "url": "https://animalbattlestats.com",
+        "description": "The ultimate animal powerscaling database with combat statistics for 225+ animals. Compare matchups, run tournaments, and discover who would win.",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://animalbattlestats.com/stats/{search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "Animal Battle Stats",
+            "url": "https://animalbattlestats.com"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Dataset",
+        "name": "Animal Combat Statistics Database",
+        "description": "Comprehensive database of combat statistics for 225+ animals including attack, defense, agility, stamina, intelligence, and special abilities. Includes weight, speed, and lifespan data.",
+        "url": "https://animalbattlestats.com/stats",
+        "keywords": ["animal stats", "animal comparison", "who would win", "apex predator", "animal combat", "wildlife data", "animal facts"],
+        "creator": {
+            "@type": "Organization",
+            "name": "Animal Battle Stats"
+        },
+        "distribution": {
+            "@type": "DataDownload",
+            "encodingFormat": "text/html",
+            "contentUrl": "https://animalbattlestats.com/stats"
+        },
+        "variableMeasured": [
+            {"@type": "PropertyValue", "name": "Attack", "description": "Offensive combat capability", "maxValue": 100},
+            {"@type": "PropertyValue", "name": "Defense", "description": "Defensive durability and armor", "maxValue": 100},
+            {"@type": "PropertyValue", "name": "Agility", "description": "Speed and maneuverability", "maxValue": 100},
+            {"@type": "PropertyValue", "name": "Stamina", "description": "Endurance and recovery", "maxValue": 100},
+            {"@type": "PropertyValue", "name": "Intelligence", "description": "Tactics and sensory awareness", "maxValue": 100},
+            {"@type": "PropertyValue", "name": "Special", "description": "Unique abilities and ferocity", "maxValue": 100}
+        ]
+    }
+    </script>
+    
     <!-- Theme Color -->
     <meta name="theme-color" content="#ff0033">
     <meta name="msapplication-TileColor" content="#ff0033">
