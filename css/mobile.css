@@ -2026,6 +2026,8 @@
     }
     
     /* Sidebar hidden by default - shown via mobile tab system */
+    #community-view .community-sidebar-column,
+    #community-view .community__sidebar,
     .community-sidebar-column,
     .community__sidebar {
         display: none !important;
@@ -2042,17 +2044,24 @@
         gap: 12px !important;
         width: 100% !important;
         box-sizing: border-box !important;
+        align-items: stretch !important;
     }
     
     /* All modules inside sidebar should take full width */
+    #community-view .community-sidebar-column > *,
+    #community-view .community__sidebar > *,
     .community-sidebar-column > *,
     .community__sidebar > * {
         width: 100% !important;
         max-width: 100% !important;
+        min-width: 100% !important;
         box-sizing: border-box !important;
+        flex-shrink: 0 !important;
     }
     
     /* When sidebar is active (via tab) */
+    #community-view .community-sidebar-column.mobile-sidebar-active,
+    #community-view .community__sidebar.mobile-sidebar-active,
     .community-sidebar-column.mobile-sidebar-active,
     .community__sidebar.mobile-sidebar-active {
         display: flex !important;
