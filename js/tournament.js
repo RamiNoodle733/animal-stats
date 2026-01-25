@@ -801,9 +801,9 @@ class TournamentManager {
             return;
         }
         
-        // Play whoosh sound for intro
+        // Play intro sound
         if (window.AudioManager) {
-            AudioManager.whoosh();
+            AudioManager.matchupIntro();
         }
         
         // Check for reduced motion preference
@@ -854,9 +854,9 @@ class TournamentManager {
         if (!prefersReducedMotion) {
             setTimeout(() => {
                 this.spawnIntroSparks();
-                // Play impact sound when sparks appear
+                // Play clash sound when sparks appear
                 if (window.AudioManager) {
-                    AudioManager.slam();
+                    AudioManager.vsClash();
                 }
             }, 800);
             

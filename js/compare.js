@@ -906,9 +906,9 @@
             const overlay = document.getElementById('matchupIntroOverlay');
             if (!overlay) return;
             
-            // Play intro whoosh sound
+            // Play intro sound
             if (window.AudioManager) {
-                AudioManager.whoosh();
+                AudioManager.matchupIntro();
             }
 
             // Set fighter data - using tournament-style element IDs
@@ -960,9 +960,9 @@
             if (!prefersReducedMotion) {
                 setTimeout(() => {
                     this.spawnIntroSparks();
-                    // Play impact sound when sparks appear
+                    // Play clash sound when sparks appear
                     if (window.AudioManager) {
-                        AudioManager.slam();
+                        AudioManager.vsClash();
                     }
                 }, 800);
                 
@@ -1441,7 +1441,13 @@
             overlay.classList.add('active');
             
             // Spawn effects with timing
-            setTimeout(() => this.spawnConfetti(), 200);
+            setTimeout(() => {
+                this.spawnConfetti();
+                // Play explosion sound with confetti burst
+                if (window.AudioManager) {
+                    AudioManager.explosion();
+                }
+            }, 200);
             setTimeout(() => this.spawnCelebrationParticles(), 400);
             setTimeout(() => this.spawnChampionParticles(), 300);
             

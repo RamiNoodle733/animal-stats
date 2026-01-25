@@ -1916,6 +1916,11 @@ class AnimalStatsApp {
         const side = this.state.compare.selectingSide;
         if (!side) return;
 
+        // Play fighter selection sound
+        if (window.AudioManager) {
+            AudioManager.fighterSelect();
+        }
+
         const prevAnimal = this.state.compare[side];
         this.state.compare[side] = animal;
         this.updateFighterCard(side, animal);
