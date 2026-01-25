@@ -1208,32 +1208,28 @@ class AnimalStatsApp {
             return cardWidth + gap;
         };
         
-        // Smooth continuous scroll for arrow hold using requestAnimationFrame
-        let isScrolling = false;
-        let scrollDirection = 0;
-        let animationFrameId = null;
-        
-        const smoothScroll = () => {
-            if (!isScrolling) return;
-            const isMobile = window.innerWidth <= 480;
-            const scrollSpeed = isMobile ? 12 : 6; // pixels per frame
-            grid.scrollLeft += scrollDirection * scrollSpeed;
-            animationFrameId = requestAnimationFrame(smoothScroll);
-        };
+        // Continuous scroll for arrow hold - smooth native scrolling
+        let scrollInterval = null;
         
         const startContinuousScroll = (direction) => {
-            if (isScrolling) return;
-            isScrolling = true;
-            scrollDirection = direction;
-            animationFrameId = requestAnimationFrame(smoothScroll);
+            if (scrollInterval) return;
+            const isMobile = window.innerWidth <= 480;
+            const scrollAmount = getScrollAmount() * direction;
+            
+            // Initial scroll
+            grid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            
+            // Continue scrolling at intervals
+            const intervalSpeed = isMobile ? 150 : 200;
+            scrollInterval = setInterval(() => {
+                grid.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }, intervalSpeed);
         };
         
         const stopContinuousScroll = () => {
-            isScrolling = false;
-            scrollDirection = 0;
-            if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-                animationFrameId = null;
+            if (scrollInterval) {
+                clearInterval(scrollInterval);
+                scrollInterval = null;
             }
         };
         
