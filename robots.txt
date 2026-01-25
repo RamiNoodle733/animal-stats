@@ -1,0 +1,11 @@
+# Animal Battle Stats - robots.txt
+# https://animalbattlestats.com
+
+User-agent: *
+Allow: /
+
+# Point to sitemap
+Sitemap: https://animalbattlestats.com/sitemap.xml
+
+# Crawl delay (optional - be nice to the server)
+Crawl-delay: 1

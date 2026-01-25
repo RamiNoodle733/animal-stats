@@ -1503,6 +1503,9 @@ class AnimalStatsApp {
             window.Router.navigate(`/stats/${slug}`);
         }
         
+        // Update page SEO for this animal
+        this.updatePageSEO('stats', animal);
+        
         // Update only affected cards instead of full re-render
         if (prevSelected) {
             const prevCard = this.dom.gridContainer.querySelector(`.character-card[data-id="${prevSelected.id || prevSelected.name}"]`);
@@ -1730,6 +1733,11 @@ class AnimalStatsApp {
         // Play page transition sound
         if (window.AudioManager && previousView !== viewName) {
             window.AudioManager.swoosh(1);
+        }
+        
+        // Update page SEO (for stats view with animal, this is handled in selectAnimal)
+        if (viewName !== 'stats' || !this.state.selectedAnimal) {
+            this.updatePageSEO(viewName, this.state.selectedAnimal);
         }
         
         // Update the main title based on current view
@@ -2878,6 +2886,111 @@ class AnimalStatsApp {
         } catch (e) {
             // Silently fail - not critical
         }
+    }
+
+    /**
+     * Update page title and meta tags for SEO
+     * @param {string} view - Current view name
+     * @param {object} animal - Selected animal (optional)
+     */
+    updatePageSEO(view, animal = null) {
+        const siteName = 'Animal Battle Stats';
+        const baseDescription = 'The animal powerscaling database. Compare matchups, rank the roster, and run tournaments to see who comes out on top.';
+        
+        let title = siteName;
+        let description = baseDescription;
+        let canonicalPath = '/';
+        
+        switch (view) {
+            case 'home':
+                title = `${siteName} - The Ultimate Animal Powerscaling Database`;
+                description = baseDescription;
+                canonicalPath = '/';
+                break;
+                
+            case 'stats':
+                if (animal) {
+                    title = `${animal.name} Stats & Abilities | ${siteName}`;
+                    description = `Discover ${animal.name}'s combat abilities, strengths, and weaknesses. The ultimate animal powerscaling database.`;
+                    canonicalPath = `/stats/${Router.slugify(animal.name)}`;
+                } else {
+                    title = `Animal Stats Database | ${siteName}`;
+                    description = 'Browse detailed stats for over 225 animals. Attack, defense, speed, intelligence, and more.';
+                    canonicalPath = '/stats';
+                }
+                break;
+                
+            case 'compare':
+                title = `Compare Animals | ${siteName}`;
+                description = 'Compare any two animals head-to-head. See who would win in a battle based on stats, abilities, and more.';
+                canonicalPath = '/compare';
+                break;
+                
+            case 'rankings':
+                title = `Power Rankings | ${siteName}`;
+                description = 'See the community-voted power rankings for all animals. Who is the ultimate apex predator?';
+                canonicalPath = '/rankings';
+                break;
+                
+            case 'community':
+                title = `Community | ${siteName}`;
+                description = 'Join the Animal Battle Stats community. Discuss matchups, share opinions, and connect with other animal enthusiasts.';
+                canonicalPath = '/community';
+                break;
+                
+            case 'tournament':
+                title = `Tournament | ${siteName}`;
+                description = 'Run bracket-style tournaments to crown the ultimate animal champion.';
+                canonicalPath = '/tournament';
+                break;
+                
+            case 'about':
+                title = `About | ${siteName}`;
+                description = 'Learn about Animal Battle Stats - the ultimate database for animal combat analysis and powerscaling.';
+                canonicalPath = '/about';
+                break;
+                
+            case 'login':
+            case 'signup':
+                title = `${view === 'login' ? 'Login' : 'Sign Up'} | ${siteName}`;
+                description = 'Join Animal Battle Stats to vote on rankings, comment on animals, and participate in the community.';
+                canonicalPath = `/${view}`;
+                break;
+        }
+        
+        // Update document title
+        document.title = title;
+        
+        // Update meta description
+        let metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+            metaDesc.setAttribute('content', description);
+        }
+        
+        // Update OG tags
+        let ogTitle = document.querySelector('meta[property="og:title"]');
+        if (ogTitle) {
+            ogTitle.setAttribute('content', title);
+        }
+        
+        let ogDesc = document.querySelector('meta[property="og:description"]');
+        if (ogDesc) {
+            ogDesc.setAttribute('content', description);
+        }
+        
+        let ogUrl = document.querySelector('meta[property="og:url"]');
+        if (ogUrl) {
+            ogUrl.setAttribute('content', `https://animalbattlestats.com${canonicalPath}`);
+        }
+        
+        // Update canonical link (create if doesn't exist)
+        let canonical = document.querySelector('link[rel="canonical"]');
+        if (!canonical) {
+            canonical = document.createElement('link');
+            canonical.setAttribute('rel', 'canonical');
+            document.head.appendChild(canonical);
+        }
+        canonical.setAttribute('href', `https://animalbattlestats.com${canonicalPath}`);
     }
 
     /**
