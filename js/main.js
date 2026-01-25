@@ -339,15 +339,21 @@ class AnimalStatsApp {
 
         // Stats routes - register more specific route first
         router.on('/stats/:slug', (params) => {
-            this.switchView('stats', false);
-            const animal = this.findAnimalBySlug(params.slug);
-            if (animal) {
-                this.selectAnimal(animal, false);
-            } else {
-                // Animal not found, select first
-                if (this.state.filteredAnimals.length > 0) {
-                    this.selectAnimal(this.state.filteredAnimals[0], false);
+            try {
+                this.switchView('stats', false);
+                const animal = this.findAnimalBySlug(params.slug);
+                if (animal) {
+                    this.selectAnimal(animal, false);
+                } else {
+                    // Animal not found, select first
+                    if (this.state.filteredAnimals.length > 0) {
+                        this.selectAnimal(this.state.filteredAnimals[0], false);
+                    }
                 }
+            } catch (error) {
+                console.error('Error handling /stats/:slug route:', error);
+                // Fallback to stats view
+                this.switchView('stats', false);
             }
         });
 
@@ -1504,7 +1510,11 @@ class AnimalStatsApp {
         }
         
         // Update page SEO for this animal
-        this.updatePageSEO('stats', animal);
+        try {
+            this.updatePageSEO('stats', animal);
+        } catch (e) {
+            console.warn('Failed to update page SEO:', e);
+        }
         
         // Update only affected cards instead of full re-render
         if (prevSelected) {
@@ -1736,8 +1746,12 @@ class AnimalStatsApp {
         }
         
         // Update page SEO (for stats view with animal, this is handled in selectAnimal)
-        if (viewName !== 'stats' || !this.state.selectedAnimal) {
-            this.updatePageSEO(viewName, this.state.selectedAnimal);
+        try {
+            if (viewName !== 'stats' || !this.state.selectedAnimal) {
+                this.updatePageSEO(viewName, this.state.selectedAnimal);
+            }
+        } catch (e) {
+            console.warn('Failed to update page SEO:', e);
         }
         
         // Update the main title based on current view
@@ -2912,7 +2926,9 @@ class AnimalStatsApp {
                 if (animal) {
                     title = `${animal.name} Stats & Abilities | ${siteName}`;
                     description = `Discover ${animal.name}'s combat abilities, strengths, and weaknesses. The ultimate animal powerscaling database.`;
-                    canonicalPath = `/stats/${Router.slugify(animal.name)}`;
+                    // Use the same slugify logic as Router class
+                    const slug = animal.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+                    canonicalPath = `/stats/${slug}`;
                 } else {
                     title = `Animal Stats Database | ${siteName}`;
                     description = 'Browse detailed stats for over 225 animals. Attack, defense, speed, intelligence, and more.';
@@ -3024,14 +3040,26 @@ class AnimalStatsApp {
 
 // Initialize App when DOM is ready
 document.addEventListener('DOMContentLoaded', async () => {
+    // Failsafe: hide loading screen after 10 seconds no matter what
+    const loadingFailsafe = setTimeout(() => {
+        const loadingScreen = document.getElementById('app-loading-screen');
+        if (loadingScreen && !loadingScreen.classList.contains('hidden')) {
+            console.warn('Loading screen failsafe triggered - forcing hide');
+            loadingScreen.classList.add('hidden');
+            setTimeout(() => loadingScreen.remove(), 300);
+        }
+    }, 10000);
+    
     try {
         console.log('[DEBUG] Creating AnimalStatsApp...');
         window.app = new AnimalStatsApp();
         console.log('[DEBUG] Calling init()...');
         await window.app.init();
         console.log('[DEBUG] Init completed successfully');
+        clearTimeout(loadingFailsafe);
     } catch (error) {
         console.error('[DEBUG] Fatal error:', error);
+        clearTimeout(loadingFailsafe);
         // Force hide loading screen
         const loadingScreen = document.getElementById('app-loading-screen');
         if (loadingScreen) {
