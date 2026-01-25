@@ -1208,14 +1208,13 @@ class AnimalStatsApp {
             return cardWidth + gap;
         };
         
-        // Smooth continuous scroll using requestAnimationFrame for 60fps
+        // Smooth continuous scroll using requestAnimationFrame for 60fps (desktop only)
         let animationFrameId = null;
         let scrollDirection = 0;
         
         const smoothScroll = () => {
             if (scrollDirection === 0) return;
-            const isMobile = window.innerWidth <= 480;
-            const scrollSpeed = isMobile ? 18 : 12; // pixels per frame at 60fps
+            const scrollSpeed = 15; // pixels per frame at 60fps = ~900px/sec
             grid.scrollLeft += scrollDirection * scrollSpeed;
             animationFrameId = requestAnimationFrame(smoothScroll);
         };

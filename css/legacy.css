@@ -1556,7 +1556,6 @@ body {
     overflow-x: scroll;
     overflow-y: hidden;
     padding: 6px 12px 14px 12px;
-    scroll-behavior: smooth;
     flex: 1;
     min-height: 140px; /* Prevent collapse when empty/few results */
     /* Native scrollbar styling */
