@@ -1175,7 +1175,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle at center, 
+    background: radial-gradient(circle at center 40%, 
         rgba(255, 255, 255, 1) 0%, 
         rgba(255, 215, 100, 0.9) 20%, 
         rgba(255, 140, 0, 0.6) 40%, 
@@ -1214,7 +1214,7 @@
     height: 100%;
     background: 
         /* Center forge glow */
-        radial-gradient(ellipse 80% 60% at center, rgba(255, 140, 0, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse 70% 50% at center 40%, rgba(255, 140, 0, 0.12) 0%, transparent 50%),
         /* Subtle metallic sheen */
         linear-gradient(135deg, rgba(60, 60, 70, 0.3) 0%, transparent 50%, rgba(60, 60, 70, 0.2) 100%),
         /* Base dark metal */
@@ -1227,6 +1227,77 @@
     opacity: 1;
 }
 
+/* ==========================
+   LARGE METAL RAYS - Center Outward Loop
+   ========================== */
+.metal-rays-container {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.metal-ray {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: var(--width, 60px);
+    height: 200vh;
+    transform-origin: center top;
+    transform: rotate(var(--angle, 0deg)) translateX(-50%);
+    background: var(--ray-gradient);
+    animation: rayExtend var(--duration, 4s) ease-out var(--delay, 0s) infinite;
+    opacity: 0;
+    /* 3D metallic effect */
+    box-shadow: 
+        inset 2px 0 4px rgba(255, 255, 255, 0.3),
+        inset -2px 0 4px rgba(0, 0, 0, 0.3),
+        0 0 30px rgba(100, 100, 120, 0.3);
+    border-radius: 4px 4px 0 0;
+}
+
+.metal-ray::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(180deg, 
+        rgba(255, 255, 255, 0.4) 0%, 
+        rgba(255, 255, 255, 0.1) 30%, 
+        transparent 60%);
+    animation: rayShine 2s ease-in-out infinite;
+}
+
+@keyframes rayExtend {
+    0% {
+        opacity: 0;
+        clip-path: polygon(0 0, 100% 0, 100% 0%, 0 0%);
+    }
+    10% {
+        opacity: 0.9;
+        clip-path: polygon(0 0, 100% 0, 100% 15%, 0 15%);
+    }
+    60% {
+        opacity: 0.7;
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+    100% {
+        opacity: 0;
+        clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+    }
+}
+
+@keyframes rayShine {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.8; }
+}
+
 /* Metal Grate Background Pattern */
 .metal-grate {
     position: absolute;
@@ -1235,8 +1306,8 @@
     width: 100%;
     height: 100%;
     background-image: 
-        repeating-linear-gradient(90deg, transparent, transparent 30px, rgba(40, 40, 50, 0.3) 30px, rgba(40, 40, 50, 0.3) 31px),
-        repeating-linear-gradient(0deg, transparent, transparent 30px, rgba(40, 40, 50, 0.3) 30px, rgba(40, 40, 50, 0.3) 31px);
+        repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(40, 40, 50, 0.2) 40px, rgba(40, 40, 50, 0.2) 41px),
+        repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(40, 40, 50, 0.2) 40px, rgba(40, 40, 50, 0.2) 41px);
     pointer-events: none;
     z-index: 0;
     opacity: 0;
@@ -1251,7 +1322,7 @@
 .metal-pillar {
     position: absolute;
     top: 0;
-    width: 60px;
+    width: 50px;
     height: 100%;
     background: linear-gradient(90deg, 
         #1a1a1f 0%, 
@@ -1261,7 +1332,7 @@
         #3a3a45 70%, 
         #2a2a35 85%, 
         #1a1a1f 100%);
-    z-index: 1;
+    z-index: 2;
     box-shadow: 
         inset 0 0 30px rgba(0, 0, 0, 0.5),
         0 0 50px rgba(0, 0, 0, 0.8);
@@ -1275,7 +1346,7 @@
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 8px;
+    width: 6px;
     height: 100%;
     background: linear-gradient(180deg, 
         rgba(255, 200, 100, 0.1) 0%, 
@@ -1287,18 +1358,6 @@
 @keyframes pillarGlow {
     0%, 100% { opacity: 0.3; }
     50% { opacity: 0.8; }
-}
-
-.metal-pillar::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 40px;
-    background: linear-gradient(180deg, 
-        #4a4a55 0%, 
-        #6a6a75 50%, 
-        #4a4a55 100%);
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
 }
 
 .pillar-left {
@@ -1321,19 +1380,19 @@
     transform: translateX(0);
 }
 
-/* Metal Beams - Top and Bottom */
+/* Metal Beams - Top and Bottom - SMALLER */
 .metal-beam {
     position: absolute;
     left: 0;
     width: 100%;
-    height: 40px;
+    height: 30px;
     background: linear-gradient(180deg, 
         #2a2a35 0%, 
         #4a4a55 20%, 
         #5a5a65 50%, 
         #4a4a55 80%, 
         #2a2a35 100%);
-    z-index: 2;
+    z-index: 3;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
     opacity: 0;
     transition: opacity 0.5s ease 0.15s, transform 0.5s ease 0.15s;
@@ -1344,7 +1403,7 @@
     position: absolute;
     left: 0;
     width: 100%;
-    height: 4px;
+    height: 3px;
     background: linear-gradient(90deg, 
         transparent 0%, 
         rgba(255, 200, 100, 0.4) 20%, 
@@ -1383,12 +1442,12 @@
     transform: translateY(0);
 }
 
-/* Metal Corner Brackets */
+/* Metal Corner Brackets - Smaller */
 .metal-corner {
     position: absolute;
-    width: 80px;
-    height: 80px;
-    z-index: 3;
+    width: 60px;
+    height: 60px;
+    z-index: 4;
     opacity: 0;
     transition: all 0.4s ease 0.3s;
 }
@@ -1405,23 +1464,23 @@
 
 .metal-corner::before {
     width: 100%;
-    height: 8px;
+    height: 6px;
 }
 
 .metal-corner::after {
-    width: 8px;
+    width: 6px;
     height: 100%;
 }
 
 .corner-tl {
-    top: 40px;
-    left: 60px;
+    top: 30px;
+    left: 50px;
     transform: scale(0) rotate(-45deg);
 }
 
 .corner-tr {
-    top: 40px;
-    right: 60px;
+    top: 30px;
+    right: 50px;
     transform: scale(0) rotate(45deg);
 }
 
@@ -1429,8 +1488,8 @@
 .corner-tr::after { right: 0; }
 
 .corner-bl {
-    bottom: 40px;
-    left: 60px;
+    bottom: 30px;
+    left: 50px;
     transform: scale(0) rotate(-45deg);
 }
 
@@ -1438,8 +1497,8 @@
 .corner-bl::after { bottom: 0; }
 
 .corner-br {
-    bottom: 40px;
-    right: 60px;
+    bottom: 30px;
+    right: 50px;
     transform: scale(0) rotate(45deg);
 }
 
@@ -1460,7 +1519,7 @@
     height: 100%;
     pointer-events: none;
     overflow: hidden;
-    z-index: 4;
+    z-index: 5;
 }
 
 /* Metallic Shards - Forge sparks rising */
@@ -1504,7 +1563,7 @@
     height: 100%;
     pointer-events: none;
     overflow: hidden;
-    z-index: 5;
+    z-index: 6;
 }
 
 /* Explosion Debris - Metallic fragments with slow-mo */
@@ -1573,42 +1632,42 @@
     }
 }
 
-/* Main Arena - Metallic Container */
+/* Main Arena - COMPACT Layout for Laptop */
 .result-arena {
     position: absolute;
-    top: 40px;
-    left: 60px;
-    right: 60px;
-    bottom: 40px;
+    top: 30px;
+    left: 50px;
+    right: 50px;
+    bottom: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 15px 30px;
+    padding: 8px 20px;
     box-sizing: border-box;
     overflow: visible;
     z-index: 10;
-    gap: 6px;
+    gap: 4px;
     /* Metallic inner frame */
     background: 
-        linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 50%, rgba(255, 255, 255, 0.02) 100%),
-        radial-gradient(ellipse 80% 60% at center 40%, rgba(255, 200, 100, 0.08) 0%, transparent 60%);
-    border: 1px solid rgba(80, 80, 90, 0.5);
+        linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, transparent 50%, rgba(255, 255, 255, 0.01) 100%),
+        radial-gradient(ellipse 70% 50% at center 40%, rgba(255, 200, 100, 0.06) 0%, transparent 60%);
+    border: 1px solid rgba(80, 80, 90, 0.4);
     border-radius: 4px;
 }
 
 /* Close Button - Metallic */
 .result-close-x {
     position: fixed;
-    top: 50px;
-    right: 75px;
-    width: 44px;
-    height: 44px;
+    top: 38px;
+    right: 60px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: linear-gradient(145deg, #3a3a45 0%, #2a2a35 50%, #3a3a45 100%);
     border: 2px solid #4a4a55;
     color: rgba(255, 200, 100, 0.8);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     cursor: pointer;
     z-index: 100;
     display: flex;
@@ -1638,12 +1697,12 @@
         0 4px 20px rgba(0, 0, 0, 0.6);
 }
 
-/* Victory Header - Metallic Crown */
+/* Victory Header - Metallic Crown - COMPACT */
 .victory-header {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2px;
+    gap: 0;
     position: relative;
     opacity: 0;
     transform: translateY(-30px) scale(0.8);
@@ -1662,12 +1721,12 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 180px;
-    height: 180px;
+    width: 140px;
+    height: 140px;
     background: conic-gradient(from 0deg, 
-        transparent, rgba(255, 200, 100, 0.25), 
-        transparent, rgba(255, 200, 100, 0.25), 
-        transparent, rgba(255, 200, 100, 0.25), 
+        transparent, rgba(255, 200, 100, 0.2), 
+        transparent, rgba(255, 200, 100, 0.2), 
+        transparent, rgba(255, 200, 100, 0.2), 
         transparent);
     border-radius: 50%;
     animation: raysRotate 15s linear infinite;
@@ -1681,21 +1740,21 @@
 /* Metal Crown Frame */
 .metal-crown-frame {
     position: absolute;
-    top: -20px;
+    top: -15px;
     left: 50%;
     transform: translateX(-50%);
-    width: 100px;
-    height: 50px;
+    width: 80px;
+    height: 40px;
     border: 3px solid transparent;
     border-top: 3px solid #5a5a65;
     border-radius: 50% 50% 0 0;
-    opacity: 0.6;
+    opacity: 0.5;
 }
 
 .victory-crown {
-    font-size: 2rem;
+    font-size: 1.6rem;
     color: #ffd700;
-    filter: drop-shadow(0 0 35px rgba(255, 200, 100, 0.9)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+    filter: drop-shadow(0 0 30px rgba(255, 200, 100, 0.9)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.5));
     animation: crownBounce 2s ease-in-out infinite;
     position: relative;
     z-index: 2;
@@ -1703,14 +1762,14 @@
 
 @keyframes crownBounce {
     0%, 100% { transform: translateY(0) rotate(-3deg); }
-    50% { transform: translateY(-10px) rotate(3deg); }
+    50% { transform: translateY(-8px) rotate(3deg); }
 }
 
 .victory-title {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     font-weight: 900;
-    letter-spacing: 0.5em;
+    letter-spacing: 0.4em;
     /* Metallic gold text */
     background: linear-gradient(180deg, 
         #fff 0%, 
@@ -1722,7 +1781,7 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    filter: drop-shadow(0 4px 25px rgba(255, 200, 100, 0.6));
+    filter: drop-shadow(0 3px 20px rgba(255, 200, 100, 0.6));
     position: relative;
     z-index: 2;
     line-height: 1;
@@ -1730,24 +1789,26 @@
 }
 
 @keyframes titleShimmer {
-    0%, 100% { filter: drop-shadow(0 4px 25px rgba(255, 200, 100, 0.6)); }
-    50% { filter: drop-shadow(0 4px 35px rgba(255, 215, 0, 0.9)); }
+    0%, 100% { filter: drop-shadow(0 3px 20px rgba(255, 200, 100, 0.6)); }
+    50% { filter: drop-shadow(0 3px 30px rgba(255, 215, 0, 0.9)); }
 }
 
 .victory-subtitle {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.55rem;
+    font-size: 0.5rem;
     font-weight: 600;
     color: rgba(255, 200, 100, 0.7);
-    letter-spacing: 0.25em;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
 }
 
-/* Champion Showcase - Metal Forge Platform */
+/* ==========================
+   CHAMPION SHOWCASE - Interactive with Zoom
+   ========================== */
 .champion-showcase {
     position: relative;
-    width: 160px;
-    height: 160px;
+    width: 130px;
+    height: 130px;
     cursor: pointer;
     opacity: 0;
     transform: scale(0.5);
@@ -1761,8 +1822,57 @@
     transition-delay: 0.2s;
 }
 
+/* HOVER STATE - Zoom & Focus */
 .champion-showcase:hover {
-    transform: scale(1.1) translateY(-5px);
+    transform: scale(1.15);
+}
+
+.champion-showcase:hover .champion-image {
+    transform: translate(-50%, -50%) scale(1.25) !important;
+    filter: 
+        drop-shadow(0 0 60px rgba(255, 200, 100, 0.8)) 
+        drop-shadow(0 0 100px rgba(255, 140, 0, 0.5))
+        drop-shadow(0 30px 60px rgba(0, 0, 0, 0.7)) !important;
+}
+
+.champion-showcase:hover .champion-spotlight {
+    border-color: rgba(255, 215, 0, 0.8);
+    box-shadow: 
+        inset 0 0 60px rgba(255, 200, 100, 0.6),
+        0 0 80px rgba(255, 200, 100, 0.5);
+}
+
+/* Click Hint - View Details */
+.champion-click-hint {
+    position: absolute;
+    bottom: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    background: linear-gradient(145deg, rgba(60, 60, 70, 0.9), rgba(40, 40, 50, 0.95));
+    border: 1px solid rgba(255, 200, 100, 0.3);
+    border-radius: 15px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.45rem;
+    color: rgba(255, 200, 100, 0.8);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.champion-click-hint i {
+    font-size: 0.5rem;
+}
+
+.champion-showcase:hover .champion-click-hint {
+    opacity: 1;
+    bottom: -40px;
 }
 
 .champion-aura {
@@ -1815,20 +1925,21 @@
     height: 120%;
     /* Metallic gold spotlight circle */
     background: radial-gradient(ellipse at center, 
-        rgba(255, 200, 100, 0.3) 0%, 
-        rgba(255, 180, 80, 0.15) 40%, 
+        rgba(255, 200, 100, 0.25) 0%, 
+        rgba(255, 180, 80, 0.12) 40%, 
         transparent 70%);
-    border: 3px solid rgba(255, 200, 100, 0.5);
+    border: 3px solid rgba(255, 200, 100, 0.45);
     border-radius: 50%;
     animation: spotlightPulse 3s ease-in-out infinite;
     box-shadow: 
-        inset 0 0 30px rgba(255, 200, 100, 0.3),
-        0 0 40px rgba(255, 200, 100, 0.2);
+        inset 0 0 25px rgba(255, 200, 100, 0.25),
+        0 0 35px rgba(255, 200, 100, 0.2);
+    transition: all 0.4s ease;
 }
 
 @keyframes spotlightPulse {
-    0%, 100% { opacity: 0.6; box-shadow: inset 0 0 30px rgba(255, 200, 100, 0.3), 0 0 40px rgba(255, 200, 100, 0.2); }
-    50% { opacity: 1; box-shadow: inset 0 0 50px rgba(255, 200, 100, 0.5), 0 0 60px rgba(255, 200, 100, 0.4); }
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
 }
 
 /* Champion Image - MUST be in front of all decorations */
@@ -1836,8 +1947,8 @@
     position: absolute !important;
     top: 50% !important;
     left: 50% !important;
-    width: 300px !important;
-    height: 300px !important;
+    width: 260px !important;
+    height: 260px !important;
     border-radius: 0 !important;
     border: none !important;
     box-shadow: none !important;
@@ -1845,17 +1956,18 @@
     object-fit: contain !important;
     /* Metallic glow filter */
     filter: 
-        drop-shadow(0 0 50px rgba(255, 180, 80, 0.6)) 
-        drop-shadow(0 0 80px rgba(255, 140, 0, 0.3))
-        drop-shadow(0 25px 50px rgba(0, 0, 0, 0.6));
+        drop-shadow(0 0 40px rgba(255, 180, 80, 0.5)) 
+        drop-shadow(0 0 70px rgba(255, 140, 0, 0.25))
+        drop-shadow(0 20px 40px rgba(0, 0, 0, 0.6));
     animation: championFloat 4s ease-in-out infinite;
     z-index: 9999;
     pointer-events: auto;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.4s ease;
 }
 
 @keyframes championFloat {
     0%, 100% { transform: translate(-50%, -50%) translateY(0) scale(1); }
-    50% { transform: translate(-50%, -50%) translateY(-12px) scale(1.03); }
+    50% { transform: translate(-50%, -50%) translateY(-10px) scale(1.02); }
 }
 
 .champion-particles {
@@ -1881,16 +1993,18 @@
 
 @keyframes championParticle {
     0%, 100% {
-        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(90px) scale(0);
+        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(80px) scale(0);
         opacity: 0;
     }
     50% {
-        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(160px) scale(1.2);
+        transform: translate(-50%, -50%) rotate(var(--angle)) translateX(140px) scale(1.2);
         opacity: 1;
     }
 }
 
-/* Champion Info - Metallic Name Plate */
+/* ==========================
+   CHAMPION INFO - Name with Stable Glow
+   ========================== */
 .champion-info {
     display: flex;
     flex-direction: column;
@@ -1908,9 +2022,47 @@
     transition-delay: 0.4s;
 }
 
+/* Name Wrapper with Glow Behind */
+.champion-name-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Stable Radial Glow Behind Name */
+.champion-name-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280px;
+    height: 80px;
+    /* Stable radial glow - not moving */
+    background: radial-gradient(ellipse at center, 
+        rgba(255, 215, 100, 0.5) 0%, 
+        rgba(255, 180, 60, 0.3) 30%,
+        rgba(255, 140, 0, 0.15) 50%,
+        transparent 70%);
+    filter: blur(8px);
+    animation: nameGlowPulse 3s ease-in-out infinite;
+    pointer-events: none;
+}
+
+@keyframes nameGlowPulse {
+    0%, 100% { 
+        opacity: 0.7; 
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% { 
+        opacity: 1; 
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+}
+
 .champion-name {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.7rem;
+    font-size: 1.6rem;
     font-weight: 900;
     letter-spacing: 0.2em;
     /* Metallic chrome text */
@@ -1928,22 +2080,27 @@
     line-height: 1;
     padding: 4px 20px;
     position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1;
 }
 
-.champion-name::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    animation: nameShine 3s ease-in-out infinite;
-    border-radius: 4px;
+/* Hover Focus Effect on Name */
+.champion-name:hover {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9)) drop-shadow(0 0 35px rgba(255, 215, 0, 0.8));
+    transform: scale(1.05);
 }
 
-@keyframes nameShine {
-    0%, 100% { transform: translateX(-100%); }
-    50% { transform: translateX(100%); }
+.champion-name:hover + .champion-name-glow,
+.champion-name-wrapper:hover .champion-name-glow {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.3);
+    background: radial-gradient(ellipse at center, 
+        rgba(255, 215, 100, 0.7) 0%, 
+        rgba(255, 180, 60, 0.4) 30%,
+        rgba(255, 140, 0, 0.2) 50%,
+        transparent 70%);
 }
-
 /* Battle Summary Cards - Metallic Plates */
 .battle-summary {
     display: flex;
@@ -2562,215 +2719,46 @@
 }
 
 /* ==========================
-   RESULT OVERLAY - RESPONSIVE METALLIC
+   RESULT OVERLAY - HEIGHT-BASED RESPONSIVE
+   For laptop screens with limited vertical space
    ========================== */
-@media (max-width: 768px) {
-    /* Adjust for tablet - pillars narrower */
-    .metal-pillar {
-        width: 40px;
-    }
-    
+@media (max-height: 800px) {
     .result-arena {
-        top: 35px;
-        left: 40px;
-        right: 40px;
-        bottom: 35px;
-        padding: 10px 15px;
-        gap: 5px;
-    }
-    
-    .result-close-x {
-        top: 42px;
-        right: 50px;
-        width: 38px;
-        height: 38px;
-        font-size: 1rem;
-    }
-    
-    .metal-corner {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .corner-tl { top: 35px; left: 40px; }
-    .corner-tr { top: 35px; right: 40px; }
-    .corner-bl { bottom: 35px; left: 40px; }
-    .corner-br { bottom: 35px; right: 40px; }
-    
-    .victory-crown {
-        font-size: 1.8rem;
-    }
-    
-    .victory-title {
-        font-size: 1.9rem;
-        letter-spacing: 0.35em;
-    }
-    
-    .champion-showcase {
-        width: 140px;
-        height: 140px;
-    }
-    
-    #fightResultOverlay .champion-showcase .champion-image {
-        width: 260px !important;
-        height: 260px !important;
-    }
-    
-    .champion-name {
-        font-size: 1.5rem;
-    }
-    
-    .battle-summary {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 8px;
-    }
-    
-    .summary-card {
-        padding: 7px 12px;
-    }
-    
-    .summary-card .card-icon {
-        width: 28px;
-        height: 28px;
-        font-size: 0.7rem;
-    }
-    
-    .summary-card .card-label {
-        font-size: 0.5rem;
-    }
-    
-    .summary-card .card-value {
-        font-size: 0.7rem;
-    }
-    
-    .stat-analysis {
-        padding: 8px 10px;
-        max-width: 380px;
-    }
-    
-    .analysis-title {
-        font-size: 0.5rem;
-        margin-bottom: 5px;
-    }
-    
-    .analysis-header-row,
-    .analysis-row {
-        padding: 5px 8px;
-        gap: 6px;
-    }
-    
-    .analysis-col {
-        font-size: 0.45rem;
-    }
-    
-    .analysis-row .analysis-col {
-        font-size: 0.5rem;
-    }
-    
-    .stat-num {
-        font-size: 0.5rem;
-    }
-    
-    .defeated-card {
-        padding: 7px 12px;
-    }
-    
-    .defeated-image {
-        width: 24px;
-        height: 24px;
-    }
-    
-    .defeated-name {
-        font-size: 0.75rem;
-    }
-    
-    .cage-fight-badge {
-        font-size: 0.4rem;
-    }
-    
-    .result-actions {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 6px;
-    }
-    
-    .result-btn {
-        padding: 8px 14px;
-        font-size: 0.55rem;
-    }
-}
-
-@media (max-width: 480px) {
-    /* Mobile - minimal pillars, compact layout */
-    .metal-pillar {
-        width: 25px;
+        top: 20px;
+        bottom: 20px;
+        padding: 4px 15px;
+        gap: 2px;
     }
     
     .metal-beam {
-        height: 30px;
-    }
-    
-    .result-arena {
-        top: 30px;
-        left: 25px;
-        right: 25px;
-        bottom: 30px;
-        padding: 8px 10px;
-        gap: 4px;
-    }
-    
-    .result-close-x {
-        top: 35px;
-        right: 32px;
-        width: 32px;
-        height: 32px;
-        font-size: 0.9rem;
+        height: 20px;
     }
     
     .metal-corner {
-        width: 40px;
-        height: 40px;
+        width: 45px;
+        height: 45px;
     }
     
-    .corner-tl { top: 30px; left: 25px; }
-    .corner-tr { top: 30px; right: 25px; }
-    .corner-bl { bottom: 30px; left: 25px; }
-    .corner-br { bottom: 30px; right: 25px; }
+    .corner-tl { top: 20px; }
+    .corner-tr { top: 20px; }
+    .corner-bl { bottom: 20px; }
+    .corner-br { bottom: 20px; }
     
-    .metal-grate {
-        background-image: 
-            repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(40, 40, 50, 0.2) 20px, rgba(40, 40, 50, 0.2) 21px),
-            repeating-linear-gradient(0deg, transparent, transparent 20px, rgba(40, 40, 50, 0.2) 20px, rgba(40, 40, 50, 0.2) 21px);
-    }
-    
-    .victory-header {
-        gap: 1px;
-    }
-    
-    .victory-crown-rays {
-        width: 120px;
-        height: 120px;
+    .result-close-x {
+        top: 25px;
     }
     
     .victory-crown {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
     
     .victory-title {
         font-size: 1.4rem;
-        letter-spacing: 0.25em;
-    }
-    
-    .metal-crown-frame {
-        width: 70px;
-        height: 35px;
-        top: -15px;
     }
     
     .champion-showcase {
-        width: 110px;
-        height: 110px;
+        width: 100px;
+        height: 100px;
     }
     
     #fightResultOverlay .champion-showcase .champion-image {
@@ -2779,17 +2767,16 @@
     }
     
     .champion-name {
-        font-size: 1.2rem;
-        padding: 3px 12px;
+        font-size: 1.3rem;
     }
     
-    .battle-summary {
-        gap: 5px;
+    .champion-name-glow {
+        width: 200px;
+        height: 50px;
     }
     
     .summary-card {
         padding: 5px 10px;
-        gap: 6px;
     }
     
     .summary-card .card-icon {
@@ -2798,21 +2785,311 @@
         font-size: 0.6rem;
     }
     
+    .stat-analysis {
+        padding: 5px 8px;
+        max-width: 360px;
+    }
+    
+    .analysis-header-row,
+    .analysis-row {
+        padding: 3px 6px;
+    }
+    
+    .defeated-card {
+        padding: 4px 10px;
+    }
+    
+    .result-btn {
+        padding: 6px 10px;
+        font-size: 0.5rem;
+    }
+}
+
+@media (max-height: 700px) {
+    .result-arena {
+        top: 15px;
+        bottom: 15px;
+        left: 35px;
+        right: 35px;
+        gap: 1px;
+        padding: 3px 12px;
+    }
+    
+    .metal-beam {
+        height: 15px;
+    }
+    
+    .metal-pillar {
+        width: 35px;
+    }
+    
+    .metal-corner {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .corner-tl { top: 15px; left: 35px; }
+    .corner-tr { top: 15px; right: 35px; }
+    .corner-bl { bottom: 15px; left: 35px; }
+    .corner-br { bottom: 15px; right: 35px; }
+    
+    .result-close-x {
+        top: 18px;
+        right: 42px;
+        width: 30px;
+        height: 30px;
+        font-size: 0.75rem;
+    }
+    
+    .victory-header {
+        gap: 0;
+    }
+    
+    .victory-crown {
+        font-size: 1.1rem;
+    }
+    
+    .victory-title {
+        font-size: 1.2rem;
+        letter-spacing: 0.3em;
+    }
+    
+    .victory-crown-rays {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .metal-crown-frame {
+        display: none;
+    }
+    
+    .champion-showcase {
+        width: 85px;
+        height: 85px;
+    }
+    
+    #fightResultOverlay .champion-showcase .champion-image {
+        width: 170px !important;
+        height: 170px !important;
+    }
+    
+    .champion-click-hint {
+        display: none;
+    }
+    
+    .champion-name {
+        font-size: 1.1rem;
+    }
+    
+    .champion-name-glow {
+        width: 170px;
+        height: 40px;
+    }
+    
+    .battle-summary {
+        gap: 4px;
+    }
+    
+    .summary-card {
+        padding: 4px 8px;
+    }
+    
+    .summary-card .card-icon {
+        width: 20px;
+        height: 20px;
+        font-size: 0.5rem;
+    }
+    
     .summary-card .card-label {
         font-size: 0.4rem;
     }
     
     .summary-card .card-value {
+        font-size: 0.55rem;
+    }
+    
+    .stat-analysis {
+        padding: 4px 6px;
+        max-width: 320px;
+    }
+    
+    .analysis-title {
+        font-size: 0.4rem;
+        margin-bottom: 2px;
+    }
+    
+    .analysis-header-row,
+    .analysis-row {
+        padding: 2px 5px;
+        gap: 3px;
+    }
+    
+    .analysis-col {
+        font-size: 0.35rem;
+    }
+    
+    .analysis-row .analysis-col {
+        font-size: 0.4rem;
+    }
+    
+    .defeated-section {
+        gap: 3px;
+    }
+    
+    .defeated-label {
+        font-size: 0.4rem;
+    }
+    
+    .defeated-card {
+        padding: 3px 8px;
+    }
+    
+    .defeated-image {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .defeated-name {
         font-size: 0.6rem;
+    }
+    
+    .cage-fight-badge {
+        font-size: 0.32rem;
+    }
+    
+    .result-actions {
+        gap: 4px;
+    }
+    
+    .result-btn {
+        padding: 5px 8px;
+        font-size: 0.45rem;
+    }
+    
+    /* Hide metal rays on very short screens */
+    .metal-rays-container {
+        display: none;
+    }
+}
+
+/* ==========================
+   RESULT OVERLAY - RESPONSIVE METALLIC
+   ========================== */
+@media (max-width: 768px) {
+    /* Adjust for tablet - pillars narrower */
+    .metal-pillar {
+        width: 35px;
+    }
+    
+    .metal-beam {
+        height: 25px;
+    }
+    
+    .result-arena {
+        top: 25px;
+        left: 35px;
+        right: 35px;
+        bottom: 25px;
+        padding: 6px 12px;
+        gap: 3px;
+    }
+    
+    .result-close-x {
+        top: 30px;
+        right: 42px;
+        width: 34px;
+        height: 34px;
+        font-size: 0.9rem;
+    }
+    
+    .metal-corner {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .corner-tl { top: 25px; left: 35px; }
+    .corner-tr { top: 25px; right: 35px; }
+    .corner-bl { bottom: 25px; left: 35px; }
+    .corner-br { bottom: 25px; right: 35px; }
+    
+    /* Metal rays smaller on tablet */
+    .metal-rays-container {
+        top: 35%;
+    }
+    
+    .metal-ray {
+        height: 50px;
+    }
+    
+    .victory-crown-rays {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .victory-crown {
+        font-size: 1.4rem;
+    }
+    
+    .victory-title {
+        font-size: 1.5rem;
+        letter-spacing: 0.3em;
+    }
+    
+    .champion-showcase {
+        width: 110px;
+        height: 110px;
+    }
+    
+    #fightResultOverlay .champion-showcase .champion-image {
+        width: 220px !important;
+        height: 220px !important;
+    }
+    
+    .champion-name-glow {
+        width: 200px;
+        height: 60px;
+    }
+    
+    .champion-name {
+        font-size: 1.3rem;
+    }
+    
+    .champion-click-hint {
+        font-size: 0.4rem;
+    }
+    
+    .battle-summary {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+    }
+    
+    .summary-card {
+        padding: 6px 10px;
+    }
+    
+    .summary-card .card-icon {
+        width: 26px;
+        height: 26px;
+        font-size: 0.65rem;
+    }
+    
+    .summary-card .card-label {
+        font-size: 0.45rem;
+    }
+    
+    .summary-card .card-value {
+        font-size: 0.65rem;
     }
     
     .stat-analysis {
         padding: 6px 8px;
-        max-width: 320px;
+        max-width: 360px;
     }
     
-    .analysis-grid {
-        gap: 1px;
+    .analysis-title {
+        font-size: 0.45rem;
+        margin-bottom: 4px;
     }
     
     .analysis-header-row,
@@ -2829,41 +3106,217 @@
         font-size: 0.45rem;
     }
     
+    .stat-num {
+        font-size: 0.45rem;
+    }
+    
+    .defeated-card {
+        padding: 5px 10px;
+    }
+    
+    .defeated-image {
+        width: 22px;
+        height: 22px;
+    }
+    
+    .defeated-name {
+        font-size: 0.7rem;
+    }
+    
+    .cage-fight-badge {
+        font-size: 0.38rem;
+    }
+    
+    .result-actions {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px;
+    }
+    
+    .result-btn {
+        padding: 7px 12px;
+        font-size: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    /* Mobile - minimal pillars, compact layout */
+    .metal-pillar {
+        width: 20px;
+    }
+    
+    .metal-beam {
+        height: 20px;
+    }
+    
+    .result-arena {
+        top: 20px;
+        left: 20px;
+        right: 20px;
+        bottom: 20px;
+        padding: 5px 8px;
+        gap: 3px;
+    }
+    
+    .result-close-x {
+        top: 24px;
+        right: 25px;
+        width: 28px;
+        height: 28px;
+        font-size: 0.75rem;
+    }
+    
+    .metal-corner {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .corner-tl { top: 20px; left: 20px; }
+    .corner-tr { top: 20px; right: 20px; }
+    .corner-bl { bottom: 20px; left: 20px; }
+    .corner-br { bottom: 20px; right: 20px; }
+    
+    /* Hide metal rays on mobile for performance */
+    .metal-rays-container {
+        display: none;
+    }
+    
+    .metal-grate {
+        background-image: 
+            repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(40, 40, 50, 0.2) 20px, rgba(40, 40, 50, 0.2) 21px),
+            repeating-linear-gradient(0deg, transparent, transparent 20px, rgba(40, 40, 50, 0.2) 20px, rgba(40, 40, 50, 0.2) 21px);
+    }
+    
+    .victory-header {
+        gap: 0;
+    }
+    
+    .victory-crown-rays {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .victory-crown {
+        font-size: 1.2rem;
+    }
+    
+    .victory-title {
+        font-size: 1.2rem;
+        letter-spacing: 0.2em;
+    }
+    
+    .metal-crown-frame {
+        width: 60px;
+        height: 30px;
+        top: -12px;
+    }
+    
+    .champion-showcase {
+        width: 90px;
+        height: 90px;
+    }
+    
+    #fightResultOverlay .champion-showcase .champion-image {
+        width: 170px !important;
+        height: 170px !important;
+    }
+    
+    .champion-name-glow {
+        width: 160px;
+        height: 50px;
+    }
+    
+    .champion-name {
+        font-size: 1rem;
+        padding: 2px 10px;
+    }
+    
+    .champion-click-hint {
+        font-size: 0.35rem;
+        padding: 3px 6px;
+    }
+    
+    .battle-summary {
+        gap: 4px;
+    }
+    
+    .summary-card {
+        padding: 4px 8px;
+        gap: 5px;
+    }
+    
+    .summary-card .card-icon {
+        width: 22px;
+        height: 22px;
+        font-size: 0.55rem;
+    }
+    
+    .summary-card .card-label {
+        font-size: 0.38rem;
+    }
+    
+    .summary-card .card-value {
+        font-size: 0.55rem;
+    }
+    
+    .stat-analysis {
+        padding: 5px 6px;
+        max-width: 280px;
+    }
+    
+    .analysis-grid {
+        gap: 1px;
+    }
+    
+    .analysis-header-row,
+    .analysis-row {
+        padding: 3px 5px;
+        gap: 3px;
+    }
+    
+    .analysis-col {
+        font-size: 0.35rem;
+    }
+    
+    .analysis-row .analysis-col {
+        font-size: 0.4rem;
+    }
+    
     .analysis-row:hover {
         transform: scale(1.01) translateX(2px);
     }
     
     .defeated-section {
-        gap: 6px;
+        gap: 4px;
     }
     
     .defeated-label {
-        font-size: 0.45rem;
-    }
-    
-    .defeated-card {
-        padding: 6px 10px;
-        gap: 6px;
-    }
-    
-    .defeated-image {
-        width: 20px;
-        height: 20px;
-    }
-    
-    .defeated-name {
-        font-size: 0.65rem;
-    }
-    
-    .defeated-x {
-        width: 14px;
-        height: 14px;
         font-size: 0.4rem;
     }
     
-    .cage-fight-badge {
-        font-size: 0.35rem;
+    .defeated-card {
+        padding: 4px 8px;
         gap: 5px;
+    }
+    
+    .defeated-image {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .defeated-name {
+        font-size: 0.6rem;
+    }
+    
+    .defeated-x {
+        width: 12px;
+        height: 12px;
+        font-size: 0.35rem;
+    }
+    
+    .cage-fight-badge {
+        font-size: 0.32rem;
+        gap: 4px;
     }
     
     .badge-dot {
@@ -2872,12 +3325,12 @@
     }
     
     .result-actions {
-        gap: 5px;
+        gap: 4px;
     }
     
     .result-btn {
-        padding: 7px 12px;
-        font-size: 0.5rem;
+        padding: 6px 10px;
+        font-size: 0.45rem;
     }
 }
 
@@ -2926,7 +3379,7 @@
 }
 
 /* ==========================
-   RESPONSIVE: Small Desktop (1366x768)
+   RESPONSIVE: Small Desktop/Laptop (1366x768, 1440x900)
    ========================== */
 @media (max-width: 1199px) and (min-width: 1024px) {
     #compare-view .fight-screen {
@@ -2946,6 +3399,82 @@
     #compare-view .fighter-display {
         width: clamp(60px, 10vh, 110px);
         height: clamp(60px, 10vh, 110px);
+    }
+    
+    /* Result Overlay - Compact for laptop screens */
+    .metal-pillar {
+        width: 40px;
+    }
+    
+    .metal-beam {
+        height: 25px;
+    }
+    
+    .result-arena {
+        top: 25px;
+        left: 40px;
+        right: 40px;
+        bottom: 25px;
+        padding: 6px 15px;
+        gap: 3px;
+    }
+    
+    .result-close-x {
+        top: 30px;
+        right: 48px;
+        width: 36px;
+        height: 36px;
+    }
+    
+    .metal-corner {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .corner-tl { top: 25px; left: 40px; }
+    .corner-tr { top: 25px; right: 40px; }
+    .corner-bl { bottom: 25px; left: 40px; }
+    .corner-br { bottom: 25px; right: 40px; }
+    
+    .victory-crown {
+        font-size: 1.4rem;
+    }
+    
+    .victory-title {
+        font-size: 1.5rem;
+    }
+    
+    .champion-showcase {
+        width: 115px;
+        height: 115px;
+    }
+    
+    #fightResultOverlay .champion-showcase .champion-image {
+        width: 230px !important;
+        height: 230px !important;
+    }
+    
+    .champion-name-glow {
+        width: 220px;
+        height: 60px;
+    }
+    
+    .champion-name {
+        font-size: 1.4rem;
+    }
+    
+    .summary-card {
+        padding: 6px 10px;
+    }
+    
+    .summary-card .card-icon {
+        width: 26px;
+        height: 26px;
+    }
+    
+    .stat-analysis {
+        max-width: 380px;
+        padding: 6px 10px;
     }
 }
 

@@ -633,6 +633,9 @@
                     <div class="metal-grate"></div>
                 </div>
                 
+                <!-- Large Metal Rays - Extending from center outward -->
+                <div class="metal-rays-container" id="metalRaysContainer"></div>
+                
                 <!-- Initial explosion flash -->
                 <div class="explosion-flash" id="explosionFlash"></div>
                 
@@ -648,12 +651,13 @@
                 <div class="result-arena">
                     <!-- Victory Header -->
                     <div class="victory-header">
+                        <div class="victory-crown-rays"></div>
                         <div class="metal-crown-frame"></div>
                         <div class="victory-crown"><i class="fas fa-crown"></i></div>
                         <div class="victory-title">VICTORY</div>
                     </div>
                     
-                    <!-- Champion Showcase -->
+                    <!-- Champion Showcase - Interactive -->
                     <div class="champion-showcase" id="championShowcase">
                         <div class="champion-aura"></div>
                         <div class="champion-ring ring-1"></div>
@@ -662,11 +666,18 @@
                         <div class="champion-spotlight"></div>
                         <img class="champion-image" id="championImg" src="" alt="">
                         <div class="champion-particles" id="championParticles"></div>
+                        <div class="champion-click-hint">
+                            <i class="fas fa-search-plus"></i>
+                            <span>View Details</span>
+                        </div>
                     </div>
                     
                     <!-- Champion Info -->
                     <div class="champion-info">
-                        <div class="champion-name" id="championName">CHAMPION</div>
+                        <div class="champion-name-wrapper">
+                            <div class="champion-name" id="championName">CHAMPION</div>
+                            <div class="champion-name-glow"></div>
+                        </div>
                     </div>
                     
                     <!-- Battle Stats Summary -->
@@ -1081,6 +1092,43 @@
         },
 
         /**
+         * Spawn large metal rays extending from center outward - CONTINUOUS LOOP
+         */
+        spawnMetalRays() {
+            const container = document.getElementById('metalRaysContainer');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            // Create 12 large metal rays at different angles
+            const rayCount = 12;
+            const colors = [
+                'linear-gradient(90deg, #3a3a45 0%, #6a6a75 30%, #8a8a95 50%, #6a6a75 70%, #3a3a45 100%)',
+                'linear-gradient(90deg, #4a4a55 0%, #7a7a85 30%, #9a9a9f 50%, #7a7a85 70%, #4a4a55 100%)',
+                'linear-gradient(90deg, #5a5a65 0%, #8a8a95 30%, #aaaaaf 50%, #8a8a95 70%, #5a5a65 100%)',
+                'linear-gradient(90deg, #d4af37 0%, #ffd700 30%, #ffed80 50%, #ffd700 70%, #d4af37 100%)'
+            ];
+            
+            for (let i = 0; i < rayCount; i++) {
+                const ray = document.createElement('div');
+                ray.className = 'metal-ray';
+                const angle = (i * 360 / rayCount);
+                const width = 40 + Math.random() * 60; // 40-100px wide
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const delay = (i * 0.15); // Staggered
+                const duration = 3 + Math.random() * 2; // 3-5 seconds
+                
+                ray.style.setProperty('--angle', angle + 'deg');
+                ray.style.setProperty('--width', width + 'px');
+                ray.style.setProperty('--ray-gradient', color);
+                ray.style.setProperty('--delay', delay + 's');
+                ray.style.setProperty('--duration', duration + 's');
+                
+                container.appendChild(ray);
+            }
+        },
+
+        /**
          * Spawn celebration particles - METALLIC EXPLOSION
          */
         spawnCelebrationParticles() {
@@ -1095,6 +1143,9 @@
                 flash.classList.add('active');
                 setTimeout(() => flash.classList.remove('active'), 600);
             }
+            
+            // Spawn metal rays
+            this.spawnMetalRays();
             
             // Metallic colors - steel, gold, chrome, bronze, titanium
             const colors = ['#c0c0c0', '#d4af37', '#e8e8e8', '#cd7f32', '#878681', '#b8860b', '#a8a9ad'];
