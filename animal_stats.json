@@ -2,6 +2,7 @@
   {
     "_id": "692f75eb274f411ced1e1284",
     "name": "African Elephant",
+    "__v": 0,
     "agility": 26,
     "attack": 97.5,
     "battle_profile": {
@@ -73,6 +74,7 @@
   {
     "_id": "692f75eb274f411ced1e1285",
     "name": "African Lion",
+    "__v": 0,
     "agility": 77.9,
     "attack": 85.2,
     "battle_profile": {
@@ -144,6 +146,7 @@
   {
     "_id": "692f75eb274f411ced1e1286",
     "name": "African Wild Dog",
+    "__v": 0,
     "agility": 81.3,
     "attack": 55.4,
     "battle_profile": {
@@ -204,12 +207,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:14.781Z",
-    "weight_kg": 50,
+    "weight_kg": 25,
     "special": 68
   },
   {
     "_id": "692f75eb274f411ced1e1287",
     "name": "Albatross",
+    "__v": 0,
     "agility": 55.9,
     "attack": 10.8,
     "battle_profile": {
@@ -270,12 +274,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:14.824Z",
-    "weight_kg": 50,
+    "weight_kg": 9,
     "special": 16
   },
   {
     "_id": "692f75eb274f411ced1e1288",
     "name": "Alligator",
+    "__v": 0,
     "agility": 11.6,
     "attack": 91.4,
     "battle_profile": {
@@ -346,6 +351,7 @@
   {
     "_id": "692f75eb274f411ced1e1289",
     "name": "Alpaca",
+    "__v": 0,
     "agility": 28,
     "attack": 13.8,
     "battle_profile": {
@@ -415,6 +421,7 @@
   {
     "_id": "692f75eb274f411ced1e128a",
     "name": "Anaconda",
+    "__v": 0,
     "agility": 10.6,
     "attack": 83.4,
     "battle_profile": {
@@ -481,12 +488,13 @@
       "semi-aquatic"
     ],
     "updatedAt": "2025-12-02T23:28:14.955Z",
-    "weight_kg": 200,
+    "weight_kg": 50,
     "special": 77
   },
   {
     "_id": "692f75ec274f411ced1e128b",
     "name": "Anglerfish",
+    "__v": 0,
     "agility": 2,
     "attack": 30.9,
     "battle_profile": {
@@ -547,12 +555,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:15.001Z",
-    "weight_kg": 50,
+    "weight_kg": 40,
     "special": 26
   },
   {
     "_id": "692f75ec274f411ced1e128c",
     "name": "Anteater",
+    "__v": 0,
     "agility": 14.1,
     "attack": 13.7,
     "battle_profile": {
@@ -622,6 +631,7 @@
   {
     "_id": "692f75ec274f411ced1e128d",
     "name": "Arctic Fox",
+    "__v": 0,
     "agility": 71.7,
     "attack": 74.5,
     "battle_profile": {
@@ -692,6 +702,7 @@
   {
     "_id": "692f75ec274f411ced1e128e",
     "name": "Arctic Wolf",
+    "__v": 0,
     "agility": 69,
     "attack": 54.6,
     "battle_profile": {
@@ -752,12 +763,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:15.153Z",
-    "weight_kg": 50,
+    "weight_kg": 45,
     "special": 72.6
   },
   {
     "_id": "692f75ec274f411ced1e128f",
     "name": "Armadillo",
+    "__v": 0,
     "agility": 6.8,
     "attack": 10.7,
     "battle_profile": {
@@ -828,6 +840,7 @@
   {
     "_id": "692f75ec274f411ced1e1290",
     "name": "Army Ant",
+    "__v": 0,
     "agility": 3.5,
     "attack": 0.4,
     "battle_profile": {
@@ -888,12 +901,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:15.238Z",
-    "weight_kg": 50,
+    "weight_kg": 0.002,
     "special": 55
   },
   {
     "_id": "692f75ec274f411ced1e1291",
     "name": "Axolotl",
+    "__v": 0,
     "agility": 0.8,
     "attack": 1.3,
     "battle_profile": {
@@ -958,12 +972,13 @@
       "external gills"
     ],
     "updatedAt": "2025-12-02T23:28:15.281Z",
-    "weight_kg": 0.3,
+    "weight_kg": 0.15,
     "special": 27.3
   },
   {
     "_id": "692f75ec274f411ced1e1292",
     "name": "Baboon",
+    "__v": 0,
     "agility": 39.5,
     "attack": 47.7,
     "battle_profile": {
@@ -1024,12 +1039,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:15.326Z",
-    "weight_kg": 50,
+    "weight_kg": 24,
     "special": 41.9
   },
   {
     "_id": "692f75ec274f411ced1e1293",
     "name": "Bactrian Camel",
+    "__v": 0,
     "agility": 15.4,
     "attack": 73.6,
     "battle_profile": {
@@ -1090,12 +1106,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:15.371Z",
-    "weight_kg": 50,
+    "weight_kg": 800,
     "special": 65
   },
   {
     "_id": "692f75ec274f411ced1e1294",
     "name": "Badger",
+    "__v": 0,
     "agility": 19.7,
     "attack": 10.5,
     "battle_profile": {
@@ -1160,12 +1177,13 @@
       "strong jaws"
     ],
     "updatedAt": "2025-12-02T23:28:15.412Z",
-    "weight_kg": 15,
+    "weight_kg": 12,
     "special": 70.2
   },
   {
     "_id": "692f75ec274f411ced1e1295",
     "name": "Bald Eagle",
+    "__v": 0,
     "agility": 89.5,
     "attack": 46.9,
     "battle_profile": {
@@ -1237,6 +1255,7 @@
   {
     "_id": "692f75ec274f411ced1e1296",
     "name": "Barn Owl",
+    "__v": 0,
     "agility": 63.4,
     "attack": 46.2,
     "battle_profile": {
@@ -1297,12 +1316,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:15.508Z",
-    "weight_kg": 50,
+    "weight_kg": 0.5,
     "special": 65
   },
   {
     "_id": "692f75ec274f411ced1e1297",
     "name": "Barracuda",
+    "__v": 0,
     "agility": 76.6,
     "attack": 30.3,
     "battle_profile": {
@@ -1363,12 +1383,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:15.555Z",
-    "weight_kg": 50,
+    "weight_kg": 5,
     "special": 73
   },
   {
     "_id": "692f75ec274f411ced1e1298",
     "name": "Beaver",
+    "__v": 0,
     "agility": 15.9,
     "attack": 20.7,
     "battle_profile": {
@@ -1438,6 +1459,7 @@
   {
     "_id": "692f75ec274f411ced1e1299",
     "name": "Beluga Whale",
+    "__v": 0,
     "agility": 9.6,
     "attack": 29.8,
     "battle_profile": {
@@ -1507,6 +1529,7 @@
   {
     "_id": "692f75ec274f411ced1e129a",
     "name": "Bighorn Sheep",
+    "__v": 0,
     "agility": 61.4,
     "attack": 13.6,
     "battle_profile": {
@@ -1576,6 +1599,7 @@
   {
     "_id": "692f75ec274f411ced1e129b",
     "name": "Bison",
+    "__v": 0,
     "agility": 41.6,
     "attack": 72.7,
     "battle_profile": {
@@ -1646,6 +1670,7 @@
   {
     "_id": "692f75ec274f411ced1e129c",
     "name": "Black Bear",
+    "__v": 0,
     "agility": 42.3,
     "attack": 82.5,
     "battle_profile": {
@@ -1706,12 +1731,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:15.785Z",
-    "weight_kg": 50,
+    "weight_kg": 150,
     "special": 76.9
   },
   {
     "_id": "692f75ec274f411ced1e129d",
     "name": "Black Mamba",
+    "__v": 0,
     "agility": 50.5,
     "attack": 58.5,
     "battle_profile": {
@@ -1781,6 +1807,7 @@
   {
     "_id": "692f75ec274f411ced1e129e",
     "name": "Black Panther",
+    "__v": 0,
     "agility": 90.7,
     "attack": 71.8,
     "battle_profile": {
@@ -1841,12 +1868,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:15.878Z",
-    "weight_kg": 50,
+    "weight_kg": 60,
     "special": 79.5
   },
   {
     "_id": "692f75ed274f411ced1e129f",
     "name": "Black Rhinoceros",
+    "__v": 0,
     "agility": 12.1,
     "attack": 95,
     "battle_profile": {
@@ -1907,12 +1935,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:15.921Z",
-    "weight_kg": 50,
+    "weight_kg": 1100,
     "special": 74.6
   },
   {
     "_id": "692f75ed274f411ced1e12a0",
     "name": "Black Widow",
+    "__v": 0,
     "agility": 21.2,
     "attack": 13.4,
     "battle_profile": {
@@ -1973,12 +2002,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:15.964Z",
-    "weight_kg": 50,
+    "weight_kg": 0.001,
     "special": 78
   },
   {
     "_id": "692f75ed274f411ced1e12a1",
     "name": "Blue Whale",
+    "__v": 0,
     "agility": 9.3,
     "attack": 29.2,
     "battle_profile": {
@@ -2048,6 +2078,7 @@
   {
     "_id": "692f75ed274f411ced1e12a2",
     "name": "Boa Constrictor",
+    "__v": 0,
     "agility": 10.3,
     "attack": 81.6,
     "battle_profile": {
@@ -2108,12 +2139,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:16.055Z",
-    "weight_kg": 50,
+    "weight_kg": 15,
     "special": 75
   },
   {
     "_id": "692f75ed274f411ced1e12a3",
     "name": "Bobcat",
+    "__v": 0,
     "agility": 75.2,
     "attack": 70.9,
     "battle_profile": {
@@ -2174,12 +2206,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:16.097Z",
-    "weight_kg": 50,
+    "weight_kg": 10,
     "special": 73.2
   },
   {
     "_id": "692f75ed274f411ced1e12a4",
     "name": "Bongo",
+    "__v": 0,
     "agility": 19.4,
     "attack": 10.4,
     "battle_profile": {
@@ -2240,12 +2273,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:16.141Z",
-    "weight_kg": 50,
+    "weight_kg": 280,
     "special": 35.1
   },
   {
     "_id": "692f75ed274f411ced1e12a5",
     "name": "Bottlenose Dolphin",
+    "__v": 0,
     "agility": 75.9,
     "attack": 28.6,
     "battle_profile": {
@@ -2316,6 +2350,7 @@
   {
     "_id": "692f760f274f411ced1e1354",
     "name": "Box Jellyfish",
+    "__v": 0,
     "agility": 22.2,
     "attack": 20.1,
     "battle_profile": {
@@ -2386,6 +2421,7 @@
   {
     "_id": "692f75ed274f411ced1e12a6",
     "name": "Bull Shark",
+    "__v": 0,
     "agility": 85.7,
     "attack": 90.6,
     "battle_profile": {
@@ -2456,6 +2492,7 @@
   {
     "_id": "692f75ed274f411ced1e12a7",
     "name": "Bullet Ant",
+    "__v": 0,
     "agility": 3.3,
     "attack": 0.3,
     "battle_profile": {
@@ -2516,12 +2553,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:16.340Z",
-    "weight_kg": 50,
+    "weight_kg": 0.002,
     "special": 90.5
   },
   {
     "_id": "692f75ed274f411ced1e12a8",
     "name": "Bullfrog",
+    "__v": 0,
     "agility": 8.1,
     "attack": 1.2,
     "battle_profile": {
@@ -2582,12 +2620,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:16.380Z",
-    "weight_kg": 50,
+    "weight_kg": 0.5,
     "special": 14.1
   },
   {
     "_id": "692f75ed274f411ced1e12a9",
     "name": "Camel",
+    "__v": 0,
     "agility": 15.1,
     "attack": 70,
     "battle_profile": {
@@ -2657,6 +2696,7 @@
   {
     "_id": "692f75ed274f411ced1e12aa",
     "name": "Camel Spider",
+    "__v": 0,
     "agility": 21.4,
     "attack": 14.6,
     "battle_profile": {
@@ -2717,12 +2757,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:16.466Z",
-    "weight_kg": 50,
+    "weight_kg": 0.06,
     "special": 65
   },
   {
     "_id": "692f75ed274f411ced1e12ab",
     "name": "Cape Buffalo",
+    "__v": 0,
     "agility": 29,
     "attack": 92.3,
     "battle_profile": {
@@ -2792,6 +2833,7 @@
   {
     "_id": "692f75ed274f411ced1e12ac",
     "name": "Capuchin Monkey",
+    "__v": 0,
     "agility": 60,
     "attack": 45.4,
     "battle_profile": {
@@ -2852,12 +2894,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:16.555Z",
-    "weight_kg": 50,
+    "weight_kg": 3,
     "special": 47.7
   },
   {
     "_id": "692f75ed274f411ced1e12ad",
     "name": "Capybara",
+    "__v": 0,
     "agility": 9.1,
     "attack": 19.5,
     "battle_profile": {
@@ -2921,12 +2964,13 @@
       "semi-aquatic"
     ],
     "updatedAt": "2025-12-02T23:28:16.596Z",
-    "weight_kg": 60,
+    "weight_kg": 55,
     "special": 26.6
   },
   {
     "_id": "692f75ed274f411ced1e12ae",
     "name": "Caracal",
+    "__v": 0,
     "agility": 80,
     "attack": 70,
     "battle_profile": {
@@ -2991,12 +3035,13 @@
       "bird catcher"
     ],
     "updatedAt": "2025-12-02T23:28:16.642Z",
-    "weight_kg": 18,
+    "weight_kg": 14,
     "special": 75
   },
   {
     "_id": "692f75ed274f411ced1e12af",
     "name": "Cassowary",
+    "__v": 0,
     "agility": 31.4,
     "attack": 10.2,
     "battle_profile": {
@@ -3062,12 +3107,13 @@
       "powerful kick"
     ],
     "updatedAt": "2025-12-02T23:28:16.689Z",
-    "weight_kg": 60,
+    "weight_kg": 50,
     "special": 85.5
   },
   {
     "_id": "692f75ed274f411ced1e12b0",
     "name": "Chameleon",
+    "__v": 0,
     "agility": 13.9,
     "attack": 10.1,
     "battle_profile": {
@@ -3128,12 +3174,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:16.736Z",
-    "weight_kg": 50,
+    "weight_kg": 0.12,
     "special": 51.9
   },
   {
     "_id": "692f75ed274f411ced1e12b1",
     "name": "Cheetah",
+    "__v": 0,
     "agility": 98.2,
     "attack": 69.2,
     "battle_profile": {
@@ -3205,6 +3252,7 @@
   {
     "_id": "692f75ed274f411ced1e12b2",
     "name": "Chimpanzee",
+    "__v": 0,
     "agility": 49.8,
     "attack": 44.6,
     "battle_profile": {
@@ -3270,12 +3318,13 @@
       "surprising strength"
     ],
     "updatedAt": "2025-12-02T23:28:16.822Z",
-    "weight_kg": 60,
+    "weight_kg": 55,
     "special": 24
   },
   {
     "_id": "692f75ed274f411ced1e12b3",
     "name": "Clouded Leopard",
+    "__v": 0,
     "agility": 88.2,
     "attack": 68.5,
     "battle_profile": {
@@ -3346,6 +3395,7 @@
   {
     "_id": "692f75ed274f411ced1e12b4",
     "name": "Cockatoo",
+    "__v": 0,
     "agility": 47,
     "attack": 10,
     "battle_profile": {
@@ -3406,12 +3456,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:16.906Z",
-    "weight_kg": 50,
+    "weight_kg": 0.6,
     "special": 31.8
   },
   {
     "_id": "692f760f274f411ced1e1355",
     "name": "Coconut Crab",
+    "__v": 0,
     "agility": 5.3,
     "attack": 9.8,
     "battle_profile": {
@@ -3472,12 +3523,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:16.950Z",
-    "weight_kg": 50,
+    "weight_kg": 4,
     "special": 56.8
   },
   {
     "_id": "692f760f274f411ced1e1356",
     "name": "Colossal Squid",
+    "__v": 0,
     "agility": 16.1,
     "attack": 53.8,
     "battle_profile": {
@@ -3538,12 +3590,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:16.996Z",
-    "weight_kg": 50,
+    "weight_kg": 500,
     "special": 18.6
   },
   {
     "_id": "692f75ed274f411ced1e12b5",
     "name": "Condor",
+    "__v": 0,
     "agility": 49.1,
     "attack": 43.8,
     "battle_profile": {
@@ -3604,12 +3657,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:17.041Z",
-    "weight_kg": 50,
+    "weight_kg": 12,
     "special": 65.1
   },
   {
     "_id": "692f75ee274f411ced1e12b6",
     "name": "Cougar",
+    "__v": 0,
     "agility": 83.2,
     "attack": 67.7,
     "battle_profile": {
@@ -3681,6 +3735,7 @@
   {
     "_id": "692f75ee274f411ced1e12b7",
     "name": "Coyote",
+    "__v": 0,
     "agility": 25,
     "attack": 53.1,
     "battle_profile": {
@@ -3751,6 +3806,7 @@
   {
     "_id": "692f75ee274f411ced1e12b8",
     "name": "Crow",
+    "__v": 0,
     "agility": 55.2,
     "attack": 9.7,
     "battle_profile": {
@@ -3811,12 +3867,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:17.170Z",
-    "weight_kg": 50,
+    "weight_kg": 0.45,
     "special": 19.2
   },
   {
     "_id": "692f7610274f411ced1e1357",
     "name": "Cuttlefish",
+    "__v": 0,
     "agility": 59.3,
     "attack": 28.1,
     "battle_profile": {
@@ -3877,12 +3934,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:17.218Z",
-    "weight_kg": 50,
+    "weight_kg": 10,
     "special": 68
   },
   {
     "_id": "692f75ee274f411ced1e12b9",
     "name": "Deathstalker Scorpion",
+    "__v": 0,
     "agility": 8.8,
     "attack": 13.3,
     "battle_profile": {
@@ -3943,12 +4001,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:17.262Z",
-    "weight_kg": 50,
+    "weight_kg": 0.003,
     "special": 93
   },
   {
     "_id": "692f75ee274f411ced1e12ba",
     "name": "Dhole",
+    "__v": 0,
     "agility": 24.7,
     "attack": 52.3,
     "battle_profile": {
@@ -4009,12 +4068,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:17.304Z",
-    "weight_kg": 50,
+    "weight_kg": 15,
     "special": 68.5
   },
   {
     "_id": "692f75ee274f411ced1e12bb",
     "name": "Dingo",
+    "__v": 0,
     "agility": 24.5,
     "attack": 51.5,
     "battle_profile": {
@@ -4085,6 +4145,7 @@
   {
     "_id": "692f75ee274f411ced1e12bc",
     "name": "Donkey",
+    "__v": 0,
     "agility": 20.9,
     "attack": 13.1,
     "battle_profile": {
@@ -4145,12 +4206,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:17.401Z",
-    "weight_kg": 50,
+    "weight_kg": 200,
     "special": 13.6
   },
   {
     "_id": "692f75ee274f411ced1e12bd",
     "name": "Dragonfly",
+    "__v": 0,
     "agility": 94.7,
     "attack": 9.5,
     "battle_profile": {
@@ -4211,12 +4273,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:17.442Z",
-    "weight_kg": 50,
+    "weight_kg": 0.001,
     "special": 17.9
   },
   {
     "_id": "692f75ee274f411ced1e12be",
     "name": "Electric Eel",
+    "__v": 0,
     "agility": 36.1,
     "attack": 27.5,
     "battle_profile": {
@@ -4288,6 +4351,7 @@
   {
     "_id": "692f75ee274f411ced1e12bf",
     "name": "Elk",
+    "__v": 0,
     "agility": 62.1,
     "attack": 19,
     "battle_profile": {
@@ -4358,6 +4422,7 @@
   {
     "_id": "692f75ee274f411ced1e12c0",
     "name": "Emperor Penguin",
+    "__v": 0,
     "agility": 7.3,
     "attack": 13,
     "battle_profile": {
@@ -4428,6 +4493,7 @@
   {
     "_id": "692f75ee274f411ced1e12c1",
     "name": "Emperor Scorpion",
+    "__v": 0,
     "agility": 7.1,
     "attack": 12.8,
     "battle_profile": {
@@ -4497,6 +4563,7 @@
   {
     "_id": "692f75ee274f411ced1e12c2",
     "name": "Emu",
+    "__v": 0,
     "agility": 33.4,
     "attack": 12.7,
     "battle_profile": {
@@ -4561,12 +4628,13 @@
       "curious nature"
     ],
     "updatedAt": "2025-12-02T23:28:17.649Z",
-    "weight_kg": 50,
+    "weight_kg": 40,
     "special": 77
   },
   {
     "_id": "692f75ee274f411ced1e12c3",
     "name": "Fennec Fox",
+    "__v": 0,
     "agility": 71,
     "attack": 66.9,
     "battle_profile": {
@@ -4637,6 +4705,7 @@
   {
     "_id": "692f75ee274f411ced1e12c4",
     "name": "Ferret",
+    "__v": 0,
     "agility": 27.5,
     "attack": 9.4,
     "battle_profile": {
@@ -4697,12 +4766,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:17.745Z",
-    "weight_kg": 50,
+    "weight_kg": 1,
     "special": 72.6
   },
   {
     "_id": "692f75ee274f411ced1e12c5",
     "name": "Flamingo",
+    "__v": 0,
     "agility": 20.7,
     "attack": 12.5,
     "battle_profile": {
@@ -4772,6 +4842,7 @@
   {
     "_id": "692f75ee274f411ced1e12c6",
     "name": "Flying Squirrel",
+    "__v": 0,
     "agility": 46.4,
     "attack": 9.2,
     "battle_profile": {
@@ -4832,12 +4903,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:17.828Z",
-    "weight_kg": 50,
+    "weight_kg": 0.15,
     "special": 21.3
   },
   {
     "_id": "692f75ee274f411ced1e12c7",
     "name": "Gaboon Viper",
+    "__v": 0,
     "agility": 6.3,
     "attack": 57.7,
     "battle_profile": {
@@ -4898,12 +4970,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:17.870Z",
-    "weight_kg": 50,
+    "weight_kg": 16,
     "special": 96
   },
   {
     "_id": "692f75ee274f411ced1e12c8",
     "name": "Galapagos Tortoise",
+    "__v": 0,
     "agility": 0.5,
     "attack": 1,
     "battle_profile": {
@@ -4974,6 +5047,7 @@
   {
     "_id": "692f75ee274f411ced1e12c9",
     "name": "Gazelle",
+    "__v": 0,
     "agility": 92.9,
     "attack": 18.4,
     "battle_profile": {
@@ -5043,6 +5117,7 @@
   {
     "_id": "692f75ee274f411ced1e12ca",
     "name": "Gecko",
+    "__v": 0,
     "agility": 30.7,
     "attack": 9.1,
     "battle_profile": {
@@ -5103,12 +5178,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:17.999Z",
-    "weight_kg": 50,
+    "weight_kg": 0.065,
     "special": 44
   },
   {
     "_id": "692f7610274f411ced1e1358",
     "name": "Giant Centipede",
+    "__v": 0,
     "agility": 14.4,
     "attack": 14.4,
     "battle_profile": {
@@ -5179,6 +5255,7 @@
   {
     "_id": "692f7610274f411ced1e1359",
     "name": "Giant Squid",
+    "__v": 0,
     "agility": 23.7,
     "attack": 43.1,
     "battle_profile": {
@@ -5239,12 +5316,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:18.087Z",
-    "weight_kg": 50,
+    "weight_kg": 275,
     "special": 27.8
   },
   {
     "_id": "692f75ee274f411ced1e12cb",
     "name": "Gibbon",
+    "__v": 0,
     "agility": 96.4,
     "attack": 42.3,
     "battle_profile": {
@@ -5305,12 +5383,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:18.145Z",
-    "weight_kg": 50,
+    "weight_kg": 7,
     "special": 43.5
   },
   {
     "_id": "692f75ef274f411ced1e12cc",
     "name": "Gila Monster",
+    "__v": 0,
     "agility": 7.6,
     "attack": 17.8,
     "battle_profile": {
@@ -5371,12 +5450,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:18.190Z",
-    "weight_kg": 50,
+    "weight_kg": 2,
     "special": 87.5
   },
   {
     "_id": "692f75ef274f411ced1e12cd",
     "name": "Giraffe",
+    "__v": 0,
     "agility": 30,
     "attack": 8.9,
     "battle_profile": {
@@ -5446,6 +5526,7 @@
   {
     "_id": "692f75ef274f411ced1e12ce",
     "name": "Golden Eagle",
+    "__v": 0,
     "agility": 91.4,
     "attack": 41.5,
     "battle_profile": {
@@ -5506,12 +5587,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:18.279Z",
-    "weight_kg": 50,
+    "weight_kg": 5,
     "special": 61
   },
   {
     "_id": "692f75ef274f411ced1e12cf",
     "name": "Goliath Birdeater",
+    "__v": 0,
     "agility": 2.8,
     "attack": 14.3,
     "battle_profile": {
@@ -5582,6 +5664,7 @@
   {
     "_id": "692f75ef274f411ced1e12d0",
     "name": "Goose",
+    "__v": 0,
     "agility": 20.4,
     "attack": 12.4,
     "battle_profile": {
@@ -5652,6 +5735,7 @@
   {
     "_id": "692f75ef274f411ced1e12d1",
     "name": "Gorilla",
+    "__v": 0,
     "agility": 28.5,
     "attack": 86.1,
     "battle_profile": {
@@ -5723,6 +5807,7 @@
   {
     "_id": "692f75ef274f411ced1e12d2",
     "name": "Gray Wolf",
+    "__v": 0,
     "agility": 68.3,
     "attack": 50.8,
     "battle_profile": {
@@ -5788,12 +5873,13 @@
       "strategic hunting"
     ],
     "updatedAt": "2025-12-02T23:28:18.450Z",
-    "weight_kg": 50,
+    "weight_kg": 40,
     "special": 70.2
   },
   {
     "_id": "692f75ef274f411ced1e12d3",
     "name": "Great Horned Owl",
+    "__v": 0,
     "agility": 67.6,
     "attack": 40.8,
     "battle_profile": {
@@ -5854,12 +5940,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:18.493Z",
-    "weight_kg": 50,
+    "weight_kg": 1.5,
     "special": 71.1
   },
   {
     "_id": "692f7611274f411ced1e135a",
     "name": "Great White Shark",
+    "__v": 0,
     "agility": 86.3,
     "attack": 95,
     "battle_profile": {
@@ -5931,6 +6018,7 @@
   {
     "_id": "692f75ef274f411ced1e12d4",
     "name": "Green Anaconda",
+    "__v": 0,
     "agility": 10.1,
     "attack": 80.7,
     "battle_profile": {
@@ -5991,12 +6079,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:18.590Z",
-    "weight_kg": 50,
+    "weight_kg": 60,
     "special": 78
   },
   {
     "_id": "692f75ef274f411ced1e12d5",
     "name": "Grizzly Bear",
+    "__v": 0,
     "agility": 43,
     "attack": 87,
     "battle_profile": {
@@ -6069,6 +6158,7 @@
   {
     "_id": "692f75ef274f411ced1e12d6",
     "name": "Guanaco",
+    "__v": 0,
     "agility": 27.2,
     "attack": 8.8,
     "battle_profile": {
@@ -6129,12 +6219,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:18.675Z",
-    "weight_kg": 50,
+    "weight_kg": 115,
     "special": 20.3
   },
   {
     "_id": "692f75ef274f411ced1e12d7",
     "name": "Hammerhead Shark",
+    "__v": 0,
     "agility": 83.8,
     "attack": 84.3,
     "battle_profile": {
@@ -6205,6 +6296,7 @@
   {
     "_id": "692f75ef274f411ced1e12d8",
     "name": "Harpy Eagle",
+    "__v": 0,
     "agility": 88.8,
     "attack": 40,
     "battle_profile": {
@@ -6276,6 +6368,7 @@
   {
     "_id": "692f75ef274f411ced1e12d9",
     "name": "Hedgehog",
+    "__v": 0,
     "agility": 3,
     "attack": 40,
     "battle_profile": {
@@ -6336,12 +6429,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:18.803Z",
-    "weight_kg": 50,
+    "weight_kg": 0.5,
     "special": 55
   },
   {
     "_id": "692f75ef274f411ced1e12da",
     "name": "Hellbender",
+    "__v": 0,
     "agility": 1.8,
     "attack": 8.7,
     "battle_profile": {
@@ -6402,12 +6496,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:18.847Z",
-    "weight_kg": 50,
+    "weight_kg": 2,
     "special": 23.2
   },
   {
     "_id": "692f75ef274f411ced1e12db",
     "name": "Hercules Beetle",
+    "__v": 0,
     "agility": 2.5,
     "attack": 12.3,
     "battle_profile": {
@@ -6468,12 +6563,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:18.890Z",
-    "weight_kg": 50,
+    "weight_kg": 0.1,
     "special": 59.1
   },
   {
     "_id": "692f7611274f411ced1e135b",
     "name": "Hippopotamus",
+    "__v": 0,
     "agility": 10.8,
     "attack": 94.1,
     "battle_profile": {
@@ -6543,6 +6639,7 @@
   {
     "_id": "692f75ef274f411ced1e12dc",
     "name": "Honey Badger",
+    "__v": 0,
     "agility": 45.7,
     "attack": 8.5,
     "battle_profile": {
@@ -6614,6 +6711,7 @@
   {
     "_id": "692f75ef274f411ced1e12dd",
     "name": "Hornet",
+    "__v": 0,
     "agility": 32.7,
     "attack": 12.1,
     "battle_profile": {
@@ -6674,12 +6772,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:19.020Z",
-    "weight_kg": 50,
+    "weight_kg": 0.002,
     "special": 62
   },
   {
     "_id": "692f75ef274f411ced1e12de",
     "name": "Howler Monkey",
+    "__v": 0,
     "agility": 48.4,
     "attack": 39.4,
     "battle_profile": {
@@ -6740,12 +6839,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:19.063Z",
-    "weight_kg": 50,
+    "weight_kg": 6.5,
     "special": 42.5
   },
   {
     "_id": "692f75ef274f411ced1e12df",
     "name": "Hummingbird",
+    "__v": 0,
     "agility": 99.1,
     "attack": 8.4,
     "battle_profile": {
@@ -6806,12 +6906,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:19.105Z",
-    "weight_kg": 50,
+    "weight_kg": 0.004,
     "special": 33.5
   },
   {
     "_id": "692f75ef274f411ced1e12e0",
     "name": "Huntsman Spider",
+    "__v": 0,
     "agility": 11.1,
     "attack": 12,
     "battle_profile": {
@@ -6872,12 +6973,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:19.147Z",
-    "weight_kg": 50,
+    "weight_kg": 0.17,
     "special": 69.3
   },
   {
     "_id": "692f75ef274f411ced1e12e1",
     "name": "Hyena",
+    "__v": 0,
     "agility": 24.2,
     "attack": 50,
     "battle_profile": {
@@ -6948,6 +7050,7 @@
   {
     "_id": "692f75ef274f411ced1e12e2",
     "name": "Ibex",
+    "__v": 0,
     "agility": 80,
     "attack": 8.2,
     "battle_profile": {
@@ -7018,6 +7121,7 @@
   {
     "_id": "692f75f0274f411ced1e12e3",
     "name": "Iguana",
+    "__v": 0,
     "agility": 13.6,
     "attack": 8.1,
     "battle_profile": {
@@ -7078,12 +7182,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:19.280Z",
-    "weight_kg": 50,
+    "weight_kg": 5,
     "special": 41.4
   },
   {
     "_id": "692f75f0274f411ced1e12e4",
     "name": "Impala",
+    "__v": 0,
     "agility": 95.6,
     "attack": 17.3,
     "battle_profile": {
@@ -7153,6 +7258,7 @@
   {
     "_id": "692f75f0274f411ced1e12e5",
     "name": "Jackal",
+    "__v": 0,
     "agility": 23.9,
     "attack": 49.2,
     "battle_profile": {
@@ -7223,6 +7329,7 @@
   {
     "_id": "692f75f0274f411ced1e12e6",
     "name": "Jaguar",
+    "__v": 0,
     "agility": 84.4,
     "attack": 87,
     "battle_profile": {
@@ -7294,6 +7401,7 @@
   {
     "_id": "692f75f0274f411ced1e12e7",
     "name": "Japanese Macaque",
+    "__v": 0,
     "agility": 38.9,
     "attack": 38.9,
     "battle_profile": {
@@ -7354,12 +7462,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:19.444Z",
-    "weight_kg": 50,
+    "weight_kg": 10,
     "special": 35
   },
   {
     "_id": "692f7612274f411ced1e135c",
     "name": "Kangaroo",
+    "__v": 0,
     "agility": 73.8,
     "attack": 7.9,
     "battle_profile": {
@@ -7429,6 +7538,7 @@
   {
     "_id": "692f75f0274f411ced1e12e8",
     "name": "King Cobra",
+    "__v": 0,
     "agility": 25.2,
     "attack": 56.9,
     "battle_profile": {
@@ -7499,6 +7609,7 @@
   {
     "_id": "692f7612274f411ced1e135d",
     "name": "King Crab",
+    "__v": 0,
     "agility": 5,
     "attack": 7.8,
     "battle_profile": {
@@ -7559,12 +7670,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:19.580Z",
-    "weight_kg": 50,
+    "weight_kg": 11,
     "special": 58.1
   },
   {
     "_id": "692f75f0274f411ced1e12e9",
     "name": "Kiwi",
+    "__v": 0,
     "agility": 4.8,
     "attack": 7.6,
     "battle_profile": {
@@ -7625,12 +7737,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:19.621Z",
-    "weight_kg": 50,
+    "weight_kg": 2.5,
     "special": 39.8
   },
   {
     "_id": "692f75f0274f411ced1e12ea",
     "name": "Koala",
+    "__v": 0,
     "agility": 4.5,
     "attack": 7.5,
     "battle_profile": {
@@ -7691,12 +7804,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:19.669Z",
-    "weight_kg": 50,
+    "weight_kg": 7,
     "special": 34.5
   },
   {
     "_id": "692f75f0274f411ced1e12eb",
     "name": "Komodo Dragon",
+    "__v": 0,
     "agility": 8.6,
     "attack": 7.4,
     "battle_profile": {
@@ -7768,6 +7882,7 @@
   {
     "_id": "692f75f0274f411ced1e12ec",
     "name": "Kookaburra",
+    "__v": 0,
     "agility": 30,
     "attack": 7.2,
     "battle_profile": {
@@ -7828,12 +7943,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:19.750Z",
-    "weight_kg": 50,
+    "weight_kg": 0.35,
     "special": 73.5
   },
   {
     "_id": "692f75f0274f411ced1e12ed",
     "name": "Kudu",
+    "__v": 0,
     "agility": 72.4,
     "attack": 7.1,
     "battle_profile": {
@@ -7894,12 +8010,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:19.793Z",
-    "weight_kg": 50,
+    "weight_kg": 270,
     "special": 11
   },
   {
     "_id": "692f75f0274f411ced1e12ee",
     "name": "Leatherback Sea Turtle",
+    "__v": 0,
     "agility": 2.3,
     "attack": 0.9,
     "battle_profile": {
@@ -7960,12 +8077,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:19.836Z",
-    "weight_kg": 50,
+    "weight_kg": 500,
     "special": 41
   },
   {
     "_id": "692f75f0274f411ced1e12ef",
     "name": "Leopard",
+    "__v": 0,
     "agility": 90.1,
     "attack": 66.2,
     "battle_profile": {
@@ -8037,6 +8155,7 @@
   {
     "_id": "692f75f0274f411ced1e12f0",
     "name": "Lionfish",
+    "__v": 0,
     "agility": 6.6,
     "attack": 65.4,
     "battle_profile": {
@@ -8097,12 +8216,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:19.923Z",
-    "weight_kg": 50,
+    "weight_kg": 1.1,
     "special": 80
   },
   {
     "_id": "692f75f0274f411ced1e12f1",
     "name": "Llama",
+    "__v": 0,
     "agility": 27.7,
     "attack": 11.8,
     "battle_profile": {
@@ -8172,6 +8292,7 @@
   {
     "_id": "692f7612274f411ced1e135e",
     "name": "Lobster",
+    "__v": 0,
     "agility": 1.5,
     "attack": 6.9,
     "battle_profile": {
@@ -8232,12 +8353,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:20.005Z",
-    "weight_kg": 50,
+    "weight_kg": 10,
     "special": 49.7
   },
   {
     "_id": "692f75f0274f411ced1e12f2",
     "name": "Lynx",
+    "__v": 0,
     "agility": 77.2,
     "attack": 64.6,
     "battle_profile": {
@@ -8309,6 +8431,7 @@
   {
     "_id": "692f75f0274f411ced1e12f3",
     "name": "Macaw",
+    "__v": 0,
     "agility": 45,
     "attack": 6.8,
     "battle_profile": {
@@ -8369,12 +8492,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:20.094Z",
-    "weight_kg": 50,
+    "weight_kg": 1,
     "special": 33.4
   },
   {
     "_id": "692f75f0274f411ced1e12f4",
     "name": "Magpie",
+    "__v": 0,
     "agility": 54.5,
     "attack": 6.6,
     "battle_profile": {
@@ -8435,12 +8559,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:20.134Z",
-    "weight_kg": 50,
+    "weight_kg": 0.22,
     "special": 18.9
   },
   {
     "_id": "692f75f0274f411ced1e12f5",
     "name": "Manatee",
+    "__v": 0,
     "agility": 4.3,
     "attack": 6.5,
     "battle_profile": {
@@ -8510,6 +8635,7 @@
   {
     "_id": "692f75f0274f411ced1e12f6",
     "name": "Mandrill",
+    "__v": 0,
     "agility": 43.6,
     "attack": 6.3,
     "battle_profile": {
@@ -8580,6 +8706,7 @@
   {
     "_id": "692f75f0274f411ced1e12f7",
     "name": "Maned Wolf",
+    "__v": 0,
     "agility": 60,
     "attack": 48.5,
     "battle_profile": {
@@ -8640,12 +8767,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:20.269Z",
-    "weight_kg": 50,
+    "weight_kg": 23,
     "special": 73.3
   },
   {
     "_id": "692f75f0274f411ced1e12f8",
     "name": "Manta Ray",
+    "__v": 0,
     "agility": 66.2,
     "attack": 26.9,
     "battle_profile": {
@@ -8706,12 +8834,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:20.313Z",
-    "weight_kg": 50,
+    "weight_kg": 2000,
     "special": 55.9
   },
   {
     "_id": "692f75f0274f411ced1e12f9",
     "name": "Mantis Shrimp",
+    "__v": 0,
     "agility": 56.6,
     "attack": 14.1,
     "battle_profile": {
@@ -8783,6 +8912,7 @@
   {
     "_id": "692f75f0274f411ced1e12fa",
     "name": "Marlin",
+    "__v": 0,
     "agility": 92,
     "attack": 26.4,
     "battle_profile": {
@@ -8843,12 +8973,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:20.398Z",
-    "weight_kg": 50,
+    "weight_kg": 400,
     "special": 50.4
   },
   {
     "_id": "692f75f1274f411ced1e12fb",
     "name": "Meerkat",
+    "__v": 0,
     "agility": 19.2,
     "attack": 6.2,
     "battle_profile": {
@@ -8919,6 +9050,7 @@
   {
     "_id": "692f75f1274f411ced1e12fc",
     "name": "Megalodon",
+    "__v": 0,
     "agility": 60.7,
     "attack": 100,
     "battle_profile": {
@@ -8989,6 +9121,7 @@
   {
     "_id": "692f75f1274f411ced1e12fd",
     "name": "Monarch Butterfly",
+    "__v": 0,
     "agility": 13.4,
     "attack": 6.1,
     "battle_profile": {
@@ -9049,12 +9182,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:20.524Z",
-    "weight_kg": 50,
+    "weight_kg": 0.0005,
     "special": 19.1
   },
   {
     "_id": "692f75f1274f411ced1e12fe",
     "name": "Mongoose",
+    "__v": 0,
     "agility": 20.2,
     "attack": 11.7,
     "battle_profile": {
@@ -9125,6 +9259,7 @@
   {
     "_id": "692f75f1274f411ced1e1300",
     "name": "Monitor Lizard",
+    "__v": 0,
     "agility": 13.1,
     "attack": 5.9,
     "battle_profile": {
@@ -9185,12 +9320,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:20.612Z",
-    "weight_kg": 50,
+    "weight_kg": 80,
     "special": 54.8
   },
   {
     "_id": "692f75f1274f411ced1e1301",
     "name": "Moose",
+    "__v": 0,
     "agility": 40.9,
     "attack": 63.8,
     "battle_profile": {
@@ -9261,6 +9397,7 @@
   {
     "_id": "692f75f1274f411ced1e1302",
     "name": "Moray Eel",
+    "__v": 0,
     "agility": 14.9,
     "attack": 25.8,
     "battle_profile": {
@@ -9321,12 +9458,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:20.699Z",
-    "weight_kg": 50,
+    "weight_kg": 30,
     "special": 72
   },
   {
     "_id": "692f75f1274f411ced1e1303",
     "name": "Mountain Goat",
+    "__v": 0,
     "agility": 80.6,
     "attack": 11.5,
     "battle_profile": {
@@ -9397,6 +9535,7 @@
   {
     "_id": "692f75f1274f411ced1e1304",
     "name": "Musk Ox",
+    "__v": 0,
     "agility": 25.5,
     "attack": 63.1,
     "battle_profile": {
@@ -9467,6 +9606,7 @@
   {
     "_id": "692f75f1274f411ced1e1305",
     "name": "Naked Mole Rat",
+    "__v": 0,
     "agility": 1.3,
     "attack": 5.8,
     "battle_profile": {
@@ -9527,12 +9667,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:20.827Z",
-    "weight_kg": 50,
+    "weight_kg": 0.035,
     "special": 12.1
   },
   {
     "_id": "692f75f1274f411ced1e1306",
     "name": "Narwhal",
+    "__v": 0,
     "agility": 18.9,
     "attack": 5.6,
     "battle_profile": {
@@ -9603,6 +9744,7 @@
   {
     "_id": "692f7613274f411ced1e135f",
     "name": "Nautilus",
+    "__v": 0,
     "agility": 1,
     "attack": 5.5,
     "battle_profile": {
@@ -9663,12 +9805,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:20.912Z",
-    "weight_kg": 50,
+    "weight_kg": 0.8,
     "special": 50.1
   },
   {
     "_id": "692f75f1274f411ced1e1307",
     "name": "Ocelot",
+    "__v": 0,
     "agility": 73.1,
     "attack": 5.3,
     "battle_profile": {
@@ -9729,12 +9872,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:20.954Z",
-    "weight_kg": 50,
+    "weight_kg": 11,
     "special": 73.5
   },
   {
     "_id": "692f7613274f411ced1e1360",
     "name": "Octopus",
+    "__v": 0,
     "agility": 65.5,
     "attack": 5.2,
     "battle_profile": {
@@ -9806,6 +9950,7 @@
   {
     "_id": "692f75f1274f411ced1e1308",
     "name": "Okapi",
+    "__v": 0,
     "agility": 51.8,
     "attack": 5,
     "battle_profile": {
@@ -9876,6 +10021,7 @@
   {
     "_id": "692f7613274f411ced1e1361",
     "name": "Opossum",
+    "__v": 0,
     "agility": 12.9,
     "attack": 4.9,
     "battle_profile": {
@@ -9946,6 +10092,7 @@
   {
     "_id": "692f75f1274f411ced1e1309",
     "name": "Orangutan",
+    "__v": 0,
     "agility": 23.4,
     "attack": 38.3,
     "battle_profile": {
@@ -10016,6 +10163,7 @@
   {
     "_id": "692f7613274f411ced1e1362",
     "name": "Orca",
+    "__v": 0,
     "agility": 26.2,
     "attack": 98.8,
     "battle_profile": {
@@ -10087,6 +10235,7 @@
   {
     "_id": "692f75f1274f411ced1e130a",
     "name": "Oryx",
+    "__v": 0,
     "agility": 64.8,
     "attack": 4.8,
     "battle_profile": {
@@ -10147,12 +10296,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:21.239Z",
-    "weight_kg": 50,
+    "weight_kg": 225,
     "special": 16.7
   },
   {
     "_id": "692f75f1274f411ced1e130b",
     "name": "Osprey",
+    "__v": 0,
     "agility": 86.9,
     "attack": 37.7,
     "battle_profile": {
@@ -10213,12 +10363,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:21.288Z",
-    "weight_kg": 50,
+    "weight_kg": 1.5,
     "special": 65.9
   },
   {
     "_id": "692f75f1274f411ced1e130c",
     "name": "Ostrich",
+    "__v": 0,
     "agility": 32,
     "attack": 11.4,
     "battle_profile": {
@@ -10289,6 +10440,7 @@
   {
     "_id": "692f75f1274f411ced1e130d",
     "name": "Otter",
+    "__v": 0,
     "agility": 58.6,
     "attack": 16.7,
     "battle_profile": {
@@ -10359,6 +10511,7 @@
   {
     "_id": "692f75f1274f411ced1e130e",
     "name": "Pangolin",
+    "__v": 0,
     "agility": 4,
     "attack": 4.6,
     "battle_profile": {
@@ -10428,6 +10581,7 @@
   {
     "_id": "692f75f1274f411ced1e130f",
     "name": "Peacock",
+    "__v": 0,
     "agility": 15.6,
     "attack": 4.5,
     "battle_profile": {
@@ -10488,12 +10642,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:21.461Z",
-    "weight_kg": 50,
+    "weight_kg": 5,
     "special": 22.4
   },
   {
     "_id": "692f75f1274f411ced1e1310",
     "name": "Pelican",
+    "__v": 0,
     "agility": 23.2,
     "attack": 37.2,
     "battle_profile": {
@@ -10562,6 +10717,7 @@
   {
     "_id": "692f75f1274f411ced1e1311",
     "name": "Peregrine Falcon",
+    "__v": 0,
     "agility": 100,
     "attack": 36.6,
     "battle_profile": {
@@ -10632,6 +10788,7 @@
   {
     "_id": "692f75f2274f411ced1e1312",
     "name": "Piranha",
+    "__v": 0,
     "agility": 35.5,
     "attack": 25.2,
     "battle_profile": {
@@ -10702,6 +10859,7 @@
   {
     "_id": "692f75f2274f411ced1e1313",
     "name": "Platypus",
+    "__v": 0,
     "agility": 21.9,
     "attack": 16.1,
     "battle_profile": {
@@ -10772,6 +10930,7 @@
   {
     "_id": "692f75f2274f411ced1e1314",
     "name": "Poison Dart Frog",
+    "__v": 0,
     "agility": 12.6,
     "attack": 0.1,
     "battle_profile": {
@@ -10841,6 +11000,7 @@
   {
     "_id": "692f75f2274f411ced1e1315",
     "name": "Polar Bear",
+    "__v": 0,
     "agility": 28.7,
     "attack": 89.7,
     "battle_profile": {
@@ -10912,6 +11072,7 @@
   {
     "_id": "692f75f2274f411ced1e1316",
     "name": "Porcupine",
+    "__v": 0,
     "agility": 5.8,
     "attack": 14,
     "battle_profile": {
@@ -10982,6 +11143,7 @@
   {
     "_id": "692f75f2274f411ced1e1317",
     "name": "Praying Mantis",
+    "__v": 0,
     "agility": 22.4,
     "attack": 24.7,
     "battle_profile": {
@@ -11042,12 +11204,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:21.831Z",
-    "weight_kg": 50,
+    "weight_kg": 0.005,
     "special": 54.5
   },
   {
     "_id": "692f75f2274f411ced1e1318",
     "name": "Proboscis Monkey",
+    "__v": 0,
     "agility": 47.7,
     "attack": 36,
     "battle_profile": {
@@ -11108,12 +11271,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:21.869Z",
-    "weight_kg": 50,
+    "weight_kg": 20,
     "special": 53.5
   },
   {
     "_id": "692f75f2274f411ced1e1319",
     "name": "Pronghorn",
+    "__v": 0,
     "agility": 97.3,
     "attack": 15.6,
     "battle_profile": {
@@ -11174,12 +11338,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:21.925Z",
-    "weight_kg": 50,
+    "weight_kg": 55,
     "special": 58.6
   },
   {
     "_id": "692f75f2274f411ced1e131a",
     "name": "Pufferfish",
+    "__v": 0,
     "agility": 6.1,
     "attack": 24.1,
     "battle_profile": {
@@ -11249,6 +11414,7 @@
   {
     "_id": "692f75f2274f411ced1e131b",
     "name": "Puffin",
+    "__v": 0,
     "agility": 22.9,
     "attack": 35.5,
     "battle_profile": {
@@ -11309,12 +11475,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:22.006Z",
-    "weight_kg": 50,
+    "weight_kg": 0.45,
     "special": 31.5
   },
   {
     "_id": "692f75f2274f411ced1e131c",
     "name": "Python",
+    "__v": 0,
     "agility": 9.8,
     "attack": 79.8,
     "battle_profile": {
@@ -11384,6 +11551,7 @@
   {
     "_id": "692f75f2274f411ced1e131d",
     "name": "Quokka",
+    "__v": 0,
     "agility": 18.7,
     "attack": 4.3,
     "battle_profile": {
@@ -11453,6 +11621,7 @@
   {
     "_id": "692f75f2274f411ced1e131e",
     "name": "Quoll",
+    "__v": 0,
     "agility": 27,
     "attack": 4.2,
     "battle_profile": {
@@ -11513,12 +11682,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:22.130Z",
-    "weight_kg": 50,
+    "weight_kg": 2,
     "special": 17
   },
   {
     "_id": "692f75f2274f411ced1e131f",
     "name": "Raccoon",
+    "__v": 0,
     "agility": 18.4,
     "attack": 4,
     "battle_profile": {
@@ -11589,6 +11759,7 @@
   {
     "_id": "692f75f2274f411ced1e1320",
     "name": "Rattlesnake",
+    "__v": 0,
     "agility": 7.8,
     "attack": 56.2,
     "battle_profile": {
@@ -11649,12 +11820,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:22.210Z",
-    "weight_kg": 50,
+    "weight_kg": 2.3,
     "special": 79
   },
   {
     "_id": "692f75f2274f411ced1e1321",
     "name": "Raven",
+    "__v": 0,
     "agility": 53.9,
     "attack": 3.9,
     "battle_profile": {
@@ -11715,12 +11887,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:22.253Z",
-    "weight_kg": 50,
+    "weight_kg": 1.2,
     "special": 28.4
   },
   {
     "_id": "692f75f2274f411ced1e1322",
     "name": "Red Fox",
+    "__v": 0,
     "agility": 70.3,
     "attack": 62.3,
     "battle_profile": {
@@ -11792,6 +11965,7 @@
   {
     "_id": "692f75f2274f411ced1e1323",
     "name": "Red Panda",
+    "__v": 0,
     "agility": 26.7,
     "attack": 3.8,
     "battle_profile": {
@@ -11862,6 +12036,7 @@
   {
     "_id": "692f75f2274f411ced1e1324",
     "name": "Red-Eyed Tree Frog",
+    "__v": 0,
     "agility": 16.9,
     "attack": 0,
     "battle_profile": {
@@ -11922,12 +12097,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:22.374Z",
-    "weight_kg": 50,
+    "weight_kg": 0.01,
     "special": 13.6
   },
   {
     "_id": "692f75f2274f411ced1e1325",
     "name": "Red-tailed Hawk",
+    "__v": 0,
     "agility": 82.5,
     "attack": 34.9,
     "battle_profile": {
@@ -11988,12 +12164,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:22.417Z",
-    "weight_kg": 50,
+    "weight_kg": 1.2,
     "special": 69.3
   },
   {
     "_id": "692f75f2274f411ced1e1326",
     "name": "Reindeer",
+    "__v": 0,
     "agility": 58,
     "attack": 15,
     "battle_profile": {
@@ -12064,6 +12241,7 @@
   {
     "_id": "692f75f2274f411ced1e1327",
     "name": "Reticulated Python",
+    "__v": 0,
     "agility": 11.3,
     "attack": 78.9,
     "battle_profile": {
@@ -12124,12 +12302,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:22.516Z",
-    "weight_kg": 50,
+    "weight_kg": 100,
     "special": 76
   },
   {
     "_id": "692f7615274f411ced1e1363",
     "name": "Rhinoceros",
+    "__v": 0,
     "agility": 11.8,
     "attack": 93.2,
     "battle_profile": {
@@ -12200,6 +12379,7 @@
   {
     "_id": "692f75f3274f411ced1e1328",
     "name": "Ring-tailed Lemur",
+    "__v": 0,
     "agility": 38.2,
     "attack": 34.3,
     "battle_profile": {
@@ -12260,12 +12440,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:22.612Z",
-    "weight_kg": 50,
+    "weight_kg": 3,
     "special": 53.1
   },
   {
     "_id": "692f75f3274f411ced1e1329",
     "name": "Sable Antelope",
+    "__v": 0,
     "agility": 34.1,
     "attack": 15,
     "battle_profile": {
@@ -12326,12 +12507,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:22.665Z",
-    "weight_kg": 50,
+    "weight_kg": 230,
     "special": 59.8
   },
   {
     "_id": "692f75f3274f411ced1e132a",
     "name": "Sailfish",
+    "__v": 0,
     "agility": 93.8,
     "attack": 23.5,
     "battle_profile": {
@@ -12392,12 +12574,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:22.714Z",
-    "weight_kg": 50,
+    "weight_kg": 80,
     "special": 55
   },
   {
     "_id": "692f75f3274f411ced1e132b",
     "name": "Salamander",
+    "__v": 0,
     "agility": 0.3,
     "attack": 0.7,
     "battle_profile": {
@@ -12458,12 +12641,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:22.764Z",
-    "weight_kg": 50,
+    "weight_kg": 0.02,
     "special": 13
   },
   {
     "_id": "692f7615274f411ced1e1364",
     "name": "Saltwater Crocodile",
+    "__v": 0,
     "agility": 12.4,
     "attack": 96.2,
     "battle_profile": {
@@ -12535,6 +12719,7 @@
   {
     "_id": "692f75f3274f411ced1e132c",
     "name": "Sawfish",
+    "__v": 0,
     "agility": 14.6,
     "attack": 23,
     "battle_profile": {
@@ -12595,12 +12780,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:22.855Z",
-    "weight_kg": 50,
+    "weight_kg": 350,
     "special": 13.7
   },
   {
     "_id": "692f75f3274f411ced1e132d",
     "name": "Sea Lion",
+    "__v": 0,
     "agility": 69.7,
     "attack": 61.5,
     "battle_profile": {
@@ -12670,6 +12856,7 @@
   {
     "_id": "692f75f3274f411ced1e132e",
     "name": "Sea Otter",
+    "__v": 0,
     "agility": 57.3,
     "attack": 14.9,
     "battle_profile": {
@@ -12740,6 +12927,7 @@
   {
     "_id": "692f75f3274f411ced1e132f",
     "name": "Seal",
+    "__v": 0,
     "agility": 53.2,
     "attack": 3.6,
     "battle_profile": {
@@ -12809,6 +12997,7 @@
   {
     "_id": "692f75f3274f411ced1e1330",
     "name": "Secretary Bird",
+    "__v": 0,
     "agility": 44.3,
     "attack": 3.5,
     "battle_profile": {
@@ -12879,6 +13068,7 @@
   {
     "_id": "692f75f3274f411ced1e1331",
     "name": "Serval",
+    "__v": 0,
     "agility": 79.3,
     "attack": 3.3,
     "battle_profile": {
@@ -12939,12 +13129,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:23.074Z",
-    "weight_kg": 50,
+    "weight_kg": 14,
     "special": 74
   },
   {
     "_id": "692f75f3274f411ced1e1332",
     "name": "Shoebill",
+    "__v": 0,
     "agility": 18.2,
     "attack": 3.2,
     "battle_profile": {
@@ -13015,6 +13206,7 @@
   {
     "_id": "692f75f3274f411ced1e1333",
     "name": "Siberian Tiger",
+    "__v": 0,
     "agility": 78.6,
     "attack": 88.8,
     "battle_profile": {
@@ -13086,6 +13278,7 @@
   {
     "_id": "692f75f3274f411ced1e1334",
     "name": "Skunk",
+    "__v": 0,
     "agility": 17.9,
     "attack": 3,
     "battle_profile": {
@@ -13156,6 +13349,7 @@
   {
     "_id": "692f75f3274f411ced1e1335",
     "name": "Sloth",
+    "__v": 0,
     "agility": 0,
     "attack": 2.9,
     "battle_profile": {
@@ -13226,6 +13420,7 @@
   {
     "_id": "692f75f3274f411ced1e1336",
     "name": "Sloth Bear",
+    "__v": 0,
     "agility": 25.7,
     "attack": 78.1,
     "battle_profile": {
@@ -13296,6 +13491,7 @@
   {
     "_id": "692f75f3274f411ced1e1337",
     "name": "Snapping Turtle",
+    "__v": 0,
     "agility": 3.8,
     "attack": 0.6,
     "battle_profile": {
@@ -13356,12 +13552,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:23.331Z",
-    "weight_kg": 50,
+    "weight_kg": 12,
     "special": 42.4
   },
   {
     "_id": "692f75f3274f411ced1e1338",
     "name": "Snow Leopard",
+    "__v": 0,
     "agility": 87.6,
     "attack": 60.8,
     "battle_profile": {
@@ -13427,12 +13624,13 @@
       "long tail for balance"
     ],
     "updatedAt": "2025-12-02T23:28:23.374Z",
-    "weight_kg": 50,
+    "weight_kg": 35,
     "special": 78.5
   },
   {
     "_id": "692f75f3274f411ced1e1339",
     "name": "Snowy Owl",
+    "__v": 0,
     "agility": 62.8,
     "attack": 33.8,
     "battle_profile": {
@@ -13503,6 +13701,7 @@
   {
     "_id": "692f75f3274f411ced1e133a",
     "name": "Spectacled Bear",
+    "__v": 0,
     "agility": 28.2,
     "attack": 77.2,
     "battle_profile": {
@@ -13563,12 +13762,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:23.455Z",
-    "weight_kg": 50,
+    "weight_kg": 120,
     "special": 78.4
   },
   {
     "_id": "692f75f3274f411ced1e133b",
     "name": "Spider Monkey",
+    "__v": 0,
     "agility": 66.9,
     "attack": 33.2,
     "battle_profile": {
@@ -13629,12 +13829,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:23.496Z",
-    "weight_kg": 50,
+    "weight_kg": 9,
     "special": 68.8
   },
   {
     "_id": "692f75f3274f411ced1e133c",
     "name": "Stag Beetle",
+    "__v": 0,
     "agility": 5.5,
     "attack": 11.2,
     "battle_profile": {
@@ -13695,12 +13896,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:23.539Z",
-    "weight_kg": 50,
+    "weight_kg": 0.004,
     "special": 58.2
   },
   {
     "_id": "692f75f3274f411ced1e133d",
     "name": "Stingray",
+    "__v": 0,
     "agility": 34.8,
     "attack": 22.4,
     "battle_profile": {
@@ -13761,12 +13963,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:23.580Z",
-    "weight_kg": 50,
+    "weight_kg": 90,
     "special": 72.5
   },
   {
     "_id": "692f75f3274f411ced1e133e",
     "name": "Stoat",
+    "__v": 0,
     "agility": 29.7,
     "attack": 2.7,
     "battle_profile": {
@@ -13827,12 +14030,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:23.629Z",
-    "weight_kg": 50,
+    "weight_kg": 0.25,
     "special": 78.4
   },
   {
     "_id": "692f75f4274f411ced1e133f",
     "name": "Stork",
+    "__v": 0,
     "agility": 17.6,
     "attack": 2.6,
     "battle_profile": {
@@ -13903,6 +14107,7 @@
   {
     "_id": "692f75f4274f411ced1e1340",
     "name": "Sugar Glider",
+    "__v": 0,
     "agility": 52.5,
     "attack": 2.5,
     "battle_profile": {
@@ -13963,12 +14168,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:23.713Z",
-    "weight_kg": 50,
+    "weight_kg": 0.13,
     "special": 12.3
   },
   {
     "_id": "692f75f4274f411ced1e1341",
     "name": "Sun Bear",
+    "__v": 0,
     "agility": 51.1,
     "attack": 76.3,
     "battle_profile": {
@@ -14035,6 +14241,7 @@
   {
     "_id": "692f75f4274f411ced1e1342",
     "name": "Swan",
+    "__v": 0,
     "agility": 19.9,
     "attack": 11.1,
     "battle_profile": {
@@ -14104,6 +14311,7 @@
   {
     "_id": "692f75f4274f411ced1e1343",
     "name": "Swordfish",
+    "__v": 0,
     "agility": 92,
     "attack": 21.8,
     "battle_profile": {
@@ -14173,6 +14381,7 @@
   {
     "_id": "692f75f4274f411ced1e1344",
     "name": "Tapir",
+    "__v": 0,
     "agility": 17.4,
     "attack": 2.3,
     "battle_profile": {
@@ -14242,6 +14451,7 @@
   {
     "_id": "692f75f4274f411ced1e1345",
     "name": "Tarantula Hawk",
+    "__v": 0,
     "agility": 37.5,
     "attack": 32.6,
     "battle_profile": {
@@ -14302,12 +14512,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:23.928Z",
-    "weight_kg": 50,
+    "weight_kg": 0.015,
     "special": 89.5
   },
   {
     "_id": "692f7616274f411ced1e1365",
     "name": "Tasmanian Devil",
+    "__v": 0,
     "agility": 26.5,
     "attack": 2.2,
     "battle_profile": {
@@ -14377,6 +14588,7 @@
   {
     "_id": "692f75f4274f411ced1e1346",
     "name": "Tiger Shark",
+    "__v": 0,
     "agility": 85.1,
     "attack": 87.9,
     "battle_profile": {
@@ -14447,6 +14659,7 @@
   {
     "_id": "692f75f4274f411ced1e1347",
     "name": "Toucan",
+    "__v": 0,
     "agility": 29.5,
     "attack": 2,
     "battle_profile": {
@@ -14517,6 +14730,7 @@
   {
     "_id": "692f75f4274f411ced1e1348",
     "name": "Tuna",
+    "__v": 0,
     "agility": 81.9,
     "attack": 21.2,
     "battle_profile": {
@@ -14577,12 +14791,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:24.102Z",
-    "weight_kg": 50,
+    "weight_kg": 200,
     "special": 42.2
   },
   {
     "_id": "692f75f4274f411ced1e1349",
     "name": "Vulture",
+    "__v": 0,
     "agility": 36.8,
     "attack": 32,
     "battle_profile": {
@@ -14651,6 +14866,7 @@
   {
     "_id": "692f75f4274f411ced1e134a",
     "name": "Wallaby",
+    "__v": 0,
     "agility": 64.1,
     "attack": 1.9,
     "battle_profile": {
@@ -14711,12 +14927,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:24.198Z",
-    "weight_kg": 50,
+    "weight_kg": 18,
     "special": 25.1
   },
   {
     "_id": "692f7617274f411ced1e1366",
     "name": "Walrus",
+    "__v": 0,
     "agility": 8.3,
     "attack": 1.7,
     "battle_profile": {
@@ -14788,6 +15005,7 @@
   {
     "_id": "692f75f4274f411ced1e134b",
     "name": "Warthog",
+    "__v": 0,
     "agility": 22.7,
     "attack": 31.5,
     "battle_profile": {
@@ -14858,6 +15076,7 @@
   {
     "_id": "692f75f4274f411ced1e134c",
     "name": "Wild Boar",
+    "__v": 0,
     "agility": 16.6,
     "attack": 75.4,
     "battle_profile": {
@@ -14928,6 +15147,7 @@
   {
     "_id": "692f75f4274f411ced1e134d",
     "name": "Wild Horse",
+    "__v": 0,
     "agility": 74.5,
     "attack": 11,
     "battle_profile": {
@@ -14988,12 +15208,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:24.395Z",
-    "weight_kg": 50,
+    "weight_kg": 500,
     "special": 74.1
   },
   {
     "_id": "692f75f4274f411ced1e134e",
     "name": "Wildebeest",
+    "__v": 0,
     "agility": 40.2,
     "attack": 60,
     "battle_profile": {
@@ -15062,6 +15283,7 @@
   {
     "_id": "692f75f4274f411ced1e134f",
     "name": "Wolverine",
+    "__v": 0,
     "agility": 29.2,
     "attack": 1.6,
     "battle_profile": {
@@ -15133,6 +15355,7 @@
   {
     "_id": "692f75f4274f411ced1e1350",
     "name": "Wombat",
+    "__v": 0,
     "agility": 21.7,
     "attack": 14.7,
     "battle_profile": {
@@ -15193,12 +15416,13 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:24.531Z",
-    "weight_kg": 50,
+    "weight_kg": 30,
     "special": 23.2
   },
   {
     "_id": "692f75f4274f411ced1e1351",
     "name": "Yak",
+    "__v": 0,
     "agility": 16.4,
     "attack": 59.2,
     "battle_profile": {
@@ -15268,6 +15492,7 @@
   {
     "_id": "692f75f4274f411ced1e1352",
     "name": "Zebra",
+    "__v": 0,
     "agility": 17.1,
     "attack": 1.4,
     "battle_profile": {
