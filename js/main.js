@@ -2981,44 +2981,54 @@ class AnimalStatsApp {
                         "mainEntity": [
                             {
                                 "@type": "Question",
-                                "name": `How strong is a ${animal.name} in a fight?`,
+                                "name": `${animal.name} battle stats`,
                                 "acceptedAnswer": {
                                     "@type": "Answer",
-                                    "text": `In combat, ${animal.name} has a power rating of Attack: ${animal.attack || 0}/100, Defense: ${animal.defense || 0}/100, and Special: ${animal.special || 0}/100. ${animal.attack >= 70 ? `With ${animal.attack} attack, it's considered a high-tier offensive fighter.` : animal.defense >= 70 ? `With ${animal.defense} defense, it excels at tanking damage.` : `It's a balanced fighter across multiple stats.`}`
+                                    "text": `${animal.name} battle stats: Attack ${animal.attack || 0}/100, Defense ${animal.defense || 0}/100, Agility ${animal.agility || 0}/100, Stamina ${animal.stamina || 0}/100, Intelligence ${animal.intelligence || 0}/100, Special ${animal.special || 0}/100. ${animal.weight_kg ? `Weight: ${animal.weight_kg} kg.` : ''} ${animal.speed_mps ? `Top speed: ${(animal.speed_mps * 3.6).toFixed(1)} km/h.` : ''}`
                                 }
                             },
                             {
                                 "@type": "Question",
-                                "name": `${animal.name} vs other animals - who would win?`,
-                                "acceptedAnswer": {
-                                    "@type": "Answer",
-                                    "text": `${animal.name} battle stats: Attack ${animal.attack || 0}, Defense ${animal.defense || 0}, Agility ${animal.agility || 0}, Stamina ${animal.stamina || 0}, Intelligence ${animal.intelligence || 0}, Special ${animal.special || 0}. ${animal.weight_kg ? `At ${animal.weight_kg} kg, ` : ''}${animal.attack >= 80 ? 'it can overpower most opponents' : animal.agility >= 80 ? 'it relies on speed and evasion' : animal.defense >= 80 ? 'it outlasts enemies through durability' : 'matchup depends on the opponent'}. Compare head-to-head on Animal Battle Stats.`
-                                }
-                            },
-                            {
-                                "@type": "Question",
-                                "name": `What tier is ${animal.name} in animal powerscaling?`,
+                                "name": `${animal.name} powerscaling stats`,
                                 "acceptedAnswer": {
                                     "@type": "Answer",
                                     "text": (() => {
                                         const avgStat = ((animal.attack || 0) + (animal.defense || 0) + (animal.agility || 0) + (animal.stamina || 0) + (animal.intelligence || 0) + (animal.special || 0)) / 6;
-                                        const tier = avgStat >= 80 ? 'S-tier apex predator' : avgStat >= 65 ? 'A-tier high threat' : avgStat >= 50 ? 'B-tier mid-level fighter' : avgStat >= 35 ? 'C-tier situational' : 'D-tier low combat';
-                                        return `${animal.name} ranks as ${tier} in animal powerscaling with an average stat of ${avgStat.toFixed(1)}/100. ${animal.weight_kg ? `Weight class: ${animal.weight_kg} kg.` : ''} Strongest stat: ${Object.entries({attack: animal.attack||0, defense: animal.defense||0, agility: animal.agility||0, stamina: animal.stamina||0, intelligence: animal.intelligence||0, special: animal.special||0}).sort((a,b) => b[1]-a[1])[0][0]} (${Object.entries({attack: animal.attack||0, defense: animal.defense||0, agility: animal.agility||0, stamina: animal.stamina||0, intelligence: animal.intelligence||0, special: animal.special||0}).sort((a,b) => b[1]-a[1])[0][1]}).`;
+                                        const tier = avgStat >= 80 ? 'S-tier' : avgStat >= 65 ? 'A-tier' : avgStat >= 50 ? 'B-tier' : avgStat >= 35 ? 'C-tier' : 'D-tier';
+                                        const strongest = Object.entries({attack: animal.attack||0, defense: animal.defense||0, agility: animal.agility||0, stamina: animal.stamina||0, intelligence: animal.intelligence||0, special: animal.special||0}).sort((a,b) => b[1]-a[1])[0];
+                                        return `${animal.name} powerscaling: ${tier} fighter (avg ${avgStat.toFixed(0)}/100). Strongest stat: ${strongest[0]} (${strongest[1]}). Attack ${animal.attack || 0}, Defense ${animal.defense || 0}, Agility ${animal.agility || 0}. ${animal.weight_kg ? `Weight class: ${animal.weight_kg} kg.` : ''}`;
                                     })()
                                 }
                             },
                             {
                                 "@type": "Question",
-                                "name": `Could a ${animal.name} beat a human in a fight?`,
+                                "name": `${animal.name} vs - who would win?`,
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": `${animal.name} matchup analysis: ${animal.attack >= 80 ? 'High offensive threat - can overpower most opponents.' : animal.agility >= 80 ? 'Speed-based fighter - relies on evasion and quick strikes.' : animal.defense >= 80 ? 'Tank build - outlasts enemies through durability.' : 'Balanced stats - matchup dependent.'} Key stats: ATK ${animal.attack || 0}, DEF ${animal.defense || 0}, AGI ${animal.agility || 0}, SPE ${animal.special || 0}. ${animal.weight_kg ? `Mass: ${animal.weight_kg} kg.` : ''} Compare any two animals head-to-head on Animal Battle Stats.`
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": `Bloodlusted ${animal.name} - how dangerous?`,
                                 "acceptedAnswer": {
                                     "@type": "Answer",
                                     "text": (() => {
-                                        const threat = (animal.attack || 0) + (animal.special || 0);
-                                        if (threat >= 140) return `Yes, a ${animal.name} would easily defeat an unarmed human. With ${animal.attack} attack and ${animal.weight_kg ? animal.weight_kg + ' kg of mass' : 'significant power'}, humans have virtually no chance without weapons.`;
-                                        if (threat >= 100) return `A ${animal.name} would likely win against an unarmed human. Its ${animal.attack} attack rating and ${animal.special || 0} special abilities make it a serious threat.`;
-                                        if (threat >= 60) return `A fight between a ${animal.name} and a human could go either way. While it has ${animal.attack} attack, a prepared human might defend themselves.`;
-                                        return `A human could likely fend off a ${animal.name} in most circumstances, though caution is still advised. It has relatively low combat stats (${animal.attack} attack).`;
+                                        const threat = (animal.attack || 0) + (animal.special || 0) + (animal.agility || 0) / 2;
+                                        const ferocity = animal.substats?.ferocity || animal.special || 50;
+                                        if (threat >= 180) return `Bloodlusted ${animal.name} is an extreme threat. With ${animal.attack} attack, ${animal.special || 0} special, and ${animal.weight_kg ? animal.weight_kg + ' kg of mass' : 'raw power'}, it becomes one of the most dangerous animals when fully aggressive. Ferocity rating: ${ferocity}/100.`;
+                                        if (threat >= 130) return `A bloodlusted ${animal.name} is highly dangerous. Attack: ${animal.attack}, Special: ${animal.special || 0}. When enraged, its ${animal.agility || 0} agility and natural weapons make it a serious threat to almost any opponent.`;
+                                        if (threat >= 80) return `Bloodlusted ${animal.name}: moderate threat level. Base attack ${animal.attack}/100. When aggressive, can cause serious damage but has limitations. ${animal.weight_kg ? `Weight: ${animal.weight_kg} kg.` : ''}`;
+                                        return `Even bloodlusted, ${animal.name} has limited combat capability (${animal.attack} attack). However, any cornered animal can be dangerous. Special abilities: ${animal.special || 0}/100.`;
                                     })()
+                                }
+                            },
+                            {
+                                "@type": "Question",
+                                "name": `How strong is a ${animal.name} in a fight?`,
+                                "acceptedAnswer": {
+                                    "@type": "Answer",
+                                    "text": `${animal.name} combat strength: Attack ${animal.attack || 0}/100, Defense ${animal.defense || 0}/100, Special ${animal.special || 0}/100. ${animal.attack >= 70 ? `With ${animal.attack} attack, it's a high-tier offensive fighter.` : animal.defense >= 70 ? `With ${animal.defense} defense, it excels at taking hits.` : `Balanced fighter across stats.`} ${animal.weight_kg ? `Fight weight: ${animal.weight_kg} kg (${(animal.weight_kg * 2.205).toFixed(0)} lbs).` : ''}`
                                 }
                             }
                         ]
