@@ -84,10 +84,18 @@ class TournamentManager {
             podiumGrid: document.getElementById('t-podium-grid'),
             playAgainBtn: document.getElementById('play-again-btn'),
             closeResultsBtn: document.getElementById('close-results-btn'),
+            resultsClose: document.getElementById('t-results-close'),
+            // Results celebration containers
+            goldenParticles: document.getElementById('t-golden-particles'),
+            dustContainer: document.getElementById('t-dust-container'),
+            confettiContainer: document.getElementById('t-confetti-container'),
+            heroParticles: document.getElementById('t-hero-particles'),
+            championShowcase: document.getElementById('t-champion-showcase'),
             // Bonus display
             bonusXp: document.getElementById('t-bonus-xp'),
             bonusBp: document.getElementById('t-bonus-bp'),
-            bonusGuess: document.getElementById('t-bonus-guess')
+            bonusGuess: document.getElementById('t-bonus-guess'),
+            bonusGuessWrap: document.getElementById('t-bonus-guess-wrap')
         };
         
         // Cache for ELO ratings and matchup votes
@@ -272,8 +280,32 @@ class TournamentManager {
         this.dom.fighter2?.addEventListener('click', () => this.selectWinner(1));
         
         // Results buttons
-        this.dom.playAgainBtn?.addEventListener('click', () => this.showSetup());
-        this.dom.closeResultsBtn?.addEventListener('click', () => this.hideModal());
+        this.dom.playAgainBtn?.addEventListener('click', () => {
+            this.clearCelebrationEffects();
+            this.showSetup();
+        });
+        this.dom.closeResultsBtn?.addEventListener('click', () => {
+            this.clearCelebrationEffects();
+            this.hideModal();
+        });
+        this.dom.resultsClose?.addEventListener('click', () => {
+            this.clearCelebrationEffects();
+            this.hideModal();
+        });
+        
+        // Champion showcase click - view champion stats
+        this.dom.championShowcase?.addEventListener('click', () => {
+            if (this.winners?.[0]) {
+                const champion = this.winners[0];
+                this.clearCelebrationEffects();
+                this.hideModal();
+                // Navigate to champion's stats page
+                if (typeof app !== 'undefined' && app.router) {
+                    const slug = champion.name.toLowerCase().replace(/\s+/g, '-');
+                    app.router.navigate(`/stats/${slug}`);
+                }
+            }
+        });
         
         // Guess mode toggle - make entire row clickable (desktop)
         const guessVoteRow = document.getElementById('t-guess-vote-row');
@@ -2088,8 +2120,9 @@ class TournamentManager {
             
             finalFour.forEach(animal => {
                 if (animal.name !== champion.name && posIdx < 3) {
+                    const slug = animal.name.toLowerCase().replace(/\s+/g, '-');
                     podiumHtml += `
-                        <div class="t-podium-card">
+                        <div class="t-podium-card" data-animal-slug="${slug}" title="View ${animal.name} stats">
                             <div class="t-podium-pos">${positions[posIdx]} PLACE</div>
                             <img src="${animal.image}" alt="${animal.name}" class="t-podium-img" 
                                 onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'">
@@ -2101,6 +2134,18 @@ class TournamentManager {
             });
             
             this.dom.podiumGrid.innerHTML = podiumHtml;
+            
+            // Add click handlers for podium cards
+            this.dom.podiumGrid.querySelectorAll('.t-podium-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const slug = card.dataset.animalSlug;
+                    if (slug && typeof app !== 'undefined' && app.router) {
+                        this.clearCelebrationEffects();
+                        this.hideModal();
+                        app.router.navigate(`/stats/${slug}`);
+                    }
+                });
+            });
         }
         
         // Award XP/BP for completing a tournament (with guess bonus)
@@ -2110,6 +2155,234 @@ class TournamentManager {
         this.dom.setup.style.display = 'none';
         this.dom.battle.style.display = 'none';
         this.dom.results.style.display = 'flex';
+        
+        // Trigger celebration effects
+        this.spawnCelebrationEffects();
+    }
+    
+    /**
+     * Spawn celebration particle effects for tournament results
+     */
+    spawnCelebrationEffects() {
+        // Golden particles rising from bottom
+        this.spawnGoldenParticles();
+        
+        // Ambient dust floating
+        this.spawnDust();
+        
+        // Hero sparks around champion
+        this.spawnHeroSparks();
+        
+        // Confetti burst (delayed)
+        setTimeout(() => this.spawnConfetti(), 500);
+    }
+    
+    /**
+     * Golden particles rising from bottom
+     */
+    spawnGoldenParticles() {
+        const container = this.dom.goldenParticles;
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        // Check for reduced motion preference
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        // Skip on mobile for performance
+        if (window.innerWidth <= 600) return;
+        
+        for (let i = 0; i < 30; i++) {
+            const particle = document.createElement('div');
+            particle.className = 't-golden-particle';
+            
+            const x = Math.random() * 100;
+            const size = 3 + Math.random() * 5;
+            const duration = 4 + Math.random() * 4;
+            const delay = Math.random() * 3;
+            const drift = (Math.random() - 0.5) * 50;
+            
+            particle.style.cssText = `
+                left: ${x}%;
+                bottom: -20px;
+                --size: ${size}px;
+                --duration: ${duration}s;
+                --delay: ${delay}s;
+                --drift: ${drift}px;
+            `;
+            
+            container.appendChild(particle);
+        }
+    }
+    
+    /**
+     * Ambient floating dust
+     */
+    spawnDust() {
+        const container = this.dom.dustContainer;
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        
+        for (let i = 0; i < 25; i++) {
+            const dust = document.createElement('div');
+            dust.className = 't-dust';
+            
+            const x = Math.random() * 100;
+            const y = Math.random() * 100;
+            const size = 1 + Math.random() * 3;
+            const duration = 15 + Math.random() * 20;
+            const delay = Math.random() * 10;
+            const opacity = 0.2 + Math.random() * 0.4;
+            const driftX = (Math.random() - 0.5) * 100;
+            const driftY = (Math.random() - 0.5) * 100;
+            
+            dust.style.cssText = `
+                left: ${x}%;
+                top: ${y}%;
+                --size: ${size}px;
+                --duration: ${duration}s;
+                --delay: ${delay}s;
+                --opacity: ${opacity};
+                --drift-x: ${driftX}px;
+                --drift-y: ${driftY}px;
+            `;
+            
+            container.appendChild(dust);
+        }
+    }
+    
+    /**
+     * Sparks around the champion hero
+     */
+    spawnHeroSparks() {
+        const container = this.dom.heroParticles;
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        
+        for (let i = 0; i < 12; i++) {
+            const spark = document.createElement('div');
+            spark.className = 't-hero-spark';
+            
+            // Position around the edge
+            const angle = (i / 12) * Math.PI * 2;
+            const radius = 40 + Math.random() * 10;
+            const x = 50 + Math.cos(angle) * radius;
+            const y = 50 + Math.sin(angle) * radius;
+            
+            const size = 2 + Math.random() * 3;
+            const duration = 1.5 + Math.random() * 1.5;
+            const delay = Math.random() * 2;
+            const drift = (Math.random() - 0.5) * 30;
+            
+            spark.style.cssText = `
+                left: ${x}%;
+                top: ${y}%;
+                --size: ${size}px;
+                --duration: ${duration}s;
+                --delay: ${delay}s;
+                --drift: ${drift}px;
+            `;
+            
+            container.appendChild(spark);
+        }
+        
+        // Continue spawning sparks
+        this.heroSparkInterval = setInterval(() => {
+            if (!this.dom.results || this.dom.results.style.display === 'none') {
+                clearInterval(this.heroSparkInterval);
+                return;
+            }
+            
+            const spark = document.createElement('div');
+            spark.className = 't-hero-spark';
+            
+            const angle = Math.random() * Math.PI * 2;
+            const radius = 35 + Math.random() * 15;
+            const x = 50 + Math.cos(angle) * radius;
+            const y = 50 + Math.sin(angle) * radius;
+            
+            spark.style.cssText = `
+                left: ${x}%;
+                top: ${y}%;
+                --size: ${2 + Math.random() * 3}px;
+                --duration: ${1.5 + Math.random() * 1}s;
+                --delay: 0s;
+                --drift: ${(Math.random() - 0.5) * 30}px;
+            `;
+            
+            container.appendChild(spark);
+            
+            // Clean up old sparks
+            setTimeout(() => spark.remove(), 3000);
+        }, 200);
+    }
+    
+    /**
+     * Confetti celebration burst
+     */
+    spawnConfetti() {
+        const container = this.dom.confettiContainer;
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        
+        const colors = [
+            '#ffd700', // Gold
+            '#00d4ff', // Cyan  
+            '#ff6b00', // Orange
+            '#9966ff', // Purple
+            '#00ff88', // Green
+            '#ff2d2d', // Red
+            '#ffffff'  // White
+        ];
+        
+        for (let i = 0; i < 60; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 't-confetti';
+            
+            const x = Math.random() * 100;
+            const size = 6 + Math.random() * 8;
+            const duration = 2 + Math.random() * 2;
+            const delay = Math.random() * 0.5;
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            confetti.style.cssText = `
+                left: ${x}%;
+                --size: ${size}px;
+                --duration: ${duration}s;
+                --delay: ${delay}s;
+                --color: ${color};
+            `;
+            
+            container.appendChild(confetti);
+        }
+        
+        // Clean up after animation
+        setTimeout(() => {
+            if (container) container.innerHTML = '';
+        }, 5000);
+    }
+    
+    /**
+     * Clear celebration effects when closing results
+     */
+    clearCelebrationEffects() {
+        if (this.heroSparkInterval) {
+            clearInterval(this.heroSparkInterval);
+            this.heroSparkInterval = null;
+        }
+        
+        if (this.dom.goldenParticles) this.dom.goldenParticles.innerHTML = '';
+        if (this.dom.dustContainer) this.dom.dustContainer.innerHTML = '';
+        if (this.dom.confettiContainer) this.dom.confettiContainer.innerHTML = '';
+        if (this.dom.heroParticles) this.dom.heroParticles.innerHTML = '';
     }
     
     /**
@@ -2123,13 +2396,13 @@ class TournamentManager {
             guessBonus = this.correctGuesses * 5;
         }
         
-        // Update bonus display
-        if (this.dom.bonusGuess) {
+        // Update bonus display - use the wrap element for visibility
+        if (this.dom.bonusGuess && this.dom.bonusGuessWrap) {
             if (guessBonus > 0) {
                 this.dom.bonusGuess.textContent = `+${guessBonus} XP (${this.correctGuesses}/${this.totalGuesses} guesses)`;
-                this.dom.bonusGuess.parentElement.style.display = 'flex';
+                this.dom.bonusGuessWrap.style.display = 'flex';
             } else {
-                this.dom.bonusGuess.parentElement.style.display = 'none';
+                this.dom.bonusGuessWrap.style.display = 'none';
             }
         }
         

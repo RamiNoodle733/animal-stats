@@ -2627,79 +2627,167 @@
             </div>
         </div>
         
-        <!-- Results Screen - Fits Viewport -->
+        <!-- Results Screen - PREMIUM CHAMPION CELEBRATION -->
         <div class="tournament-results" id="tournament-results" style="display: none;">
+            <!-- Epic Background Layers -->
+            <div class="t-results-backdrop">
+                <!-- Animated gradient background -->
+                <div class="t-backdrop-gradient"></div>
+                
+                <!-- Atmospheric fog -->
+                <div class="t-atmosphere-layer">
+                    <div class="t-fog t-fog-1"></div>
+                    <div class="t-fog t-fog-2"></div>
+                    <div class="t-fog t-fog-3"></div>
+                </div>
+                
+                <!-- Radial light burst from champion -->
+                <div class="t-light-burst" id="t-light-burst"></div>
+                
+                <!-- Floating golden particles -->
+                <div class="t-golden-particles" id="t-golden-particles"></div>
+                
+                <!-- Ambient dust -->
+                <div class="t-dust-container" id="t-dust-container"></div>
+                
+                <!-- Confetti celebration -->
+                <div class="t-confetti-container" id="t-confetti-container"></div>
+            </div>
+            
+            <!-- Close Button -->
+            <button class="t-results-close" id="t-results-close">
+                <i class="fas fa-times"></i>
+            </button>
+            
             <div class="t-results-container">
-                <!-- Champion Section -->
-                <div class="t-champion-section">
-                    <div class="t-crown-burst"><i class="fas fa-crown"></i></div>
-                    <div class="t-champion-banner"><span>CHAMPION</span></div>
-                    <div class="t-champion-card">
-                        <img src="" alt="" class="t-champion-img" id="champion-img">
-                        <div class="t-champion-name" id="champion-name">Champion</div>
-                        <div class="t-champion-stats">
-                            <div class="t-champ-stat">
-                                <span class="t-champ-val" id="result-matches">0</span>
-                                <span class="t-champ-label">Matches Won</span>
+                <!-- CHAMPION SHOWCASE - Central Hero -->
+                <div class="t-champion-showcase" id="t-champion-showcase">
+                    <!-- Crown with rays -->
+                    <div class="t-crown-section">
+                        <div class="t-crown-rays"></div>
+                        <div class="t-crown-icon"><i class="fas fa-crown"></i></div>
+                    </div>
+                    
+                    <!-- Champion Banner -->
+                    <div class="t-champion-banner">
+                        <div class="t-banner-glow"></div>
+                        <span>TOURNAMENT CHAMPION</span>
+                    </div>
+                    
+                    <!-- Champion Image with Epic Effects -->
+                    <div class="t-champion-hero">
+                        <div class="t-hero-aura"></div>
+                        <div class="t-hero-ring t-ring-1"></div>
+                        <div class="t-hero-ring t-ring-2"></div>
+                        <div class="t-hero-ring t-ring-3"></div>
+                        <div class="t-hero-spotlight"></div>
+                        <div class="t-hero-image-wrap">
+                            <img src="" alt="" class="t-champion-img" id="champion-img">
+                            <div class="t-hero-shine"></div>
+                        </div>
+                        <div class="t-hero-particles" id="t-hero-particles"></div>
+                    </div>
+                    
+                    <!-- Champion Name with Glow -->
+                    <div class="t-champion-name-section">
+                        <div class="t-name-glow"></div>
+                        <div class="t-champion-name" id="champion-name">CHAMPION</div>
+                    </div>
+                    
+                    <!-- Victory Stats -->
+                    <div class="t-victory-stats">
+                        <div class="t-victory-stat">
+                            <div class="t-stat-icon"><i class="fas fa-trophy"></i></div>
+                            <div class="t-stat-content">
+                                <span class="t-stat-value" id="result-matches">0</span>
+                                <span class="t-stat-label">Battles Won</span>
                             </div>
-                            <div class="t-champ-stat">
-                                <span class="t-champ-val" id="result-bracket">0</span>
-                                <span class="t-champ-label">Bracket Size</span>
+                        </div>
+                        <div class="t-victory-divider"></div>
+                        <div class="t-victory-stat">
+                            <div class="t-stat-icon"><i class="fas fa-sitemap"></i></div>
+                            <div class="t-stat-content">
+                                <span class="t-stat-value" id="result-bracket">0</span>
+                                <span class="t-stat-label">Bracket Size</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Stats + Podium Row -->
-                <div class="t-results-row">
-                    <!-- Tournament Stats -->
-                    <div class="t-stats-panel">
-                        <div class="t-stats-title">TOURNAMENT STATS</div>
-                        <div class="t-stats-grid">
-                            <div class="t-stat-item">
-                                <span class="t-stat-value" id="stat-total-battles">0</span>
-                                <span class="t-stat-label">Battles</span>
+                <!-- Bottom Section - Stats, Podium, Actions -->
+                <div class="t-results-bottom">
+                    <!-- Stats + Podium Row -->
+                    <div class="t-results-row">
+                        <!-- Tournament Stats Panel -->
+                        <div class="t-stats-panel">
+                            <div class="t-panel-header">
+                                <i class="fas fa-chart-bar"></i>
+                                <span>TOURNAMENT STATS</span>
                             </div>
-                            <div class="t-stat-item">
-                                <span class="t-stat-value" id="stat-avg-rating">0</span>
-                                <span class="t-stat-label">Avg Rating</span>
+                            <div class="t-stats-grid">
+                                <div class="t-stat-item">
+                                    <div class="t-stat-icon-small"><i class="fas fa-bolt"></i></div>
+                                    <span class="t-stat-value" id="stat-total-battles">0</span>
+                                    <span class="t-stat-label">Total Battles</span>
+                                </div>
+                                <div class="t-stat-item">
+                                    <div class="t-stat-icon-small"><i class="fas fa-star"></i></div>
+                                    <span class="t-stat-value" id="stat-avg-rating">0</span>
+                                    <span class="t-stat-label">Avg Rating</span>
+                                </div>
+                                <div class="t-stat-item">
+                                    <div class="t-stat-icon-small"><i class="fas fa-clock"></i></div>
+                                    <span class="t-stat-value" id="stat-duration">0s</span>
+                                    <span class="t-stat-label">Duration</span>
+                                </div>
                             </div>
-                            <div class="t-stat-item">
-                                <span class="t-stat-value" id="stat-duration">0s</span>
-                                <span class="t-stat-label">Duration</span>
+                        </div>
+                        
+                        <!-- Podium - Runner Ups -->
+                        <div class="t-podium-panel">
+                            <div class="t-panel-header">
+                                <i class="fas fa-medal"></i>
+                                <span>RUNNER-UPS</span>
+                            </div>
+                            <div class="t-podium-grid" id="t-podium-grid">
+                                <!-- Dynamically populated -->
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Podium -->
-                    <div class="t-podium-panel">
-                        <div class="t-podium-title">RUNNER-UPS</div>
-                        <div class="t-podium-grid" id="t-podium-grid">
-                            <!-- Dynamically populated -->
+                    <!-- XP/Bonus Display -->
+                    <div class="t-bonus-display" id="t-bonus-display">
+                        <div class="t-bonus-item xp">
+                            <i class="fas fa-star"></i>
+                            <span id="t-bonus-xp">+0 XP</span>
+                        </div>
+                        <div class="t-bonus-item bp">
+                            <i class="fas fa-coins"></i>
+                            <span id="t-bonus-bp">+0 BP</span>
+                        </div>
+                        <div class="t-bonus-item guess" id="t-bonus-guess-wrap" style="display: none;">
+                            <i class="fas fa-brain"></i>
+                            <span id="t-bonus-guess">+5 XP Guess Bonus!</span>
                         </div>
                     </div>
-                </div>
-                
-                <!-- XP/Bonus Display -->
-                <div class="t-bonus-display" id="t-bonus-display" style="display: none;">
-                    <div class="t-bonus-item xp"><i class="fas fa-star"></i> <span id="t-bonus-xp">+0 XP</span></div>
-                    <div class="t-bonus-item bp"><i class="fas fa-coins"></i> <span id="t-bonus-bp">+0 BP</span></div>
-                    <div class="t-bonus-item guess" id="t-bonus-guess" style="display: none;">
-                        <i class="fas fa-brain"></i> <span>+5 XP Guess Bonus!</span>
+                    
+                    <!-- Action Buttons -->
+                    <div class="t-results-actions">
+                        <button class="t-action-btn primary" id="play-again-btn">
+                            <div class="t-btn-shine"></div>
+                            <i class="fas fa-redo"></i>
+                            <span>PLAY AGAIN</span>
+                        </button>
+                        <button class="t-action-btn secondary" id="share-results-btn">
+                            <div class="t-btn-shine"></div>
+                            <i class="fas fa-share-alt"></i>
+                            <span>SHARE</span>
+                        </button>
+                        <button class="t-action-btn tertiary" id="close-results-btn">
+                            <i class="fas fa-times"></i>
+                            <span>CLOSE</span>
+                        </button>
                     </div>
-                </div>
-                
-                <!-- Action Buttons -->
-                <div class="t-results-actions">
-                    <button class="t-action-btn primary" id="play-again-btn">
-                        <i class="fas fa-redo"></i><span>PLAY AGAIN</span>
-                    </button>
-                    <button class="t-action-btn secondary" id="share-results-btn">
-                        <i class="fas fa-share-alt"></i><span>SHARE</span>
-                    </button>
-                    <button class="t-action-btn tertiary" id="close-results-btn">
-                        <i class="fas fa-times"></i><span>CLOSE</span>
-                    </button>
                 </div>
             </div>
         </div>
