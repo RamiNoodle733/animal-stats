@@ -297,12 +297,14 @@ class TournamentManager {
         this.dom.championShowcase?.addEventListener('click', () => {
             if (this.winners?.[0]) {
                 const champion = this.winners[0];
-                this.clearCelebrationEffects();
-                this.hideModal();
-                // Navigate to champion's stats page
-                if (typeof app !== 'undefined' && app.router) {
-                    const slug = champion.name.toLowerCase().replace(/\s+/g, '-');
-                    app.router.navigate(`/stats/${slug}`);
+                if (confirm(`View ${champion.name}'s stats page?`)) {
+                    this.clearCelebrationEffects();
+                    this.hideModal();
+                    // Navigate to champion's stats page
+                    if (typeof window.app !== 'undefined') {
+                        window.app.switchView('stats');
+                        window.app.selectAnimal(champion);
+                    }
                 }
             }
         });
@@ -2138,11 +2140,15 @@ class TournamentManager {
             // Add click handlers for podium cards
             this.dom.podiumGrid.querySelectorAll('.t-podium-card').forEach(card => {
                 card.addEventListener('click', () => {
-                    const slug = card.dataset.animalSlug;
-                    if (slug && typeof app !== 'undefined' && app.router) {
+                    const animalName = card.querySelector('.t-podium-name')?.textContent;
+                    const animalData = this.matchHistory.flatMap(m => [m.winner, m.loser]).find(a => a.name === animalName);
+                    if (animalData && confirm(`View ${animalName}'s stats page?`)) {
                         this.clearCelebrationEffects();
                         this.hideModal();
-                        app.router.navigate(`/stats/${slug}`);
+                        if (typeof window.app !== 'undefined') {
+                            window.app.switchView('stats');
+                            window.app.selectAnimal(animalData);
+                        }
                     }
                 });
             });

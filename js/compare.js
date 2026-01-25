@@ -788,18 +788,22 @@
             // Champion showcase click
             document.getElementById('championShowcase').addEventListener('click', () => {
                 if (this._lastWinner && window.app) {
-                    this.hideResult();
-                    window.app.switchView('stats');
-                    window.app.selectAnimal(this._lastWinner);
+                    if (confirm(`View ${this._lastWinner.name}'s stats page?`)) {
+                        this.hideResult();
+                        window.app.switchView('stats');
+                        window.app.selectAnimal(this._lastWinner);
+                    }
                 }
             });
             
             // Defeated card click
             document.getElementById('defeatedCard').addEventListener('click', () => {
                 if (this._lastLoser && window.app) {
-                    this.hideResult();
-                    window.app.switchView('stats');
-                    window.app.selectAnimal(this._lastLoser);
+                    if (confirm(`View ${this._lastLoser.name}'s stats page?`)) {
+                        this.hideResult();
+                        window.app.switchView('stats');
+                        window.app.selectAnimal(this._lastLoser);
+                    }
                 }
             });
             
