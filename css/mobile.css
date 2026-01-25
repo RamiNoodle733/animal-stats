@@ -2009,10 +2009,10 @@
         display: flex !important;
         flex-direction: column !important;
         position: fixed !important;
-        top: calc(var(--header-height, 56px) + 56px) !important;
+        top: calc(var(--mobile-header-height, 70px) + 56px) !important; /* Header + tab bar */
         left: 0 !important;
         right: 0 !important;
-        bottom: 0 !important;
+        bottom: calc(var(--mobile-nav-height, 60px) + var(--mobile-safe-bottom, 0px)) !important; /* Above bottom nav */
         width: 100% !important;
         max-width: 100% !important;
         overflow-y: auto !important;
