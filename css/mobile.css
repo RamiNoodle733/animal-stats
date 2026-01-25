@@ -1999,6 +1999,48 @@
 }
 
 /* ============================================================================
+ * COMMUNITY HUB TAB - Mobile Full-Width Fix (480px - 900px range)
+ * When Hub tab is active, sidebar should be full width, not horizontal scroll
+ * ============================================================================ */
+@media (max-width: 900px) {
+    /* Override community-page.css horizontal scroll layout when Hub tab is active */
+    #community-view .community-sidebar-column.mobile-sidebar-active,
+    #community-view .community__sidebar.mobile-sidebar-active {
+        display: flex !important;
+        flex-direction: column !important;
+        position: fixed !important;
+        top: calc(var(--header-height, 56px) + 56px) !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        padding: 16px !important;
+        gap: 16px !important;
+        background: rgba(8, 16, 28, 0.98) !important;
+        z-index: 500 !important;
+        align-items: stretch !important;
+    }
+    
+    /* Children take full width when Hub tab is active */
+    #community-view .community-sidebar-column.mobile-sidebar-active > *,
+    #community-view .community__sidebar.mobile-sidebar-active > * {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        flex-shrink: 0 !important;
+    }
+    
+    /* Show leaderboard on Hub tab (was hidden in community-page.css) */
+    #community-view .community-sidebar-column.mobile-sidebar-active .leaderboard-module,
+    #community-view .community__sidebar.mobile-sidebar-active .leaderboard-module {
+        display: block !important;
+    }
+}
+
+/* ============================================================================
  * COMMUNITY PAGE - Mobile Layout (Complete Redesign)
  * ============================================================================ */
 @media (max-width: 480px) {
