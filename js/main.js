@@ -1208,25 +1208,32 @@ class AnimalStatsApp {
             return cardWidth + gap;
         };
         
-        // Continuous scroll for arrow hold
-        let scrollInterval = null;
-        const isMobile = window.innerWidth <= 480;
-        const startContinuousScroll = (direction) => {
-            if (scrollInterval) return;
-            // First immediate scroll
-            const amount = getScrollAmount() * direction;
-            grid.scrollBy({ left: amount, behavior: 'smooth' });
-            // Then continuous scrolling at intervals - faster on mobile
-            const scrollMultiplier = isMobile ? 2 : 0.5;
-            const intervalSpeed = isMobile ? 50 : 100;
-            scrollInterval = setInterval(() => {
-                grid.scrollBy({ left: getScrollAmount() * direction * scrollMultiplier, behavior: 'auto' });
-            }, intervalSpeed);
+        // Smooth continuous scroll for arrow hold using requestAnimationFrame
+        let isScrolling = false;
+        let scrollDirection = 0;
+        let animationFrameId = null;
+        
+        const smoothScroll = () => {
+            if (!isScrolling) return;
+            const isMobile = window.innerWidth <= 480;
+            const scrollSpeed = isMobile ? 12 : 6; // pixels per frame
+            grid.scrollLeft += scrollDirection * scrollSpeed;
+            animationFrameId = requestAnimationFrame(smoothScroll);
         };
+        
+        const startContinuousScroll = (direction) => {
+            if (isScrolling) return;
+            isScrolling = true;
+            scrollDirection = direction;
+            animationFrameId = requestAnimationFrame(smoothScroll);
+        };
+        
         const stopContinuousScroll = () => {
-            if (scrollInterval) {
-                clearInterval(scrollInterval);
-                scrollInterval = null;
+            isScrolling = false;
+            scrollDirection = 0;
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
             }
         };
         
