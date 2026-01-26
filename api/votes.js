@@ -154,17 +154,34 @@ async function handlePost(req, res) {
     // Handle vote clear
     if (voteType === 'clear') {
         if (existingTodayVote) {
+            const oldVoteType = existingTodayVote.voteType;
             await Vote.deleteOne({ _id: existingTodayVote._id });
             action = 'cleared';
+            
+            // Notify Discord about vote removal
+            notifyDiscord('vote_removed', {
+                user: user.username,
+                animal: animalName,
+                oldVoteType: oldVoteType
+            }, req);
         }
     } else if (voteType) {
         // Handle vote create or update
         if (existingTodayVote) {
             // Update existing vote if different
             if (existingTodayVote.voteType !== voteType) {
+                const oldVoteType = existingTodayVote.voteType;
                 existingTodayVote.voteType = voteType;
                 await existingTodayVote.save();
                 action = 'updated';
+                
+                // Notify Discord about vote change
+                notifyDiscord('vote_changed', {
+                    user: user.username,
+                    animal: animalName,
+                    oldVoteType: oldVoteType,
+                    newVoteType: voteType
+                }, req);
             } else {
                 action = 'unchanged';
             }
@@ -180,7 +197,7 @@ async function handlePost(req, res) {
             });
             action = 'created';
             
-            // Notify Discord only for new votes
+            // Notify Discord about new vote
             notifyDiscord('vote', {
                 user: user.username,
                 animal: animalName,

@@ -101,13 +101,25 @@ async function handleNotification(req, res) {
         if (typeof body === 'string') {
             try { body = JSON.parse(body); } catch (e) { body = {}; }
         }
-        const { type, username } = body || {};
+        const { type, username, page, referrer, sessionId, duration, screenSize, language } = body || {};
+        
+        // Build notification data with all available info
+        const notifyData = {
+            username: username || 'Anonymous',
+            page: page || '/',
+            referrer: referrer || null,
+            sessionId: sessionId || null,
+            duration: duration || null,
+            screenSize: screenSize || null,
+            language: language || null
+        };
+        
         if (type === 'logout') {
             notifyDiscord('logout', { username: username || 'Unknown' }, req);
         } else if (type === 'site_leave') {
-            notifyDiscord('site_leave', { username: username || 'Anonymous' }, req);
+            notifyDiscord('site_leave', notifyData, req);
         } else {
-            notifyDiscord('site_visit', { username: username || 'Anonymous' }, req);
+            notifyDiscord('site_visit', notifyData, req);
         }
         return res.status(200).json({ success: true });
     } catch (error) {

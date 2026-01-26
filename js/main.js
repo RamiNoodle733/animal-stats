@@ -590,11 +590,29 @@ class AnimalStatsApp {
                 } catch (e) { }
             }
             
-            // Send Discord notification
+            // Generate session ID for tracking
+            let sessionId = sessionStorage.getItem('abs_session_id');
+            if (!sessionId) {
+                sessionId = Math.random().toString(36).substring(2, 15);
+                sessionStorage.setItem('abs_session_id', sessionId);
+            }
+            
+            // Get current page/route
+            const currentPage = window.location.pathname + window.location.hash;
+            const referrer = document.referrer || 'Direct';
+            
+            // Send Discord notification with detailed info
             fetch(API_CONFIG.baseUrl + '/api/animals?action=notify', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username })
+                body: JSON.stringify({ 
+                    username,
+                    page: currentPage,
+                    referrer: referrer,
+                    sessionId: sessionId,
+                    screenSize: `${window.screen.width}x${window.screen.height}`,
+                    language: navigator.language || 'Unknown'
+                })
             }).catch(() => {});
             
             // Increment site visit counter (rate limited - once per session)
@@ -608,9 +626,26 @@ class AnimalStatsApp {
                 sessionStorage.setItem(lastVisitKey, Date.now().toString());
             }
             
+            // Store visit start time for duration calculation
+            sessionStorage.setItem('abs_visit_start', Date.now().toString());
+            
             // Set up site leave tracking
             window.addEventListener('beforeunload', () => {
-                const data = JSON.stringify({ type: 'site_leave', username });
+                const visitStart = parseInt(sessionStorage.getItem('abs_visit_start') || '0');
+                const duration = visitStart ? Math.round((Date.now() - visitStart) / 1000) : 0;
+                const durationStr = duration > 3600 
+                    ? `${Math.floor(duration / 3600)}h ${Math.floor((duration % 3600) / 60)}m`
+                    : duration > 60 
+                        ? `${Math.floor(duration / 60)}m ${duration % 60}s`
+                        : `${duration}s`;
+                
+                const data = JSON.stringify({ 
+                    type: 'site_leave', 
+                    username,
+                    page: window.location.pathname + window.location.hash,
+                    duration: durationStr,
+                    sessionId: sessionId
+                });
                 navigator.sendBeacon(API_CONFIG.baseUrl + '/api/animals?action=notify', data);
             });
         } catch (error) { }
