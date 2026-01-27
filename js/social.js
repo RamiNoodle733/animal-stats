@@ -44,6 +44,15 @@ const SocialLinks = {
             ariaLabel: 'Join our subreddit'
         },
         {
+            id: 'youtube',
+            name: 'YouTube',
+            url: 'https://www.youtube.com/@AnimalBattleStats',
+            icon: 'fab fa-youtube',
+            color: '#FF0000',
+            description: 'Videos, breakdowns, and battle analyses',
+            ariaLabel: 'Subscribe on YouTube'
+        },
+        {
             id: 'github',
             name: 'GitHub',
             url: 'https://github.com/RamiNoodle733/animal-battle-stats',
