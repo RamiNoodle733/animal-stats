@@ -590,13 +590,6 @@ class AnimalStatsApp {
                 } catch (e) { }
             }
             
-            // Generate session ID for tracking
-            let sessionId = sessionStorage.getItem('abs_session_id');
-            if (!sessionId) {
-                sessionId = Math.random().toString(36).substring(2, 15);
-                sessionStorage.setItem('abs_session_id', sessionId);
-            }
-            
             // Get current page/route
             const currentPage = window.location.pathname + window.location.hash;
             const referrer = document.referrer || 'Direct';
@@ -609,7 +602,6 @@ class AnimalStatsApp {
                     username,
                     page: currentPage,
                     referrer: referrer,
-                    sessionId: sessionId,
                     screenSize: `${window.screen.width}x${window.screen.height}`,
                     language: navigator.language || 'Unknown'
                 })
@@ -643,8 +635,7 @@ class AnimalStatsApp {
                     type: 'site_leave', 
                     username,
                     page: window.location.pathname + window.location.hash,
-                    duration: durationStr,
-                    sessionId: sessionId
+                    duration: durationStr
                 });
                 navigator.sendBeacon(API_CONFIG.baseUrl + '/api/animals?action=notify', data);
             });
