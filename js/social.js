@@ -178,9 +178,20 @@ const SocialLinks = {
                     </div>
                 </div>
             </div>
-            
-            <!-- Mobile Bottom Sheet -->
-            <div class="social-bottom-sheet" id="social-bottom-sheet" role="dialog" aria-label="Social links" aria-hidden="true">
+        `;
+
+        footer.appendChild(followContainer);
+        
+        // Append bottom sheet to body (not footer) to avoid z-index stacking context issues
+        // Footer has z-index: 20 which creates a stacking context, limiting child z-index
+        if (!document.getElementById('social-bottom-sheet')) {
+            const bottomSheet = document.createElement('div');
+            bottomSheet.className = 'social-bottom-sheet';
+            bottomSheet.id = 'social-bottom-sheet';
+            bottomSheet.setAttribute('role', 'dialog');
+            bottomSheet.setAttribute('aria-label', 'Social links');
+            bottomSheet.setAttribute('aria-hidden', 'true');
+            bottomSheet.innerHTML = `
                 <div class="social-bottom-sheet-overlay"></div>
                 <div class="social-bottom-sheet-content">
                     <div class="social-bottom-sheet-handle"></div>
@@ -189,10 +200,9 @@ const SocialLinks = {
                         ${this.renderBottomSheetItems()}
                     </div>
                 </div>
-            </div>
-        `;
-
-        footer.appendChild(followContainer);
+            `;
+            document.body.appendChild(bottomSheet);
+        }
     },
 
     /**
