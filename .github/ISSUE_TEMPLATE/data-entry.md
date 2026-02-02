@@ -367,4 +367,6 @@ assignees: []
 
 ---
 
-📖 [CONTRIBUTING.md](../../CONTRIBUTING.md) • 💬 [Discord](https://discord.gg/BAaJFCXNTN)
+📖 [Contributing Guide](../../CONTRIBUTING.md) • 🌐 [Website](https://animalbattlestats.com)
+
+💬 [Discord](https://discord.gg/BAaJFCXNTN) • 📘 [Reddit](https://reddit.com/r/AnimalBattleStats) • 🐦 [X/Twitter](https://x.com/AnimalBattStats) • 📸 [Instagram](https://instagram.com/animalbattlestats) • 🎬 [YouTube](https://youtube.com/@AnimalBattleStats) • 💼 [LinkedIn](https://linkedin.com/company/animal-battle-stats)
