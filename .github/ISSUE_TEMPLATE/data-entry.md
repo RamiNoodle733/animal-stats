@@ -1,36 +1,50 @@
 ---
 name: "🐾 Data Entry: Animal Stats"
-about: "Help verify weight, speed, and bite force for animals"
-title: "Data: [Animal Name] - Verify weight/speed/bite force"
+about: "Help add accurate weight, speed, and bite force for all animals"
+title: "Help Wanted: Accurate weight/speed/bite force for ALL animals"
 labels: ["help wanted", "good first issue", "data"]
 assignees: []
 ---
 
-## Animal
-**Name:** [Animal name here]
+## 🐾 We Need Your Help
 
-## Current Values
-| Field | Current Value | Needs Verification |
-|-------|---------------|-------------------|
-| weight_kg | | ⬜ |
-| speed_mps | | ⬜ |
-| bite_force_psi | | ⬜ |
+Our database has **225+ animals** but most have **placeholder or estimated values** for weight, speed, and bite force.
 
-## Task
-Research and verify the above stats using reliable sources. Update `animal_stats.json` with accurate values.
+**Every animal needs accurate, sourced data.**
 
-## Requirements
-- [ ] Find reliable source(s) for each stat
-- [ ] Update values in `animal_stats.json`
-- [ ] List sources in PR description
-- [ ] Ensure JSON is still valid
+## The Task
+
+Research and update these fields in `animal_stats.json`:
+
+| Field | Unit | Notes |
+|-------|------|-------|
+| `weight_kg` | kilograms | Adult average |
+| `speed_mps` | meters per second | Top speed (km/h ÷ 3.6) |
+| `bite_force_psi` | PSI | Use 0 if no bite or no data |
+
+## How to Contribute
+
+1. **Comment below to claim animals** (e.g., "I'll do Lion, Tiger, Bear")
+2. Fork the repo
+3. Research using reliable sources
+4. Update `animal_stats.json`
+5. Submit a PR with your sources listed
+
+See [CONTRIBUTING.md](../../CONTRIBUTING.md) for full details.
+
+## Claimed Animals
+
+*Comment below to claim - I'll update this list*
+
+| Animal | Claimed By | Status |
+|--------|------------|--------|
+| - | - | - |
 
 ## Helpful Resources
 - [Animal Diversity Web](https://animaldiversity.org/)
 - [IUCN Red List](https://www.iucnredlist.org/)
 - [National Geographic Animals](https://www.nationalgeographic.com/animals)
 
-## Notes
-- Use adult average values
-- Speed should be in meters per second (km/h ÷ 3.6)
-- If no reliable bite force data exists, use 0
+## Questions?
+
+Ask here or join our [Discord](https://discord.gg/BAaJFCXNTN).
