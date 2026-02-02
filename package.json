@@ -4,8 +4,8 @@
   "description": "Animal Battle Stats - A scientifically accurate wildlife statistics website with MongoDB backend",
   "main": "api/index.js",
   "scripts": {
-    "dev": "vercel dev",
-    "start": "vercel dev",
+    "dev": "echo 'Use: vercel dev'",
+    "start": "echo 'Use: vercel dev'",
     "seed": "node scripts/seed-database.js",
     "lint": "eslint script.js auth.js router.js compare-page.js community-page.js",
     "lint:fix": "eslint script.js auth.js router.js compare-page.js community-page.js --fix"
