@@ -1,24 +1,16 @@
-## Description
-Brief description of what this PR changes.
+## Animals Updated
 
-## Animal(s) Updated
-- [ Animal name ]
+List the animals you updated:
+- 
 
-## Changes Made
-| Animal | Field | Old Value | New Value |
-|--------|-------|-----------|-----------|
-| | weight_kg | | |
-| | speed_mps | | |
-| | bite_force_psi | | |
+## Changes
 
-## Sources
-List your sources for each stat change:
-- **Weight:** [source URL]
-- **Speed:** [source URL]  
-- **Bite Force:** [source URL]
+| Animal | weight_kg | speed_mps | bite_force_psi |
+|--------|-----------|-----------|----------------|
+| | | | |
 
 ## Checklist
-- [ ] I only edited `animal_stats.json`
-- [ ] Every changed value has a source listed above
+
+- [ ] I edited `animal_stats.json`
 - [ ] JSON file is still valid (no syntax errors)
 - [ ] I used metric units (kg, m/s, PSI)

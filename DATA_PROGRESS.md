@@ -1,0 +1,246 @@
+# 🐾 Animal Data Progress Tracker
+
+Track which animals have accurate **weight**, **speed**, and **bite force** data.
+
+**Progress: 0 / 225 animals completed**
+
+---
+
+## How to Contribute
+1. Pick any unchecked animal below
+2. Research weight (kg), speed (m/s), bite force (PSI)
+3. Update `animal_stats.json`
+4. Submit a PR
+5. A maintainer will check the box when merged
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
+
+---
+
+## Animals (A-Z)
+
+- [ ] African Elephant
+- [ ] African Lion
+- [ ] African Wild Dog
+- [ ] Albatross
+- [ ] Alligator
+- [ ] Alpaca
+- [ ] Anaconda
+- [ ] Anglerfish
+- [ ] Anteater
+- [ ] Arctic Fox
+- [ ] Arctic Wolf
+- [ ] Armadillo
+- [ ] Army Ant
+- [ ] Axolotl
+- [ ] Baboon
+- [ ] Bactrian Camel
+- [ ] Badger
+- [ ] Bald Eagle
+- [ ] Barn Owl
+- [ ] Barracuda
+- [ ] Beaver
+- [ ] Beluga Whale
+- [ ] Bighorn Sheep
+- [ ] Bison
+- [ ] Black Bear
+- [ ] Black Mamba
+- [ ] Black Panther
+- [ ] Black Rhinoceros
+- [ ] Black Widow
+- [ ] Blue Whale
+- [ ] Boa Constrictor
+- [ ] Bobcat
+- [ ] Bongo
+- [ ] Bottlenose Dolphin
+- [ ] Box Jellyfish
+- [ ] Bull Shark
+- [ ] Bullet Ant
+- [ ] Bullfrog
+- [ ] Camel
+- [ ] Camel Spider
+- [ ] Cape Buffalo
+- [ ] Capuchin Monkey
+- [ ] Capybara
+- [ ] Caracal
+- [ ] Cassowary
+- [ ] Chameleon
+- [ ] Cheetah
+- [ ] Chimpanzee
+- [ ] Clouded Leopard
+- [ ] Cockatoo
+- [ ] Coconut Crab
+- [ ] Colossal Squid
+- [ ] Condor
+- [ ] Cougar
+- [ ] Coyote
+- [ ] Crow
+- [ ] Cuttlefish
+- [ ] Deathstalker Scorpion
+- [ ] Dhole
+- [ ] Dingo
+- [ ] Donkey
+- [ ] Dragonfly
+- [ ] Electric Eel
+- [ ] Elk
+- [ ] Emperor Penguin
+- [ ] Emperor Scorpion
+- [ ] Emu
+- [ ] Fennec Fox
+- [ ] Ferret
+- [ ] Flamingo
+- [ ] Flying Squirrel
+- [ ] Gaboon Viper
+- [ ] Galapagos Tortoise
+- [ ] Gazelle
+- [ ] Gecko
+- [ ] Giant Centipede
+- [ ] Giant Squid
+- [ ] Gibbon
+- [ ] Gila Monster
+- [ ] Giraffe
+- [ ] Golden Eagle
+- [ ] Goliath Birdeater
+- [ ] Goose
+- [ ] Gorilla
+- [ ] Gray Wolf
+- [ ] Great Horned Owl
+- [ ] Great White Shark
+- [ ] Green Anaconda
+- [ ] Grizzly Bear
+- [ ] Guanaco
+- [ ] Hammerhead Shark
+- [ ] Harpy Eagle
+- [ ] Hedgehog
+- [ ] Hellbender
+- [ ] Hercules Beetle
+- [ ] Hippopotamus
+- [ ] Honey Badger
+- [ ] Hornet
+- [ ] Howler Monkey
+- [ ] Hummingbird
+- [ ] Huntsman Spider
+- [ ] Hyena
+- [ ] Ibex
+- [ ] Iguana
+- [ ] Impala
+- [ ] Jackal
+- [ ] Jaguar
+- [ ] Japanese Macaque
+- [ ] Kangaroo
+- [ ] King Cobra
+- [ ] King Crab
+- [ ] Kiwi
+- [ ] Koala
+- [ ] Komodo Dragon
+- [ ] Kookaburra
+- [ ] Kudu
+- [ ] Leatherback Sea Turtle
+- [ ] Leopard
+- [ ] Lionfish
+- [ ] Llama
+- [ ] Lobster
+- [ ] Lynx
+- [ ] Macaw
+- [ ] Magpie
+- [ ] Manatee
+- [ ] Mandrill
+- [ ] Maned Wolf
+- [ ] Manta Ray
+- [ ] Mantis Shrimp
+- [ ] Marlin
+- [ ] Meerkat
+- [ ] Megalodon
+- [ ] Monarch Butterfly
+- [ ] Mongoose
+- [ ] Monitor Lizard
+- [ ] Moose
+- [ ] Moray Eel
+- [ ] Mountain Goat
+- [ ] Musk Ox
+- [ ] Naked Mole Rat
+- [ ] Narwhal
+- [ ] Nautilus
+- [ ] Ocelot
+- [ ] Octopus
+- [ ] Okapi
+- [ ] Opossum
+- [ ] Orangutan
+- [ ] Orca
+- [ ] Oryx
+- [ ] Osprey
+- [ ] Ostrich
+- [ ] Otter
+- [ ] Pangolin
+- [ ] Peacock
+- [ ] Pelican
+- [ ] Peregrine Falcon
+- [ ] Piranha
+- [ ] Platypus
+- [ ] Poison Dart Frog
+- [ ] Polar Bear
+- [ ] Porcupine
+- [ ] Praying Mantis
+- [ ] Proboscis Monkey
+- [ ] Pronghorn
+- [ ] Pufferfish
+- [ ] Puffin
+- [ ] Python
+- [ ] Quokka
+- [ ] Quoll
+- [ ] Raccoon
+- [ ] Rattlesnake
+- [ ] Raven
+- [ ] Red Fox
+- [ ] Red Panda
+- [ ] Red-Eyed Tree Frog
+- [ ] Red-tailed Hawk
+- [ ] Reindeer
+- [ ] Reticulated Python
+- [ ] Rhinoceros
+- [ ] Ring-tailed Lemur
+- [ ] Sable Antelope
+- [ ] Sailfish
+- [ ] Salamander
+- [ ] Saltwater Crocodile
+- [ ] Sawfish
+- [ ] Sea Lion
+- [ ] Sea Otter
+- [ ] Seal
+- [ ] Secretary Bird
+- [ ] Serval
+- [ ] Shoebill
+- [ ] Siberian Tiger
+- [ ] Skunk
+- [ ] Sloth
+- [ ] Sloth Bear
+- [ ] Snapping Turtle
+- [ ] Snow Leopard
+- [ ] Snowy Owl
+- [ ] Spectacled Bear
+- [ ] Spider Monkey
+- [ ] Stag Beetle
+- [ ] Stingray
+- [ ] Stoat
+- [ ] Stork
+- [ ] Sugar Glider
+- [ ] Sun Bear
+- [ ] Swan
+- [ ] Swordfish
+- [ ] Tapir
+- [ ] Tarantula Hawk
+- [ ] Tasmanian Devil
+- [ ] Tiger Shark
+- [ ] Toucan
+- [ ] Tuna
+- [ ] Vulture
+- [ ] Wallaby
+- [ ] Walrus
+- [ ] Warthog
+- [ ] Wild Boar
+- [ ] Wild Horse
+- [ ] Wildebeest
+- [ ] Wolverine
+- [ ] Wombat
+- [ ] Yak
+- [ ] Zebra

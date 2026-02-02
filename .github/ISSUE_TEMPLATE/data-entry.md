@@ -1,20 +1,20 @@
 ---
 name: "🐾 Data Entry: Animal Stats"
 about: "Help add accurate weight, speed, and bite force for all animals"
-title: "Help Wanted: Accurate weight/speed/bite force for ALL animals"
+title: "Help Wanted: Accurate weight/speed/bite force for ALL 225 animals"
 labels: ["help wanted", "good first issue", "data"]
 assignees: []
 ---
 
 ## 🐾 We Need Your Help
 
-Our database has **225+ animals** but most have **placeholder or estimated values** for weight, speed, and bite force.
+Our database has **225 animals** with **placeholder or estimated values** for weight, speed, and bite force.
 
-**Every animal needs accurate, sourced data.**
+**Every animal needs accurate data.**
 
-## The Task
+## What to Update
 
-Research and update these fields in `animal_stats.json`:
+In `animal_stats.json`, update these fields:
 
 | Field | Unit | Notes |
 |-------|------|-------|
@@ -24,26 +24,16 @@ Research and update these fields in `animal_stats.json`:
 
 ## How to Contribute
 
-1. **Comment below to claim animals** (e.g., "I'll do Lion, Tiger, Bear")
+1. Check [DATA_PROGRESS.md](../../DATA_PROGRESS.md) for unchecked animals
 2. Fork the repo
-3. Research using reliable sources
-4. Update `animal_stats.json`
-5. Submit a PR with your sources listed
+3. Research and update `animal_stats.json`
+4. Submit a PR
 
-See [CONTRIBUTING.md](../../CONTRIBUTING.md) for full details.
+See [CONTRIBUTING.md](../../CONTRIBUTING.md) for details.
 
-## Claimed Animals
+## Progress
 
-*Comment below to claim - I'll update this list*
-
-| Animal | Claimed By | Status |
-|--------|------------|--------|
-| - | - | - |
-
-## Helpful Resources
-- [Animal Diversity Web](https://animaldiversity.org/)
-- [IUCN Red List](https://www.iucnredlist.org/)
-- [National Geographic Animals](https://www.nationalgeographic.com/animals)
+Track completion at [DATA_PROGRESS.md](../../DATA_PROGRESS.md)
 
 ## Questions?
 
