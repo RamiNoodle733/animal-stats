@@ -17,19 +17,21 @@ jobs:
             const prAuthor = context.payload.pull_request.user.login;
             const prNumber = context.payload.pull_request.number;
             
-            const message = `## Thanks for contributing, @${prAuthor}! 🎉
-
-We appreciate you helping make Animal Battle Stats more accurate!
-
-### Before merge:
-- [ ] ⭐ **Please star the repo** if you haven't already - it helps others find the project!
-- [ ] Make sure the JSON is valid (no syntax errors)
-- [ ] Double-check your data is for the correct animal
-
-A maintainer will review your PR shortly.
-
----
-*Questions? Join our [Discord](https://discord.gg/BAaJFCXNTN)*`;
+            const message = [
+              "## Thanks for contributing, @" + prAuthor + "! 🎉",
+              "",
+              "We appreciate you helping make Animal Battle Stats more accurate!",
+              "",
+              "### Before merge:",
+              "- [ ] ⭐ **Please star the repo** if you haven't already - it helps others find the project!",
+              "- [ ] Make sure the JSON is valid (no syntax errors)",
+              "- [ ] Double-check your data is for the correct animal",
+              "",
+              "A maintainer will review your PR shortly.",
+              "",
+              "---",
+              "*Questions? Join our [Discord](https://discord.gg/BAaJFCXNTN)*"
+            ].join("\n");
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
