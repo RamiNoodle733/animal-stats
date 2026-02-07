@@ -162,30 +162,32 @@
         "General vulnerability"
       ]
     },
-    "bite_force_psi": 100,
+    "bite_force_psi": 142,
     "class": "Hunter",
     "createdAt": "2025-12-02T23:27:41.018Z",
     "defense": 63.1,
-    "description": "A Medium creature found in Varied.",
+    "description": "A highly efficient pack hunter found across African savannas and woodlands. Known for their distinctive coat patterns and cooperative hunting strategies with the highest hunting success rate among African carnivores.",
     "diet": [
-      "Varied"
+      "impalas",
+      "wildebeest",
+      "gazelles"
     ],
-    "habitat": "Varied",
-    "height_cm": 50,
+    "habitat": "Savannas, woodlands, grasslands",
+    "height_cm": 75,
     "image": "/images/animals/african-wild-dog.png",
     "intelligence": 74.5,
     "isNocturnal": false,
     "isSocial": true,
-    "length_cm": 100,
-    "lifespan_years": 15,
+    "length_cm": 120,
+    "lifespan_years": 11,
     "scientific_name": "Lycaon pictus",
     "size": "Medium",
     "size_score": 34.5,
     "special_abilities": [
-      "Survival Instinct",
-      "Quick Reflexes"
+      "Pack Coordination",
+      "Endurance Hunting"
     ],
-    "speed_mps": 10,
+    "speed_mps": 16.7,
     "stamina": 99,
     "substats": {
       "raw_power": 51.6,
@@ -229,30 +231,32 @@
         "General vulnerability"
       ]
     },
-    "bite_force_psi": 100,
+    "bite_force_psi": 8,
     "class": "Traveler",
     "createdAt": "2025-12-02T23:27:41.060Z",
     "defense": 10.8,
-    "description": "A Medium creature found in Varied.",
+    "description": "Masters of oceanic flight with the largest wingspan of any bird. Can travel thousands of kilometers without landing and live for over 70 years.",
     "diet": [
-      "Varied"
+      "squid",
+      "fish",
+      "krill"
     ],
-    "habitat": "Varied",
-    "height_cm": 50,
+    "habitat": "Open ocean, subantarctic islands",
+    "height_cm": 90,
     "image": "/images/animals/albatross.png",
     "intelligence": 44,
     "isNocturnal": false,
     "isSocial": true,
-    "length_cm": 100,
-    "lifespan_years": 15,
-    "scientific_name": "Diomedeidae",
-    "size": "Medium",
+    "length_cm": 135,
+    "lifespan_years": 70,
+    "scientific_name": "Diomedea exulans",
+    "size": "Large",
     "size_score": 34.5,
     "special_abilities": [
-      "Survival Instinct",
-      "Quick Reflexes"
+      "Dynamic Soaring",
+      "Ocean Navigation"
     ],
-    "speed_mps": 10,
+    "speed_mps": 24,
     "stamina": 89.9,
     "substats": {
       "raw_power": 31.2,
@@ -301,7 +305,7 @@
     "class": "Ambush Predator",
     "createdAt": "2025-12-02T23:27:41.103Z",
     "defense": 96.7,
-    "description": "A Large creature found in Swamps, rivers, lakes.",
+    "description": "An apex predator with one of the strongest bite forces ever measured. Native to the southeastern United States, these armored reptiles are perfectly adapted for ambush hunting in freshwater habitats.",
     "diet": [
       "fish",
       "birds",
@@ -372,7 +376,7 @@
     "class": "Herd Animal",
     "createdAt": "2025-12-02T23:27:41.143Z",
     "defense": 23.7,
-    "description": "A Small creature found in Mountains, grasslands.",
+    "description": "A domesticated South American camelid valued for its soft, luxurious fleece. Gentle and social animals that communicate through humming sounds and are excellent guard animals for other livestock.",
     "diet": [
       "grass",
       "hay"
@@ -439,18 +443,17 @@
         "Needs to ambush"
       ]
     },
-    "bite_force_psi": 100,
+    "bite_force_psi": 50,
     "class": "Grappler",
     "createdAt": "2025-12-02T23:27:41.195Z",
     "defense": 36.1,
-    "description": "The heaviest snake in the world, a master of constriction. It coils around prey, suffocating them with immense pressure.",
+    "description": "The heaviest snake in the world, a master of constriction. It coils around prey with constricting pressure of 90 PSI, suffocating them with immense force.",
     "diet": [
-      "mammals",
-      "birds",
-      "fish",
-      "reptiles"
+      "caiman",
+      "capibara",
+      "fish"
     ],
-    "habitat": "Swamps, rivers",
+    "habitat": "Amazon river basins, swamps",
     "height_cm": 30,
     "image": "/images/animals/anaconda.png",
     "intelligence": 21.2,
@@ -465,7 +468,7 @@
       "Death Coil",
       "Aquatic Stealth"
     ],
-    "speed_mps": 3,
+    "speed_mps": 4.4,
     "stamina": 40.9,
     "substats": {
       "raw_power": 46.9,
@@ -488,7 +491,7 @@
       "semi-aquatic"
     ],
     "updatedAt": "2025-12-02T23:28:14.955Z",
-    "weight_kg": 50,
+    "weight_kg": 100,
     "special": 77
   },
   {
@@ -510,30 +513,32 @@
         "General vulnerability"
       ]
     },
-    "bite_force_psi": 100,
+    "bite_force_psi": 5,
     "class": "Lure",
     "createdAt": "2025-12-02T23:27:41.248Z",
     "defense": 27.7,
-    "description": "A Medium creature found in Varied.",
+    "description": "Deep-sea predators with a bioluminescent lure to attract prey in the darkness. Females are significantly larger than males and can swallow prey twice their size.",
     "diet": [
-      "Varied"
+      "fish",
+      "squid",
+      "crustaceans"
     ],
-    "habitat": "Varied",
-    "height_cm": 50,
+    "habitat": "Deep ocean, abyssal zones",
+    "height_cm": 20,
     "image": "/images/animals/anglerfish.png",
     "intelligence": 30.7,
     "isNocturnal": false,
-    "isSocial": true,
-    "length_cm": 100,
-    "lifespan_years": 15,
-    "scientific_name": "Lophiiformes",
-    "size": "Medium",
-    "size_score": 34.5,
+    "isSocial": false,
+    "length_cm": 30,
+    "lifespan_years": 8,
+    "scientific_name": "Melanocetus johnsonii",
+    "size": "Small",
+    "size_score": 20.5,
     "special_abilities": [
-      "Survival Instinct",
-      "Quick Reflexes"
+      "Bioluminescent Lure",
+      "Vacuum Feeding"
     ],
-    "speed_mps": 10,
+    "speed_mps": 0.5,
     "stamina": 55.7,
     "substats": {
       "raw_power": 64.6,
@@ -555,7 +560,7 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:15.001Z",
-    "weight_kg": 40,
+    "weight_kg": 1.5,
     "special": 26
   },
   {
@@ -582,7 +587,7 @@
     "class": "Specialist",
     "createdAt": "2025-12-02T23:27:41.300Z",
     "defense": 5.8,
-    "description": "A Medium creature found in Grasslands, forests.",
+    "description": "The largest of four anteater species, capable of consuming 35,000 ants and termites daily. Despite their specialized diet, they have powerful claws for defense and can run surprisingly fast when threatened.",
     "diet": [
       "ants",
       "termites"
@@ -602,7 +607,7 @@
       "Claw Slash",
       "Bear Hug"
     ],
-    "speed_mps": 6.94,
+    "speed_mps": 13.3,
     "stamina": 56.9,
     "substats": {
       "raw_power": 26.2,
@@ -648,11 +653,11 @@
         "General vulnerability"
       ]
     },
-    "bite_force_psi": 0,
+    "bite_force_psi": 65,
     "class": "Hunter",
     "createdAt": "2025-12-02T23:27:41.344Z",
     "defense": 56.6,
-    "description": "A Tiny creature found in Arctic tundra.",
+    "description": "Perfectly adapted to Arctic environments with thick fur that changes color seasonally. Can survive temperatures as low as -50°C and locate prey beneath deep snow.",
     "diet": [
       "lemmings",
       "fish",
@@ -718,30 +723,32 @@
         "General vulnerability"
       ]
     },
-    "bite_force_psi": 100,
+    "bite_force_psi": 400,
     "class": "Hunter",
     "createdAt": "2025-12-02T23:27:41.405Z",
     "defense": 62.6,
-    "description": "A Medium creature found in Varied.",
+    "description": "A subspecies of gray wolf adapted to the harsh Arctic environment. They hunt musk oxen, caribou, and Arctic hares in packs, with white fur providing camouflage in the snow.",
     "diet": [
-      "Varied"
+      "musk ox",
+      "caribou",
+      "Arctic hare"
     ],
-    "habitat": "Varied",
-    "height_cm": 50,
+    "habitat": "Arctic tundra, Greenland, northern Canada",
+    "height_cm": 80,
     "image": "/images/animals/arctic-wolf.png",
     "intelligence": 81.3,
     "isNocturnal": false,
     "isSocial": true,
-    "length_cm": 100,
-    "lifespan_years": 15,
+    "length_cm": 150,
+    "lifespan_years": 7,
     "scientific_name": "Canis lupus arctos",
     "size": "Medium",
     "size_score": 34.5,
     "special_abilities": [
-      "Survival Instinct",
-      "Quick Reflexes"
+      "Pack Hunting",
+      "Arctic Camouflage"
     ],
-    "speed_mps": 10,
+    "speed_mps": 20.6,
     "stamina": 95.7,
     "substats": {
       "raw_power": 63.5,
@@ -790,7 +797,7 @@
     "class": "Defender",
     "createdAt": "2025-12-02T23:27:41.459Z",
     "defense": 89.2,
-    "description": "A Small creature found in Forests, grasslands.",
+    "description": "Known for their armor-like shell made of bony plates. Can jump 3-4 feet vertically when startled and are excellent diggers with sharp claws for finding insects.",
     "diet": [
       "insects",
       "grubs",
@@ -811,7 +818,7 @@
       "Shell Defense",
       "Burrow Escape"
     ],
-    "speed_mps": 6.94,
+    "speed_mps": 13.3,
     "stamina": 59.8,
     "substats": {
       "raw_power": 49,
@@ -834,7 +841,7 @@
       "jumps when startled"
     ],
     "updatedAt": "2025-12-02T23:28:15.195Z",
-    "weight_kg": 6,
+    "weight_kg": 4.5,
     "special": 50
   },
   {
@@ -856,30 +863,32 @@
         "General vulnerability"
       ]
     },
-    "bite_force_psi": 100,
+    "bite_force_psi": 0.2,
     "class": "Swarm",
     "createdAt": "2025-12-02T23:27:41.513Z",
     "defense": 5.5,
-    "description": "A Medium creature found in Varied.",
+    "description": "Highly organized swarm predators that form massive colonies with millions of individuals. Their coordinated attacks can overwhelm prey many times their size.",
     "diet": [
-      "Varied"
+      "insects",
+      "spiders",
+      "small vertebrates"
     ],
-    "habitat": "Varied",
-    "height_cm": 50,
+    "habitat": "Tropical forests, savannas",
+    "height_cm": 1,
     "image": "/images/animals/army-ant.png",
     "intelligence": 10.8,
     "isNocturnal": false,
     "isSocial": true,
-    "length_cm": 100,
-    "lifespan_years": 15,
-    "scientific_name": "Dorylus",
-    "size": "Medium",
-    "size_score": 34.5,
+    "length_cm": 2,
+    "lifespan_years": 1,
+    "scientific_name": "Eciton burchellii",
+    "size": "Tiny",
+    "size_score": 2.5,
     "special_abilities": [
-      "Survival Instinct",
-      "Quick Reflexes"
+      "Swarm Attack",
+      "Coordinated Hunting"
     ],
-    "speed_mps": 10,
+    "speed_mps": 0.05,
     "stamina": 17.3,
     "substats": {
       "raw_power": 49.2,
@@ -901,7 +910,7 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:15.238Z",
-    "weight_kg": 0.002,
+    "weight_kg": 0.000001,
     "special": 55
   },
   {
@@ -924,11 +933,11 @@
         "General vulnerability"
       ]
     },
-    "bite_force_psi": 20,
+    "bite_force_psi": 3,
     "class": "Support",
     "createdAt": "2025-12-02T23:27:41.561Z",
     "defense": 1.3,
-    "description": "A Tiny creature found in Lakes of Mexico City.",
+    "description": "A critically endangered neotenic salamander native to Lake Xochimilco in Mexico City. Famous for their remarkable regeneration abilities, able to regrow entire limbs, spinal cord, heart, and other organs.",
     "diet": [
       "worms",
       "insects",
