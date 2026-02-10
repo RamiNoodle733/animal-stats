@@ -9,6 +9,10 @@ List the animals you updated:
 |--------|-----------|-----------|----------------|
 | | | | |
 
+Relates to #5
+
+> **Note:** Please use "Relates to #5" (not "Fixes #5") so the master tracking issue stays open.
+
 ## Checklist
 
 - [ ] I edited `animal_stats.json`
