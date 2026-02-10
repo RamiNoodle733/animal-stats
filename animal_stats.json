@@ -162,11 +162,11 @@
         "General vulnerability"
       ]
     },
-    "bite_force_psi": 142,
+    "bite_force_psi": 317,
     "class": "Hunter",
     "createdAt": "2025-12-02T23:27:41.018Z",
     "defense": 63.1,
-    "description": "A highly efficient pack hunter found across African savannas and woodlands. Known for their distinctive coat patterns and cooperative hunting strategies with the highest hunting success rate among African carnivores.",
+    "description": "A Medium creature found in Varied.",
     "diet": [
       "impalas",
       "wildebeest",
@@ -235,7 +235,7 @@
     "class": "Traveler",
     "createdAt": "2025-12-02T23:27:41.060Z",
     "defense": 10.8,
-    "description": "Masters of oceanic flight with the largest wingspan of any bird. Can travel thousands of kilometers without landing and live for over 70 years.",
+    "description": "A Medium creature found in Varied.",
     "diet": [
       "squid",
       "fish",
@@ -248,7 +248,7 @@
     "isNocturnal": false,
     "isSocial": true,
     "length_cm": 135,
-    "lifespan_years": 70,
+    "lifespan_years": 50,
     "scientific_name": "Diomedea exulans",
     "size": "Large",
     "size_score": 34.5,
@@ -256,7 +256,7 @@
       "Dynamic Soaring",
       "Ocean Navigation"
     ],
-    "speed_mps": 24,
+    "speed_mps": 35,
     "stamina": 89.9,
     "substats": {
       "raw_power": 31.2,
@@ -305,7 +305,7 @@
     "class": "Ambush Predator",
     "createdAt": "2025-12-02T23:27:41.103Z",
     "defense": 96.7,
-    "description": "An apex predator with one of the strongest bite forces ever measured. Native to the southeastern United States, these armored reptiles are perfectly adapted for ambush hunting in freshwater habitats.",
+    "description": "A Large creature found in Swamps, rivers, lakes.",
     "diet": [
       "fish",
       "birds",
@@ -376,7 +376,7 @@
     "class": "Herd Animal",
     "createdAt": "2025-12-02T23:27:41.143Z",
     "defense": 23.7,
-    "description": "A domesticated South American camelid valued for its soft, luxurious fleece. Gentle and social animals that communicate through humming sounds and are excellent guard animals for other livestock.",
+    "description": "A Small creature found in Mountains, grasslands.",
     "diet": [
       "grass",
       "hay"
@@ -447,10 +447,10 @@
     "class": "Grappler",
     "createdAt": "2025-12-02T23:27:41.195Z",
     "defense": 36.1,
-    "description": "The heaviest snake in the world, a master of constriction. It coils around prey with constricting pressure of 90 PSI, suffocating them with immense force.",
+    "description": "The heaviest snake in the world, a master of constriction. It coils around prey, suffocating them with immense pressure.",
     "diet": [
       "caiman",
-      "capibara",
+      "capybara",
       "fish"
     ],
     "habitat": "Amazon river basins, swamps",
@@ -517,22 +517,22 @@
     "class": "Lure",
     "createdAt": "2025-12-02T23:27:41.248Z",
     "defense": 27.7,
-    "description": "Deep-sea predators with a bioluminescent lure to attract prey in the darkness. Females are significantly larger than males and can swallow prey twice their size.",
+    "description": "A Medium creature found in Varied.",
     "diet": [
       "fish",
       "squid",
       "crustaceans"
     ],
     "habitat": "Deep ocean, abyssal zones",
-    "height_cm": 20,
+    "height_cm": 5,
     "image": "/images/animals/anglerfish.png",
     "intelligence": 30.7,
     "isNocturnal": false,
     "isSocial": false,
-    "length_cm": 30,
+    "length_cm": 18,
     "lifespan_years": 8,
     "scientific_name": "Melanocetus johnsonii",
-    "size": "Small",
+    "size": "Tiny",
     "size_score": 20.5,
     "special_abilities": [
       "Bioluminescent Lure",
@@ -560,7 +560,7 @@
       "Adapted to environment"
     ],
     "updatedAt": "2025-12-02T23:28:15.001Z",
-    "weight_kg": 1.5,
+    "weight_kg": 0.05,
     "special": 26
   },
   {
@@ -587,7 +587,7 @@
     "class": "Specialist",
     "createdAt": "2025-12-02T23:27:41.300Z",
     "defense": 5.8,
-    "description": "The largest of four anteater species, capable of consuming 35,000 ants and termites daily. Despite their specialized diet, they have powerful claws for defense and can run surprisingly fast when threatened.",
+    "description": "A Medium creature found in Grasslands, forests.",
     "diet": [
       "ants",
       "termites"
@@ -607,7 +607,7 @@
       "Claw Slash",
       "Bear Hug"
     ],
-    "speed_mps": 13.3,
+    "speed_mps": 8.3,
     "stamina": 56.9,
     "substats": {
       "raw_power": 26.2,
@@ -657,7 +657,7 @@
     "class": "Hunter",
     "createdAt": "2025-12-02T23:27:41.344Z",
     "defense": 56.6,
-    "description": "Perfectly adapted to Arctic environments with thick fur that changes color seasonally. Can survive temperatures as low as -50°C and locate prey beneath deep snow.",
+    "description": "A Tiny creature found in Arctic tundra.",
     "diet": [
       "lemmings",
       "fish",
@@ -727,7 +727,7 @@
     "class": "Hunter",
     "createdAt": "2025-12-02T23:27:41.405Z",
     "defense": 62.6,
-    "description": "A subspecies of gray wolf adapted to the harsh Arctic environment. They hunt musk oxen, caribou, and Arctic hares in packs, with white fur providing camouflage in the snow.",
+    "description": "A Medium creature found in Varied.",
     "diet": [
       "musk ox",
       "caribou",
@@ -748,7 +748,7 @@
       "Pack Hunting",
       "Arctic Camouflage"
     ],
-    "speed_mps": 20.6,
+    "speed_mps": 18,
     "stamina": 95.7,
     "substats": {
       "raw_power": 63.5,
@@ -797,7 +797,7 @@
     "class": "Defender",
     "createdAt": "2025-12-02T23:27:41.459Z",
     "defense": 89.2,
-    "description": "Known for their armor-like shell made of bony plates. Can jump 3-4 feet vertically when startled and are excellent diggers with sharp claws for finding insects.",
+    "description": "A Small creature found in Forests, grasslands.",
     "diet": [
       "insects",
       "grubs",
@@ -818,7 +818,7 @@
       "Shell Defense",
       "Burrow Escape"
     ],
-    "speed_mps": 13.3,
+    "speed_mps": 8.3,
     "stamina": 59.8,
     "substats": {
       "raw_power": 49,
@@ -867,7 +867,7 @@
     "class": "Swarm",
     "createdAt": "2025-12-02T23:27:41.513Z",
     "defense": 5.5,
-    "description": "Highly organized swarm predators that form massive colonies with millions of individuals. Their coordinated attacks can overwhelm prey many times their size.",
+    "description": "A Medium creature found in Varied.",
     "diet": [
       "insects",
       "spiders",
@@ -937,7 +937,7 @@
     "class": "Support",
     "createdAt": "2025-12-02T23:27:41.561Z",
     "defense": 1.3,
-    "description": "A critically endangered neotenic salamander native to Lake Xochimilco in Mexico City. Famous for their remarkable regeneration abilities, able to regrow entire limbs, spinal cord, heart, and other organs.",
+    "description": "A Tiny creature found in Lakes of Mexico City.",
     "diet": [
       "worms",
       "insects",

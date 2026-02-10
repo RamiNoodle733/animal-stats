@@ -2,7 +2,7 @@
 
 Track which animals have accurate **weight**, **speed**, and **bite force** data.
 
-**Progress: 0 / 225 animals completed**
+**Progress: 12 / 225 animals completed**
 
 ---
 
@@ -21,18 +21,18 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
 
 - [ ] African Elephant
 - [ ] African Lion
-- [ ] African Wild Dog
-- [ ] Albatross
-- [ ] Alligator
-- [ ] Alpaca
-- [ ] Anaconda
-- [ ] Anglerfish
-- [ ] Anteater
-- [ ] Arctic Fox
-- [ ] Arctic Wolf
-- [ ] Armadillo
-- [ ] Army Ant
-- [ ] Axolotl
+- [x] African Wild Dog
+- [x] Albatross
+- [x] Alligator
+- [x] Alpaca
+- [x] Anaconda
+- [x] Anglerfish
+- [x] Anteater
+- [x] Arctic Fox
+- [x] Arctic Wolf
+- [x] Armadillo
+- [x] Army Ant
+- [x] Axolotl
 - [ ] Baboon
 - [ ] Bactrian Camel
 - [ ] Badger
