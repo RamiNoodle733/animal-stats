@@ -2,7 +2,7 @@
 
 Track which animals have accurate **weight**, **speed**, and **bite force** data.
 
-**Progress: 12 / 225 animals completed**
+**Progress: 13 / 225 animals completed**
 
 ---
 
@@ -72,7 +72,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
 - [ ] Coconut Crab
 - [ ] Colossal Squid
 - [ ] Condor
-- [ ] Cougar
+- [x] Cougar
 - [ ] Coyote
 - [ ] Crow
 - [ ] Cuttlefish
