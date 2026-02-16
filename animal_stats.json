@@ -3690,7 +3690,7 @@
         "Avoids injury"
       ]
     },
-    "bite_force_psi": 350,
+    "bite_force_psi": 750,
     "class": "Ambush Predator",
     "createdAt": "2025-12-02T23:27:43.244Z",
     "defense": 66.7,
@@ -3715,7 +3715,7 @@
       "Pounce Attack",
       "Mountain Agility"
     ],
-    "speed_mps": 20,
+    "speed_mps": 22.2,
     "stamina": 62.4,
     "substats": {
       "raw_power": 82,
@@ -3738,7 +3738,7 @@
       "solitary hunter"
     ],
     "updatedAt": "2025-12-02T23:28:17.085Z",
-    "weight_kg": 70,
+    "weight_kg": 41,
     "special": 78
   },
   {
