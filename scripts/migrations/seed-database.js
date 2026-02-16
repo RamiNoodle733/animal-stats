@@ -25,7 +25,7 @@ if (!MONGODB_URI) {
 }
 
 // Import Animal model
-const Animal = require('../lib/models/Animal');
+const Animal = require('../../lib/models/Animal');
 
 async function seedDatabase() {
     console.log('🚀 Starting database seed...\n');
@@ -41,7 +41,7 @@ async function seedDatabase() {
 
         // Read JSON data
         console.log('📂 Reading animal_stats.json...');
-        const jsonPath = path.join(__dirname, '..', 'animal_stats.json');
+        const jsonPath = path.join(__dirname, '..', '..', 'animal_stats.json');
         
         if (!fs.existsSync(jsonPath)) {
             console.error('❌ Error: animal_stats.json not found!');
