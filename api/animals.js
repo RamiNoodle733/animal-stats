@@ -157,12 +157,13 @@ async function handleGet(req, res) {
     // Build query
     const query = {};
 
-    // Text search
+    // Text search (escape regex metacharacters to prevent ReDoS)
     if (search) {
+        const escaped = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         query.$or = [
-            { name: { $regex: search, $options: 'i' } },
-            { scientific_name: { $regex: search, $options: 'i' } },
-            { description: { $regex: search, $options: 'i' } }
+            { name: { $regex: escaped, $options: 'i' } },
+            { scientific_name: { $regex: escaped, $options: 'i' } },
+            { description: { $regex: escaped, $options: 'i' } }
         ];
     }
 
@@ -180,7 +181,8 @@ async function handleGet(req, res) {
     }
 
     if (biome && biome !== 'all') {
-        query.habitat = { $regex: biome, $options: 'i' };
+        const escapedBiome = biome.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        query.habitat = { $regex: escapedBiome, $options: 'i' };
     }
 
     // Build sort object
@@ -198,7 +200,7 @@ async function handleGet(req, res) {
                     }
                 }
             },
-            { $sort: { totalStats: -sortOrder } },
+            { $sort: { totalStats: sortOrder } },
             { $skip: parseInt(skip) },
             { $limit: parseInt(limit) }
         ]);

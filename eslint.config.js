@@ -2,10 +2,10 @@ const js = require('@eslint/js');
 const globals = require('globals');
 
 module.exports = [
+  { ignores: ['node_modules/**', 'scripts/**', '**/*.min.js'] },
   js.configs.recommended,
   {
     files: ['**/*.js'],
-    ignores: ['node_modules/**', 'scripts/**', '**/*.min.js'],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',

@@ -58,13 +58,14 @@ module.exports = async function handler(req, res) {
         // Build query
         const query = {};
 
-        // Text search
+        // Text search (escape regex metacharacters to prevent ReDoS)
         if (q) {
+            const escaped = q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             query.$or = [
-                { name: { $regex: q, $options: 'i' } },
-                { scientific_name: { $regex: q, $options: 'i' } },
-                { habitat: { $regex: q, $options: 'i' } },
-                { description: { $regex: q, $options: 'i' } }
+                { name: { $regex: escaped, $options: 'i' } },
+                { scientific_name: { $regex: escaped, $options: 'i' } },
+                { habitat: { $regex: escaped, $options: 'i' } },
+                { description: { $regex: escaped, $options: 'i' } }
             ];
         }
 
