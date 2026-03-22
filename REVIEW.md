@@ -1,4 +1,202 @@
-# API Code Review: /workspace/api/
+# Full Backend Code Review
+
+# Part 1: Library Code Review (`/workspace/lib/`)
+
+## Summary
+
+Reviewed all library files and Mongoose models. Found **30 issues** across security, correctness, performance, and code quality. The most critical issues were a hardcoded JWT secret fallback (now fixed), regex injection in `Animal.findByName` (now fixed), and a race condition in `SiteStats.recordVisit` (now fixed).
+
+**Severity Legend:**
+- CRITICAL: Exploitable security vulnerability or data-loss bug
+- HIGH: Significant bug or security concern
+- MEDIUM: Non-trivial issue that should be fixed
+- LOW: Code quality or minor concern
+
+---
+
+## File: `lib/auth.js`
+
+### Issue L1 — CRITICAL (FIXED): Hardcoded JWT secret fallback (Line 8)
+**Was:** `const JWT_SECRET = process.env.JWT_SECRET || 'animal-stats-secret-key-change-in-production';`
+If `JWT_SECRET` was not set in the environment, the application silently fell back to a publicly-visible secret baked into source code. Any attacker who reads the source could forge arbitrary JWT tokens. The same hardcoded fallback was duplicated in `api/auth.js` line 25.
+**Fix applied:** Removed the fallback — now throws at startup if `JWT_SECRET` is missing, matching how `mongodb.js` handles `MONGODB_URI`. Also deduplicated: `api/auth.js` now imports `JWT_SECRET` from `lib/auth.js`.
+
+### Issue L2 — MEDIUM: `JWT_SECRET` is exported (Line 64)
+`JWT_SECRET` is exported in `module.exports`, which means any module that imports `lib/auth.js` gets access to sign tokens, not just verify them. This violates the principle of least privilege. Only verification helpers should be exported; signing should be done through a dedicated `createToken()` function.
+
+### Issue L3 — LOW: No error discrimination in `verifyToken` (Lines 19-29)
+`verifyToken` returns `null` for all errors (expired, malformed, wrong algorithm) without distinguishing them. Callers cannot tell the difference between "token expired, re-login" and "token is forged."
+
+---
+
+## File: `lib/mongodb.js`
+
+### Issue L4 — LOW: Connection state can go stale (Lines 32-34)
+Once `cached.conn` is set, it's never checked for liveness. If the MongoDB connection drops, all subsequent calls return the dead connection. Consider checking `mongoose.connection.readyState` before returning the cached connection.
+
+### Issue L5 — LOW: Console logging in production (Line 45)
+`console.log('MongoDB connected successfully')` runs on every cold start. In high-traffic serverless environments, this pollutes logs.
+
+---
+
+## File: `lib/discord.js`
+
+### Issue L6 — LOW: No rate limiting on Discord webhook calls (Line 125)
+Discord rate limits webhooks to ~30 requests per 60 seconds. High-traffic events (votes, site visits) could hit rate limits causing silent failures.
+
+### Issue L7 — LOW: Inconsistent emoji usage (Lines 323-327)
+Some embed fields use raw emoji literals (`📐`, `🌐`) while the rest of the file uses the `EMOJI` constant map.
+
+---
+
+## File: `lib/xpSystem.js`
+
+### Issue L8 — MEDIUM: Division by Infinity in `buildProgressionPayload` (Line 185)
+When `user.level >= 100`, `xpToNext(100)` returns `Infinity`. `user.xp / Infinity` gives `0`, so `xpPercent` will always be `0` at level 100, even though the user has "completed" leveling. This is misleading.
+
+### Issue L9 — LOW: XP clamping at level 100 discards overflow (Line 125)
+`xp = Math.min(xp, xpToNext(99))` caps overflow XP to the level 99→100 requirement. If a large XP award spans multiple levels, the excess is silently lost.
+
+---
+
+## File: `lib/models/Animal.js`
+
+### Issue L10 — CRITICAL (FIXED): Regex injection in `findByName` (Line 145)
+**Was:** `return this.findOne({ name: new RegExp('^${name}$', 'i') });`
+The `name` parameter was interpolated directly into a regex without escaping. Used from `api/animals/[id].js` with URL params, enabling ReDoS and unintended match behavior (e.g., `name = ".*"` matches any animal).
+**Fix applied:** Now escapes regex metacharacters before interpolation.
+
+### Issue L11 — MEDIUM (FIXED): Redundant `index: true` on `name` field (Lines 41-42)
+`name` had both `unique: true` and `index: true`. The `unique` constraint already creates an index.
+**Fix applied:** Removed redundant `index: true`.
+
+### Issue L12 — MEDIUM: Over-indexing on stat fields (Lines 89-94)
+Six individual indexes on `attack`, `defense`, `agility`, `stamina`, `intelligence`, and `special_attack`. For a collection of hundreds of animals, these indexes add write overhead without meaningful query benefit. The compound index `{ attack: -1, defense: -1 }` partially overlaps with the individual `attack` index.
+
+---
+
+## File: `lib/models/BattleStats.js`
+
+### Issue L13 — MEDIUM (FIXED): Redundant `index: true` on `animalName` (Lines 13-15)
+Same as Animal.js — `unique: true` already creates an index.
+**Fix applied:** Removed redundant `index: true`.
+
+### Issue L14 — LOW: Missing index on `battleRating`
+If the application sorts by `battleRating` for leaderboards, there should be an index on this field.
+
+---
+
+## File: `lib/models/ChatMessage.js`
+
+### Issue L15 — MEDIUM: Conflicting timestamp definitions (Lines 50-54 and 65)
+The schema both explicitly defines `createdAt` with `Date.now` and enables `timestamps: true`. Mongoose uses the `timestamps` option, making the explicit `default: Date.now` dead code. The explicit definition does serve the purpose of adding the index.
+
+### Issue L16 — MEDIUM: `pre('find')` / `pre('findOne')` middleware hides deleted messages globally (Lines 80-86)
+This automatically filters out deleted messages on every query. Admin/moderation queries cannot retrieve deleted messages without bypassing the model entirely.
+
+### Issue L17 — LOW: Unbounded array growth on `upvotes`/`downvotes` (Lines 41-48)
+Voter IDs stored as embedded arrays mean each message document grows with every vote, risking the 16MB document limit.
+
+---
+
+## File: `lib/models/Comment.js`
+
+### Issue L18 — MEDIUM: `voteScore` can become inconsistent (Lines 68-71 and 140-143)
+`voteScore` is a denormalized field that must be manually updated via `updateVoteScore()`. No pre-save hook keeps it in sync if upvotes/downvotes are modified without calling `updateVoteScore()`.
+
+### Issue L19 — LOW: No `minlength` validation on `content` (Line 34)
+Comments can be empty strings (after trimming) since there's only `maxlength` but no `minlength`.
+
+### Issue L20 — LOW: Same unbounded array issue on `upvotes`/`downvotes` as ChatMessage.
+
+---
+
+## File: `lib/models/RankHistory.js`
+
+### Issue L21 — MEDIUM: Missing index on `rankings.animalName` (Line 18)
+If the application queries rank history by animal name, there's no index to support that query efficiently.
+
+### Issue L22 — LOW: No TTL or cleanup mechanism
+Rank history entries accumulate indefinitely with no TTL index or pruning.
+
+### Issue L23 — LOW: Redundant index (Lines 12 and 30)
+`date` has `index: true` on the field AND a separate `{ unique: true }` index. The unique index supersedes the simple one.
+
+---
+
+## File: `lib/models/SiteStats.js`
+
+### Issue L24 — HIGH (FIXED): Race condition in `recordVisit` (Lines 75-117)
+**Was:** Read-modify-write pattern (`findOne` → modify in memory → `save`) not atomic. Under concurrent serverless requests, two requests could read the same state and one would overwrite the other's changes, losing visit counts.
+**Fix applied:** Rewrote to use atomic MongoDB operations (`$addToSet`, `$inc`, `$pull`) instead of in-memory modification.
+
+### Issue L25 — HIGH: Unbounded array growth in `dailyVisits[].uniqueIps` (Line 35)
+Every unique visitor's IP hash is stored in an array. On a busy site, 7 days × thousands of IPs in a single document can approach the 16MB limit. The `includes()` check was also O(n).
+
+### Issue L26 — MEDIUM: IP hashes stored without hashing verification
+The parameter is named `ipHash` but nothing verifies the caller actually hashed the IP. If raw IPs are passed, they're stored in plain text (privacy/GDPR concern).
+
+### Issue L27 — LOW: `recordVisit` is dead code
+`recordVisit` is defined but never invoked anywhere in the codebase.
+
+---
+
+## File: `lib/models/User.js`
+
+### Issue L28 — MEDIUM (FIXED): `comparePassword` could fail silently (Lines 126-128)
+If a caller forgot `.select('+password')`, `this.password` would be `undefined` and `bcrypt.compare` would throw a cryptic error.
+**Fix applied:** Added defensive check that throws a clear error message.
+
+### Issue L29 — MEDIUM: Unbounded array growth on `votes` and `fightVotes` (Lines 48-60)
+User voting history embedded as arrays in the User document. Active users accumulating thousands of votes will bloat the document and impact every query fetching the user.
+
+### Issue L30 — LOW: `createdAt` defined both explicitly and via `timestamps` (Lines 100-103, 109)
+Same issue as ChatMessage.
+
+### Issue L31 — LOW: Weak password policy (Line 29)
+Minimum 6 characters with no complexity requirements.
+
+### Issue L32 — LOW: `usernameChanges` array grows forever (Lines 95-99)
+Old username change records are never pruned.
+
+---
+
+## File: `lib/models/Vote.js`
+
+### Issue L33 — MEDIUM (FIXED): `getVoteCounts` made two separate queries (Lines 56-60)
+**Was:** Two `countDocuments` calls for upvotes and downvotes.
+**Fix applied:** Replaced with a single aggregation query, halving database round trips.
+
+### Issue L34 — LOW: Redundant `animalId` index (Line 14)
+Individual index on `animalId` is redundant with the compound unique index `{ animalId, votedBy, voteDate }` since `animalId` is the leftmost prefix.
+
+---
+
+## File: `lib/models/XpClaim.js`
+
+### Issue L35 — LOW: `getDayKey` trusts client-provided timezone (Lines 55-71)
+A user could send extreme timezones (e.g., UTC+14 vs UTC-11) to claim XP for dates not yet reached in UTC.
+
+---
+
+## Fixes Applied Summary
+
+| File | Issue | Fix |
+|------|-------|-----|
+| `lib/auth.js` | Hardcoded JWT fallback | Throws if missing |
+| `api/auth.js` | Duplicated JWT_SECRET | Now imports from `lib/auth.js` |
+| `api/auth.js` | Regex injection in username lookups | Escapes metacharacters |
+| `lib/models/Animal.js` | Regex injection in `findByName` | Escapes metacharacters |
+| `lib/models/Animal.js` | Redundant index on `name` | Removed `index: true` |
+| `lib/models/BattleStats.js` | Redundant index on `animalName` | Removed `index: true` |
+| `lib/models/SiteStats.js` | Race condition in `recordVisit` | Uses atomic MongoDB ops |
+| `lib/models/User.js` | `comparePassword` no defensive check | Throws clear error |
+| `lib/models/Vote.js` | Two queries in `getVoteCounts` | Single aggregation |
+
+---
+---
+
+# Part 2: API Code Review (`/workspace/api/`)
 
 ## Summary
 
