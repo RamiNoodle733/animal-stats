@@ -3164,29 +3164,29 @@ class AnimalStatsApp {
         document.title = title;
         
         // Update meta description
-        let metaDesc = document.querySelector('meta[name="description"]');
+        const metaDesc = document.querySelector('meta[name="description"]');
         if (metaDesc) {
             metaDesc.setAttribute('content', description);
         }
         
         // Update OG tags
-        let ogTitle = document.querySelector('meta[property="og:title"]');
+        const ogTitle = document.querySelector('meta[property="og:title"]');
         if (ogTitle) {
             ogTitle.setAttribute('content', title);
         }
         
-        let ogDesc = document.querySelector('meta[property="og:description"]');
+        const ogDesc = document.querySelector('meta[property="og:description"]');
         if (ogDesc) {
             ogDesc.setAttribute('content', description);
         }
         
-        let ogUrl = document.querySelector('meta[property="og:url"]');
+        const ogUrl = document.querySelector('meta[property="og:url"]');
         if (ogUrl) {
             ogUrl.setAttribute('content', `https://animalbattlestats.com${canonicalPath}`);
         }
         
         // Update OG image for animal pages
-        let ogImage = document.querySelector('meta[property="og:image"]');
+        const ogImage = document.querySelector('meta[property="og:image"]');
         if (ogImage && animal && animal.image) {
             const imageUrl = animal.image.startsWith('http') ? animal.image : `https://animalbattlestats.com${animal.image}`;
             ogImage.setAttribute('content', imageUrl);

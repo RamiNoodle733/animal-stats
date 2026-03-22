@@ -210,7 +210,7 @@ async function handleGet(req, res) {
     const { limit = 50, before } = req.query;
     const User = require('../lib/models/User');
 
-    let query = { parentId: null }; // Only get root messages
+    const query = { parentId: null }; // Only get root messages
     
     // For pagination - get messages before a certain timestamp
     if (before) {

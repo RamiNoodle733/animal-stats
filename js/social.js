@@ -269,7 +269,7 @@ const SocialLinks = {
      * Render mobile bottom sheet items
      */
     renderBottomSheetItems() {
-        let items = [];
+        const items = [];
         
         this.platforms.forEach(platform => {
             if (platform.hasChildren) {
@@ -352,7 +352,7 @@ const SocialLinks = {
      * Render About page cards
      */
     renderAboutCards() {
-        let cards = [];
+        const cards = [];
         
         this.platforms.forEach(platform => {
             if (platform.hasChildren) {
