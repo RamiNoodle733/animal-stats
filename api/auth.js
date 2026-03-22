@@ -13,7 +13,7 @@ const { connectToDatabase } = require('../lib/mongodb');
 const User = require('../lib/models/User');
 const jwt = require('jsonwebtoken');
 const { notifyDiscord } = require('../lib/discord');
-const { verifyToken } = require('../lib/auth');
+const { verifyToken, JWT_SECRET } = require('../lib/auth');
 const { 
     XP_REWARDS, 
     xpToNext, 
@@ -22,7 +22,6 @@ const {
     buildProgressionPayload 
 } = require('../lib/xpSystem');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'animal-stats-secret-key-change-in-production';
 
 module.exports = async function handler(req, res) {
     // Set CORS headers
@@ -357,8 +356,9 @@ async function handleUpdateProfile(req, res) {
         }
 
         // Check if username is already taken (by another user)
+        const escapedUsername = newUsername.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const existingUser = await User.findOne({ 
-            username: { $regex: new RegExp(`^${newUsername}$`, 'i') },
+            username: { $regex: new RegExp(`^${escapedUsername}$`, 'i') },
             _id: { $ne: user._id }
         });
         if (existingUser) {
@@ -646,9 +646,9 @@ async function handleGetPublicProfile(req, res) {
         return res.status(400).json({ success: false, error: 'Username is required' });
     }
 
-    // Find user by username (case-insensitive)
+    const escapedUsername = username.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const user = await User.findOne({ 
-        username: { $regex: new RegExp(`^${username}$`, 'i') }
+        username: { $regex: new RegExp(`^${escapedUsername}$`, 'i') }
     });
     
     if (!user) {
