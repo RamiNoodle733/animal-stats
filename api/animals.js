@@ -12,13 +12,14 @@
 
 const { connectToDatabase } = require('../lib/mongodb');
 const Animal = require('../lib/models/Animal');
+const { getAuthUser } = require('../lib/auth');
 const { notifyDiscord } = require('../lib/discord');
 
 module.exports = async function handler(req, res) {
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     
     // Prevent caching - always fetch fresh data from MongoDB
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
@@ -238,6 +239,11 @@ async function handleGet(req, res) {
  * Create a new animal
  */
 async function handlePost(req, res) {
+    const user = getAuthUser(req);
+    if (!user) {
+        return res.status(401).json({ success: false, error: 'Authentication required' });
+    }
+
     const animalData = req.body;
 
     // Validate required fields
