@@ -341,8 +341,7 @@
             // Watch for class changes on view containers
             const viewsContainer = document.querySelector('.views-container');
             if (!viewsContainer) {
-                // Fallback: check periodically
-                setInterval(() => this.checkIfOnCommunityPage(), 1000);
+                this._viewCheckInterval = setInterval(() => this.checkIfOnCommunityPage(), 1000);
                 return;
             }
             
@@ -369,7 +368,6 @@
                 console.log('[Community] Entered community page, starting heartbeat');
                 this.isOnCommunityPage = true;
                 this.startHeartbeat();
-                this.registerSiteVisit();
             } else if (!isNowOnCommunity && this.isOnCommunityPage) {
                 // Just left community page
                 console.log('[Community] Left community page, stopping heartbeat');

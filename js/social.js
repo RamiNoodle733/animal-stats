@@ -322,6 +322,9 @@ const SocialLinks = {
         const aboutContent = document.querySelector('.about-content');
         if (!aboutContent) return;
 
+        // Prevent duplicate injection
+        if (aboutContent.querySelector('.about-connect-section')) return;
+
         // Create the Connect section
         const connectSection = document.createElement('div');
         connectSection.className = 'about-connect-section';
