@@ -262,7 +262,7 @@ class CommunityManager {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${Auth.getToken()}`
                 },
-                body: JSON.stringify({ customXp: 10, customBp: 2 })
+                body: JSON.stringify({ action: 'daily_matchup_vote' })
             });
 
             const result = await response.json();

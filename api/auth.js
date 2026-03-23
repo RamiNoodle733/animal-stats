@@ -503,8 +503,8 @@ async function handleRewards(req, res) {
         }
         rewardCooldowns.set(cooldownKey, Date.now());
 
-        let xpToAward = XP_REWARDS[action].xp;
-        let bpToAward = XP_REWARDS[action].bp;
+        const xpToAward = XP_REWARDS[action].xp;
+        const bpToAward = XP_REWARDS[action].bp;
 
         // Get current user state
         const dbUser = await User.findById(user.id);
