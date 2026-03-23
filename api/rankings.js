@@ -59,7 +59,7 @@ module.exports = async function handler(req, res) {
         await connectToDatabase();
 
         // Get all animals with scientific_name included
-        const animals = await Animal.find({}).select('name image attack defense agility stamina intelligence special scientific_name').lean();
+        const animals = await Animal.find({}).select('name image attack defense agility stamina intelligence special_attack scientific_name').lean();
         
         // Get vote aggregations
         const voteAggregations = await Vote.aggregate([
@@ -138,7 +138,7 @@ module.exports = async function handler(req, res) {
             
             // Calculate total stats for display
             const totalStats = (animal.attack || 0) + (animal.defense || 0) + (animal.agility || 0) + 
-                              (animal.stamina || 0) + (animal.intelligence || 0) + (animal.special || 0);
+                              (animal.stamina || 0) + (animal.intelligence || 0) + (animal.special_attack || 0);
 
             // ============================================
             // NEW POWER SCORE ALGORITHM
@@ -182,7 +182,7 @@ module.exports = async function handler(req, res) {
                     agility: animal.agility,
                     stamina: animal.stamina,
                     intelligence: animal.intelligence,
-                    special: animal.special,
+                    special: animal.special_attack,
                     scientific_name: animal.scientific_name
                 },
                 upvotes: votes.upvotes,

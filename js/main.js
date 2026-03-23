@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ============================================
  * ANIMAL STATS - MAIN APPLICATION
  * ============================================
@@ -637,7 +637,7 @@ class AnimalStatsApp {
                     page: window.location.pathname + window.location.hash,
                     duration: durationStr
                 });
-                navigator.sendBeacon(API_CONFIG.baseUrl + '/api/animals?action=notify', data);
+                navigator.sendBeacon(API_CONFIG.baseUrl + '/api/animals?action=notify', new Blob([data], { type: 'application/json' }));
             });
         } catch (error) { }
     }
@@ -962,8 +962,8 @@ class AnimalStatsApp {
         this.setupProfileDropdowns();
         
         // Compare View Interactions
-        this.dom.fighter1.display.addEventListener('click', () => this.setSelectingSide('left'));
-        this.dom.fighter2.display.addEventListener('click', () => this.setSelectingSide('right'));
+        this.dom.fighter1.display?.addEventListener('click', () => this.setSelectingSide('left'));
+        this.dom.fighter2.display?.addEventListener('click', () => this.setSelectingSide('right'));
         
         // View Stats Buttons in Compare Mode
         this.dom.fighter1.viewStatsBtn?.addEventListener('click', (e) => {
@@ -975,7 +975,7 @@ class AnimalStatsApp {
             this.toggleFighterStats('right');
         });
 
-        this.dom.fightBtn.addEventListener('click', this.startFight);
+        this.dom.fightBtn?.addEventListener('click', this.startFight);
         
         // Keyboard Navigation
         document.addEventListener('keydown', (e) => {
@@ -2187,17 +2187,14 @@ class AnimalStatsApp {
         this.dom.detailsPanel.classList.toggle('expanded', this.state.isDetailsExpanded);
         this.dom.expandDetailsBtn.classList.toggle('expanded', this.state.isDetailsExpanded);
         
-        const icon = this.dom.expandDetailsBtn.querySelector('i');
         const toggleSeparator = document.getElementById('toggle-separator');
         
         if (this.state.isDetailsExpanded) {
-            icon.className = 'fas fa-chevron-down';
             this.dom.expandDetailsBtn.innerHTML = '<i class="fas fa-chevron-up"></i> LESS DETAILS';
             this.dom.gridWrapper.classList.add('hidden');
             this.dom.toggleGridBtn.style.display = 'none';
             if (toggleSeparator) toggleSeparator.style.display = 'none';
         } else {
-            icon.className = 'fas fa-chevron-up';
             this.dom.expandDetailsBtn.innerHTML = '<i class="fas fa-info-circle"></i> MORE DETAILS';
             this.dom.gridWrapper.classList.remove('hidden');
             this.dom.toggleGridBtn.style.display = 'flex';
@@ -3167,29 +3164,29 @@ class AnimalStatsApp {
         document.title = title;
         
         // Update meta description
-        let metaDesc = document.querySelector('meta[name="description"]');
+        const metaDesc = document.querySelector('meta[name="description"]');
         if (metaDesc) {
             metaDesc.setAttribute('content', description);
         }
         
         // Update OG tags
-        let ogTitle = document.querySelector('meta[property="og:title"]');
+        const ogTitle = document.querySelector('meta[property="og:title"]');
         if (ogTitle) {
             ogTitle.setAttribute('content', title);
         }
         
-        let ogDesc = document.querySelector('meta[property="og:description"]');
+        const ogDesc = document.querySelector('meta[property="og:description"]');
         if (ogDesc) {
             ogDesc.setAttribute('content', description);
         }
         
-        let ogUrl = document.querySelector('meta[property="og:url"]');
+        const ogUrl = document.querySelector('meta[property="og:url"]');
         if (ogUrl) {
             ogUrl.setAttribute('content', `https://animalbattlestats.com${canonicalPath}`);
         }
         
         // Update OG image for animal pages
-        let ogImage = document.querySelector('meta[property="og:image"]');
+        const ogImage = document.querySelector('meta[property="og:image"]');
         if (ogImage && animal && animal.image) {
             const imageUrl = animal.image.startsWith('http') ? animal.image : `https://animalbattlestats.com${animal.image}`;
             ogImage.setAttribute('content', imageUrl);

@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ============================================
  * TOURNAMENT SYSTEM - tournament.js
  * ============================================
@@ -575,6 +575,8 @@ class TournamentManager {
         // Reset vote protection
         this.isVotingLocked = false;
         this.isMatchReady = false;
+        // Clear celebration effects to prevent interval leaks
+        this.clearCelebrationEffects();
     }
     
     reset() {
@@ -2140,7 +2142,7 @@ class TournamentManager {
             statDuration.textContent = duration > 60 ? `${Math.floor(duration/60)}m ${duration%60}s` : `${duration}s`;
         }
         if (statAvgRating) {
-            const avgRating = Math.round(finalFour.reduce((sum, a) => sum + (a.elo || 1500), 0) / finalFour.length);
+            const avgRating = Math.round(finalFour.reduce((sum, a) => sum + (this.eloCache[a.name] || 1500), 0) / finalFour.length);
             statAvgRating.textContent = avgRating;
         }
         
@@ -2556,7 +2558,7 @@ class TournamentManager {
             });
             
             // Use sendBeacon for more reliable delivery
-            const sent = navigator.sendBeacon('/api/battles?action=tournament_complete', data);
+            const sent = navigator.sendBeacon('/api/battles?action=tournament_complete', new Blob([data], { type: 'application/json' }));
             console.log('Tournament complete notification sent:', sent);
         } catch (error) {
             console.error('Failed to notify tournament completion:', error);
@@ -2567,7 +2569,7 @@ class TournamentManager {
      * Send tournament quit notification to Discord
      */
     notifyTournamentQuit() {
-        if (this.completedMatches === 0) return; // Don't notify if no matches played
+        if (this.completedMatches === 0) return;
         
         try {
             const matchHistoryData = this.matchHistory.map(m => ({
@@ -2576,7 +2578,7 @@ class TournamentManager {
             }));
             
             const data = JSON.stringify({
-                user: Auth.isLoggedIn() ? Auth.getUser()?.username : 'Anonymous',
+                user: window.Auth?.isLoggedIn() ? window.Auth.getUser()?.username : 'Anonymous',
                 bracketSize: this.bracketSize,
                 totalMatches: this.totalMatches,
                 completedMatches: this.completedMatches,
@@ -2584,7 +2586,7 @@ class TournamentManager {
             });
             
             // Use sendBeacon for more reliable delivery
-            const sent = navigator.sendBeacon('/api/battles?action=tournament_quit', data);
+            const sent = navigator.sendBeacon('/api/battles?action=tournament_quit', new Blob([data], { type: 'application/json' }));
             console.log('Tournament quit notification sent:', sent);
         } catch (error) {
             console.error('Failed to notify tournament quit:', error);

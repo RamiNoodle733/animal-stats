@@ -609,7 +609,7 @@ class RankingsManager {
         const hasTournamentData = tournamentsFirst > 0 || tournamentsSecond > 0 || tournamentsThird > 0;
         
         // Always show tournament chips (0 if no data)
-        let tournamentBadges = `
+        const tournamentBadges = `
             <div class="row-tournament-chips">
                 <span class="tournament-chip gold" title="1st Place"><i class="fas fa-trophy"></i><span>${tournamentsFirst}</span></span>
                 <span class="tournament-chip silver" title="2nd Place"><i class="fas fa-medal"></i><span>${tournamentsSecond}</span></span>
@@ -907,7 +907,7 @@ class RankingsManager {
                     const rUsername = r.author?.username || r.authorUsername || null;
                     const rTime = this.getTimeAgo(new Date(r.createdAt));
                     const rProfile = r.author?.profileAnimal || r.profileAnimal;
-                    let rAvatar = r.isAnonymous ? '<i class="fas fa-user-secret"></i>' : 
+                    const rAvatar = r.isAnonymous ? '<i class="fas fa-user-secret"></i>' : 
                         (rProfile?.image ? `<img src="${rProfile.image}" alt="">` : `<span>${rName[0].toUpperCase()}</span>`);
                     const rIsClickable = !r.isAnonymous && rUsername;
                     const rAvatarClass = rIsClickable ? 'inline-comment-avatar small clickable-avatar' : 'inline-comment-avatar small';

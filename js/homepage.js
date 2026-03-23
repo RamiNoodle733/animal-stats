@@ -784,7 +784,7 @@ const HomepageController = {
                 ctx.getImageData(size - 1, size - 1, 1, 1).data
             ];
             
-            let opaqueCorners = corners.filter(p => p[3] > 200).length;
+            const opaqueCorners = corners.filter(p => p[3] > 200).length;
             
             if (opaqueCorners === 4) {
                 const edges = [

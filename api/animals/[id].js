@@ -9,13 +9,14 @@
 
 const { connectToDatabase } = require('../../lib/mongodb');
 const Animal = require('../../lib/models/Animal');
+const { getAuthUser } = require('../../lib/auth');
 const mongoose = require('mongoose');
 
 module.exports = async function handler(req, res) {
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
     // Handle preflight
     if (req.method === 'OPTIONS') {
@@ -95,6 +96,11 @@ async function handleGet(req, res, id) {
  * PUT /api/animals/[id]
  */
 async function handlePut(req, res, id) {
+    const user = getAuthUser(req);
+    if (!user) {
+        return res.status(401).json({ success: false, error: 'Authentication required' });
+    }
+
     const animal = await findAnimal(id);
 
     if (!animal) {
@@ -120,8 +126,19 @@ async function handlePut(req, res, id) {
         }
     }
 
-    // Update the animal
-    Object.assign(animal, updateData);
+    // Only allow known schema fields to be updated (prevent mass assignment)
+    const allowedFields = [
+        'name', 'scientific_name', 'description', 'type', 'class', 'habitat', 'size',
+        'weight_kg', 'height_cm', 'length_cm', 'speed_mps', 'lifespan_years', 'bite_force_psi',
+        'size_score', 'isNocturnal', 'isSocial', 'diet', 'attack', 'defense', 'agility',
+        'stamina', 'intelligence', 'special_attack', 'substats', 'battle_profile',
+        'unique_traits', 'special_abilities', 'image'
+    ];
+    for (const field of allowedFields) {
+        if (updateData[field] !== undefined) {
+            animal[field] = updateData[field];
+        }
+    }
     await animal.save();
 
     return res.status(200).json({
@@ -134,6 +151,11 @@ async function handlePut(req, res, id) {
  * DELETE /api/animals/[id]
  */
 async function handleDelete(req, res, id) {
+    const user = getAuthUser(req);
+    if (!user) {
+        return res.status(401).json({ success: false, error: 'Authentication required' });
+    }
+
     const animal = await findAnimal(id);
 
     if (!animal) {

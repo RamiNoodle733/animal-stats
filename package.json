@@ -7,8 +7,8 @@
     "dev": "echo 'Use: vercel dev'",
     "start": "echo 'Use: vercel dev'",
     "seed": "node scripts/seed-database.js",
-    "lint": "eslint script.js auth.js router.js compare-page.js community-page.js",
-    "lint:fix": "eslint script.js auth.js router.js compare-page.js community-page.js --fix"
+    "lint": "eslint js/ api/ lib/",
+    "lint:fix": "eslint js/ api/ lib/ --fix"
   },
   "keywords": [
     "animals",

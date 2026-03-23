@@ -269,7 +269,7 @@ const SocialLinks = {
      * Render mobile bottom sheet items
      */
     renderBottomSheetItems() {
-        let items = [];
+        const items = [];
         
         this.platforms.forEach(platform => {
             if (platform.hasChildren) {
@@ -322,6 +322,9 @@ const SocialLinks = {
         const aboutContent = document.querySelector('.about-content');
         if (!aboutContent) return;
 
+        // Prevent duplicate injection
+        if (aboutContent.querySelector('.about-connect-section')) return;
+
         // Create the Connect section
         const connectSection = document.createElement('div');
         connectSection.className = 'about-connect-section';
@@ -349,7 +352,7 @@ const SocialLinks = {
      * Render About page cards
      */
     renderAboutCards() {
-        let cards = [];
+        const cards = [];
         
         this.platforms.forEach(platform => {
             if (platform.hasChildren) {

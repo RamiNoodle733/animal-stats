@@ -30,7 +30,7 @@ module.exports = async function handler(req, res) {
         await connectToDatabase();
 
         const { count = 1, type, exclude } = req.query;
-        const numAnimals = Math.min(parseInt(count), 10); // Max 10 random animals
+        const numAnimals = Math.min(parseInt(count) || 1, 10);
 
         const matchStage = {};
         

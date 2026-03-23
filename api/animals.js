@@ -12,13 +12,14 @@
 
 const { connectToDatabase } = require('../lib/mongodb');
 const Animal = require('../lib/models/Animal');
+const { getAuthUser } = require('../lib/auth');
 const { notifyDiscord } = require('../lib/discord');
 
 module.exports = async function handler(req, res) {
     // Set CORS headers
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     
     // Prevent caching - always fetch fresh data from MongoDB
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
@@ -157,12 +158,13 @@ async function handleGet(req, res) {
     // Build query
     const query = {};
 
-    // Text search
+    // Text search (escape regex metacharacters to prevent ReDoS)
     if (search) {
+        const escaped = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         query.$or = [
-            { name: { $regex: search, $options: 'i' } },
-            { scientific_name: { $regex: search, $options: 'i' } },
-            { description: { $regex: search, $options: 'i' } }
+            { name: { $regex: escaped, $options: 'i' } },
+            { scientific_name: { $regex: escaped, $options: 'i' } },
+            { description: { $regex: escaped, $options: 'i' } }
         ];
     }
 
@@ -180,7 +182,8 @@ async function handleGet(req, res) {
     }
 
     if (biome && biome !== 'all') {
-        query.habitat = { $regex: biome, $options: 'i' };
+        const escapedBiome = biome.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        query.habitat = { $regex: escapedBiome, $options: 'i' };
     }
 
     // Build sort object
@@ -198,7 +201,7 @@ async function handleGet(req, res) {
                     }
                 }
             },
-            { $sort: { totalStats: -sortOrder } },
+            { $sort: { totalStats: sortOrder } },
             { $skip: parseInt(skip) },
             { $limit: parseInt(limit) }
         ]);
@@ -236,6 +239,11 @@ async function handleGet(req, res) {
  * Create a new animal
  */
 async function handlePost(req, res) {
+    const user = getAuthUser(req);
+    if (!user) {
+        return res.status(401).json({ success: false, error: 'Authentication required' });
+    }
+
     const animalData = req.body;
 
     // Validate required fields

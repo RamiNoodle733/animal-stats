@@ -2,10 +2,10 @@ const js = require('@eslint/js');
 const globals = require('globals');
 
 module.exports = [
+  { ignores: ['node_modules/**', 'scripts/**', '**/*.min.js'] },
   js.configs.recommended,
   {
     files: ['**/*.js'],
-    ignores: ['node_modules/**', 'scripts/**', '**/*.min.js'],
     languageOptions: {
       ecmaVersion: 2022,
       sourceType: 'module',
@@ -16,16 +16,34 @@ module.exports = [
         Chart: 'readonly',
         Auth: 'readonly',
         Router: 'readonly',
+        AudioManager: 'readonly',
         AnimalStatsApp: 'readonly',
         RankingsManager: 'readonly',
         TournamentManager: 'readonly',
         CommunityManager: 'readonly',
+        BattlepointsManager: 'readonly',
         ComparePageEnhancements: 'readonly',
         CommunityPageEnhancements: 'readonly',
+        HomepageController: 'readonly',
+        SocialLinks: 'readonly',
         FALLBACK_IMAGE: 'readonly',
         API_CONFIG: 'readonly',
+        AppState: 'readonly',
+        EventBus: 'readonly',
+        CoreUtils: 'readonly',
         formatNumber: 'readonly',
-        formatStat: 'readonly'
+        formatStat: 'readonly',
+        escapeHtml: 'readonly',
+        formatTimeAgo: 'readonly',
+        debounce: 'readonly',
+        getAnimalSlug: 'readonly',
+        calculateTier: 'readonly',
+        calculateGrade: 'readonly',
+        getDietType: 'readonly',
+        apiRequest: 'readonly',
+        authApiRequest: 'readonly',
+        initMobileNav: 'readonly',
+        initMobileRankingsSheet: 'readonly'
       }
     },
     rules: {

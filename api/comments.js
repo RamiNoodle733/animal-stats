@@ -80,7 +80,7 @@ async function handleGet(req, res) {
     try {
         const { animalId, animalName, comparison, limit = 100 } = req.query;
 
-        let query = { isHidden: false };
+        const query = { isHidden: false };
         
         if (animalId) {
             query.targetType = 'animal';
@@ -101,7 +101,7 @@ async function handleGet(req, res) {
             .lean();
         
         // Try to get current user data, but don't fail if User model has issues
-        let userMap = {};
+        const userMap = {};
         try {
             const User = require('../lib/models/User');
             const authorIds = [...new Set(comments.map(c => c.authorId?.toString()).filter(Boolean))];
