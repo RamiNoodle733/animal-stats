@@ -28,7 +28,10 @@ module.exports = async function handler(req, res) {
 
     // Handle fight notifications
     if (req.method === 'POST' && req.query.action === 'fight') {
-        const { animal1, animal2, user } = req.body;
+        const { animal1, animal2, user } = req.body || {};
+        if (!animal1 || !animal2 || typeof animal1 !== 'string' || typeof animal2 !== 'string') {
+            return res.status(400).json({ success: false, error: 'animal1 and animal2 are required strings' });
+        }
         await notifyDiscord('fight', { animal1, animal2, user: user || 'Anonymous' }, req);
         
         // Increment comparison count for both animals

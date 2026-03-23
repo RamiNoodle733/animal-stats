@@ -11,6 +11,7 @@
 
 const { connectToDatabase } = require('../lib/mongodb');
 const { verifyToken } = require('../lib/auth');
+const { xpToNext } = require('../lib/xpSystem');
 
 // In-memory presence store with TTL (would use Redis in production)
 // Structure: { odId: { username, displayName, profileAnimal, lastSeen, page } }
@@ -83,21 +84,20 @@ async function handleLeaderboard(req, res) {
         .limit(maxLimit)
         .lean();
 
-    // Calculate XP needed for next level for each user
     const leaderboard = users.map((user, index) => {
-        const xpForNextLevel = calculateXpForLevel(user.level + 1);
-        const xpProgress = user.xp;
-        const xpNeeded = xpForNextLevel;
+        const level = user.level || 1;
+        const xpProgress = user.xp || 0;
+        const xpNeeded = xpToNext(level);
         
         return {
             rank: index + 1,
             odId: user._id,
             username: user.displayName || user.username,
             profileAnimal: user.profileAnimal,
-            level: user.level || 1,
-            xp: user.xp || 0,
+            level,
+            xp: xpProgress,
             xpForNextLevel: xpNeeded,
-            xpProgress: Math.min(100, Math.round((xpProgress / xpNeeded) * 100)),
+            xpProgress: xpNeeded === Infinity ? 100 : Math.min(100, Math.round((xpProgress / xpNeeded) * 100)),
             battlePoints: user.battlePoints || 0,
             lifetimeXp: user.lifetimeXp || 0,
             joinedAt: user.createdAt
@@ -109,15 +109,6 @@ async function handleLeaderboard(req, res) {
         count: leaderboard.length,
         data: leaderboard
     });
-}
-
-/**
- * Calculate XP required for a given level
- * Uses same formula as xpSystem.js
- */
-function calculateXpForLevel(level) {
-    // Base: 100 XP for level 2, increases by 50 per level
-    return 100 + (level - 2) * 50;
 }
 
 /**

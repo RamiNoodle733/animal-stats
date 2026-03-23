@@ -169,17 +169,14 @@ async function handleTournamentComplete(req, res) {
     
     // Save tournament placements to database
     try {
-        // Champion gets 1st place
         if (champion) {
             await updateTournamentPlacement(champion, 1);
         }
         
-        // Runner-up gets 2nd place
         if (runnerUp && runnerUp !== 'N/A') {
             await updateTournamentPlacement(runnerUp, 2);
         }
         
-        // Third/Fourth place finishers
         if (thirdFourth && thirdFourth !== 'N/A') {
             const thirdFourthAnimals = thirdFourth.split(',').map(s => s.trim()).filter(Boolean);
             for (const animalName of thirdFourthAnimals) {
@@ -187,13 +184,13 @@ async function handleTournamentComplete(req, res) {
             }
         }
         
-        // Mark all animals in the tournament as having played
-        const allAnimals = new Set([champion]);
+        // Collect all valid animal names from this tournament
+        const allAnimals = new Set();
+        if (champion) allAnimals.add(champion);
         if (runnerUp && runnerUp !== 'N/A') allAnimals.add(runnerUp);
         if (thirdFourth && thirdFourth !== 'N/A') {
             thirdFourth.split(',').map(s => s.trim()).filter(Boolean).forEach(a => allAnimals.add(a));
         }
-        // Also add all participants from match history
         if (matchHistory && Array.isArray(matchHistory)) {
             matchHistory.forEach(match => {
                 if (match.winner) allAnimals.add(match.winner);
@@ -201,7 +198,6 @@ async function handleTournamentComplete(req, res) {
             });
         }
         
-        // Increment tournamentsPlayed for all participants
         for (const animalName of allAnimals) {
             await incrementTournamentsPlayed(animalName);
         }
@@ -230,32 +226,25 @@ async function handleTournamentComplete(req, res) {
  * @param {number} place - 1, 2, or 3 (3rd and 4th both count as 3rd)
  */
 async function updateTournamentPlacement(animalName, place) {
-    let stats = await BattleStats.findOne({ animalName });
-    if (!stats) {
-        stats = new BattleStats({ animalName });
-    }
-    
-    if (place === 1) {
-        stats.tournamentsFirst = (stats.tournamentsFirst || 0) + 1;
-    } else if (place === 2) {
-        stats.tournamentsSecond = (stats.tournamentsSecond || 0) + 1;
-    } else if (place === 3) {
-        stats.tournamentsThird = (stats.tournamentsThird || 0) + 1;
-    }
-    
-    await stats.save();
+    if (!animalName) return;
+    const incField = place === 1 ? 'tournamentsFirst' : place === 2 ? 'tournamentsSecond' : 'tournamentsThird';
+    await BattleStats.findOneAndUpdate(
+        { animalName },
+        { $inc: { [incField]: 1 } },
+        { upsert: true }
+    );
 }
 
 /**
  * Increment tournaments played count for an animal
  */
 async function incrementTournamentsPlayed(animalName) {
-    let stats = await BattleStats.findOne({ animalName });
-    if (!stats) {
-        stats = new BattleStats({ animalName });
-    }
-    stats.tournamentsPlayed = (stats.tournamentsPlayed || 0) + 1;
-    await stats.save();
+    if (!animalName) return;
+    await BattleStats.findOneAndUpdate(
+        { animalName },
+        { $inc: { tournamentsPlayed: 1 } },
+        { upsert: true }
+    );
 }
 
 /**
@@ -327,7 +316,7 @@ async function recordBattle(req, res) {
         // Winner gets points (actual score = 1)
         // Loser loses points (actual score = 0)
         const newRatingA = Math.round(ratingA + K_FACTOR * (1 - expectedA));
-        const newRatingB = Math.round(ratingB + K_FACTOR * (0 - expectedB));
+        const newRatingB = Math.max(0, Math.round(ratingB + K_FACTOR * (0 - expectedB)));
 
         // Update winner stats
         winnerStats.battleRating = newRatingA;

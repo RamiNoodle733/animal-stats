@@ -269,7 +269,7 @@ async function handleDelete(req, res) {
         return res.status(404).json({ success: false, error: 'Comment not found' });
     }
 
-    if (comment.authorId.toString() !== user.id) {
+    if (!comment.authorId || comment.authorId.toString() !== user.id) {
         return res.status(403).json({ success: false, error: 'Not authorized to delete this comment' });
     }
 
@@ -317,8 +317,8 @@ async function handlePatch(req, res) {
     }
 
     const userId = user.id;
-    const upvoteIndex = comment.upvotes.findIndex(id => id.toString() === userId);
-    const downvoteIndex = comment.downvotes.findIndex(id => id.toString() === userId);
+    const upvoteIndex = (comment.upvotes || []).findIndex(vid => vid.toString() === userId);
+    const downvoteIndex = (comment.downvotes || []).findIndex(vid => vid.toString() === userId);
 
     if (action === 'upvote') {
         if (upvoteIndex > -1) {
@@ -365,8 +365,8 @@ async function handlePatch(req, res) {
     await comment.save();
 
     const score = comment.upvotes.length - comment.downvotes.length;
-    const userVote = comment.upvotes.some(id => id.toString() === userId) ? 'up' : 
-                     comment.downvotes.some(id => id.toString() === userId) ? 'down' : null;
+    const userVote = comment.upvotes.some(vid => vid.toString() === userId) ? 'up' : 
+                     comment.downvotes.some(vid => vid.toString() === userId) ? 'down' : null;
 
     return res.status(200).json({
         success: true,

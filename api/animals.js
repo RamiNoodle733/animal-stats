@@ -191,37 +191,51 @@ async function handleGet(req, res) {
     const sortOrder = order === 'desc' ? -1 : 1;
     
     if (sort === 'total') {
-        // Sort by total stats (need to use aggregation for this)
-        const animals = await Animal.aggregate([
-            { $match: query },
-            {
-                $addFields: {
-                    totalStats: {
-                        $add: ['$attack', '$defense', '$agility', '$stamina', '$intelligence', '$special_attack']
+        const parsedSkip = Math.max(0, parseInt(skip) || 0);
+        const parsedLimit = Math.max(1, Math.min(parseInt(limit) || 500, 500));
+
+        const [animals, totalResult] = await Promise.all([
+            Animal.aggregate([
+                { $match: query },
+                {
+                    $addFields: {
+                        totalStats: {
+                            $add: ['$attack', '$defense', '$agility', '$stamina', '$intelligence', '$special_attack']
+                        }
                     }
-                }
-            },
-            { $sort: { totalStats: sortOrder } },
-            { $skip: parseInt(skip) },
-            { $limit: parseInt(limit) }
+                },
+                { $sort: { totalStats: sortOrder } },
+                { $skip: parsedSkip },
+                { $limit: parsedLimit }
+            ]),
+            Animal.countDocuments(query)
         ]);
         
         return res.status(200).json({
             success: true,
             count: animals.length,
+            total: totalResult,
             data: animals
         });
     }
 
-    // Regular sort
+    // Validate sort field against allowlist
+    const validSortFields = ['name', 'attack', 'defense', 'agility', 'stamina', 'intelligence', 'special_attack', 'type', 'class', 'size', 'createdAt'];
     const sortField = sort === 'special' ? 'special_attack' : sort;
-    sortObj[sortField] = sortOrder;
+    if (validSortFields.includes(sortField)) {
+        sortObj[sortField] = sortOrder;
+    } else {
+        sortObj.name = sortOrder;
+    }
+
+    const parsedSkip = Math.max(0, parseInt(skip) || 0);
+    const parsedLimit = Math.max(1, Math.min(parseInt(limit) || 500, 500));
 
     const animals = await Animal
         .find(query)
         .sort(sortObj)
-        .skip(parseInt(skip))
-        .limit(parseInt(limit))
+        .skip(parsedSkip)
+        .limit(parsedLimit)
         .lean();
 
     const total = await Animal.countDocuments(query);
@@ -244,10 +258,9 @@ async function handlePost(req, res) {
         return res.status(401).json({ success: false, error: 'Authentication required' });
     }
 
-    const animalData = req.body;
+    const body = req.body;
 
-    // Validate required fields
-    if (!animalData.name) {
+    if (!body.name) {
         return res.status(400).json({
             success: false,
             error: 'Name is required'
@@ -255,7 +268,7 @@ async function handlePost(req, res) {
     }
 
     // Check for duplicate
-    const existing = await Animal.findByName(animalData.name);
+    const existing = await Animal.findByName(body.name);
     if (existing) {
         return res.status(409).json({
             success: false,
@@ -263,7 +276,21 @@ async function handlePost(req, res) {
         });
     }
 
-    // Create animal
+    // Filter to allowed fields only (prevent mass assignment)
+    const allowedFields = [
+        'name', 'scientific_name', 'description', 'type', 'class', 'habitat', 'size',
+        'weight_kg', 'height_cm', 'length_cm', 'speed_mps', 'lifespan_years', 'bite_force_psi',
+        'size_score', 'isNocturnal', 'isSocial', 'diet', 'attack', 'defense', 'agility',
+        'stamina', 'intelligence', 'special_attack', 'substats', 'battle_profile',
+        'unique_traits', 'special_abilities', 'image'
+    ];
+    const animalData = {};
+    for (const field of allowedFields) {
+        if (body[field] !== undefined) {
+            animalData[field] = body[field];
+        }
+    }
+
     const animal = await Animal.create(animalData);
 
     return res.status(201).json({

@@ -132,9 +132,8 @@ async function handlePost(req, res) {
         return res.status(400).json({ success: false, error: 'Animal ID and name required' });
     }
 
-    // voteType can be 'up', 'down', or 'clear' (to remove vote)
-    if (voteType && !['up', 'down', 'clear'].includes(voteType)) {
-        return res.status(400).json({ success: false, error: 'Invalid vote type' });
+    if (!voteType || !['up', 'down', 'clear'].includes(voteType)) {
+        return res.status(400).json({ success: false, error: 'voteType is required and must be up, down, or clear' });
     }
 
     // Compute dayKey using user's timezone

@@ -364,9 +364,9 @@ async function handlePatch(req, res) {
 
     const userId = user.id;
 
-    // Remove existing votes
-    message.upvotes = message.upvotes.filter(id => id.toString() !== userId);
-    message.downvotes = message.downvotes.filter(id => id.toString() !== userId);
+    // Remove existing votes by this user
+    message.upvotes = (message.upvotes || []).filter(vid => vid.toString() !== userId);
+    message.downvotes = (message.downvotes || []).filter(vid => vid.toString() !== userId);
 
     // Add new vote
     if (voteType === 'up') {
@@ -416,9 +416,11 @@ async function handleDelete(req, res) {
         return res.status(404).json({ success: false, error: 'Message not found' });
     }
 
-    // Check if user owns the message or is admin/mod
-    const isOwner = message.authorId.toString() === user.id;
-    const isAdminOrMod = user.role === 'admin' || user.role === 'moderator';
+    // Look up user role from DB since verifyToken only returns id/username
+    const User = require('../lib/models/User');
+    const userDoc = await User.findById(user.id).select('role');
+    const isOwner = message.authorId?.toString() === user.id;
+    const isAdminOrMod = userDoc?.role === 'admin' || userDoc?.role === 'moderator';
 
     if (!isOwner && !isAdminOrMod) {
         return res.status(403).json({ success: false, error: 'Not authorized to delete this message' });

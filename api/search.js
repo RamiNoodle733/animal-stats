@@ -84,36 +84,19 @@ module.exports = async function handler(req, res) {
             query.size = size;
         }
 
-        // Stat range filters
-        if (minAttack || maxAttack) {
-            query.attack = {};
-            if (minAttack) query.attack.$gte = parseFloat(minAttack);
-            if (maxAttack) query.attack.$lte = parseFloat(maxAttack);
+        // Stat range filters (use explicit undefined check since 0 is a valid value)
+        function addRangeFilter(field, min, max) {
+            if (min !== undefined && min !== '' || max !== undefined && max !== '') {
+                query[field] = {};
+                if (min !== undefined && min !== '') query[field].$gte = parseFloat(min);
+                if (max !== undefined && max !== '') query[field].$lte = parseFloat(max);
+            }
         }
-
-        if (minDefense || maxDefense) {
-            query.defense = {};
-            if (minDefense) query.defense.$gte = parseFloat(minDefense);
-            if (maxDefense) query.defense.$lte = parseFloat(maxDefense);
-        }
-
-        if (minAgility || maxAgility) {
-            query.agility = {};
-            if (minAgility) query.agility.$gte = parseFloat(minAgility);
-            if (maxAgility) query.agility.$lte = parseFloat(maxAgility);
-        }
-
-        if (minStamina || maxStamina) {
-            query.stamina = {};
-            if (minStamina) query.stamina.$gte = parseFloat(minStamina);
-            if (maxStamina) query.stamina.$lte = parseFloat(maxStamina);
-        }
-
-        if (minIntelligence || maxIntelligence) {
-            query.intelligence = {};
-            if (minIntelligence) query.intelligence.$gte = parseFloat(minIntelligence);
-            if (maxIntelligence) query.intelligence.$lte = parseFloat(maxIntelligence);
-        }
+        addRangeFilter('attack', minAttack, maxAttack);
+        addRangeFilter('defense', minDefense, maxDefense);
+        addRangeFilter('agility', minAgility, maxAgility);
+        addRangeFilter('stamina', minStamina, maxStamina);
+        addRangeFilter('intelligence', minIntelligence, maxIntelligence);
 
         // Boolean filters
         if (nocturnal !== undefined) {
@@ -124,20 +107,22 @@ module.exports = async function handler(req, res) {
             query.isSocial = social === 'true' || social === true;
         }
 
-        // Build sort
+        // Build sort with field allowlist
+        const validSortFields = ['name', 'attack', 'defense', 'agility', 'stamina', 'intelligence', 'special_attack', 'type', 'class', 'size', 'createdAt'];
         const sortObj = {};
         const sortField = sort === 'special' ? 'special_attack' : sort;
-        sortObj[sortField] = order === 'desc' ? -1 : 1;
+        sortObj[validSortFields.includes(sortField) ? sortField : 'name'] = order === 'desc' ? -1 : 1;
 
-        // Pagination
-        const skip = (parseInt(page) - 1) * parseInt(limit);
+        // Pagination with validation
+        const parsedPage = Math.max(1, parseInt(page) || 1);
+        const parsedLimit = Math.max(1, Math.min(parseInt(limit) || 50, 200));
+        const skip = (parsedPage - 1) * parsedLimit;
 
-        // Execute query
         const [animals, total] = await Promise.all([
             Animal.find(query)
                 .sort(sortObj)
                 .skip(skip)
-                .limit(parseInt(limit))
+                .limit(parsedLimit)
                 .lean(),
             Animal.countDocuments(query)
         ]);
@@ -146,10 +131,10 @@ module.exports = async function handler(req, res) {
             success: true,
             data: animals,
             pagination: {
-                page: parseInt(page),
-                limit: parseInt(limit),
+                page: parsedPage,
+                limit: parsedLimit,
                 total,
-                pages: Math.ceil(total / parseInt(limit))
+                pages: Math.ceil(total / parsedLimit)
             }
         });
 

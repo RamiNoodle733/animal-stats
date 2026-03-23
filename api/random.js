@@ -49,6 +49,14 @@ module.exports = async function handler(req, res) {
             { $sample: { size: numAnimals } }
         ]);
 
+        if (animals.length === 0) {
+            return res.status(200).json({
+                success: true,
+                count: 0,
+                data: numAnimals === 1 ? null : []
+            });
+        }
+
         return res.status(200).json({
             success: true,
             count: animals.length,
