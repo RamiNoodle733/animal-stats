@@ -1557,7 +1557,7 @@ class TournamentManager {
             const abilityList = Array.isArray(abilities) ? abilities : [abilities].filter(Boolean);
             if (abilityList.length > 0) {
                 abilitiesEl.innerHTML = abilityList.slice(0, 3).map(a => 
-                    `<span class="ability-tag-sm"><i class="fas fa-star"></i>${a}</span>`
+                    `<span class="ability-tag-sm"><i class="fas fa-star"></i>${escapeHtml(a)}</span>`
                 ).join('');
             } else {
                 abilitiesEl.innerHTML = '<span class="ability-tag-sm placeholder">None</span>';
@@ -1571,7 +1571,7 @@ class TournamentManager {
             const traitList = Array.isArray(traits) ? traits : [traits].filter(Boolean);
             if (traitList.length > 0) {
                 traitsEl.innerHTML = traitList.slice(0, 3).map(t => 
-                    `<span class="trait-tag-sm"><i class="fas fa-tag"></i>${t}</span>`
+                    `<span class="trait-tag-sm"><i class="fas fa-tag"></i>${escapeHtml(t)}</span>`
                 ).join('');
             } else {
                 traitsEl.innerHTML = '<span class="trait-tag-sm placeholder">None</span>';
@@ -1862,11 +1862,11 @@ class TournamentManager {
         const matchInRound = this.currentMatch + 1;
         const matchesInRound = this.bracket.length;
         
-        this.dom.progressText.textContent = roundName;
-        this.dom.matchText.textContent = `Match ${matchInRound} of ${matchesInRound}`;
+        if (this.dom.progressText) this.dom.progressText.textContent = roundName;
+        if (this.dom.matchText) this.dom.matchText.textContent = `Match ${matchInRound} of ${matchesInRound}`;
         
-        const progressPercent = (this.completedMatches / this.totalMatches) * 100;
-        this.dom.progressBar.style.width = `${progressPercent}%`;
+        const progressPercent = this.totalMatches > 0 ? (this.completedMatches / this.totalMatches) * 100 : 0;
+        if (this.dom.progressBar) this.dom.progressBar.style.width = `${progressPercent}%`;
     }
 
     getRoundName(round, totalRounds) {
@@ -2156,11 +2156,11 @@ class TournamentManager {
                 if (animal.name !== champion.name && posIdx < 3) {
                     const slug = animal.name.toLowerCase().replace(/\s+/g, '-');
                     podiumHtml += `
-                        <div class="t-podium-card" data-animal-slug="${slug}" title="View ${animal.name} stats">
+                        <div class="t-podium-card" data-animal-slug="${slug}" title="View ${escapeHtml(animal.name)} stats">
                             <div class="t-podium-pos">${positions[posIdx]} PLACE</div>
-                            <img src="${animal.image}" alt="${animal.name}" class="t-podium-img" 
+                            <img src="${encodeURI(animal.image)}" alt="${escapeHtml(animal.name)}" class="t-podium-img" 
                                 onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'">
-                            <div class="t-podium-name">${animal.name}</div>
+                            <div class="t-podium-name">${escapeHtml(animal.name)}</div>
                         </div>
                     `;
                     posIdx++;

@@ -48,7 +48,7 @@ const API_CONFIG = {
  * Format number with commas (e.g., 1000 -> "1,000")
  */
 function formatNumber(num) {
-    if (num === null || num === undefined) return null;
+    if (num === null || num === undefined) return '0';
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 
@@ -56,7 +56,7 @@ function formatNumber(num) {
  * Format stat with consistent decimals
  */
 function formatStat(num, decimals = 1) {
-    if (num === null || num === undefined) return null;
+    if (num === null || num === undefined) return '--';
     if (num === 100) return '100';
     const fixed = Number(num).toFixed(decimals);
     const parts = fixed.split('.');

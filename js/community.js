@@ -341,7 +341,22 @@
             // Watch for class changes on view containers
             const viewsContainer = document.querySelector('.views-container');
             if (!viewsContainer) {
-                this._viewCheckInterval = setInterval(() => this.checkIfOnCommunityPage(), 1000);
+                this._viewCheckInterval = setInterval(() => {
+                    const container = document.querySelector('.views-container');
+                    if (container) {
+                        clearInterval(this._viewCheckInterval);
+                        this._viewCheckInterval = null;
+                        this.viewObserver = new MutationObserver(() => {
+                            this.checkIfOnCommunityPage();
+                        });
+                        this.viewObserver.observe(container, {
+                            subtree: true,
+                            attributes: true,
+                            attributeFilter: ['class']
+                        });
+                    }
+                    this.checkIfOnCommunityPage();
+                }, 1000);
                 return;
             }
             

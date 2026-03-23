@@ -164,8 +164,9 @@ class Router {
 
         // No route matched - default to home or 404 behavior
         console.warn(`No route matched for: ${path}`);
-        // Fallback to home
-        this.navigate('/', { replace: true });
+        if (path !== '/') {
+            this.navigate('/', { replace: true });
+        }
     }
 
     /**

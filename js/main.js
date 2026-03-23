@@ -1344,7 +1344,9 @@ class AnimalStatsApp {
      * Helper to determine diet type
      */
     getDietType(animal) {
-        const diet = animal.diet.map(d => d.toLowerCase());
+        if (!animal.diet) return 'Herbivore';
+        const dietArr = Array.isArray(animal.diet) ? animal.diet : [animal.diet];
+        const diet = dietArr.map(d => d.toLowerCase());
         const hasMeat = diet.some(d => ['meat', 'fish', 'insects', 'small animals', 'prey', 'carrion'].some(k => d.includes(k)));
         const hasPlants = diet.some(d => ['plants', 'fruits', 'grass', 'leaves', 'bark', 'roots', 'berries'].some(k => d.includes(k)));
         
@@ -1384,9 +1386,9 @@ class AnimalStatsApp {
             // Biome Filter - multi-select
             let matchesBiome = true;
             if (biomes && biomes.length > 0) {
-                matchesBiome = biomes.some(b => animal.habitat.toLowerCase().includes(b.toLowerCase()));
+                matchesBiome = animal.habitat ? biomes.some(b => animal.habitat.toLowerCase().includes(b.toLowerCase())) : false;
             } else if (biomeFilter !== 'all') {
-                matchesBiome = animal.habitat.toLowerCase().includes(biomeFilter.toLowerCase());
+                matchesBiome = animal.habitat ? animal.habitat.toLowerCase().includes(biomeFilter.toLowerCase()) : false;
             }
 
             return matchesSearch && matchesClass && matchesDiet && matchesBiome;
@@ -1448,6 +1450,7 @@ class AnimalStatsApp {
      * Render the character grid
      */
     renderGrid() {
+        if (!this.dom.gridContainer) return;
         this.dom.gridContainer.innerHTML = '';
         
         if (this.state.filteredAnimals.length === 0) {
@@ -1479,9 +1482,9 @@ class AnimalStatsApp {
             }
 
             card.innerHTML = `
-                <span class="card-tier-badge tier-${tierClass}">${overallTier}</span>
-                <img src="${animal.image}" alt="${animal.name}" class="character-card-image" loading="lazy" onerror="this.src=FALLBACK_IMAGE">
-                <div class="character-card-name">${animal.name}</div>
+                <span class="card-tier-badge tier-${tierClass}">${escapeHtml(overallTier)}</span>
+                <img src="${encodeURI(animal.image)}" alt="${escapeHtml(animal.name)}" class="character-card-image" loading="lazy" onerror="this.src=FALLBACK_IMAGE">
+                <div class="character-card-name">${escapeHtml(animal.name)}</div>
                 <div class="card-hover-stats">
                     <div class="hover-stat"><i class="fas fa-fist-raised"></i>${Math.round(animal.attack || 0)}</div>
                     <div class="hover-stat"><i class="fas fa-shield-alt"></i>${Math.round(animal.defense || 0)}</div>
@@ -1635,9 +1638,10 @@ class AnimalStatsApp {
      * Update the Stats View UI
      */
     updateStatsView(animal) {
+        if (!animal) return;
         // Basic Info
-        this.dom.charName.textContent = animal.name.toUpperCase();
-        this.dom.charScientific.textContent = animal.scientific_name || 'Unknown Species';
+        if (this.dom.charName) this.dom.charName.textContent = animal.name.toUpperCase();
+        if (this.dom.charScientific) this.dom.charScientific.textContent = animal.scientific_name || 'Unknown Species';
         
         // Image
         this.dom.charSilhouette.style.display = 'none';
@@ -2277,7 +2281,7 @@ class AnimalStatsApp {
             const abilities = animal.special_abilities || [];
             if (abilities.length > 0) {
                 this.dom.info.abilitiesList.innerHTML = abilities.map(ability => 
-                    `<div class="ability-item"><i class="fas fa-bolt"></i> ${ability}</div>`
+                    `<div class="ability-item"><i class="fas fa-bolt"></i> ${escapeHtml(ability)}</div>`
                 ).join('');
             } else {
                 this.dom.info.abilitiesList.innerHTML = '<div class="ability-item placeholder">No abilities</div>';
@@ -2289,7 +2293,7 @@ class AnimalStatsApp {
             const traits = animal.unique_traits || [];
             if (traits.length > 0) {
                 this.dom.info.traitsList.innerHTML = traits.map(trait => 
-                    `<div class="trait-item"><i class="fas fa-star"></i> ${trait}</div>`
+                    `<div class="trait-item"><i class="fas fa-star"></i> ${escapeHtml(trait)}</div>`
                 ).join('');
             } else {
                 this.dom.info.traitsList.innerHTML = '<div class="trait-item placeholder">No traits</div>';
@@ -2543,7 +2547,7 @@ class AnimalStatsApp {
                         a.name.toLowerCase() === user.profileAnimal.toLowerCase()
                     );
                     if (animal?.image) {
-                        avatar.innerHTML = `<img src="${animal.image}" alt="${user.profileAnimal}">`;
+                        avatar.innerHTML = `<img src="${encodeURI(animal.image)}" alt="${escapeHtml(user.profileAnimal)}">`;
                     } else {
                         avatar.innerHTML = `<i class="fas fa-user-circle"></i>`;
                     }
@@ -2854,7 +2858,8 @@ class AnimalStatsApp {
         const score2 = this.calculateFightScore(right);
         
         // Calculate win probability: probA = scoreA / (scoreA + scoreB)
-        const prob1 = score1 / (score1 + score2);
+        const totalScore = score1 + score2;
+        const prob1 = totalScore > 0 ? score1 / totalScore : 0.5;
         const prob2 = 1 - prob1;
         
         let winner, loser, winnerScore, loserScore, winnerProb;

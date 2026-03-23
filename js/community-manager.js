@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ============================================
  * COMMUNITY PAGE - community.js (Manager)
  * ============================================
@@ -282,6 +282,10 @@ class CommunityManager {
     }
     
     startMatchupCountdown() {
+        if (this.countdownInterval) {
+            clearInterval(this.countdownInterval);
+        }
+        
         const updateCountdown = () => {
             const now = new Date();
             const tomorrow = new Date(now);
@@ -300,7 +304,7 @@ class CommunityManager {
         };
         
         updateCountdown();
-        setInterval(updateCountdown, 1000);
+        this.countdownInterval = setInterval(updateCountdown, 1000);
     }
     
     // ==================== HUB LEADERBOARD ====================
@@ -350,7 +354,7 @@ class CommunityManager {
                 a.name.toLowerCase() === profileAnimal.toLowerCase()
             );
             if (animal?.image) {
-                return `<img src="${animal.image}" alt="${profileAnimal}">`;
+                return `<img src="${encodeURI(animal.image)}" alt="${escapeHtml(profileAnimal)}">`;
             }
         }
         return fallback;
@@ -1328,16 +1332,18 @@ class CommunityManager {
             return '<i class="fas fa-mask"></i>';
         }
 
+        const safeFallback = escapeHtml(fallbackInitial || '?');
+
         if (profileAnimal && this.app?.state?.animals) {
             const animal = this.app.state.animals.find(a => 
                 a.name.toLowerCase() === profileAnimal.toLowerCase()
             );
             if (animal?.image) {
-                return `<img src="${animal.image}" alt="${profileAnimal}" class="user-avatar-img" onerror="this.parentElement.innerHTML='${fallbackInitial}'">`;
+                return `<img src="${encodeURI(animal.image)}" alt="${escapeHtml(profileAnimal)}" class="user-avatar-img" onerror="this.style.display='none';this.parentElement.textContent='${safeFallback}'">`;
             }
         }
 
-        return fallbackInitial;
+        return safeFallback;
     }
 
     goToAnimal(animalName) {

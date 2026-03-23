@@ -1,4 +1,4 @@
-﻿/**
+/**
  * ============================================
  * RANKINGS PAGE - rankings.js
  * ============================================
@@ -400,7 +400,7 @@ class RankingsManager {
                 <div class="detail-comment-avatar">${avatarHtml}</div>
                 <div class="detail-comment-body">
                     <div class="detail-comment-meta">
-                        <span class="detail-comment-author">${displayName}</span>
+                        <span class="detail-comment-author">${this.escapeHtml(displayName)}</span>
                         <span class="detail-comment-time">${timeAgo}</span>
                     </div>
                     <p class="detail-comment-text">${this.escapeHtml(comment.content)}</p>
@@ -887,16 +887,16 @@ class RankingsManager {
         if (comment.isAnonymous) {
             avatarHtml = '<i class="fas fa-user-secret"></i>';
         } else if (profileAnimal?.image) {
-            avatarHtml = `<img src="${profileAnimal.image}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span style="display:none">${displayName[0].toUpperCase()}</span>`;
+            avatarHtml = `<img src="${encodeURI(profileAnimal.image)}" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span style="display:none">${this.escapeHtml(displayName[0].toUpperCase())}</span>`;
         } else {
-            avatarHtml = `<span>${displayName[0].toUpperCase()}</span>`;
+            avatarHtml = `<span>${this.escapeHtml(displayName[0].toUpperCase())}</span>`;
         }
         
         // Clickable author
         const isClickable = !comment.isAnonymous && authorUsername;
         const avatarClass = isClickable ? 'inline-comment-avatar clickable-avatar' : 'inline-comment-avatar';
         const nameClass = isClickable ? 'inline-comment-author clickable-author' : 'inline-comment-author';
-        const usernameAttr = isClickable ? `data-username="${authorUsername}"` : '';
+        const usernameAttr = isClickable ? `data-username="${this.escapeHtml(authorUsername)}"` : '';
         
         // Replies HTML
         let repliesHtml = '';
@@ -908,16 +908,16 @@ class RankingsManager {
                     const rTime = this.getTimeAgo(new Date(r.createdAt));
                     const rProfile = r.author?.profileAnimal || r.profileAnimal;
                     const rAvatar = r.isAnonymous ? '<i class="fas fa-user-secret"></i>' : 
-                        (rProfile?.image ? `<img src="${rProfile.image}" alt="">` : `<span>${rName[0].toUpperCase()}</span>`);
+                        (rProfile?.image ? `<img src="${encodeURI(rProfile.image)}" alt="">` : `<span>${this.escapeHtml(rName[0].toUpperCase())}</span>`);
                     const rIsClickable = !r.isAnonymous && rUsername;
                     const rAvatarClass = rIsClickable ? 'inline-comment-avatar small clickable-avatar' : 'inline-comment-avatar small';
                     const rNameClass = rIsClickable ? 'inline-comment-author clickable-author' : 'inline-comment-author';
-                    const rUsernameAttr = rIsClickable ? `data-username="${rUsername}"` : '';
+                    const rUsernameAttr = rIsClickable ? `data-username="${this.escapeHtml(rUsername)}"` : '';
                     return `
                         <div class="inline-reply-item">
                             <div class="${rAvatarClass}" ${rUsernameAttr}>${rAvatar}</div>
                             <div class="inline-reply-content">
-                                <span class="${rNameClass}" ${rUsernameAttr}>${rName}</span>
+                                <span class="${rNameClass}" ${rUsernameAttr}>${this.escapeHtml(rName)}</span>
                                 <span class="inline-comment-time">${rTime}</span>
                                 <p class="inline-comment-text">${this.escapeHtml(r.content)}</p>
                             </div>
@@ -933,7 +933,7 @@ class RankingsManager {
                 <div class="${avatarClass}" ${usernameAttr}>${avatarHtml}</div>
                 <div class="inline-comment-content">
                     <div class="inline-comment-meta">
-                        <span class="${nameClass}" ${usernameAttr}>${displayName}</span>
+                        <span class="${nameClass}" ${usernameAttr}>${this.escapeHtml(displayName)}</span>
                         <span class="inline-comment-time">${timeAgo}</span>
                     </div>
                     <p class="inline-comment-text">${this.escapeHtml(comment.content)}</p>
@@ -1059,7 +1059,7 @@ class RankingsManager {
             const abilities = fullAnimal.special_abilities || [];
             if (abilities.length > 0) {
                 this.dom.detailAbilities.innerHTML = abilities.slice(0, 3).map(a => 
-                    `<span class="ability-tag-sm"><i class="fas fa-bolt"></i> ${a}</span>`
+                    `<span class="ability-tag-sm"><i class="fas fa-bolt"></i> ${escapeHtml(a)}</span>`
                 ).join('');
             } else {
                 this.dom.detailAbilities.innerHTML = '<span class="ability-tag-sm dim">None</span>';
@@ -1071,7 +1071,7 @@ class RankingsManager {
             const traits = fullAnimal.unique_traits || [];
             if (traits.length > 0) {
                 this.dom.detailTraits.innerHTML = traits.slice(0, 3).map(t => 
-                    `<span class="trait-tag-sm"><i class="fas fa-star"></i> ${t}</span>`
+                    `<span class="trait-tag-sm"><i class="fas fa-star"></i> ${escapeHtml(t)}</span>`
                 ).join('');
             } else {
                 this.dom.detailTraits.innerHTML = '<span class="trait-tag-sm dim">None</span>';
@@ -1689,13 +1689,13 @@ class RankingsManager {
         const isClickable = !comment.isAnonymous && authorUsername;
         const avatarClass = isClickable ? 'comment-avatar clickable-avatar' : 'comment-avatar';
         const nameClass = isClickable ? 'comment-author-name clickable-author' : 'comment-author-name';
-        const usernameAttr = isClickable ? `data-username="${authorUsername}"` : '';
+        const usernameAttr = isClickable ? `data-username="${this.escapeHtml(authorUsername)}"` : '';
         
         div.innerHTML = `
             <div class="comment-header" ${userIdAttr}>
                 <div class="comment-author">
                     <span class="${avatarClass}" ${usernameAttr}>${avatarHtml}</span>
-                    <span class="${nameClass}" ${usernameAttr}>${displayName}</span>
+                    <span class="${nameClass}" ${usernameAttr}>${this.escapeHtml(displayName)}</span>
                     ${roleBadge}
                     <span class="comment-dot">•</span>
                     <span class="comment-date">${timeAgo}</span>
@@ -1922,9 +1922,11 @@ class RankingsManager {
             return '<i class="fas fa-mask"></i>';
         }
 
+        const safeFallback = escapeHtml(fallbackInitial || '?');
+
         // Handle profileAnimal as object with image property
         if (profileAnimal?.image) {
-            return `<img src="${profileAnimal.image}" alt="${profileAnimal.name || 'Avatar'}" class="user-avatar-img" onerror="this.style.display='none'">`;
+            return `<img src="${encodeURI(profileAnimal.image)}" alt="${escapeHtml(profileAnimal.name || 'Avatar')}" class="user-avatar-img" onerror="this.style.display='none'">`;
         }
         
         // Handle profileAnimal as string (animal name)
@@ -1933,11 +1935,11 @@ class RankingsManager {
                 a.name.toLowerCase() === profileAnimal.toLowerCase()
             );
             if (animal?.image) {
-                return `<img src="${animal.image}" alt="${profileAnimal}" class="user-avatar-img" onerror="this.parentElement.innerHTML='${fallbackInitial}'">`;
+                return `<img src="${encodeURI(animal.image)}" alt="${escapeHtml(profileAnimal)}" class="user-avatar-img" onerror="this.style.display='none';this.parentElement.textContent='${safeFallback}'">`;
             }
         }
 
-        return fallbackInitial;
+        return safeFallback;
     }
 
     /**

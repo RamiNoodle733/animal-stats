@@ -759,7 +759,11 @@ const Auth = {
 
         // Case 1: profileAnimal is an object with .image property
         if (profileAnimal && typeof profileAnimal === 'object' && profileAnimal.image) {
-            element.innerHTML = `<img src="${profileAnimal.image}" alt="${profileAnimal.name || 'Avatar'}">${overlayHtml}`;
+            const img = document.createElement('img');
+            img.src = profileAnimal.image;
+            img.alt = profileAnimal.name || 'Avatar';
+            element.innerHTML = overlayHtml;
+            element.insertBefore(img, element.firstChild);
             return;
         }
         
@@ -771,7 +775,11 @@ const Auth = {
                 a.name.toLowerCase() === animalName.toLowerCase()
             );
             if (animal?.image) {
-                element.innerHTML = `<img src="${animal.image}" alt="${animalName}">${overlayHtml}`;
+                const img = document.createElement('img');
+                img.src = animal.image;
+                img.alt = animalName;
+                element.innerHTML = overlayHtml;
+                element.insertBefore(img, element.firstChild);
                 return;
             }
         }
@@ -847,6 +855,7 @@ const Auth = {
      * Format number with commas
      */
     formatNumber(num) {
+        if (num === null || num === undefined) return '0';
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     },
 
@@ -879,12 +888,11 @@ const Auth = {
      * Clear form inputs
      */
     clearForms() {
-        document.getElementById('login-email').value = '';
-        document.getElementById('login-password').value = '';
-        document.getElementById('signup-username').value = '';
-        document.getElementById('signup-email').value = '';
-        document.getElementById('signup-password').value = '';
-        document.getElementById('signup-confirm').value = '';
+        const ids = ['login-email', 'login-password', 'signup-username', 'signup-email', 'signup-password', 'signup-confirm'];
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = '';
+        });
     },
 
     /**

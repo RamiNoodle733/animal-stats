@@ -421,7 +421,7 @@
             if (abilitiesEl) {
                 const abilities = animal.special_abilities || animal.abilities || [];
                 abilitiesEl.innerHTML = abilities.slice(0, 3).map(a => 
-                    `<span class="ability-tag-sm">${a}</span>`
+                    `<span class="ability-tag-sm">${escapeHtml(a)}</span>`
                 ).join('') || '<span class="ability-tag-sm">None</span>';
             }
             
@@ -430,7 +430,7 @@
             if (traitsEl) {
                 const traits = animal.unique_traits || animal.traits || [];
                 traitsEl.innerHTML = traits.slice(0, 3).map(t => 
-                    `<span class="trait-tag-sm">${t}</span>`
+                    `<span class="trait-tag-sm">${escapeHtml(t)}</span>`
                 ).join('') || '<span class="trait-tag-sm">None</span>';
             }
             
