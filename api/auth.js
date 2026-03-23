@@ -11,9 +11,8 @@
 
 const { connectToDatabase } = require('../lib/mongodb');
 const User = require('../lib/models/User');
-const jwt = require('jsonwebtoken');
 const { notifyDiscord } = require('../lib/discord');
-const { verifyToken, JWT_SECRET } = require('../lib/auth');
+const { verifyToken, createToken } = require('../lib/auth');
 const { 
     XP_REWARDS, 
     xpToNext, 
@@ -22,6 +21,19 @@ const {
     buildProgressionPayload 
 } = require('../lib/xpSystem');
 
+// Per-user per-action cooldown map: `${userId}:${action}` -> timestamp
+const rewardCooldowns = new Map();
+const REWARD_COOLDOWN_MS = {
+    vote: 3_000,
+    daily_matchup_vote: 10_000,
+    comment: 5_000,
+    reply: 5_000,
+    tournament_participate: 30_000,
+    tournament_win: 30_000,
+    battle_won: 3_000,
+    daily_login: 60_000 * 60, // 1 hour
+    first_vote_of_day: 60_000 * 60
+};
 
 module.exports = async function handler(req, res) {
     // Set CORS headers
@@ -85,7 +97,7 @@ module.exports = async function handler(req, res) {
         }
     } catch (error) {
         console.error('Auth error:', error);
-        res.status(500).json({ success: false, error: 'Server error. Please try again.' });
+        return res.status(500).json({ success: false, error: 'Server error. Please try again.' });
     }
 };
 
@@ -119,11 +131,7 @@ async function handleLogin(req, res) {
     user.lastLogin = new Date();
     await user.save();
 
-    const token = jwt.sign(
-        { userId: user._id, username: user.username },
-        JWT_SECRET,
-        { expiresIn: '7d' }
-    );
+    const token = createToken({ userId: user._id, username: user.username });
 
     notifyDiscord('login', { username: user.username }, req);
 
@@ -192,11 +200,7 @@ async function handleSignup(req, res) {
 
     await user.save();
 
-    const token = jwt.sign(
-        { userId: user._id, username: user.username },
-        JWT_SECRET,
-        { expiresIn: '7d' }
-    );
+    const token = createToken({ userId: user._id, username: user.username });
 
     notifyDiscord('signup', { username: user.username }, req);
 
@@ -229,16 +233,13 @@ async function handleMe(req, res) {
         return res.status(401).json({ success: false, error: 'No token provided' });
     }
 
-    const token = authHeader.split(' ')[1];
-
-    let decoded;
-    try {
-        decoded = jwt.verify(token, JWT_SECRET);
-    } catch (err) {
+    const tokenStr = authHeader.split(' ')[1];
+    const decoded = verifyToken(tokenStr);
+    if (!decoded) {
         return res.status(401).json({ success: false, error: 'Invalid or expired token' });
     }
 
-    const user = await User.findById(decoded.userId);
+    const user = await User.findById(decoded.id);
     if (!user) {
         return res.status(404).json({ success: false, error: 'User not found' });
     }
@@ -271,16 +272,13 @@ async function handleGetProfile(req, res) {
         return res.status(401).json({ success: false, error: 'No token provided' });
     }
 
-    const token = authHeader.split(' ')[1];
-
-    let decoded;
-    try {
-        decoded = jwt.verify(token, JWT_SECRET);
-    } catch (err) {
+    const tokenStr = authHeader.split(' ')[1];
+    const decoded = verifyToken(tokenStr);
+    if (!decoded) {
         return res.status(401).json({ success: false, error: 'Invalid or expired token' });
     }
 
-    const user = await User.findById(decoded.userId);
+    const user = await User.findById(decoded.id);
     if (!user) {
         return res.status(404).json({ success: false, error: 'User not found' });
     }
@@ -308,7 +306,7 @@ async function handleGetProfile(req, res) {
                 xpToNext: xpNeeded,
                 xpProgress,
                 xpNeeded,
-                xpPercentage: Math.min(100, Math.round((xpProgress / xpNeeded) * 100)),
+                xpPercentage: xpNeeded === Infinity ? 100 : Math.min(100, Math.round((xpProgress / xpNeeded) * 100)),
                 isPrestigeReady: (user.level || 1) >= 100,
                 createdAt: user.createdAt,
                 lastLogin: user.lastLogin
@@ -324,16 +322,13 @@ async function handleUpdateProfile(req, res) {
         return res.status(401).json({ success: false, error: 'No token provided' });
     }
 
-    const token = authHeader.split(' ')[1];
-
-    let decoded;
-    try {
-        decoded = jwt.verify(token, JWT_SECRET);
-    } catch (err) {
+    const tokenStr = authHeader.split(' ')[1];
+    const decoded = verifyToken(tokenStr);
+    if (!decoded) {
         return res.status(401).json({ success: false, error: 'Invalid or expired token' });
     }
 
-    const user = await User.findById(decoded.userId);
+    const user = await User.findById(decoded.id);
     if (!user) {
         return res.status(404).json({ success: false, error: 'User not found' });
     }
@@ -448,7 +443,7 @@ async function handleUpdateProfile(req, res) {
                 usernameChangesRemaining,
                 xpProgress,
                 xpNeeded,
-                xpPercentage: Math.min(100, Math.round((xpProgress / xpNeeded) * 100)),
+                xpPercentage: xpNeeded === Infinity ? 100 : Math.min(100, Math.round((xpProgress / xpNeeded) * 100)),
                 isPrestigeReady: (user.level || 1) >= 100,
                 createdAt: user.createdAt,
                 lastLogin: user.lastLogin
@@ -486,29 +481,30 @@ async function handleRewards(req, res) {
     }
 
     if (req.method === 'POST') {
-        const { action, customXp, customBp } = req.body;
+        const { action } = req.body;
 
-        // Get reward amounts from config
-        let xpToAward = 0;
-        let bpToAward = 0;
-
-        if (action && XP_REWARDS[action]) {
-            xpToAward = XP_REWARDS[action].xp;
-            bpToAward = XP_REWARDS[action].bp;
-        } else if (customXp !== undefined || customBp !== undefined) {
-            xpToAward = parseInt(customXp) || 0;
-            bpToAward = parseInt(customBp) || 0;
-        } else {
+        if (!action || !XP_REWARDS[action]) {
             return res.status(400).json({ 
                 success: false, 
-                error: 'Invalid action or reward amount',
+                error: 'Invalid action',
                 validActions: Object.keys(XP_REWARDS)
             });
         }
 
-        // Cap rewards to prevent abuse
-        xpToAward = Math.min(Math.max(xpToAward, 0), 500);
-        bpToAward = Math.min(Math.max(bpToAward, 0), 100);
+        // Per-user per-action cooldown to prevent rapid farming
+        const cooldownKey = `${user.id}:${action}`;
+        const lastClaim = rewardCooldowns.get(cooldownKey);
+        const cooldownMs = REWARD_COOLDOWN_MS[action] || 5_000;
+        if (lastClaim && Date.now() - lastClaim < cooldownMs) {
+            return res.status(429).json({
+                success: false,
+                error: 'Reward claimed too recently. Please wait before trying again.'
+            });
+        }
+        rewardCooldowns.set(cooldownKey, Date.now());
+
+        let xpToAward = XP_REWARDS[action].xp;
+        let bpToAward = XP_REWARDS[action].bp;
 
         // Get current user state
         const dbUser = await User.findById(user.id);
@@ -567,7 +563,7 @@ async function handleRewards(req, res) {
                 level: result.level,
                 xp: result.xp,
                 xpToNext: result.xpToNext,
-                xpPercent: Math.min(100, Math.round((result.xp / result.xpToNext) * 100)),
+                xpPercent: result.xpToNext === Infinity ? 100 : Math.min(100, Math.round((result.xp / result.xpToNext) * 100)),
                 prestige: updatedUser.prestige || 0,
                 lifetimeXp: updatedUser.lifetimeXp || 0,
                 battlePoints: updatedUser.battlePoints || 0,
@@ -674,7 +670,7 @@ async function handleGetPublicProfile(req, res) {
                 xpToNext: xpNeeded,
                 xpProgress,
                 xpNeeded,
-                xpPercentage: Math.min(100, Math.round((xpProgress / xpNeeded) * 100)),
+                xpPercentage: xpNeeded === Infinity ? 100 : Math.min(100, Math.round((xpProgress / xpNeeded) * 100)),
                 role: user.role,
                 createdAt: user.createdAt
             }
