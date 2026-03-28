@@ -314,8 +314,8 @@ function initMobileNav() {
         item.addEventListener('click', (e) => {
             e.preventDefault();
             const href = item.getAttribute('href');
-            if (window.router) {
-                window.router.navigate(href);
+            if (window.Router) {
+                window.Router.navigate(href);
             } else {
                 // Fallback if router not available
                 window.location.href = href;
@@ -331,9 +331,9 @@ function initMobileNav() {
     updateActiveNav();
     
     // Also update when router navigates
-    const originalNavigate = window.router?.navigate?.bind(window.router);
+    const originalNavigate = window.Router?.navigate?.bind(window.Router);
     if (originalNavigate) {
-        window.router.navigate = function(...args) {
+        window.Router.navigate = function(...args) {
             originalNavigate(...args);
             setTimeout(updateActiveNav, 10);
         };

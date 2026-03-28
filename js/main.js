@@ -207,6 +207,13 @@ class AnimalStatsApp {
 
         // Rankings Manager
         this.rankingsManager = null;
+        this.tournamentManager = null;
+        this.communityManager = null;
+        this.battlepointsManager = null;
+
+        // Performance caches
+        this.animalsById = new Map();
+        this._deferredInitStarted = false;
 
         // Bind methods
         this.init = this.init.bind(this);
@@ -247,31 +254,6 @@ class AnimalStatsApp {
 
             // Track site visit
             this.trackSiteVisit();
-
-            // Initialize Rankings Manager
-            this.rankingsManager = new RankingsManager(this);
-            this.rankingsManager.init();
-            window.rankingsManager = this.rankingsManager; // Expose globally for stats comments
-            
-            // Initialize Tournament Manager
-            this.tournamentManager = new TournamentManager(this);
-            this.tournamentManager.init();
-            window.tournamentManager = this.tournamentManager;
-            
-            // Initialize Community Manager
-            this.communityManager = new CommunityManager(this);
-            this.communityManager.init();
-            window.communityManager = this.communityManager;
-            
-            // Initialize Battle Points Manager
-            if (window.BattlepointsManager) {
-                this.battlepointsManager = new BattlepointsManager(this);
-                this.battlepointsManager.init();
-                window.battlepointsManager = this.battlepointsManager;
-            }
-            
-            // Fetch rankings data to get power ranks for sorting
-            await this.rankingsManager.fetchRankings();
             
             // Initial Render with power rank sort as default
             this.state.filters.sort = 'rank';
@@ -287,6 +269,9 @@ class AnimalStatsApp {
             
             // Hide loading screen and mark app as loaded
             this.hideLoadingScreen();
+
+            // Defer heavy, non-critical managers until after first paint.
+            this.startDeferredInitialization();
             
             console.log(`Animal Stats App Initialized (API: ${this.state.apiAvailable ? 'Connected' : 'Fallback Mode'})`);
         } catch (error) {
@@ -315,6 +300,93 @@ class AnimalStatsApp {
         // Clean up initial load classes - let JS handle view management now
         document.documentElement.classList.add('app-loaded');
         document.documentElement.classList.remove('is-home', 'is-login', 'is-signup', 'is-profile');
+    }
+
+    /**
+     * Schedule work after first paint using requestIdleCallback when available.
+     */
+    runWhenIdle(task, timeout = 800) {
+        if (typeof window.requestIdleCallback === 'function') {
+            window.requestIdleCallback(() => {
+                try {
+                    task();
+                } catch (error) {
+                    console.error('Deferred task failed:', error);
+                }
+            }, { timeout });
+            return;
+        }
+
+        setTimeout(() => {
+            try {
+                task();
+            } catch (error) {
+                console.error('Deferred task failed:', error);
+            }
+        }, 0);
+    }
+
+    ensureRankingsManager() {
+        if (this.rankingsManager) return this.rankingsManager;
+        this.rankingsManager = new RankingsManager(this);
+        this.rankingsManager.init();
+        window.rankingsManager = this.rankingsManager;
+        return this.rankingsManager;
+    }
+
+    ensureTournamentManager() {
+        if (this.tournamentManager) return this.tournamentManager;
+        this.tournamentManager = new TournamentManager(this);
+        this.tournamentManager.init();
+        window.tournamentManager = this.tournamentManager;
+        return this.tournamentManager;
+    }
+
+    ensureCommunityManager() {
+        if (this.communityManager) return this.communityManager;
+        this.communityManager = new CommunityManager(this);
+        this.communityManager.init();
+        window.communityManager = this.communityManager;
+        return this.communityManager;
+    }
+
+    ensureBattlepointsManager() {
+        if (this.battlepointsManager || !window.BattlepointsManager) {
+            return this.battlepointsManager;
+        }
+        this.battlepointsManager = new BattlepointsManager(this);
+        this.battlepointsManager.init();
+        window.battlepointsManager = this.battlepointsManager;
+        return this.battlepointsManager;
+    }
+
+    startDeferredInitialization() {
+        if (this._deferredInitStarted) return;
+        this._deferredInitStarted = true;
+
+        // Rankings powers several UI elements and should be available early.
+        const rankingsManager = this.ensureRankingsManager();
+
+        this.runWhenIdle(async () => {
+            try {
+                await rankingsManager.fetchRankings();
+
+                // Re-apply ranking sort once rankings data arrives.
+                if (this.state.filters.sort === 'rank') {
+                    this.applyFilters();
+                }
+
+                if (this.state.selectedAnimal) {
+                    this.updateBattleRecord(this.state.selectedAnimal);
+                }
+            } catch (error) {
+                console.warn('Deferred rankings load failed:', error);
+            }
+        }, 600);
+
+        this.runWhenIdle(() => this.ensureTournamentManager(), 1000);
+        this.runWhenIdle(() => this.ensureCommunityManager(), 1200);
+        this.runWhenIdle(() => this.ensureBattlepointsManager(), 1400);
     }
 
     /**
@@ -397,9 +469,8 @@ class AnimalStatsApp {
                 this.switchView('rankings', false);
             }
             // Show tournament modal on top of current view
-            if (this.tournamentManager) {
-                this.tournamentManager.showSetup();
-            }
+            const tournamentManager = this.ensureTournamentManager();
+            tournamentManager?.showSetup();
         });
 
         // Profile route - own profile (redirects to /profile/username)
@@ -671,54 +742,134 @@ class AnimalStatsApp {
      * This is the single source of truth - no local fallbacks
      */
     async fetchData() {
+        const cachedAnimals = this.readAnimalsCache();
+
+        if (cachedAnimals?.length) {
+            this.applyAnimalData(cachedAnimals, 'cache');
+
+            // Keep startup fast: refresh in background instead of blocking first paint.
+            this.refreshAnimalDataInBackground();
+            return;
+        }
+
         try {
-            // Add cache-busting timestamp to always get fresh data from MongoDB
-            const cacheBuster = `?_t=${Date.now()}`;
-            const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.animals}${cacheBuster}`, {
-                method: 'GET',
-                headers: { 
-                    'Accept': 'application/json',
-                    'Cache-Control': 'no-cache'
-                },
-                signal: AbortSignal.timeout(15000) // 15 second timeout
-            });
-            
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-            }
-            
-            const result = await response.json();
-            
-            if (!result.success || !result.data) {
-                throw new Error('Invalid API response format');
-            }
-            
-            this.state.animals = result.data;
-            this.state.filteredAnimals = [...result.data];
-            this.state.apiAvailable = true;
-            console.log(`Loaded ${result.data.length} animals from MongoDB API`);
-            
-            // Update homepage animal count
-            this.updateHomeStats();
-            
-            // Initialize homepage silhouette panels with animal data
-            if (window.HomepageController) {
-                window.HomepageController.activate(this.state.animals);
-            }
-            
-            // Now that animals are loaded, retry any pending avatar displays
-            if (window.Auth?.retryPendingAvatars) {
-                window.Auth.retryPendingAvatars();
-            }
-            
+            const animals = await this.fetchAnimalsFromApi();
+            this.applyAnimalData(animals, 'network');
+            this.writeAnimalsCache(animals);
         } catch (error) {
             console.error('Failed to load animal data:', error.message);
             this.state.apiAvailable = false;
-            
+
             // Show user-friendly error
             this.showLoadError(error.message);
             throw error;
         }
+    }
+
+    getAnimalsCacheKey() {
+        return 'abs_animals_cache_v1';
+    }
+
+    readAnimalsCache() {
+        try {
+            const raw = localStorage.getItem(this.getAnimalsCacheKey());
+            if (!raw) return null;
+
+            const parsed = JSON.parse(raw);
+            if (!Array.isArray(parsed?.data) || parsed.data.length === 0) return null;
+
+            const ageMs = Date.now() - Number(parsed.savedAt || 0);
+            const maxAgeMs = 6 * 60 * 60 * 1000; // 6 hours
+            if (!Number.isFinite(ageMs) || ageMs > maxAgeMs) return null;
+
+            return parsed.data;
+        } catch {
+            return null;
+        }
+    }
+
+    writeAnimalsCache(animals) {
+        try {
+            localStorage.setItem(this.getAnimalsCacheKey(), JSON.stringify({
+                savedAt: Date.now(),
+                data: animals
+            }));
+        } catch {
+            // Ignore storage quota or privacy mode failures.
+        }
+    }
+
+    async fetchAnimalsFromApi() {
+        const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.animals}`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            },
+            signal: AbortSignal.timeout(12000) // 12 second timeout
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        if (!result.success || !Array.isArray(result.data)) {
+            throw new Error('Invalid API response format');
+        }
+
+        return result.data;
+    }
+
+    applyAnimalData(animals, source = 'network') {
+        this.state.animals = animals;
+        this.state.filteredAnimals = [...animals];
+        this.state.apiAvailable = true;
+
+        this.animalsById = new Map();
+        animals.forEach((animal) => {
+            const keys = [animal._id, animal.id, animal.name].filter(Boolean);
+            keys.forEach((key) => this.animalsById.set(String(key), animal));
+        });
+
+        // Keep selected animal in sync after cache refresh/network refresh.
+        if (this.state.selectedAnimal) {
+            const selectedKey = this.state.selectedAnimal._id || this.state.selectedAnimal.id || this.state.selectedAnimal.name;
+            const refreshedAnimal = this.animalsById.get(String(selectedKey));
+            if (refreshedAnimal) {
+                this.state.selectedAnimal = refreshedAnimal;
+            }
+        }
+
+        console.log(`Loaded ${animals.length} animals from ${source}`);
+
+        // Update filters/home UI with latest dataset.
+        this.populateClassFilter();
+        this.updateHomeStats();
+
+        // Initialize homepage silhouettes with current data.
+        if (window.HomepageController) {
+            window.HomepageController.activate(this.state.animals);
+        }
+
+        // Now that animals are loaded, retry any pending avatar displays.
+        if (window.Auth?.retryPendingAvatars) {
+            window.Auth.retryPendingAvatars();
+        }
+    }
+
+    refreshAnimalDataInBackground() {
+        this.fetchAnimalsFromApi()
+            .then((animals) => {
+                this.applyAnimalData(animals, 'network-refresh');
+                this.writeAnimalsCache(animals);
+
+                if (this.state.view === 'stats' || this.state.view === 'compare') {
+                    this.applyFilters();
+                }
+            })
+            .catch((error) => {
+                console.warn('Background animal refresh failed:', error.message);
+            });
     }
     
     /**
@@ -744,6 +895,10 @@ class AnimalStatsApp {
      * Populate the class filter dropdown
      */
     populateClassFilter() {
+        if (!this.dom.classFilter) return;
+
+        this.dom.classFilter.innerHTML = '<option value="all">All Classes</option>';
+
         const types = [...new Set(this.state.animals.map(a => a.type))].sort();
         types.forEach(type => {
             const option = document.createElement('option');
@@ -762,13 +917,10 @@ class AnimalStatsApp {
             if (window.AudioManager) {
                 window.AudioManager.init();
             }
-            document.removeEventListener('click', initAudioOnce);
-            document.removeEventListener('touchstart', initAudioOnce);
-            document.removeEventListener('keydown', initAudioOnce);
         };
-        document.addEventListener('click', initAudioOnce);
-        document.addEventListener('touchstart', initAudioOnce);
-        document.addEventListener('keydown', initAudioOnce);
+        document.addEventListener('click', initAudioOnce, { once: true, passive: true });
+        document.addEventListener('touchstart', initAudioOnce, { once: true, passive: true });
+        document.addEventListener('keydown', initAudioOnce, { once: true });
         
         // Search & Filter
         this.dom.searchInput.addEventListener('input', this.debouncedSearch);
@@ -1459,8 +1611,12 @@ class AnimalStatsApp {
         
         this.state.filteredAnimals.forEach(animal => {
             const card = document.createElement('div');
+            const animalKey = animal._id || animal.id || animal.name;
+            const safeName = escapeHtml(animal.name || 'Unknown');
+            const safeImage = escapeHtml(animal.image || FALLBACK_IMAGE);
+
             card.className = 'character-card';
-            card.dataset.id = animal.id || animal.name; // Fallback to name if ID missing
+            card.dataset.id = animalKey; // Fallback to name if ID missing
             
             // Calculate overall tier based on total stats
             const totalStats = (animal.attack || 0) + (animal.defense || 0) + (animal.agility || 0) + 
@@ -1480,8 +1636,8 @@ class AnimalStatsApp {
 
             card.innerHTML = `
                 <span class="card-tier-badge tier-${tierClass}">${overallTier}</span>
-                <img src="${animal.image}" alt="${animal.name}" class="character-card-image" loading="lazy" onerror="this.src=FALLBACK_IMAGE">
-                <div class="character-card-name">${animal.name}</div>
+                <img src="${safeImage}" alt="${safeName}" class="character-card-image" loading="lazy" decoding="async" onerror="this.src=FALLBACK_IMAGE">
+                <div class="character-card-name" data-text-source="${safeName}">${safeName}</div>
                 <div class="card-hover-stats">
                     <div class="hover-stat"><i class="fas fa-fist-raised"></i>${Math.round(animal.attack || 0)}</div>
                     <div class="hover-stat"><i class="fas fa-shield-alt"></i>${Math.round(animal.defense || 0)}</div>
@@ -1493,6 +1649,35 @@ class AnimalStatsApp {
         });
         
         this.dom.gridContainer.appendChild(fragment);
+        this.applyGridCardTextLayout();
+    }
+
+    getAnimalKey(animal) {
+        return String(animal?._id || animal?.id || animal?.name || '');
+    }
+
+    findGridCardByAnimal(animal) {
+        if (!animal || !this.dom.gridContainer) return null;
+        const key = this.getAnimalKey(animal);
+        if (!key) return null;
+
+        const escaped = (window.CSS && typeof window.CSS.escape === 'function')
+            ? window.CSS.escape(key)
+            : key.replace(/"/g, '\\"');
+
+        return this.dom.gridContainer.querySelector(`.character-card[data-id="${escaped}"]`);
+    }
+
+    applyGridCardTextLayout() {
+        if (!window.TextLayoutEngine) return;
+
+        this.dom.gridContainer.querySelectorAll('.character-card-name').forEach((el) => {
+            window.TextLayoutEngine.fitElement(el, {
+                maxLines: 1,
+                sourceAttr: 'data-text-source',
+                font: "700 0.74rem 'Orbitron', sans-serif"
+            });
+        });
     }
 
     /**
@@ -1501,9 +1686,10 @@ class AnimalStatsApp {
     handleGridClick(e) {
         const card = e.target.closest('.character-card');
         if (!card) return;
-        
-        const name = card.querySelector('.character-card-name').textContent;
-        const animal = this.state.animals.find(a => a.name === name);
+
+        const animalId = card.dataset.id;
+        const animal = this.animalsById.get(String(animalId)) ||
+            this.state.animals.find(a => String(a._id || a.id || a.name) === String(animalId));
         
         if (animal) {
             if (this.state.view === 'stats') {
@@ -1544,10 +1730,10 @@ class AnimalStatsApp {
         
         // Update only affected cards instead of full re-render
         if (prevSelected) {
-            const prevCard = this.dom.gridContainer.querySelector(`.character-card[data-id="${prevSelected.id || prevSelected.name}"]`);
+            const prevCard = this.findGridCardByAnimal(prevSelected);
             if (prevCard) prevCard.classList.remove('selected');
         }
-        const newCard = this.dom.gridContainer.querySelector(`.character-card[data-id="${animal.id || animal.name}"]`);
+        const newCard = this.findGridCardByAnimal(animal);
         if (newCard) newCard.classList.add('selected');
         
         this.updateStatsCommentsBtn(animal);
@@ -1636,8 +1822,26 @@ class AnimalStatsApp {
      */
     updateStatsView(animal) {
         // Basic Info
-        this.dom.charName.textContent = animal.name.toUpperCase();
-        this.dom.charScientific.textContent = animal.scientific_name || 'Unknown Species';
+        const displayName = (animal.name || '').toUpperCase();
+        const scientificName = animal.scientific_name || 'Unknown Species';
+
+        if (window.TextLayoutEngine) {
+            window.TextLayoutEngine.fitElement(this.dom.charName, {
+                sourceText: displayName,
+                sourceAttr: 'data-text-source',
+                maxLines: 1,
+                font: "900 2.4rem 'Bebas Neue', sans-serif"
+            });
+            window.TextLayoutEngine.fitElement(this.dom.charScientific, {
+                sourceText: scientificName,
+                sourceAttr: 'data-text-source',
+                maxLines: 1,
+                font: "500 1rem 'Inter', sans-serif"
+            });
+        } else {
+            this.dom.charName.textContent = displayName;
+            this.dom.charScientific.textContent = scientificName;
+        }
         
         // Image
         this.dom.charSilhouette.style.display = 'none';
@@ -1797,12 +2001,18 @@ class AnimalStatsApp {
             this.dom.titleMode.textContent = titleModes[viewName] || 'STATS';
         }
         
-        // Reset scroll position on any scrollable elements before switching
-        this.resetScrollPositions();
+        // Reset scroll only when changing view to avoid expensive no-op traversals.
+        if (previousView !== viewName) {
+            this.resetScrollPositions();
+        }
         
         // Activate homepage controller when switching to home
         if (viewName === 'home' && window.HomepageController) {
             window.HomepageController.activate(this.state.animals);
+        }
+
+        if (window.HomepageController?.setVisibility) {
+            window.HomepageController.setVisibility(viewName === 'home');
         }
         
         // Update UI classes - include home view, auth views, and profile views
@@ -1899,9 +2109,7 @@ class AnimalStatsApp {
             if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'none';
             
             // Fetch rankings when entering rankings view
-            if (this.rankingsManager) {
-                this.rankingsManager.fetchRankings();
-            }
+            this.ensureRankingsManager().fetchRankings();
         } else if (viewName === 'community') {
             // Hide grid and bottom bar in community view (always hidden)
             this.dom.gridWrapper.classList.add('hidden');
@@ -1909,9 +2117,7 @@ class AnimalStatsApp {
             if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'none';
             
             // Load community content when entering
-            if (this.communityManager) {
-                this.communityManager.onViewEnter();
-            }
+            this.ensureCommunityManager().onViewEnter();
         } else if (viewName === 'battlepoints') {
             // Hide grid and bottom bar in battlepoints view
             this.dom.gridWrapper.classList.add('hidden');
@@ -1919,9 +2125,7 @@ class AnimalStatsApp {
             if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'none';
             
             // Initialize battlepoints manager when entering
-            if (this.battlepointsManager) {
-                this.battlepointsManager.onViewEnter();
-            }
+            this.ensureBattlepointsManager()?.onViewEnter();
         } else {
             // Stats view - show bottom bar
             if (this.dom.toggleGridBtn) this.dom.toggleGridBtn.style.display = 'flex';
@@ -1979,10 +2183,10 @@ class AnimalStatsApp {
         const selectedClass = side === 'left' ? 'selected-fighter1' : 'selected-fighter2';
         
         if (prevAnimal) {
-            const prevCard = this.dom.gridContainer.querySelector(`.character-card[data-id="${prevAnimal.id || prevAnimal.name}"]`);
+            const prevCard = this.findGridCardByAnimal(prevAnimal);
             if (prevCard) prevCard.classList.remove(selectedClass);
         }
-        const newCard = this.dom.gridContainer.querySelector(`.character-card[data-id="${animal.id || animal.name}"]`);
+        const newCard = this.findGridCardByAnimal(animal);
         if (newCard) newCard.classList.add(selectedClass);
         
         // Auto-switch to other side if empty

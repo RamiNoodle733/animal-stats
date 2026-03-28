@@ -25,6 +25,12 @@ const HomepageController = {
     initialized: false,
     animalImages: [],
     mobilePanel: null,
+    interactionsBound: false,
+    lifecycleBound: false,
+    isVisible: false,
+    reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    transparencyCache: new Map(),
+    transparencyCanvas: null,
     
     // Animation state for each track
     animations: {
@@ -177,6 +183,13 @@ const HomepageController = {
      */
     async activate(animals) {
         if (!animals || !animals.length) return;
+
+        const shouldBeVisible = this.isHomeViewActive();
+
+        if (this.initialized) {
+            this.setVisibility(shouldBeVisible);
+            return;
+        }
         
         const trackLeft = document.getElementById('silhouette-track-left');
         const trackRight = document.getElementById('silhouette-track-right');
@@ -185,8 +198,7 @@ const HomepageController = {
             console.warn('Homepage: silhouette tracks not found');
             return;
         }
-        
-        if (this.initialized) return;
+
         this.initialized = true;
         
         const validAnimals = animals.filter(a => 
@@ -218,8 +230,45 @@ const HomepageController = {
         this.createDragLineOverlay();
         this.injectSlingshotStyles();
         this.setupInteractions();
-        
-        setTimeout(() => this.startAnimationLoop(), 100);
+        this.setupLifecycleGuards();
+
+        this.setVisibility(shouldBeVisible);
+    },
+
+    isHomeViewActive() {
+        const homeView = document.getElementById('home-view');
+        if (homeView?.classList.contains('active-view')) return true;
+        return window.location.pathname === '/' || window.location.pathname === '';
+    },
+
+    setVisibility(isVisible) {
+        this.isVisible = !!isVisible;
+
+        if (!this.initialized) return;
+
+        if (this.isVisible && !document.hidden) {
+            this.startAnimationLoop();
+        } else {
+            this.stopAnimationLoop();
+        }
+    },
+
+    setupLifecycleGuards() {
+        if (this.lifecycleBound) return;
+        this.lifecycleBound = true;
+
+        document.addEventListener('visibilitychange', () => {
+            this.setVisibility(this.isHomeViewActive());
+        }, { passive: true });
+
+        window.addEventListener('resize', () => {
+            if (!this.initialized) return;
+
+            // Recalculate loop dimensions after layout changes.
+            this.animations.left.height = 0;
+            this.animations.right.height = 0;
+            this.animations.mobile.width = 0;
+        }, { passive: true });
     },
     
     /**
@@ -731,13 +780,52 @@ const HomepageController = {
         img.loading = 'lazy';
         img.alt = '';
         img.draggable = false;
-        img.crossOrigin = 'anonymous';
+        
+        const cachedTransparency = this.transparencyCache.get(src);
+        if (cachedTransparency === false) {
+            img.style.display = 'none';
+        }
         
         img.onerror = () => { img.style.display = 'none'; };
-        img.onload = () => this.validateImageTransparency(img);
+        img.onload = () => {
+            if (img.style.display === 'none') return;
+
+            const knownResult = this.transparencyCache.get(src);
+            if (knownResult === false) {
+                img.style.display = 'none';
+                return;
+            }
+            if (knownResult === true) return;
+
+            if (!this.shouldValidateImageTransparency(src)) {
+                this.transparencyCache.set(src, true);
+                return;
+            }
+
+            const runValidation = () => this.validateImageTransparency(img, src);
+            if (typeof window.requestIdleCallback === 'function') {
+                window.requestIdleCallback(runValidation, { timeout: 350 });
+            } else {
+                setTimeout(runValidation, 0);
+            }
+        };
         img.src = src;
         
         return img;
+    },
+
+    shouldValidateImageTransparency(src) {
+        try {
+            const url = new URL(src, window.location.origin);
+
+            // Skip expensive validation for same-origin images we control.
+            if (url.origin === window.location.origin) return false;
+
+            // Validate remote images only.
+            return /^https?:/i.test(url.protocol);
+        } catch {
+            return false;
+        }
     },
     
     populateTrack(track, images) {
@@ -750,9 +838,10 @@ const HomepageController = {
         });
     },
     
-    validateImageTransparency(img) {
+    validateImageTransparency(img, srcKey) {
         if (!img || !img.complete || img.naturalWidth === 0) {
             img.style.display = 'none';
+            if (srcKey) this.transparencyCache.set(srcKey, false);
             return;
         }
         
@@ -765,11 +854,18 @@ const HomepageController = {
         
         if (badPatterns.some(pattern => src.includes(pattern))) {
             img.style.display = 'none';
+            if (srcKey) this.transparencyCache.set(srcKey, false);
             return;
         }
         
         try {
-            const canvas = document.createElement('canvas');
+            if (!this.transparencyCanvas) {
+                this.transparencyCanvas = document.createElement('canvas');
+                this.transparencyCanvas.width = 50;
+                this.transparencyCanvas.height = 50;
+            }
+
+            const canvas = this.transparencyCanvas;
             const ctx = canvas.getContext('2d', { willReadFrequently: true });
             const size = 50;
             canvas.width = size;
@@ -796,37 +892,61 @@ const HomepageController = {
                 
                 if (edges.filter(p => p[3] > 200).length >= 3) {
                     img.style.display = 'none';
+                    if (srcKey) this.transparencyCache.set(srcKey, false);
+                    return;
                 }
             }
-        } catch (e) {}
+
+            if (srcKey) this.transparencyCache.set(srcKey, true);
+        } catch (e) {
+            // Cross-origin canvas restrictions can throw; treat image as valid.
+            if (srcKey) this.transparencyCache.set(srcKey, true);
+        }
     },
     
     startAnimationLoop() {
-        const self = this;
-        
+        if (this.animationFrame) return;
+
         const animate = () => {
+            if (!this.isVisible || document.hidden) {
+                this.animationFrame = null;
+                return;
+            }
+
             const isMobile = window.innerWidth <= 600;
-            self.frameCount++;
-            
-            if (self.slingshot.active) {
-                self.updateSlingshotVisuals();
-                self.updatePanelScale();
+            this.frameCount++;
+
+            // On reduced-motion systems, update motion at half rate to reduce main thread pressure.
+            if (this.reducedMotion && this.frameCount % 2 !== 0) {
+                this.animationFrame = requestAnimationFrame(animate);
+                return;
             }
-            
-            if (self.screenShake.active) {
-                self.applyScreenShake();
+
+            if (this.slingshot.active) {
+                this.updateSlingshotVisuals();
+                this.updatePanelScale();
             }
-            
+
+            if (this.screenShake.active) {
+                this.applyScreenShake();
+            }
+
             if (isMobile) {
-                self.animateMobile();
+                this.animateMobile();
             } else {
-                self.animateDesktop();
+                this.animateDesktop();
             }
-            
-            self.animationFrame = requestAnimationFrame(animate);
+
+            this.animationFrame = requestAnimationFrame(animate);
         };
-        
-        setTimeout(animate, 300);
+
+        this.animationFrame = requestAnimationFrame(animate);
+    },
+
+    stopAnimationLoop() {
+        if (!this.animationFrame) return;
+        cancelAnimationFrame(this.animationFrame);
+        this.animationFrame = null;
     },
     
     /**
@@ -1072,16 +1192,24 @@ const HomepageController = {
      */
     updateSpeedLines(panel, velocity, position) {
         if (!panel || velocity < 10) return;
+
+        // Throttle visual rebuilds to reduce DOM churn during high-speed slingshots.
+        if (this.frameCount % 2 !== 0) return;
         
-        // Remove any existing speed lines containers
-        panel.querySelectorAll('.speed-lines').forEach(c => c.remove());
-        
-        const container = document.createElement('div');
-        container.className = `speed-lines ${position}`;
-        panel.appendChild(container);
+        let container = panel.querySelector(`.speed-lines.${position}`);
+        if (!container) {
+            panel.querySelectorAll('.speed-lines').forEach(c => c.remove());
+            container = document.createElement('div');
+            container.className = `speed-lines ${position}`;
+            panel.appendChild(container);
+        }
         
         const lineCount = Math.min(Math.floor(velocity / 3), 15);
         const isVertical = position.startsWith('vertical');
+
+        if (container.childElementCount === lineCount) return;
+
+        container.innerHTML = '';
         
         for (let i = 0; i < lineCount; i++) {
             const line = document.createElement('div');
@@ -1109,6 +1237,9 @@ const HomepageController = {
     },
     
     setupInteractions() {
+        if (this.interactionsBound) return;
+        this.interactionsBound = true;
+
         const panelLeft = document.getElementById('silhouette-left');
         const panelRight = document.getElementById('silhouette-right');
         const mobilePanel = document.getElementById('silhouette-mobile');
@@ -1187,8 +1318,8 @@ const HomepageController = {
             });
         });
         
-        document.addEventListener('mousemove', (e) => this.updateSlingshot(e, false));
-        document.addEventListener('mouseup', (e) => this.releaseSlingshot(e));
+        document.addEventListener('mousemove', (e) => this.updateSlingshot(e, false), { passive: true });
+        document.addEventListener('mouseup', (e) => this.releaseSlingshot(e), { passive: true });
         
         if (mobilePanel) {
             mobilePanel.addEventListener('touchstart', (e) => {
@@ -1205,8 +1336,8 @@ const HomepageController = {
             }
         }, { passive: false });
         
-        document.addEventListener('touchend', (e) => this.releaseSlingshot(e));
-        document.addEventListener('touchcancel', (e) => this.releaseSlingshot(e));
+        document.addEventListener('touchend', (e) => this.releaseSlingshot(e), { passive: true });
+        document.addEventListener('touchcancel', (e) => this.releaseSlingshot(e), { passive: true });
     },
     
     startSlingshot(e, panelKey, isTouch) {

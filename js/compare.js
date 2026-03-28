@@ -40,6 +40,28 @@
             console.log('[Compare] Tournament-style enhancements initialized');
         },
 
+        fitText(el, text, options = {}) {
+            if (!el) return;
+
+            const normalized = String(text || '').trim();
+            if (!normalized) {
+                el.textContent = '';
+                return;
+            }
+
+            if (!window.TextLayoutEngine) {
+                el.textContent = normalized;
+                return;
+            }
+
+            window.TextLayoutEngine.fitElement(el, {
+                sourceText: normalized,
+                sourceAttr: 'data-text-source',
+                maxLines: options.maxLines || 1,
+                font: options.font
+            });
+        },
+
         /**
          * Setup tournament-style layout elements
          */
@@ -349,11 +371,17 @@
             
             // Update name
             const nameEl = document.getElementById(`c-name-${num}`);
-            if (nameEl) nameEl.textContent = animal.name.toUpperCase();
+            this.fitText(nameEl, (animal.name || '').toUpperCase(), {
+                maxLines: 1,
+                font: "800 1.2rem 'Bebas Neue', sans-serif"
+            });
             
             // Update scientific name
             const sciEl = document.getElementById(`c-scientific-${num}`);
-            if (sciEl) sciEl.textContent = animal.scientific_name || animal.latinName || '';
+            this.fitText(sciEl, animal.scientific_name || animal.latinName || '', {
+                maxLines: 1,
+                font: "500 0.75rem 'Inter', sans-serif"
+            });
             
             // Update battle record - lookup from rankings like Stats page does
             const rankEl = document.getElementById(`c-rank-${num}`);
@@ -923,14 +951,26 @@
                 img1.src = left.image || '';
                 img1.onerror = () => { img1.src = 'images/fallback.png'; };
             }
-            if (name1) name1.textContent = (left.name || 'FIGHTER 1').toUpperCase();
-            if (scientific1) scientific1.textContent = left.scientific_name || '';
+            this.fitText(name1, (left.name || 'FIGHTER 1').toUpperCase(), {
+                maxLines: 1,
+                font: "800 2rem 'Bebas Neue', sans-serif"
+            });
+            this.fitText(scientific1, left.scientific_name || '', {
+                maxLines: 1,
+                font: "500 0.9rem 'Inter', sans-serif"
+            });
             if (img2) {
                 img2.src = right.image || '';
                 img2.onerror = () => { img2.src = 'images/fallback.png'; };
             }
-            if (name2) name2.textContent = (right.name || 'FIGHTER 2').toUpperCase();
-            if (scientific2) scientific2.textContent = right.scientific_name || '';
+            this.fitText(name2, (right.name || 'FIGHTER 2').toUpperCase(), {
+                maxLines: 1,
+                font: "800 2rem 'Bebas Neue', sans-serif"
+            });
+            this.fitText(scientific2, right.scientific_name || '', {
+                maxLines: 1,
+                font: "500 0.9rem 'Inter', sans-serif"
+            });
 
             // Reset animation states (tournament-style)
             overlay.classList.remove('fade-out', 'shake');
@@ -1399,7 +1439,10 @@
                 championImg.src = result.winner.image || '';
                 championImg.onerror = () => { championImg.src = 'images/fallback.png'; };
             }
-            if (championName) championName.textContent = result.winner.name.toUpperCase();
+            this.fitText(championName, result.winner.name.toUpperCase(), {
+                maxLines: 1,
+                font: "800 1.5rem 'Bebas Neue', sans-serif"
+            });
 
             // Victory subtitle
             const victorySubtitle = document.getElementById('victorySubtitle');
@@ -1473,9 +1516,20 @@
                 { name: 'SPC', key: 'special', icon: 'fa-star', fullName: 'Special' }
             ];
 
-            // Get short names for animals
-            const winnerShort = result.winner.name.length > 8 ? result.winner.name.substring(0, 7) + '.' : result.winner.name;
-            const loserShort = result.loser.name.length > 8 ? result.loser.name.substring(0, 7) + '.' : result.loser.name;
+            const fitHeaderName = (name) => {
+                const raw = String(name || '').toUpperCase();
+                if (!window.TextLayoutEngine) {
+                    return raw.length > 10 ? `${raw.slice(0, 9)}...` : raw;
+                }
+
+                return window.TextLayoutEngine.ellipsize(raw, 102, {
+                    font: "700 0.82rem 'Rajdhani', sans-serif",
+                    ellipsis: '...'
+                });
+            };
+
+            const winnerShort = fitHeaderName(result.winner.name);
+            const loserShort = fitHeaderName(result.loser.name);
 
             let html = '';
             
@@ -1483,8 +1537,8 @@
             html += `
                 <div class="analysis-header-row">
                     <div class="analysis-col stat-col">STAT</div>
-                    <div class="analysis-col winner-col"><i class="fas fa-crown"></i> ${winnerShort.toUpperCase()}</div>
-                    <div class="analysis-col loser-col">${loserShort.toUpperCase()}</div>
+                    <div class="analysis-col winner-col"><i class="fas fa-crown"></i> ${winnerShort}</div>
+                    <div class="analysis-col loser-col">${loserShort}</div>
                 </div>
             `;
             

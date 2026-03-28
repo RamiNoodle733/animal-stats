@@ -116,6 +116,28 @@ class TournamentManager {
         this.populateTypeFilters();
         this.updateFilteredAnimals();
     }
+
+    fitText(el, text, options = {}) {
+        if (!el) return;
+
+        const normalized = String(text || '').trim();
+        if (!normalized) {
+            el.textContent = '';
+            return;
+        }
+
+        if (!window.TextLayoutEngine) {
+            el.textContent = normalized;
+            return;
+        }
+
+        window.TextLayoutEngine.fitElement(el, {
+            sourceText: normalized,
+            sourceAttr: 'data-text-source',
+            maxLines: options.maxLines || 1,
+            font: options.font
+        });
+    }
     
     /**
      * Setup unit toggle click handlers for weight/speed in tournament
@@ -827,10 +849,22 @@ class TournamentManager {
             imageRight.src = animal2.image || '';
             imageRight.onerror = () => { imageRight.src = 'images/fallback.png'; };
         }
-        if (nameLeft) nameLeft.textContent = (animal1.name || 'FIGHTER 1').toUpperCase();
-        if (nameRight) nameRight.textContent = (animal2.name || 'FIGHTER 2').toUpperCase();
-        if (scientificLeft) scientificLeft.textContent = animal1.scientific_name || '';
-        if (scientificRight) scientificRight.textContent = animal2.scientific_name || '';
+        this.fitText(nameLeft, (animal1.name || 'FIGHTER 1').toUpperCase(), {
+            maxLines: 1,
+            font: "800 2rem 'Bebas Neue', sans-serif"
+        });
+        this.fitText(nameRight, (animal2.name || 'FIGHTER 2').toUpperCase(), {
+            maxLines: 1,
+            font: "800 2rem 'Bebas Neue', sans-serif"
+        });
+        this.fitText(scientificLeft, animal1.scientific_name || '', {
+            maxLines: 1,
+            font: "500 0.9rem 'Inter', sans-serif"
+        });
+        this.fitText(scientificRight, animal2.scientific_name || '', {
+            maxLines: 1,
+            font: "500 0.9rem 'Inter', sans-serif"
+        });
         
         // Reset animation states
         overlay.classList.remove('fade-out', 'shake');
@@ -1363,14 +1397,16 @@ class TournamentManager {
         }
         
         // Name - IMPORTANT: Set from actual animal data
-        if (nameEl) {
-            nameEl.textContent = animal.name || 'Unknown Animal';
-        }
+        this.fitText(nameEl, animal.name || 'Unknown Animal', {
+            maxLines: 1,
+            font: "800 1.1rem 'Bebas Neue', sans-serif"
+        });
         
         // Scientific Name
-        if (scientificEl) {
-            scientificEl.textContent = animal.scientific_name || animal.scientificName || 'Unknown species';
-        }
+        this.fitText(scientificEl, animal.scientific_name || animal.scientificName || 'Unknown species', {
+            maxLines: 1,
+            font: "500 0.72rem 'Inter', sans-serif"
+        });
         
         // Get ranking data from RankingsManager
         const rankings = this.app.rankingsManager?.rankings || [];
@@ -2127,7 +2163,10 @@ class TournamentManager {
         // Update champion card
         this.dom.championImg.src = champion.image;
         this.dom.championImg.onerror = () => { this.dom.championImg.src = FALLBACK_IMAGE; };
-        this.dom.championName.textContent = champion.name;
+        this.fitText(this.dom.championName, champion.name, {
+            maxLines: 1,
+            font: "800 2rem 'Bebas Neue', sans-serif"
+        });
         this.dom.resultMatches.textContent = this.totalMatches;
         this.dom.resultBracket.textContent = this.bracketSize;
         
