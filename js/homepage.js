@@ -29,8 +29,13 @@ const HomepageController = {
     lifecycleBound: false,
     isVisible: false,
     reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+    performanceMode: 'high',
+    disableFancyEffects: false,
+    maxTrackItemsDesktop: 28,
+    maxTrackItemsMobile: 24,
     transparencyCache: new Map(),
     transparencyCanvas: null,
+    homePortalEl: null,
     
     // Animation state for each track
     animations: {
@@ -84,6 +89,7 @@ const HomepageController = {
         maxDragDistance: 250,
         releaseMultiplier: 60,
         dragLine: null,
+        overlayNodes: null,
         lastTensionMilestone: 0,
         preDragSpeed: 0
     },
@@ -200,6 +206,9 @@ const HomepageController = {
         }
 
         this.initialized = true;
+        this.detectPerformanceMode();
+        this.applyPerformanceModeClass();
+        this.homePortalEl = document.getElementById('home-portal');
         
         const validAnimals = animals.filter(a => 
             a.image && 
@@ -210,13 +219,17 @@ const HomepageController = {
         
         const shuffled = this.shuffle([...validAnimals]);
         const allImages = shuffled.map(a => a.image);
+        const desktopPoolSize = Math.max(8, this.maxTrackItemsDesktop * 2);
+        const mobilePoolSize = Math.max(10, this.maxTrackItemsMobile);
+        const desktopPool = allImages.slice(0, desktopPoolSize);
+        const mobilePool = allImages.slice(0, mobilePoolSize);
         
-        this.animalImages = allImages;
+        this.animalImages = desktopPool;
         this.addPanelDecorations();
         
-        const half = Math.ceil(allImages.length / 2);
-        const leftImages = allImages.slice(0, half);
-        const rightImages = allImages.slice(half);
+        const half = Math.ceil(desktopPool.length / 2);
+        const leftImages = desktopPool.slice(0, half);
+        const rightImages = desktopPool.slice(half);
         
         this.populateTrack(trackLeft, leftImages);
         this.populateTrack(trackRight, rightImages.length > 0 ? rightImages : leftImages);
@@ -226,13 +239,69 @@ const HomepageController = {
         this.animations.left.panel = document.getElementById('silhouette-left');
         this.animations.right.panel = document.getElementById('silhouette-right');
         
-        this.createMobilePanel(allImages);
+        this.createMobilePanel(mobilePool);
         this.createDragLineOverlay();
         this.injectSlingshotStyles();
         this.setupInteractions();
         this.setupLifecycleGuards();
 
         this.setVisibility(shouldBeVisible);
+    },
+
+    detectPerformanceMode() {
+        const cores = navigator.hardwareConcurrency || 4;
+        const memory = navigator.deviceMemory || 4;
+        const prefersReduced = this.reducedMotion;
+        const isMobile = window.matchMedia('(max-width: 900px)').matches;
+
+        if (prefersReduced || memory <= 4 || cores <= 4) {
+            this.performanceMode = 'low';
+            this.disableFancyEffects = true;
+            this.maxTrackItemsDesktop = isMobile ? 12 : 14;
+            this.maxTrackItemsMobile = 12;
+            this.physics.baseSpeed = 2.2;
+            return;
+        }
+
+        if (memory <= 8 || cores <= 6 || isMobile) {
+            this.performanceMode = 'medium';
+            this.disableFancyEffects = false;
+            this.maxTrackItemsDesktop = 20;
+            this.maxTrackItemsMobile = 16;
+            this.physics.baseSpeed = 2.8;
+            return;
+        }
+
+        this.performanceMode = 'high';
+        this.disableFancyEffects = false;
+        this.maxTrackItemsDesktop = 28;
+        this.maxTrackItemsMobile = 24;
+        this.physics.baseSpeed = 3.5;
+    },
+
+    applyPerformanceModeClass() {
+        const homeView = document.getElementById('home-view');
+        if (!homeView) return;
+
+        homeView.classList.remove('home-performance-low', 'home-performance-medium');
+        if (this.performanceMode === 'low') {
+            homeView.classList.add('home-performance-low');
+        } else if (this.performanceMode === 'medium') {
+            homeView.classList.add('home-performance-medium');
+        }
+    },
+
+    buildTrackItems(images, targetCount) {
+        const source = (images && images.length ? images : this.animalImages).slice(0, Math.max(1, targetCount));
+        const items = [];
+
+        if (source.length === 0) return items;
+
+        while (items.length < targetCount * 2) {
+            items.push(source[items.length % source.length]);
+        }
+
+        return items;
     },
 
     isHomeViewActive() {
@@ -772,6 +841,15 @@ const HomepageController = {
         
         document.body.appendChild(svg);
         this.slingshot.dragLine = svg;
+        this.slingshot.overlayNodes = {
+            line,
+            rubberBand,
+            startCircle,
+            endCircle,
+            tensionIndicator,
+            directionArrow: arrow,
+            gradient
+        };
     },
     
     createSilhouetteImage(src) {
@@ -830,7 +908,9 @@ const HomepageController = {
     
     populateTrack(track, images) {
         track.innerHTML = '';
-        const allImages = [...images, ...images];
+        const isMobileTrack = track.id === 'silhouette-track-mobile';
+        const targetCount = isMobileTrack ? this.maxTrackItemsMobile : this.maxTrackItemsDesktop;
+        const allImages = this.buildTrackItems(images, targetCount);
         
         allImages.forEach(src => {
             const img = this.createSilhouetteImage(src);
@@ -983,7 +1063,7 @@ const HomepageController = {
     
     applyScreenShake() {
         // Only shake the portal content, not fixed elements like footer
-        const portalContent = document.querySelector('.home-portal');
+        const portalContent = this.homePortalEl || document.querySelector('.home-portal');
         if (!portalContent) return;
         
         const shake = this.screenShake;
@@ -1040,14 +1120,18 @@ const HomepageController = {
             // Speed lines TRAIL BEHIND movement (same side as movement direction)
             // If moving right, lines trail on right. If moving left, lines trail on left.
             const movingRight = mobile.velocity > 0;
-            this.updateSpeedLines(mobile.panel, Math.abs(mobile.velocity), movingRight ? 'horizontal-right' : 'horizontal-left');
+            if (!this.disableFancyEffects) {
+                this.updateSpeedLines(mobile.panel, Math.abs(mobile.velocity), movingRight ? 'horizontal-right' : 'horizontal-left');
+            }
             
-            if (Math.abs(mobile.velocity) > 15 && this.frameCount % 3 === 0) {
+            if (!this.disableFancyEffects && Math.abs(mobile.velocity) > 15 && this.frameCount % 3 === 0) {
                 this.spawnTrailSpark(mobile.panel);
             }
             
             if (Math.abs(mobile.velocity) > 15) {
-                mobile.panel?.classList.add('slingshot-blur');
+                if (!this.disableFancyEffects) {
+                    mobile.panel?.classList.add('slingshot-blur');
+                }
             } else {
                 mobile.panel?.classList.remove('slingshot-blur');
             }
@@ -1109,14 +1193,18 @@ const HomepageController = {
                 // Speed lines TRAIL BEHIND movement (same side as movement direction)
                 // If moving down, lines trail on bottom. If moving up, lines trail on top.
                 const movingDown = anim.velocity > 0;
-                this.updateSpeedLines(anim.panel, Math.abs(anim.velocity), movingDown ? 'vertical-bottom' : 'vertical-top');
+                if (!this.disableFancyEffects) {
+                    this.updateSpeedLines(anim.panel, Math.abs(anim.velocity), movingDown ? 'vertical-bottom' : 'vertical-top');
+                }
                 
-                if (Math.abs(anim.velocity) > 15 && this.frameCount % 3 === 0) {
+                if (!this.disableFancyEffects && Math.abs(anim.velocity) > 15 && this.frameCount % 3 === 0) {
                     this.spawnTrailSpark(anim.panel);
                 }
                 
                 if (Math.abs(anim.velocity) > 15) {
-                    anim.panel?.classList.add('slingshot-blur');
+                    if (!this.disableFancyEffects) {
+                        anim.panel?.classList.add('slingshot-blur');
+                    }
                 } else {
                     anim.panel?.classList.remove('slingshot-blur');
                 }
@@ -1426,20 +1514,15 @@ const HomepageController = {
     updateSlingshotVisuals() {
         const s = this.slingshot;
         const overlay = s.dragLine;
-        if (!overlay) return;
+        const nodes = s.overlayNodes;
+        if (!overlay || !nodes) return;
         
-        const line = overlay.querySelector('#drag-line');
-        const rubberBand = overlay.querySelector('#rubber-band');
-        const startCircle = overlay.querySelector('#drag-start');
-        const endCircle = overlay.querySelector('#drag-end');
-        const tensionIndicator = overlay.querySelector('#tension-indicator');
-        const directionArrow = overlay.querySelector('#direction-arrow');
-        const gradient = overlay.querySelector('#drag-line-gradient');
+        const { line, rubberBand, startCircle, endCircle, tensionIndicator, directionArrow, gradient } = nodes;
         
         const level = this.getTensionLevel(s.tension);
         
         // Update gradient
-        if (gradient) {
+        if (gradient && !this.disableFancyEffects) {
             gradient.innerHTML = `
                 <stop offset="0%" stop-color="${level.color1}" stop-opacity="0.9"/>
                 <stop offset="50%" stop-color="${level.color2}" stop-opacity="1"/>
@@ -1456,7 +1539,9 @@ const HomepageController = {
             const perpX = -dy * 0.2 * s.tension;
             const perpY = dx * 0.2 * s.tension;
             
-            const wobble = s.tension > 0.8 ? Math.sin(this.frameCount * 0.15) * s.tension * 8 : Math.sin(this.frameCount * 0.1) * s.tension * 5;
+            const wobble = this.disableFancyEffects
+                ? 0
+                : (s.tension > 0.8 ? Math.sin(this.frameCount * 0.15) * s.tension * 8 : Math.sin(this.frameCount * 0.1) * s.tension * 5);
             const ctrlX = midX + perpX + wobble;
             const ctrlY = midY + perpY + wobble;
             
@@ -1478,7 +1563,7 @@ const HomepageController = {
         if (startCircle) {
             startCircle.setAttribute('cx', s.startX);
             startCircle.setAttribute('cy', s.startY);
-            const pulse = s.tension > 0.8 ? 2 + Math.sin(this.frameCount * 0.3) * 3 : 0;
+            const pulse = (s.tension > 0.8 && !this.disableFancyEffects) ? 2 + Math.sin(this.frameCount * 0.3) * 3 : 0;
             startCircle.setAttribute('r', 10 + s.tension * 6 + pulse);
             startCircle.setAttribute('fill', level.color1);
         }
@@ -1487,7 +1572,7 @@ const HomepageController = {
         if (endCircle) {
             endCircle.setAttribute('cx', s.currentX);
             endCircle.setAttribute('cy', s.currentY);
-            const endPulse = s.tension > 0.95 ? Math.sin(this.frameCount * 0.4) * 4 : 0;
+            const endPulse = (s.tension > 0.95 && !this.disableFancyEffects) ? Math.sin(this.frameCount * 0.4) * 4 : 0;
             endCircle.setAttribute('r', 14 + s.tension * 12 + endPulse);
             endCircle.setAttribute('fill', level.color2);
             endCircle.setAttribute('stroke', s.tension > 0.95 ? '#ff0044' : '#fff');
@@ -1550,7 +1635,7 @@ const HomepageController = {
         
         // Panel glow
         const anim = this.animations[s.panelKey];
-        if (anim?.panel) {
+        if (anim?.panel && !this.disableFancyEffects) {
             const glowIntensity = 0.2 + s.tension * 0.6;
             
             if (s.tension > 0.95) {
@@ -1589,25 +1674,25 @@ const HomepageController = {
             }
             
             // Screen ripple effect
-            if (s.tension > 0.4) {
+            if (!this.disableFancyEffects && s.tension > 0.4) {
                 this.spawnRipple(s.startX, s.startY, s.tension);
             }
             
             // Effects based on power
-            if (s.tension > 0.95) {
+            if (s.tension > 0.95 && !this.disableFancyEffects) {
                 // EXTREME release
                 this.triggerScreenShake(this.physics.screenShakeIntensity * 1.5);
                 this.playWhoosh(1);
                 this.spawnReleaseParticles(anim.panel, s.panelKey === 'mobile', 40, true);
                 this.spawnShockwave(anim.panel, s.startX, s.startY);
                 this.flashReleaseEffect(anim.panel, 'extreme');
-            } else if (s.tension > 0.7) {
+            } else if (s.tension > 0.7 && !this.disableFancyEffects) {
                 this.triggerScreenShake(this.physics.screenShakeIntensity * s.tension);
                 this.playWhoosh(s.tension);
                 this.spawnReleaseParticles(anim.panel, s.panelKey === 'mobile', 28);
                 this.spawnShockwave(anim.panel, s.startX, s.startY);
                 this.flashReleaseEffect(anim.panel, 'power');
-            } else if (s.tension > 0.3) {
+            } else if (s.tension > 0.3 && !this.disableFancyEffects) {
                 this.playWhoosh(s.tension * 0.7);
                 this.spawnReleaseParticles(anim.panel, s.panelKey === 'mobile', 18);
                 this.flashReleaseEffect(anim.panel, 'normal');
@@ -1839,6 +1924,9 @@ const HomepageController = {
         
         // Add focused class to button
         btn.classList.add('portal-btn-focused');
+
+        // Avoid expensive global blur effects on low-end devices.
+        if (this.disableFancyEffects) return;
         
         // Add slow-mo class to home view for blur/dim effect
         const homeView = document.getElementById('home-view');
@@ -1860,6 +1948,8 @@ const HomepageController = {
         if (!btn) return;
         
         btn.classList.remove('portal-btn-focused');
+
+        if (this.disableFancyEffects) return;
         
         const homeView = document.getElementById('home-view');
         if (homeView) {

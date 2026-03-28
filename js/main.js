@@ -1969,6 +1969,10 @@ class AnimalStatsApp {
     switchView(viewName, updateUrl = true) {
         const previousView = this.state.view;
         this.state.view = viewName;
+
+        const html = document.documentElement;
+        html.classList.toggle('route-home', viewName === 'home');
+        html.classList.toggle('route-about', viewName === 'about');
         
         // Play page transition sound
         if (window.AudioManager && previousView !== viewName) {

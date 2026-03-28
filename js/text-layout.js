@@ -16,6 +16,44 @@
             this._ctx = null;
             this._widthCache = new Map();
             this._maxCacheEntries = 20000;
+            this._pretext = null;
+            this._pretextReady = false;
+            this._pretextPreparedCache = new Map();
+
+            this._loadPretext();
+        }
+
+        async _loadPretext() {
+            try {
+                const module = await import('https://esm.sh/@chenglou/pretext@0.0.2');
+                if (module?.prepareWithSegments && module?.layoutWithLines) {
+                    this._pretext = module;
+                    this._pretextReady = true;
+                    console.log('[TextLayout] Using @chenglou/pretext');
+                }
+            } catch {
+                // Fallback to internal canvas strategy when CDN/modules are unavailable.
+                this._pretextReady = false;
+            }
+        }
+
+        _extractFontSizePx(font) {
+            const match = String(font).match(/(\d+(?:\.\d+)?)px/);
+            return match ? Number(match[1]) : 14;
+        }
+
+        _getPreparedPretext(text, font) {
+            const key = `${font}|${text}`;
+            const cached = this._pretextPreparedCache.get(key);
+            if (cached) return cached;
+
+            const prepared = this._pretext.prepareWithSegments(text, font);
+            if (this._pretextPreparedCache.size > 4000) {
+                const oldest = this._pretextPreparedCache.keys().next().value;
+                if (oldest) this._pretextPreparedCache.delete(oldest);
+            }
+            this._pretextPreparedCache.set(key, prepared);
+            return prepared;
         }
 
         _getContext() {
@@ -121,6 +159,35 @@
             const maxLines = Math.max(1, Number(options.maxLines) || 1);
             const font = options.font || "600 14px 'Inter', sans-serif";
             const letterSpacingPx = Number.isFinite(options.letterSpacingPx) ? options.letterSpacingPx : 0;
+
+            if (this._pretextReady && this._pretext) {
+                try {
+                    const prepared = this._getPreparedPretext(normalized, font);
+                    const lineHeightPx = Number(options.lineHeightPx) || Math.max(14, this._extractFontSizePx(font) * 1.25);
+                    const result = this._pretext.layoutWithLines(prepared, safeMaxWidth, lineHeightPx);
+
+                    if (Array.isArray(result?.lines) && result.lines.length > 0) {
+                        let lines = result.lines.map((line) => line.text);
+                        if (lines.length > maxLines) {
+                            lines = lines.slice(0, maxLines);
+                            const lastIndex = lines.length - 1;
+                            lines[lastIndex] = this.ellipsize(lines[lastIndex], safeMaxWidth, {
+                                font,
+                                letterSpacingPx,
+                                ellipsis: options.ellipsis || '...'
+                            });
+                        }
+
+                        return {
+                            text: lines.join('\n'),
+                            lines
+                        };
+                    }
+                } catch {
+                    // Fall through to canvas-based strategy.
+                }
+            }
+
             const words = normalized.split(' ');
             const lines = [];
             let current = '';
