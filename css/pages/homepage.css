@@ -134,7 +134,8 @@ html.route-home nav[class*="mobile"] {
 }
 
 /* Lightweight rendering profile for lower-end devices */
-#home-view.home-performance-low::before {
+#home-view.home-performance-low::before,
+#home-view.home-performance-medium::before {
     animation: none;
     opacity: 0.3;
 }
@@ -142,20 +143,35 @@ html.route-home nav[class*="mobile"] {
 #home-view.home-performance-low .portal-logo-glow,
 #home-view.home-performance-low .portal-tournament-btn,
 #home-view.home-performance-low .home-profile-link,
-#home-view.home-performance-low .portal-nav-btn {
+#home-view.home-performance-low .portal-nav-btn,
+#home-view.home-performance-medium .portal-logo-glow,
+#home-view.home-performance-medium .portal-tournament-btn,
+#home-view.home-performance-medium .home-profile-link,
+#home-view.home-performance-medium .portal-nav-btn {
     animation: none !important;
 }
 
 #home-view.home-performance-low .portal-nav-btn.portal-btn-dimmed,
-#home-view.home-performance-low .portal-nav-btn.portal-btn-focused {
+#home-view.home-performance-low .portal-nav-btn.portal-btn-focused,
+#home-view.home-performance-medium .portal-nav-btn.portal-btn-dimmed,
+#home-view.home-performance-medium .portal-nav-btn.portal-btn-focused {
     filter: none !important;
 }
 
 #home-view.home-performance-low .silhouette-panel::before,
 #home-view.home-performance-low .silhouette-panel::after,
 #home-view.home-performance-low .panel-scanlines,
-#home-view.home-performance-low .panel-frame-highlight {
+#home-view.home-performance-low .panel-frame-highlight,
+#home-view.home-performance-medium .silhouette-panel::before,
+#home-view.home-performance-medium .silhouette-panel::after,
+#home-view.home-performance-medium .panel-scanlines,
+#home-view.home-performance-medium .panel-frame-highlight {
     display: none !important;
+}
+
+#home-view.home-performance-low .silhouette-panel,
+#home-view.home-performance-medium .silhouette-panel {
+    transition: none !important;
 }
 
 /* ========================================
@@ -301,13 +317,17 @@ html.route-home nav[class*="mobile"] {
     filter: brightness(0) invert(1);
 }
 
-#home-view.home-performance-low .silhouette-panel {
+#home-view.home-performance-low .silhouette-panel,
+#home-view.home-performance-medium .silhouette-panel {
+    background: rgba(8, 14, 22, 0.9) !important;
+    border-color: rgba(70, 110, 145, 0.35) !important;
     box-shadow: 0 0 12px rgba(0, 212, 255, 0.09), 2px 2px 8px rgba(0, 0, 0, 0.3) !important;
 }
 
-#home-view.home-performance-low .silhouette-img {
-    opacity: 0.35;
-    filter: brightness(0) invert(1) !important;
+#home-view.home-performance-low .silhouette-img,
+#home-view.home-performance-medium .silhouette-img {
+    opacity: 0.3;
+    filter: none !important;
 }
 
 /* Scanline overlay for CRT/hologram feel */

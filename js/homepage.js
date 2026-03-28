@@ -31,11 +31,14 @@ const HomepageController = {
     reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     performanceMode: 'high',
     disableFancyEffects: false,
-    maxTrackItemsDesktop: 28,
-    maxTrackItemsMobile: 24,
+    frameStride: 1,
+    maxTrackItemsDesktop: 14,
+    maxTrackItemsMobile: 12,
     transparencyCache: new Map(),
     transparencyCanvas: null,
     homePortalEl: null,
+    desktopTrackPool: [],
+    mobileTrackPool: [],
     
     // Animation state for each track
     animations: {
@@ -219,27 +222,21 @@ const HomepageController = {
         
         const shuffled = this.shuffle([...validAnimals]);
         const allImages = shuffled.map(a => a.image);
-        const desktopPoolSize = Math.max(8, this.maxTrackItemsDesktop * 2);
-        const mobilePoolSize = Math.max(10, this.maxTrackItemsMobile);
+        const desktopPoolSize = Math.max(6, this.maxTrackItemsDesktop);
+        const mobilePoolSize = Math.max(6, this.maxTrackItemsMobile);
         const desktopPool = allImages.slice(0, desktopPoolSize);
         const mobilePool = allImages.slice(0, mobilePoolSize);
         
+        this.desktopTrackPool = desktopPool;
+        this.mobileTrackPool = mobilePool;
         this.animalImages = desktopPool;
         this.addPanelDecorations();
-        
-        const half = Math.ceil(desktopPool.length / 2);
-        const leftImages = desktopPool.slice(0, half);
-        const rightImages = desktopPool.slice(half);
-        
-        this.populateTrack(trackLeft, leftImages);
-        this.populateTrack(trackRight, rightImages.length > 0 ? rightImages : leftImages);
-        
-        this.animations.left.track = trackLeft;
-        this.animations.right.track = trackRight;
+
+        this.populateTracksForViewport();
+
         this.animations.left.panel = document.getElementById('silhouette-left');
         this.animations.right.panel = document.getElementById('silhouette-right');
-        
-        this.createMobilePanel(mobilePool);
+
         this.createDragLineOverlay();
         this.injectSlingshotStyles();
         this.setupInteractions();
@@ -257,26 +254,29 @@ const HomepageController = {
         if (prefersReduced || memory <= 4 || cores <= 4) {
             this.performanceMode = 'low';
             this.disableFancyEffects = true;
-            this.maxTrackItemsDesktop = isMobile ? 12 : 14;
-            this.maxTrackItemsMobile = 12;
-            this.physics.baseSpeed = 2.2;
+            this.frameStride = 3;
+            this.maxTrackItemsDesktop = isMobile ? 6 : 7;
+            this.maxTrackItemsMobile = 8;
+            this.physics.baseSpeed = 1.9;
             return;
         }
 
         if (memory <= 8 || cores <= 6 || isMobile) {
             this.performanceMode = 'medium';
-            this.disableFancyEffects = false;
-            this.maxTrackItemsDesktop = 20;
-            this.maxTrackItemsMobile = 16;
-            this.physics.baseSpeed = 2.8;
+            this.disableFancyEffects = true;
+            this.frameStride = 2;
+            this.maxTrackItemsDesktop = 10;
+            this.maxTrackItemsMobile = 10;
+            this.physics.baseSpeed = 2.3;
             return;
         }
 
         this.performanceMode = 'high';
         this.disableFancyEffects = false;
-        this.maxTrackItemsDesktop = 28;
-        this.maxTrackItemsMobile = 24;
-        this.physics.baseSpeed = 3.5;
+        this.frameStride = 1;
+        this.maxTrackItemsDesktop = 14;
+        this.maxTrackItemsMobile = 12;
+        this.physics.baseSpeed = 2.8;
     },
 
     applyPerformanceModeClass() {
@@ -302,6 +302,47 @@ const HomepageController = {
         }
 
         return items;
+    },
+
+    removeMobilePanel() {
+        const mobilePanel = document.getElementById('silhouette-mobile');
+        if (mobilePanel) {
+            mobilePanel.remove();
+        }
+
+        this.mobilePanel = null;
+        this.animations.mobile.track = null;
+        this.animations.mobile.panel = null;
+    },
+
+    populateTracksForViewport() {
+        const trackLeft = document.getElementById('silhouette-track-left');
+        const trackRight = document.getElementById('silhouette-track-right');
+        const isMobile = window.matchMedia('(max-width: 600px)').matches;
+
+        if (!trackLeft || !trackRight) return;
+
+        if (isMobile) {
+            trackLeft.innerHTML = '';
+            trackRight.innerHTML = '';
+            this.animations.left.track = null;
+            this.animations.right.track = null;
+            this.createMobilePanel(this.mobileTrackPool);
+            return;
+        }
+
+        this.removeMobilePanel();
+
+        const desktopPool = this.desktopTrackPool.length ? this.desktopTrackPool : this.animalImages;
+        const half = Math.ceil(desktopPool.length / 2);
+        const leftImages = desktopPool.slice(0, half);
+        const rightImages = desktopPool.slice(half);
+
+        this.populateTrack(trackLeft, leftImages);
+        this.populateTrack(trackRight, rightImages.length > 0 ? rightImages : leftImages);
+
+        this.animations.left.track = trackLeft;
+        this.animations.right.track = trackRight;
     },
 
     isHomeViewActive() {
@@ -332,6 +373,12 @@ const HomepageController = {
 
         window.addEventListener('resize', () => {
             if (!this.initialized) return;
+
+            const wasMobile = this.animations.mobile.track !== null;
+            const isMobile = window.matchMedia('(max-width: 600px)').matches;
+            if (wasMobile !== isMobile) {
+                this.populateTracksForViewport();
+            }
 
             // Recalculate loop dimensions after layout changes.
             this.animations.left.height = 0;
@@ -691,6 +738,15 @@ const HomepageController = {
     
     addPanelDecorations() {
         const panels = document.querySelectorAll('.silhouette-panel.panel-left, .silhouette-panel.panel-right');
+
+        if (this.disableFancyEffects) {
+            panels.forEach(panel => {
+                panel.querySelector('.panel-scanlines')?.remove();
+                panel.querySelector('.panel-frame-highlight')?.remove();
+            });
+            return;
+        }
+
         panels.forEach(panel => {
             if (!panel.querySelector('.panel-scanlines')) {
                 const scanlines = document.createElement('div');
@@ -711,6 +767,7 @@ const HomepageController = {
             this.mobilePanel = mobilePanel;
             this.animations.mobile.track = mobilePanel.querySelector('.silhouette-track');
             this.animations.mobile.panel = mobilePanel;
+            this.bindMobilePanelTouch(mobilePanel);
             return;
         }
         
@@ -734,6 +791,19 @@ const HomepageController = {
         this.mobilePanel = mobilePanel;
         this.animations.mobile.track = track;
         this.animations.mobile.panel = mobilePanel;
+        this.bindMobilePanelTouch(mobilePanel);
+    },
+
+    bindMobilePanelTouch(mobilePanel) {
+        if (!mobilePanel || mobilePanel.dataset.touchBound === 'true') return;
+
+        mobilePanel.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.initAudio();
+            this.startSlingshot(e, 'mobile', true);
+        }, { passive: false });
+
+        mobilePanel.dataset.touchBound = 'true';
     },
     
     createDragLineOverlay() {
@@ -856,6 +926,8 @@ const HomepageController = {
         const img = document.createElement('img');
         img.className = 'silhouette-img';
         img.loading = 'lazy';
+        img.decoding = 'async';
+        img.fetchPriority = 'low';
         img.alt = '';
         img.draggable = false;
         
@@ -893,6 +965,8 @@ const HomepageController = {
     },
 
     shouldValidateImageTransparency(src) {
+        if (this.performanceMode !== 'high') return false;
+
         try {
             const url = new URL(src, window.location.origin);
 
@@ -996,8 +1070,8 @@ const HomepageController = {
             const isMobile = window.innerWidth <= 600;
             this.frameCount++;
 
-            // On reduced-motion systems, update motion at half rate to reduce main thread pressure.
-            if (this.reducedMotion && this.frameCount % 2 !== 0) {
+            const effectiveStride = this.reducedMotion ? Math.max(this.frameStride, 2) : this.frameStride;
+            if (!this.slingshot.active && effectiveStride > 1 && this.frameCount % effectiveStride !== 0) {
                 this.animationFrame = requestAnimationFrame(animate);
                 return;
             }
@@ -1409,13 +1483,7 @@ const HomepageController = {
         document.addEventListener('mousemove', (e) => this.updateSlingshot(e, false), { passive: true });
         document.addEventListener('mouseup', (e) => this.releaseSlingshot(e), { passive: true });
         
-        if (mobilePanel) {
-            mobilePanel.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                this.initAudio();
-                this.startSlingshot(e, 'mobile', true);
-            }, { passive: false });
-        }
+        this.bindMobilePanelTouch(mobilePanel);
         
         document.addEventListener('touchmove', (e) => {
             if (this.slingshot.active) {
