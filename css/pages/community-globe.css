@@ -1,0 +1,303 @@
+/* Globe analytics module styles loaded independently from legacy community CSS. */
+
+#community-view .globe-focus-module {
+    border-color: rgba(0, 212, 255, 0.34);
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.36), inset 0 0 18px rgba(0, 212, 255, 0.06);
+    padding: 10px;
+    background:
+        radial-gradient(circle at 18% 14%, rgba(65, 160, 255, 0.18), transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.14), transparent 45%),
+        linear-gradient(145deg, rgba(8, 20, 32, 0.95), rgba(7, 16, 28, 0.98));
+}
+
+#community-view .globe-live-pill {
+    margin-left: auto;
+    font-size: 0.66rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(130, 220, 255, 0.95);
+    background: rgba(0, 212, 255, 0.16);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 999px;
+    padding: 3px 8px;
+}
+
+#community-view .globe-stage {
+    width: 100%;
+    height: min(36vh, 330px);
+    min-height: 220px;
+    max-height: 340px;
+    position: relative;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 212, 255, 0.28);
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% 30%, rgba(0, 180, 255, 0.12), transparent 55%),
+        linear-gradient(180deg, rgba(1, 7, 12, 0.9), rgba(2, 11, 20, 0.98));
+}
+
+#community-view #community-globe-canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100%;
+    cursor: grab;
+}
+
+#community-view #community-globe-canvas:active {
+    cursor: grabbing;
+}
+
+#community-view .globe-empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 14px;
+    font-size: 0.8rem;
+    color: rgba(208, 238, 255, 0.78);
+    background: rgba(3, 9, 15, 0.6);
+    z-index: 2;
+}
+
+#community-view .globe-tooltip {
+    position: absolute;
+    z-index: 9;
+    min-width: 140px;
+    max-width: 230px;
+    pointer-events: none;
+    padding: 8px 10px;
+    border-radius: 9px;
+    border: 1px solid rgba(0, 212, 255, 0.36);
+    background: rgba(2, 14, 24, 0.95);
+    color: rgba(225, 245, 255, 0.95);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+}
+
+#community-view .tooltip-place {
+    font-size: 0.73rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    color: #8be7ff;
+}
+
+#community-view .tooltip-line {
+    font-size: 0.69rem;
+    color: rgba(214, 236, 245, 0.9);
+}
+
+#community-view .globe-totals-grid {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+#community-view .globe-total-card {
+    border-radius: 10px;
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    background: rgba(7, 20, 33, 0.75);
+    padding: 8px 8px 10px;
+    text-align: center;
+}
+
+#community-view .globe-total-label {
+    display: block;
+    font-size: 0.61rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(190, 224, 241, 0.72);
+    margin-bottom: 5px;
+}
+
+#community-view .globe-total-value {
+    display: block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(1rem, 1.4vw, 1.12rem);
+    letter-spacing: 1px;
+    color: #d6f7ff;
+}
+
+#community-view .globe-window-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 9px;
+}
+
+#community-view .globe-window-pill {
+    border-radius: 999px;
+    border: 1px solid rgba(88, 188, 255, 0.34);
+    background: rgba(9, 28, 44, 0.66);
+    padding: 5px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+#community-view .window-label {
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(188, 218, 235, 0.7);
+}
+
+#community-view .window-value {
+    font-size: 0.77rem;
+    font-weight: 700;
+    color: #8fe7ff;
+}
+
+#community-view .globe-breakdown-grid {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+#community-view .globe-breakdown-col h4 {
+    margin: 0 0 6px;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(177, 219, 239, 0.72);
+}
+
+#community-view .globe-breakdown-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#community-view .globe-breakdown-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border: 1px solid rgba(0, 212, 255, 0.16);
+    border-radius: 8px;
+    background: rgba(8, 21, 34, 0.7);
+    padding: 5px 7px;
+}
+
+#community-view .globe-breakdown-label {
+    font-size: 0.67rem;
+    color: rgba(221, 240, 250, 0.86);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#community-view .globe-breakdown-value {
+    font-size: 0.67rem;
+    font-weight: 700;
+    color: #75e0ff;
+}
+
+#community-view .globe-breakdown-empty,
+#community-view .globe-mini-empty {
+    color: rgba(182, 220, 239, 0.62);
+    font-size: 0.68rem;
+}
+
+#community-view .globe-point-details {
+    margin-top: 11px;
+    border-radius: 12px;
+    border: 1px solid rgba(74, 173, 224, 0.3);
+    background: rgba(7, 18, 30, 0.83);
+    padding: 10px;
+}
+
+#community-view .globe-point-placeholder,
+#community-view .globe-point-loading,
+#community-view .globe-point-error {
+    font-size: 0.72rem;
+    color: rgba(188, 223, 241, 0.74);
+}
+
+#community-view .globe-point-header {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: 9px;
+}
+
+#community-view .globe-point-place {
+    font-size: 0.77rem;
+    font-weight: 700;
+    color: #90e8ff;
+}
+
+#community-view .globe-point-time {
+    font-size: 0.65rem;
+    color: rgba(186, 215, 228, 0.72);
+}
+
+#community-view .globe-point-totals {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+    margin-bottom: 10px;
+}
+
+#community-view .globe-point-totals div {
+    border-radius: 8px;
+    background: rgba(8, 25, 40, 0.75);
+    border: 1px solid rgba(66, 164, 222, 0.22);
+    padding: 6px;
+    text-align: center;
+}
+
+#community-view .globe-point-totals span {
+    display: block;
+    font-size: 0.6rem;
+    color: rgba(188, 221, 237, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+#community-view .globe-point-totals strong {
+    display: block;
+    margin-top: 4px;
+    color: #d4f5ff;
+    font-size: 0.75rem;
+}
+
+#community-view .globe-point-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+#community-view .globe-point-col h5 {
+    margin: 0 0 6px;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(171, 213, 232, 0.72);
+}
+
+#community-view .globe-mini-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 4px 5px;
+    border-bottom: 1px solid rgba(84, 159, 196, 0.2);
+    font-size: 0.65rem;
+    color: rgba(209, 234, 247, 0.82);
+}
+
+#community-view .globe-mini-item strong {
+    color: #87e3ff;
+}
+
+@media (max-width: 1024px) {
+    #community-view .globe-point-grid,
+    #community-view .globe-breakdown-grid {
+        grid-template-columns: 1fr;
+    }
+}
