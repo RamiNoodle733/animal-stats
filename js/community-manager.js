@@ -400,23 +400,34 @@ class CommunityManager {
         const empty = document.getElementById('community-globe-empty');
         if (!canvas) return;
 
-        if (!window.THREE || !window.CommunityGlobe) {
+        if (!window.CommunityGlobe) {
             if (empty) {
-                empty.textContent = '3D globe unavailable on this device.';
+                empty.textContent = 'Globe module failed to load.';
                 empty.style.display = 'flex';
             }
             return;
         }
 
         if (!this.globe) {
-            this.globe = new window.CommunityGlobe(canvas, {
-                tooltipEl: document.getElementById('community-globe-tooltip')
-            });
+            try {
+                this.globe = new window.CommunityGlobe(canvas, {
+                    tooltipEl: document.getElementById('community-globe-tooltip')
+                });
+            } catch (error) {
+                console.error('Failed to initialize community globe:', error);
+                if (empty) {
+                    empty.textContent = 'Globe unavailable on this device.';
+                    empty.style.display = 'flex';
+                }
+                return;
+            }
 
             this.globe.setOnPointSelect((point) => {
                 this.selectedGlobeKey = point?.key || null;
                 this.loadGlobePointDetails(this.selectedGlobeKey);
             });
+
+            requestAnimationFrame(() => this.globe?.resize?.());
         }
 
         this.loadGlobeAnalytics();
@@ -780,6 +791,7 @@ class CommunityManager {
         this.startPresencePing();
         this.startGlobeRefresh();
         this.globe?.setPaused(false);
+        requestAnimationFrame(() => this.globe?.resize?.());
         
         // Refresh hub data
         this.loadLeaderboard();
