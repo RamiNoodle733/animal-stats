@@ -37,6 +37,12 @@ class CommunityManager {
         this.presenceInterval = null;
         this.hubRefreshInterval = null;
         this.replyingTo = null; // For chat replies
+
+        // Globe analytics module
+        this.globe = null;
+        this.globeRefreshInterval = null;
+        this.lastGlobePayload = null;
+        this.selectedGlobeKey = null;
     }
 
     init() {
@@ -49,6 +55,7 @@ class CommunityManager {
         this.loadLeaderboard();
         this.loadSiteStats();
         this.loadOnlineCount();
+        this.initGlobeModule();
         
         // Listen for auth changes
         window.addEventListener('authChange', () => this.updateLoginState());
@@ -385,6 +392,227 @@ class CommunityManager {
             console.error('Error loading site stats:', error);
         }
     }
+
+    // ==================== GLOBE ANALYTICS ====================
+
+    initGlobeModule() {
+        const canvas = document.getElementById('community-globe-canvas');
+        const empty = document.getElementById('community-globe-empty');
+        if (!canvas) return;
+
+        if (!window.THREE || !window.CommunityGlobe) {
+            if (empty) {
+                empty.textContent = '3D globe unavailable on this device.';
+                empty.style.display = 'flex';
+            }
+            return;
+        }
+
+        if (!this.globe) {
+            this.globe = new window.CommunityGlobe(canvas, {
+                tooltipEl: document.getElementById('community-globe-tooltip')
+            });
+
+            this.globe.setOnPointSelect((point) => {
+                this.selectedGlobeKey = point?.key || null;
+                this.loadGlobePointDetails(this.selectedGlobeKey);
+            });
+        }
+
+        this.loadGlobeAnalytics();
+        this.startGlobeRefresh();
+    }
+
+    startGlobeRefresh() {
+        this.stopGlobeRefresh();
+        this.globeRefreshInterval = setInterval(() => {
+            this.loadGlobeAnalytics({ silent: true });
+        }, 60000);
+    }
+
+    stopGlobeRefresh() {
+        if (this.globeRefreshInterval) {
+            clearInterval(this.globeRefreshInterval);
+            this.globeRefreshInterval = null;
+        }
+    }
+
+    async loadGlobeAnalytics(options = {}) {
+        const { silent = false } = options;
+        const empty = document.getElementById('community-globe-empty');
+
+        if (!silent && empty) {
+            empty.style.display = 'flex';
+            empty.textContent = 'Loading global activity...';
+        }
+
+        try {
+            const response = await fetch('/api/community?action=globe');
+            if (!response.ok) throw new Error('Failed to load globe analytics');
+
+            const result = await response.json();
+            const payload = result.data || {};
+            this.lastGlobePayload = payload;
+
+            if (this.globe) {
+                this.globe.setPoints(payload.points || []);
+            }
+
+            this.renderGlobeSummary(payload);
+            this.renderGlobeBreakdown('globe-actions-list', payload.actions || []);
+            this.renderGlobeBreakdown('globe-pages-list', payload.pages || []);
+
+            if (empty) {
+                empty.style.display = 'none';
+            }
+
+            if (!this.selectedGlobeKey && Array.isArray(payload.points) && payload.points.length > 0) {
+                this.selectedGlobeKey = payload.points[0].key;
+                this.loadGlobePointDetails(this.selectedGlobeKey);
+            }
+        } catch (error) {
+            console.error('Error loading globe analytics:', error);
+            if (empty) {
+                empty.style.display = 'flex';
+                empty.textContent = 'Unable to load globe analytics.';
+            }
+        }
+    }
+
+    renderGlobeSummary(payload) {
+        const summary = payload.summary || {};
+        const windows = payload.windows || {};
+
+        const mappings = [
+            ['globe-total-events', summary.totalEvents],
+            ['globe-total-visits', summary.totalVisits],
+            ['globe-total-visitors', summary.uniqueVisitors],
+            ['globe-window-24h', windows.last24h],
+            ['globe-window-7d', windows.last7d],
+            ['globe-window-30d', windows.last30d]
+        ];
+
+        mappings.forEach(([id, value]) => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.textContent = this.formatNumber(value || 0);
+            }
+        });
+    }
+
+    renderGlobeBreakdown(containerId, items) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        if (!Array.isArray(items) || items.length === 0) {
+            container.innerHTML = '<div class="globe-breakdown-empty">No data</div>';
+            return;
+        }
+
+        container.innerHTML = items.slice(0, 6).map(item => {
+            const label = this.escapeHtml(item.key || 'Unknown');
+            const count = this.formatNumber(item.count || 0);
+            return `
+                <div class="globe-breakdown-item">
+                    <span class="globe-breakdown-label">${label}</span>
+                    <span class="globe-breakdown-value">${count}</span>
+                </div>
+            `;
+        }).join('');
+    }
+
+    async loadGlobePointDetails(locationKey) {
+        const detailsEl = document.getElementById('globe-point-details');
+        if (!detailsEl || !locationKey) return;
+
+        detailsEl.innerHTML = '<div class="globe-point-loading"><i class="fas fa-spinner fa-spin"></i> Loading location details...</div>';
+
+        try {
+            const response = await fetch(`/api/community?action=globe-point&key=${encodeURIComponent(locationKey)}`);
+            if (!response.ok) throw new Error('Failed to load point details');
+
+            const result = await response.json();
+            this.renderGlobePointDetails(result.data || {});
+        } catch (error) {
+            console.error('Error loading point details:', error);
+            detailsEl.innerHTML = '<div class="globe-point-error">Failed to load location detail.</div>';
+        }
+    }
+
+    renderGlobePointDetails(data) {
+        const detailsEl = document.getElementById('globe-point-details');
+        if (!detailsEl) return;
+
+        const summary = data.summary || {};
+        const place = summary.locationRaw || [summary.city, summary.region, summary.country].filter(Boolean).join(', ') || 'Unknown location';
+        const actions = Array.isArray(data.actions) ? data.actions.slice(0, 5) : [];
+        const pages = Array.isArray(data.pages) ? data.pages.slice(0, 5) : [];
+        const devices = Array.isArray(data.devices) ? data.devices.slice(0, 4) : [];
+
+        detailsEl.innerHTML = `
+            <div class="globe-point-header">
+                <div class="globe-point-place">${this.escapeHtml(place)}</div>
+                <div class="globe-point-time">Last seen ${this.formatDateTime(summary.lastSeen)}</div>
+            </div>
+            <div class="globe-point-totals">
+                <div><span>Events</span><strong>${this.formatNumber(summary.totalEvents || 0)}</strong></div>
+                <div><span>Visits</span><strong>${this.formatNumber(summary.totalVisits || 0)}</strong></div>
+                <div><span>Visitors</span><strong>${this.formatNumber(summary.uniqueVisitors || 0)}</strong></div>
+            </div>
+            <div class="globe-point-grid">
+                <div class="globe-point-col">
+                    <h5>Actions</h5>
+                    ${this.renderMiniList(actions)}
+                </div>
+                <div class="globe-point-col">
+                    <h5>Pages</h5>
+                    ${this.renderMiniList(pages)}
+                </div>
+                <div class="globe-point-col">
+                    <h5>Devices</h5>
+                    ${this.renderDeviceList(devices)}
+                </div>
+            </div>
+        `;
+    }
+
+    renderMiniList(items) {
+        if (!items.length) return '<div class="globe-mini-empty">No data</div>';
+
+        return items.map(item => `
+            <div class="globe-mini-item">
+                <span>${this.escapeHtml(item.key || 'Unknown')}</span>
+                <strong>${this.formatNumber(item.count || 0)}</strong>
+            </div>
+        `).join('');
+    }
+
+    renderDeviceList(items) {
+        if (!items.length) return '<div class="globe-mini-empty">No data</div>';
+
+        return items.map(item => {
+            const label = [item.device, item.browser, item.os].filter(Boolean).join(' • ') || 'Unknown';
+            return `
+                <div class="globe-mini-item">
+                    <span>${this.escapeHtml(label)}</span>
+                    <strong>${this.formatNumber(item.count || 0)}</strong>
+                </div>
+            `;
+        }).join('');
+    }
+
+    formatDateTime(value) {
+        if (!value) return 'just now';
+        const date = new Date(value);
+        if (Number.isNaN(date.getTime())) return 'recently';
+
+        return date.toLocaleString(undefined, {
+            month: 'short',
+            day: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit'
+        });
+    }
     
     // ==================== HUD ONLINE COUNT ====================
     
@@ -550,11 +778,14 @@ class CommunityManager {
         // Called when entering community view
         this.updateLoginState();
         this.startPresencePing();
+        this.startGlobeRefresh();
+        this.globe?.setPaused(false);
         
         // Refresh hub data
         this.loadLeaderboard();
         this.loadSiteStats();
         this.loadOnlineCount();
+        this.loadGlobeAnalytics({ silent: true });
         
         if (this.currentTab === 'chat') {
             this.loadChat();
@@ -567,6 +798,8 @@ class CommunityManager {
     onViewLeave() {
         this.stopChatPolling();
         this.stopPresencePing();
+        this.stopGlobeRefresh();
+        this.globe?.setPaused(true);
         
         // Reset mobile sidebar state
         const sidebar = document.querySelector('.community-sidebar-column');

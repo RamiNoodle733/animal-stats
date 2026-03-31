@@ -122,6 +122,312 @@
 }
 
 /* ========================================
+   GLOBE FOCUS MODULE
+   ======================================== */
+
+.globe-focus-module {
+    border-color: rgba(0, 212, 255, 0.36);
+    box-shadow: 0 20px 32px rgba(0, 0, 0, 0.38), inset 0 0 20px rgba(0, 212, 255, 0.08);
+    padding: clamp(14px, 1.4vw, 18px);
+    background:
+        radial-gradient(circle at 18% 14%, rgba(65, 160, 255, 0.18), transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.14), transparent 45%),
+        linear-gradient(145deg, rgba(8, 20, 32, 0.95), rgba(7, 16, 28, 0.98));
+}
+
+.globe-live-pill {
+    margin-left: auto;
+    font-size: 0.67rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(130, 220, 255, 0.95);
+    background: rgba(0, 212, 255, 0.16);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 999px;
+    padding: 3px 8px;
+}
+
+.globe-stage {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    position: relative;
+    border-radius: 14px;
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 50% 30%, rgba(0, 180, 255, 0.12), transparent 55%),
+        linear-gradient(180deg, rgba(1, 7, 12, 0.9), rgba(2, 11, 20, 0.98));
+}
+
+#community-globe-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: grab;
+}
+
+#community-globe-canvas:active {
+    cursor: grabbing;
+}
+
+.globe-empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 14px;
+    font-size: 0.8rem;
+    color: rgba(208, 238, 255, 0.78);
+    background: rgba(3, 9, 15, 0.6);
+    z-index: 2;
+}
+
+.globe-tooltip {
+    position: absolute;
+    z-index: 9;
+    min-width: 150px;
+    max-width: 240px;
+    pointer-events: none;
+    padding: 8px 10px;
+    border-radius: 9px;
+    border: 1px solid rgba(0, 212, 255, 0.36);
+    background: rgba(2, 14, 24, 0.95);
+    color: rgba(225, 245, 255, 0.95);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
+}
+
+.tooltip-place {
+    font-size: 0.73rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    color: #8be7ff;
+}
+
+.tooltip-line {
+    font-size: 0.7rem;
+    color: rgba(214, 236, 245, 0.9);
+}
+
+.globe-totals-grid {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.globe-total-card {
+    border-radius: 10px;
+    border: 1px solid rgba(0, 212, 255, 0.25);
+    background: rgba(7, 20, 33, 0.75);
+    padding: 8px 8px 10px;
+    text-align: center;
+}
+
+.globe-total-label {
+    display: block;
+    font-size: 0.62rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(190, 224, 241, 0.72);
+    margin-bottom: 5px;
+}
+
+.globe-total-value {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 1.4vw, 1.12rem);
+    letter-spacing: 1px;
+    color: #d6f7ff;
+}
+
+.globe-window-row {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: 9px;
+}
+
+.globe-window-pill {
+    border-radius: 999px;
+    border: 1px solid rgba(88, 188, 255, 0.34);
+    background: rgba(9, 28, 44, 0.66);
+    padding: 5px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.window-label {
+    font-size: 0.63rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(188, 218, 235, 0.7);
+}
+
+.window-value {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #8fe7ff;
+}
+
+.globe-breakdown-grid {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.globe-breakdown-col h4 {
+    margin: 0 0 6px;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(177, 219, 239, 0.72);
+}
+
+.globe-breakdown-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.globe-breakdown-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    border: 1px solid rgba(0, 212, 255, 0.16);
+    border-radius: 8px;
+    background: rgba(8, 21, 34, 0.7);
+    padding: 5px 7px;
+}
+
+.globe-breakdown-label {
+    font-size: 0.68rem;
+    color: rgba(221, 240, 250, 0.86);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.globe-breakdown-value {
+    font-size: 0.67rem;
+    font-weight: 700;
+    color: #75e0ff;
+}
+
+.globe-breakdown-empty,
+.globe-mini-empty {
+    color: rgba(182, 220, 239, 0.62);
+    font-size: 0.68rem;
+}
+
+.globe-point-details {
+    margin-top: 11px;
+    border-radius: 12px;
+    border: 1px solid rgba(74, 173, 224, 0.3);
+    background: rgba(7, 18, 30, 0.83);
+    padding: 10px;
+}
+
+.globe-point-placeholder,
+.globe-point-loading,
+.globe-point-error {
+    font-size: 0.72rem;
+    color: rgba(188, 223, 241, 0.74);
+}
+
+.globe-point-header {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: 9px;
+}
+
+.globe-point-place {
+    font-size: 0.77rem;
+    font-weight: 700;
+    color: #90e8ff;
+}
+
+.globe-point-time {
+    font-size: 0.65rem;
+    color: rgba(186, 215, 228, 0.72);
+}
+
+.globe-point-totals {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 7px;
+    margin-bottom: 10px;
+}
+
+.globe-point-totals div {
+    border-radius: 8px;
+    background: rgba(8, 25, 40, 0.75);
+    border: 1px solid rgba(66, 164, 222, 0.22);
+    padding: 6px;
+    text-align: center;
+}
+
+.globe-point-totals span {
+    display: block;
+    font-size: 0.6rem;
+    color: rgba(188, 221, 237, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.globe-point-totals strong {
+    display: block;
+    margin-top: 4px;
+    color: #d4f5ff;
+    font-size: 0.75rem;
+}
+
+.globe-point-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.globe-point-col h5 {
+    margin: 0 0 6px;
+    font-size: 0.65rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(171, 213, 232, 0.72);
+}
+
+.globe-mini-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 4px 5px;
+    border-bottom: 1px solid rgba(84, 159, 196, 0.2);
+    font-size: 0.65rem;
+    color: rgba(209, 234, 247, 0.82);
+}
+
+.globe-mini-item strong {
+    color: #87e3ff;
+}
+
+@media (max-width: 1024px) {
+    .globe-point-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .globe-breakdown-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ========================================
    FEED COLUMN (BEM)
    ======================================== */
 

@@ -125,7 +125,7 @@ async function handleLogin(req, res) {
         { expiresIn: '7d' }
     );
 
-    notifyDiscord('login', { username: user.username }, req);
+    await notifyDiscord('login', { username: user.username }, req);
 
     res.status(200).json({
         success: true,
@@ -198,7 +198,7 @@ async function handleSignup(req, res) {
         { expiresIn: '7d' }
     );
 
-    notifyDiscord('signup', { username: user.username }, req);
+    await notifyDiscord('signup', { username: user.username }, req);
 
     res.status(201).json({
         success: true,
@@ -626,7 +626,7 @@ async function handlePrestige(req, res) {
         { new: true }
     );
 
-    notifyDiscord('prestige', { 
+    await notifyDiscord('prestige', { 
         username: updatedUser.username, 
         prestige: updatedUser.prestige 
     }, req);

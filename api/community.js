@@ -48,6 +48,16 @@ module.exports = async function handler(req, res) {
                 return await handleGetPresence(req, res);
             case 'stats':
                 return await handleStats(req, res);
+            case 'globe':
+                if (req.method !== 'GET') {
+                    return res.status(405).json({ success: false, error: 'Method not allowed' });
+                }
+                return await handleGlobe(req, res);
+            case 'globe-point':
+                if (req.method !== 'GET') {
+                    return res.status(405).json({ success: false, error: 'Method not allowed' });
+                }
+                return await handleGlobePoint(req, res);
             case 'ping':
                 if (req.method !== 'POST') {
                     return res.status(405).json({ success: false, error: 'Method not allowed' });
@@ -295,4 +305,280 @@ async function handleVisit(req, res) {
             totalVisits: null // Indicate we couldn't get the count
         });
     }
+}
+
+/**
+ * GET /api/community?action=globe
+ * Returns all-time cumulative analytics summary + weighted location points.
+ */
+async function handleGlobe(req, res) {
+    const SiteActivity = require('../lib/models/SiteActivity');
+
+    const now = new Date();
+    const oneDayAgo = new Date(now.getTime() - (24 * 60 * 60 * 1000));
+    const sevenDaysAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
+    const thirtyDaysAgo = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000));
+    const fourteenDaysAgo = new Date(now.getTime() - (14 * 24 * 60 * 60 * 1000));
+
+    const [summaryAgg, pointsAgg, actionsAgg, pagesAgg, trendAgg] = await Promise.all([
+        SiteActivity.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    totalEvents: { $sum: 1 },
+                    totalVisits: {
+                        $sum: {
+                            $cond: [{ $eq: ['$eventType', 'site_visit'] }, 1, 0]
+                        }
+                    },
+                    uniqueVisitors: { $addToSet: '$visitorHash' }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    totalEvents: 1,
+                    totalVisits: 1,
+                    uniqueVisitors: {
+                        $size: {
+                            $setDifference: ['$uniqueVisitors', [null, '']]
+                        }
+                    }
+                }
+            }
+        ]),
+        SiteActivity.aggregate([
+            {
+                $match: {
+                    locationKey: { $ne: null },
+                    'coordinates.lat': { $ne: null },
+                    'coordinates.lng': { $ne: null }
+                }
+            },
+            {
+                $group: {
+                    _id: '$locationKey',
+                    city: { $first: '$city' },
+                    region: { $first: '$region' },
+                    country: { $first: '$country' },
+                    locationRaw: { $first: '$locationRaw' },
+                    lat: { $first: '$coordinates.lat' },
+                    lng: { $first: '$coordinates.lng' },
+                    totalEvents: { $sum: 1 },
+                    totalVisits: {
+                        $sum: {
+                            $cond: [{ $eq: ['$eventType', 'site_visit'] }, 1, 0]
+                        }
+                    },
+                    uniqueVisitors: { $addToSet: '$visitorHash' },
+                    lastSeen: { $max: '$occurredAt' }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    key: '$_id',
+                    city: 1,
+                    region: 1,
+                    country: 1,
+                    locationRaw: 1,
+                    lat: 1,
+                    lng: 1,
+                    totalEvents: 1,
+                    totalVisits: 1,
+                    uniqueVisitors: {
+                        $size: {
+                            $setDifference: ['$uniqueVisitors', [null, '']]
+                        }
+                    },
+                    lastSeen: 1
+                }
+            },
+            { $sort: { totalEvents: -1 } },
+            { $limit: 1000 }
+        ]),
+        SiteActivity.aggregate([
+            { $group: { _id: '$eventType', count: { $sum: 1 } } },
+            { $project: { _id: 0, key: '$_id', count: 1 } },
+            { $sort: { count: -1 } }
+        ]),
+        SiteActivity.aggregate([
+            { $match: { page: { $ne: null } } },
+            { $group: { _id: '$page', count: { $sum: 1 } } },
+            { $project: { _id: 0, key: '$_id', count: 1 } },
+            { $sort: { count: -1 } },
+            { $limit: 8 }
+        ]),
+        SiteActivity.aggregate([
+            { $match: { occurredAt: { $gte: fourteenDaysAgo } } },
+            {
+                $group: {
+                    _id: {
+                        $dateToString: {
+                            format: '%Y-%m-%d',
+                            date: '$occurredAt'
+                        }
+                    },
+                    events: { $sum: 1 },
+                    visits: {
+                        $sum: {
+                            $cond: [{ $eq: ['$eventType', 'site_visit'] }, 1, 0]
+                        }
+                    }
+                }
+            },
+            { $sort: { _id: 1 } },
+            {
+                $project: {
+                    _id: 0,
+                    day: '$_id',
+                    events: 1,
+                    visits: 1
+                }
+            }
+        ])
+    ]);
+
+    const [last24h, last7d, last30d] = await Promise.all([
+        SiteActivity.countDocuments({ occurredAt: { $gte: oneDayAgo } }),
+        SiteActivity.countDocuments({ occurredAt: { $gte: sevenDaysAgo } }),
+        SiteActivity.countDocuments({ occurredAt: { $gte: thirtyDaysAgo } })
+    ]);
+
+    return res.status(200).json({
+        success: true,
+        data: {
+            summary: summaryAgg[0] || { totalEvents: 0, totalVisits: 0, uniqueVisitors: 0 },
+            windows: {
+                last24h,
+                last7d,
+                last30d
+            },
+            points: pointsAgg,
+            actions: actionsAgg,
+            pages: pagesAgg,
+            trend: trendAgg
+        }
+    });
+}
+
+/**
+ * GET /api/community?action=globe-point&key=<locationKey>
+ * Returns drilldown analytics for a single location hotspot.
+ */
+async function handleGlobePoint(req, res) {
+    const SiteActivity = require('../lib/models/SiteActivity');
+    const key = typeof req.query.key === 'string' ? req.query.key.trim() : '';
+
+    if (!key) {
+        return res.status(400).json({ success: false, error: 'Location key is required' });
+    }
+
+    const [summaryAgg, pagesAgg, actionsAgg, devicesAgg, usersAgg, recentAgg] = await Promise.all([
+        SiteActivity.aggregate([
+            { $match: { locationKey: key } },
+            {
+                $group: {
+                    _id: '$locationKey',
+                    city: { $first: '$city' },
+                    region: { $first: '$region' },
+                    country: { $first: '$country' },
+                    locationRaw: { $first: '$locationRaw' },
+                    totalEvents: { $sum: 1 },
+                    totalVisits: {
+                        $sum: {
+                            $cond: [{ $eq: ['$eventType', 'site_visit'] }, 1, 0]
+                        }
+                    },
+                    uniqueVisitors: { $addToSet: '$visitorHash' },
+                    firstSeen: { $min: '$occurredAt' },
+                    lastSeen: { $max: '$occurredAt' }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    key: key,
+                    city: 1,
+                    region: 1,
+                    country: 1,
+                    locationRaw: 1,
+                    totalEvents: 1,
+                    totalVisits: 1,
+                    uniqueVisitors: {
+                        $size: {
+                            $setDifference: ['$uniqueVisitors', [null, '']]
+                        }
+                    },
+                    firstSeen: 1,
+                    lastSeen: 1
+                }
+            }
+        ]),
+        SiteActivity.aggregate([
+            { $match: { locationKey: key, page: { $ne: null } } },
+            { $group: { _id: '$page', count: { $sum: 1 } } },
+            { $project: { _id: 0, key: '$_id', count: 1 } },
+            { $sort: { count: -1 } },
+            { $limit: 15 }
+        ]),
+        SiteActivity.aggregate([
+            { $match: { locationKey: key } },
+            { $group: { _id: '$eventType', count: { $sum: 1 } } },
+            { $project: { _id: 0, key: '$_id', count: 1 } },
+            { $sort: { count: -1 } }
+        ]),
+        SiteActivity.aggregate([
+            { $match: { locationKey: key, device: { $ne: null } } },
+            {
+                $group: {
+                    _id: {
+                        device: '$device',
+                        browser: '$browser',
+                        os: '$os'
+                    },
+                    count: { $sum: 1 }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    device: '$_id.device',
+                    browser: '$_id.browser',
+                    os: '$_id.os',
+                    count: 1
+                }
+            },
+            { $sort: { count: -1 } },
+            { $limit: 12 }
+        ]),
+        SiteActivity.aggregate([
+            { $match: { locationKey: key, username: { $ne: null } } },
+            { $group: { _id: '$username', count: { $sum: 1 } } },
+            { $project: { _id: 0, key: '$_id', count: 1 } },
+            { $sort: { count: -1 } },
+            { $limit: 12 }
+        ]),
+        SiteActivity.find({ locationKey: key })
+            .sort({ occurredAt: -1 })
+            .limit(25)
+            .select('occurredAt eventType username page device browser os metadata')
+            .lean()
+    ]);
+
+    if (!summaryAgg[0]) {
+        return res.status(404).json({ success: false, error: 'Location not found' });
+    }
+
+    return res.status(200).json({
+        success: true,
+        data: {
+            summary: summaryAgg[0],
+            pages: pagesAgg,
+            actions: actionsAgg,
+            devices: devicesAgg,
+            users: usersAgg,
+            recent: recentAgg
+        }
+    });
 }
