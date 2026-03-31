@@ -304,17 +304,19 @@ html.route-home nav[class*="mobile"] {
     object-fit: contain;
     padding: 10%;
     opacity: 0.45;
-    filter: brightness(0) invert(1);
+    filter: none;
     flex-shrink: 0;
     transition: opacity 0.3s ease;
-    /* NO filter transition - it causes black flash during state changes */
+}
+
+.silhouette-img.silhouette-fallback-filter {
+    filter: brightness(0) invert(1);
 }
 
 /* Brighter on panel hover (desktop only) */
 .silhouette-panel.panel-left:hover .silhouette-img,
 .silhouette-panel.panel-right:hover .silhouette-img {
     opacity: 0.6;
-    filter: brightness(0) invert(1);
 }
 
 #home-view.home-performance-low .silhouette-panel,

@@ -35,6 +35,8 @@ const HomepageController = {
     maxTrackItemsDesktop: 14,
     maxTrackItemsMobile: 12,
     transparencyCache: new Map(),
+    silhouetteSourceCache: new Map(),
+    silhouetteGenerationQueue: new Map(),
     transparencyCanvas: null,
     homePortalEl: null,
     desktopTrackPool: [],
@@ -230,6 +232,11 @@ const HomepageController = {
         this.desktopTrackPool = desktopPool;
         this.mobileTrackPool = mobilePool;
         this.animalImages = desktopPool;
+
+        // Prebuild lightweight white silhouettes so the track can render
+        // without a continuous per-image filter cost.
+        this.primeSilhouetteCache([...new Set([...desktopPool, ...mobilePool])]);
+
         this.addPanelDecorations();
 
         this.populateTracksForViewport();
@@ -916,7 +923,7 @@ const HomepageController = {
             rubberBand,
             startCircle,
             endCircle,
-            tensionIndicator,
+            tensionIndicator: tensionArc,
             directionArrow: arrow,
             gradient
         };
@@ -925,11 +932,13 @@ const HomepageController = {
     createSilhouetteImage(src) {
         const img = document.createElement('img');
         img.className = 'silhouette-img';
+        img.classList.add('silhouette-fallback-filter');
         img.loading = 'lazy';
         img.decoding = 'async';
         img.fetchPriority = 'low';
         img.alt = '';
         img.draggable = false;
+        img.dataset.originalSrc = src;
         
         const cachedTransparency = this.transparencyCache.get(src);
         if (cachedTransparency === false) {
@@ -947,6 +956,11 @@ const HomepageController = {
             }
             if (knownResult === true) return;
 
+            if (img.classList.contains('silhouette-generated')) {
+                this.transparencyCache.set(src, true);
+                return;
+            }
+
             if (!this.shouldValidateImageTransparency(src)) {
                 this.transparencyCache.set(src, true);
                 return;
@@ -960,8 +974,139 @@ const HomepageController = {
             }
         };
         img.src = src;
+
+        this.maybeUpgradeToGeneratedSilhouette(img, src);
         
         return img;
+    },
+
+    primeSilhouetteCache(images) {
+        if (!Array.isArray(images) || images.length === 0) return;
+
+        // Keep this work out of the critical rendering path.
+        images.slice(0, 18).forEach((src, index) => {
+            const run = () => {
+                this.getSilhouetteSource(src).catch(() => {});
+            };
+
+            if (typeof window.requestIdleCallback === 'function') {
+                window.requestIdleCallback(run, { timeout: 800 + index * 25 });
+            } else {
+                setTimeout(run, 25 * index);
+            }
+        });
+    },
+
+    isSilhouetteGenerationCandidate(src) {
+        if (!src) return false;
+
+        try {
+            const url = new URL(src, window.location.origin);
+            if (url.origin !== window.location.origin) return false;
+
+            return /\.(png|jpe?g|webp|avif)$/i.test(url.pathname);
+        } catch {
+            return false;
+        }
+    },
+
+    maybeUpgradeToGeneratedSilhouette(img, src) {
+        if (!img || !src || !this.isSilhouetteGenerationCandidate(src)) return;
+
+        this.getSilhouetteSource(src)
+            .then((silhouetteSrc) => {
+                if (!silhouetteSrc || !img.isConnected) return;
+                if (img.dataset.originalSrc !== src) return;
+
+                img.classList.remove('silhouette-fallback-filter');
+                img.classList.add('silhouette-generated');
+
+                // Avoid a second swap if the image already points at the generated source.
+                if (img.currentSrc === silhouetteSrc || img.src === silhouetteSrc) return;
+                img.src = silhouetteSrc;
+            })
+            .catch(() => {
+                // Keep fallback path: original image + CSS silhouette filter.
+            });
+    },
+
+    getSilhouetteSource(src) {
+        if (this.silhouetteSourceCache.has(src)) {
+            return Promise.resolve(this.silhouetteSourceCache.get(src));
+        }
+
+        if (!this.isSilhouetteGenerationCandidate(src)) {
+            return Promise.resolve(null);
+        }
+
+        const inFlight = this.silhouetteGenerationQueue.get(src);
+        if (inFlight) return inFlight;
+
+        const job = this.generateSilhouetteSource(src)
+            .then((generatedSrc) => {
+                if (generatedSrc) {
+                    this.silhouetteSourceCache.set(src, generatedSrc);
+                }
+                return generatedSrc;
+            })
+            .finally(() => {
+                this.silhouetteGenerationQueue.delete(src);
+            });
+
+        this.silhouetteGenerationQueue.set(src, job);
+        return job;
+    },
+
+    async generateSilhouetteSource(src) {
+        const sourceImage = await this.loadImageForSilhouette(src);
+        if (!sourceImage || sourceImage.naturalWidth <= 0 || sourceImage.naturalHeight <= 0) {
+            return null;
+        }
+
+        const maxSide = 300;
+        const scale = Math.min(1, maxSide / Math.max(sourceImage.naturalWidth, sourceImage.naturalHeight));
+        const width = Math.max(1, Math.round(sourceImage.naturalWidth * scale));
+        const height = Math.max(1, Math.round(sourceImage.naturalHeight * scale));
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d', { alpha: true, willReadFrequently: false });
+        if (!ctx) return null;
+
+        ctx.clearRect(0, 0, width, height);
+        ctx.drawImage(sourceImage, 0, 0, width, height);
+
+        // Keep source alpha edges but flatten RGB to white silhouette.
+        ctx.globalCompositeOperation = 'source-in';
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, width, height);
+        ctx.globalCompositeOperation = 'source-over';
+
+        const blob = await new Promise((resolve) => {
+            if (typeof canvas.toBlob !== 'function') {
+                resolve(null);
+                return;
+            }
+
+            canvas.toBlob((result) => resolve(result), 'image/webp', 0.82);
+        });
+
+        if (!blob) return null;
+
+        return URL.createObjectURL(blob);
+    },
+
+    loadImageForSilhouette(src) {
+        return new Promise((resolve, reject) => {
+            const image = new Image();
+            image.decoding = 'async';
+            image.crossOrigin = 'anonymous';
+            image.onload = () => resolve(image);
+            image.onerror = () => reject(new Error(`Failed to load silhouette source: ${src}`));
+            image.src = src;
+        });
     },
 
     shouldValidateImageTransparency(src) {

@@ -46,7 +46,7 @@ class Router {
         });
 
         // Handle initial route
-        this.handleRoute(window.location.pathname);
+        this.handleRoute(this.normalizePath(window.location.pathname));
     }
 
     /**
@@ -77,34 +77,36 @@ class Router {
      */
     navigate(url, options = {}) {
         const { replace = false, skipHandler = false } = options;
+        const normalizedUrl = this.normalizePath(url);
+        const currentPath = this.normalizePath(window.location.pathname);
 
         // Prevent duplicate navigation
         if (this.isNavigating) return;
         
         // Don't navigate if already on this route (unless forced)
-        if (url === window.location.pathname && !options.force) return;
+        if (normalizedUrl === currentPath && !options.force) return;
 
         this.isNavigating = true;
 
         // Check if we're opening an overlay route
-        const isOverlayRoute = this.overlayRoutes.some(r => url.startsWith(r));
-        const currentIsOverlay = this.overlayRoutes.some(r => window.location.pathname.startsWith(r));
+        const isOverlayRoute = this.overlayRoutes.some(r => normalizedUrl === r || normalizedUrl.startsWith(`${r}/`));
+        const currentIsOverlay = this.overlayRoutes.some(r => currentPath === r || currentPath.startsWith(`${r}/`));
 
         // Store base route when opening overlay
         if (isOverlayRoute && !currentIsOverlay) {
-            this.baseRoute = window.location.pathname;
+            this.baseRoute = currentPath;
         }
 
         // Update browser history
         if (replace) {
-            history.replaceState({ baseRoute: this.baseRoute }, '', url);
+            history.replaceState({ baseRoute: this.baseRoute }, '', normalizedUrl);
         } else {
-            history.pushState({ baseRoute: this.baseRoute }, '', url);
+            history.pushState({ baseRoute: this.baseRoute }, '', normalizedUrl);
         }
 
         // Handle the route
         if (!skipHandler) {
-            this.handleRoute(url);
+            this.handleRoute(normalizedUrl);
         }
 
         this.isNavigating = false;
@@ -116,9 +118,9 @@ class Router {
     handlePopState(e) {
         // Restore base route if stored in state
         if (e.state?.baseRoute) {
-            this.baseRoute = e.state.baseRoute;
+            this.baseRoute = this.normalizePath(e.state.baseRoute);
         }
-        this.handleRoute(window.location.pathname);
+        this.handleRoute(this.normalizePath(window.location.pathname));
     }
 
     /**
@@ -126,8 +128,10 @@ class Router {
      * @param {string} path - URL path to handle
      */
     handleRoute(path) {
+        const normalizedPath = this.normalizePath(path);
+
         this.previousRoute = this.currentRoute;
-        this.currentRoute = path;
+        this.currentRoute = normalizedPath;
 
         // Toggle page classes for header visibility and instant view display
         const html = document.documentElement;
@@ -136,19 +140,19 @@ class Router {
         html.classList.remove('is-home', 'is-login', 'is-signup', 'is-about');
         
         // Add appropriate classes based on route
-        if (path === '/' || path === '') {
+        if (normalizedPath === '/' || normalizedPath === '') {
             html.classList.add('is-home');
-        } else if (path === '/login') {
+        } else if (normalizedPath === '/login') {
             html.classList.add('is-home', 'is-login');
-        } else if (path === '/signup') {
+        } else if (normalizedPath === '/signup') {
             html.classList.add('is-home', 'is-signup');
-        } else if (path === '/about') {
+        } else if (normalizedPath === '/about') {
             html.classList.add('is-home', 'is-about');
         }
 
         // Find matching route
         for (const route of this.routes) {
-            const match = path.match(route.pattern);
+            const match = normalizedPath.match(route.pattern);
             if (match) {
                 // Extract params
                 const params = {};
@@ -163,9 +167,33 @@ class Router {
         }
 
         // No route matched - default to home or 404 behavior
-        console.warn(`No route matched for: ${path}`);
+        console.warn(`No route matched for: ${normalizedPath}`);
         // Fallback to home
         this.navigate('/', { replace: true });
+    }
+
+    normalizePath(pathOrUrl) {
+        if (!pathOrUrl) return '/';
+
+        let pathname = pathOrUrl;
+
+        try {
+            pathname = new URL(pathOrUrl, window.location.origin).pathname;
+        } catch {
+            pathname = String(pathOrUrl).split('?')[0].split('#')[0] || '/';
+        }
+
+        if (!pathname.startsWith('/')) {
+            pathname = `/${pathname}`;
+        }
+
+        pathname = pathname.replace(/\/+/g, '/');
+
+        if (pathname.length > 1) {
+            pathname = pathname.replace(/\/+$/, '');
+        }
+
+        return pathname || '/';
     }
 
     /**
