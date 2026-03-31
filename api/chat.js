@@ -311,7 +311,7 @@ async function handlePost(req, res) {
 
     // Notify Discord about the chat message
     const msgType = parentId ? 'chat_reply' : 'chat_message';
-    notifyDiscord(msgType, {
+    await notifyDiscord(msgType, {
         user: userDoc?.displayName || user.username,
         content: content.trim()
     }, req);

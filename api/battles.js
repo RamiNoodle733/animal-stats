@@ -211,7 +211,7 @@ async function handleTournamentComplete(req, res) {
         // Don't fail the request - still notify Discord
     }
     
-    notifyDiscord('tournament_complete', {
+    await notifyDiscord('tournament_complete', {
         user: user || 'Anonymous',
         bracketSize: bracketSize || 0,
         totalMatches: totalMatches || 0,
@@ -270,7 +270,7 @@ async function handleTournamentQuit(req, res) {
     
     const { user, bracketSize, totalMatches, completedMatches, matchHistory } = body || {};
     
-    notifyDiscord('tournament_quit', {
+    await notifyDiscord('tournament_quit', {
         user: user || 'Anonymous',
         bracketSize: bracketSize || 0,
         totalMatches: totalMatches || 0,

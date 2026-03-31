@@ -159,7 +159,7 @@ async function handlePost(req, res) {
             action = 'cleared';
             
             // Notify Discord about vote removal
-            notifyDiscord('vote_removed', {
+            await notifyDiscord('vote_removed', {
                 user: user.username,
                 animal: animalName,
                 oldVoteType: oldVoteType
@@ -176,7 +176,7 @@ async function handlePost(req, res) {
                 action = 'updated';
                 
                 // Notify Discord about vote change
-                notifyDiscord('vote_changed', {
+                await notifyDiscord('vote_changed', {
                     user: user.username,
                     animal: animalName,
                     oldVoteType: oldVoteType,
@@ -198,7 +198,7 @@ async function handlePost(req, res) {
             action = 'created';
             
             // Notify Discord about new vote
-            notifyDiscord('vote', {
+            await notifyDiscord('vote', {
                 user: user.username,
                 animal: animalName,
                 voteType: voteType

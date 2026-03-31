@@ -1366,6 +1366,67 @@
             <div class="community-feed-layout community__layout">
                 <!-- Sidebar Column (LEFT) -->
                 <div class="community-sidebar-column community__sidebar">
+                    <!-- Globe Analytics Module (Main Focus) -->
+                    <div class="sidebar-module globe-focus-module community-widget community-widget--with-brackets">
+                        <div class="module-header community-widget__header">
+                            <span class="module-title community-widget__title"><i class="fas fa-globe-americas"></i> GLOBAL ACTIVITY</span>
+                            <span class="globe-live-pill">All-Time Cumulative</span>
+                        </div>
+
+                        <div class="globe-stage">
+                            <canvas id="community-globe-canvas" width="520" height="520" aria-label="Interactive global activity map"></canvas>
+                            <div id="community-globe-empty" class="globe-empty">Loading global activity...</div>
+                            <div id="community-globe-tooltip" class="globe-tooltip" style="display: none;"></div>
+                        </div>
+
+                        <div class="globe-totals-grid">
+                            <div class="globe-total-card">
+                                <span class="globe-total-label">Total Events</span>
+                                <span class="globe-total-value" id="globe-total-events">0</span>
+                            </div>
+                            <div class="globe-total-card">
+                                <span class="globe-total-label">Site Visits</span>
+                                <span class="globe-total-value" id="globe-total-visits">0</span>
+                            </div>
+                            <div class="globe-total-card">
+                                <span class="globe-total-label">Unique Visitors</span>
+                                <span class="globe-total-value" id="globe-total-visitors">0</span>
+                            </div>
+                        </div>
+
+                        <div class="globe-window-row">
+                            <div class="globe-window-pill">
+                                <span class="window-label">24h</span>
+                                <span class="window-value" id="globe-window-24h">0</span>
+                            </div>
+                            <div class="globe-window-pill">
+                                <span class="window-label">7d</span>
+                                <span class="window-value" id="globe-window-7d">0</span>
+                            </div>
+                            <div class="globe-window-pill">
+                                <span class="window-label">30d</span>
+                                <span class="window-value" id="globe-window-30d">0</span>
+                            </div>
+                        </div>
+
+                        <div class="globe-breakdown-grid">
+                            <div class="globe-breakdown-col">
+                                <h4>Top Actions</h4>
+                                <div id="globe-actions-list" class="globe-breakdown-list"></div>
+                            </div>
+                            <div class="globe-breakdown-col">
+                                <h4>Top Pages</h4>
+                                <div id="globe-pages-list" class="globe-breakdown-list"></div>
+                            </div>
+                        </div>
+
+                        <div class="globe-point-details" id="globe-point-details">
+                            <div class="globe-point-placeholder">
+                                Click a hotspot to view exact location stats.
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Community HUD Module -->
                     <div class="community-hud-module">
                         <div class="hud-header">
@@ -2902,6 +2963,8 @@
     <!-- Page managers (must load before main.js initializes them) -->
     <script src="/js/rankings.js"></script>
     <script src="/js/tournament.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.min.js"></script>
+    <script src="/js/community-globe.js"></script>
     <script src="/js/community-manager.js"></script>
     <script src="/js/battlepoints.js"></script>
     <script src="/js/homepage.js"></script>

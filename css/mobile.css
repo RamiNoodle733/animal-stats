@@ -2038,6 +2038,19 @@
     #community-view .community__sidebar.mobile-sidebar-active .leaderboard-module {
         display: block !important;
     }
+
+    .globe-focus-module {
+        padding: 12px !important;
+    }
+
+    .globe-stage {
+        aspect-ratio: 1 / 1 !important;
+        min-height: 260px !important;
+    }
+
+    .globe-point-grid {
+        grid-template-columns: 1fr !important;
+    }
 }
 
 /* ============================================================================
@@ -2189,6 +2202,28 @@
     
     .community-tab-btn::after {
         display: none !important; /* Remove desktop underline indicator */
+    }
+
+    .globe-focus-module {
+        padding: 10px !important;
+    }
+
+    .globe-stage {
+        min-height: 240px !important;
+    }
+
+    .globe-totals-grid,
+    .globe-window-row {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 6px !important;
+    }
+
+    .globe-breakdown-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .globe-point-totals {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
     }
     
     /* Feed scroll region */

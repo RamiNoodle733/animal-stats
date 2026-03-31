@@ -120,11 +120,11 @@ async function handleNotification(req, res) {
         };
         
         if (type === 'logout') {
-            notifyDiscord('logout', { username: username || 'Unknown' }, req);
+            await notifyDiscord('logout', { username: username || 'Unknown' }, req);
         } else if (type === 'site_leave') {
-            notifyDiscord('site_leave', notifyData, req);
+            await notifyDiscord('site_leave', notifyData, req);
         } else {
-            notifyDiscord('site_visit', notifyData, req);
+            await notifyDiscord('site_visit', notifyData, req);
         }
         return res.status(200).json({ success: true });
     } catch (error) {
