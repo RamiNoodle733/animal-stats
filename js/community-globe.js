@@ -1,46 +1,87 @@
 'use strict';
 
 (function initCommunityGlobe() {
-    const CONTINENT_POLYGONS = [
-        [
-            [-168, 72], [-145, 70], [-130, 60], [-124, 50], [-125, 42],
-            [-117, 32], [-106, 24], [-95, 18], [-85, 22], [-80, 27],
-            [-81, 33], [-75, 40], [-67, 46], [-60, 52], [-58, 58],
-            [-74, 74], [-100, 80], [-135, 78], [-168, 72]
-        ],
-        [
-            [-82, 12], [-74, 5], [-70, -8], [-66, -18], [-62, -30],
-            [-60, -42], [-54, -50], [-48, -55], [-42, -50], [-36, -38],
-            [-35, -25], [-41, -12], [-48, -2], [-58, 4], [-70, 8],
-            [-82, 12]
-        ],
-        [
-            [-10, 72], [10, 72], [32, 64], [40, 55], [28, 45],
-            [24, 36], [30, 30], [34, 20], [32, 8], [26, -2],
-            [20, -14], [16, -24], [10, -34], [2, -36], [-8, -30],
-            [-16, -20], [-18, -5], [-12, 8], [-8, 20], [-2, 32],
-            [2, 42], [-4, 50], [-10, 58], [-12, 66], [-10, 72]
-        ],
-        [
-            [26, 74], [50, 72], [78, 70], [104, 64], [124, 54],
-            [138, 46], [150, 36], [160, 24], [164, 8], [154, -2],
-            [136, -4], [122, 4], [108, 14], [94, 18], [84, 10],
-            [72, 8], [62, 18], [56, 30], [50, 40], [40, 48],
-            [30, 58], [26, 74]
-        ],
-        [
-            [112, -12], [116, -20], [124, -28], [134, -33], [146, -36],
-            [154, -30], [154, -22], [146, -16], [136, -12], [124, -10],
-            [112, -12]
-        ],
-        [
-            [-54, 82], [-46, 78], [-38, 72], [-36, 66], [-42, 60],
-            [-50, 62], [-56, 68], [-58, 76], [-54, 82]
-        ]
+    const LAND_DATA_PATH = '/data/ne_110m_land.geojson';
+    const INTEGER_FORMATTER = new Intl.NumberFormat();
+
+    const FALLBACK_RINGS = [
+        [[-168, 72], [-145, 70], [-130, 60], [-124, 50], [-125, 42], [-117, 32], [-106, 24], [-95, 18], [-85, 22], [-80, 27], [-81, 33], [-75, 40], [-67, 46], [-60, 52], [-58, 58], [-74, 74], [-100, 80], [-135, 78], [-168, 72]],
+        [[-82, 12], [-74, 5], [-70, -8], [-66, -18], [-62, -30], [-60, -42], [-54, -50], [-48, -55], [-42, -50], [-36, -38], [-35, -25], [-41, -12], [-48, -2], [-58, 4], [-70, 8], [-82, 12]],
+        [[-10, 72], [10, 72], [32, 64], [40, 55], [28, 45], [24, 36], [30, 30], [34, 20], [32, 8], [26, -2], [20, -14], [16, -24], [10, -34], [2, -36], [-8, -30], [-16, -20], [-18, -5], [-12, 8], [-8, 20], [-2, 32], [2, 42], [-4, 50], [-10, 58], [-12, 66], [-10, 72]],
+        [[26, 74], [50, 72], [78, 70], [104, 64], [124, 54], [138, 46], [150, 36], [160, 24], [164, 8], [154, -2], [136, -4], [122, 4], [108, 14], [94, 18], [84, 10], [72, 8], [62, 18], [56, 30], [50, 40], [40, 48], [30, 58], [26, 74]],
+        [[112, -12], [116, -20], [124, -28], [134, -33], [146, -36], [154, -30], [154, -22], [146, -16], [136, -12], [124, -10], [112, -12]]
     ];
 
     function clamp(value, min, max) {
         return Math.max(min, Math.min(max, value));
+    }
+
+    function normalize(vec) {
+        const length = Math.hypot(vec.x, vec.y, vec.z);
+        if (length < 1e-8) return null;
+        return {
+            x: vec.x / length,
+            y: vec.y / length,
+            z: vec.z / length
+        };
+    }
+
+    function cross(a, b) {
+        return {
+            x: (a.y * b.z) - (a.z * b.y),
+            y: (a.z * b.x) - (a.x * b.z),
+            z: (a.x * b.y) - (a.y * b.x)
+        };
+    }
+
+    function dot(a, b) {
+        return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
+    }
+
+    function identityMatrix() {
+        return [
+            [1, 0, 0],
+            [0, 1, 0],
+            [0, 0, 1]
+        ];
+    }
+
+    function multiplyMatrices(a, b) {
+        const out = identityMatrix();
+        for (let row = 0; row < 3; row += 1) {
+            for (let col = 0; col < 3; col += 1) {
+                out[row][col] = (a[row][0] * b[0][col]) + (a[row][1] * b[1][col]) + (a[row][2] * b[2][col]);
+            }
+        }
+        return out;
+    }
+
+    function applyMatrix(matrix, vec) {
+        return {
+            x: (matrix[0][0] * vec.x) + (matrix[0][1] * vec.y) + (matrix[0][2] * vec.z),
+            y: (matrix[1][0] * vec.x) + (matrix[1][1] * vec.y) + (matrix[1][2] * vec.z),
+            z: (matrix[2][0] * vec.x) + (matrix[2][1] * vec.y) + (matrix[2][2] * vec.z)
+        };
+    }
+
+    function rotationMatrixFromAxisAngle(axisInput, angle) {
+        const axis = normalize(axisInput);
+        if (!axis || Math.abs(angle) < 1e-8) {
+            return identityMatrix();
+        }
+
+        const x = axis.x;
+        const y = axis.y;
+        const z = axis.z;
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+        const oneMinus = 1 - cos;
+
+        return [
+            [cos + (x * x * oneMinus), (x * y * oneMinus) - (z * sin), (x * z * oneMinus) + (y * sin)],
+            [(y * x * oneMinus) + (z * sin), cos + (y * y * oneMinus), (y * z * oneMinus) - (x * sin)],
+            [(z * x * oneMinus) - (y * sin), (z * y * oneMinus) + (x * sin), cos + (z * z * oneMinus)]
+        ];
     }
 
     class CommunityGlobe {
@@ -57,24 +98,84 @@
             this.points = [];
             this.projectedPoints = [];
             this.maxEvents = 1;
+            this.landRings = [...FALLBACK_RINGS];
 
-            this.rotationYaw = 0;
-            this.rotationPitch = 0.18;
-            this.velocityYaw = 0;
-            this.velocityPitch = 0;
-            this.autoSpinSpeed = 0.0013;
+            this.rotationMatrix = rotationMatrixFromAxisAngle({ x: 1, y: 0, z: 0 }, 0.18);
+            this.dragVector = null;
+            this.inertiaAxis = { x: 0, y: 1, z: 0 };
+            this.inertiaSpeed = 0;
+            this.autoSpinSpeed = 0.00125;
+
             this.isPaused = false;
             this.isDragging = false;
             this.dragDistance = 0;
             this.lastPointerX = 0;
             this.lastPointerY = 0;
             this.animationFrame = null;
+            this.flatBaseCanvas = null;
+            this.flatBaseHash = '';
 
             this.canvas.style.touchAction = 'none';
 
             this.bindEvents();
             this.resize();
+            this.loadLandGeometry();
             this.animate();
+        }
+
+        async loadLandGeometry() {
+            try {
+                const response = await fetch(LAND_DATA_PATH, { cache: 'force-cache' });
+                if (!response.ok) throw new Error(`Failed to load land data (${response.status})`);
+
+                const geojson = await response.json();
+                const rings = this.extractLandRings(geojson);
+                if (rings.length) {
+                    this.landRings = rings;
+                    this.flatBaseHash = '';
+                }
+            } catch (error) {
+                console.warn('CommunityGlobe: using fallback continent rings.', error?.message || error);
+            }
+        }
+
+        extractLandRings(geojson) {
+            const rings = [];
+            const features = Array.isArray(geojson?.features) ? geojson.features : [];
+
+            const addRing = (ring) => {
+                if (!Array.isArray(ring) || ring.length < 3) return;
+                const parsed = ring
+                    .map((point) => {
+                        if (!Array.isArray(point) || point.length < 2) return null;
+                        const lng = Number(point[0]);
+                        const lat = Number(point[1]);
+                        if (!Number.isFinite(lat) || !Number.isFinite(lng)) return null;
+                        return [lng, lat];
+                    })
+                    .filter(Boolean);
+
+                if (parsed.length >= 3) {
+                    rings.push(parsed);
+                }
+            };
+
+            features.forEach((feature) => {
+                const geometry = feature?.geometry;
+                if (!geometry || !Array.isArray(geometry.coordinates)) return;
+
+                if (geometry.type === 'Polygon') {
+                    geometry.coordinates.forEach(addRing);
+                } else if (geometry.type === 'MultiPolygon') {
+                    geometry.coordinates.forEach((polygon) => {
+                        if (Array.isArray(polygon)) {
+                            polygon.forEach(addRing);
+                        }
+                    });
+                }
+            });
+
+            return rings;
         }
 
         bindEvents() {
@@ -86,6 +187,7 @@
                 this.dragDistance = 0;
                 this.lastPointerX = event.clientX;
                 this.lastPointerY = event.clientY;
+                this.dragVector = this.mode === 'globe' ? this.projectPointerToTrackball(event) : null;
                 this.canvas.setPointerCapture(event.pointerId);
             });
 
@@ -96,12 +198,21 @@
                     this.dragDistance += Math.abs(dx) + Math.abs(dy);
 
                     if (this.mode === 'globe') {
-                        this.rotationYaw += dx * 0.0055;
-                        this.rotationPitch += dy * 0.0042;
-                        this.rotationPitch = clamp(this.rotationPitch, -1.1, 1.1);
+                        const currentVector = this.projectPointerToTrackball(event);
+                        if (this.dragVector && currentVector) {
+                            const rotationAxisRaw = cross(this.dragVector, currentVector);
+                            const rotationAxis = normalize(rotationAxisRaw);
+                            const rotationDot = clamp(dot(this.dragVector, currentVector), -1, 1);
+                            const rotationAngle = Math.acos(rotationDot);
 
-                        this.velocityYaw = dx * 0.00056;
-                        this.velocityPitch = dy * 0.00044;
+                            if (rotationAxis && rotationAngle > 1e-5) {
+                                const delta = rotationMatrixFromAxisAngle(rotationAxis, rotationAngle * 1.1);
+                                this.rotationMatrix = multiplyMatrices(delta, this.rotationMatrix);
+                                this.inertiaAxis = rotationAxis;
+                                this.inertiaSpeed = rotationAngle * 0.72;
+                            }
+                        }
+                        this.dragVector = currentVector;
                     }
 
                     this.lastPointerX = event.clientX;
@@ -117,6 +228,7 @@
                 }
 
                 this.isDragging = false;
+                this.dragVector = null;
                 this.canvas.releasePointerCapture(event.pointerId);
             });
 
@@ -125,6 +237,37 @@
                     this.tooltipEl.style.display = 'none';
                 }
             });
+        }
+
+        getGlobeLayout(width = this.renderWidth, height = this.renderHeight) {
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = Math.max(70, Math.min(width, height) * 0.365);
+            return { centerX, centerY, radius };
+        }
+
+        projectPointerToTrackball(event) {
+            const rect = this.canvas.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+            const { centerX, centerY, radius } = this.getGlobeLayout();
+
+            let nx = (x - centerX) / radius;
+            let ny = (centerY - y) / radius;
+
+            const distanceSq = (nx * nx) + (ny * ny);
+            if (distanceSq > 1) {
+                const scale = 1 / Math.sqrt(distanceSq);
+                nx *= scale;
+                ny *= scale;
+                return { x: nx, y: ny, z: 0 };
+            }
+
+            return {
+                x: nx,
+                y: ny,
+                z: Math.sqrt(1 - distanceSq)
+            };
         }
 
         setMode(mode) {
@@ -159,17 +302,23 @@
             this.canvas.width = Math.round(width * dpr);
             this.canvas.height = Math.round(height * dpr);
             this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+            this.flatBaseHash = '';
         }
 
         animate() {
             const tick = () => {
                 if (!this.isPaused && this.mode === 'globe' && !this.isDragging) {
-                    this.rotationYaw += this.autoSpinSpeed + this.velocityYaw;
-                    this.rotationPitch += this.velocityPitch;
-                    this.rotationPitch = clamp(this.rotationPitch, -1.1, 1.1);
+                    if (this.inertiaSpeed > 0.00005) {
+                        const inertiaDelta = rotationMatrixFromAxisAngle(this.inertiaAxis, this.inertiaSpeed);
+                        this.rotationMatrix = multiplyMatrices(inertiaDelta, this.rotationMatrix);
+                        this.inertiaSpeed *= 0.92;
+                    } else {
+                        this.inertiaSpeed = 0;
+                    }
 
-                    this.velocityYaw *= 0.92;
-                    this.velocityPitch *= 0.92;
+                    const autoSpinDelta = rotationMatrixFromAxisAngle({ x: 0, y: 1, z: 0 }, this.autoSpinSpeed);
+                    this.rotationMatrix = multiplyMatrices(autoSpinDelta, this.rotationMatrix);
                 }
 
                 this.draw();
@@ -195,11 +344,9 @@
         }
 
         drawGlobe(ctx, width, height) {
-            const centerX = width / 2;
-            const centerY = height / 2;
-            const radius = Math.max(70, Math.min(width, height) * 0.365);
+            const { centerX, centerY, radius } = this.getGlobeLayout(width, height);
 
-            const outer = ctx.createRadialGradient(
+            const oceanGradient = ctx.createRadialGradient(
                 centerX - (radius * 0.35),
                 centerY - (radius * 0.4),
                 radius * 0.12,
@@ -207,13 +354,13 @@
                 centerY,
                 radius
             );
-            outer.addColorStop(0, '#62bcff');
-            outer.addColorStop(0.45, '#2b79c1');
-            outer.addColorStop(1, '#0f3558');
+            oceanGradient.addColorStop(0, '#62bcff');
+            oceanGradient.addColorStop(0.45, '#2b79c1');
+            oceanGradient.addColorStop(1, '#0f3558');
 
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-            ctx.fillStyle = outer;
+            ctx.fillStyle = oceanGradient;
             ctx.fill();
 
             ctx.save();
@@ -240,7 +387,7 @@
         }
 
         drawGlobeGraticule(ctx, centerX, centerY, radius) {
-            ctx.strokeStyle = 'rgba(130, 206, 242, 0.18)';
+            ctx.strokeStyle = 'rgba(130, 206, 242, 0.16)';
             ctx.lineWidth = 1;
 
             for (let lat = -60; lat <= 60; lat += 30) {
@@ -253,7 +400,7 @@
         }
 
         drawGlobeLine(ctx, centerX, centerY, radius, value, isLatitude) {
-            const steps = 72;
+            const steps = 96;
             let drawing = false;
 
             ctx.beginPath();
@@ -263,7 +410,7 @@
                 const lng = isLatitude ? -180 + (t * 360) : value;
                 const projected = this.projectToGlobe(lat, lng, centerX, centerY, radius);
 
-                if (projected && projected.visible) {
+                if (projected.visible) {
                     if (!drawing) {
                         ctx.moveTo(projected.x, projected.y);
                         drawing = true;
@@ -278,28 +425,30 @@
         }
 
         drawGlobeContinents(ctx, centerX, centerY, radius) {
-            CONTINENT_POLYGONS.forEach((polygon) => {
-                const visiblePoints = [];
+            const rings = this.landRings.length ? this.landRings : FALLBACK_RINGS;
+            ctx.strokeStyle = 'rgba(143, 234, 164, 0.72)';
+            ctx.lineWidth = 1.1;
 
-                polygon.forEach(([lng, lat]) => {
-                    const projected = this.projectToGlobe(lat, lng, centerX, centerY, radius);
-                    if (projected && projected.visible) {
-                        visiblePoints.push(projected);
-                    }
-                });
-
-                if (visiblePoints.length < 3) return;
+            rings.forEach((ring) => {
+                const points = ring.concat([ring[0]]);
+                let drawing = false;
 
                 ctx.beginPath();
-                visiblePoints.forEach((point, index) => {
-                    if (index === 0) ctx.moveTo(point.x, point.y);
-                    else ctx.lineTo(point.x, point.y);
-                });
-                ctx.closePath();
-                ctx.fillStyle = 'rgba(86, 178, 116, 0.45)';
-                ctx.fill();
-                ctx.strokeStyle = 'rgba(151, 238, 167, 0.35)';
-                ctx.lineWidth = 0.9;
+                for (let index = 0; index < points.length; index += 1) {
+                    const [lng, lat] = points[index];
+                    const projected = this.projectToGlobe(lat, lng, centerX, centerY, radius);
+                    if (projected.visible) {
+                        if (!drawing) {
+                            ctx.moveTo(projected.x, projected.y);
+                            drawing = true;
+                        } else {
+                            ctx.lineTo(projected.x, projected.y);
+                        }
+                    } else {
+                        drawing = false;
+                    }
+                }
+
                 ctx.stroke();
             });
         }
@@ -307,7 +456,7 @@
         drawGlobePoints(ctx, centerX, centerY, radius) {
             this.points.forEach((point) => {
                 const projected = this.projectToGlobe(point.lat, point.lng, centerX, centerY, radius);
-                if (!projected || !projected.visible) return;
+                if (!projected.visible) return;
 
                 const strength = clamp((point.totalEvents || 1) / this.maxEvents, 0.05, 1);
                 const depthScale = 0.4 + ((projected.depth + 1) * 0.35);
@@ -339,44 +488,66 @@
             const mapWidth = width - (padding * 2);
             const mapHeight = height - (padding * 2);
 
-            const bg = ctx.createLinearGradient(0, mapY, 0, mapY + mapHeight);
-            bg.addColorStop(0, '#0b2f4f');
-            bg.addColorStop(1, '#082640');
-            ctx.fillStyle = bg;
-            ctx.fillRect(mapX, mapY, mapWidth, mapHeight);
+            const hash = `${width}x${height}::${this.landRings.length}`;
+            if (!this.flatBaseCanvas || this.flatBaseHash !== hash) {
+                this.flatBaseCanvas = document.createElement('canvas');
+                this.flatBaseCanvas.width = Math.max(1, Math.round(width));
+                this.flatBaseCanvas.height = Math.max(1, Math.round(height));
 
-            ctx.strokeStyle = 'rgba(130, 206, 242, 0.2)';
-            ctx.lineWidth = 1;
-            for (let lng = -180; lng <= 180; lng += 30) {
-                const x = mapX + (((lng + 180) / 360) * mapWidth);
-                ctx.beginPath();
-                ctx.moveTo(x, mapY);
-                ctx.lineTo(x, mapY + mapHeight);
-                ctx.stroke();
+                const baseCtx = this.flatBaseCanvas.getContext('2d');
+                if (baseCtx) {
+                    const bg = baseCtx.createLinearGradient(0, mapY, 0, mapY + mapHeight);
+                    bg.addColorStop(0, '#0b2f4f');
+                    bg.addColorStop(1, '#082640');
+                    baseCtx.fillStyle = bg;
+                    baseCtx.fillRect(mapX, mapY, mapWidth, mapHeight);
+
+                    baseCtx.strokeStyle = 'rgba(130, 206, 242, 0.2)';
+                    baseCtx.lineWidth = 1;
+                    for (let lng = -180; lng <= 180; lng += 30) {
+                        const x = mapX + (((lng + 180) / 360) * mapWidth);
+                        baseCtx.beginPath();
+                        baseCtx.moveTo(x, mapY);
+                        baseCtx.lineTo(x, mapY + mapHeight);
+                        baseCtx.stroke();
+                    }
+
+                    for (let lat = -60; lat <= 60; lat += 30) {
+                        const y = mapY + (((90 - lat) / 180) * mapHeight);
+                        baseCtx.beginPath();
+                        baseCtx.moveTo(mapX, y);
+                        baseCtx.lineTo(mapX + mapWidth, y);
+                        baseCtx.stroke();
+                    }
+
+                    const rings = this.landRings.length ? this.landRings : FALLBACK_RINGS;
+                    rings.forEach((ring) => {
+                        if (ring.length < 3) return;
+                        baseCtx.beginPath();
+                        ring.forEach(([lng, lat], index) => {
+                            const point = this.projectToFlat(lat, lng, mapX, mapY, mapWidth, mapHeight);
+                            if (index === 0) baseCtx.moveTo(point.x, point.y);
+                            else baseCtx.lineTo(point.x, point.y);
+                        });
+                        baseCtx.closePath();
+                        baseCtx.fillStyle = 'rgba(86, 178, 116, 0.6)';
+                        baseCtx.fill();
+                        baseCtx.strokeStyle = 'rgba(151, 238, 167, 0.45)';
+                        baseCtx.lineWidth = 1;
+                        baseCtx.stroke();
+                    });
+
+                    baseCtx.strokeStyle = 'rgba(139, 225, 255, 0.5)';
+                    baseCtx.lineWidth = 1.1;
+                    baseCtx.strokeRect(mapX, mapY, mapWidth, mapHeight);
+                }
+
+                this.flatBaseHash = hash;
             }
 
-            for (let lat = -60; lat <= 60; lat += 30) {
-                const y = mapY + (((90 - lat) / 180) * mapHeight);
-                ctx.beginPath();
-                ctx.moveTo(mapX, y);
-                ctx.lineTo(mapX + mapWidth, y);
-                ctx.stroke();
+            if (this.flatBaseCanvas) {
+                ctx.drawImage(this.flatBaseCanvas, 0, 0, width, height);
             }
-
-            CONTINENT_POLYGONS.forEach((polygon) => {
-                ctx.beginPath();
-                polygon.forEach(([lng, lat], index) => {
-                    const point = this.projectToFlat(lat, lng, mapX, mapY, mapWidth, mapHeight);
-                    if (index === 0) ctx.moveTo(point.x, point.y);
-                    else ctx.lineTo(point.x, point.y);
-                });
-                ctx.closePath();
-                ctx.fillStyle = 'rgba(86, 178, 116, 0.58)';
-                ctx.fill();
-                ctx.strokeStyle = 'rgba(151, 238, 167, 0.42)';
-                ctx.lineWidth = 1;
-                ctx.stroke();
-            });
 
             this.points.forEach((point) => {
                 const projected = this.projectToFlat(point.lat, point.lng, mapX, mapY, mapWidth, mapHeight);
@@ -400,9 +571,6 @@
             });
 
             ctx.shadowBlur = 0;
-            ctx.strokeStyle = 'rgba(139, 225, 255, 0.5)';
-            ctx.lineWidth = 1.1;
-            ctx.strokeRect(mapX, mapY, mapWidth, mapHeight);
         }
 
         projectToFlat(lat, lng, mapX, mapY, mapWidth, mapHeight) {
@@ -423,21 +591,7 @@
         }
 
         rotateVector(vec) {
-            const cosYaw = Math.cos(this.rotationYaw);
-            const sinYaw = Math.sin(this.rotationYaw);
-            const cosPitch = Math.cos(this.rotationPitch);
-            const sinPitch = Math.sin(this.rotationPitch);
-
-            const xYaw = (vec.x * cosYaw) - (vec.z * sinYaw);
-            const zYaw = (vec.x * sinYaw) + (vec.z * cosYaw);
-            const yPitch = (vec.y * cosPitch) - (zYaw * sinPitch);
-            const zPitch = (vec.y * sinPitch) + (zYaw * cosPitch);
-
-            return {
-                x: xYaw,
-                y: yPitch,
-                z: zPitch
-            };
+            return applyMatrix(this.rotationMatrix, vec);
         }
 
         projectToGlobe(lat, lng, centerX, centerY, radius) {
@@ -523,9 +677,9 @@
         }
 
         formatNumber(value) {
-            if (value >= 1000000) return `${(value / 1000000).toFixed(1)}M`;
-            if (value >= 1000) return `${(value / 1000).toFixed(1)}K`;
-            return String(value || 0);
+            const numeric = Number(value);
+            if (!Number.isFinite(numeric)) return '0';
+            return INTEGER_FORMATTER.format(Math.trunc(numeric));
         }
 
         escapeHtml(value) {

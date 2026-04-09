@@ -1364,11 +1364,26 @@
         
         <!-- Community View -->
         <div id="community-view" class="view-container community">
+            <div class="community-tab-bar">
+                <button class="community-tab-btn active" data-tab="chat">
+                    <i class="fas fa-comments"></i> <span class="tab-label">Chat</span>
+                </button>
+                <button class="community-tab-btn" data-tab="feed">
+                    <i class="fas fa-stream"></i> <span class="tab-label">Feed</span>
+                </button>
+                <button class="community-tab-btn" data-tab="map">
+                    <i class="fas fa-globe-americas"></i> <span class="tab-label">Map</span>
+                </button>
+                <button class="community-tab-btn mobile-only-tab" data-tab="hub">
+                    <i class="fas fa-chart-bar"></i> <span class="tab-label">Hub</span>
+                </button>
+            </div>
+
             <div class="community-feed-layout community__layout">
                 <!-- Sidebar Column (LEFT) -->
                 <div class="community-sidebar-column community__sidebar">
                     <!-- Globe Analytics Module (Main Focus) -->
-                    <div class="sidebar-module globe-focus-module community-widget community-widget--with-brackets">
+                    <div class="sidebar-module globe-focus-module map-primary-module community-widget community-widget--with-brackets">
                         <div class="module-header community-widget__header">
                             <span class="module-title community-widget__title"><i class="fas fa-globe-americas"></i> GLOBAL ACTIVITY</span>
                             <span class="globe-live-pill">All-Time Cumulative</span>
@@ -1434,7 +1449,7 @@
                     </div>
 
                     <!-- Community HUD Module -->
-                    <div class="community-hud-module">
+                    <div class="community-hud-module hub-only-module">
                         <div class="hud-header">
                             <span class="hud-title"><i class="fas fa-gamepad"></i> COMMUNITY HUD</span>
                         </div>
@@ -1471,7 +1486,7 @@
                     </div>
 
                     <!-- Daily Matchup Module -->
-                    <div class="sidebar-module daily-matchup-module">
+                    <div class="sidebar-module daily-matchup-module hub-only-module">
                         <div class="module-header">
                             <span class="module-title"><i class="fas fa-fire"></i> DAILY MATCHUP</span>
                             <span class="matchup-timer" id="matchup-timer">--:--:--</span>
@@ -1504,7 +1519,7 @@
                     </div>
 
                     <!-- Top Players Module -->
-                    <div class="sidebar-module leaderboard-module">
+                    <div class="sidebar-module leaderboard-module hub-only-module">
                         <div class="module-header">
                             <span class="module-title"><i class="fas fa-trophy"></i> TOP PLAYERS</span>
                         </div>
@@ -1516,19 +1531,6 @@
 
                 <!-- Main Chat/Feed Column (RIGHT) -->
                 <div class="community-feed-column">
-                    <!-- Sticky Tab Bar at Top -->
-                    <div class="community-tab-bar">
-                        <button class="community-tab-btn active" data-tab="chat">
-                            <i class="fas fa-comments"></i> <span class="tab-label">Chat</span>
-                        </button>
-                        <button class="community-tab-btn" data-tab="feed">
-                            <i class="fas fa-stream"></i> <span class="tab-label">Feed</span>
-                        </button>
-                        <button class="community-tab-btn mobile-only-tab" data-tab="hub">
-                            <i class="fas fa-chart-bar"></i> <span class="tab-label">Hub</span>
-                        </button>
-                    </div>
-                    
                     <!-- Scrollable Feed Area (middle region) -->
                     <div class="feed-scroll-region" id="feed-scroll-region">
                         <!-- Feed Posts Container -->

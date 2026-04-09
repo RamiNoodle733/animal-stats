@@ -45,6 +45,7 @@ class CommunityManager {
         this.selectedGlobeKey = null;
         this.globeMode = 'globe';
         this.globeModeBound = false;
+        this.numberFormatter = new Intl.NumberFormat();
     }
 
     init() {
@@ -539,7 +540,7 @@ class CommunityManager {
         mappings.forEach(([id, value]) => {
             const el = document.getElementById(id);
             if (el) {
-                el.textContent = this.formatNumber(value || 0);
+                el.textContent = this.formatExactNumber(value || 0);
             }
         });
     }
@@ -555,7 +556,7 @@ class CommunityManager {
 
         container.innerHTML = items.slice(0, 6).map(item => {
             const label = this.escapeHtml(item.key || 'Unknown');
-            const count = this.formatNumber(item.count || 0);
+            const count = this.formatExactNumber(item.count || 0);
             return `
                 <div class="globe-breakdown-item">
                     <span class="globe-breakdown-label">${label}</span>
@@ -599,9 +600,9 @@ class CommunityManager {
                 <div class="globe-point-time">Last seen ${this.formatDateTime(summary.lastSeen)}</div>
             </div>
             <div class="globe-point-totals">
-                <div><span>Events</span><strong>${this.formatNumber(summary.totalEvents || 0)}</strong></div>
-                <div><span>Visits</span><strong>${this.formatNumber(summary.totalVisits || 0)}</strong></div>
-                <div><span>Visitors</span><strong>${this.formatNumber(summary.uniqueVisitors || 0)}</strong></div>
+                <div><span>Events</span><strong>${this.formatExactNumber(summary.totalEvents || 0)}</strong></div>
+                <div><span>Visits</span><strong>${this.formatExactNumber(summary.totalVisits || 0)}</strong></div>
+                <div><span>Visitors</span><strong>${this.formatExactNumber(summary.uniqueVisitors || 0)}</strong></div>
             </div>
             <div class="globe-point-grid">
                 <div class="globe-point-col">
@@ -626,7 +627,7 @@ class CommunityManager {
         return items.map(item => `
             <div class="globe-mini-item">
                 <span>${this.escapeHtml(item.key || 'Unknown')}</span>
-                <strong>${this.formatNumber(item.count || 0)}</strong>
+                <strong>${this.formatExactNumber(item.count || 0)}</strong>
             </div>
         `).join('');
     }
@@ -639,7 +640,7 @@ class CommunityManager {
             return `
                 <div class="globe-mini-item">
                     <span>${this.escapeHtml(label)}</span>
-                    <strong>${this.formatNumber(item.count || 0)}</strong>
+                    <strong>${this.formatExactNumber(item.count || 0)}</strong>
                 </div>
             `;
         }).join('');
@@ -727,6 +728,12 @@ class CommunityManager {
         if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
         return num.toString();
     }
+
+    formatExactNumber(num) {
+        const numeric = Number(num);
+        if (!Number.isFinite(numeric)) return '0';
+        return this.numberFormatter.format(Math.trunc(numeric));
+    }
     
     showXpPopup(xp, bp) {
         const popup = document.createElement('div');
@@ -774,40 +781,46 @@ class CommunityManager {
         }
     }
 
-    switchTab(tabName) {
+    switchTab(tabName, options = {}) {
         this.currentTab = tabName;
-        
-        // Play tab switch sound
-        if (window.AudioManager) {
+
+        if (!options.silent && window.AudioManager) {
             AudioManager.click();
         }
-        
+
         // Update tab buttons (new unified tabs)
         document.querySelectorAll('.community-tab-btn').forEach(tab => {
             tab.classList.toggle('active', tab.dataset.tab === tabName);
         });
-        
+
         // Handle mobile sidebar/feed visibility
         const sidebar = document.querySelector('.community-sidebar-column');
         const feedColumn = document.querySelector('.community-feed-column');
-        
-        if (tabName === 'hub') {
-            // Show sidebar (stats hub), hide feed
+        const communityView = document.getElementById('community-view');
+
+        if (communityView) {
+            communityView.classList.toggle('map-tab-active', tabName === 'map');
+        }
+
+        if (tabName === 'hub' || tabName === 'map') {
             if (sidebar) sidebar.classList.add('mobile-sidebar-active');
             if (feedColumn) feedColumn.classList.add('mobile-feed-hidden');
             this.stopChatPolling();
+
+            if (tabName === 'map') {
+                this.globe?.setPaused(false);
+                requestAnimationFrame(() => this.globe?.resize?.());
+                this.loadGlobeAnalytics({ silent: true });
+            }
         } else {
-            // Hide sidebar, show feed
             if (sidebar) sidebar.classList.remove('mobile-sidebar-active');
             if (feedColumn) feedColumn.classList.remove('mobile-feed-hidden');
-            
-            // Show/hide compose box (only for chat)
+
             const composeBox = document.getElementById('feed-compose-box');
             if (composeBox) {
                 composeBox.style.display = tabName === 'chat' ? 'block' : 'none';
             }
-            
-            // Load content for the tab
+
             if (tabName === 'chat') {
                 this.loadChat();
                 this.startChatPolling();
@@ -831,13 +844,8 @@ class CommunityManager {
         this.loadSiteStats();
         this.loadOnlineCount();
         this.loadGlobeAnalytics({ silent: true });
-        
-        if (this.currentTab === 'chat') {
-            this.loadChat();
-            this.startChatPolling();
-        } else {
-            this.loadFeed();
-        }
+
+        this.switchTab(this.currentTab, { silent: true });
     }
 
     onViewLeave() {
@@ -849,8 +857,10 @@ class CommunityManager {
         // Reset mobile sidebar state
         const sidebar = document.querySelector('.community-sidebar-column');
         const feedColumn = document.querySelector('.community-feed-column');
+        const communityView = document.getElementById('community-view');
         if (sidebar) sidebar.classList.remove('mobile-sidebar-active');
         if (feedColumn) feedColumn.classList.remove('mobile-feed-hidden');
+        if (communityView) communityView.classList.remove('map-tab-active');
     }
 
     // ==================== CHAT ====================
