@@ -447,9 +447,40 @@ class AnimalStatsApp {
             this.switchView('rankings', false);
         });
 
-        // Community route
+        const handleCommunityRoute = (tabName = 'chat', options = {}) => {
+            const requestedTab = typeof tabName === 'string' ? tabName.toLowerCase() : 'chat';
+            const communityManager = this.ensureCommunityManager();
+            const normalizedTab = communityManager.normalizeTabName(requestedTab);
+            const targetPath = communityManager.getRouteForTab(normalizedTab);
+            const shouldReplace = Boolean(options.replace) || requestedTab !== normalizedTab;
+
+            if (window.location.pathname !== targetPath) {
+                if (window.Router && !window.Router.isNavigating) {
+                    window.Router.navigate(targetPath, { replace: shouldReplace });
+                    return;
+                }
+
+                history.replaceState(history.state || {}, '', targetPath);
+            }
+
+            communityManager.currentTab = normalizedTab;
+            if (this.state.view !== 'community') {
+                this.switchView('community', false);
+                return;
+            }
+
+            communityManager.switchTab(normalizedTab, { silent: true, fromRoute: true });
+        };
+
+        // Community route (tab-aware sub-pages)
+        router.on('/community/:tab', (params) => {
+            handleCommunityRoute(params.tab);
+        });
+
+        // Legacy/default community route fallback
         router.on('/community', () => {
-            this.switchView('community', false);
+            const legacyTab = new URLSearchParams(window.location.search).get('tab');
+            handleCommunityRoute(legacyTab || 'chat', { replace: true });
         });
 
         // Battle Points route
@@ -1016,8 +1047,10 @@ class AnimalStatsApp {
         this.dom.navBtns.community?.addEventListener('click', () => {
             if (window.AudioManager) AudioManager.click();
             if (window.Router) {
-                window.Router.navigate('/community');
+                window.Router.navigate('/community/chat');
             } else {
+                const communityManager = this.ensureCommunityManager();
+                communityManager.currentTab = communityManager.normalizeTabName('chat');
                 this.switchView('community');
             }
         });
@@ -2058,7 +2091,7 @@ class AnimalStatsApp {
                 stats: '/stats',
                 compare: '/compare',
                 rankings: '/rankings',
-                community: '/community',
+                community: '/community/chat',
                 battlepoints: '/battlepoints',
                 about: '/about',
                 login: '/login',

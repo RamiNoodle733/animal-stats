@@ -820,21 +820,43 @@
 }
 
 #community-view .community-tab-bar {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    padding: 4px;
     flex-shrink: 0;
     position: sticky;
     top: 0;
     z-index: 20;
     width: min(1400px, calc(100% - 24px));
     margin: 0 auto clamp(8px, 1vh, 12px);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 212, 255, 0.35) transparent;
     background: linear-gradient(135deg, rgba(20, 25, 35, 0.99), rgba(15, 20, 30, 1));
     border: 1px solid rgba(0, 212, 255, 0.25);
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
+#community-view .community-tab-bar::-webkit-scrollbar {
+    height: 6px;
+}
+
+#community-view .community-tab-bar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+#community-view .community-tab-bar::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.35);
+    border-radius: 3px;
+}
+
 #community-view .community-tab-btn {
-    flex: 1 1 0;
-    min-width: 0;
+    flex: 1 1 140px;
+    min-width: 140px;
     padding: clamp(10px, 1.5vh, 14px) clamp(12px, 2vw, 20px);
     background: transparent;
     border: none;
@@ -850,6 +872,10 @@
     gap: 8px;
     position: relative;
     white-space: nowrap;
+}
+
+#community-view .community-tab-btn.mobile-only-tab {
+    display: none;
 }
 
 #community-view .community-tab-btn:hover {

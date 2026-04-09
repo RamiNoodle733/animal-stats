@@ -26,6 +26,19 @@
     display: none !important;
 }
 
+#community-view.globe-compact-mode .globe-totals-grid,
+#community-view.globe-compact-mode .globe-window-row,
+#community-view.globe-compact-mode .globe-breakdown-grid,
+#community-view.globe-compact-mode .globe-point-details {
+    display: none;
+}
+
+#community-view.globe-compact-mode .globe-stage {
+    height: clamp(230px, 34vh, 350px);
+    min-height: 220px;
+    max-height: 350px;
+}
+
 @media (min-width: 901px) {
     #community-view.map-tab-active .community-feed-layout,
     #community-view.map-tab-active .community__layout {
@@ -43,7 +56,7 @@
     #community-view.map-tab-active .community__sidebar {
         padding-right: 0;
         max-height: 100%;
-        overflow-y: auto;
+        overflow: hidden;
     }
 
     #community-view.map-tab-active .community-sidebar-column > :not(.map-primary-module),
@@ -54,20 +67,41 @@
     #community-view.map-tab-active .map-primary-module {
         display: flex;
         flex-direction: column;
-        min-height: calc(100vh - var(--header-height, 56px) - 30px);
+        flex: 1 1 auto;
+        min-height: 0;
+        max-height: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
         padding: 12px;
     }
 
+    #community-view.map-tab-active .map-primary-module::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #community-view.map-tab-active .map-primary-module::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 3px;
+    }
+
+    #community-view.map-tab-active .map-primary-module::-webkit-scrollbar-thumb {
+        background: rgba(0, 212, 255, 0.3);
+        border-radius: 3px;
+    }
+
     #community-view.map-tab-active .globe-stage {
-        height: clamp(260px, 47vh, 560px);
-        min-height: 260px;
-        max-height: 560px;
+        height: clamp(250px, 44vh, 500px);
+        min-height: 250px;
+        max-height: 500px;
     }
 
     #community-view.map-tab-active .globe-point-details {
-        flex: 1;
+        flex: 1 1 auto;
         max-height: none;
         min-height: 170px;
+        overflow: auto;
     }
 }
 

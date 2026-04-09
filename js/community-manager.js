@@ -74,7 +74,24 @@ class CommunityManager {
     setupEventListeners() {
         // Tab switching - new unified tabs
         document.querySelectorAll('.community-tab-btn').forEach(tab => {
-            tab.addEventListener('click', (e) => this.switchTab(e.currentTarget.dataset.tab));
+            tab.addEventListener('click', (e) => {
+                const tabName = e.currentTarget.dataset.tab;
+                if (!tabName) return;
+
+                if (window.AudioManager) {
+                    AudioManager.click();
+                }
+
+                if (window.Router) {
+                    const targetPath = this.getRouteForTab(tabName);
+                    if (window.location.pathname !== targetPath) {
+                        window.Router.navigate(targetPath);
+                        return;
+                    }
+                }
+
+                this.switchTab(tabName, { silent: true });
+            });
         });
 
         // Compose input (new structure)
@@ -121,6 +138,40 @@ class CommunityManager {
         if (mobileSidebarToggle) {
             mobileSidebarToggle.addEventListener('click', () => this.toggleMobileSidebar());
         }
+    }
+
+    normalizeTabName(tabName) {
+        const rawTab = typeof tabName === 'string' ? tabName.toLowerCase() : 'chat';
+        const allowedTabs = new Set(['chat', 'feed', 'map', 'hub']);
+        let normalizedTab = allowedTabs.has(rawTab) ? rawTab : 'chat';
+
+        const desktopViewport = typeof window !== 'undefined'
+            && window.matchMedia
+            && window.matchMedia('(min-width: 901px)').matches;
+
+        if (desktopViewport && normalizedTab === 'hub') {
+            normalizedTab = 'chat';
+        }
+
+        return normalizedTab;
+    }
+
+    getRouteForTab(tabName) {
+        return `/community/${this.normalizeTabName(tabName)}`;
+    }
+
+    ensureActiveTabVisible(tabName, smooth = true) {
+        const tabBar = document.querySelector('#community-view .community-tab-bar');
+        if (!tabBar) return;
+
+        const tabBtn = tabBar.querySelector(`.community-tab-btn[data-tab="${tabName}"]`);
+        if (!tabBtn) return;
+
+        tabBtn.scrollIntoView({
+            behavior: smooth ? 'smooth' : 'auto',
+            block: 'nearest',
+            inline: 'center'
+        });
     }
     
     toggleMobileSidebar() {
@@ -782,15 +833,12 @@ class CommunityManager {
     }
 
     switchTab(tabName, options = {}) {
-        this.currentTab = tabName;
-
-        if (!options.silent && window.AudioManager) {
-            AudioManager.click();
-        }
+        const normalizedTab = this.normalizeTabName(tabName);
+        this.currentTab = normalizedTab;
 
         // Update tab buttons (new unified tabs)
         document.querySelectorAll('.community-tab-btn').forEach(tab => {
-            tab.classList.toggle('active', tab.dataset.tab === tabName);
+            tab.classList.toggle('active', tab.dataset.tab === normalizedTab);
         });
 
         // Handle mobile sidebar/feed visibility
@@ -799,15 +847,16 @@ class CommunityManager {
         const communityView = document.getElementById('community-view');
 
         if (communityView) {
-            communityView.classList.toggle('map-tab-active', tabName === 'map');
+            communityView.classList.toggle('map-tab-active', normalizedTab === 'map');
+            communityView.classList.toggle('globe-compact-mode', normalizedTab !== 'map');
         }
 
-        if (tabName === 'hub' || tabName === 'map') {
+        if (normalizedTab === 'hub' || normalizedTab === 'map') {
             if (sidebar) sidebar.classList.add('mobile-sidebar-active');
             if (feedColumn) feedColumn.classList.add('mobile-feed-hidden');
             this.stopChatPolling();
 
-            if (tabName === 'map') {
+            if (normalizedTab === 'map') {
                 this.globe?.setPaused(false);
                 requestAnimationFrame(() => this.globe?.resize?.());
                 this.loadGlobeAnalytics({ silent: true });
@@ -818,10 +867,10 @@ class CommunityManager {
 
             const composeBox = document.getElementById('feed-compose-box');
             if (composeBox) {
-                composeBox.style.display = tabName === 'chat' ? 'block' : 'none';
+                composeBox.style.display = normalizedTab === 'chat' ? 'block' : 'none';
             }
 
-            if (tabName === 'chat') {
+            if (normalizedTab === 'chat') {
                 this.loadChat();
                 this.startChatPolling();
             } else {
@@ -829,6 +878,8 @@ class CommunityManager {
                 this.loadFeed();
             }
         }
+
+        this.ensureActiveTabVisible(normalizedTab, !options.silent);
     }
 
     onViewEnter() {
@@ -860,7 +911,10 @@ class CommunityManager {
         const communityView = document.getElementById('community-view');
         if (sidebar) sidebar.classList.remove('mobile-sidebar-active');
         if (feedColumn) feedColumn.classList.remove('mobile-feed-hidden');
-        if (communityView) communityView.classList.remove('map-tab-active');
+        if (communityView) {
+            communityView.classList.remove('map-tab-active');
+            communityView.classList.remove('globe-compact-mode');
+        }
     }
 
     // ==================== CHAT ====================
