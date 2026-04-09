@@ -43,6 +43,8 @@ class CommunityManager {
         this.globeRefreshInterval = null;
         this.lastGlobePayload = null;
         this.selectedGlobeKey = null;
+        this.globeMode = 'globe';
+        this.globeModeBound = false;
     }
 
     init() {
@@ -430,8 +432,39 @@ class CommunityManager {
             requestAnimationFrame(() => this.globe?.resize?.());
         }
 
+        this.bindGlobeModeSwitch();
+        this.applyGlobeMode(this.globeMode);
+
         this.loadGlobeAnalytics();
         this.startGlobeRefresh();
+    }
+
+    bindGlobeModeSwitch() {
+        if (this.globeModeBound) return;
+
+        const modeButtons = document.querySelectorAll('.globe-mode-btn');
+        if (!modeButtons.length) return;
+
+        modeButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                const mode = button.dataset.mode;
+                if (mode) {
+                    this.applyGlobeMode(mode);
+                }
+            });
+        });
+
+        this.globeModeBound = true;
+    }
+
+    applyGlobeMode(mode) {
+        const normalized = mode === 'flat' ? 'flat' : 'globe';
+        this.globeMode = normalized;
+        this.globe?.setMode?.(normalized);
+
+        document.querySelectorAll('.globe-mode-btn').forEach((button) => {
+            button.classList.toggle('active', button.dataset.mode === normalized);
+        });
     }
 
     startGlobeRefresh() {

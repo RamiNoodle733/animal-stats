@@ -22,11 +22,43 @@
     padding: 3px 8px;
 }
 
+#community-view .globe-mode-switch {
+    margin: 8px 0 10px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+#community-view .globe-mode-btn {
+    height: 30px;
+    border-radius: 999px;
+    border: 1px solid rgba(0, 212, 255, 0.32);
+    background: rgba(8, 28, 43, 0.78);
+    color: rgba(196, 232, 248, 0.82);
+    font-size: 0.66rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#community-view .globe-mode-btn:hover {
+    border-color: rgba(111, 225, 255, 0.54);
+    color: rgba(224, 248, 255, 0.96);
+}
+
+#community-view .globe-mode-btn.active {
+    background: linear-gradient(120deg, rgba(0, 144, 230, 0.85), rgba(0, 212, 255, 0.95));
+    border-color: rgba(118, 231, 255, 0.88);
+    color: #022031;
+    font-weight: 700;
+}
+
 #community-view .globe-stage {
     width: 100%;
-    height: min(36vh, 330px);
+    height: clamp(210px, 33vh, 290px);
     min-height: 220px;
-    max-height: 340px;
+    max-height: 300px;
     position: relative;
     border-radius: 14px;
     border: 1px solid rgba(0, 212, 255, 0.28);
@@ -209,6 +241,8 @@
     border: 1px solid rgba(74, 173, 224, 0.3);
     background: rgba(7, 18, 30, 0.83);
     padding: 10px;
+    max-height: 240px;
+    overflow: auto;
 }
 
 #community-view .globe-point-placeholder,
@@ -299,5 +333,10 @@
     #community-view .globe-point-grid,
     #community-view .globe-breakdown-grid {
         grid-template-columns: 1fr;
+    }
+
+    #community-view .globe-stage {
+        height: clamp(220px, 36vh, 320px);
+        max-height: 320px;
     }
 }

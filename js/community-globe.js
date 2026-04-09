@@ -1,118 +1,80 @@
-/* global THREE */
-
 'use strict';
 
 (function initCommunityGlobe() {
+    const CONTINENT_POLYGONS = [
+        [
+            [-168, 72], [-145, 70], [-130, 60], [-124, 50], [-125, 42],
+            [-117, 32], [-106, 24], [-95, 18], [-85, 22], [-80, 27],
+            [-81, 33], [-75, 40], [-67, 46], [-60, 52], [-58, 58],
+            [-74, 74], [-100, 80], [-135, 78], [-168, 72]
+        ],
+        [
+            [-82, 12], [-74, 5], [-70, -8], [-66, -18], [-62, -30],
+            [-60, -42], [-54, -50], [-48, -55], [-42, -50], [-36, -38],
+            [-35, -25], [-41, -12], [-48, -2], [-58, 4], [-70, 8],
+            [-82, 12]
+        ],
+        [
+            [-10, 72], [10, 72], [32, 64], [40, 55], [28, 45],
+            [24, 36], [30, 30], [34, 20], [32, 8], [26, -2],
+            [20, -14], [16, -24], [10, -34], [2, -36], [-8, -30],
+            [-16, -20], [-18, -5], [-12, 8], [-8, 20], [-2, 32],
+            [2, 42], [-4, 50], [-10, 58], [-12, 66], [-10, 72]
+        ],
+        [
+            [26, 74], [50, 72], [78, 70], [104, 64], [124, 54],
+            [138, 46], [150, 36], [160, 24], [164, 8], [154, -2],
+            [136, -4], [122, 4], [108, 14], [94, 18], [84, 10],
+            [72, 8], [62, 18], [56, 30], [50, 40], [40, 48],
+            [30, 58], [26, 74]
+        ],
+        [
+            [112, -12], [116, -20], [124, -28], [134, -33], [146, -36],
+            [154, -30], [154, -22], [146, -16], [136, -12], [124, -10],
+            [112, -12]
+        ],
+        [
+            [-54, 82], [-46, 78], [-38, 72], [-36, 66], [-42, 60],
+            [-50, 62], [-56, 68], [-58, 76], [-54, 82]
+        ]
+    ];
+
+    function clamp(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
     class CommunityGlobe {
         constructor(canvas, options = {}) {
             this.canvas = canvas;
+            this.ctx = canvas.getContext('2d', { alpha: true });
+            if (!this.ctx) {
+                throw new Error('Unable to initialize canvas context for community globe');
+            }
+
             this.tooltipEl = options.tooltipEl || null;
             this.onPointSelect = null;
+            this.mode = 'globe';
+            this.points = [];
+            this.projectedPoints = [];
+            this.maxEvents = 1;
+
+            this.rotationYaw = 0;
+            this.rotationPitch = 0.18;
+            this.velocityYaw = 0;
+            this.velocityPitch = 0;
+            this.autoSpinSpeed = 0.0013;
             this.isPaused = false;
             this.isDragging = false;
             this.dragDistance = 0;
             this.lastPointerX = 0;
             this.lastPointerY = 0;
-            this.velocityX = 0;
-            this.velocityY = 0;
-            this.rotationX = 0.12;
-            this.rotationY = 0;
-            this.hotspots = [];
-            this.points = [];
-            this.projectedHotspots = [];
             this.animationFrame = null;
-            this.mode = 'canvas2d';
 
-            this.tryInitThree();
-            if (this.mode !== 'three') {
-                this.initCanvas2D();
-            }
+            this.canvas.style.touchAction = 'none';
 
             this.bindEvents();
             this.resize();
             this.animate();
-        }
-
-        tryInitThree() {
-            if (!window.THREE) return;
-
-            try {
-                this.pointer = new THREE.Vector2();
-                this.raycaster = new THREE.Raycaster();
-
-                this.scene = new THREE.Scene();
-                this.camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
-                this.camera.position.set(0, 0, 3.4);
-
-                this.renderer = new THREE.WebGLRenderer({
-                    canvas: this.canvas,
-                    alpha: true,
-                    antialias: true,
-                    powerPreference: 'high-performance'
-                });
-                this.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-
-                this.globeGroup = new THREE.Group();
-                this.scene.add(this.globeGroup);
-
-                this.hotspotGroup = new THREE.Group();
-                this.globeGroup.add(this.hotspotGroup);
-
-                this.addThreeLights();
-                this.addThreeGlobe();
-                this.mode = 'three';
-            } catch (error) {
-                console.warn('CommunityGlobe: WebGL mode unavailable, using 2D fallback.', error?.message || error);
-                this.mode = 'canvas2d';
-                this.renderer?.dispose?.();
-                this.renderer = null;
-            }
-        }
-
-        initCanvas2D() {
-            this.ctx = this.canvas.getContext('2d');
-            if (!this.ctx) {
-                throw new Error('CommunityGlobe: Canvas 2D context unavailable');
-            }
-        }
-
-        addThreeLights() {
-            const ambient = new THREE.AmbientLight(0x7fb4ff, 0.68);
-            this.scene.add(ambient);
-
-            const key = new THREE.DirectionalLight(0xffffff, 1.05);
-            key.position.set(2.4, 2.0, 2.7);
-            this.scene.add(key);
-
-            const rim = new THREE.DirectionalLight(0x35d6ff, 0.72);
-            rim.position.set(-2.0, -1.2, -2.0);
-            this.scene.add(rim);
-        }
-
-        addThreeGlobe() {
-            const globeGeometry = new THREE.SphereGeometry(1, 64, 64);
-            const globeMaterial = new THREE.MeshPhongMaterial({
-                color: 0x1d4f86,
-                emissive: 0x0b2238,
-                emissiveIntensity: 0.9,
-                shininess: 46,
-                specular: 0x8ddfff,
-                transparent: true,
-                opacity: 0.98
-            });
-
-            this.globeMesh = new THREE.Mesh(globeGeometry, globeMaterial);
-            this.globeGroup.add(this.globeMesh);
-
-            const atmosphereGeometry = new THREE.SphereGeometry(1.08, 48, 48);
-            const atmosphereMaterial = new THREE.MeshBasicMaterial({
-                color: 0x53d7ff,
-                transparent: true,
-                opacity: 0.16,
-                side: THREE.BackSide
-            });
-            this.atmosphereMesh = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
-            this.globeGroup.add(this.atmosphereMesh);
         }
 
         bindEvents() {
@@ -133,12 +95,14 @@
                     const dy = event.clientY - this.lastPointerY;
                     this.dragDistance += Math.abs(dx) + Math.abs(dy);
 
-                    this.rotationY += dx * 0.0048;
-                    this.rotationX += dy * 0.0048;
-                    this.rotationX = Math.max(-1.1, Math.min(1.1, this.rotationX));
+                    if (this.mode === 'globe') {
+                        this.rotationYaw += dx * 0.0055;
+                        this.rotationPitch += dy * 0.0042;
+                        this.rotationPitch = clamp(this.rotationPitch, -1.1, 1.1);
 
-                    this.velocityX = dx * 0.00045;
-                    this.velocityY = dy * 0.00045;
+                        this.velocityYaw = dx * 0.00056;
+                        this.velocityPitch = dy * 0.00044;
+                    }
 
                     this.lastPointerX = event.clientX;
                     this.lastPointerY = event.clientY;
@@ -148,97 +112,33 @@
             });
 
             this.canvas.addEventListener('pointerup', (event) => {
-                if (this.isDragging && this.dragDistance < 6) {
+                if (this.isDragging && this.dragDistance < 7) {
                     this.handlePointClick(event);
                 }
+
                 this.isDragging = false;
                 this.canvas.releasePointerCapture(event.pointerId);
             });
 
             this.canvas.addEventListener('pointerleave', () => {
-                if (this.tooltipEl) this.tooltipEl.style.display = 'none';
+                if (this.tooltipEl) {
+                    this.tooltipEl.style.display = 'none';
+                }
             });
         }
 
-        latLngToVec(lat, lng) {
-            const latRad = lat * (Math.PI / 180);
-            const lngRad = (lng + 180) * (Math.PI / 180);
-
-            return {
-                x: Math.cos(latRad) * Math.cos(lngRad),
-                y: Math.sin(latRad),
-                z: Math.cos(latRad) * Math.sin(lngRad)
-            };
-        }
-
-        rotateVector(vec, rotX, rotY) {
-            const cosY = Math.cos(rotY);
-            const sinY = Math.sin(rotY);
-            const cosX = Math.cos(rotX);
-            const sinX = Math.sin(rotX);
-
-            const x1 = (vec.x * cosY) - (vec.z * sinY);
-            const z1 = (vec.x * sinY) + (vec.z * cosY);
-            const y2 = (vec.y * cosX) - (z1 * sinX);
-            const z2 = (vec.y * sinX) + (z1 * cosX);
-
-            return { x: x1, y: y2, z: z2 };
-        }
-
-        setPoints(points = []) {
-            this.points = Array.isArray(points) ? points.filter(point => (
-                typeof point.lat === 'number' && typeof point.lng === 'number'
-            )) : [];
-
-            if (this.mode === 'three') {
-                this.setThreePoints(this.points);
+        setMode(mode) {
+            this.mode = mode === 'flat' ? 'flat' : 'globe';
+            if (this.tooltipEl) {
+                this.tooltipEl.style.display = 'none';
             }
         }
 
-        setThreePoints(points) {
-            this.hotspots.forEach(mesh => {
-                this.hotspotGroup.remove(mesh);
-                mesh.geometry.dispose();
-                mesh.material.dispose();
-            });
-            this.hotspots = [];
-
-            if (!points.length) return;
-
-            const maxEvents = Math.max(...points.map(point => point.totalEvents || 1), 1);
-
-            points.forEach(point => {
-                const strength = Math.min(1, (point.totalEvents || 1) / maxEvents);
-                const radius = 0.011 + (strength * 0.043);
-                const color = new THREE.Color();
-                color.setHSL(0.58 - (strength * 0.16), 0.82, 0.52 - (strength * 0.18));
-
-                const geometry = new THREE.SphereGeometry(radius, 14, 14);
-                const material = new THREE.MeshStandardMaterial({
-                    color,
-                    emissive: color,
-                    emissiveIntensity: 0.55 + (strength * 0.95),
-                    roughness: 0.2,
-                    metalness: 0.2
-                });
-
-                const hotspot = new THREE.Mesh(geometry, material);
-                hotspot.position.copy(this.latLngToVector3(point.lat, point.lng, 1.02 + (strength * 0.06)));
-                hotspot.userData = { ...point, strength };
-
-                this.hotspotGroup.add(hotspot);
-                this.hotspots.push(hotspot);
-            });
-        }
-
-        latLngToVector3(lat, lng, radius = 1.01) {
-            const phi = (90 - lat) * (Math.PI / 180);
-            const theta = (lng + 180) * (Math.PI / 180);
-
-            const x = -(radius * Math.sin(phi) * Math.cos(theta));
-            const y = radius * Math.cos(phi);
-            const z = radius * Math.sin(phi) * Math.sin(theta);
-            return new THREE.Vector3(x, y, z);
+        setPoints(points = []) {
+            this.points = Array.isArray(points)
+                ? points.filter((point) => typeof point.lat === 'number' && typeof point.lng === 'number')
+                : [];
+            this.maxEvents = Math.max(...this.points.map((point) => point.totalEvents || 1), 1);
         }
 
         setOnPointSelect(handler) {
@@ -249,36 +149,332 @@
             this.isPaused = Boolean(paused);
         }
 
-        getIntersections(event) {
-            if (this.mode !== 'three') return [];
+        resize() {
+            const width = Math.max(220, this.canvas.clientWidth || 320);
+            const height = Math.max(220, this.canvas.clientHeight || 320);
+            this.renderWidth = width;
+            this.renderHeight = height;
 
-            const rect = this.canvas.getBoundingClientRect();
-            if (!rect.width || !rect.height) return [];
-
-            this.pointer.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-            this.pointer.y = -(((event.clientY - rect.top) / rect.height) * 2 - 1);
-
-            this.raycaster.setFromCamera(this.pointer, this.camera);
-            return this.raycaster.intersectObjects(this.hotspots, false);
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            this.canvas.width = Math.round(width * dpr);
+            this.canvas.height = Math.round(height * dpr);
+            this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
 
-        get2DHit(event) {
-            if (this.mode !== 'canvas2d' || !this.projectedHotspots.length) return null;
+        animate() {
+            const tick = () => {
+                if (!this.isPaused && this.mode === 'globe' && !this.isDragging) {
+                    this.rotationYaw += this.autoSpinSpeed + this.velocityYaw;
+                    this.rotationPitch += this.velocityPitch;
+                    this.rotationPitch = clamp(this.rotationPitch, -1.1, 1.1);
+
+                    this.velocityYaw *= 0.92;
+                    this.velocityPitch *= 0.92;
+                }
+
+                this.draw();
+                this.animationFrame = requestAnimationFrame(tick);
+            };
+
+            this.animationFrame = requestAnimationFrame(tick);
+        }
+
+        draw() {
+            const ctx = this.ctx;
+            const width = this.renderWidth;
+            const height = this.renderHeight;
+
+            ctx.clearRect(0, 0, width, height);
+            this.projectedPoints = [];
+
+            if (this.mode === 'flat') {
+                this.drawFlatMap(ctx, width, height);
+            } else {
+                this.drawGlobe(ctx, width, height);
+            }
+        }
+
+        drawGlobe(ctx, width, height) {
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const radius = Math.max(70, Math.min(width, height) * 0.365);
+
+            const outer = ctx.createRadialGradient(
+                centerX - (radius * 0.35),
+                centerY - (radius * 0.4),
+                radius * 0.12,
+                centerX,
+                centerY,
+                radius
+            );
+            outer.addColorStop(0, '#62bcff');
+            outer.addColorStop(0.45, '#2b79c1');
+            outer.addColorStop(1, '#0f3558');
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.fillStyle = outer;
+            ctx.fill();
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.clip();
+
+            this.drawGlobeGraticule(ctx, centerX, centerY, radius);
+            this.drawGlobeContinents(ctx, centerX, centerY, radius);
+            this.drawGlobePoints(ctx, centerX, centerY, radius);
+
+            ctx.restore();
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(125, 215, 255, 0.65)';
+            ctx.lineWidth = 1.2;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(centerX - (radius * 0.32), centerY - (radius * 0.42), radius * 0.18, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(208, 243, 255, 0.18)';
+            ctx.fill();
+        }
+
+        drawGlobeGraticule(ctx, centerX, centerY, radius) {
+            ctx.strokeStyle = 'rgba(130, 206, 242, 0.18)';
+            ctx.lineWidth = 1;
+
+            for (let lat = -60; lat <= 60; lat += 30) {
+                this.drawGlobeLine(ctx, centerX, centerY, radius, lat, true);
+            }
+
+            for (let lng = -150; lng <= 150; lng += 30) {
+                this.drawGlobeLine(ctx, centerX, centerY, radius, lng, false);
+            }
+        }
+
+        drawGlobeLine(ctx, centerX, centerY, radius, value, isLatitude) {
+            const steps = 72;
+            let drawing = false;
+
+            ctx.beginPath();
+            for (let i = 0; i <= steps; i += 1) {
+                const t = i / steps;
+                const lat = isLatitude ? value : -90 + (t * 180);
+                const lng = isLatitude ? -180 + (t * 360) : value;
+                const projected = this.projectToGlobe(lat, lng, centerX, centerY, radius);
+
+                if (projected && projected.visible) {
+                    if (!drawing) {
+                        ctx.moveTo(projected.x, projected.y);
+                        drawing = true;
+                    } else {
+                        ctx.lineTo(projected.x, projected.y);
+                    }
+                } else {
+                    drawing = false;
+                }
+            }
+            ctx.stroke();
+        }
+
+        drawGlobeContinents(ctx, centerX, centerY, radius) {
+            CONTINENT_POLYGONS.forEach((polygon) => {
+                const visiblePoints = [];
+
+                polygon.forEach(([lng, lat]) => {
+                    const projected = this.projectToGlobe(lat, lng, centerX, centerY, radius);
+                    if (projected && projected.visible) {
+                        visiblePoints.push(projected);
+                    }
+                });
+
+                if (visiblePoints.length < 3) return;
+
+                ctx.beginPath();
+                visiblePoints.forEach((point, index) => {
+                    if (index === 0) ctx.moveTo(point.x, point.y);
+                    else ctx.lineTo(point.x, point.y);
+                });
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(86, 178, 116, 0.45)';
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(151, 238, 167, 0.35)';
+                ctx.lineWidth = 0.9;
+                ctx.stroke();
+            });
+        }
+
+        drawGlobePoints(ctx, centerX, centerY, radius) {
+            this.points.forEach((point) => {
+                const projected = this.projectToGlobe(point.lat, point.lng, centerX, centerY, radius);
+                if (!projected || !projected.visible) return;
+
+                const strength = clamp((point.totalEvents || 1) / this.maxEvents, 0.05, 1);
+                const depthScale = 0.4 + ((projected.depth + 1) * 0.35);
+                const dotRadius = (2.1 + (strength * 8.8)) * depthScale;
+                const hue = 170 - (strength * 90);
+
+                ctx.beginPath();
+                ctx.arc(projected.x, projected.y, dotRadius, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${hue}, 92%, ${55 - (strength * 18)}%, ${0.62 + (strength * 0.34)})`;
+                ctx.shadowColor = `hsla(${hue}, 95%, 72%, 0.9)`;
+                ctx.shadowBlur = dotRadius * 2.2;
+                ctx.fill();
+
+                this.projectedPoints.push({
+                    x: projected.x,
+                    y: projected.y,
+                    radius: dotRadius + 4,
+                    data: { ...point, strength }
+                });
+            });
+
+            ctx.shadowBlur = 0;
+        }
+
+        drawFlatMap(ctx, width, height) {
+            const padding = 10;
+            const mapX = padding;
+            const mapY = padding;
+            const mapWidth = width - (padding * 2);
+            const mapHeight = height - (padding * 2);
+
+            const bg = ctx.createLinearGradient(0, mapY, 0, mapY + mapHeight);
+            bg.addColorStop(0, '#0b2f4f');
+            bg.addColorStop(1, '#082640');
+            ctx.fillStyle = bg;
+            ctx.fillRect(mapX, mapY, mapWidth, mapHeight);
+
+            ctx.strokeStyle = 'rgba(130, 206, 242, 0.2)';
+            ctx.lineWidth = 1;
+            for (let lng = -180; lng <= 180; lng += 30) {
+                const x = mapX + (((lng + 180) / 360) * mapWidth);
+                ctx.beginPath();
+                ctx.moveTo(x, mapY);
+                ctx.lineTo(x, mapY + mapHeight);
+                ctx.stroke();
+            }
+
+            for (let lat = -60; lat <= 60; lat += 30) {
+                const y = mapY + (((90 - lat) / 180) * mapHeight);
+                ctx.beginPath();
+                ctx.moveTo(mapX, y);
+                ctx.lineTo(mapX + mapWidth, y);
+                ctx.stroke();
+            }
+
+            CONTINENT_POLYGONS.forEach((polygon) => {
+                ctx.beginPath();
+                polygon.forEach(([lng, lat], index) => {
+                    const point = this.projectToFlat(lat, lng, mapX, mapY, mapWidth, mapHeight);
+                    if (index === 0) ctx.moveTo(point.x, point.y);
+                    else ctx.lineTo(point.x, point.y);
+                });
+                ctx.closePath();
+                ctx.fillStyle = 'rgba(86, 178, 116, 0.58)';
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(151, 238, 167, 0.42)';
+                ctx.lineWidth = 1;
+                ctx.stroke();
+            });
+
+            this.points.forEach((point) => {
+                const projected = this.projectToFlat(point.lat, point.lng, mapX, mapY, mapWidth, mapHeight);
+                const strength = clamp((point.totalEvents || 1) / this.maxEvents, 0.05, 1);
+                const dotRadius = 2.4 + (strength * 10.5);
+                const hue = 170 - (strength * 90);
+
+                ctx.beginPath();
+                ctx.arc(projected.x, projected.y, dotRadius, 0, Math.PI * 2);
+                ctx.fillStyle = `hsla(${hue}, 92%, ${52 - (strength * 14)}%, ${0.66 + (strength * 0.3)})`;
+                ctx.shadowColor = `hsla(${hue}, 95%, 72%, 0.9)`;
+                ctx.shadowBlur = dotRadius * 2.1;
+                ctx.fill();
+
+                this.projectedPoints.push({
+                    x: projected.x,
+                    y: projected.y,
+                    radius: dotRadius + 5,
+                    data: { ...point, strength }
+                });
+            });
+
+            ctx.shadowBlur = 0;
+            ctx.strokeStyle = 'rgba(139, 225, 255, 0.5)';
+            ctx.lineWidth = 1.1;
+            ctx.strokeRect(mapX, mapY, mapWidth, mapHeight);
+        }
+
+        projectToFlat(lat, lng, mapX, mapY, mapWidth, mapHeight) {
+            return {
+                x: mapX + (((lng + 180) / 360) * mapWidth),
+                y: mapY + (((90 - lat) / 180) * mapHeight)
+            };
+        }
+
+        latLngToVector(lat, lng) {
+            const latRad = lat * (Math.PI / 180);
+            const lngRad = (lng + 180) * (Math.PI / 180);
+            return {
+                x: Math.cos(latRad) * Math.cos(lngRad),
+                y: Math.sin(latRad),
+                z: Math.cos(latRad) * Math.sin(lngRad)
+            };
+        }
+
+        rotateVector(vec) {
+            const cosYaw = Math.cos(this.rotationYaw);
+            const sinYaw = Math.sin(this.rotationYaw);
+            const cosPitch = Math.cos(this.rotationPitch);
+            const sinPitch = Math.sin(this.rotationPitch);
+
+            const xYaw = (vec.x * cosYaw) - (vec.z * sinYaw);
+            const zYaw = (vec.x * sinYaw) + (vec.z * cosYaw);
+            const yPitch = (vec.y * cosPitch) - (zYaw * sinPitch);
+            const zPitch = (vec.y * sinPitch) + (zYaw * cosPitch);
+
+            return {
+                x: xYaw,
+                y: yPitch,
+                z: zPitch
+            };
+        }
+
+        projectToGlobe(lat, lng, centerX, centerY, radius) {
+            const base = this.latLngToVector(lat, lng);
+            const rotated = this.rotateVector(base);
+            const visible = rotated.z > 0.02;
+
+            if (!visible) {
+                return { visible: false, x: 0, y: 0, depth: rotated.z };
+            }
+
+            return {
+                visible: true,
+                x: centerX + (rotated.x * radius),
+                y: centerY - (rotated.y * radius),
+                depth: rotated.z
+            };
+        }
+
+        getPointHit(event) {
+            if (!this.projectedPoints.length) return null;
 
             const rect = this.canvas.getBoundingClientRect();
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
 
             let best = null;
-            let bestDistance = Infinity;
+            let closest = Infinity;
 
-            this.projectedHotspots.forEach(point => {
-                const dx = x - point.screenX;
-                const dy = y - point.screenY;
+            this.projectedPoints.forEach((point) => {
+                const dx = x - point.x;
+                const dy = y - point.y;
                 const distance = Math.hypot(dx, dy);
-                if (distance <= (point.radius + 4) && distance < bestDistance) {
+
+                if (distance <= point.radius && distance < closest) {
                     best = point;
-                    bestDistance = distance;
+                    closest = distance;
                 }
             });
 
@@ -287,20 +483,14 @@
 
         handleHover(event) {
             if (!this.tooltipEl) return;
+            const hit = this.getPointHit(event);
 
-            let target = null;
-            if (this.mode === 'three') {
-                const intersections = this.getIntersections(event);
-                target = intersections.length ? intersections[0].object.userData : null;
-            } else {
-                target = this.get2DHit(event)?.data || null;
-            }
-
-            if (!target) {
+            if (!hit) {
                 this.tooltipEl.style.display = 'none';
                 return;
             }
 
+            const target = hit.data;
             const place = target.locationRaw || [target.city, target.region, target.country].filter(Boolean).join(', ') || 'Unknown location';
 
             this.tooltipEl.innerHTML = `
@@ -317,162 +507,10 @@
 
         handlePointClick(event) {
             if (!this.onPointSelect) return;
-
-            if (this.mode === 'three') {
-                const intersections = this.getIntersections(event);
-                if (!intersections.length) return;
-                this.onPointSelect(intersections[0].object.userData);
-                return;
-            }
-
-            const hit = this.get2DHit(event);
+            const hit = this.getPointHit(event);
             if (hit?.data) {
                 this.onPointSelect(hit.data);
             }
-        }
-
-        animate() {
-            const tick = () => {
-                if (!this.isPaused) {
-                    if (!this.isDragging) {
-                        this.rotationY += 0.0016 + this.velocityX;
-                        this.rotationX += this.velocityY;
-                        this.rotationX = Math.max(-1.1, Math.min(1.1, this.rotationX));
-                        this.velocityX *= 0.95;
-                        this.velocityY *= 0.95;
-                    }
-                }
-
-                if (this.mode === 'three') {
-                    this.renderThree();
-                } else {
-                    this.renderCanvas2D();
-                }
-
-                this.animationFrame = requestAnimationFrame(tick);
-            };
-
-            this.animationFrame = requestAnimationFrame(tick);
-        }
-
-        renderThree() {
-            if (!this.globeGroup) return;
-
-            this.globeGroup.rotation.y = this.rotationY;
-            this.globeGroup.rotation.x = this.rotationX;
-
-            this.hotspots.forEach(hotspot => {
-                const pulse = 1 + (Math.sin((Date.now() * 0.0025) + (hotspot.userData.strength * 6)) * 0.07);
-                hotspot.scale.set(pulse, pulse, pulse);
-            });
-
-            this.renderer.render(this.scene, this.camera);
-        }
-
-        renderCanvas2D() {
-            if (!this.ctx) return;
-
-            const ctx = this.ctx;
-            const width = this.renderWidth;
-            const height = this.renderHeight;
-
-            ctx.clearRect(0, 0, width, height);
-
-            const cx = width / 2;
-            const cy = height / 2;
-            const globeRadius = Math.max(50, Math.min(width, height) * 0.34);
-
-            const gradient = ctx.createRadialGradient(
-                cx - (globeRadius * 0.26),
-                cy - (globeRadius * 0.32),
-                globeRadius * 0.2,
-                cx,
-                cy,
-                globeRadius
-            );
-            gradient.addColorStop(0, '#5fbaff');
-            gradient.addColorStop(0.35, '#2f7fc8');
-            gradient.addColorStop(1, '#103a61');
-
-            ctx.beginPath();
-            ctx.arc(cx, cy, globeRadius, 0, Math.PI * 2);
-            ctx.fillStyle = gradient;
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.arc(cx, cy, globeRadius, 0, Math.PI * 2);
-            ctx.strokeStyle = 'rgba(141, 225, 255, 0.38)';
-            ctx.lineWidth = 1.2;
-            ctx.stroke();
-
-            this.draw2DHotspots(ctx, cx, cy, globeRadius);
-
-            ctx.beginPath();
-            ctx.arc(cx - (globeRadius * 0.32), cy - (globeRadius * 0.42), globeRadius * 0.18, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(208, 243, 255, 0.18)';
-            ctx.fill();
-        }
-
-        draw2DHotspots(ctx, cx, cy, globeRadius) {
-            this.projectedHotspots = [];
-            if (!this.points.length) return;
-
-            const maxEvents = Math.max(...this.points.map(point => point.totalEvents || 1), 1);
-
-            this.points.forEach(point => {
-                const base = this.latLngToVec(point.lat, point.lng);
-                const rotated = this.rotateVector(base, this.rotationX, this.rotationY);
-
-                if (rotated.z < -0.18) return;
-
-                const screenX = cx + (rotated.x * globeRadius);
-                const screenY = cy - (rotated.y * globeRadius);
-                const strength = Math.min(1, (point.totalEvents || 1) / maxEvents);
-                const depthScale = 0.45 + ((rotated.z + 1) * 0.55);
-                const radius = (2.2 + (strength * 8.4)) * depthScale;
-
-                this.projectedHotspots.push({
-                    data: { ...point, strength },
-                    screenX,
-                    screenY,
-                    radius
-                });
-            });
-
-            this.projectedHotspots.sort((a, b) => a.radius - b.radius);
-
-            this.projectedHotspots.forEach(point => {
-                const hue = 195 - (point.data.strength * 45);
-
-                ctx.beginPath();
-                ctx.arc(point.screenX, point.screenY, point.radius, 0, Math.PI * 2);
-                ctx.fillStyle = `hsla(${hue}, 90%, ${58 - (point.data.strength * 15)}%, ${0.55 + (point.data.strength * 0.42)})`;
-                ctx.shadowColor = `hsla(${hue}, 95%, 72%, 0.95)`;
-                ctx.shadowBlur = point.radius * 2.6;
-                ctx.fill();
-            });
-
-            ctx.shadowBlur = 0;
-        }
-
-        resize() {
-            const width = Math.max(240, this.canvas.clientWidth || 320);
-            const height = Math.max(240, this.canvas.clientHeight || 320);
-
-            this.renderWidth = width;
-            this.renderHeight = height;
-
-            if (this.mode === 'three') {
-                this.renderer.setSize(width, height, false);
-                this.camera.aspect = width / height;
-                this.camera.updateProjectionMatrix();
-                return;
-            }
-
-            const dpr = Math.min(window.devicePixelRatio || 1, 2);
-            this.canvas.width = Math.round(width * dpr);
-            this.canvas.height = Math.round(height * dpr);
-            this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
         }
 
         destroy() {
@@ -482,10 +520,6 @@
             }
 
             window.removeEventListener('resize', this.onResize);
-
-            if (this.mode === 'three') {
-                this.renderer?.dispose?.();
-            }
         }
 
         formatNumber(value) {
