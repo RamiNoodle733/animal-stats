@@ -22,6 +22,55 @@
     padding: 3px 8px;
 }
 
+#community-view.map-tab-active .hub-only-module {
+    display: none !important;
+}
+
+@media (min-width: 901px) {
+    #community-view.map-tab-active .community-feed-layout,
+    #community-view.map-tab-active .community__layout {
+        grid-template-columns: minmax(0, 1fr);
+        max-width: none;
+        padding: 10px 14px;
+    }
+
+    #community-view.map-tab-active .community-feed-column,
+    #community-view.map-tab-active .community__feed {
+        display: none !important;
+    }
+
+    #community-view.map-tab-active .community-sidebar-column,
+    #community-view.map-tab-active .community__sidebar {
+        padding-right: 0;
+        max-height: 100%;
+        overflow-y: auto;
+    }
+
+    #community-view.map-tab-active .community-sidebar-column > :not(.map-primary-module),
+    #community-view.map-tab-active .community__sidebar > :not(.map-primary-module) {
+        display: none !important;
+    }
+
+    #community-view.map-tab-active .map-primary-module {
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - var(--header-height, 56px) - 30px);
+        padding: 12px;
+    }
+
+    #community-view.map-tab-active .globe-stage {
+        height: clamp(260px, 47vh, 560px);
+        min-height: 260px;
+        max-height: 560px;
+    }
+
+    #community-view.map-tab-active .globe-point-details {
+        flex: 1;
+        max-height: none;
+        min-height: 170px;
+    }
+}
+
 #community-view .globe-mode-switch {
     margin: 8px 0 10px;
     display: grid;

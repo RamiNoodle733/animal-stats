@@ -824,10 +824,11 @@
     position: sticky;
     top: 0;
     z-index: 20;
+    width: min(1400px, calc(100% - 24px));
+    margin: 0 auto clamp(8px, 1vh, 12px);
     background: linear-gradient(135deg, rgba(20, 25, 35, 0.99), rgba(15, 20, 30, 1));
     border: 1px solid rgba(0, 212, 255, 0.25);
     border-radius: 10px;
-    margin-bottom: clamp(8px, 1vh, 12px);
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
