@@ -1,5 +1,41 @@
 /* Globe analytics module styles loaded independently from legacy community CSS. */
 
+#community-view .community-tab-bar {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+    padding: 4px;
+    width: min(1400px, calc(100% - 24px));
+    margin: 0 auto clamp(8px, 1vh, 12px);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 212, 255, 0.35) transparent;
+}
+
+#community-view .community-tab-bar::-webkit-scrollbar {
+    height: 6px;
+}
+
+#community-view .community-tab-bar::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+#community-view .community-tab-bar::-webkit-scrollbar-thumb {
+    background: rgba(0, 212, 255, 0.35);
+    border-radius: 3px;
+}
+
+#community-view .community-tab-btn {
+    flex: 1 1 140px;
+    min-width: 140px;
+}
+
+#community-view .community-sidebar-column > * {
+    flex: 0 0 auto;
+}
+
 #community-view .globe-focus-module {
     border-color: rgba(0, 212, 255, 0.34);
     box-shadow: 0 14px 30px rgba(0, 0, 0, 0.36), inset 0 0 18px rgba(0, 212, 255, 0.06);
@@ -28,7 +64,10 @@
 
 #community-view.globe-compact-mode .globe-totals-grid,
 #community-view.globe-compact-mode .globe-window-row,
+#community-view.globe-compact-mode .globe-insights-grid,
+#community-view.globe-compact-mode .globe-advanced-grid,
 #community-view.globe-compact-mode .globe-breakdown-grid,
+#community-view.globe-compact-mode .globe-city-directory,
 #community-view.globe-compact-mode .globe-point-details {
     display: none;
 }
@@ -40,11 +79,18 @@
 }
 
 @media (min-width: 901px) {
+    #community-view.map-tab-active {
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
     #community-view.map-tab-active .community-feed-layout,
     #community-view.map-tab-active .community__layout {
         grid-template-columns: minmax(0, 1fr);
         max-width: none;
         padding: 10px 14px;
+        min-height: auto;
+        overflow: visible;
     }
 
     #community-view.map-tab-active .community-feed-column,
@@ -55,8 +101,8 @@
     #community-view.map-tab-active .community-sidebar-column,
     #community-view.map-tab-active .community__sidebar {
         padding-right: 0;
-        max-height: 100%;
-        overflow: hidden;
+        max-height: none;
+        overflow: visible;
     }
 
     #community-view.map-tab-active .community-sidebar-column > :not(.map-primary-module),
@@ -68,27 +114,10 @@
         display: flex;
         flex-direction: column;
         flex: 1 1 auto;
-        min-height: 0;
-        max-height: 100%;
-        overflow-y: auto;
-        overflow-x: hidden;
-        scrollbar-width: thin;
-        scrollbar-color: rgba(0, 212, 255, 0.3) transparent;
+        min-height: auto;
+        max-height: none;
+        overflow: visible;
         padding: 12px;
-    }
-
-    #community-view.map-tab-active .map-primary-module::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    #community-view.map-tab-active .map-primary-module::-webkit-scrollbar-track {
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 3px;
-    }
-
-    #community-view.map-tab-active .map-primary-module::-webkit-scrollbar-thumb {
-        background: rgba(0, 212, 255, 0.3);
-        border-radius: 3px;
     }
 
     #community-view.map-tab-active .globe-stage {
@@ -98,10 +127,10 @@
     }
 
     #community-view.map-tab-active .globe-point-details {
-        flex: 1 1 auto;
+        flex: 0 0 auto;
         max-height: none;
         min-height: 170px;
-        overflow: auto;
+        overflow: visible;
     }
 }
 
@@ -191,6 +220,26 @@
     box-shadow: 0 8px 18px rgba(0, 0, 0, 0.4);
 }
 
+#community-view .feed-reply-context {
+    margin: 0 0 10px;
+    padding: 6px 10px;
+    border-left: 3px solid rgba(0, 212, 255, 0.42);
+    border-radius: 0 8px 8px 0;
+    background: rgba(0, 212, 255, 0.08);
+}
+
+#community-view .feed-reply-context-author {
+    font-size: 0.68rem;
+    color: rgba(133, 222, 255, 0.94);
+    margin-bottom: 3px;
+}
+
+#community-view .feed-reply-context-text {
+    font-size: 0.74rem;
+    color: rgba(196, 227, 241, 0.78);
+    line-height: 1.35;
+}
+
 #community-view .tooltip-place {
     font-size: 0.73rem;
     letter-spacing: 0.5px;
@@ -266,6 +315,162 @@
     color: #8fe7ff;
 }
 
+#community-view .globe-insights-grid {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+}
+
+#community-view .globe-insight-card {
+    border-radius: 10px;
+    border: 1px solid rgba(98, 176, 215, 0.3);
+    background: rgba(6, 20, 33, 0.8);
+    padding: 8px;
+    min-height: 58px;
+}
+
+#community-view .globe-insight-label {
+    display: block;
+    font-size: 0.58rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(177, 216, 233, 0.76);
+    margin-bottom: 4px;
+}
+
+#community-view .globe-insight-value {
+    display: block;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: #c9f4ff;
+    line-height: 1.35;
+}
+
+#community-view .globe-advanced-grid {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+#community-view .globe-chart-card {
+    border-radius: 11px;
+    border: 1px solid rgba(89, 168, 206, 0.3);
+    background: rgba(5, 19, 31, 0.82);
+    padding: 10px;
+}
+
+#community-view .globe-chart-card h4 {
+    margin: 0 0 8px;
+    font-size: 0.66rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(170, 212, 231, 0.8);
+}
+
+#community-view .globe-chart-wrap {
+    height: 150px;
+    position: relative;
+}
+
+#community-view .globe-city-directory {
+    margin-top: 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(76, 167, 214, 0.31);
+    background: rgba(7, 18, 30, 0.83);
+    padding: 10px;
+}
+
+#community-view .globe-city-directory-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+#community-view .globe-city-directory-head h4 {
+    margin: 0;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: rgba(181, 220, 238, 0.8);
+}
+
+#community-view .globe-city-count {
+    font-size: 0.63rem;
+    color: #88e3ff;
+}
+
+#community-view .globe-city-search {
+    width: 100%;
+    height: 34px;
+    border-radius: 8px;
+    border: 1px solid rgba(86, 172, 214, 0.3);
+    background: rgba(6, 22, 36, 0.85);
+    color: rgba(214, 239, 250, 0.94);
+    font-size: 0.74rem;
+    padding: 0 10px;
+    margin-bottom: 9px;
+}
+
+#community-view .globe-city-search:focus {
+    outline: none;
+    border-color: rgba(126, 216, 255, 0.68);
+    box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.15);
+}
+
+#community-view .globe-city-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#community-view .globe-city-row {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid rgba(73, 155, 190, 0.24);
+    background: rgba(8, 23, 37, 0.78);
+    color: rgba(219, 242, 251, 0.9);
+    text-align: left;
+    padding: 7px 9px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+#community-view .globe-city-row:hover {
+    border-color: rgba(122, 218, 255, 0.55);
+    background: rgba(11, 30, 47, 0.88);
+}
+
+#community-view .globe-city-row.active {
+    border-color: rgba(120, 228, 255, 0.8);
+    background: rgba(6, 40, 61, 0.9);
+}
+
+#community-view .globe-city-label {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #b9eeff;
+}
+
+#community-view .globe-city-metrics {
+    display: block;
+    margin-top: 3px;
+    font-size: 0.65rem;
+    color: rgba(179, 216, 232, 0.78);
+}
+
+#community-view .globe-directory-empty {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px dashed rgba(90, 165, 205, 0.32);
+    color: rgba(178, 218, 236, 0.72);
+    font-size: 0.7rem;
+}
+
 #community-view .globe-breakdown-grid {
     margin-top: 10px;
     display: grid;
@@ -324,8 +529,8 @@
     border: 1px solid rgba(74, 173, 224, 0.3);
     background: rgba(7, 18, 30, 0.83);
     padding: 10px;
-    max-height: 240px;
-    overflow: auto;
+    max-height: none;
+    overflow: visible;
 }
 
 #community-view .globe-point-placeholder,
@@ -413,6 +618,8 @@
 }
 
 @media (max-width: 1024px) {
+    #community-view .globe-insights-grid,
+    #community-view .globe-advanced-grid,
     #community-view .globe-point-grid,
     #community-view .globe-breakdown-grid {
         grid-template-columns: 1fr;

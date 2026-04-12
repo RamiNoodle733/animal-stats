@@ -75,12 +75,13 @@ function buildMessageTree(messages, userMap) {
         messageMap[message._id.toString()] = message;
     });
     
-    // Second pass: build tree
-    messages.forEach(m => {
-        const message = messageMap[m._id.toString()];
+    // Second pass: build tree and attach parent context
+    Object.values(messageMap).forEach((message) => {
         if (message.parentId) {
             const parent = messageMap[message.parentId.toString()];
             if (parent) {
+                message.parentContent = parent.content || null;
+                message.parentUsername = parent.authorUsername || null;
                 parent.replies.push(message);
             }
         } else {
@@ -95,7 +96,41 @@ function buildMessageTree(messages, userMap) {
         }
     });
     
+    rootMessages.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
     return rootMessages;
+}
+
+async function fetchReplyDescendants(rootIds) {
+    if (!Array.isArray(rootIds) || rootIds.length === 0) return [];
+
+    const seen = new Set(rootIds.map(id => id.toString()));
+    const descendants = [];
+    let frontier = [...rootIds];
+
+    while (frontier.length > 0) {
+        const batch = await ChatMessage.find({ parentId: { $in: frontier } })
+            .sort({ createdAt: 1 })
+            .lean();
+
+        if (!batch.length) {
+            break;
+        }
+
+        const nextFrontier = [];
+        batch.forEach((message) => {
+            const messageId = message._id.toString();
+            if (seen.has(messageId)) return;
+
+            seen.add(messageId);
+            descendants.push(message);
+            nextFrontier.push(message._id);
+        });
+
+        frontier = nextFrontier;
+    }
+
+    return descendants;
 }
 
 // GET: Get community feed (all comments)
@@ -223,15 +258,9 @@ async function handleGet(req, res) {
         .limit(parseInt(limit))
         .lean();
 
-    // Get all message IDs to fetch replies
+    // Fetch replies at all depths for the selected root messages
     const rootIds = rootMessages.map(m => m._id);
-    
-    // Fetch all replies for these root messages
-    const replies = await ChatMessage.find({
-        parentId: { $in: rootIds }
-    })
-        .sort({ createdAt: 1 })
-        .lean();
+    const replies = await fetchReplyDescendants(rootIds);
 
     // Combine all messages
     const allMessages = [...rootMessages, ...replies];
