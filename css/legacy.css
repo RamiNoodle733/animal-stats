@@ -1,4 +1,6 @@
 :root {
+    --header-height: 60px;
+
     /* Primary Colors */
     --primary-color: #00d4ff;
     --primary-glow: rgba(0, 212, 255, 0.6);
@@ -101,8 +103,9 @@ body {
     box-shadow: 0 2px 15px rgba(0, 212, 255, 0.2);
     flex-shrink: 0;
     display: grid;
-    grid-template-columns: 280px 1fr 280px;
+    grid-template-columns: minmax(260px, 1fr) auto minmax(260px, 1fr);
     align-items: center;
+    min-height: var(--header-height);
     z-index: 50;
     position: relative;
 }
@@ -115,6 +118,7 @@ body {
     cursor: pointer;
     transition: transform 0.2s ease;
     justify-self: start;
+    min-width: 0;
 }
 
 .header-brand:hover {
@@ -136,9 +140,9 @@ body {
 
 .game-header h1 {
     font-family: var(--font-display);
-    font-size: 1.2rem;
+    font-size: clamp(0.92rem, 1.15vw, 1.2rem);
     font-weight: 700;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     background: linear-gradient(135deg, #00d4ff, #00ff88);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -146,6 +150,9 @@ body {
     filter: drop-shadow(0 0 8px rgba(0, 212, 255, 0.6));
     margin: 0;
     white-space: nowrap;
+    max-width: min(100%, 440px);
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .game-header h1 .title-mode {

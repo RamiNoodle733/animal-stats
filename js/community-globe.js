@@ -483,10 +483,20 @@
 
         drawFlatMap(ctx, width, height) {
             const padding = 10;
-            const mapX = padding;
-            const mapY = padding;
-            const mapWidth = width - (padding * 2);
-            const mapHeight = height - (padding * 2);
+            const maxWidth = width - (padding * 2);
+            const maxHeight = height - (padding * 2);
+            const targetAspect = 2; // Equirectangular world maps are naturally 2:1.
+
+            let mapWidth = maxWidth;
+            let mapHeight = mapWidth / targetAspect;
+
+            if (mapHeight > maxHeight) {
+                mapHeight = maxHeight;
+                mapWidth = mapHeight * targetAspect;
+            }
+
+            const mapX = (width - mapWidth) / 2;
+            const mapY = (height - mapHeight) / 2;
 
             const hash = `${width}x${height}::${this.landRings.length}`;
             if (!this.flatBaseCanvas || this.flatBaseHash !== hash) {
@@ -582,11 +592,11 @@
 
         latLngToVector(lat, lng) {
             const latRad = lat * (Math.PI / 180);
-            const lngRad = (lng + 180) * (Math.PI / 180);
+            const lngRad = lng * (Math.PI / 180);
             return {
-                x: Math.cos(latRad) * Math.cos(lngRad),
+                x: Math.cos(latRad) * Math.sin(lngRad),
                 y: Math.sin(latRad),
-                z: Math.cos(latRad) * Math.sin(lngRad)
+                z: Math.cos(latRad) * Math.cos(lngRad)
             };
         }
 

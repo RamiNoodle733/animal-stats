@@ -1430,6 +1430,36 @@
                             </div>
                         </div>
 
+                        <div class="globe-insights-grid">
+                            <div class="globe-insight-card">
+                                <span class="globe-insight-label">Hottest Location</span>
+                                <strong class="globe-insight-value" id="globe-insight-hottest">No data</strong>
+                            </div>
+                            <div class="globe-insight-card">
+                                <span class="globe-insight-label">Top Country</span>
+                                <strong class="globe-insight-value" id="globe-insight-country">No data</strong>
+                            </div>
+                            <div class="globe-insight-card">
+                                <span class="globe-insight-label">Momentum</span>
+                                <strong class="globe-insight-value" id="globe-insight-momentum">No data</strong>
+                            </div>
+                        </div>
+
+                        <div class="globe-advanced-grid">
+                            <div class="globe-chart-card">
+                                <h4>14-Day Activity Trend</h4>
+                                <div class="globe-chart-wrap">
+                                    <canvas id="globe-trend-chart" aria-label="Daily events and visits trend"></canvas>
+                                </div>
+                            </div>
+                            <div class="globe-chart-card">
+                                <h4>Top Countries by Events</h4>
+                                <div class="globe-chart-wrap">
+                                    <canvas id="globe-country-chart" aria-label="Top countries by event volume"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="globe-breakdown-grid">
                             <div class="globe-breakdown-col">
                                 <h4>Top Actions</h4>
@@ -1438,6 +1468,17 @@
                             <div class="globe-breakdown-col">
                                 <h4>Top Pages</h4>
                                 <div id="globe-pages-list" class="globe-breakdown-list"></div>
+                            </div>
+                        </div>
+
+                        <div class="globe-city-directory">
+                            <div class="globe-city-directory-head">
+                                <h4>Location Directory</h4>
+                                <span class="globe-city-count" id="globe-city-count">0 locations</span>
+                            </div>
+                            <input type="search" id="globe-city-search" class="globe-city-search" placeholder="Search city, region, or country">
+                            <div class="globe-city-list" id="globe-city-list">
+                                <div class="globe-directory-empty">Loading locations...</div>
                             </div>
                         </div>
 

@@ -45,6 +45,12 @@ class CommunityManager {
         this.selectedGlobeKey = null;
         this.globeMode = 'globe';
         this.globeModeBound = false;
+        this.globeDirectoryBound = false;
+        this.globeCityFilter = '';
+        this.globeCharts = {
+            trend: null,
+            country: null
+        };
         this.numberFormatter = new Intl.NumberFormat();
     }
 
@@ -479,12 +485,14 @@ class CommunityManager {
             this.globe.setOnPointSelect((point) => {
                 this.selectedGlobeKey = point?.key || null;
                 this.loadGlobePointDetails(this.selectedGlobeKey);
+                this.highlightSelectedCityRow();
             });
 
             requestAnimationFrame(() => this.globe?.resize?.());
         }
 
         this.bindGlobeModeSwitch();
+        this.bindGlobeDirectoryControls();
         this.applyGlobeMode(this.globeMode);
 
         this.loadGlobeAnalytics();
@@ -507,6 +515,20 @@ class CommunityManager {
         });
 
         this.globeModeBound = true;
+    }
+
+    bindGlobeDirectoryControls() {
+        if (this.globeDirectoryBound) return;
+
+        const searchInput = document.getElementById('globe-city-search');
+        if (!searchInput) return;
+
+        searchInput.addEventListener('input', (event) => {
+            this.globeCityFilter = String(event.target.value || '').trim().toLowerCase();
+            this.renderGlobeCityDirectory(this.lastGlobePayload?.points || []);
+        });
+
+        this.globeDirectoryBound = true;
     }
 
     applyGlobeMode(mode) {
@@ -557,6 +579,10 @@ class CommunityManager {
             this.renderGlobeSummary(payload);
             this.renderGlobeBreakdown('globe-actions-list', payload.actions || []);
             this.renderGlobeBreakdown('globe-pages-list', payload.pages || []);
+            this.renderGlobeInsights(payload);
+            this.renderGlobeTrendChart(payload.trend || []);
+            this.renderGlobeCountryChart(payload.points || []);
+            this.renderGlobeCityDirectory(payload.points || []);
 
             if (empty) {
                 empty.style.display = 'none';
@@ -565,6 +591,7 @@ class CommunityManager {
             if (!this.selectedGlobeKey && Array.isArray(payload.points) && payload.points.length > 0) {
                 this.selectedGlobeKey = payload.points[0].key;
                 this.loadGlobePointDetails(this.selectedGlobeKey);
+                this.highlightSelectedCityRow();
             }
         } catch (error) {
             console.error('Error loading globe analytics:', error);
@@ -596,6 +623,320 @@ class CommunityManager {
         });
     }
 
+    renderGlobeInsights(payload) {
+        const points = Array.isArray(payload.points) ? payload.points : [];
+        const windows = payload.windows || {};
+
+        const hottest = points[0] || null;
+        const hottestLabel = hottest
+            ? (hottest.locationRaw || [hottest.city, hottest.region, hottest.country].filter(Boolean).join(', ') || 'Unknown')
+            : 'No data';
+
+        const countryTotals = points.reduce((acc, point) => {
+            const country = (point.country || 'Unknown').trim() || 'Unknown';
+            acc[country] = (acc[country] || 0) + (Number(point.totalEvents) || 0);
+            return acc;
+        }, {});
+
+        const topCountryEntry = Object.entries(countryTotals)
+            .sort((a, b) => b[1] - a[1])[0];
+        const topCountryLabel = topCountryEntry
+            ? `${topCountryEntry[0]} (${this.formatExactNumber(topCountryEntry[1])})`
+            : 'No data';
+
+        const last24h = Number(windows.last24h) || 0;
+        const last7d = Number(windows.last7d) || 0;
+        const weeklyPace = last7d > 0 ? (last24h * 7) / last7d : 0;
+        const momentumLabel = last7d > 0
+            ? `${weeklyPace.toFixed(2)}x weekly pace`
+            : 'No weekly baseline';
+
+        this.updateInsightValue('globe-insight-hottest', hottestLabel);
+        this.updateInsightValue('globe-insight-country', topCountryLabel);
+        this.updateInsightValue('globe-insight-momentum', momentumLabel);
+    }
+
+    updateInsightValue(id, value) {
+        const el = document.getElementById(id);
+        if (el) {
+            el.textContent = value;
+        }
+    }
+
+    renderGlobeTrendChart(trend) {
+        const canvas = document.getElementById('globe-trend-chart');
+        if (!canvas) return;
+
+        if (!Array.isArray(trend) || trend.length === 0 || !window.Chart) {
+            this.destroyGlobeChart('trend');
+            this.renderChartFallback(canvas, 'Trend chart unavailable');
+            return;
+        }
+
+        const labels = trend.map((item) => {
+            const date = new Date(`${item.day}T00:00:00`);
+            if (Number.isNaN(date.getTime())) return item.day;
+            return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+        });
+
+        const events = trend.map(item => Number(item.events) || 0);
+        const visits = trend.map(item => Number(item.visits) || 0);
+
+        this.destroyGlobeChart('trend');
+
+        this.globeCharts.trend = new window.Chart(canvas.getContext('2d'), {
+            type: 'line',
+            data: {
+                labels,
+                datasets: [
+                    {
+                        label: 'Events',
+                        data: events,
+                        borderColor: 'rgba(0, 212, 255, 0.95)',
+                        backgroundColor: 'rgba(0, 212, 255, 0.2)',
+                        fill: true,
+                        tension: 0.34,
+                        borderWidth: 2,
+                        pointRadius: 2.4,
+                        pointHoverRadius: 4
+                    },
+                    {
+                        label: 'Visits',
+                        data: visits,
+                        borderColor: 'rgba(255, 155, 0, 0.95)',
+                        backgroundColor: 'rgba(255, 155, 0, 0.15)',
+                        fill: false,
+                        tension: 0.28,
+                        borderWidth: 1.8,
+                        pointRadius: 2,
+                        pointHoverRadius: 3.8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'rgba(206, 235, 247, 0.88)',
+                            boxWidth: 10,
+                            boxHeight: 10,
+                            font: { size: 10 }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: 'rgba(174, 211, 227, 0.72)',
+                            maxRotation: 0,
+                            autoSkip: true,
+                            font: { size: 9 }
+                        },
+                        grid: {
+                            color: 'rgba(80, 128, 148, 0.18)'
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: 'rgba(174, 211, 227, 0.72)',
+                            precision: 0,
+                            font: { size: 9 }
+                        },
+                        grid: {
+                            color: 'rgba(80, 128, 148, 0.18)'
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    renderGlobeCountryChart(points) {
+        const canvas = document.getElementById('globe-country-chart');
+        if (!canvas) return;
+
+        if (!Array.isArray(points) || points.length === 0 || !window.Chart) {
+            this.destroyGlobeChart('country');
+            this.renderChartFallback(canvas, 'Country chart unavailable');
+            return;
+        }
+
+        const countryTotals = points.reduce((acc, point) => {
+            const country = (point.country || 'Unknown').trim() || 'Unknown';
+            acc[country] = (acc[country] || 0) + (Number(point.totalEvents) || 0);
+            return acc;
+        }, {});
+
+        const topCountries = Object.entries(countryTotals)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 8);
+
+        if (!topCountries.length) {
+            this.destroyGlobeChart('country');
+            this.renderChartFallback(canvas, 'Country chart unavailable');
+            return;
+        }
+
+        this.destroyGlobeChart('country');
+
+        this.globeCharts.country = new window.Chart(canvas.getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: topCountries.map(([country]) => country),
+                datasets: [{
+                    label: 'Events',
+                    data: topCountries.map(([, count]) => count),
+                    backgroundColor: [
+                        'rgba(0, 212, 255, 0.85)',
+                        'rgba(51, 202, 255, 0.8)',
+                        'rgba(103, 191, 255, 0.75)',
+                        'rgba(145, 180, 255, 0.7)',
+                        'rgba(185, 170, 255, 0.65)',
+                        'rgba(255, 158, 116, 0.7)',
+                        'rgba(255, 188, 92, 0.72)',
+                        'rgba(255, 220, 102, 0.74)'
+                    ],
+                    borderColor: 'rgba(12, 32, 44, 0.9)',
+                    borderWidth: 1,
+                    borderRadius: 5,
+                    barThickness: 12
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: 'rgba(174, 211, 227, 0.72)',
+                            precision: 0,
+                            font: { size: 9 }
+                        },
+                        grid: {
+                            color: 'rgba(80, 128, 148, 0.16)'
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: 'rgba(206, 235, 247, 0.88)',
+                            font: { size: 9 }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    renderChartFallback(canvas, message) {
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        const width = canvas.clientWidth || 320;
+        const height = canvas.clientHeight || 140;
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        canvas.width = Math.round(width * dpr);
+        canvas.height = Math.round(height * dpr);
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, width, height);
+
+        ctx.fillStyle = 'rgba(170, 211, 229, 0.75)';
+        ctx.font = '12px Rajdhani, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(message, width / 2, height / 2);
+    }
+
+    renderGlobeCityDirectory(points) {
+        const listEl = document.getElementById('globe-city-list');
+        const countEl = document.getElementById('globe-city-count');
+        if (!listEl || !countEl) return;
+
+        const normalizedFilter = this.globeCityFilter;
+        const normalizedPoints = Array.isArray(points)
+            ? points
+                .filter(point => point && point.key)
+                .map((point) => {
+                    const label = point.locationRaw || [point.city, point.region, point.country].filter(Boolean).join(', ') || 'Unknown location';
+                    return {
+                        ...point,
+                        label,
+                        searchText: `${label} ${point.country || ''} ${point.region || ''} ${point.city || ''}`.toLowerCase()
+                    };
+                })
+            : [];
+
+        const filtered = normalizedFilter
+            ? normalizedPoints.filter(point => point.searchText.includes(normalizedFilter))
+            : normalizedPoints;
+
+        countEl.textContent = `${filtered.length} locations`;
+
+        if (!filtered.length) {
+            listEl.innerHTML = '<div class="globe-directory-empty">No locations match the current filter.</div>';
+            return;
+        }
+
+        listEl.innerHTML = filtered.slice(0, 250).map((point) => {
+            const isActive = this.selectedGlobeKey && point.key === this.selectedGlobeKey;
+            return `
+                <button type="button" class="globe-city-row ${isActive ? 'active' : ''}" data-location-key="${this.escapeHtml(point.key)}" aria-pressed="${isActive ? 'true' : 'false'}">
+                    <span class="globe-city-label">${this.escapeHtml(point.label)}</span>
+                    <span class="globe-city-metrics">
+                        ${this.formatExactNumber(point.totalEvents || 0)} events • ${this.formatExactNumber(point.totalVisits || 0)} visits
+                    </span>
+                </button>
+            `;
+        }).join('');
+
+        listEl.querySelectorAll('.globe-city-row').forEach((row) => {
+            row.addEventListener('click', () => {
+                const key = row.dataset.locationKey;
+                if (!key) return;
+
+                this.selectedGlobeKey = key;
+                this.loadGlobePointDetails(key);
+                this.highlightSelectedCityRow();
+            });
+        });
+
+        this.highlightSelectedCityRow();
+    }
+
+    highlightSelectedCityRow() {
+        const listEl = document.getElementById('globe-city-list');
+        if (!listEl) return;
+
+        const selectedKey = this.selectedGlobeKey || '';
+        listEl.querySelectorAll('.globe-city-row').forEach((row) => {
+            const isActive = row.dataset.locationKey === selectedKey;
+            row.classList.toggle('active', isActive);
+            row.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+        });
+    }
+
+    destroyGlobeChart(chartKey) {
+        const chart = this.globeCharts[chartKey];
+        if (chart && typeof chart.destroy === 'function') {
+            chart.destroy();
+        }
+        this.globeCharts[chartKey] = null;
+    }
+
+    destroyGlobeCharts() {
+        this.destroyGlobeChart('trend');
+        this.destroyGlobeChart('country');
+    }
+
     renderGlobeBreakdown(containerId, items) {
         const container = document.getElementById(containerId);
         if (!container) return;
@@ -620,6 +961,9 @@ class CommunityManager {
     async loadGlobePointDetails(locationKey) {
         const detailsEl = document.getElementById('globe-point-details');
         if (!detailsEl || !locationKey) return;
+
+        this.selectedGlobeKey = locationKey;
+        this.highlightSelectedCityRow();
 
         detailsEl.innerHTML = '<div class="globe-point-loading"><i class="fas fa-spinner fa-spin"></i> Loading location details...</div>';
 
@@ -743,7 +1087,7 @@ class CommunityManager {
                     'Authorization': `Bearer ${Auth.getToken()}`
                 }
             });
-        } catch (error) {
+        } catch {
             // Silent fail for presence
         }
     }
@@ -904,6 +1248,7 @@ class CommunityManager {
         this.stopPresencePing();
         this.stopGlobeRefresh();
         this.globe?.setPaused(true);
+        this.destroyGlobeCharts();
         
         // Reset mobile sidebar state
         const sidebar = document.querySelector('.community-sidebar-column');
@@ -1097,7 +1442,7 @@ class CommunityManager {
         if (item.parentId && item.parentContent) {
             replyContextHtml = `
                 <div class="feed-reply-context">
-                    <div class="feed-reply-context-author">â†³ Replying to ${this.escapeHtml(item.parentUsername || 'someone')}</div>
+                    <div class="feed-reply-context-author">-> Replying to ${this.escapeHtml(item.parentUsername || 'someone')}</div>
                     <div class="feed-reply-context-text">${this.escapeHtml(item.parentContent.substring(0, 100))}${item.parentContent.length > 100 ? '...' : ''}</div>
                 </div>
             `;
@@ -1135,6 +1480,7 @@ class CommunityManager {
                         </div>
                     </div>
                     ${replyContextHtml}
+                    ${animalContextHtml}
                     <div class="feed-post-content">${this.escapeHtml(item.content)}</div>
                     <div class="feed-post-actions">
                         <button class="feed-action-btn vote-up ${hasUpvoted ? 'voted' : ''}" data-msg-id="${item._id}" title="Upvote">
