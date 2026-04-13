@@ -131,6 +131,9 @@
             if (path === '/' || path === '' || path === '/login' || path === '/signup' || path === '/profile') {
                 document.documentElement.classList.add('is-home');
             }
+            if (path === '/about') {
+                document.documentElement.classList.add('is-home', 'is-about');
+            }
             if (path === '/login') {
                 document.documentElement.classList.add('is-login');
             }
@@ -195,11 +198,12 @@
         html.is-home .shared-bottom-bar { display: none !important; }
         
         /* Show correct view based on route - only during initial load */
-        html.is-home:not(.is-login):not(.is-signup):not(.is-profile):not(.is-public-profile) #home-view { display: flex !important; }
+        html.is-home:not(.is-login):not(.is-signup):not(.is-profile):not(.is-public-profile):not(.is-about) #home-view { display: flex !important; }
         html.is-login #login-view { display: flex !important; }
         html.is-signup #signup-view { display: flex !important; }
         html.is-profile #profile-view { display: flex !important; }
         html.is-public-profile #public-profile-view { display: flex !important; }
+        html.is-about #about-view { display: flex !important; }
         
         /* Hide other views on home/auth pages - only during initial load */
         html.is-home #stats-view,
@@ -366,7 +370,7 @@
 
             <!-- Footer with About link - OUTSIDE home-portal to avoid screen shake effects -->
             <footer class="portal-footer">
-                <span class="portal-version">v0.1.1</span>
+                <span class="portal-version">v2.1.0</span>
                 <div class="portal-footer-divider"></div>
                 <a href="/about" class="portal-footer-link">About</a>
                 <div class="portal-footer-divider"></div>
@@ -405,7 +409,7 @@
                     </div>
                     
                     <div class="about-version-section">
-                        <p class="about-version">Version 0.1.1 • Built with <i class="fas fa-heart" style="color: #ff4d6a;"></i> and JavaScript</p>
+                        <p class="about-version">Version 2.1.0 • Built with <i class="fas fa-heart" style="color: #ff4d6a;"></i> and JavaScript</p>
                     </div>
                 </div>
             </div>
