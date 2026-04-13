@@ -105,6 +105,8 @@
             this.inertiaAxis = { x: 0, y: 1, z: 0 };
             this.inertiaSpeed = 0;
             this.autoSpinSpeed = 0.00125;
+            this.globeZoom = 1;
+            this.flatZoom = 1;
 
             this.isPaused = false;
             this.isDragging = false;
@@ -237,13 +239,36 @@
                     this.tooltipEl.style.display = 'none';
                 }
             });
+
+            this.canvas.addEventListener('wheel', (event) => {
+                event.preventDefault();
+                const direction = event.deltaY < 0 ? 1 : -1;
+                const zoomStep = this.mode === 'flat' ? 0.15 : 0.1;
+                this.adjustZoom(direction * zoomStep);
+            }, { passive: false });
         }
 
         getGlobeLayout(width = this.renderWidth, height = this.renderHeight) {
             const centerX = width / 2;
             const centerY = height / 2;
-            const radius = Math.max(70, Math.min(width, height) * 0.365);
+            const baseRadius = Math.max(70, Math.min(width, height) * 0.365);
+            const radius = baseRadius * this.globeZoom;
             return { centerX, centerY, radius };
+        }
+
+        adjustZoom(delta) {
+            if (!Number.isFinite(delta) || delta === 0) return;
+
+            if (this.mode === 'flat') {
+                const nextFlatZoom = clamp(this.flatZoom + delta, 1, 4);
+                if (nextFlatZoom !== this.flatZoom) {
+                    this.flatZoom = nextFlatZoom;
+                    this.flatBaseHash = '';
+                }
+                return;
+            }
+
+            this.globeZoom = clamp(this.globeZoom + delta, 0.65, 2.25);
         }
 
         projectPointerToTrackball(event) {
@@ -487,18 +512,21 @@
             const maxHeight = height - (padding * 2);
             const targetAspect = 2; // Equirectangular world maps are naturally 2:1.
 
-            let mapWidth = maxWidth;
-            let mapHeight = mapWidth / targetAspect;
+            let baseWidth = maxWidth;
+            let baseHeight = baseWidth / targetAspect;
 
-            if (mapHeight > maxHeight) {
-                mapHeight = maxHeight;
-                mapWidth = mapHeight * targetAspect;
+            if (baseHeight > maxHeight) {
+                baseHeight = maxHeight;
+                baseWidth = baseHeight * targetAspect;
             }
+
+            const mapWidth = baseWidth * this.flatZoom;
+            const mapHeight = baseHeight * this.flatZoom;
 
             const mapX = (width - mapWidth) / 2;
             const mapY = (height - mapHeight) / 2;
 
-            const hash = `${width}x${height}::${this.landRings.length}`;
+            const hash = `${width}x${height}::${this.landRings.length}::${this.flatZoom.toFixed(3)}`;
             if (!this.flatBaseCanvas || this.flatBaseHash !== hash) {
                 this.flatBaseCanvas = document.createElement('canvas');
                 this.flatBaseCanvas.width = Math.max(1, Math.round(width));

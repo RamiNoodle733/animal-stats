@@ -1,6 +1,6 @@
 {
   "name": "animal-battle-stats",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Animal Battle Stats - A scientifically accurate wildlife statistics website with MongoDB backend",
   "main": "api/index.js",
   "scripts": {
@@ -8,6 +8,11 @@
     "start": "echo 'Use: vercel dev'",
     "seed": "node scripts/seed-database.js",
     "import:site-activity": "node scripts/migrations/import-site-activity.js",
+    "hooks:install": "git config core.hooksPath .githooks",
+    "version:sync": "node scripts/version/bump-site-version.js --sync-only",
+    "version:bump:patch": "node scripts/version/bump-site-version.js --bump patch",
+    "version:bump:minor": "node scripts/version/bump-site-version.js --bump minor",
+    "version:bump:major": "node scripts/version/bump-site-version.js --bump major",
     "lint": "eslint js/ api/ lib/",
     "lint:fix": "eslint js/ api/ lib/ --fix"
   },
