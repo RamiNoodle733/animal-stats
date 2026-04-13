@@ -17,6 +17,39 @@ const { verifyToken } = require('../lib/auth');
 const presenceStore = new Map();
 const PRESENCE_TTL = 90 * 1000; // 90 seconds
 
+const ACTION_LABELS = Object.freeze({
+    site_visit: 'Site Visits',
+    site_leave: 'Site Exits',
+    fight: 'Animal Fights',
+    vote: 'Votes Cast',
+    vote_removed: 'Votes Removed',
+    tournament_complete: 'Tournaments Completed',
+    tournament_start: 'Tournaments Started',
+    chat_message: 'Chat Messages',
+    chat_reply: 'Chat Replies',
+    comment: 'Comments',
+    comment_reply: 'Comment Replies',
+    profile_view: 'Profile Views',
+    profile_update: 'Profile Updates'
+});
+
+const PAGE_LABELS = Object.freeze({
+    '/': 'Home',
+    '/stats': 'Stats Landing',
+    '/stats/:animal': 'Animal Profiles',
+    '/compare': 'Compare',
+    '/rankings': 'Rankings',
+    '/community': 'Community',
+    '/community/:tab': 'Community Tabs',
+    '/tournament': 'Tournament',
+    '/battlepoints': 'Battle Points Shop',
+    '/about': 'About',
+    '/profile': 'Profile',
+    '/profile/:user': 'Public Profiles',
+    '/login': 'Login',
+    '/signup': 'Signup'
+});
+
 // Clean up stale presence entries
 function cleanupPresence() {
     const now = Date.now();
@@ -25,6 +58,79 @@ function cleanupPresence() {
             presenceStore.delete(userId);
         }
     }
+}
+
+function titleCase(rawValue) {
+    const text = String(rawValue || '').trim();
+    if (!text) return 'Unknown';
+
+    return text
+        .replace(/[_-]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
+function normalizePagePath(rawPath) {
+    const input = String(rawPath || '').trim();
+    if (!input) return null;
+
+    let path = input;
+    try {
+        path = new URL(input, 'https://animalbattlestats.com').pathname;
+    } catch {
+        path = input.split('?')[0].split('#')[0];
+    }
+
+    if (!path.startsWith('/')) {
+        path = `/${path}`;
+    }
+
+    path = path.replace(/\/+/g, '/');
+    if (path.length > 1) {
+        path = path.replace(/\/+$/, '');
+    }
+
+    if (path.startsWith('/stats/')) return '/stats/:animal';
+    if (path.startsWith('/profile/')) return '/profile/:user';
+    if (path.startsWith('/community/')) return '/community/:tab';
+
+    return path;
+}
+
+function cleanActionBuckets(items) {
+    const grouped = new Map();
+
+    (Array.isArray(items) ? items : []).forEach((item) => {
+        const rawKey = String(item?.key || '').trim().toLowerCase() || 'unknown_action';
+        const label = ACTION_LABELS[rawKey] || titleCase(rawKey);
+        const count = Number(item?.count) || 0;
+
+        grouped.set(label, (grouped.get(label) || 0) + count);
+    });
+
+    return Array.from(grouped.entries())
+        .map(([key, count]) => ({ key, count }))
+        .sort((a, b) => b.count - a.count);
+}
+
+function cleanPageBuckets(items, limit = 8) {
+    const grouped = new Map();
+
+    (Array.isArray(items) ? items : []).forEach((item) => {
+        const normalizedPath = normalizePagePath(item?.key);
+        if (!normalizedPath) return;
+
+        const label = PAGE_LABELS[normalizedPath] || titleCase(normalizedPath.replace(/^\//, ''));
+        const count = Number(item?.count) || 0;
+
+        grouped.set(label, (grouped.get(label) || 0) + count);
+    });
+
+    return Array.from(grouped.entries())
+        .map(([key, count]) => ({ key, count }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, Math.max(1, Number(limit) || 8));
 }
 
 module.exports = async function handler(req, res) {
@@ -445,6 +551,9 @@ async function handleGlobe(req, res) {
         SiteActivity.countDocuments({ occurredAt: { $gte: thirtyDaysAgo } })
     ]);
 
+    const cleanedActions = cleanActionBuckets(actionsAgg);
+    const cleanedPages = cleanPageBuckets(pagesAgg, 8);
+
     return res.status(200).json({
         success: true,
         data: {
@@ -455,8 +564,8 @@ async function handleGlobe(req, res) {
                 last30d
             },
             points: pointsAgg,
-            actions: actionsAgg,
-            pages: pagesAgg,
+            actions: cleanedActions,
+            pages: cleanedPages,
             trend: trendAgg
         }
     });
@@ -570,12 +679,15 @@ async function handleGlobePoint(req, res) {
         return res.status(404).json({ success: false, error: 'Location not found' });
     }
 
+    const cleanedActions = cleanActionBuckets(actionsAgg);
+    const cleanedPages = cleanPageBuckets(pagesAgg, 15);
+
     return res.status(200).json({
         success: true,
         data: {
             summary: summaryAgg[0],
-            pages: pagesAgg,
-            actions: actionsAgg,
+            pages: cleanedPages,
+            actions: cleanedActions,
             devices: devicesAgg,
             users: usersAgg,
             recent: recentAgg

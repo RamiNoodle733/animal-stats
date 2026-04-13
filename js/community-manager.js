@@ -179,6 +179,16 @@ class CommunityManager {
             inline: 'center'
         });
     }
+
+    scheduleGlobeResize() {
+        if (!this.globe) return;
+
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                this.globe?.resize?.();
+            });
+        });
+    }
     
     toggleMobileSidebar() {
         const sidebar = document.querySelector('.community-sidebar-column');
@@ -1195,6 +1205,8 @@ class CommunityManager {
             communityView.classList.toggle('globe-compact-mode', normalizedTab !== 'map');
         }
 
+        this.scheduleGlobeResize();
+
         if (normalizedTab === 'hub' || normalizedTab === 'map') {
             if (sidebar) sidebar.classList.add('mobile-sidebar-active');
             if (feedColumn) feedColumn.classList.add('mobile-feed-hidden');
@@ -1202,7 +1214,7 @@ class CommunityManager {
 
             if (normalizedTab === 'map') {
                 this.globe?.setPaused(false);
-                requestAnimationFrame(() => this.globe?.resize?.());
+                this.scheduleGlobeResize();
                 this.loadGlobeAnalytics({ silent: true });
             }
         } else {
@@ -1232,7 +1244,7 @@ class CommunityManager {
         this.startPresencePing();
         this.startGlobeRefresh();
         this.globe?.setPaused(false);
-        requestAnimationFrame(() => this.globe?.resize?.());
+        this.scheduleGlobeResize();
         
         // Refresh hub data
         this.loadLeaderboard();
