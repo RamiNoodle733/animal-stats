@@ -214,6 +214,7 @@ class AnimalStatsApp {
         // Performance caches
         this.animalsById = new Map();
         this._deferredInitStarted = false;
+        this.gridRendered = false;
 
         // Bind methods
         this.init = this.init.bind(this);
@@ -255,9 +256,13 @@ class AnimalStatsApp {
             // Track site visit
             this.trackSiteVisit();
             
+            // Align initial view with current path before rendering heavy UI.
+            this.state.view = this.getInitialViewFromPath();
+
             // Initial Render with power rank sort as default
             this.state.filters.sort = 'rank';
-            this.applyFilters();
+            const shouldRenderGridNow = this.shouldRenderGridImmediately();
+            this.applyFilters({ renderGrid: shouldRenderGridNow });
             
             // Initialize Router
             this.initRouter();
@@ -326,6 +331,26 @@ class AnimalStatsApp {
         }, 0);
     }
 
+    getInitialViewFromPath() {
+        const path = window.location.pathname || '/';
+        if (path.startsWith('/stats')) return 'stats';
+        if (path.startsWith('/compare')) return 'compare';
+        if (path.startsWith('/rankings')) return 'rankings';
+        if (path.startsWith('/community')) return 'community';
+        if (path.startsWith('/battlepoints')) return 'battlepoints';
+        if (path.startsWith('/about')) return 'about';
+        if (path.startsWith('/login')) return 'login';
+        if (path.startsWith('/signup')) return 'signup';
+        if (path.startsWith('/profile')) return 'profile';
+        return 'home';
+    }
+
+    shouldRenderGridImmediately() {
+        if (this.state.view === 'stats' || this.state.view === 'compare') return true;
+        const path = window.location.pathname || '/';
+        return path.startsWith('/stats') || path.startsWith('/compare');
+    }
+
     ensureRankingsManager() {
         if (this.rankingsManager) return this.rankingsManager;
         this.rankingsManager = new RankingsManager(this);
@@ -364,16 +389,15 @@ class AnimalStatsApp {
         if (this._deferredInitStarted) return;
         this._deferredInitStarted = true;
 
-        // Rankings powers several UI elements and should be available early.
-        const rankingsManager = this.ensureRankingsManager();
-
         this.runWhenIdle(async () => {
             try {
+                const rankingsManager = this.ensureRankingsManager();
                 await rankingsManager.fetchRankings();
 
                 // Re-apply ranking sort once rankings data arrives.
                 if (this.state.filters.sort === 'rank') {
-                    this.applyFilters();
+                    const shouldRenderGrid = this.gridRendered || this.state.view === 'stats' || this.state.view === 'compare';
+                    this.applyFilters({ renderGrid: shouldRenderGrid });
                 }
 
                 if (this.state.selectedAnimal) {
@@ -382,11 +406,11 @@ class AnimalStatsApp {
             } catch (error) {
                 console.warn('Deferred rankings load failed:', error);
             }
-        }, 600);
+        }, 800);
 
-        this.runWhenIdle(() => this.ensureTournamentManager(), 1000);
-        this.runWhenIdle(() => this.ensureCommunityManager(), 1200);
-        this.runWhenIdle(() => this.ensureBattlepointsManager(), 1400);
+        this.runWhenIdle(() => this.ensureTournamentManager(), 1200);
+        this.runWhenIdle(() => this.ensureCommunityManager(), 1400);
+        this.runWhenIdle(() => this.ensureBattlepointsManager(), 1600);
     }
 
     /**
@@ -1541,7 +1565,8 @@ class AnimalStatsApp {
     /**
      * Apply all filters and sort
      */
-    applyFilters() {
+    applyFilters(options = {}) {
+        const { renderGrid = true } = options;
         const { search, class: classFilter, diet: dietFilter, biome: biomeFilter, sort, classes, diets, biomes } = this.state.filters;
         
         // Filter
@@ -1626,7 +1651,17 @@ class AnimalStatsApp {
             return 0;
         });
 
-        this.renderGrid();
+        if (renderGrid) {
+            this.renderGrid();
+            return;
+        }
+
+        this.gridRendered = false;
+    }
+
+    ensureGridRendered() {
+        if (this.gridRendered) return;
+        this.applyFilters({ renderGrid: true });
     }
 
     /**
@@ -1682,6 +1717,7 @@ class AnimalStatsApp {
         });
         
         this.dom.gridContainer.appendChild(fragment);
+        this.gridRendered = true;
         this.applyGridCardTextLayout();
     }
 
@@ -1811,7 +1847,8 @@ class AnimalStatsApp {
         const animalId = animal._id || animal.id;
         
         // Use RankingsManager's comments modal
-        if (window.rankingsManager) {
+        const rankingsManager = this.ensureRankingsManager();
+        if (rankingsManager?.openCommentsModal) {
             // Create a fake event object that the modal opener expects
             const fakeEvent = {
                 currentTarget: {
@@ -1822,7 +1859,7 @@ class AnimalStatsApp {
                     }
                 }
             };
-            window.rankingsManager.openCommentsModal(fakeEvent);
+            rankingsManager.openCommentsModal(fakeEvent);
         }
     }
 
@@ -2042,7 +2079,11 @@ class AnimalStatsApp {
         if (previousView !== viewName) {
             this.resetScrollPositions();
         }
-        
+
+        if (viewName === 'stats' || viewName === 'compare') {
+            this.ensureGridRendered();
+        }
+
         // Activate homepage controller when switching to home
         if (viewName === 'home' && window.HomepageController) {
             window.HomepageController.activate(this.state.animals);
@@ -3530,4 +3571,3 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 // ========================================
-
