@@ -37,10 +37,15 @@ const HomepageController = {
     transparencyCache: new Map(),
     silhouetteSourceCache: new Map(),
     silhouetteGenerationQueue: new Map(),
+    prebuiltSilhouetteCache: new Map(),
+    prebuiltSilhouetteFiles: null,
+    prebuiltManifestRequested: false,
+    enableRuntimeSilhouetteGeneration: false,
     transparencyCanvas: null,
     homePortalEl: null,
     desktopTrackPool: [],
     mobileTrackPool: [],
+    resizeRaf: null,
     
     // Animation state for each track
     animations: {
@@ -262,40 +267,63 @@ const HomepageController = {
             this.performanceMode = 'low';
             this.disableFancyEffects = true;
             this.frameStride = 3;
-            this.maxTrackItemsDesktop = isMobile ? 6 : 7;
-            this.maxTrackItemsMobile = 8;
-            this.physics.baseSpeed = 1.9;
+            this.maxTrackItemsDesktop = isMobile ? 5 : 6;
+            this.maxTrackItemsMobile = 6;
+            this.physics.baseSpeed = 2.6;
+            this.physics.hoverMultiplier = 1.05;
             return;
         }
 
-        if (memory <= 8 || cores <= 6 || isMobile) {
+        if (memory <= 12 || cores <= 8 || isMobile) {
             this.performanceMode = 'medium';
             this.disableFancyEffects = true;
             this.frameStride = 2;
-            this.maxTrackItemsDesktop = 10;
-            this.maxTrackItemsMobile = 10;
-            this.physics.baseSpeed = 2.3;
+            this.maxTrackItemsDesktop = 8;
+            this.maxTrackItemsMobile = 8;
+            this.physics.baseSpeed = 3.2;
+            this.physics.hoverMultiplier = 1.1;
             return;
         }
 
         this.performanceMode = 'high';
         this.disableFancyEffects = false;
         this.frameStride = 1;
-        this.maxTrackItemsDesktop = 14;
-        this.maxTrackItemsMobile = 12;
-        this.physics.baseSpeed = 2.8;
+        this.maxTrackItemsDesktop = 10;
+        this.maxTrackItemsMobile = 9;
+        this.physics.baseSpeed = 3.8;
+        this.physics.hoverMultiplier = 1.15;
     },
 
     applyPerformanceModeClass() {
         const homeView = document.getElementById('home-view');
         if (!homeView) return;
 
-        homeView.classList.remove('home-performance-low', 'home-performance-medium');
+        homeView.classList.remove('home-performance-low', 'home-performance-medium', 'home-performance-high');
         if (this.performanceMode === 'low') {
             homeView.classList.add('home-performance-low');
         } else if (this.performanceMode === 'medium') {
             homeView.classList.add('home-performance-medium');
+        } else {
+            homeView.classList.add('home-performance-high');
         }
+    },
+
+    ensurePrebuiltManifestRequested() {
+        if (this.prebuiltManifestRequested) return;
+        this.prebuiltManifestRequested = true;
+
+        fetch('/images/animals/silhouettes/manifest.json', { cache: 'force-cache' })
+            .then((response) => {
+                if (!response.ok) throw new Error('manifest not found');
+                return response.json();
+            })
+            .then((manifest) => {
+                const files = manifest?.files ? Object.keys(manifest.files) : [];
+                this.prebuiltSilhouetteFiles = new Set(files);
+            })
+            .catch(() => {
+                this.prebuiltSilhouetteFiles = new Set();
+            });
     },
 
     buildTrackItems(images, targetCount) {
@@ -380,17 +408,23 @@ const HomepageController = {
 
         window.addEventListener('resize', () => {
             if (!this.initialized) return;
-
-            const wasMobile = this.animations.mobile.track !== null;
-            const isMobile = window.matchMedia('(max-width: 600px)').matches;
-            if (wasMobile !== isMobile) {
-                this.populateTracksForViewport();
+            if (this.resizeRaf) {
+                cancelAnimationFrame(this.resizeRaf);
             }
+            this.resizeRaf = requestAnimationFrame(() => {
+                this.resizeRaf = null;
 
-            // Recalculate loop dimensions after layout changes.
-            this.animations.left.height = 0;
-            this.animations.right.height = 0;
-            this.animations.mobile.width = 0;
+                const wasMobile = this.animations.mobile.track !== null;
+                const isMobile = window.matchMedia('(max-width: 600px)').matches;
+                if (wasMobile !== isMobile) {
+                    this.populateTracksForViewport();
+                }
+
+                // Recalculate loop dimensions after layout changes.
+                this.animations.left.height = 0;
+                this.animations.right.height = 0;
+                this.animations.mobile.width = 0;
+            });
         }, { passive: true });
     },
     
@@ -939,13 +973,28 @@ const HomepageController = {
         img.alt = '';
         img.draggable = false;
         img.dataset.originalSrc = src;
+        const prebuiltSilhouetteSrc = this.getPrebuiltSilhouettePath(src);
+        if (prebuiltSilhouetteSrc) {
+            img.dataset.prebuiltSilhouetteSrc = prebuiltSilhouetteSrc;
+        }
         
         const cachedTransparency = this.transparencyCache.get(src);
         if (cachedTransparency === false) {
             img.style.display = 'none';
         }
         
-        img.onerror = () => { img.style.display = 'none'; };
+        img.onerror = () => {
+            // If server-side silhouette is missing, gracefully fall back
+            // to the original source with CSS filter.
+            if (img.dataset.prebuiltSilhouetteSrc && img.src.includes('/silhouettes/')) {
+                img.classList.remove('silhouette-generated');
+                img.classList.add('silhouette-fallback-filter');
+                img.src = src;
+                return;
+            }
+
+            img.style.display = 'none';
+        };
         img.onload = () => {
             if (img.style.display === 'none') return;
 
@@ -973,11 +1022,62 @@ const HomepageController = {
                 setTimeout(runValidation, 0);
             }
         };
-        img.src = src;
 
-        this.maybeUpgradeToGeneratedSilhouette(img, src);
+        if (prebuiltSilhouetteSrc) {
+            img.classList.remove('silhouette-fallback-filter');
+            img.classList.add('silhouette-generated');
+            img.src = prebuiltSilhouetteSrc;
+        } else {
+            img.src = src;
+            this.maybeUpgradeToGeneratedSilhouette(img, src);
+        }
         
         return img;
+    },
+
+    getPrebuiltSilhouettePath(src) {
+        if (!src) return null;
+        this.ensurePrebuiltManifestRequested();
+        if (this.prebuiltSilhouetteCache.has(src)) {
+            return this.prebuiltSilhouetteCache.get(src);
+        }
+
+        try {
+            const url = new URL(src, window.location.origin);
+            if (url.origin !== window.location.origin) {
+                this.prebuiltSilhouetteCache.set(src, null);
+                return null;
+            }
+
+            if (!url.pathname.startsWith('/images/animals/')) {
+                this.prebuiltSilhouetteCache.set(src, null);
+                return null;
+            }
+
+            const filename = url.pathname.split('/').pop();
+            if (!filename) {
+                this.prebuiltSilhouetteCache.set(src, null);
+                return null;
+            }
+
+            const baseName = filename.replace(/\.[^.]+$/, '');
+            if (!baseName) {
+                this.prebuiltSilhouetteCache.set(src, null);
+                return null;
+            }
+
+            if (!this.prebuiltSilhouetteFiles || !this.prebuiltSilhouetteFiles.has(filename)) {
+                this.prebuiltSilhouetteCache.set(src, null);
+                return null;
+            }
+
+            const prebuiltPath = `/images/animals/silhouettes/${baseName}.webp`;
+            this.prebuiltSilhouetteCache.set(src, prebuiltPath);
+            return prebuiltPath;
+        } catch {
+            this.prebuiltSilhouetteCache.set(src, null);
+            return null;
+        }
     },
 
     primeSilhouetteCache(images) {
@@ -1012,6 +1112,8 @@ const HomepageController = {
 
     maybeUpgradeToGeneratedSilhouette(img, src) {
         if (!img || !src || !this.isSilhouetteGenerationCandidate(src)) return;
+        if (this.getPrebuiltSilhouettePath(src)) return;
+        if (!this.enableRuntimeSilhouetteGeneration || this.performanceMode !== 'high') return;
 
         this.getSilhouetteSource(src)
             .then((silhouetteSrc) => {
@@ -2122,10 +2224,9 @@ const HomepageController = {
     },
     
     /**
-     * Activate dramatic focus effect on button hover
-     * - Button scales up dramatically
-     * - Background blurs and dims
-     * - Everything feels slow-motion
+     * Activate button hover focus effect
+     * - Keeps silhouette motion at normal speed
+     * - Adds lightweight ambient glow feedback
      */
     activateButtonFocus(btn) {
         if (!btn) return;
@@ -2138,20 +2239,11 @@ const HomepageController = {
         // Add focused class to button
         btn.classList.add('portal-btn-focused');
 
-        // Avoid expensive global blur effects on low-end devices.
-        if (this.disableFancyEffects) return;
-        
-        // Add slow-mo class to home view for blur/dim effect
+        // Keep hover feedback lightweight and avoid blur-based slow-motion.
         const homeView = document.getElementById('home-view');
         if (homeView) {
-            homeView.classList.add('slow-motion-active');
+            homeView.classList.add('button-hover-active');
         }
-        
-        // Dim other buttons
-        const allBtns = document.querySelectorAll('.portal-nav-btn, .portal-tournament-btn');
-        allBtns.forEach(b => {
-            if (b !== btn) b.classList.add('portal-btn-dimmed');
-        });
     },
     
     /**
@@ -2162,15 +2254,10 @@ const HomepageController = {
         
         btn.classList.remove('portal-btn-focused');
 
-        if (this.disableFancyEffects) return;
-        
         const homeView = document.getElementById('home-view');
         if (homeView) {
-            homeView.classList.remove('slow-motion-active');
+            homeView.classList.remove('button-hover-active');
         }
-        
-        const allBtns = document.querySelectorAll('.portal-nav-btn, .portal-tournament-btn');
-        allBtns.forEach(b => b.classList.remove('portal-btn-dimmed'));
     },
     
     shuffle(array) {
