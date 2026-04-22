@@ -166,6 +166,55 @@
     font-weight: 700;
 }
 
+#community-view .globe-context-bar {
+    margin: 0 0 10px;
+    padding: 9px;
+    border-radius: 11px;
+    border: 1px solid rgba(91, 171, 204, 0.34);
+    background: rgba(6, 19, 31, 0.8);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 10px;
+}
+
+#community-view .globe-context-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+#community-view .globe-context-label {
+    font-size: 0.58rem;
+    letter-spacing: 0.95px;
+    text-transform: uppercase;
+    color: rgba(176, 216, 234, 0.72);
+}
+
+#community-view .globe-context-select,
+#community-view .globe-context-pill {
+    height: 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(86, 170, 209, 0.34);
+    background: rgba(8, 23, 36, 0.9);
+    color: rgba(210, 241, 252, 0.95);
+    font-size: 0.7rem;
+    padding: 0 10px;
+}
+
+#community-view .globe-context-select:focus {
+    outline: none;
+    border-color: rgba(124, 221, 255, 0.7);
+    box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.14);
+}
+
+#community-view .globe-context-pill {
+    display: inline-flex;
+    align-items: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 #community-view .globe-stage {
     width: 100%;
     height: clamp(210px, 33vh, 290px);
@@ -425,6 +474,23 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
+    max-height: 270px;
+    overflow: auto;
+    padding-right: 4px;
+}
+
+#community-view .globe-city-list::-webkit-scrollbar {
+    width: 7px;
+}
+
+#community-view .globe-city-list::-webkit-scrollbar-track {
+    border-radius: 999px;
+    background: rgba(8, 22, 36, 0.6);
+}
+
+#community-view .globe-city-list::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: rgba(92, 178, 218, 0.5);
 }
 
 #community-view .globe-city-row {
@@ -622,6 +688,10 @@
     #community-view .globe-advanced-grid,
     #community-view .globe-point-grid,
     #community-view .globe-breakdown-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #community-view .globe-context-bar {
         grid-template-columns: 1fr;
     }
 
