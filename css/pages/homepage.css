@@ -62,9 +62,15 @@
         radial-gradient(1px 1px at 35% 55%, rgba(0, 212, 255, 0.1), transparent),
         radial-gradient(1px 1px at 75% 15%, rgba(255, 255, 255, 0.2), transparent);
     background-size: 250px 250px;
-    animation: starDrift 60s linear infinite;
+    animation: none;
+    opacity: 0.32;
     pointer-events: none;
     z-index: 1;
+}
+
+#home-view.home-performance-high::before {
+    animation: starDrift 60s linear infinite;
+    opacity: 1;
 }
 
 @keyframes starDrift {
@@ -1000,6 +1006,14 @@ html.route-home nav[class*="mobile"] {
     width: 50%;
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+    animation: none;
+}
+
+#home-view.home-performance-high .portal-tournament-btn {
+    animation: tournamentPulse 3s ease-in-out infinite;
+}
+
+#home-view.home-performance-high .portal-tournament-btn::after {
     animation: tournamentShine 4s ease-in-out infinite;
 }
 
