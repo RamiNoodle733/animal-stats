@@ -14,7 +14,8 @@
     "version:bump:minor": "node scripts/version/bump-site-version.js --bump minor",
     "version:bump:major": "node scripts/version/bump-site-version.js --bump major",
     "lint": "eslint js/ api/ lib/",
-    "lint:fix": "eslint js/ api/ lib/ --fix"
+    "lint:fix": "eslint js/ api/ lib/ --fix",
+    "assets:generate-silhouettes": "node scripts/assets/generate-silhouettes.js"
   },
   "keywords": [
     "animals",
@@ -38,6 +39,7 @@
     "eslint": "^9.39.2",
     "globals": "^17.0.0",
     "playwright": "^1.57.0",
+    "sharp": "^0.34.5",
     "vercel": "^33.0.0"
   },
   "engines": {
