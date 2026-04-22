@@ -121,6 +121,23 @@
     transition: filter 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+#home-view.button-hover-active::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 14;
+    background:
+        radial-gradient(circle at 50% 52%, rgba(0, 212, 255, 0.14), transparent 55%),
+        radial-gradient(circle at 50% 52%, rgba(255, 255, 255, 0.08), transparent 70%);
+    animation: homeHoverAura 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes homeHoverAura {
+    from { opacity: 0.38; transform: scale(1); }
+    to { opacity: 0.62; transform: scale(1.02); }
+}
+
 #home-view.active-view {
     display: flex !important;
     min-height: 100vh !important;
@@ -821,16 +838,15 @@ html.route-home nav[class*="mobile"] {
 
 /* FOCUSED STATE - Dramatic zoom effect */
 .portal-nav-btn.portal-btn-focused {
-    transform: scale(1.25) translateY(-8px);
+    transform: scale(1.08) translateY(-3px);
     z-index: 100;
     border-color: var(--btn-accent-color, rgba(0, 212, 255, 0.8));
     box-shadow: 
-        0 20px 60px rgba(0, 0, 0, 0.6),
-        0 0 80px var(--btn-glow-color, rgba(0, 212, 255, 0.4)),
-        0 0 120px var(--btn-glow-color, rgba(0, 212, 255, 0.2)),
+        0 12px 30px rgba(0, 0, 0, 0.45),
+        0 0 28px var(--btn-glow-color, rgba(0, 212, 255, 0.28)),
         inset 0 2px 0 rgba(255, 255, 255, 0.2),
-        inset 0 0 30px var(--btn-glow-color, rgba(0, 212, 255, 0.1));
-    filter: brightness(1.1);
+        inset 0 0 12px var(--btn-glow-color, rgba(0, 212, 255, 0.08));
+    filter: brightness(1.05);
 }
 
 /* Dimmed state for other buttons */
@@ -1039,17 +1055,16 @@ html.route-home nav[class*="mobile"] {
 
 /* FOCUSED STATE - Dramatic zoom effect (same as nav buttons) */
 .portal-tournament-btn.portal-btn-focused {
-    transform: scale(1.25) translateY(-8px);
+    transform: scale(1.08) translateY(-3px);
     z-index: 100;
     animation: none;
     border-color: rgba(255, 255, 255, 0.6);
     box-shadow: 
-        0 20px 70px rgba(255, 0, 68, 0.7),
-        0 0 100px rgba(255, 0, 68, 0.4),
-        0 0 150px rgba(255, 0, 68, 0.2),
+        0 12px 34px rgba(255, 0, 68, 0.5),
+        0 0 36px rgba(255, 0, 68, 0.28),
         inset 0 2px 0 rgba(255, 255, 255, 0.3),
-        inset 0 0 40px rgba(255, 255, 255, 0.1);
-    filter: brightness(1.1);
+        inset 0 0 14px rgba(255, 255, 255, 0.08);
+    filter: brightness(1.05);
 }
 
 /* Dimmed state */

@@ -2214,10 +2214,9 @@ const HomepageController = {
     },
     
     /**
-     * Activate dramatic focus effect on button hover
-     * - Button scales up dramatically
-     * - Background blurs and dims
-     * - Everything feels slow-motion
+     * Activate button hover focus effect
+     * - Keeps silhouette motion at normal speed
+     * - Adds lightweight ambient glow feedback
      */
     activateButtonFocus(btn) {
         if (!btn) return;
@@ -2230,20 +2229,11 @@ const HomepageController = {
         // Add focused class to button
         btn.classList.add('portal-btn-focused');
 
-        // Avoid expensive global blur effects on low-end devices.
-        if (this.disableFancyEffects) return;
-        
-        // Add slow-mo class to home view for blur/dim effect
+        // Keep hover feedback lightweight and avoid blur-based slow-motion.
         const homeView = document.getElementById('home-view');
         if (homeView) {
-            homeView.classList.add('slow-motion-active');
+            homeView.classList.add('button-hover-active');
         }
-        
-        // Dim other buttons
-        const allBtns = document.querySelectorAll('.portal-nav-btn, .portal-tournament-btn');
-        allBtns.forEach(b => {
-            if (b !== btn) b.classList.add('portal-btn-dimmed');
-        });
     },
     
     /**
@@ -2254,15 +2244,10 @@ const HomepageController = {
         
         btn.classList.remove('portal-btn-focused');
 
-        if (this.disableFancyEffects) return;
-        
         const homeView = document.getElementById('home-view');
         if (homeView) {
-            homeView.classList.remove('slow-motion-active');
+            homeView.classList.remove('button-hover-active');
         }
-        
-        const allBtns = document.querySelectorAll('.portal-nav-btn, .portal-tournament-btn');
-        allBtns.forEach(b => b.classList.remove('portal-btn-dimmed'));
     },
     
     shuffle(array) {
