@@ -46,7 +46,9 @@ class CommunityManager {
         this.globeMode = 'globe';
         this.globeModeBound = false;
         this.globeDirectoryBound = false;
+        this.globeControlsBound = false;
         this.globeCityFilter = '';
+        this.globeTrendRange = 'all';
         this.globeCharts = {
             trend: null,
             country: null
@@ -503,6 +505,7 @@ class CommunityManager {
 
         this.bindGlobeModeSwitch();
         this.bindGlobeDirectoryControls();
+        this.bindGlobeAnalyticsControls();
         this.applyGlobeMode(this.globeMode);
 
         this.loadGlobeAnalytics();
@@ -541,6 +544,24 @@ class CommunityManager {
         this.globeDirectoryBound = true;
     }
 
+    bindGlobeAnalyticsControls() {
+        if (this.globeControlsBound) return;
+
+        const trendRange = document.getElementById('globe-trend-range');
+        if (trendRange) {
+            trendRange.value = this.globeTrendRange;
+            trendRange.addEventListener('change', (event) => {
+                const nextRange = String(event.target.value || 'all').toLowerCase();
+                this.globeTrendRange = ['all', '14d', '30d', '90d', '365d'].includes(nextRange) ? nextRange : 'all';
+                this.updateGlobeContextChips();
+                this.loadGlobeAnalytics();
+            });
+        }
+
+        this.updateGlobeContextChips();
+        this.globeControlsBound = true;
+    }
+
     applyGlobeMode(mode) {
         const normalized = mode === 'flat' ? 'flat' : 'globe';
         this.globeMode = normalized;
@@ -575,7 +596,11 @@ class CommunityManager {
         }
 
         try {
-            const response = await fetch('/api/community?action=globe');
+            const query = new URLSearchParams({
+                action: 'globe',
+                range: this.globeTrendRange || 'all'
+            });
+            const response = await fetch(`/api/community?${query.toString()}`);
             if (!response.ok) throw new Error('Failed to load globe analytics');
 
             const result = await response.json();
@@ -593,6 +618,7 @@ class CommunityManager {
             this.renderGlobeTrendChart(payload.trend || []);
             this.renderGlobeCountryChart(payload.points || []);
             this.renderGlobeCityDirectory(payload.points || []);
+            this.updateGlobeContextChips(payload.trendRange);
 
             if (empty) {
                 empty.style.display = 'none';
@@ -761,6 +787,11 @@ class CommunityManager {
                 }
             }
         });
+
+        const title = document.getElementById('globe-trend-title');
+        if (title) {
+            title.textContent = `Activity Trend (${this.formatTrendRangeLabel(this.globeTrendRange)})`;
+        }
     }
 
     renderGlobeCountryChart(points) {
@@ -916,6 +947,7 @@ class CommunityManager {
                 this.selectedGlobeKey = key;
                 this.loadGlobePointDetails(key);
                 this.highlightSelectedCityRow();
+                this.updateGlobeContextChips();
             });
         });
 
@@ -932,6 +964,8 @@ class CommunityManager {
             row.classList.toggle('active', isActive);
             row.setAttribute('aria-pressed', isActive ? 'true' : 'false');
         });
+
+        this.updateGlobeContextChips();
     }
 
     destroyGlobeChart(chartKey) {
@@ -1024,6 +1058,8 @@ class CommunityManager {
                 </div>
             </div>
         `;
+
+        this.updateGlobeContextChips();
     }
 
     renderMiniList(items) {
@@ -1049,6 +1085,43 @@ class CommunityManager {
                 </div>
             `;
         }).join('');
+    }
+
+    updateGlobeContextChips(serverRange = null) {
+        if (serverRange && ['all', '14d', '30d', '90d', '365d'].includes(serverRange)) {
+            this.globeTrendRange = serverRange;
+        }
+
+        const rangeSelect = document.getElementById('globe-trend-range');
+        if (rangeSelect && rangeSelect.value !== this.globeTrendRange) {
+            rangeSelect.value = this.globeTrendRange;
+        }
+
+        const trendTitle = document.getElementById('globe-trend-title');
+        if (trendTitle) {
+            trendTitle.textContent = `Activity Trend (${this.formatTrendRangeLabel(this.globeTrendRange)})`;
+        }
+
+        const locationScope = document.getElementById('globe-location-scope');
+        if (locationScope) {
+            const selectedPoint = (this.lastGlobePayload?.points || []).find(point => point?.key === this.selectedGlobeKey);
+            const label = selectedPoint
+                ? (selectedPoint.locationRaw || [selectedPoint.city, selectedPoint.region, selectedPoint.country].filter(Boolean).join(', ') || 'Unknown location')
+                : 'Global';
+            locationScope.textContent = label;
+        }
+    }
+
+    formatTrendRangeLabel(range) {
+        const normalized = String(range || 'all').toLowerCase();
+        const labels = {
+            all: 'All Time',
+            '14d': 'Last 14 Days',
+            '30d': 'Last 30 Days',
+            '90d': 'Last 90 Days',
+            '365d': 'Last 12 Months'
+        };
+        return labels[normalized] || labels.all;
     }
 
     formatDateTime(value) {
@@ -2157,4 +2230,3 @@ class CommunityManager {
         return div.innerHTML;
     }
 }
-
