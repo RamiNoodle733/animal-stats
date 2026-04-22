@@ -420,11 +420,23 @@ async function handleVisit(req, res) {
 async function handleGlobe(req, res) {
     const SiteActivity = require('../lib/models/SiteActivity');
 
+    const trendRange = String(req.query.range || 'all').trim().toLowerCase();
     const now = new Date();
     const oneDayAgo = new Date(now.getTime() - (24 * 60 * 60 * 1000));
     const sevenDaysAgo = new Date(now.getTime() - (7 * 24 * 60 * 60 * 1000));
     const thirtyDaysAgo = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000));
-    const fourteenDaysAgo = new Date(now.getTime() - (14 * 24 * 60 * 60 * 1000));
+
+    const trendRangeDays = {
+        '14d': 14,
+        '30d': 30,
+        '90d': 90,
+        '365d': 365
+    }[trendRange] || null;
+
+    const trendDateMatch = {};
+    if (Number.isFinite(trendRangeDays) && trendRangeDays > 0) {
+        trendDateMatch.occurredAt = { $gte: new Date(now.getTime() - (trendRangeDays * 24 * 60 * 60 * 1000)) };
+    }
 
     const [summaryAgg, pointsAgg, actionsAgg, pagesAgg, trendAgg] = await Promise.all([
         SiteActivity.aggregate([
@@ -468,8 +480,8 @@ async function handleGlobe(req, res) {
                     region: { $first: '$region' },
                     country: { $first: '$country' },
                     locationRaw: { $first: '$locationRaw' },
-                    lat: { $first: '$coordinates.lat' },
-                    lng: { $first: '$coordinates.lng' },
+                    lat: { $avg: '$coordinates.lat' },
+                    lng: { $avg: '$coordinates.lng' },
                     totalEvents: { $sum: 1 },
                     totalVisits: {
                         $sum: {
@@ -488,8 +500,8 @@ async function handleGlobe(req, res) {
                     region: 1,
                     country: 1,
                     locationRaw: 1,
-                    lat: 1,
-                    lng: 1,
+                    lat: { $round: ['$lat', 5] },
+                    lng: { $round: ['$lng', 5] },
                     totalEvents: 1,
                     totalVisits: 1,
                     uniqueVisitors: {
@@ -516,7 +528,7 @@ async function handleGlobe(req, res) {
             { $limit: 8 }
         ]),
         SiteActivity.aggregate([
-            { $match: { occurredAt: { $gte: fourteenDaysAgo } } },
+            { $match: trendDateMatch },
             {
                 $group: {
                     _id: {
@@ -566,7 +578,8 @@ async function handleGlobe(req, res) {
             points: pointsAgg,
             actions: cleanedActions,
             pages: cleanedPages,
-            trend: trendAgg
+            trend: trendAgg,
+            trendRange: trendRangeDays ? `${trendRangeDays}d` : 'all'
         }
     });
 }

@@ -107,6 +107,8 @@
             this.autoSpinSpeed = 0.00125;
             this.globeZoom = 1;
             this.flatZoom = 1;
+            this.flatPanX = 0;
+            this.flatPanY = 0;
 
             this.isPaused = false;
             this.isDragging = false;
@@ -215,6 +217,10 @@
                             }
                         }
                         this.dragVector = currentVector;
+                    } else if (this.mode === 'flat' && this.flatZoom > 1) {
+                        this.flatPanX += dx;
+                        this.flatPanY += dy;
+                        this.clampFlatPan();
                     }
 
                     this.lastPointerX = event.clientX;
@@ -263,6 +269,11 @@
                 const nextFlatZoom = clamp(this.flatZoom + delta, 1, 4);
                 if (nextFlatZoom !== this.flatZoom) {
                     this.flatZoom = nextFlatZoom;
+                    if (nextFlatZoom === 1) {
+                        this.flatPanX = 0;
+                        this.flatPanY = 0;
+                    }
+                    this.clampFlatPan();
                     this.flatBaseHash = '';
                 }
                 return;
@@ -404,11 +415,6 @@
             ctx.strokeStyle = 'rgba(125, 215, 255, 0.65)';
             ctx.lineWidth = 1.2;
             ctx.stroke();
-
-            ctx.beginPath();
-            ctx.arc(centerX - (radius * 0.32), centerY - (radius * 0.42), radius * 0.18, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(208, 243, 255, 0.18)';
-            ctx.fill();
         }
 
         drawGlobeGraticule(ctx, centerX, centerY, radius) {
@@ -523,8 +529,10 @@
             const mapWidth = baseWidth * this.flatZoom;
             const mapHeight = baseHeight * this.flatZoom;
 
-            const mapX = (width - mapWidth) / 2;
-            const mapY = (height - mapHeight) / 2;
+            this.clampFlatPan(width, height);
+
+            const mapX = ((width - mapWidth) / 2) + this.flatPanX;
+            const mapY = ((height - mapHeight) / 2) + this.flatPanY;
 
             const hash = `${width}x${height}::${this.landRings.length}::${this.flatZoom.toFixed(3)}`;
             if (!this.flatBaseCanvas || this.flatBaseHash !== hash) {
@@ -609,6 +617,38 @@
             });
 
             ctx.shadowBlur = 0;
+        }
+
+        clampFlatPan(width = this.renderWidth, height = this.renderHeight) {
+            const safeWidth = Number(width) || 0;
+            const safeHeight = Number(height) || 0;
+
+            if (this.flatZoom <= 1 || !safeWidth || !safeHeight) {
+                this.flatPanX = 0;
+                this.flatPanY = 0;
+                return;
+            }
+
+            const padding = 10;
+            const maxWidth = safeWidth - (padding * 2);
+            const maxHeight = safeHeight - (padding * 2);
+            const targetAspect = 2;
+
+            let baseWidth = maxWidth;
+            let baseHeight = baseWidth / targetAspect;
+
+            if (baseHeight > maxHeight) {
+                baseHeight = maxHeight;
+                baseWidth = baseHeight * targetAspect;
+            }
+
+            const mapWidth = baseWidth * this.flatZoom;
+            const mapHeight = baseHeight * this.flatZoom;
+            const overflowX = Math.max(0, (mapWidth - safeWidth) / 2);
+            const overflowY = Math.max(0, (mapHeight - safeHeight) / 2);
+
+            this.flatPanX = clamp(this.flatPanX, -overflowX, overflowX);
+            this.flatPanY = clamp(this.flatPanY, -overflowY, overflowY);
         }
 
         projectToFlat(lat, lng, mapX, mapY, mapWidth, mapHeight) {
