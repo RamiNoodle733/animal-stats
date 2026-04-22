@@ -37,10 +37,12 @@ const HomepageController = {
     transparencyCache: new Map(),
     silhouetteSourceCache: new Map(),
     silhouetteGenerationQueue: new Map(),
+    prebuiltSilhouetteCache: new Map(),
     transparencyCanvas: null,
     homePortalEl: null,
     desktopTrackPool: [],
     mobileTrackPool: [],
+    resizeRaf: null,
     
     // Animation state for each track
     animations: {
@@ -380,17 +382,23 @@ const HomepageController = {
 
         window.addEventListener('resize', () => {
             if (!this.initialized) return;
-
-            const wasMobile = this.animations.mobile.track !== null;
-            const isMobile = window.matchMedia('(max-width: 600px)').matches;
-            if (wasMobile !== isMobile) {
-                this.populateTracksForViewport();
+            if (this.resizeRaf) {
+                cancelAnimationFrame(this.resizeRaf);
             }
+            this.resizeRaf = requestAnimationFrame(() => {
+                this.resizeRaf = null;
 
-            // Recalculate loop dimensions after layout changes.
-            this.animations.left.height = 0;
-            this.animations.right.height = 0;
-            this.animations.mobile.width = 0;
+                const wasMobile = this.animations.mobile.track !== null;
+                const isMobile = window.matchMedia('(max-width: 600px)').matches;
+                if (wasMobile !== isMobile) {
+                    this.populateTracksForViewport();
+                }
+
+                // Recalculate loop dimensions after layout changes.
+                this.animations.left.height = 0;
+                this.animations.right.height = 0;
+                this.animations.mobile.width = 0;
+            });
         }, { passive: true });
     },
     
@@ -939,13 +947,28 @@ const HomepageController = {
         img.alt = '';
         img.draggable = false;
         img.dataset.originalSrc = src;
+        const prebuiltSilhouetteSrc = this.getPrebuiltSilhouettePath(src);
+        if (prebuiltSilhouetteSrc) {
+            img.dataset.prebuiltSilhouetteSrc = prebuiltSilhouetteSrc;
+        }
         
         const cachedTransparency = this.transparencyCache.get(src);
         if (cachedTransparency === false) {
             img.style.display = 'none';
         }
         
-        img.onerror = () => { img.style.display = 'none'; };
+        img.onerror = () => {
+            // If server-side silhouette is missing, gracefully fall back
+            // to the original source with CSS filter.
+            if (img.dataset.prebuiltSilhouetteSrc && img.src.includes('/silhouettes/')) {
+                img.classList.remove('silhouette-generated');
+                img.classList.add('silhouette-fallback-filter');
+                img.src = src;
+                return;
+            }
+
+            img.style.display = 'none';
+        };
         img.onload = () => {
             if (img.style.display === 'none') return;
 
@@ -973,11 +996,56 @@ const HomepageController = {
                 setTimeout(runValidation, 0);
             }
         };
-        img.src = src;
 
-        this.maybeUpgradeToGeneratedSilhouette(img, src);
+        if (prebuiltSilhouetteSrc) {
+            img.classList.remove('silhouette-fallback-filter');
+            img.classList.add('silhouette-generated');
+            img.src = prebuiltSilhouetteSrc;
+        } else {
+            img.src = src;
+            this.maybeUpgradeToGeneratedSilhouette(img, src);
+        }
         
         return img;
+    },
+
+    getPrebuiltSilhouettePath(src) {
+        if (!src) return null;
+        if (this.prebuiltSilhouetteCache.has(src)) {
+            return this.prebuiltSilhouetteCache.get(src);
+        }
+
+        try {
+            const url = new URL(src, window.location.origin);
+            if (url.origin !== window.location.origin) {
+                this.prebuiltSilhouetteCache.set(src, null);
+                return null;
+            }
+
+            if (!url.pathname.startsWith('/images/animals/')) {
+                this.prebuiltSilhouetteCache.set(src, null);
+                return null;
+            }
+
+            const filename = url.pathname.split('/').pop();
+            if (!filename) {
+                this.prebuiltSilhouetteCache.set(src, null);
+                return null;
+            }
+
+            const baseName = filename.replace(/\.[^.]+$/, '');
+            if (!baseName) {
+                this.prebuiltSilhouetteCache.set(src, null);
+                return null;
+            }
+
+            const prebuiltPath = `/images/animals/silhouettes/${baseName}.webp`;
+            this.prebuiltSilhouetteCache.set(src, prebuiltPath);
+            return prebuiltPath;
+        } catch {
+            this.prebuiltSilhouetteCache.set(src, null);
+            return null;
+        }
     },
 
     primeSilhouetteCache(images) {
@@ -1012,6 +1080,7 @@ const HomepageController = {
 
     maybeUpgradeToGeneratedSilhouette(img, src) {
         if (!img || !src || !this.isSilhouetteGenerationCandidate(src)) return;
+        if (this.getPrebuiltSilhouettePath(src)) return;
 
         this.getSilhouetteSource(src)
             .then((silhouetteSrc) => {

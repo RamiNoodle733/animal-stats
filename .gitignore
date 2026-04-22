@@ -55,6 +55,10 @@ ui-snapshots/
 *.temp
 .cache/
 
+# Generated silhouette assets (created by npm run assets:generate-silhouettes)
+images/animals/silhouettes/*.webp
+images/animals/silhouettes/manifest.json
+
 # Internal documentation
 AUDIT.md
 IMAGE_UPDATER_README.md
