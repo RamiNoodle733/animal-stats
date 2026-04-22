@@ -38,9 +38,6 @@ const HomepageController = {
     silhouetteSourceCache: new Map(),
     silhouetteGenerationQueue: new Map(),
     prebuiltSilhouetteCache: new Map(),
-    prebuiltSilhouetteFiles: null,
-    prebuiltManifestRequested: false,
-    enableRuntimeSilhouetteGeneration: false,
     transparencyCanvas: null,
     homePortalEl: null,
     desktopTrackPool: [],
@@ -1037,7 +1034,6 @@ const HomepageController = {
 
     getPrebuiltSilhouettePath(src) {
         if (!src) return null;
-        this.ensurePrebuiltManifestRequested();
         if (this.prebuiltSilhouetteCache.has(src)) {
             return this.prebuiltSilhouetteCache.get(src);
         }
@@ -1062,11 +1058,6 @@ const HomepageController = {
 
             const baseName = filename.replace(/\.[^.]+$/, '');
             if (!baseName) {
-                this.prebuiltSilhouetteCache.set(src, null);
-                return null;
-            }
-
-            if (!this.prebuiltSilhouetteFiles || !this.prebuiltSilhouetteFiles.has(filename)) {
                 this.prebuiltSilhouetteCache.set(src, null);
                 return null;
             }
@@ -1113,7 +1104,6 @@ const HomepageController = {
     maybeUpgradeToGeneratedSilhouette(img, src) {
         if (!img || !src || !this.isSilhouetteGenerationCandidate(src)) return;
         if (this.getPrebuiltSilhouettePath(src)) return;
-        if (!this.enableRuntimeSilhouetteGeneration || this.performanceMode !== 'high') return;
 
         this.getSilhouetteSource(src)
             .then((silhouetteSrc) => {
