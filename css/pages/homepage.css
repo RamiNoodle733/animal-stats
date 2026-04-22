@@ -983,7 +983,7 @@ html.route-home nav[class*="mobile"] {
     
     transform-origin: center center;
     will-change: transform;
-    animation: none;
+    animation: tournamentPulse 3s ease-in-out infinite;
 }
 
 /* Inner shine line */
