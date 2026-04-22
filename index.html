@@ -1398,6 +1398,23 @@
                             <button type="button" class="globe-mode-btn" id="globe-mode-flat" data-mode="flat">Flat Map</button>
                         </div>
 
+                        <div class="globe-context-bar">
+                            <div class="globe-context-item">
+                                <span class="globe-context-label">Trend Window</span>
+                                <select id="globe-trend-range" class="globe-context-select" aria-label="Select activity trend time range">
+                                    <option value="all" selected>All Time</option>
+                                    <option value="14d">Last 14 Days</option>
+                                    <option value="30d">Last 30 Days</option>
+                                    <option value="90d">Last 90 Days</option>
+                                    <option value="365d">Last 12 Months</option>
+                                </select>
+                            </div>
+                            <div class="globe-context-item">
+                                <span class="globe-context-label">Location Scope</span>
+                                <span id="globe-location-scope" class="globe-context-pill">Global</span>
+                            </div>
+                        </div>
+
                         <div class="globe-stage">
                             <canvas id="community-globe-canvas" width="520" height="520" aria-label="Interactive global activity map"></canvas>
                             <div id="community-globe-empty" class="globe-empty">Loading global activity...</div>
@@ -1451,7 +1468,7 @@
 
                         <div class="globe-advanced-grid">
                             <div class="globe-chart-card">
-                                <h4>14-Day Activity Trend</h4>
+                                <h4 id="globe-trend-title">Activity Trend (All Time)</h4>
                                 <div class="globe-chart-wrap">
                                     <canvas id="globe-trend-chart" aria-label="Daily events and visits trend"></canvas>
                                 </div>
