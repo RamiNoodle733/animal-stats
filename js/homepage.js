@@ -264,40 +264,63 @@ const HomepageController = {
             this.performanceMode = 'low';
             this.disableFancyEffects = true;
             this.frameStride = 3;
-            this.maxTrackItemsDesktop = isMobile ? 6 : 7;
-            this.maxTrackItemsMobile = 8;
-            this.physics.baseSpeed = 1.9;
+            this.maxTrackItemsDesktop = isMobile ? 5 : 6;
+            this.maxTrackItemsMobile = 6;
+            this.physics.baseSpeed = 2.6;
+            this.physics.hoverMultiplier = 1.05;
             return;
         }
 
-        if (memory <= 8 || cores <= 6 || isMobile) {
+        if (memory <= 12 || cores <= 8 || isMobile) {
             this.performanceMode = 'medium';
             this.disableFancyEffects = true;
             this.frameStride = 2;
-            this.maxTrackItemsDesktop = 10;
-            this.maxTrackItemsMobile = 10;
-            this.physics.baseSpeed = 2.3;
+            this.maxTrackItemsDesktop = 8;
+            this.maxTrackItemsMobile = 8;
+            this.physics.baseSpeed = 3.2;
+            this.physics.hoverMultiplier = 1.1;
             return;
         }
 
         this.performanceMode = 'high';
         this.disableFancyEffects = false;
         this.frameStride = 1;
-        this.maxTrackItemsDesktop = 14;
-        this.maxTrackItemsMobile = 12;
-        this.physics.baseSpeed = 2.8;
+        this.maxTrackItemsDesktop = 10;
+        this.maxTrackItemsMobile = 9;
+        this.physics.baseSpeed = 3.8;
+        this.physics.hoverMultiplier = 1.15;
     },
 
     applyPerformanceModeClass() {
         const homeView = document.getElementById('home-view');
         if (!homeView) return;
 
-        homeView.classList.remove('home-performance-low', 'home-performance-medium');
+        homeView.classList.remove('home-performance-low', 'home-performance-medium', 'home-performance-high');
         if (this.performanceMode === 'low') {
             homeView.classList.add('home-performance-low');
         } else if (this.performanceMode === 'medium') {
             homeView.classList.add('home-performance-medium');
+        } else {
+            homeView.classList.add('home-performance-high');
         }
+    },
+
+    ensurePrebuiltManifestRequested() {
+        if (this.prebuiltManifestRequested) return;
+        this.prebuiltManifestRequested = true;
+
+        fetch('/images/animals/silhouettes/manifest.json', { cache: 'force-cache' })
+            .then((response) => {
+                if (!response.ok) throw new Error('manifest not found');
+                return response.json();
+            })
+            .then((manifest) => {
+                const files = manifest?.files ? Object.keys(manifest.files) : [];
+                this.prebuiltSilhouetteFiles = new Set(files);
+            })
+            .catch(() => {
+                this.prebuiltSilhouetteFiles = new Set();
+            });
     },
 
     buildTrackItems(images, targetCount) {
