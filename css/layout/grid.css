@@ -329,7 +329,7 @@
     
     background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
     color: var(--text-primary);
-    border: var(--border-default) solid var(--color-primary);
+    border: var(--border-width-default) solid var(--color-primary);
     border-radius: var(--radius-full);
     box-shadow: 0 4px 20px var(--color-primary-glow);
     

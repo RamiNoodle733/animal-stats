@@ -418,8 +418,8 @@ body {
 }
 
 @keyframes statBarGlowS {
-    0%, 100% { box-shadow: 0 0 12px rgba(255, 215, 0, 0.6); }
-    50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.9), 0 0 30px rgba(255, 215, 0, 0.4); }
+    0%, 100% { filter: brightness(1) saturate(1.2); }
+    50% { filter: brightness(1.15) saturate(1.5); }
 }
 
 /* Remove the ::after pseudo since we now use gradient in fill */
@@ -1705,6 +1705,7 @@ body {
     flex-direction: column;
     padding: 0;
     flex-shrink: 0;
+    will-change: transform;
 }
 
 .character-card:hover {
@@ -1811,8 +1812,8 @@ body {
 }
 
 @keyframes selectedPulse {
-    0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.7); }
-    50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.9); }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
 }
 
 .character-card.selected-fighter1 {

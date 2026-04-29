@@ -36,8 +36,6 @@
             this.injectResultOverlay();
             this.setupTournamentLayout();
             this.setupEventListeners();
-            
-            console.log('[Compare] Tournament-style enhancements initialized');
         },
 
         fitText(el, text, options = {}) {
@@ -807,10 +805,9 @@
                 }
             });
             
-            // Share button (placeholder functionality for now)
+            // Share button
             document.getElementById('shareResultBtn').addEventListener('click', () => {
                 // TODO: Implement share functionality
-                console.log('Share button clicked');
             });
             
             // Champion showcase click

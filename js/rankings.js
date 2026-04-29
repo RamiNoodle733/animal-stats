@@ -962,8 +962,6 @@ class RankingsManager {
     }
     
     selectRankingRow(index) {
-        console.log('[Rankings] selectRankingRow called, index:', index);
-        
         // Play select sound
         if (window.AudioManager) {
             AudioManager.select();

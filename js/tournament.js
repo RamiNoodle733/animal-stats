@@ -2112,7 +2112,6 @@ class TournamentManager {
             }
             
             const result = await response.json();
-            console.log('Battle recorded:', result.data);
             
             // Update ELO cache
             if (result.success && result.data) {
@@ -2598,7 +2597,7 @@ class TournamentManager {
             
             // Use sendBeacon for more reliable delivery
             const sent = navigator.sendBeacon('/api/battles?action=tournament_complete', new Blob([data], { type: 'application/json' }));
-            console.log('Tournament complete notification sent:', sent);
+            void sent; // fire-and-forget
         } catch (error) {
             console.error('Failed to notify tournament completion:', error);
         }
@@ -2626,7 +2625,7 @@ class TournamentManager {
             
             // Use sendBeacon for more reliable delivery
             const sent = navigator.sendBeacon('/api/battles?action=tournament_quit', new Blob([data], { type: 'application/json' }));
-            console.log('Tournament quit notification sent:', sent);
+            void sent; // fire-and-forget
         } catch (error) {
             console.error('Failed to notify tournament quit:', error);
         }

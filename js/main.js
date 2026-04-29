@@ -277,8 +277,6 @@ class AnimalStatsApp {
 
             // Defer heavy, non-critical managers until after first paint.
             this.startDeferredInitialization();
-            
-            console.log(`Animal Stats App Initialized (API: ${this.state.apiAvailable ? 'Connected' : 'Fallback Mode'})`);
         } catch (error) {
             console.error('Initialization failed:', error);
             this.hideLoadingScreen();
@@ -652,7 +650,7 @@ class AnimalStatsApp {
                 }
             }
         } catch (e) {
-            console.log('Could not fetch battle stats');
+            // silently ignore - battle count is non-critical
         }
     }
 
@@ -894,8 +892,6 @@ class AnimalStatsApp {
                 this.state.selectedAnimal = refreshedAnimal;
             }
         }
-
-        console.log(`Loaded ${animals.length} animals from ${source}`);
 
         // Update filters/home UI with latest dataset.
         this.populateClassFilter();
@@ -3552,14 +3548,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 10000);
     
     try {
-        console.log('[DEBUG] Creating AnimalStatsApp...');
         window.app = new AnimalStatsApp();
-        console.log('[DEBUG] Calling init()...');
         await window.app.init();
-        console.log('[DEBUG] Init completed successfully');
         clearTimeout(loadingFailsafe);
     } catch (error) {
-        console.error('[DEBUG] Fatal error:', error);
+        console.error('Fatal initialization error:', error);
         clearTimeout(loadingFailsafe);
         // Force hide loading screen
         const loadingScreen = document.getElementById('app-loading-screen');

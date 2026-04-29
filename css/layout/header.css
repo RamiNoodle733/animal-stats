@@ -156,7 +156,7 @@
     padding: var(--space-2) var(--space-3);
     
     background: var(--bg-surface);
-    border: var(--border-default) solid var(--border-default);
+    border: var(--border-width-default) solid var(--border-default);
     border-radius: var(--radius-full);
     
     cursor: pointer;
@@ -260,7 +260,7 @@
     border: 1px solid var(--border-subtle);
     border-radius: var(--radius-md);
     
-    color: var(--color-cyan);
+    color: var(--color-primary);
     font-size: var(--text-base);
     
     cursor: pointer;
@@ -269,8 +269,8 @@
 
 .audio-toggle-btn:hover {
     background: var(--bg-hover);
-    border-color: var(--color-cyan);
-    box-shadow: 0 0 10px var(--color-cyan-glow);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 10px var(--color-primary-glow);
 }
 
 .audio-toggle-btn:active {

@@ -53,8 +53,6 @@
             
             // Only start heartbeat if currently on community page
             this.checkIfOnCommunityPage();
-            
-            console.log('[Community] Enhancements initialized, tabId:', this.tabId);
         },
 
         /**
@@ -259,7 +257,6 @@
                 
                 // Rate limit: one visit per 30 minutes per browser
                 if (lastVisit && (now - parseInt(lastVisit)) < 30 * 60 * 1000) {
-                    console.log('[Community] Visit already registered recently');
                     return;
                 }
                 
@@ -364,13 +361,9 @@
             const isNowOnCommunity = communityView && communityView.classList.contains('active-view');
             
             if (isNowOnCommunity && !this.isOnCommunityPage) {
-                // Just entered community page
-                console.log('[Community] Entered community page, starting heartbeat');
                 this.isOnCommunityPage = true;
                 this.startHeartbeat();
             } else if (!isNowOnCommunity && this.isOnCommunityPage) {
-                // Just left community page
-                console.log('[Community] Left community page, stopping heartbeat');
                 this.isOnCommunityPage = false;
                 this.stopHeartbeat();
             }

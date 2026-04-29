@@ -134,8 +134,8 @@
 }
 
 @keyframes homeHoverAura {
-    from { opacity: 0.38; transform: scale(1); }
-    to { opacity: 0.62; transform: scale(1.02); }
+    from { opacity: 0.38; }
+    to { opacity: 0.62; }
 }
 
 #home-view.active-view {
