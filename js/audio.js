@@ -33,7 +33,7 @@ const AudioManager = {
             this.masterGain.connect(this.ctx.destination);
             this.createNoiseBuffers();
             this.loadPreferences();
-            console.log('[AudioManager] Initialized');
+            
         } catch (e) {
             console.warn('[AudioManager] Failed to initialize:', e);
         }
