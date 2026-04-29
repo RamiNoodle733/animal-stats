@@ -389,6 +389,8 @@ class AnimalStatsApp {
         if (this._deferredInitStarted) return;
         this._deferredInitStarted = true;
 
+        // Heavy managers/data fetches are deferred and guarded behind
+        // feature availability to keep initial load snappy.
         this.runWhenIdle(async () => {
             try {
                 const rankingsManager = this.ensureRankingsManager();
