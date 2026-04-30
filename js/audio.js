@@ -111,7 +111,7 @@ const AudioManager = {
     isEnabled() { return this.enabled; },
     
     savePreferences() {
-        try { localStorage.setItem('abs_audio_prefs', JSON.stringify({enabled:this.enabled,volume:this.volume})); } catch(e){}
+        try { localStorage.setItem('abs_audio_prefs', JSON.stringify({enabled:this.enabled,volume:this.volume})); } catch(_e){}
     },
     
     loadPreferences() {
@@ -122,7 +122,7 @@ const AudioManager = {
                 this.volume = typeof p.volume === 'number' ? p.volume : 0.5;
                 if (this.masterGain) this.masterGain.gain.value = this.enabled ? this.volume : 0;
             }
-        } catch(e){}
+        } catch(_e){}
     },
     
     // ========== UI SOUNDS ==========
@@ -142,7 +142,7 @@ const AudioManager = {
             g.gain.exponentialRampToValueAtTime(0.001, now+0.04);
             n.connect(f); f.connect(g); g.connect(this.masterGain);
             n.start(now); n.stop(now+0.05);
-        } catch(e){}
+        } catch(_e){}
     },
     
     hover() {
@@ -160,7 +160,7 @@ const AudioManager = {
             g.gain.exponentialRampToValueAtTime(0.001, now+0.05);
             n.connect(f); f.connect(g); g.connect(this.masterGain);
             n.start(now); n.stop(now+0.07);
-        } catch(e){}
+        } catch(_e){}
     },
     
     toggle_sound(on = true) {
@@ -177,7 +177,7 @@ const AudioManager = {
             g.gain.exponentialRampToValueAtTime(0.001, now+0.035);
             n.connect(f); f.connect(g); g.connect(this.masterGain);
             n.start(now); n.stop(now+0.05);
-        } catch(e){}
+        } catch(_e){}
     },
     
     select() {
@@ -194,7 +194,7 @@ const AudioManager = {
             g.gain.exponentialRampToValueAtTime(0.001, now+0.05);
             n.connect(f); f.connect(g); g.connect(this.masterGain);
             n.start(now); n.stop(now+0.07);
-        } catch(e){}
+        } catch(_e){}
     },
     
     // Fighter selection - meatier
@@ -223,7 +223,7 @@ const AudioManager = {
             s.connect(sf); sf.connect(sg); sg.connect(this.masterGain);
             t.start(now); t.stop(now+0.12);
             s.start(now); s.stop(now+0.05);
-        } catch(e){}
+        } catch(_e){}
     },
     
     // ========== SQUISH SOUNDS ==========
@@ -260,7 +260,7 @@ const AudioManager = {
             m.connect(mf); mf.connect(mg); mg.connect(this.masterGain);
             l.start(now); l.stop(now+0.12);
             m.start(now); m.stop(now+0.1);
-        } catch(e){}
+        } catch(_e){}
     },
     
     splat() {
@@ -290,7 +290,7 @@ const AudioManager = {
             s.connect(sf); sf.connect(sg); sg.connect(this.masterGain);
             t.start(now); t.stop(now+0.15);
             s.start(now); s.stop(now+0.18);
-        } catch(e){}
+        } catch(_e){}
     },
     
     // ========== TRANSITION SOUNDS (all different) ==========
@@ -314,7 +314,7 @@ const AudioManager = {
             g.gain.exponentialRampToValueAtTime(0.001, now+0.2);
             n.connect(f); f.connect(g); g.connect(this.masterGain);
             n.start(now); n.stop(now+0.22);
-        } catch(e){}
+        } catch(_e){}
     },
     
     swipe() {
@@ -334,7 +334,7 @@ const AudioManager = {
             g.gain.exponentialRampToValueAtTime(0.001, now+0.08);
             n.connect(f); f.connect(g); g.connect(this.masterGain);
             n.start(now); n.stop(now+0.1);
-        } catch(e){}
+        } catch(_e){}
     },
     
     rush() {
@@ -356,7 +356,7 @@ const AudioManager = {
             g.gain.exponentialRampToValueAtTime(0.001, now+0.3);
             n.connect(f); f.connect(g); g.connect(this.masterGain);
             n.start(now); n.stop(now+0.35);
-        } catch(e){}
+        } catch(_e){}
     },
     
     // ========== IMPACT / COMBAT SOUNDS ==========
@@ -386,7 +386,7 @@ const AudioManager = {
             s.connect(sf); sf.connect(sg); sg.connect(this.masterGain);
             t.start(now); t.stop(now+0.15);
             s.start(now); s.stop(now+0.04);
-        } catch(e){}
+        } catch(_e){}
     },
     
     slam() {
@@ -414,7 +414,7 @@ const AudioManager = {
             c.connect(cf); cf.connect(cg); cg.connect(this.masterGain);
             b.start(now); b.stop(now+0.4);
             c.start(now); c.stop(now+0.06);
-        } catch(e){}
+        } catch(_e){}
     },
     
     explosion() {
@@ -456,7 +456,7 @@ const AudioManager = {
             bl.start(now); bl.stop(now+0.5);
             d.start(now); d.stop(now+0.4);
             bu.start(now); bu.stop(now+0.1);
-        } catch(e){}
+        } catch(_e){}
     },
     
     impact(intensity = 0.7) {
@@ -484,7 +484,7 @@ const AudioManager = {
             c.connect(cf); cf.connect(cg); cg.connect(this.masterGain);
             t.start(now); t.stop(now+0.22);
             c.start(now); c.stop(now+0.05);
-        } catch(e){}
+        } catch(_e){}
     },
     
     // ========== MATCHUP SOUNDS ==========
@@ -522,7 +522,7 @@ const AudioManager = {
             a.connect(af); af.connect(ag); ag.connect(this.masterGain);
             r.start(now); r.stop(now+0.45);
             a.start(now); a.stop(now+0.45);
-        } catch(e){}
+        } catch(_e){}
     },
     
     vsClash() {
@@ -562,7 +562,7 @@ const AudioManager = {
             i.start(now); i.stop(now+0.35);
             c.start(now); c.stop(now+0.18);
             d.start(now); d.stop(now+0.25);
-        } catch(e){}
+        } catch(_e){}
     },
     
     victoryCrunch() {
@@ -604,7 +604,7 @@ const AudioManager = {
             i.start(now); i.stop(now+0.45);
             c.start(now); c.stop(now+0.25);
             s.start(now); s.stop(now+0.4);
-        } catch(e){}
+        } catch(_e){}
     },
     
     // ========== UTILITY SOUNDS ==========
@@ -623,7 +623,7 @@ const AudioManager = {
             g.gain.exponentialRampToValueAtTime(0.001, now+0.12);
             n.connect(f); f.connect(g); g.connect(this.masterGain);
             n.start(now); n.stop(now+0.15);
-        } catch(e){}
+        } catch(_e){}
     },
     
     success() {
@@ -649,7 +649,7 @@ const AudioManager = {
             p.connect(pf); pf.connect(pg); pg.connect(this.masterGain);
             t.start(now); t.stop(now+0.12);
             p.start(now); p.stop(now+0.1);
-        } catch(e){}
+        } catch(_e){}
     },
     
     modalOpen() {
@@ -670,7 +670,7 @@ const AudioManager = {
             g.gain.exponentialRampToValueAtTime(0.001, now+0.12);
             n.connect(f); f.connect(g); g.connect(this.masterGain);
             n.start(now); n.stop(now+0.15);
-        } catch(e){}
+        } catch(_e){}
     },
     
     modalClose() {
@@ -690,7 +690,7 @@ const AudioManager = {
             g.gain.exponentialRampToValueAtTime(0.001, now+0.1);
             n.connect(f); f.connect(g); g.connect(this.masterGain);
             n.start(now); n.stop(now+0.12);
-        } catch(e){}
+        } catch(_e){}
     },
     
     tensionRumble(tension) {
@@ -708,7 +708,7 @@ const AudioManager = {
             g.gain.exponentialRampToValueAtTime(0.001, now+0.1);
             n.connect(f); f.connect(g); g.connect(this.masterGain);
             n.start(now); n.stop(now+0.12);
-        } catch(e){}
+        } catch(_e){}
     },
     
     releaseBurst(intensity = 1) {
@@ -734,7 +734,7 @@ const AudioManager = {
             t.connect(tf); tf.connect(tg); tg.connect(this.masterGain);
             s.start(now); s.stop(now+0.04);
             t.start(now); t.stop(now+0.12);
-        } catch(e){}
+        } catch(_e){}
     },
     
     // Legacy aliases

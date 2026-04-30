@@ -104,7 +104,7 @@ async function handleNotification(req, res) {
     try {
         let body = req.body;
         if (typeof body === 'string') {
-            try { body = JSON.parse(body); } catch (e) { body = {}; }
+            try { body = JSON.parse(body); } catch (_e) { body = {}; }
         }
         const { type, username, page, referrer, sessionId, duration, screenSize, language } = body || {};
         
@@ -151,7 +151,7 @@ async function handleGet(req, res) {
         type, 
         class: animalClass, 
         size,
-        diet,
+        _diet,
         biome,
         sort = 'name', 
         order = 'asc',

@@ -1289,8 +1289,7 @@ const HomepageController = {
             }
 
             if (srcKey) this.transparencyCache.set(srcKey, true);
-        } catch (e) {
-            // Cross-origin canvas restrictions can throw; treat image as valid.
+        } catch (_e) {
             if (srcKey) this.transparencyCache.set(srcKey, true);
         }
     },
@@ -1960,7 +1959,7 @@ const HomepageController = {
         }
     },
     
-    releaseSlingshot(e) {
+    releaseSlingshot(_e) {
         if (!this.slingshot.active) return;
         
         const s = this.slingshot;

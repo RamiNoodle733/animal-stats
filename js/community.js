@@ -75,7 +75,7 @@
                 window.addEventListener('beforeunload', () => {
                     this.unregisterTab();
                 });
-            } catch (e) {
+            } catch (_e) {
                 // localStorage might be disabled
                 console.warn('[Community] localStorage not available for tab tracking');
             }
@@ -101,7 +101,7 @@
                 });
                 
                 return activeTabs;
-            } catch (e) {
+            } catch (_e) {
                 return {};
             }
         },
@@ -125,7 +125,7 @@
                 const tabs = this.getActiveTabs();
                 delete tabs[this.tabId];
                 localStorage.setItem('abs_active_tabs', JSON.stringify(tabs));
-            } catch (e) {
+            } catch (_e) {
                 // Ignore
             }
         },
@@ -138,7 +138,7 @@
                 const tabs = this.getActiveTabs();
                 tabs[this.tabId] = Date.now();
                 localStorage.setItem('abs_active_tabs', JSON.stringify(tabs));
-            } catch (e) {
+            } catch (_e) {
                 // Ignore
             }
         },
@@ -213,7 +213,7 @@
                         tabId: this.tabId
                     })
                 });
-            } catch (error) {
+            } catch (_error) {
                 // Silent fail for presence
             }
         },
@@ -239,7 +239,7 @@
                     countEl.textContent = count;
                     setTimeout(() => countEl.classList.remove('count-updated'), 300);
                 }
-            } catch (error) {
+            } catch (_error) {
                 // Silent fail
             }
         },
@@ -288,7 +288,7 @@
                         this.updateVisitsDisplay(result.totalVisits);
                     }
                 }
-            } catch (error) {
+            } catch (_error) {
                 // Silent fail - visit counter is not critical
             }
         },
