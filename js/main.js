@@ -649,7 +649,7 @@ class AnimalStatsApp {
                         : count.toString();
                 }
             }
-        } catch (e) {
+        } catch (_e) {
             // silently ignore - battle count is non-critical
         }
     }
@@ -711,7 +711,7 @@ class AnimalStatsApp {
                 try {
                     const payload = JSON.parse(atob(token.split('.')[1]));
                     username = payload.username || 'Anonymous';
-                } catch (e) { }
+                } catch (_e) { }
             }
             
             // Get current page/route
@@ -763,7 +763,7 @@ class AnimalStatsApp {
                 });
                 navigator.sendBeacon(API_CONFIG.baseUrl + '/api/animals?action=notify', new Blob([data], { type: 'application/json' }));
             });
-        } catch (error) { }
+        } catch (_error) { }
     }
 
     /**
@@ -873,7 +873,7 @@ class AnimalStatsApp {
         return result.data;
     }
 
-    applyAnimalData(animals, source = 'network') {
+    applyAnimalData(animals, _source = 'network') {
         this.state.animals = animals;
         this.state.filteredAnimals = [...animals];
         this.state.apiAvailable = true;
@@ -926,7 +926,7 @@ class AnimalStatsApp {
     /**
      * Show a loading error to the user
      */
-    showLoadError(message) {
+    showLoadError(_message) {
         const gridContainer = document.getElementById('character-grid');
         if (gridContainer) {
             gridContainer.innerHTML = `
@@ -1454,7 +1454,7 @@ class AnimalStatsApp {
         if (!grid) return;
         
         // Card scroll amount (card width + gap)
-        const getScrollAmount = () => {
+        const _getScrollAmount = () => {
             const card = grid.querySelector('.character-card');
             if (!card) return 105; // Default fallback
             const cardWidth = card.offsetWidth;
@@ -1825,7 +1825,7 @@ class AnimalStatsApp {
                 const count = result.data?.length || 0;
                 countEl.textContent = count;
             }
-        } catch (e) {
+        } catch (_e) {
             countEl.textContent = '0';
         }
     }
@@ -2253,7 +2253,7 @@ class AnimalStatsApp {
         this.updateRadarChart(); // Update chart whenever a fighter changes
         
         // Update only affected cards instead of full re-render
-        const otherSide = side === 'left' ? 'right' : 'left';
+        const _otherSide = side === 'left' ? 'right' : 'left';
         const selectedClass = side === 'left' ? 'selected-fighter1' : 'selected-fighter2';
         
         if (prevAnimal) {
@@ -2394,7 +2394,7 @@ class AnimalStatsApp {
         if (window.ComparePageEnhancements && typeof window.ComparePageEnhancements.updateFighterInfo === 'function') {
             // Trigger via image change - the observer will pick it up
             // Or directly call update
-            const num = side === 'left' ? 1 : 2;
+            const _num = side === 'left' ? 1 : 2;
             window.ComparePageEnhancements.updateFighterDisplay?.(side, animal);
         }
     }
@@ -2587,7 +2587,7 @@ class AnimalStatsApp {
         const rankings = (this.rankingsManager && this.rankingsManager.rankings) ? this.rankingsManager.rankings : [];
         
         // Rankings data uses item.animal.name structure
-        const rankData = rankings.find((item, index) => {
+        const rankData = rankings.find((item, _index) => {
             const itemAnimal = item.animal || item;
             return itemAnimal.name && itemAnimal.name.toLowerCase() === animalName;
         });
@@ -2670,7 +2670,7 @@ class AnimalStatsApp {
         const user = window.Auth.user;
         const {
             displayName = 'User',
-            username = 'user',
+            username: _username = 'user',
             level = 1,
             xp = 0,
             xpToNext,
@@ -3198,7 +3198,7 @@ class AnimalStatsApp {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ animal1, animal2, user })
             });
-        } catch (e) {
+        } catch (_e) {
             // Silently fail - not critical
         }
     }

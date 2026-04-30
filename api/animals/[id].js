@@ -70,7 +70,7 @@ async function findAnimal(id) {
     }
 
     // Try to find by name (case-insensitive)
-    return await Animal.findByName(id);
+    return Animal.findByName(id);
 }
 
 /**

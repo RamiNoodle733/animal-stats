@@ -18,6 +18,7 @@
  * Rankings Module
  * Handles Power Rankings voting and comments
  */
+// eslint-disable-next-line no-unused-vars
 class RankingsManager {
     constructor(app) {
         this.app = app;
@@ -459,7 +460,7 @@ class RankingsManager {
         
         // Create a lookup map: name -> community data
         const communityMap = {};
-        this.rankings.forEach((item, index) => {
+        this.rankings.forEach((item, _index) => {
             communityMap[item.animal.name] = {
                 netVotes: item.netScore || 0,
                 comparisonCount: item.comparisonCount || 0
@@ -606,7 +607,7 @@ class RankingsManager {
         const tournamentsFirst = animal.tournamentsFirst || item.tournamentsFirst || 0;
         const tournamentsSecond = animal.tournamentsSecond || item.tournamentsSecond || 0;
         const tournamentsThird = animal.tournamentsThird || item.tournamentsThird || 0;
-        const hasTournamentData = tournamentsFirst > 0 || tournamentsSecond > 0 || tournamentsThird > 0;
+        const _hasTournamentData = tournamentsFirst > 0 || tournamentsSecond > 0 || tournamentsThird > 0;
         
         // Always show tournament chips (0 if no data)
         const tournamentBadges = `
@@ -818,7 +819,7 @@ class RankingsManager {
                     } else {
                         Auth.showToast(result.error || 'Failed to post');
                     }
-                } catch (err) {
+                } catch (_err) {
                     Auth.showToast('Error posting comment');
                 } finally {
                     sendBtn.disabled = false;
@@ -1129,7 +1130,7 @@ class RankingsManager {
         const tournamentsSecond = animal.tournamentsSecond || item.tournamentsSecond || 0;
         const tournamentsThird = animal.tournamentsThird || item.tournamentsThird || 0;
         
-        const hasTournamentData = tournamentsPlayed > 0 || tournamentsFirst > 0 || tournamentsSecond > 0 || tournamentsThird > 0;
+        const _hasTournamentData = tournamentsPlayed > 0 || tournamentsFirst > 0 || tournamentsSecond > 0 || tournamentsThird > 0;
         
         const historyContent = document.getElementById('tournament-history-content');
         const historyEmpty = document.getElementById('tournament-history-empty');

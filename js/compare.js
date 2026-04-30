@@ -105,7 +105,7 @@
             const fighterSections = document.querySelectorAll('#compare-view .fighter-section');
             
             fighterSections.forEach((section, index) => {
-                const side = index === 0 ? 'left' : 'right';
+                const _side = index === 0 ? 'left' : 'right';
                 const num = index + 1;
                 
                 // Skip if already rebuilt
@@ -321,7 +321,7 @@
             if (!imgElement?.src || imgElement.src === '' || imgElement.style.display === 'none') return;
             
             const isLeft = imgElement.id === 'animal-1-image';
-            const num = isLeft ? 1 : 2;
+            const _num = isLeft ? 1 : 2;
             const side = isLeft ? 'left' : 'right';
             const animal = isLeft 
                 ? window.app?.state?.compare?.left 
@@ -1545,7 +1545,7 @@
                 const loserVal = result.loser[stat.key] || 0;
                 const isWinnerBetter = winnerVal > loserVal;
                 const isLoserBetter = loserVal > winnerVal;
-                const isTie = winnerVal === loserVal;
+                const _isTie = winnerVal === loserVal;
                 
                 html += `
                     <div class="analysis-row" style="--delay: ${index * 0.04}s">

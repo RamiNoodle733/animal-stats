@@ -17,6 +17,7 @@
 /**
  * Tournament Manager - Handles bracket tournaments
  */
+// eslint-disable-next-line no-unused-vars
 class TournamentManager {
     constructor(app) {
         this.app = app;
@@ -1221,7 +1222,7 @@ class TournamentManager {
     /**
      * Show in-card rating change (replaces overlay animation)
      */
-    showInCardRatingChange(fighterNum, oldRating, newRating, isWinner) {
+    showInCardRatingChange(fighterNum, oldRating, newRating, _isWinner) {
         const container = document.getElementById(`t-rating-change-${fighterNum}`);
         if (!container) return;
         
@@ -1380,9 +1381,9 @@ class TournamentManager {
         const rankEl = document.getElementById(`t-fighter-${fighterNum}-rank`);
         const winrateEl = document.getElementById(`t-fighter-${fighterNum}-winrate`);
         const battlesEl = document.getElementById(`t-fighter-${fighterNum}-battles`);
-        const weightEl = document.getElementById(`t-fighter-${fighterNum}-weight`);
-        const speedEl = document.getElementById(`t-fighter-${fighterNum}-speed`);
-        const biteEl = document.getElementById(`t-fighter-${fighterNum}-bite`);
+        const _weightEl = document.getElementById(`t-fighter-${fighterNum}-weight`);
+        const _speedEl = document.getElementById(`t-fighter-${fighterNum}-speed`);
+        const _biteEl = document.getElementById(`t-fighter-${fighterNum}-bite`);
         
         // Image - ALWAYS reset first to prevent showing previous animal
         if (imgEl) {
