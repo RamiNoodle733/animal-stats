@@ -136,6 +136,12 @@
     --radius-2xl: 24px;
     --radius-full: 9999px;
     
+    --border-width-thin: 1px;
+    --border-width-default: 2px;
+    --border-width-thick: 3px;
+    --border-width-heavy: 4px;
+
+    /* Aliases kept for back-compat (widths) */
     --border-thin: 1px;
     --border-default: 2px;
     --border-thick: 3px;

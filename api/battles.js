@@ -12,7 +12,7 @@
 
 const { connectToDatabase } = require('../lib/mongodb');
 const BattleStats = require('../lib/models/BattleStats');
-const { verifyToken } = require('../lib/auth');
+const { verifyToken: _verifyToken } = require('../lib/auth');
 const { notifyDiscord } = require('../lib/discord');
 const mongoose = require('mongoose');
 
@@ -162,7 +162,7 @@ async function handleTournamentComplete(req, res) {
     // Parse body - handle both JSON and text/plain from sendBeacon
     let body = req.body;
     if (typeof body === 'string') {
-        try { body = JSON.parse(body); } catch (e) { body = {}; }
+        try { body = JSON.parse(body); } catch (_e) { body = {}; }
     }
     
     const { user, bracketSize, totalMatches, champion, runnerUp, thirdFourth, matchHistory } = body || {};
@@ -265,7 +265,7 @@ async function handleTournamentQuit(req, res) {
     // Parse body - handle both JSON and text/plain from sendBeacon
     let body = req.body;
     if (typeof body === 'string') {
-        try { body = JSON.parse(body); } catch (e) { body = {}; }
+        try { body = JSON.parse(body); } catch (_e) { body = {}; }
     }
     
     const { user, bracketSize, totalMatches, completedMatches, matchHistory } = body || {};

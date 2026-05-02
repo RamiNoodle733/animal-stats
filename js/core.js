@@ -381,4 +381,4 @@ document.addEventListener('DOMContentLoaded', () => {
     initMobileRankingsSheet();
 });
 
-console.log('[Core] Utilities loaded');
+

@@ -277,12 +277,10 @@ class AnimalStatsApp {
 
             // Defer heavy, non-critical managers until after first paint.
             this.startDeferredInitialization();
-            
-            console.log(`Animal Stats App Initialized (API: ${this.state.apiAvailable ? 'Connected' : 'Fallback Mode'})`);
         } catch (error) {
             console.error('Initialization failed:', error);
             this.hideLoadingScreen();
-            alert('Failed to load animal data. Please try refreshing the page.');
+            this.showLoadError('Failed to load animal data. Please try refreshing the page.');
         }
     }
 
@@ -651,8 +649,8 @@ class AnimalStatsApp {
                         : count.toString();
                 }
             }
-        } catch (e) {
-            console.log('Could not fetch battle stats');
+        } catch (_e) {
+            // silently ignore - battle count is non-critical
         }
     }
 
@@ -713,7 +711,7 @@ class AnimalStatsApp {
                 try {
                     const payload = JSON.parse(atob(token.split('.')[1]));
                     username = payload.username || 'Anonymous';
-                } catch (e) { }
+                } catch (_e) { }
             }
             
             // Get current page/route
@@ -765,7 +763,7 @@ class AnimalStatsApp {
                 });
                 navigator.sendBeacon(API_CONFIG.baseUrl + '/api/animals?action=notify', new Blob([data], { type: 'application/json' }));
             });
-        } catch (error) { }
+        } catch (_error) { }
     }
 
     /**
@@ -875,7 +873,7 @@ class AnimalStatsApp {
         return result.data;
     }
 
-    applyAnimalData(animals, source = 'network') {
+    applyAnimalData(animals, _source = 'network') {
         this.state.animals = animals;
         this.state.filteredAnimals = [...animals];
         this.state.apiAvailable = true;
@@ -894,8 +892,6 @@ class AnimalStatsApp {
                 this.state.selectedAnimal = refreshedAnimal;
             }
         }
-
-        console.log(`Loaded ${animals.length} animals from ${source}`);
 
         // Update filters/home UI with latest dataset.
         this.populateClassFilter();
@@ -928,11 +924,19 @@ class AnimalStatsApp {
     }
     
     /**
-     * Show a loading error to the user
+     * Show a loading error to the user.
+     * Shows a toast if the auth system is available, otherwise renders an inline
+     * error inside the character grid (or a fixed banner for fatal boot errors).
      */
     showLoadError(message) {
+        // Use the toast system if Auth is already available
+        if (window.Auth && typeof Auth.showToast === 'function') {
+            Auth.showToast(message || 'Failed to load data. Please refresh.', 8000);
+            return;
+        }
+        // Inline error inside the grid container
         const gridContainer = document.getElementById('character-grid');
-        if (gridContainer) {
+        if (gridContainer && message) {
             gridContainer.innerHTML = `
                 <div class="load-error">
                     <i class="fas fa-exclamation-triangle"></i>
@@ -943,7 +947,22 @@ class AnimalStatsApp {
                     </button>
                 </div>
             `;
+            return;
         }
+        // Fallback: fixed error banner at top of page
+        let banner = document.getElementById('app-load-error');
+        if (!banner) {
+            banner = document.createElement('div');
+            banner.id = 'app-load-error';
+            banner.style.cssText = [
+                'position:fixed', 'top:0', 'left:0', 'right:0', 'z-index:10000',
+                'background:#1a0505', 'border-bottom:2px solid #ef4444',
+                'color:#fca5a5', 'font-family:sans-serif', 'font-size:0.875rem',
+                'padding:12px 16px', 'text-align:center'
+            ].join(';');
+            document.body.appendChild(banner);
+        }
+        banner.textContent = message || 'Failed to load data. Please refresh.';
     }
 
     /**
@@ -1458,7 +1477,7 @@ class AnimalStatsApp {
         if (!grid) return;
         
         // Card scroll amount (card width + gap)
-        const getScrollAmount = () => {
+        const _getScrollAmount = () => {
             const card = grid.querySelector('.character-card');
             if (!card) return 105; // Default fallback
             const cardWidth = card.offsetWidth;
@@ -1829,7 +1848,7 @@ class AnimalStatsApp {
                 const count = result.data?.length || 0;
                 countEl.textContent = count;
             }
-        } catch (e) {
+        } catch (_e) {
             countEl.textContent = '0';
         }
     }
@@ -2257,7 +2276,7 @@ class AnimalStatsApp {
         this.updateRadarChart(); // Update chart whenever a fighter changes
         
         // Update only affected cards instead of full re-render
-        const otherSide = side === 'left' ? 'right' : 'left';
+        const _otherSide = side === 'left' ? 'right' : 'left';
         const selectedClass = side === 'left' ? 'selected-fighter1' : 'selected-fighter2';
         
         if (prevAnimal) {
@@ -2398,7 +2417,7 @@ class AnimalStatsApp {
         if (window.ComparePageEnhancements && typeof window.ComparePageEnhancements.updateFighterInfo === 'function') {
             // Trigger via image change - the observer will pick it up
             // Or directly call update
-            const num = side === 'left' ? 1 : 2;
+            const _num = side === 'left' ? 1 : 2;
             window.ComparePageEnhancements.updateFighterDisplay?.(side, animal);
         }
     }
@@ -2591,7 +2610,7 @@ class AnimalStatsApp {
         const rankings = (this.rankingsManager && this.rankingsManager.rankings) ? this.rankingsManager.rankings : [];
         
         // Rankings data uses item.animal.name structure
-        const rankData = rankings.find((item, index) => {
+        const rankData = rankings.find((item, _index) => {
             const itemAnimal = item.animal || item;
             return itemAnimal.name && itemAnimal.name.toLowerCase() === animalName;
         });
@@ -2674,7 +2693,7 @@ class AnimalStatsApp {
         const user = window.Auth.user;
         const {
             displayName = 'User',
-            username = 'user',
+            username: _username = 'user',
             level = 1,
             xp = 0,
             xpToNext,
@@ -3185,9 +3204,14 @@ class AnimalStatsApp {
                 loserProb: loserProb * 100
             });
         } else {
-            // Fallback to alert if enhancements not loaded
+            // Fallback: show result via toast
             const probPercent = Math.round(winnerProb * 100);
-            alert(`FIGHT PREDICTION:\n\nðŸ† ${winner.name} wins!\n\n${winner.name}: ${probPercent}% chance\n${loser.name}: ${100 - probPercent}% chance\n\nFight Score:\n${winner.name}: ${winnerScore.toFixed(1)}\n${loser.name}: ${loserScore.toFixed(1)}`);
+            const msg = `🏆 ${winner.name} wins! (${probPercent}% vs ${100 - probPercent}%)`;
+            if (window.Auth && typeof Auth.showToast === 'function') {
+                Auth.showToast(msg, 5000);
+            } else {
+                this.showLoadError(msg);
+            }
         }
     }
 
@@ -3202,7 +3226,7 @@ class AnimalStatsApp {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ animal1, animal2, user })
             });
-        } catch (e) {
+        } catch (_e) {
             // Silently fail - not critical
         }
     }
@@ -3552,21 +3576,28 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 10000);
     
     try {
-        console.log('[DEBUG] Creating AnimalStatsApp...');
         window.app = new AnimalStatsApp();
-        console.log('[DEBUG] Calling init()...');
         await window.app.init();
-        console.log('[DEBUG] Init completed successfully');
         clearTimeout(loadingFailsafe);
     } catch (error) {
-        console.error('[DEBUG] Fatal error:', error);
+        console.error('Fatal initialization error:', error);
         clearTimeout(loadingFailsafe);
         // Force hide loading screen
         const loadingScreen = document.getElementById('app-loading-screen');
         if (loadingScreen) {
             loadingScreen.classList.add('hidden');
         }
-        alert('Failed to load: ' + error.message);
+        // Show non-blocking error banner
+        const errMsg = 'Failed to load: ' + error.message;
+        if (window.app && typeof window.app.showLoadError === 'function') {
+            window.app.showLoadError(errMsg);
+        } else {
+            const banner = document.createElement('div');
+            banner.id = 'app-load-error';
+            banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:10000;background:#1a0505;border-bottom:2px solid #ef4444;color:#fca5a5;font-family:sans-serif;font-size:0.875rem;padding:12px 16px;text-align:center';
+            banner.textContent = errMsg;
+            document.body.appendChild(banner);
+        }
     }
 });
 

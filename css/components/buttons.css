@@ -38,7 +38,7 @@
     
     background: var(--bg-surface);
     color: var(--text-primary);
-    border: var(--border-default) solid var(--border-accent);
+    border: var(--border-width-default) solid var(--border-accent);
     border-radius: var(--radius-md);
     
     cursor: pointer;
@@ -259,22 +259,23 @@
     text-shadow: 0 0 15px rgba(255, 107, 0, 0.8);
     box-shadow: 0 0 40px rgba(255, 107, 0, 0.6);
     
+    will-change: transform, opacity;
     animation: fight-pulse 2.5s ease-in-out infinite;
 }
 
 .btn--fight:hover {
     background: linear-gradient(135deg, #ff8800, #ff5500);
     box-shadow: 0 0 60px rgba(255, 107, 0, 1);
-    transform: scale(1.1);
+    transform: scale(1.05);
     animation: none;
 }
 
 @keyframes fight-pulse {
     0%, 100% { 
-        box-shadow: 0 0 40px rgba(255, 107, 0, 0.6); 
+        opacity: 1;
     }
     50% { 
-        box-shadow: 0 0 60px rgba(255, 107, 0, 0.8); 
+        opacity: 0.82;
     }
 }
 

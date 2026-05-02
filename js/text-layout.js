@@ -29,7 +29,6 @@
                 if (module?.prepareWithSegments && module?.layoutWithLines) {
                     this._pretext = module;
                     this._pretextReady = true;
-                    console.log('[TextLayout] Using @chenglou/pretext');
                 }
             } catch {
                 // Fallback to internal canvas strategy when CDN/modules are unavailable.
