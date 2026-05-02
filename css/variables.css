@@ -143,6 +143,7 @@
 
     /* Aliases kept for back-compat (widths) */
     --border-thin: 1px;
+    --border-default: 2px;
     --border-thick: 3px;
     --border-heavy: 4px;
     
