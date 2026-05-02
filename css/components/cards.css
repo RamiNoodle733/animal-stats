@@ -47,6 +47,7 @@
 
 .card--interactive {
     cursor: pointer;
+    will-change: transform;
 }
 
 .card--interactive:hover {
@@ -177,11 +178,12 @@
     padding: var(--space-2);
     
     background: linear-gradient(180deg, var(--bg-surface) 0%, var(--bg-dark) 100%);
-    border: var(--border-default) solid var(--border-default);
+    border: var(--border-width-default) solid var(--border-default);
     border-radius: var(--radius-md);
     
     cursor: pointer;
     transition: all var(--transition-base);
+    will-change: transform;
 }
 
 .animal-card:hover {

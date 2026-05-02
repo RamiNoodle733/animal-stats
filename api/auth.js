@@ -234,7 +234,7 @@ async function handleMe(req, res) {
     let decoded;
     try {
         decoded = jwt.verify(token, JWT_SECRET);
-    } catch (err) {
+    } catch (_err) {
         return res.status(401).json({ success: false, error: 'Invalid or expired token' });
     }
 
@@ -276,7 +276,7 @@ async function handleGetProfile(req, res) {
     let decoded;
     try {
         decoded = jwt.verify(token, JWT_SECRET);
-    } catch (err) {
+    } catch (_err) {
         return res.status(401).json({ success: false, error: 'Invalid or expired token' });
     }
 
@@ -329,7 +329,7 @@ async function handleUpdateProfile(req, res) {
     let decoded;
     try {
         decoded = jwt.verify(token, JWT_SECRET);
-    } catch (err) {
+    } catch (_err) {
         return res.status(401).json({ success: false, error: 'Invalid or expired token' });
     }
 

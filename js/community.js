@@ -53,8 +53,6 @@
             
             // Only start heartbeat if currently on community page
             this.checkIfOnCommunityPage();
-            
-            console.log('[Community] Enhancements initialized, tabId:', this.tabId);
         },
 
         /**
@@ -77,7 +75,7 @@
                 window.addEventListener('beforeunload', () => {
                     this.unregisterTab();
                 });
-            } catch (e) {
+            } catch (_e) {
                 // localStorage might be disabled
                 console.warn('[Community] localStorage not available for tab tracking');
             }
@@ -103,7 +101,7 @@
                 });
                 
                 return activeTabs;
-            } catch (e) {
+            } catch (_e) {
                 return {};
             }
         },
@@ -127,7 +125,7 @@
                 const tabs = this.getActiveTabs();
                 delete tabs[this.tabId];
                 localStorage.setItem('abs_active_tabs', JSON.stringify(tabs));
-            } catch (e) {
+            } catch (_e) {
                 // Ignore
             }
         },
@@ -140,7 +138,7 @@
                 const tabs = this.getActiveTabs();
                 tabs[this.tabId] = Date.now();
                 localStorage.setItem('abs_active_tabs', JSON.stringify(tabs));
-            } catch (e) {
+            } catch (_e) {
                 // Ignore
             }
         },
@@ -215,7 +213,7 @@
                         tabId: this.tabId
                     })
                 });
-            } catch (error) {
+            } catch (_error) {
                 // Silent fail for presence
             }
         },
@@ -241,7 +239,7 @@
                     countEl.textContent = count;
                     setTimeout(() => countEl.classList.remove('count-updated'), 300);
                 }
-            } catch (error) {
+            } catch (_error) {
                 // Silent fail
             }
         },
@@ -259,7 +257,6 @@
                 
                 // Rate limit: one visit per 30 minutes per browser
                 if (lastVisit && (now - parseInt(lastVisit)) < 30 * 60 * 1000) {
-                    console.log('[Community] Visit already registered recently');
                     return;
                 }
                 
@@ -291,7 +288,7 @@
                         this.updateVisitsDisplay(result.totalVisits);
                     }
                 }
-            } catch (error) {
+            } catch (_error) {
                 // Silent fail - visit counter is not critical
             }
         },
@@ -364,13 +361,9 @@
             const isNowOnCommunity = communityView && communityView.classList.contains('active-view');
             
             if (isNowOnCommunity && !this.isOnCommunityPage) {
-                // Just entered community page
-                console.log('[Community] Entered community page, starting heartbeat');
                 this.isOnCommunityPage = true;
                 this.startHeartbeat();
             } else if (!isNowOnCommunity && this.isOnCommunityPage) {
-                // Just left community page
-                console.log('[Community] Left community page, stopping heartbeat');
                 this.isOnCommunityPage = false;
                 this.stopHeartbeat();
             }

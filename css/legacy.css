@@ -179,6 +179,7 @@ body {
     min-height: 0;
     overflow: hidden;
     position: relative;
+    contain: layout style;
 }
 
 .view-container.active-view {
@@ -307,6 +308,7 @@ body {
 .stat-bar-wrapper {
     position: relative;
     height: 18px;
+    contain: layout;
 }
 
 /* Segmented stat bar - like Injustice cards */
@@ -418,8 +420,8 @@ body {
 }
 
 @keyframes statBarGlowS {
-    0%, 100% { box-shadow: 0 0 12px rgba(255, 215, 0, 0.6); }
-    50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.9), 0 0 30px rgba(255, 215, 0, 0.4); }
+    0%, 100% { filter: brightness(1) saturate(1.2); }
+    50% { filter: brightness(1.15) saturate(1.5); }
 }
 
 /* Remove the ::after pseudo since we now use gradient in fill */
@@ -1152,6 +1154,7 @@ body {
     z-index: 20;
     flex-shrink: 0;
     margin-bottom: 0;
+    contain: layout style;
 }
 
 .character-grid-container.hidden {
@@ -1705,6 +1708,7 @@ body {
     flex-direction: column;
     padding: 0;
     flex-shrink: 0;
+    will-change: transform;
 }
 
 .character-card:hover {
@@ -1811,8 +1815,8 @@ body {
 }
 
 @keyframes selectedPulse {
-    0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.7); }
-    50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.9); }
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
 }
 
 .character-card.selected-fighter1 {
@@ -6369,6 +6373,7 @@ body {
     padding-bottom: 20px;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 215, 0, 0.3) transparent;
+    contain: layout style;
 }
 
 .rankings-list::-webkit-scrollbar {

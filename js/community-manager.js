@@ -18,6 +18,7 @@
 /**
  * Community Manager - Handles general chat and comments feed
  */
+// eslint-disable-next-line no-unused-vars
 class CommunityManager {
     constructor(app) {
         this.app = app;

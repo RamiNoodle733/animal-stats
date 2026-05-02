@@ -70,6 +70,7 @@ async function findAnimal(id) {
     }
 
     // Try to find by name (case-insensitive)
+    // eslint-disable-next-line no-return-await
     return await Animal.findByName(id);
 }
 

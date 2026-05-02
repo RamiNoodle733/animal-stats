@@ -57,7 +57,7 @@
     flex-direction: column;
     
     background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-dark) 100%);
-    border: var(--border-default) solid var(--border-accent);
+    border: var(--border-width-default) solid var(--border-accent);
     border-radius: var(--radius-xl);
     box-shadow: var(--shadow-xl), 0 0 60px var(--color-primary-dim);
     
@@ -211,7 +211,7 @@
     flex-direction: column;
     
     background: var(--bg-dark);
-    border-left: var(--border-default) solid var(--border-accent);
+    border-left: var(--border-width-default) solid var(--border-accent);
     box-shadow: -10px 0 40px rgba(0, 0, 0, 0.5);
     
     transform: translateX(100%);

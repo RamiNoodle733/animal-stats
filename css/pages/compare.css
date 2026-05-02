@@ -232,7 +232,7 @@
     position: relative;
     
     background: var(--bg-base);
-    border: var(--border-default) solid var(--border-default);
+    border: var(--border-width-default) solid var(--border-default);
     border-radius: var(--radius-md);
     overflow: hidden;
     
@@ -683,7 +683,7 @@
     #compare-view .fighter-section.fighter-right {
         border-left: none;
         border-right: none;
-        border-top: var(--border-default) solid var(--color-purple);
+        border-top: var(--border-width-default) solid var(--color-purple);
     }
     
     #compare-view .fighter-section.fighter-right {
