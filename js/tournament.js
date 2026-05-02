@@ -723,7 +723,9 @@ class TournamentManager {
         // Use selected bracket size
         const size = this.selectedBracketSize;
         if (!size || this.filteredAnimals.length < size) {
-            alert('Please select a bracket size with enough animals available.');
+            if (window.Auth && typeof Auth.showToast === 'function') {
+                Auth.showToast('Please select a bracket size with enough animals available.', 4000);
+            }
             return;
         }
         

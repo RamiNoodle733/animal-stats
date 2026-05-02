@@ -179,6 +179,7 @@ body {
     min-height: 0;
     overflow: hidden;
     position: relative;
+    contain: layout style;
 }
 
 .view-container.active-view {
@@ -307,6 +308,7 @@ body {
 .stat-bar-wrapper {
     position: relative;
     height: 18px;
+    contain: layout;
 }
 
 /* Segmented stat bar - like Injustice cards */
@@ -1152,6 +1154,7 @@ body {
     z-index: 20;
     flex-shrink: 0;
     margin-bottom: 0;
+    contain: layout style;
 }
 
 .character-grid-container.hidden {
@@ -6370,6 +6373,7 @@ body {
     padding-bottom: 20px;
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 215, 0, 0.3) transparent;
+    contain: layout style;
 }
 
 .rankings-list::-webkit-scrollbar {

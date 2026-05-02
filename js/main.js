@@ -280,7 +280,7 @@ class AnimalStatsApp {
         } catch (error) {
             console.error('Initialization failed:', error);
             this.hideLoadingScreen();
-            alert('Failed to load animal data. Please try refreshing the page.');
+            this.showLoadError('Failed to load animal data. Please try refreshing the page.');
         }
     }
 
@@ -924,11 +924,19 @@ class AnimalStatsApp {
     }
     
     /**
-     * Show a loading error to the user
+     * Show a loading error to the user.
+     * Shows a toast if the auth system is available, otherwise renders an inline
+     * error inside the character grid (or a fixed banner for fatal boot errors).
      */
-    showLoadError(_message) {
+    showLoadError(message) {
+        // Use the toast system if Auth is already available
+        if (window.Auth && typeof Auth.showToast === 'function') {
+            Auth.showToast(message || 'Failed to load data. Please refresh.', 8000);
+            return;
+        }
+        // Inline error inside the grid container
         const gridContainer = document.getElementById('character-grid');
-        if (gridContainer) {
+        if (gridContainer && message) {
             gridContainer.innerHTML = `
                 <div class="load-error">
                     <i class="fas fa-exclamation-triangle"></i>
@@ -939,7 +947,22 @@ class AnimalStatsApp {
                     </button>
                 </div>
             `;
+            return;
         }
+        // Fallback: fixed error banner at top of page
+        let banner = document.getElementById('app-load-error');
+        if (!banner) {
+            banner = document.createElement('div');
+            banner.id = 'app-load-error';
+            banner.style.cssText = [
+                'position:fixed', 'top:0', 'left:0', 'right:0', 'z-index:10000',
+                'background:#1a0505', 'border-bottom:2px solid #ef4444',
+                'color:#fca5a5', 'font-family:sans-serif', 'font-size:0.875rem',
+                'padding:12px 16px', 'text-align:center'
+            ].join(';');
+            document.body.appendChild(banner);
+        }
+        banner.textContent = message || 'Failed to load data. Please refresh.';
     }
 
     /**
@@ -3181,9 +3204,14 @@ class AnimalStatsApp {
                 loserProb: loserProb * 100
             });
         } else {
-            // Fallback to alert if enhancements not loaded
+            // Fallback: show result via toast
             const probPercent = Math.round(winnerProb * 100);
-            alert(`FIGHT PREDICTION:\n\nðŸ† ${winner.name} wins!\n\n${winner.name}: ${probPercent}% chance\n${loser.name}: ${100 - probPercent}% chance\n\nFight Score:\n${winner.name}: ${winnerScore.toFixed(1)}\n${loser.name}: ${loserScore.toFixed(1)}`);
+            const msg = `🏆 ${winner.name} wins! (${probPercent}% vs ${100 - probPercent}%)`;
+            if (window.Auth && typeof Auth.showToast === 'function') {
+                Auth.showToast(msg, 5000);
+            } else {
+                this.showLoadError(msg);
+            }
         }
     }
 
@@ -3559,7 +3587,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (loadingScreen) {
             loadingScreen.classList.add('hidden');
         }
-        alert('Failed to load: ' + error.message);
+        // Show non-blocking error banner
+        const errMsg = 'Failed to load: ' + error.message;
+        if (window.app && typeof window.app.showLoadError === 'function') {
+            window.app.showLoadError(errMsg);
+        } else {
+            const banner = document.createElement('div');
+            banner.id = 'app-load-error';
+            banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:10000;background:#1a0505;border-bottom:2px solid #ef4444;color:#fca5a5;font-family:sans-serif;font-size:0.875rem;padding:12px 16px;text-align:center';
+            banner.textContent = errMsg;
+            document.body.appendChild(banner);
+        }
     }
 });
 
