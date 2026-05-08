@@ -17,7 +17,6 @@
 /**
  * Tournament Manager - Handles bracket tournaments
  */
-// eslint-disable-next-line no-unused-vars
 class TournamentManager {
     constructor(app) {
         this.app = app;
@@ -2634,4 +2633,4 @@ class TournamentManager {
 }
 
 // ========================================
-
+window.TournamentManager = TournamentManager;
