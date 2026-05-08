@@ -18,7 +18,6 @@
  * Rankings Module
  * Handles Power Rankings voting and comments
  */
-// eslint-disable-next-line no-unused-vars
 class RankingsManager {
     constructor(app) {
         this.app = app;
@@ -1971,4 +1970,4 @@ class RankingsManager {
 }
 
 // ========================================
-
+window.RankingsManager = RankingsManager;

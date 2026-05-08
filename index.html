@@ -107,11 +107,6 @@
     <!-- Page-specific CSS (loaded async) -->
     <link rel="stylesheet" href="/css/pages/homepage.css">
     <link rel="stylesheet" href="/css/components/about-info-btn.css">
-    <link rel="stylesheet" href="/tournament-v4.css" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="/compare-page.css" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="/community-page.css" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="/css/pages/community-globe.css">
-    <link rel="stylesheet" href="/css/pages/battlepoints.css" media="print" onload="this.media='all'">
     
     <!-- Mobile-specific styles (loaded last to override) -->
     <link rel="stylesheet" href="/css/mobile.css" media="print" onload="this.media='all'">
@@ -3030,13 +3025,7 @@
     <!-- Audio Manager (must load before other scripts) -->
     <script src="/js/audio.js"></script>
     
-    <!-- Page managers (must load before main.js initializes them) -->
-    <script src="/js/rankings.js"></script>
-    <script src="/js/tournament.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.min.js"></script>
-    <script src="/js/community-globe.js"></script>
-    <script src="/js/community-manager.js"></script>
-    <script src="/js/battlepoints.js"></script>
+    <!-- Lightweight shared modules -->
     <script src="/js/homepage.js"></script>
     <script src="/js/social.js"></script>
     
@@ -3044,7 +3033,5 @@
     <script src="/js/main.js" defer></script>
     
     <!-- Page-specific enhancements -->
-    <script src="/js/compare.js" defer></script>
-    <script src="/js/community.js" defer></script>
 </body>
 </html>
