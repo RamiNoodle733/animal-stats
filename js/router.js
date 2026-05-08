@@ -15,6 +15,114 @@
 
 'use strict';
 
+
+/**
+ * Route asset loader registry.
+ * Scripts/styles are injected once and cached for repeat navigations.
+ */
+const ROUTE_ASSET_DEFINITIONS = {
+    rankings: {
+        styles: ['/css/pages/rankings.css'],
+        scripts: ['/js/rankings.js']
+    },
+    tournament: {
+        styles: ['/tournament-v4.css', '/css/pages/tournament.css'],
+        scripts: ['/js/tournament.js']
+    },
+    community: {
+        styles: ['/community-page.css', '/css/pages/community.css', '/css/pages/community-globe.css'],
+        scripts: [
+            'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.min.js',
+            '/js/community-globe.js',
+            '/js/community-manager.js',
+            '/js/community.js'
+        ]
+    },
+    compare: {
+        styles: ['/compare-page.css', '/css/pages/compare.css'],
+        scripts: ['/js/compare.js']
+    },
+    battlepoints: {
+        styles: ['/css/pages/battlepoints.css'],
+        scripts: ['/js/battlepoints.js']
+    }
+};
+
+const routeAssetPromises = new Map();
+const routeStylePromises = new Map();
+const routeScriptPromises = new Map();
+
+function loadStylesheetOnce(href) {
+    if (routeStylePromises.has(href)) return routeStylePromises.get(href);
+
+    const existing = document.querySelector(`link[rel="stylesheet"][href="${href}"]`);
+    if (existing) {
+        const promise = Promise.resolve(existing);
+        routeStylePromises.set(href, promise);
+        return promise;
+    }
+
+    const promise = new Promise((resolve, reject) => {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href;
+        link.dataset.routeAsset = 'true';
+        link.onload = () => resolve(link);
+        link.onerror = () => reject(new Error(`Failed to load stylesheet: ${href}`));
+        document.head.appendChild(link);
+    });
+
+    routeStylePromises.set(href, promise);
+    return promise;
+}
+
+function loadScriptOnce(src) {
+    if (routeScriptPromises.has(src)) return routeScriptPromises.get(src);
+
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+        const promise = Promise.resolve(existing);
+        routeScriptPromises.set(src, promise);
+        return promise;
+    }
+
+    const promise = new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.dataset.routeAsset = 'true';
+        script.onload = () => resolve(script);
+        script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+        document.body.appendChild(script);
+    });
+
+    routeScriptPromises.set(src, promise);
+    return promise;
+}
+
+function loadRouteAssets(routeName) {
+    const assets = ROUTE_ASSET_DEFINITIONS[routeName];
+    if (!assets) return Promise.resolve();
+    if (routeAssetPromises.has(routeName)) return routeAssetPromises.get(routeName);
+
+    const promise = (async () => {
+        await Promise.all((assets.styles || []).map(loadStylesheetOnce));
+
+        // Load scripts in order so route dependencies are available before managers initialize.
+        for (const src of (assets.scripts || [])) {
+            await loadScriptOnce(src);
+        }
+    })();
+
+    routeAssetPromises.set(routeName, promise);
+    return promise;
+}
+
+window.loadRouteAssets = loadRouteAssets;
+window.routeAssetRegistry = {
+    definitions: ROUTE_ASSET_DEFINITIONS,
+    loaded: routeAssetPromises
+};
+
 class Router {
     constructor() {
         this.routes = [];
@@ -160,8 +268,13 @@ class Router {
                     params[name] = decodeURIComponent(match[index + 1]);
                 });
 
-                // Call handler
-                route.handler(params);
+                // Call handler. Route handlers may lazily load assets before switching views.
+                const result = route.handler(params);
+                if (result && typeof result.catch === 'function') {
+                    result.catch((error) => {
+                        console.error(`Error handling route ${route.path}:`, error);
+                    });
+                }
                 return;
             }
         }

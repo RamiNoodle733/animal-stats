@@ -351,7 +351,12 @@ class AnimalStatsApp {
 
     ensureRankingsManager() {
         if (this.rankingsManager) return this.rankingsManager;
-        this.rankingsManager = new RankingsManager(this);
+        const ManagerClass = window.RankingsManager || (typeof RankingsManager !== 'undefined' ? RankingsManager : null);
+        if (!ManagerClass) {
+            console.warn("RankingsManager is not loaded yet. Call loadRouteAssets('rankings') before initializing rankings.");
+            return null;
+        }
+        this.rankingsManager = new ManagerClass(this);
         this.rankingsManager.init();
         window.rankingsManager = this.rankingsManager;
         return this.rankingsManager;
@@ -359,7 +364,12 @@ class AnimalStatsApp {
 
     ensureTournamentManager() {
         if (this.tournamentManager) return this.tournamentManager;
-        this.tournamentManager = new TournamentManager(this);
+        const ManagerClass = window.TournamentManager || (typeof TournamentManager !== 'undefined' ? TournamentManager : null);
+        if (!ManagerClass) {
+            console.warn("TournamentManager is not loaded yet. Call loadRouteAssets('tournament') before initializing tournaments.");
+            return null;
+        }
+        this.tournamentManager = new ManagerClass(this);
         this.tournamentManager.init();
         window.tournamentManager = this.tournamentManager;
         return this.tournamentManager;
@@ -367,17 +377,25 @@ class AnimalStatsApp {
 
     ensureCommunityManager() {
         if (this.communityManager) return this.communityManager;
-        this.communityManager = new CommunityManager(this);
+        const ManagerClass = window.CommunityManager || (typeof CommunityManager !== 'undefined' ? CommunityManager : null);
+        if (!ManagerClass) {
+            console.warn("CommunityManager is not loaded yet. Call loadRouteAssets('community') before initializing community.");
+            return null;
+        }
+        this.communityManager = new ManagerClass(this);
         this.communityManager.init();
         window.communityManager = this.communityManager;
         return this.communityManager;
     }
 
     ensureBattlepointsManager() {
-        if (this.battlepointsManager || !window.BattlepointsManager) {
-            return this.battlepointsManager;
+        if (this.battlepointsManager) return this.battlepointsManager;
+        const ManagerClass = window.BattlepointsManager || (typeof BattlepointsManager !== 'undefined' ? BattlepointsManager : null);
+        if (!ManagerClass) {
+            console.warn("BattlepointsManager is not loaded yet. Call loadRouteAssets('battlepoints') before initializing battle points.");
+            return null;
         }
-        this.battlepointsManager = new BattlepointsManager(this);
+        this.battlepointsManager = new ManagerClass(this);
         this.battlepointsManager.init();
         window.battlepointsManager = this.battlepointsManager;
         return this.battlepointsManager;
@@ -387,28 +405,8 @@ class AnimalStatsApp {
         if (this._deferredInitStarted) return;
         this._deferredInitStarted = true;
 
-        this.runWhenIdle(async () => {
-            try {
-                const rankingsManager = this.ensureRankingsManager();
-                await rankingsManager.fetchRankings();
-
-                // Re-apply ranking sort once rankings data arrives.
-                if (this.state.filters.sort === 'rank') {
-                    const shouldRenderGrid = this.gridRendered || this.state.view === 'stats' || this.state.view === 'compare';
-                    this.applyFilters({ renderGrid: shouldRenderGrid });
-                }
-
-                if (this.state.selectedAnimal) {
-                    this.updateBattleRecord(this.state.selectedAnimal);
-                }
-            } catch (error) {
-                console.warn('Deferred rankings load failed:', error);
-            }
-        }, 800);
-
-        this.runWhenIdle(() => this.ensureTournamentManager(), 1200);
-        this.runWhenIdle(() => this.ensureCommunityManager(), 1400);
-        this.runWhenIdle(() => this.ensureBattlepointsManager(), 1600);
+        // Route-heavy managers are intentionally not preloaded here. They are
+        // injected by loadRouteAssets(routeName) on the first visit to their route.
     }
 
     /**
@@ -460,16 +458,19 @@ class AnimalStatsApp {
         });
 
         // Compare route
-        router.on('/compare', () => {
+        router.on('/compare', async () => {
+            await window.loadRouteAssets?.('compare');
             this.switchView('compare', false);
         });
 
         // Rankings route
-        router.on('/rankings', () => {
+        router.on('/rankings', async () => {
+            await window.loadRouteAssets?.('rankings');
             this.switchView('rankings', false);
         });
 
-        const handleCommunityRoute = (tabName = 'chat', options = {}) => {
+        const handleCommunityRoute = async (tabName = 'chat', options = {}) => {
+            await window.loadRouteAssets?.('community');
             const requestedTab = typeof tabName === 'string' ? tabName.toLowerCase() : 'chat';
             const communityManager = this.ensureCommunityManager();
             const normalizedTab = communityManager.normalizeTabName(requestedTab);
@@ -496,17 +497,18 @@ class AnimalStatsApp {
 
         // Community route (tab-aware sub-pages)
         router.on('/community/:tab', (params) => {
-            handleCommunityRoute(params.tab);
+            return handleCommunityRoute(params.tab);
         });
 
         // Legacy/default community route fallback
         router.on('/community', () => {
             const legacyTab = new URLSearchParams(window.location.search).get('tab');
-            handleCommunityRoute(legacyTab || 'chat', { replace: true });
+            return handleCommunityRoute(legacyTab || 'chat', { replace: true });
         });
 
         // Battle Points route
-        router.on('/battlepoints', () => {
+        router.on('/battlepoints', async () => {
+            await window.loadRouteAssets?.('battlepoints');
             this.switchView('battlepoints', false);
         });
 
@@ -516,9 +518,11 @@ class AnimalStatsApp {
         });
 
         // Tournament route
-        router.on('/tournament', () => {
+        router.on('/tournament', async () => {
+            await window.loadRouteAssets?.('tournament');
             // Ensure a base view is active before showing tournament overlay
             if (this.state.view === 'home' || !this.state.view) {
+                await window.loadRouteAssets?.('rankings');
                 this.switchView('rankings', false);
             }
             // Show tournament modal on top of current view
@@ -1856,7 +1860,7 @@ class AnimalStatsApp {
     /**
      * Open comments modal for the currently selected animal (Stats view)
      */
-    openStatsComments() {
+    async openStatsComments() {
         if (!this.state.selectedAnimal) {
             Auth.showToast('Please select an animal first');
             return;
@@ -1865,6 +1869,7 @@ class AnimalStatsApp {
         const animal = this.state.selectedAnimal;
         const animalId = animal._id || animal.id;
         
+        await window.loadRouteAssets?.('rankings');
         // Use RankingsManager's comments modal
         const rankingsManager = this.ensureRankingsManager();
         if (rankingsManager?.openCommentsModal) {
@@ -2206,7 +2211,7 @@ class AnimalStatsApp {
             if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'none';
             
             // Fetch rankings when entering rankings view
-            this.ensureRankingsManager().fetchRankings();
+            this.ensureRankingsManager()?.fetchRankings();
         } else if (viewName === 'community') {
             // Hide grid and bottom bar in community view (always hidden)
             this.dom.gridWrapper.classList.add('hidden');
@@ -2214,7 +2219,7 @@ class AnimalStatsApp {
             if (this.dom.sharedBottomBar) this.dom.sharedBottomBar.style.display = 'none';
             
             // Load community content when entering
-            this.ensureCommunityManager().onViewEnter();
+            this.ensureCommunityManager()?.onViewEnter();
         } else if (viewName === 'battlepoints') {
             // Hide grid and bottom bar in battlepoints view
             this.dom.gridWrapper.classList.add('hidden');
