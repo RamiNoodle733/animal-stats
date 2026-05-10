@@ -144,9 +144,60 @@ async function handleNotification(req, res) {
  * - order: sort order (asc, desc)
  * - limit: number of results
  * - skip: pagination offset
+ * - view=home: lightweight curated sample for the homepage
  */
+
+async function handleHomeView(_req, res) {
+    const validImageQuery = {
+        image: {
+            $exists: true,
+            $type: 'string',
+            $nin: ['', null],
+            $not: /fallback|placeholder/i
+        }
+    };
+
+    const sampleLimit = 32;
+    const animals = await Animal.aggregate([
+        { $match: validImageQuery },
+        {
+            $addFields: {
+                totalStats: {
+                    $add: ['$attack', '$defense', '$agility', '$stamina', '$intelligence', '$special_attack']
+                }
+            }
+        },
+        { $sort: { totalStats: -1, name: 1 } },
+        { $limit: sampleLimit },
+        {
+            $project: {
+                _id: 1,
+                name: 1,
+                image: 1,
+                type: 1,
+                totalStats: 1
+            }
+        }
+    ]);
+
+    const total = await Animal.countDocuments();
+    const rankedAnimals = animals.map((animal, index) => ({
+        ...animal,
+        rank: index + 1
+    }));
+
+    return res.status(200).json({
+        success: true,
+        count: rankedAnimals.length,
+        total,
+        view: 'home',
+        data: rankedAnimals
+    });
+}
+
 async function handleGet(req, res) {
     const { 
+        view,
         search, 
         type, 
         class: animalClass, 
@@ -158,6 +209,10 @@ async function handleGet(req, res) {
         limit = 500,
         skip = 0 
     } = req.query;
+
+    if (view === 'home') {
+        return handleHomeView(req, res);
+    }
 
     // Build query
     const query = {};
