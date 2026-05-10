@@ -97,6 +97,9 @@ npm install
    # Edit .env.local and add your credentials
    MONGODB_URI=mongodb+srv://your_username:your_password@cluster.mongodb.net/animal-stats?retryWrites=true&w=majority
    JWT_SECRET=your-secret-key-here
+   SITE_ORIGIN=https://animalbattlestats.com
+   # Optional: comma-separated exact preview origins that can call credentialed APIs
+   VERCEL_PREVIEW_ORIGINS=https://your-preview.vercel.app
    ```
 
 ### Step 4: Seed the Database
@@ -243,6 +246,10 @@ Defines:
 |----------|----------|-------------|
 | `MONGODB_URI` | Yes | MongoDB connection string |
 | `JWT_SECRET` | Yes | Secret key for JWT authentication |
+| `SITE_ORIGIN` | Yes | Canonical browser origin allowed for credentialed/auth APIs (for example, `https://animalbattlestats.com`) |
+| `CORS_ALLOWED_ORIGINS` | No | Comma-separated additional exact origins allowed for credentialed APIs |
+| `VERCEL_PREVIEW_ORIGINS` | No | Comma-separated exact Vercel preview origins allowed for credentialed APIs |
+| `ALLOW_VERCEL_PREVIEW_ORIGINS` | No | Set to `true` only when every `*.vercel.app` preview for this project should be allowed |
 | `NODE_ENV` | No | Environment (development/production) |
 
 ### Battle Points Shop (Coming Soon)
