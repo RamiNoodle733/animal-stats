@@ -438,6 +438,14 @@
                         
                         <div class="auth-page-error" id="login-page-error"></div>
                         
+                        <button type="button" class="google-auth-btn" data-google-auth="login">
+                            <i class="fab fa-google"></i> Continue with Google
+                        </button>
+
+                        <div class="auth-page-divider">
+                            <span>or</span>
+                        </div>
+
                         <form class="auth-page-form" id="login-page-form">
                             <div class="auth-form-group">
                                 <label for="login-page-email">Email or username</label>
@@ -457,10 +465,6 @@
 
                         <div class="auth-page-switch">
                             <a href="/forgot-password">Forgot your password?</a>
-                        </div>
-                        
-                        <div class="auth-page-divider">
-                            <span>or</span>
                         </div>
                         
                         <div class="auth-page-switch">
@@ -571,6 +575,14 @@
                         
                         <div class="auth-page-error" id="signup-page-error"></div>
                         
+                        <button type="button" class="google-auth-btn" data-google-auth="signup">
+                            <i class="fab fa-google"></i> Continue with Google
+                        </button>
+
+                        <div class="auth-page-divider">
+                            <span>or</span>
+                        </div>
+
                         <form class="auth-page-form" id="signup-page-form">
                             <div class="auth-form-group">
                                 <label for="signup-page-username">Username</label>
@@ -596,10 +608,6 @@
                                 <span class="btn-loader"><i class="fas fa-spinner fa-spin"></i></span>
                             </button>
                         </form>
-                        
-                        <div class="auth-page-divider">
-                            <span>or</span>
-                        </div>
                         
                         <div class="auth-page-switch">
                             Already on Animal Battle Stats? <a href="/login">Sign in</a>
@@ -770,6 +778,20 @@
                                         <label for="retro-username">Username</label>
                                         <p class="abs-form-hint">Your login username. <span id="retro-username-changes">3 changes remaining this week.</span></p>
                                         <input type="text" id="retro-username" placeholder="Enter username..." maxlength="20">
+                                    </div>
+                                    <div class="abs-form-group abs-google-link-group">
+                                        <label>Google account</label>
+                                        <p class="abs-form-hint">Use Google to sign in faster while keeping this Animal Battle Stats profile.</p>
+                                        <div class="abs-google-link-row">
+                                            <span class="abs-google-status" id="google-link-status">Not linked</span>
+                                            <button type="button" class="abs-save-btn abs-google-btn" id="link-google-btn">
+                                                <i class="fab fa-google"></i> Link Google account
+                                            </button>
+                                            <button type="button" class="abs-save-btn abs-google-btn danger" id="unlink-google-btn" style="display: none;">
+                                                <i class="fab fa-google"></i> Unlink Google
+                                            </button>
+                                        </div>
+                                        <div class="abs-google-error" id="google-link-error"></div>
                                     </div>
                                     <div class="abs-form-actions">
                                         <span class="abs-unsaved-indicator" id="retro-unsaved-indicator">
@@ -1979,6 +2001,9 @@
                     <span class="btn-text">LOG IN</span>
                     <span class="btn-loader" style="display: none;"><i class="fas fa-spinner fa-spin"></i></span>
                 </button>
+                <button type="button" class="auth-submit-btn google-auth-btn modal-google" data-google-auth="modal-login">
+                    <i class="fab fa-google"></i> Continue with Google
+                </button>
                 <div class="auth-switch">
                     <a href="#" id="show-forgot">Forgot your password?</a>
                 </div>
@@ -2010,6 +2035,9 @@
                 <button class="auth-submit-btn" id="signup-submit">
                     <span class="btn-text">CREATE ACCOUNT</span>
                     <span class="btn-loader" style="display: none;"><i class="fas fa-spinner fa-spin"></i></span>
+                </button>
+                <button type="button" class="auth-submit-btn google-auth-btn modal-google" data-google-auth="modal-signup">
+                    <i class="fab fa-google"></i> Continue with Google
                 </button>
                 <div class="auth-switch">
                     Already have an account? <a href="#" id="show-login">Log in</a>

@@ -8,6 +8,10 @@
  * GET/POST /api/auth?action=rewards - XP/BP rewards system
  * POST /api/auth?action=prestige - Prestige at level 100
  * POST /api/auth?action=flag-rename - Admin-only: require a user to rename
+ * GET /api/auth?action=google-start - Begin Google OAuth sign in
+ * GET /api/auth?action=google-callback - Complete Google OAuth sign in
+ * GET /api/auth?action=link-google - Begin linking Google to the current user
+ * POST /api/auth?action=unlink-google - Unlink Google from the current user
  */
 
 const { connectToDatabase } = require('../lib/mongodb');
@@ -34,6 +38,11 @@ const LOGIN_LIMIT = { windowMs: 15 * 60 * 1000, max: 5 };
 const SIGNUP_LIMIT = { windowMs: 60 * 60 * 1000, max: 5 };
 const attemptBuckets = new Map();
 const GENERIC_AUTH_ERROR = 'Unable to complete this request. Please check your details and try again later.';
+const GOOGLE_PROVIDER = 'google';
+const GOOGLE_OAUTH_SCOPES = ['openid', 'email', 'profile'];
+const GOOGLE_STATE_COOKIE = 'abs_google_oauth_state';
+const GOOGLE_STATE_MAX_AGE_SECONDS = 10 * 60;
+const GOOGLE_AUTO_LINK_VERIFIED_EMAILS = process.env.GOOGLE_AUTO_LINK_VERIFIED_EMAILS === 'true';
 
 function normalizeIdentifier(value) {
     return String(value || '').trim().toLowerCase();
@@ -152,6 +161,30 @@ async function sendPasswordResetEmail(req, user, token) {
     });
 }
 
+function getSafeReturnPath(value) {
+    const raw = String(value || '').trim();
+    if (!raw || !raw.startsWith('/') || raw.startsWith('//') || raw.includes('://')) {
+        return '/';
+    }
+    return raw;
+}
+
+function buildRedirectUrl(req, path, params = {}) {
+    const url = new URL(path, getBaseUrl(req));
+    Object.entries(params).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== '') {
+            url.searchParams.set(key, String(value));
+        }
+    });
+    return url.toString();
+}
+
+function redirectTo(res, location) {
+    res.statusCode = 302;
+    res.setHeader('Location', location);
+    return res.end();
+}
+
 function parseCookies(req) {
     return String(req.headers.cookie || '').split(';').reduce((cookies, pair) => {
         const index = pair.indexOf('=');
@@ -170,14 +203,35 @@ function getRequestToken(req) {
     return parseCookies(req)[AUTH_COOKIE_NAME] || null;
 }
 
+function appendSetCookie(res, cookie) {
+    const existing = res.getHeader('Set-Cookie');
+    if (!existing) {
+        res.setHeader('Set-Cookie', cookie);
+    } else if (Array.isArray(existing)) {
+        res.setHeader('Set-Cookie', [...existing, cookie]);
+    } else {
+        res.setHeader('Set-Cookie', [existing, cookie]);
+    }
+}
+
 function setAuthCookie(res, token) {
     const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
-    res.setHeader('Set-Cookie', `${AUTH_COOKIE_NAME}=${encodeURIComponent(token)}; Max-Age=${TOKEN_MAX_AGE_SECONDS}; Path=/; HttpOnly; SameSite=Lax${secure}`);
+    appendSetCookie(res, `${AUTH_COOKIE_NAME}=${encodeURIComponent(token)}; Max-Age=${TOKEN_MAX_AGE_SECONDS}; Path=/; HttpOnly; SameSite=Lax${secure}`);
 }
 
 function clearAuthCookie(res) {
     const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
-    res.setHeader('Set-Cookie', `${AUTH_COOKIE_NAME}=; Max-Age=0; Path=/; HttpOnly; SameSite=Lax${secure}`);
+    appendSetCookie(res, `${AUTH_COOKIE_NAME}=; Max-Age=0; Path=/; HttpOnly; SameSite=Lax${secure}`);
+}
+
+function setGoogleStateCookie(res, state) {
+    const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
+    appendSetCookie(res, `${GOOGLE_STATE_COOKIE}=${encodeURIComponent(state)}; Max-Age=${GOOGLE_STATE_MAX_AGE_SECONDS}; Path=/; HttpOnly; SameSite=Lax${secure}`);
+}
+
+function clearGoogleStateCookie(res) {
+    const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
+    appendSetCookie(res, `${GOOGLE_STATE_COOKIE}=; Max-Age=0; Path=/; HttpOnly; SameSite=Lax${secure}`);
 }
 
 function signSessionToken(user) {
@@ -189,11 +243,19 @@ function signSessionToken(user) {
 }
 
 function buildUserPayload(user) {
+    const authProviders = (user.authProviders || []).map((provider) => ({
+        provider: provider.provider,
+        email: provider.email,
+        linkedAt: provider.linkedAt
+    }));
+
     return {
         id: user._id,
         username: user.username,
         email: user.email,
         emailVerified: Boolean(user.emailVerified),
+        authProviders,
+        googleLinked: authProviders.some((provider) => provider.provider === GOOGLE_PROVIDER),
         displayName: user.displayName,
         avatar: user.avatar,
         role: user.role,
@@ -241,6 +303,30 @@ module.exports = async function handler(req, res) {
                 }
                 return await handleSignup(req, res);
             
+            case 'google-start':
+                if (req.method !== 'GET') {
+                    return res.status(405).json({ success: false, error: 'Method not allowed' });
+                }
+                return await handleGoogleStart(req, res, 'login');
+
+            case 'google-callback':
+                if (req.method !== 'GET') {
+                    return res.status(405).json({ success: false, error: 'Method not allowed' });
+                }
+                return await handleGoogleCallback(req, res);
+
+            case 'link-google':
+                if (req.method !== 'GET') {
+                    return res.status(405).json({ success: false, error: 'Method not allowed' });
+                }
+                return await handleGoogleStart(req, res, 'link');
+
+            case 'unlink-google':
+                if (req.method !== 'POST') {
+                    return res.status(405).json({ success: false, error: 'Method not allowed' });
+                }
+                return await handleUnlinkGoogle(req, res);
+
             case 'verify-email':
                 if (req.method !== 'GET' && req.method !== 'POST') {
                     return res.status(405).json({ success: false, error: 'Method not allowed' });
@@ -310,6 +396,320 @@ module.exports = async function handler(req, res) {
     }
 };
 
+
+function getGoogleConfig(req) {
+    const clientId = process.env.GOOGLE_CLIENT_ID;
+    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+    const redirectUri = process.env.GOOGLE_REDIRECT_URI || `${getBaseUrl(req)}/api/auth?action=google-callback`;
+
+    if (!clientId || !clientSecret) {
+        return null;
+    }
+
+    return { clientId, clientSecret, redirectUri };
+}
+
+function encodeGoogleState(payload) {
+    return Buffer.from(JSON.stringify(payload)).toString('base64url');
+}
+
+function decodeGoogleState(value) {
+    try {
+        return JSON.parse(Buffer.from(String(value || ''), 'base64url').toString('utf8'));
+    } catch (_err) {
+        return null;
+    }
+}
+
+function getAuthenticatedUserFromRequest(req) {
+    const token = getRequestToken(req);
+    if (!token) return null;
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        return { id: decoded.userId, username: decoded.username };
+    } catch (_err) {
+        return null;
+    }
+}
+
+function findLinkedProvider(user, provider = GOOGLE_PROVIDER) {
+    return (user.authProviders || []).find((authProvider) => authProvider.provider === provider);
+}
+
+function addOrUpdateGoogleProvider(user, googleProfile) {
+    if (!user.authProviders) user.authProviders = [];
+
+    const linkedProvider = findLinkedProvider(user);
+    if (linkedProvider) {
+        linkedProvider.providerUserId = googleProfile.sub;
+        linkedProvider.email = googleProfile.email;
+        linkedProvider.linkedAt = linkedProvider.linkedAt || new Date();
+        return;
+    }
+
+    user.authProviders.push({
+        provider: GOOGLE_PROVIDER,
+        providerUserId: googleProfile.sub,
+        email: googleProfile.email,
+        linkedAt: new Date()
+    });
+}
+
+async function buildUniqueUsername(googleProfile) {
+    const emailPrefix = String(googleProfile.email || '').split('@')[0];
+    const namePrefix = String(googleProfile.name || '').replace(/[^a-zA-Z0-9_]/g, '').slice(0, 20);
+    const base = (emailPrefix || namePrefix || 'google_user')
+        .replace(/[^a-zA-Z0-9_]/g, '_')
+        .replace(/_+/g, '_')
+        .replace(/^_+|_+$/g, '')
+        .slice(0, 16) || 'google_user';
+    const normalizedBase = base.length >= 3 ? base : `${base}_abs`;
+
+    for (let index = 0; index < 50; index += 1) {
+        const suffix = index === 0 ? '' : String(index);
+        const candidate = `${normalizedBase}${suffix}`.slice(0, 20);
+        const exists = await User.exists({ username: { $regex: new RegExp(`^${candidate.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') } });
+        if (!exists) return candidate;
+    }
+
+    return `google_${crypto.randomBytes(5).toString('hex')}`.slice(0, 20);
+}
+
+async function fetchGoogleProfile(req, code) {
+    const googleConfig = getGoogleConfig(req);
+    if (!googleConfig) {
+        throw new Error('Google OAuth is not configured.');
+    }
+
+    const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+            code,
+            client_id: googleConfig.clientId,
+            client_secret: googleConfig.clientSecret,
+            redirect_uri: googleConfig.redirectUri,
+            grant_type: 'authorization_code'
+        })
+    });
+
+    if (!tokenResponse.ok) {
+        throw new Error('Google token exchange failed.');
+    }
+
+    const tokenPayload = await tokenResponse.json();
+    const profileResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: { Authorization: `Bearer ${tokenPayload.access_token}` }
+    });
+
+    if (!profileResponse.ok) {
+        throw new Error('Google profile fetch failed.');
+    }
+
+    const profile = await profileResponse.json();
+    if (!profile.sub || !profile.email) {
+        throw new Error('Google did not return the required profile details.');
+    }
+
+    return {
+        sub: String(profile.sub),
+        email: normalizeIdentifier(profile.email),
+        emailVerified: profile.email_verified === true || profile.email_verified === 'true',
+        name: profile.name || profile.email
+    };
+}
+
+async function handleGoogleStart(req, res, mode = 'login') {
+    const googleConfig = getGoogleConfig(req);
+    const returnTo = getSafeReturnPath(req.query.returnTo || req.headers.referer);
+
+    if (!googleConfig) {
+        return redirectTo(res, buildRedirectUrl(req, mode === 'link' ? '/profile' : '/login', {
+            google_error: 'not_configured',
+            message: 'Google sign-in is not configured yet.'
+        }));
+    }
+
+    const authUser = getAuthenticatedUserFromRequest(req);
+    if (mode === 'link' && !authUser) {
+        return redirectTo(res, buildRedirectUrl(req, '/login', {
+            google_error: 'login_required',
+            message: 'Log in before linking a Google account.',
+            returnTo: '/profile'
+        }));
+    }
+
+    const nonce = crypto.randomBytes(24).toString('hex');
+    const state = encodeGoogleState({
+        nonce,
+        mode,
+        returnTo: mode === 'link' ? '/profile' : returnTo,
+        userId: mode === 'link' ? authUser.id : null,
+        createdAt: Date.now()
+    });
+    setGoogleStateCookie(res, nonce);
+
+    const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
+    authUrl.searchParams.set('client_id', googleConfig.clientId);
+    authUrl.searchParams.set('redirect_uri', googleConfig.redirectUri);
+    authUrl.searchParams.set('response_type', 'code');
+    authUrl.searchParams.set('scope', GOOGLE_OAUTH_SCOPES.join(' '));
+    authUrl.searchParams.set('state', state);
+    authUrl.searchParams.set('prompt', 'select_account');
+
+    return redirectTo(res, authUrl.toString());
+}
+
+function googleErrorRedirect(req, res, state, code, message) {
+    const destination = state?.mode === 'link' ? '/profile' : '/login';
+    return redirectTo(res, buildRedirectUrl(req, destination, {
+        google_error: code,
+        message
+    }));
+}
+
+async function handleGoogleCallback(req, res) {
+    const state = decodeGoogleState(req.query.state);
+    const expectedNonce = parseCookies(req)[GOOGLE_STATE_COOKIE];
+    clearGoogleStateCookie(res);
+
+    if (req.query.error) {
+        return googleErrorRedirect(req, res, state, 'cancelled', 'Google sign-in was cancelled.');
+    }
+
+    if (!state || !expectedNonce || state.nonce !== expectedNonce || Date.now() - Number(state.createdAt || 0) > GOOGLE_STATE_MAX_AGE_SECONDS * 1000) {
+        return googleErrorRedirect(req, res, state, 'invalid_state', 'Google sign-in expired. Please try again.');
+    }
+
+    try {
+        const googleProfile = await fetchGoogleProfile(req, String(req.query.code || ''));
+
+        if (!googleProfile.emailVerified) {
+            return googleErrorRedirect(req, res, state, 'unverified_email', 'Google did not verify this email address.');
+        }
+
+        const alreadyLinkedUser = await User.findOne({
+            authProviders: {
+                $elemMatch: {
+                    provider: GOOGLE_PROVIDER,
+                    providerUserId: googleProfile.sub
+                }
+            }
+        });
+
+        if (state.mode === 'link') {
+            const authUser = getAuthenticatedUserFromRequest(req);
+            if (!authUser || String(authUser.id) !== String(state.userId)) {
+                return googleErrorRedirect(req, res, state, 'login_required', 'Log in before linking a Google account.');
+            }
+
+            const currentUser = await User.findById(state.userId);
+            if (!currentUser) {
+                return googleErrorRedirect(req, res, state, 'login_required', 'Log in before linking a Google account.');
+            }
+
+            if (alreadyLinkedUser && String(alreadyLinkedUser._id) !== String(currentUser._id)) {
+                return googleErrorRedirect(req, res, state, 'already_linked', 'That Google account is already linked to another Animal Battle Stats account.');
+            }
+
+            addOrUpdateGoogleProvider(currentUser, googleProfile);
+            if (currentUser.email === googleProfile.email) currentUser.emailVerified = true;
+            await currentUser.save();
+
+            const token = signSessionToken(currentUser);
+            setAuthCookie(res, token);
+            return redirectTo(res, buildRedirectUrl(req, state.returnTo || '/profile', { google_linked: '1' }));
+        }
+
+        if (alreadyLinkedUser) {
+            alreadyLinkedUser.lastLogin = new Date();
+            await alreadyLinkedUser.save();
+            const token = signSessionToken(alreadyLinkedUser);
+            setAuthCookie(res, token);
+            await notifyDiscord('login', { username: alreadyLinkedUser.username }, req);
+            return redirectTo(res, getSafeReturnPath(state.returnTo));
+        }
+
+        const existingEmailUser = await User.findOne({ email: googleProfile.email });
+        if (existingEmailUser) {
+            if (GOOGLE_AUTO_LINK_VERIFIED_EMAILS && existingEmailUser.emailVerified && googleProfile.emailVerified) {
+                addOrUpdateGoogleProvider(existingEmailUser, googleProfile);
+                existingEmailUser.lastLogin = new Date();
+                await existingEmailUser.save();
+                const token = signSessionToken(existingEmailUser);
+                setAuthCookie(res, token);
+                return redirectTo(res, getSafeReturnPath(state.returnTo));
+            }
+
+            return googleErrorRedirect(
+                req,
+                res,
+                state,
+                'existing_account',
+                'An account already uses that email. Log in first, then use Link Google account from your profile.'
+            );
+        }
+
+        const username = await buildUniqueUsername(googleProfile);
+        const user = new User({
+            username,
+            email: googleProfile.email,
+            displayName: String(googleProfile.name || username).slice(0, 30),
+            emailVerified: true,
+            authProviders: [{
+                provider: GOOGLE_PROVIDER,
+                providerUserId: googleProfile.sub,
+                email: googleProfile.email,
+                linkedAt: new Date()
+            }]
+        });
+
+        await user.save();
+        const token = signSessionToken(user);
+        setAuthCookie(res, token);
+        await notifyDiscord('signup', { username: user.username }, req);
+        return redirectTo(res, getSafeReturnPath(state.returnTo));
+    } catch (error) {
+        console.error('Google OAuth callback error:', error);
+        return googleErrorRedirect(req, res, state, 'oauth_failed', 'Google sign-in failed. Please try again.');
+    }
+}
+
+async function handleUnlinkGoogle(req, res) {
+    const authUser = getAuthenticatedUserFromRequest(req);
+    if (!authUser) {
+        return res.status(401).json({ success: false, error: 'Authentication required' });
+    }
+
+    const user = await User.findById(authUser.id).select('+password');
+    if (!user) {
+        return res.status(404).json({ success: false, error: 'User not found' });
+    }
+
+    const hasPassword = Boolean(user.password);
+    if (!hasPassword) {
+        return res.status(400).json({
+            success: false,
+            error: 'Add a password to your account before unlinking Google.'
+        });
+    }
+
+    const originalCount = (user.authProviders || []).length;
+    user.authProviders = (user.authProviders || []).filter((provider) => provider.provider !== GOOGLE_PROVIDER);
+
+    if (user.authProviders.length === originalCount) {
+        return res.status(400).json({ success: false, error: 'No Google account is linked.' });
+    }
+
+    await user.save();
+    return res.status(200).json({
+        success: true,
+        message: 'Google account unlinked.',
+        data: { user: buildUserPayload(user) }
+    });
+}
+
 // ==================== LOGIN ====================
 async function handleLogin(req, res) {
     const { login, password } = req.body || {};
@@ -337,6 +737,14 @@ async function handleLogin(req, res) {
     if (!user) {
         recordFailedAttempt('login', req, normalizedLogin, LOGIN_LIMIT);
         return res.status(401).json({ success: false, error: 'Invalid credentials' });
+    }
+
+    if (!user.password) {
+        recordFailedAttempt('login', req, normalizedLogin, LOGIN_LIMIT);
+        return res.status(401).json({
+            success: false,
+            error: 'This account uses Google sign-in. Continue with Google or reset your password to add password login.'
+        });
     }
 
     const isMatch = await user.comparePassword(password);
@@ -590,6 +998,9 @@ async function handleGetProfile(req, res) {
                 id: user._id,
                 username: user.username,
                 email: user.email,
+                emailVerified: Boolean(user.emailVerified),
+                authProviders: buildUserPayload(user).authProviders,
+                googleLinked: buildUserPayload(user).googleLinked,
                 displayName: user.displayName,
                 avatar: user.avatar,
                 role: user.role,
@@ -759,6 +1170,9 @@ async function handleUpdateProfile(req, res) {
                 id: user._id,
                 username: user.username,
                 email: user.email,
+                emailVerified: Boolean(user.emailVerified),
+                authProviders: buildUserPayload(user).authProviders,
+                googleLinked: buildUserPayload(user).googleLinked,
                 displayName: user.displayName || user.username,
                 avatar: user.avatar,
                 role: user.role,
