@@ -7,6 +7,7 @@ const { connectToDatabase } = require('../lib/mongodb');
 const Comment = require('../lib/models/Comment');
 const { verifyToken } = require('../lib/auth');
 const { notifyDiscord } = require('../lib/discord');
+const { maskBlockedTerms } = require('../lib/moderation');
 
 module.exports = async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -173,12 +174,15 @@ async function handlePost(req, res) {
         return res.status(400).json({ success: false, error: 'Comment too long (max 1000 characters)' });
     }
 
+    const trimmedContent = content.trim();
+    const publicContent = maskBlockedTerms(trimmedContent);
+
     // Get user's profile info for display
     const User = require('../lib/models/User');
     const userDoc = await User.findById(user.id).select('displayName profileAnimal');
 
     const commentData = {
-        content: content.trim(),
+        content: publicContent,
         authorId: user.id,
         authorUsername: userDoc?.displayName || user.username,
         profileAnimal: userDoc?.profileAnimal || null,
@@ -206,7 +210,7 @@ async function handlePost(req, res) {
             user: displayName,
             replyTo: parentAuthor,
             target: parent.animalName || parent.comparisonKey || 'Unknown',
-            content: content.substring(0, 100) + (content.length > 100 ? '...' : '')
+            content: publicContent.substring(0, 100) + (publicContent.length > 100 ? '...' : '')
         }, req);
     } else {
         // New top-level comment
@@ -233,7 +237,7 @@ async function handlePost(req, res) {
         await notifyDiscord('comment', {
             user: displayName,
             target: targetType === 'animal' ? animalName : comparisonKey,
-            content: content.substring(0, 100) + (content.length > 100 ? '...' : '')
+            content: publicContent.substring(0, 100) + (publicContent.length > 100 ? '...' : '')
         }, req);
     }
 
