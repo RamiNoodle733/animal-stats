@@ -11,6 +11,7 @@
 
 const { connectToDatabase } = require('../lib/mongodb');
 const { verifyToken } = require('../lib/auth');
+const { setCorsHeaders } = require('../lib/cors');
 
 // In-memory presence store with TTL (would use Redis in production)
 // Structure: { odId: { username, displayName, profileAnimal, lastSeen, page } }
@@ -134,9 +135,10 @@ function cleanPageBuckets(items, limit = 8) {
 }
 
 module.exports = async function handler(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    setCorsHeaders(req, res, {
+        methods: 'GET, POST, OPTIONS',
+        credentials: true
+    });
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
 
     if (req.method === 'OPTIONS') {

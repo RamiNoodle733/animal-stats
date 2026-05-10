@@ -13,11 +13,13 @@ const Vote = require('../lib/models/Vote');
 const XpClaim = require('../lib/models/XpClaim');
 const { verifyToken } = require('../lib/auth');
 const { notifyDiscord } = require('../lib/discord');
+const { setCorsHeaders } = require('../lib/cors');
 
 module.exports = async function handler(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    setCorsHeaders(req, res, {
+        methods: 'GET, POST, DELETE, OPTIONS',
+        credentials: true
+    });
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
 
     if (req.method === 'OPTIONS') {
