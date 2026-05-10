@@ -245,7 +245,7 @@ class Router {
         const html = document.documentElement;
         
         // Clear all route-specific classes first
-        html.classList.remove('is-home', 'is-login', 'is-signup', 'is-about');
+        html.classList.remove('is-home', 'is-login', 'is-signup', 'is-forgot', 'is-reset', 'is-about');
         
         // Add appropriate classes based on route
         if (normalizedPath === '/' || normalizedPath === '') {
@@ -254,6 +254,10 @@ class Router {
             html.classList.add('is-home', 'is-login');
         } else if (normalizedPath === '/signup') {
             html.classList.add('is-home', 'is-signup');
+        } else if (normalizedPath === '/forgot-password') {
+            html.classList.add('is-home', 'is-login', 'is-forgot');
+        } else if (normalizedPath === '/reset-password') {
+            html.classList.add('is-home', 'is-login', 'is-reset');
         } else if (normalizedPath === '/about') {
             html.classList.add('is-home', 'is-about');
         }

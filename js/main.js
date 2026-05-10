@@ -254,6 +254,8 @@ class AnimalStatsApp {
             // Cache auth view elements
             this.dom.loginView = document.getElementById('login-view');
             this.dom.signupView = document.getElementById('signup-view');
+            this.dom.forgotPasswordView = document.getElementById('forgot-password-view');
+            this.dom.resetPasswordView = document.getElementById('reset-password-view');
             
             // Cache about view element
             this.dom.aboutView = document.getElementById('about-view');
@@ -345,6 +347,8 @@ class AnimalStatsApp {
         if (path.startsWith('/about')) return 'about';
         if (path.startsWith('/login')) return 'login';
         if (path.startsWith('/signup')) return 'signup';
+        if (path.startsWith('/forgot-password')) return 'forgot-password';
+        if (path.startsWith('/reset-password')) return 'reset-password';
         if (path.startsWith('/profile')) return 'profile';
         return 'home';
     }
@@ -590,6 +594,16 @@ class AnimalStatsApp {
             this.switchView('login', false);
         });
 
+        // Forgot password route
+        router.on('/forgot-password', () => {
+            this.switchView('forgot-password', false);
+        });
+
+        // Reset password route
+        router.on('/reset-password', () => {
+            this.switchView('reset-password', false);
+        });
+
         // Signup route
         router.on('/signup', () => {
             // If already logged in, redirect to home
@@ -727,14 +741,7 @@ class AnimalStatsApp {
      */
     trackSiteVisit() {
         try {
-            const token = localStorage.getItem('auth_token');
-            let username = 'Anonymous';
-            if (token) {
-                try {
-                    const payload = JSON.parse(atob(token.split('.')[1]));
-                    username = payload.username || 'Anonymous';
-                } catch (_e) { }
-            }
+            const username = window.Auth?.getUser?.()?.username || 'Anonymous';
             
             // Get current page/route
             const currentPage = window.location.pathname + window.location.hash;
@@ -2189,6 +2196,8 @@ class AnimalStatsApp {
             about: 'ABOUT',
             login: 'LOGIN',
             signup: 'SIGNUP',
+            'forgot-password': 'RESET',
+            'reset-password': 'RESET',
             profile: 'PROFILE'
         };
         if (this.dom.titleMode) {
@@ -2217,6 +2226,8 @@ class AnimalStatsApp {
         this.dom.homeView?.classList.toggle('active-view', viewName === 'home');
         this.dom.loginView?.classList.toggle('active-view', viewName === 'login');
         this.dom.signupView?.classList.toggle('active-view', viewName === 'signup');
+        this.dom.forgotPasswordView?.classList.toggle('active-view', viewName === 'forgot-password');
+        this.dom.resetPasswordView?.classList.toggle('active-view', viewName === 'reset-password');
         this.dom.aboutView?.classList.toggle('active-view', viewName === 'about');
         this.dom.profileView?.classList.toggle('active-view', viewName === 'profile');
         this.dom.publicProfileView?.classList.remove('active-view'); // Always hide public profile when switching
@@ -2257,6 +2268,8 @@ class AnimalStatsApp {
                 about: '/about',
                 login: '/login',
                 signup: '/signup',
+                'forgot-password': '/forgot-password',
+                'reset-password': '/reset-password',
                 profile: '/profile'
             };
             if (routes[viewName]) {
@@ -2271,7 +2284,7 @@ class AnimalStatsApp {
         }
 
         // Grid visibility logic - preserve user's hidden/shown preference across stats/compare
-        const isFullscreenView = viewName === 'home' || viewName === 'login' || viewName === 'signup' || viewName === 'about';
+        const isFullscreenView = viewName === 'home' || viewName === 'login' || viewName === 'signup' || viewName === 'forgot-password' || viewName === 'reset-password' || viewName === 'about';
         const isProfileView = viewName === 'profile';
         
         // Show/hide header for different view types
@@ -3561,7 +3574,9 @@ class AnimalStatsApp {
                 
             case 'login':
             case 'signup':
-                title = `${view === 'login' ? 'Login' : 'Sign Up'} | ${siteName}`;
+            case 'forgot-password':
+            case 'reset-password':
+                title = `${view === 'login' ? 'Login' : view === 'signup' ? 'Sign Up' : 'Reset Password'} | ${siteName}`;
                 description = 'Join Animal Battle Stats to vote on rankings, comment on animals, and participate in the community.';
                 canonicalPath = `/${view}`;
                 break;

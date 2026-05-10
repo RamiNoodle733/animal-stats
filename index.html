@@ -123,7 +123,7 @@
     <script>
         (function() {
             var path = window.location.pathname;
-            if (path === '/' || path === '' || path === '/login' || path === '/signup' || path === '/profile') {
+            if (path === '/' || path === '' || path === '/login' || path === '/signup' || path === '/profile' || path === '/forgot-password' || path === '/reset-password') {
                 document.documentElement.classList.add('is-home');
             }
             if (path === '/about') {
@@ -134,6 +134,12 @@
             }
             if (path === '/signup') {
                 document.documentElement.classList.add('is-signup');
+            }
+            if (path === '/forgot-password') {
+                document.documentElement.classList.add('is-login', 'is-forgot');
+            }
+            if (path === '/reset-password') {
+                document.documentElement.classList.add('is-login', 'is-reset');
             }
             if (path === '/profile') {
                 document.documentElement.classList.add('is-profile');
@@ -194,8 +200,10 @@
         
         /* Show correct view based on route - only during initial load */
         html.is-home:not(.is-login):not(.is-signup):not(.is-profile):not(.is-public-profile):not(.is-about) #home-view { display: flex !important; }
-        html.is-login #login-view { display: flex !important; }
+        html.is-login:not(.is-forgot):not(.is-reset) #login-view { display: flex !important; }
         html.is-signup #signup-view { display: flex !important; }
+        html.is-forgot #forgot-password-view { display: flex !important; }
+        html.is-reset #reset-password-view { display: flex !important; }
         html.is-profile #profile-view { display: flex !important; }
         html.is-public-profile #public-profile-view { display: flex !important; }
         html.is-about #about-view { display: flex !important; }
@@ -207,6 +215,8 @@
         html.is-home #community-view { display: none !important; }
         html.is-login #home-view,
         html.is-signup #home-view,
+        html.is-login:not(.is-forgot) #forgot-password-view,
+        html.is-login:not(.is-reset) #reset-password-view,
         html.is-profile #home-view,
         html.is-public-profile #home-view { display: none !important; }
     </style>
@@ -444,6 +454,10 @@
                                 <span class="btn-loader"><i class="fas fa-spinner fa-spin"></i></span>
                             </button>
                         </form>
+
+                        <div class="auth-page-switch">
+                            <a href="/forgot-password">Forgot your password?</a>
+                        </div>
                         
                         <div class="auth-page-divider">
                             <span>or</span>
@@ -451,6 +465,88 @@
                         
                         <div class="auth-page-switch">
                             New to Animal Battle Stats? <a href="/signup">Join now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Forgot Password View -->
+        <div id="forgot-password-view" class="view-container">
+            <div class="auth-page">
+                <button class="auth-close-btn" id="forgot-close-btn" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+
+                <div class="auth-page-container">
+                    <a href="/" class="auth-page-logo">
+                        <img src="/images/logo.png" alt="Animal Battle Stats">
+                    </a>
+
+                    <div class="auth-page-card">
+                        <h1 class="auth-page-title">Reset password</h1>
+                        <p class="auth-page-subtitle">Enter your email and we’ll send a secure reset link.</p>
+
+                        <div class="auth-page-error" id="forgot-page-error"></div>
+
+                        <form class="auth-page-form" id="forgot-page-form">
+                            <div class="auth-form-group">
+                                <label for="forgot-page-email">Email</label>
+                                <input type="email" id="forgot-page-email" autocomplete="email" required>
+                            </div>
+
+                            <button type="submit" class="auth-page-submit" id="forgot-page-submit">
+                                <span class="btn-text">Send reset link</span>
+                                <span class="btn-loader"><i class="fas fa-spinner fa-spin"></i></span>
+                            </button>
+                        </form>
+
+                        <div class="auth-page-switch">
+                            Remembered your password? <a href="/login">Sign in</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reset Password View -->
+        <div id="reset-password-view" class="view-container">
+            <div class="auth-page">
+                <button class="auth-close-btn" id="reset-close-btn" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                </button>
+
+                <div class="auth-page-container">
+                    <a href="/" class="auth-page-logo">
+                        <img src="/images/logo.png" alt="Animal Battle Stats">
+                    </a>
+
+                    <div class="auth-page-card">
+                        <h1 class="auth-page-title">Choose a new password</h1>
+                        <p class="auth-page-subtitle">Use at least 8 characters.</p>
+
+                        <div class="auth-page-error" id="reset-page-error"></div>
+
+                        <form class="auth-page-form" id="reset-page-form">
+                            <div class="auth-form-group">
+                                <label for="reset-page-password">New password</label>
+                                <input type="password" id="reset-page-password" autocomplete="new-password" required minlength="8">
+                            </div>
+
+                            <div class="auth-form-group">
+                                <label for="reset-page-confirm">Confirm new password</label>
+                                <input type="password" id="reset-page-confirm" autocomplete="new-password" required minlength="8">
+                            </div>
+
+                            <button type="submit" class="auth-page-submit" id="reset-page-submit">
+                                <span class="btn-text">Reset password</span>
+                                <span class="btn-loader"><i class="fas fa-spinner fa-spin"></i></span>
+                            </button>
+                        </form>
+
+                        <div class="auth-page-switch">
+                            Return to <a href="/login">sign in</a>
                         </div>
                     </div>
                 </div>
@@ -487,8 +583,8 @@
                             </div>
                             
                             <div class="auth-form-group">
-                                <label for="signup-page-password">Password (6+ characters)</label>
-                                <input type="password" id="signup-page-password" autocomplete="new-password" required minlength="6">
+                                <label for="signup-page-password">Password (8+ characters)</label>
+                                <input type="password" id="signup-page-password" autocomplete="new-password" required minlength="8">
                             </div>
                             
                             <p class="auth-terms">
@@ -1884,6 +1980,9 @@
                     <span class="btn-loader" style="display: none;"><i class="fas fa-spinner fa-spin"></i></span>
                 </button>
                 <div class="auth-switch">
+                    <a href="#" id="show-forgot">Forgot your password?</a>
+                </div>
+                <div class="auth-switch">
                     Don't have an account? <a href="#" id="show-signup">Sign up</a>
                 </div>
             </div>
@@ -1902,7 +2001,7 @@
                 </div>
                 <div class="form-group">
                     <label for="signup-password"><i class="fas fa-lock"></i> Password</label>
-                    <input type="password" id="signup-password" placeholder="Create a password (min 6 characters)" autocomplete="new-password">
+                    <input type="password" id="signup-password" placeholder="Create a password (min 8 characters)" autocomplete="new-password" minlength="8">
                 </div>
                 <div class="form-group">
                     <label for="signup-confirm"><i class="fas fa-lock"></i> Confirm Password</label>
@@ -1915,6 +2014,41 @@
                 <div class="auth-switch">
                     Already have an account? <a href="#" id="show-login">Log in</a>
                 </div>
+            </div>
+
+            <!-- Forgot Password Form -->
+            <div class="auth-form" id="forgot-form" style="display: none;">
+                <h2><i class="fas fa-key"></i> RESET PASSWORD</h2>
+                <div class="auth-error" id="forgot-error"></div>
+                <div class="form-group">
+                    <label for="forgot-email"><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="forgot-email" placeholder="Enter your email" autocomplete="email">
+                </div>
+                <button class="auth-submit-btn" id="forgot-submit">
+                    <span class="btn-text">SEND RESET LINK</span>
+                    <span class="btn-loader" style="display: none;"><i class="fas fa-spinner fa-spin"></i></span>
+                </button>
+                <div class="auth-switch">
+                    Remembered it? <a href="#" id="show-login-from-forgot">Log in</a>
+                </div>
+            </div>
+
+            <!-- Reset Password Form -->
+            <div class="auth-form" id="reset-form" style="display: none;">
+                <h2><i class="fas fa-lock"></i> NEW PASSWORD</h2>
+                <div class="auth-error" id="reset-error"></div>
+                <div class="form-group">
+                    <label for="reset-password"><i class="fas fa-lock"></i> New Password</label>
+                    <input type="password" id="reset-password" placeholder="New password (min 8 characters)" autocomplete="new-password" minlength="8">
+                </div>
+                <div class="form-group">
+                    <label for="reset-confirm"><i class="fas fa-lock"></i> Confirm Password</label>
+                    <input type="password" id="reset-confirm" placeholder="Confirm your new password" autocomplete="new-password" minlength="8">
+                </div>
+                <button class="auth-submit-btn" id="reset-submit">
+                    <span class="btn-text">RESET PASSWORD</span>
+                    <span class="btn-loader" style="display: none;"><i class="fas fa-spinner fa-spin"></i></span>
+                </button>
             </div>
         </div>
     </div>
