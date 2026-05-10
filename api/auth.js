@@ -14,6 +14,7 @@ const User = require('../lib/models/User');
 const jwt = require('jsonwebtoken');
 const { notifyDiscord } = require('../lib/discord');
 const { verifyToken, JWT_SECRET } = require('../lib/auth');
+const { validatePublicName } = require('../lib/moderation');
 const { 
     XP_REWARDS, 
     xpToNext, 
@@ -170,6 +171,11 @@ async function handleSignup(req, res) {
             success: false,
             error: 'Password must be at least 6 characters'
         });
+    }
+
+    const usernameModeration = validatePublicName(username);
+    if (!usernameModeration.valid) {
+        return res.status(400).json({ success: false, error: usernameModeration.error });
     }
 
     const existingUser = await User.findOne({
@@ -355,6 +361,11 @@ async function handleUpdateProfile(req, res) {
             return res.status(400).json({ success: false, error: 'Username can only contain letters, numbers, and underscores' });
         }
 
+        const usernameModeration = validatePublicName(newUsername);
+        if (!usernameModeration.valid) {
+            return res.status(400).json({ success: false, error: usernameModeration.error });
+        }
+
         // Check if username is already taken (by another user)
         const escapedUsername = newUsername.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const existingUser = await User.findOne({ 
@@ -404,6 +415,11 @@ async function handleUpdateProfile(req, res) {
         }
         if (newDisplayName.length > 30) {
             return res.status(400).json({ success: false, error: 'Display name cannot exceed 30 characters' });
+        }
+
+        const displayNameModeration = validatePublicName(newDisplayName);
+        if (!displayNameModeration.valid) {
+            return res.status(400).json({ success: false, error: displayNameModeration.error });
         }
         
         user.displayName = newDisplayName;

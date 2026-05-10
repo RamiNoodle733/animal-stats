@@ -16,6 +16,7 @@ const Comment = require('../lib/models/Comment');
 const Animal = require('../lib/models/Animal');
 const { verifyToken } = require('../lib/auth');
 const { notifyDiscord } = require('../lib/discord');
+const { maskBlockedTerms } = require('../lib/moderation');
 
 module.exports = async function handler(req, res) {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -316,6 +317,9 @@ async function handlePost(req, res) {
         return res.status(400).json({ success: false, error: 'Message too long (max 500 characters)' });
     }
 
+    const trimmedContent = content.trim();
+    const publicContent = maskBlockedTerms(trimmedContent);
+
     // Get user's profile info for display
     const User = require('../lib/models/User');
     const userDoc = await User.findById(user.id).select('displayName profileAnimal');
@@ -329,7 +333,7 @@ async function handlePost(req, res) {
     }
 
     const message = await ChatMessage.create({
-        content: content.trim(),
+        content: publicContent,
         authorId: user.id,
         authorUsername: userDoc?.displayName || user.username,
         profileAnimal: userDoc?.profileAnimal || null,
@@ -342,7 +346,7 @@ async function handlePost(req, res) {
     const msgType = parentId ? 'chat_reply' : 'chat_message';
     await notifyDiscord(msgType, {
         user: userDoc?.displayName || user.username,
-        content: content.trim()
+        content: publicContent
     }, req);
 
     return res.status(201).json({
