@@ -12,6 +12,8 @@
  * GET /api/auth?action=google-callback - Complete Google OAuth sign in
  * GET /api/auth?action=link-google - Begin linking Google to the current user
  * POST /api/auth?action=unlink-google - Unlink Google from the current user
+ * GET/PUT /api/auth?action=notification-preferences - Manage email notification settings
+ * GET /api/auth?action=unsubscribe - Public signed-token email unsubscribe
  */
 
 const { connectToDatabase } = require('../lib/mongodb');
@@ -21,6 +23,11 @@ const crypto = require('crypto');
 const { notifyDiscord } = require('../lib/discord');
 const { verifyToken, JWT_SECRET } = require('../lib/auth');
 const { validatePublicName } = require('../lib/moderation');
+const {
+    normalizeNotificationPreferences,
+    sendEmail,
+    verifyUnsubscribeToken
+} = require('../lib/email');
 const { 
     XP_REWARDS, 
     xpToNext, 
@@ -124,26 +131,9 @@ function getBaseUrl(req) {
     return `${protocol}://${req.headers.host}`;
 }
 
-async function sendAuthEmail({ to, subject, text, html }) {
-    if (process.env.AUTH_EMAIL_WEBHOOK_URL) {
-        try {
-            await fetch(process.env.AUTH_EMAIL_WEBHOOK_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ to, subject, text, html })
-            });
-            return;
-        } catch (error) {
-            console.error('Auth email webhook failed:', error);
-        }
-    }
-
-    console.info('Auth email queued (configure AUTH_EMAIL_WEBHOOK_URL to send):', { to, subject, text });
-}
-
 async function sendVerificationEmail(req, user, token) {
     const url = `${getBaseUrl(req)}/api/auth?action=verify-email&email=${encodeURIComponent(user.email)}&token=${encodeURIComponent(token)}`;
-    await sendAuthEmail({
+    await sendEmail({
         to: user.email,
         subject: 'Verify your Animal Battle Stats email',
         text: `Verify your email by opening this link: ${url}`,
@@ -153,7 +143,7 @@ async function sendVerificationEmail(req, user, token) {
 
 async function sendPasswordResetEmail(req, user, token) {
     const url = `${getBaseUrl(req)}/reset-password?email=${encodeURIComponent(user.email)}&token=${encodeURIComponent(token)}`;
-    await sendAuthEmail({
+    await sendEmail({
         to: user.email,
         subject: 'Reset your Animal Battle Stats password',
         text: `Reset your password by opening this link: ${url}. This link expires in ${RESET_TOKEN_MINUTES} minutes.`,
@@ -254,6 +244,7 @@ function buildUserPayload(user) {
         username: user.username,
         email: user.email,
         emailVerified: Boolean(user.emailVerified),
+        emailNotifications: normalizeNotificationPreferences(user.emailNotifications || {}),
         authProviders,
         googleLinked: authProviders.some((provider) => provider.provider === GOOGLE_PROVIDER),
         displayName: user.displayName,
@@ -365,6 +356,20 @@ module.exports = async function handler(req, res) {
                     return await handleUpdateProfile(req, res);
                 }
                 return res.status(405).json({ success: false, error: 'Method not allowed' });
+
+            case 'notification-preferences':
+                if (req.method === 'GET') {
+                    return await handleGetNotificationPreferences(req, res);
+                } else if (req.method === 'PUT') {
+                    return await handleUpdateNotificationPreferences(req, res);
+                }
+                return res.status(405).json({ success: false, error: 'Method not allowed' });
+
+            case 'unsubscribe':
+                if (req.method !== 'GET' && req.method !== 'POST') {
+                    return res.status(405).json({ success: false, error: 'Method not allowed' });
+                }
+                return await handleUnsubscribe(req, res);
             
             case 'rewards':
                 return await handleRewards(req, res);
@@ -938,6 +943,120 @@ async function handleResetPassword(req, res) {
     return res.status(200).json({ success: true, message: 'Password reset successfully. Please sign in with your new password.' });
 }
 
+
+function getAuthenticatedRequestUser(req) {
+    const token = getRequestToken(req);
+    if (!token) return null;
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        return { id: decoded.userId, username: decoded.username };
+    } catch (_err) {
+        return null;
+    }
+}
+
+function pickNotificationPreferenceUpdates(body = {}) {
+    const allowedKeys = ['enabled', 'weeklyDigest', 'newFeatures', 'commentReplies', 'tournamentUpdates'];
+    const updates = {};
+
+    allowedKeys.forEach((key) => {
+        if (Object.prototype.hasOwnProperty.call(body, key)) {
+            updates[key] = Boolean(body[key]);
+        }
+    });
+
+    return updates;
+}
+
+// ==================== NOTIFICATION PREFERENCES ====================
+async function handleGetNotificationPreferences(req, res) {
+    const authUser = getAuthenticatedRequestUser(req);
+    if (!authUser) {
+        return res.status(401).json({ success: false, error: 'Authentication required' });
+    }
+
+    const user = await User.findById(authUser.id);
+    if (!user) {
+        return res.status(404).json({ success: false, error: 'User not found' });
+    }
+
+    return res.status(200).json({
+        success: true,
+        data: {
+            emailNotifications: normalizeNotificationPreferences(user.emailNotifications || {})
+        }
+    });
+}
+
+async function handleUpdateNotificationPreferences(req, res) {
+    const authUser = getAuthenticatedRequestUser(req);
+    if (!authUser) {
+        return res.status(401).json({ success: false, error: 'Authentication required' });
+    }
+
+    const user = await User.findById(authUser.id);
+    if (!user) {
+        return res.status(404).json({ success: false, error: 'User not found' });
+    }
+
+    const current = normalizeNotificationPreferences(user.emailNotifications || {});
+    const updates = pickNotificationPreferenceUpdates(req.body || {});
+    const next = { ...current, ...updates };
+
+    if (Object.prototype.hasOwnProperty.call(updates, 'enabled')) {
+        next.unsubscribedAt = updates.enabled ? null : (current.unsubscribedAt || new Date());
+    } else if (next.enabled && current.unsubscribedAt) {
+        next.unsubscribedAt = null;
+    }
+
+    user.emailNotifications = next;
+    await user.save();
+
+    return res.status(200).json({
+        success: true,
+        message: 'Notification preferences updated',
+        data: {
+            emailNotifications: normalizeNotificationPreferences(user.emailNotifications || {})
+        }
+    });
+}
+
+// ==================== PUBLIC UNSUBSCRIBE ====================
+async function handleUnsubscribe(req, res) {
+    const token = String(req.query.token || req.body?.token || '');
+    const payload = verifyUnsubscribeToken(token);
+
+    if (!payload?.userId || !payload?.email) {
+        return res.status(400).json({ success: false, error: 'Unsubscribe link is invalid.' });
+    }
+
+    const user = await User.findOne({ _id: payload.userId, email: normalizeIdentifier(payload.email) });
+    if (!user) {
+        return res.status(404).json({ success: false, error: 'User not found.' });
+    }
+
+    const preferences = normalizeNotificationPreferences(user.emailNotifications || {});
+    preferences.enabled = false;
+    preferences.weeklyDigest = false;
+    preferences.newFeatures = false;
+    preferences.commentReplies = false;
+    preferences.tournamentUpdates = false;
+    preferences.unsubscribedAt = new Date();
+    user.emailNotifications = preferences;
+    await user.save();
+
+    if (req.method === 'GET' && !(req.headers.accept || '').includes('application/json')) {
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
+        return res.status(200).send('<!doctype html><html><head><title>Unsubscribed</title></head><body><h1>You are unsubscribed</h1><p>You will no longer receive Animal Battle Stats notification emails.</p><p>You can opt back in from your profile settings.</p></body></html>');
+    }
+
+    return res.status(200).json({
+        success: true,
+        message: 'You have been unsubscribed from notification emails.'
+    });
+}
+
 // ==================== ME ====================
 async function handleMe(req, res) {
     const token = getRequestToken(req);
@@ -999,6 +1118,7 @@ async function handleGetProfile(req, res) {
                 username: user.username,
                 email: user.email,
                 emailVerified: Boolean(user.emailVerified),
+                emailNotifications: normalizeNotificationPreferences(user.emailNotifications || {}),
                 authProviders: buildUserPayload(user).authProviders,
                 googleLinked: buildUserPayload(user).googleLinked,
                 displayName: user.displayName,
@@ -1171,6 +1291,7 @@ async function handleUpdateProfile(req, res) {
                 username: user.username,
                 email: user.email,
                 emailVerified: Boolean(user.emailVerified),
+                emailNotifications: normalizeNotificationPreferences(user.emailNotifications || {}),
                 authProviders: buildUserPayload(user).authProviders,
                 googleLinked: buildUserPayload(user).googleLinked,
                 displayName: user.displayName || user.username,
