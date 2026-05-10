@@ -22,15 +22,15 @@
  */
 const ROUTE_ASSET_DEFINITIONS = {
     rankings: {
-        styles: ['/css/pages/rankings.css'],
+        styles: [],
         scripts: ['/js/rankings.js']
     },
     tournament: {
-        styles: ['/tournament-v4.css', '/css/pages/tournament.css'],
+        styles: [],
         scripts: ['/js/tournament.js']
     },
     community: {
-        styles: ['/community-page.css', '/css/pages/community.css', '/css/pages/community-globe.css'],
+        styles: [],
         scripts: [
             'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.min.js',
             '/js/community-globe.js',
@@ -39,11 +39,11 @@ const ROUTE_ASSET_DEFINITIONS = {
         ]
     },
     compare: {
-        styles: ['/compare-page.css', '/css/pages/compare.css'],
+        styles: [],
         scripts: ['/js/compare.js']
     },
     battlepoints: {
-        styles: ['/css/pages/battlepoints.css'],
+        styles: [],
         scripts: ['/js/battlepoints.js']
     }
 };
