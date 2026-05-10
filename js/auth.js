@@ -39,6 +39,7 @@ const Auth = {
         this.bindEvents();
         this.bindPageEvents();
         this.bindCloseButtons();
+        this.handleGoogleRedirectMessage();
         this.installRenameNavigationGuard();
         this.checkExistingSession();
     },
@@ -113,7 +114,12 @@ const Auth = {
             avatarPreviewCurrent: document.getElementById('avatar-preview-current'),
             avatarPreviewName: document.getElementById('avatar-preview-name'),
             avatarSaveBtn: document.getElementById('avatar-save-btn'),
-            avatarCancelBtn: document.getElementById('avatar-cancel-btn')
+            avatarCancelBtn: document.getElementById('avatar-cancel-btn'),
+            googleLoginButtons: document.querySelectorAll('[data-google-auth]'),
+            linkGoogleBtn: document.getElementById('link-google-btn'),
+            unlinkGoogleBtn: document.getElementById('unlink-google-btn'),
+            googleLinkStatus: document.getElementById('google-link-status'),
+            googleLinkError: document.getElementById('google-link-error')
         };
     },
 
@@ -151,6 +157,11 @@ const Auth = {
         });
 
         // Submit forms
+        this.elements.googleLoginButtons?.forEach((button) => {
+            button.addEventListener('click', () => this.startGoogleAuth());
+        });
+        this.elements.linkGoogleBtn?.addEventListener('click', () => this.startGoogleLink());
+        this.elements.unlinkGoogleBtn?.addEventListener('click', () => this.unlinkGoogle());
         this.elements.loginSubmit?.addEventListener('click', () => this.handleLogin());
         this.elements.signupSubmit?.addEventListener('click', () => this.handleSignup());
         this.elements.forgotSubmit?.addEventListener('click', () => this.handleForgotPassword('modal'));
@@ -576,6 +587,114 @@ const Auth = {
         } finally {
             isPage ? this.setPageLoading('reset', false) : this.setLoading('reset', false);
         }
+    },
+
+    startGoogleAuth() {
+        const returnTo = window.location.pathname && !['/login', '/signup'].includes(window.location.pathname)
+            ? window.location.pathname
+            : '/';
+        window.location.href = `/api/auth?action=google-start&returnTo=${encodeURIComponent(returnTo)}`;
+    },
+
+    startGoogleLink() {
+        if (!this.isLoggedIn()) {
+            this.showToast('Log in before linking Google.');
+            this.showModal('login');
+            return;
+        }
+        window.location.href = '/api/auth?action=link-google';
+    },
+
+    async unlinkGoogle() {
+        if (!this.token) return;
+
+        const button = this.elements.unlinkGoogleBtn;
+        if (button) {
+            button.disabled = true;
+            button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Unlinking...';
+        }
+
+        try {
+            const response = await fetch('/api/auth?action=unlink-google', {
+                method: 'POST',
+                headers: { Authorization: `Bearer ${this.token}` },
+                credentials: 'same-origin'
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                this.user = { ...this.user, ...result.data.user };
+                this.updateGoogleLinkUI();
+                this.showToast(result.message || 'Google account unlinked.');
+            } else {
+                this.showGoogleLinkError(result.error || 'Unable to unlink Google.');
+            }
+        } catch (error) {
+            console.error('Google unlink error:', error);
+            this.showGoogleLinkError('Network error. Please try again.');
+        } finally {
+            if (button) {
+                button.disabled = false;
+                button.innerHTML = '<i class="fab fa-google"></i> Unlink Google';
+            }
+        }
+    },
+
+    handleGoogleRedirectMessage() {
+        const params = new URLSearchParams(window.location.search);
+        const googleError = params.get('google_error');
+        const googleLinked = params.get('google_linked');
+        const message = params.get('message');
+
+        if (!googleError && !googleLinked) return;
+
+        const cleanUrl = `${window.location.pathname}${window.location.hash || ''}`;
+        window.history.replaceState({}, document.title, cleanUrl);
+
+        if (googleError) {
+            const fallbackMessages = {
+                already_linked: 'That Google account is already linked to another account.',
+                existing_account: 'An account already uses that email. Log in first, then link Google from your profile.',
+                login_required: 'Log in before linking a Google account.',
+                not_configured: 'Google sign-in is not configured yet.',
+                invalid_state: 'Google sign-in expired. Please try again.',
+                unverified_email: 'Google did not verify this email address.',
+                oauth_failed: 'Google sign-in failed. Please try again.',
+                cancelled: 'Google sign-in was cancelled.'
+            };
+            const text = message || fallbackMessages[googleError] || 'Google sign-in failed. Please try again.';
+            this.showPageError(window.location.pathname === '/signup' ? 'signup' : 'login', text);
+            this.showGoogleLinkError(text);
+            this.showToast(text, 5000);
+        } else if (googleLinked) {
+            this.showToast('Google account linked successfully.');
+        }
+    },
+
+    showGoogleLinkError(message) {
+        if (this.elements.googleLinkError) {
+            this.elements.googleLinkError.textContent = message;
+            this.elements.googleLinkError.style.display = message ? 'block' : 'none';
+        }
+    },
+
+    updateGoogleLinkUI() {
+        const linkedProvider = (this.user?.authProviders || []).find((provider) => provider.provider === 'google');
+        const isLinked = Boolean(this.user?.googleLinked || linkedProvider);
+
+        if (this.elements.googleLinkStatus) {
+            this.elements.googleLinkStatus.textContent = isLinked
+                ? `Linked${linkedProvider?.email ? ` to ${linkedProvider.email}` : ''}`
+                : 'Not linked';
+            this.elements.googleLinkStatus.classList.toggle('linked', isLinked);
+        }
+        if (this.elements.linkGoogleBtn) {
+            this.elements.linkGoogleBtn.style.display = isLinked ? 'none' : 'inline-flex';
+        }
+        if (this.elements.unlinkGoogleBtn) {
+            this.elements.unlinkGoogleBtn.style.display = isLinked ? 'inline-flex' : 'none';
+        }
+        this.showGoogleLinkError('');
     },
 
     /**
@@ -1040,6 +1159,7 @@ const Auth = {
             
             // Update user stats bar
             this.updateUserStatsBar();
+            this.updateGoogleLinkUI();
         } else {
             // Show login button, hide stats bar
             if (this.elements.authLoginBtn) {
@@ -1056,6 +1176,7 @@ const Auth = {
             if (homeProfileLink) {
                 homeProfileLink.style.display = 'none';
             }
+            this.updateGoogleLinkUI();
         }
     },
 
@@ -1348,6 +1469,7 @@ const Auth = {
 
         // Reset save button state
         this.updateSaveButtonState();
+        this.updateGoogleLinkUI();
     },
 
     /**
