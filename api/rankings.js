@@ -15,11 +15,13 @@ const Animal = require('../lib/models/Animal');
 const BattleStats = require('../lib/models/BattleStats');
 const RankHistory = require('../lib/models/RankHistory');
 const { notifyDiscord } = require('../lib/discord');
+const { setCorsHeaders } = require('../lib/cors');
 
 module.exports = async function handler(req, res) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    setCorsHeaders(req, res, {
+        methods: 'GET, POST, OPTIONS',
+        credentials: true
+    });
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
 
     if (req.method === 'OPTIONS') {

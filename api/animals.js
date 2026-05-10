@@ -14,12 +14,13 @@ const { connectToDatabase } = require('../lib/mongodb');
 const Animal = require('../lib/models/Animal');
 const { getAuthUser } = require('../lib/auth');
 const { notifyDiscord } = require('../lib/discord');
+const { setCorsHeaders } = require('../lib/cors');
 
 module.exports = async function handler(req, res) {
-    // Set CORS headers
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    setCorsHeaders(req, res, {
+        methods: 'GET, POST, OPTIONS',
+        credentials: true
+    });
 
     // Handle preflight
     if (req.method === 'OPTIONS') {

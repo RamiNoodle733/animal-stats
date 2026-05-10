@@ -9,12 +9,15 @@
 
 const { connectToDatabase } = require('../lib/mongodb');
 const Animal = require('../lib/models/Animal');
+const { setCorsHeaders } = require('../lib/cors');
 
 module.exports = async function handler(req, res) {
-    // Set CORS headers
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    // Public aggregate stats are read-only and return no auth/user data, so they intentionally stay open.
+    setCorsHeaders(req, res, {
+        methods: 'GET, OPTIONS',
+        headers: 'Content-Type',
+        open: true
+    });
 
     // Handle preflight
     if (req.method === 'OPTIONS') {

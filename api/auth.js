@@ -22,6 +22,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const { notifyDiscord } = require('../lib/discord');
 const { verifyToken, JWT_SECRET } = require('../lib/auth');
+const { setCorsHeaders } = require('../lib/cors');
 const { validatePublicName } = require('../lib/moderation');
 const {
     normalizeNotificationPreferences,
@@ -266,11 +267,11 @@ function buildUserPayload(user) {
 
 
 module.exports = async function handler(req, res) {
-    // Set CORS headers
-    res.setHeader('Access-Control-Allow-Origin', req.headers.origin || '*');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    setCorsHeaders(req, res, {
+        methods: 'GET, POST, PUT, OPTIONS',
+        headers: 'Content-Type, Authorization',
+        credentials: true
+    });
 
     if (req.method === 'OPTIONS') {
         return res.status(200).end();
