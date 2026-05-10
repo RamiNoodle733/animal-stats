@@ -67,7 +67,9 @@ class AnimalStatsApp {
             // API state
             isLoading: false,
             apiAvailable: false,
-            lastApiCheck: null
+            lastApiCheck: null,
+            animalsDataMode: 'none', // 'none' | 'home' | 'full'
+            animalCount: 0
         };
 
         // DOM Elements Cache
@@ -213,6 +215,7 @@ class AnimalStatsApp {
 
         // Performance caches
         this.animalsById = new Map();
+        this.fullDataPromise = null;
         this._deferredInitStarted = false;
         this.gridRendered = false;
 
@@ -235,6 +238,12 @@ class AnimalStatsApp {
     async init() {
         try {
             this.showLoadingState(true);
+
+            // Align initial view before data loading so the homepage can use
+            // the lightweight `/api/animals?view=home` payload. Feature pages
+            // still load the full dataset up front.
+            this.state.view = this.getInitialViewFromPath();
+
             await this.fetchData();
             this.populateClassFilter();
             this.setupEventListeners();
@@ -256,9 +265,6 @@ class AnimalStatsApp {
             // Track site visit
             this.trackSiteVisit();
             
-            // Align initial view with current path before rendering heavy UI.
-            this.state.view = this.getInitialViewFromPath();
-
             // Initial Render with power rank sort as default
             this.state.filters.sort = 'rank';
             const shouldRenderGridNow = this.shouldRenderGridImmediately();
@@ -430,8 +436,9 @@ class AnimalStatsApp {
         });
 
         // Stats routes - register more specific route first
-        router.on('/stats/:slug', (params) => {
+        router.on('/stats/:slug', async (params) => {
             try {
+                await this.ensureFullAnimalData();
                 this.switchView('stats', false);
                 const animal = this.findAnimalBySlug(params.slug);
                 if (animal) {
@@ -449,7 +456,8 @@ class AnimalStatsApp {
             }
         });
 
-        router.on('/stats', () => {
+        router.on('/stats', async () => {
+            await this.ensureFullAnimalData();
             this.switchView('stats', false);
             // Select first animal if none selected
             if (!this.state.selectedAnimal && this.state.filteredAnimals.length > 0) {
@@ -459,13 +467,19 @@ class AnimalStatsApp {
 
         // Compare route
         router.on('/compare', async () => {
-            await window.loadRouteAssets?.('compare');
+            await Promise.all([
+                this.ensureFullAnimalData(),
+                window.loadRouteAssets?.('compare')
+            ]);
             this.switchView('compare', false);
         });
 
         // Rankings route
         router.on('/rankings', async () => {
-            await window.loadRouteAssets?.('rankings');
+            await Promise.all([
+                this.ensureFullAnimalData(),
+                window.loadRouteAssets?.('rankings')
+            ]);
             this.switchView('rankings', false);
         });
 
@@ -519,7 +533,10 @@ class AnimalStatsApp {
 
         // Tournament route
         router.on('/tournament', async () => {
-            await window.loadRouteAssets?.('tournament');
+            await Promise.all([
+                this.ensureFullAnimalData(),
+                window.loadRouteAssets?.('tournament')
+            ]);
             // Ensure a base view is active before showing tournament overlay
             if (this.state.view === 'home' || !this.state.view) {
                 await window.loadRouteAssets?.('rankings');
@@ -628,8 +645,9 @@ class AnimalStatsApp {
      */
     updateHomeStats() {
         const animalCountEl = document.getElementById('home-animal-count');
-        if (animalCountEl && this.state.animals.length > 0) {
-            animalCountEl.textContent = this.state.animals.length;
+        const animalCount = this.state.animalCount || this.state.animals.length;
+        if (animalCountEl && animalCount > 0) {
+            animalCountEl.textContent = animalCount;
         }
         
         // Fetch battle count from API
@@ -799,20 +817,58 @@ class AnimalStatsApp {
      * This is the single source of truth - no local fallbacks
      */
     async fetchData() {
+        if (this.state.view === 'home') {
+            return this.fetchHomeData();
+        }
+
+        return this.ensureFullAnimalData();
+    }
+
+    async fetchHomeData() {
+        try {
+            const result = await this.fetchHomeAnimalsFromApi();
+            this.applyAnimalData(result.data, 'home', { mode: 'home', total: result.total });
+        } catch (error) {
+            console.error('Failed to load homepage animal data:', error.message);
+            this.state.apiAvailable = false;
+            this.showLoadError(error.message);
+            throw error;
+        }
+    }
+
+    async ensureFullAnimalData() {
+        if (this.state.animalsDataMode === 'full' && this.state.animals.length > 0) {
+            return this.state.animals;
+        }
+
+        if (this.fullDataPromise) {
+            return this.fullDataPromise;
+        }
+
+        this.fullDataPromise = this.fetchFullAnimalData()
+            .finally(() => {
+                this.fullDataPromise = null;
+            });
+
+        return this.fullDataPromise;
+    }
+
+    async fetchFullAnimalData() {
         const cachedAnimals = this.readAnimalsCache();
 
         if (cachedAnimals?.length) {
-            this.applyAnimalData(cachedAnimals, 'cache');
+            this.applyAnimalData(cachedAnimals, 'cache', { mode: 'full', total: cachedAnimals.length });
 
-            // Keep startup fast: refresh in background instead of blocking first paint.
+            // Keep route entry fast: refresh in background instead of blocking paint.
             this.refreshAnimalDataInBackground();
-            return;
+            return cachedAnimals;
         }
 
         try {
             const animals = await this.fetchAnimalsFromApi();
-            this.applyAnimalData(animals, 'network');
+            this.applyAnimalData(animals, 'network', { mode: 'full', total: animals.length });
             this.writeAnimalsCache(animals);
+            return animals;
         } catch (error) {
             console.error('Failed to load animal data:', error.message);
             this.state.apiAvailable = false;
@@ -856,6 +912,30 @@ class AnimalStatsApp {
         }
     }
 
+    async fetchHomeAnimalsFromApi() {
+        const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.animals}?view=home`, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            },
+            signal: AbortSignal.timeout(8000)
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const result = await response.json();
+        if (!result.success || !Array.isArray(result.data)) {
+            throw new Error('Invalid API response format');
+        }
+
+        return {
+            data: result.data,
+            total: Number(result.total || result.count || result.data.length)
+        };
+    }
+
     async fetchAnimalsFromApi() {
         const response = await fetch(`${API_CONFIG.baseUrl}${API_CONFIG.endpoints.animals}`, {
             method: 'GET',
@@ -877,10 +957,12 @@ class AnimalStatsApp {
         return result.data;
     }
 
-    applyAnimalData(animals, _source = 'network') {
+    applyAnimalData(animals, _source = 'network', options = {}) {
         this.state.animals = animals;
         this.state.filteredAnimals = [...animals];
         this.state.apiAvailable = true;
+        this.state.animalsDataMode = options.mode || 'full';
+        this.state.animalCount = Number(options.total || animals.length);
 
         this.animalsById = new Map();
         animals.forEach((animal) => {
@@ -915,7 +997,7 @@ class AnimalStatsApp {
     refreshAnimalDataInBackground() {
         this.fetchAnimalsFromApi()
             .then((animals) => {
-                this.applyAnimalData(animals, 'network-refresh');
+                this.applyAnimalData(animals, 'network-refresh', { mode: 'full', total: animals.length });
                 this.writeAnimalsCache(animals);
 
                 if (this.state.view === 'stats' || this.state.view === 'compare') {
@@ -2055,12 +2137,26 @@ class AnimalStatsApp {
         }
     }
 
+    requiresFullAnimalData(viewName) {
+        return ['stats', 'compare', 'rankings'].includes(viewName);
+    }
+
     /**
      * Switch between Stats and Compare views
      * @param {string} viewName - View to switch to
      * @param {boolean} updateUrl - Whether to update the URL (default true)
      */
     switchView(viewName, updateUrl = true) {
+        if (this.requiresFullAnimalData(viewName) && this.state.animalsDataMode !== 'full') {
+            this.ensureFullAnimalData()
+                .then(() => this.switchView(viewName, updateUrl))
+                .catch((error) => {
+                    console.error(`Failed to load full animal data for ${viewName}:`, error);
+                    this.showLoadError('Failed to load animal data. Please try refreshing the page.');
+                });
+            return;
+        }
+
         const previousView = this.state.view;
         this.state.view = viewName;
 
