@@ -11,12 +11,13 @@ const { connectToDatabase } = require('../../lib/mongodb');
 const Animal = require('../../lib/models/Animal');
 const { getAuthUser } = require('../../lib/auth');
 const mongoose = require('mongoose');
+const { setCorsHeaders } = require('../../lib/cors');
 
 module.exports = async function handler(req, res) {
-    // Set CORS headers
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    setCorsHeaders(req, res, {
+        methods: 'GET, PUT, DELETE, OPTIONS',
+        credentials: true
+    });
 
     // Handle preflight
     if (req.method === 'OPTIONS') {
