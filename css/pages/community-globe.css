@@ -1,5 +1,9 @@
 /* Globe analytics module styles loaded independently from legacy community CSS. */
 
+#community-view:not(.active-view) {
+    display: none !important;
+}
+
 #community-view .community-tab-bar {
     display: flex;
     align-items: stretch;

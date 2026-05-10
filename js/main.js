@@ -415,8 +415,8 @@ class AnimalStatsApp {
         if (this._deferredInitStarted) return;
         this._deferredInitStarted = true;
 
-        // Route-heavy managers are intentionally not preloaded here. They are
-        // injected by loadRouteAssets(routeName) on the first visit to their route.
+        // Route-heavy managers are loaded by index.html in a stable order and
+        // initialized only when their route is entered.
     }
 
     /**
@@ -491,6 +491,10 @@ class AnimalStatsApp {
             await window.loadRouteAssets?.('community');
             const requestedTab = typeof tabName === 'string' ? tabName.toLowerCase() : 'chat';
             const communityManager = this.ensureCommunityManager();
+            if (!communityManager) {
+                this.switchView('community', false);
+                return;
+            }
             const normalizedTab = communityManager.normalizeTabName(requestedTab);
             const targetPath = communityManager.getRouteForTab(normalizedTab);
             const shouldReplace = Boolean(options.replace) || requestedTab !== normalizedTab;
@@ -505,7 +509,7 @@ class AnimalStatsApp {
             }
 
             communityManager.currentTab = normalizedTab;
-            if (this.state.view !== 'community') {
+            if (this.state.view !== 'community' || !this.dom.communityView?.classList.contains('active-view')) {
                 this.switchView('community', false);
                 return;
             }
@@ -2170,6 +2174,10 @@ class AnimalStatsApp {
         const html = document.documentElement;
         html.classList.toggle('route-home', viewName === 'home');
         html.classList.toggle('route-about', viewName === 'about');
+        html.classList.toggle('route-stats', viewName === 'stats');
+        html.classList.toggle('route-compare', viewName === 'compare');
+        html.classList.toggle('route-rankings', viewName === 'rankings');
+        html.classList.toggle('route-community', viewName === 'community');
         
         // Play page transition sound
         if (window.AudioManager && previousView !== viewName) {
@@ -2222,20 +2230,43 @@ class AnimalStatsApp {
             window.HomepageController.setVisibility(viewName === 'home');
         }
         
-        // Update UI classes - include home view, auth views, and profile views
-        this.dom.homeView?.classList.toggle('active-view', viewName === 'home');
-        this.dom.loginView?.classList.toggle('active-view', viewName === 'login');
-        this.dom.signupView?.classList.toggle('active-view', viewName === 'signup');
-        this.dom.forgotPasswordView?.classList.toggle('active-view', viewName === 'forgot-password');
-        this.dom.resetPasswordView?.classList.toggle('active-view', viewName === 'reset-password');
-        this.dom.aboutView?.classList.toggle('active-view', viewName === 'about');
-        this.dom.profileView?.classList.toggle('active-view', viewName === 'profile');
-        this.dom.publicProfileView?.classList.remove('active-view'); // Always hide public profile when switching
-        this.dom.statsView.classList.toggle('active-view', viewName === 'stats');
-        this.dom.compareView.classList.toggle('active-view', viewName === 'compare');
-        this.dom.rankingsView?.classList.toggle('active-view', viewName === 'rankings');
-        this.dom.communityView?.classList.toggle('active-view', viewName === 'community');
-        this.dom.battlepointsView?.classList.toggle('active-view', viewName === 'battlepoints');
+        // Reset all routed views first so stale route UI cannot remain layered
+        // over the newly selected route.
+        [
+            this.dom.homeView,
+            this.dom.loginView,
+            this.dom.signupView,
+            this.dom.forgotPasswordView,
+            this.dom.resetPasswordView,
+            this.dom.aboutView,
+            this.dom.profileView,
+            this.dom.publicProfileView,
+            this.dom.statsView,
+            this.dom.compareView,
+            this.dom.rankingsView,
+            this.dom.communityView,
+            this.dom.battlepointsView
+        ].forEach(view => view?.classList.remove('active-view'));
+
+        const activeViews = {
+            home: this.dom.homeView,
+            login: this.dom.loginView,
+            signup: this.dom.signupView,
+            'forgot-password': this.dom.forgotPasswordView,
+            'reset-password': this.dom.resetPasswordView,
+            about: this.dom.aboutView,
+            profile: this.dom.profileView,
+            stats: this.dom.statsView,
+            compare: this.dom.compareView,
+            rankings: this.dom.rankingsView,
+            community: this.dom.communityView,
+            battlepoints: this.dom.battlepointsView
+        };
+        activeViews[viewName]?.classList.add('active-view');
+
+        if (viewName !== 'community' && this.dom.communityView) {
+            this.dom.communityView.classList.remove('chat-tab-active', 'feed-tab-active', 'map-tab-active', 'hub-tab-active', 'globe-compact-mode');
+        }
         
         // Update nav button active states (desktop header)
         this.dom.navBtns.stats.classList.toggle('active', viewName === 'stats');

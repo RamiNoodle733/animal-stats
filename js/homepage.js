@@ -1033,6 +1033,12 @@ const HomepageController = {
     },
 
     getPrebuiltSilhouettePath(src) {
+        // The generated files are retained for future use, but many currently
+        // include excess transparent padding that makes animals render as tiny
+        // marks in the homepage panels. Keep the proven filtered image path as
+        // the default until the asset generator can crop silhouettes tightly.
+        if (!window.ABS_USE_PREBUILT_HOME_SILHOUETTES) return null;
+
         if (!src) return null;
         if (this.prebuiltSilhouetteCache.has(src)) {
             return this.prebuiltSilhouetteCache.get(src);
