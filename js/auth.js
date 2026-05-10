@@ -9,6 +9,7 @@ const Auth = {
     // Current user state
     user: null,
     token: null,
+    passwordMinLength: 8,
     
     // Return URL after login/signup
     returnUrl: null,
@@ -60,6 +61,14 @@ const Auth = {
             signupSubmit: document.getElementById('signup-submit'),
             showSignup: document.getElementById('show-signup'),
             showLogin: document.getElementById('show-login'),
+            showForgot: document.getElementById('show-forgot'),
+            showLoginFromForgot: document.getElementById('show-login-from-forgot'),
+            forgotForm: document.getElementById('forgot-form'),
+            forgotError: document.getElementById('forgot-error'),
+            forgotSubmit: document.getElementById('forgot-submit'),
+            resetForm: document.getElementById('reset-form'),
+            resetError: document.getElementById('reset-error'),
+            resetSubmit: document.getElementById('reset-submit'),
             // Auth Page Elements
             loginPageForm: document.getElementById('login-page-form'),
             loginPageEmail: document.getElementById('login-page-email'),
@@ -72,6 +81,15 @@ const Auth = {
             signupPagePassword: document.getElementById('signup-page-password'),
             signupPageError: document.getElementById('signup-page-error'),
             signupPageSubmit: document.getElementById('signup-page-submit'),
+            forgotPageForm: document.getElementById('forgot-page-form'),
+            forgotPageEmail: document.getElementById('forgot-page-email'),
+            forgotPageError: document.getElementById('forgot-page-error'),
+            forgotPageSubmit: document.getElementById('forgot-page-submit'),
+            resetPageForm: document.getElementById('reset-page-form'),
+            resetPagePassword: document.getElementById('reset-page-password'),
+            resetPageConfirm: document.getElementById('reset-page-confirm'),
+            resetPageError: document.getElementById('reset-page-error'),
+            resetPageSubmit: document.getElementById('reset-page-submit'),
             // User Stats Bar
             userStatsBar: document.getElementById('user-stats-bar'),
             userProfileMini: document.getElementById('user-profile-mini'),
@@ -123,10 +141,20 @@ const Auth = {
             e.preventDefault();
             this.showModal('login');
         });
+        this.elements.showForgot?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.showModal('forgot');
+        });
+        this.elements.showLoginFromForgot?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.showModal('login');
+        });
 
         // Submit forms
         this.elements.loginSubmit?.addEventListener('click', () => this.handleLogin());
         this.elements.signupSubmit?.addEventListener('click', () => this.handleSignup());
+        this.elements.forgotSubmit?.addEventListener('click', () => this.handleForgotPassword('modal'));
+        this.elements.resetSubmit?.addEventListener('click', () => this.handleResetPassword('modal'));
 
         // Enter key on inputs
         document.getElementById('login-password')?.addEventListener('keypress', (e) => {
@@ -230,6 +258,16 @@ const Auth = {
             this.handlePageSignup();
         });
 
+        this.elements.forgotPageForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleForgotPassword('page');
+        });
+
+        this.elements.resetPageForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleResetPassword('page');
+        });
+
         // Enter key handlers for page forms
         this.elements.loginPagePassword?.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
@@ -252,6 +290,8 @@ const Auth = {
     bindCloseButtons() {
         const loginCloseBtn = document.getElementById('login-close-btn');
         const signupCloseBtn = document.getElementById('signup-close-btn');
+        const forgotCloseBtn = document.getElementById('forgot-close-btn');
+        const resetCloseBtn = document.getElementById('reset-close-btn');
         
         const handleClose = () => {
             // Check if we have a stored return URL
@@ -274,6 +314,8 @@ const Auth = {
         
         loginCloseBtn?.addEventListener('click', handleClose);
         signupCloseBtn?.addEventListener('click', handleClose);
+        forgotCloseBtn?.addEventListener('click', handleClose);
+        resetCloseBtn?.addEventListener('click', handleClose);
     },
 
     /**
@@ -294,15 +336,14 @@ const Auth = {
             const response = await fetch('/api/auth?action=login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
                 body: JSON.stringify({ login, password })
             });
 
             const result = await response.json();
 
             if (result.success) {
-                this.token = result.data.token;
-                this.user = result.data.user;
-                localStorage.setItem('auth_token', this.token);
+                this.storeSession(result.data);
                 this.updateUI();
                 this.enforceRequiredUsernameChange();
                 this.showToast(`Welcome back, ${this.user.displayName}!`);
@@ -342,8 +383,8 @@ const Auth = {
             return;
         }
 
-        if (password.length < 6) {
-            this.showPageError('signup', 'Password must be at least 6 characters');
+        if (password.length < this.passwordMinLength) {
+            this.showPageError('signup', `Password must be at least ${this.passwordMinLength} characters`);
             return;
         }
 
@@ -358,15 +399,14 @@ const Auth = {
             const response = await fetch('/api/auth?action=signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
                 body: JSON.stringify({ username, email, password })
             });
 
             const result = await response.json();
 
             if (result.success) {
-                this.token = result.data.token;
-                this.user = result.data.user;
-                localStorage.setItem('auth_token', this.token);
+                this.storeSession(result.data);
                 this.updateUI();
                 this.enforceRequiredUsernameChange();
                 this.showToast(`Welcome to Animal Battle Stats, ${this.user.displayName}!`);
@@ -392,7 +432,13 @@ const Auth = {
      * Show error on auth page
      */
     showPageError(type, message) {
-        const errorEl = type === 'login' ? this.elements.loginPageError : this.elements.signupPageError;
+        const errorMap = {
+            login: this.elements.loginPageError,
+            signup: this.elements.signupPageError,
+            forgot: this.elements.forgotPageError,
+            reset: this.elements.resetPageError
+        };
+        const errorEl = errorMap[type];
         if (errorEl) {
             errorEl.textContent = message;
             errorEl.classList.add('show');
@@ -405,16 +451,130 @@ const Auth = {
     clearPageErrors() {
         this.elements.loginPageError?.classList.remove('show');
         this.elements.signupPageError?.classList.remove('show');
+        this.elements.forgotPageError?.classList.remove('show');
+        this.elements.resetPageError?.classList.remove('show');
     },
 
     /**
      * Set loading state on page form
      */
     setPageLoading(type, loading) {
-        const submitBtn = type === 'login' ? this.elements.loginPageSubmit : this.elements.signupPageSubmit;
+        const buttonMap = {
+            login: this.elements.loginPageSubmit,
+            signup: this.elements.signupPageSubmit,
+            forgot: this.elements.forgotPageSubmit,
+            reset: this.elements.resetPageSubmit
+        };
+        const submitBtn = buttonMap[type];
         if (submitBtn) {
             submitBtn.disabled = loading;
             submitBtn.classList.toggle('loading', loading);
+        }
+    },
+
+
+    storeSession(data) {
+        this.token = data?.token || null;
+        this.user = data?.user || null;
+        localStorage.removeItem('auth_token');
+    },
+
+    getResetParams() {
+        const params = new URLSearchParams(window.location.search);
+        return {
+            email: params.get('email') || '',
+            token: params.get('token') || ''
+        };
+    },
+
+    async handleForgotPassword(context = 'page') {
+        const isPage = context === 'page';
+        const email = isPage
+            ? this.elements.forgotPageEmail?.value.trim()
+            : document.getElementById('forgot-email')?.value.trim();
+
+        if (!email) {
+            isPage ? this.showPageError('forgot', 'Please enter your email') : this.showError('forgot', 'Please enter your email');
+            return;
+        }
+
+        isPage ? this.setPageLoading('forgot', true) : this.setLoading('forgot', true);
+
+        try {
+            const response = await fetch('/api/auth?action=forgot-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
+                body: JSON.stringify({ email })
+            });
+            const result = await response.json();
+            const message = result.message || 'If an account matches that email, a password reset link has been sent.';
+
+            if (isPage) {
+                this.showPageError('forgot', message);
+            } else {
+                this.showError('forgot', message);
+            }
+        } catch (error) {
+            console.error('Forgot password error:', error);
+            isPage ? this.showPageError('forgot', 'Network error. Please try again.') : this.showError('forgot', 'Network error. Please try again.');
+        } finally {
+            isPage ? this.setPageLoading('forgot', false) : this.setLoading('forgot', false);
+        }
+    },
+
+    async handleResetPassword(context = 'page') {
+        const isPage = context === 'page';
+        const password = isPage
+            ? this.elements.resetPagePassword?.value
+            : document.getElementById('reset-password')?.value;
+        const confirm = isPage
+            ? this.elements.resetPageConfirm?.value
+            : document.getElementById('reset-confirm')?.value;
+        const { email, token } = this.getResetParams();
+
+        const showResetError = (message) => isPage ? this.showPageError('reset', message) : this.showError('reset', message);
+
+        if (!email || !token) {
+            showResetError('Reset link is invalid or expired.');
+            return;
+        }
+        if (!password || !confirm) {
+            showResetError('Please fill in all fields');
+            return;
+        }
+        if (password !== confirm) {
+            showResetError('Passwords do not match');
+            return;
+        }
+        if (password.length < this.passwordMinLength) {
+            showResetError(`Password must be at least ${this.passwordMinLength} characters`);
+            return;
+        }
+
+        isPage ? this.setPageLoading('reset', true) : this.setLoading('reset', true);
+
+        try {
+            const response = await fetch('/api/auth?action=reset-password', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
+                body: JSON.stringify({ email, token, password })
+            });
+            const result = await response.json();
+
+            if (result.success) {
+                showResetError(result.message || 'Password reset successfully. Please sign in.');
+                this.showToast('Password reset. Please sign in.');
+                setTimeout(() => window.Router?.navigate('/login'), 1200);
+            } else {
+                showResetError(result.error || 'Unable to reset password');
+            }
+        } catch (error) {
+            console.error('Reset password error:', error);
+            showResetError('Network error. Please try again.');
+        } finally {
+            isPage ? this.setPageLoading('reset', false) : this.setLoading('reset', false);
         }
     },
 
@@ -422,21 +582,15 @@ const Auth = {
      * Check for existing session on page load
      */
     async checkExistingSession() {
-        const token = localStorage.getItem('auth_token');
-        if (!token) return;
-
         try {
             const response = await fetch('/api/auth?action=me', {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                credentials: 'same-origin'
             });
 
             if (response.ok) {
                 const result = await response.json();
                 if (result.success && result.data.user) {
-                    this.token = token;
-                    this.user = result.data.user;
+                    this.storeSession(result.data);
                     this.updateUI();
                     this.enforceRequiredUsernameChange();
                     
@@ -449,8 +603,8 @@ const Auth = {
                     }
                 }
             } else {
-                // Token invalid, clear it
-                localStorage.removeItem('auth_token');
+                // Token invalid or cookie missing; clear in-memory session
+                this.token = null;
             }
         } catch (error) {
             console.error('Session check failed:', error);
@@ -471,7 +625,8 @@ const Auth = {
         
         // Navigate to the auth page instead of showing modal
         if (window.Router) {
-            window.Router.navigate(type === 'signup' ? '/signup' : '/login');
+            const routes = { signup: '/signup', forgot: '/forgot-password', reset: '/reset-password', login: '/login' };
+            window.Router.navigate(routes[type] || '/login');
         }
     },
 
@@ -502,15 +657,14 @@ const Auth = {
             const response = await fetch('/api/auth?action=login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
                 body: JSON.stringify({ login, password })
             });
 
             const result = await response.json();
 
             if (result.success) {
-                this.token = result.data.token;
-                this.user = result.data.user;
-                localStorage.setItem('auth_token', this.token);
+                this.storeSession(result.data);
                 this.updateUI();
                 this.hideModal();
                 this.enforceRequiredUsernameChange();
@@ -557,8 +711,8 @@ const Auth = {
             return;
         }
 
-        if (password.length < 6) {
-            this.showError('signup', 'Password must be at least 6 characters');
+        if (password.length < this.passwordMinLength) {
+            this.showError('signup', `Password must be at least ${this.passwordMinLength} characters`);
             return;
         }
 
@@ -573,15 +727,14 @@ const Auth = {
             const response = await fetch('/api/auth?action=signup', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'same-origin',
                 body: JSON.stringify({ username, email, password })
             });
 
             const result = await response.json();
 
             if (result.success) {
-                this.token = result.data.token;
-                this.user = result.data.user;
-                localStorage.setItem('auth_token', this.token);
+                this.storeSession(result.data);
                 this.updateUI();
                 this.hideModal();
                 this.enforceRequiredUsernameChange();
@@ -838,9 +991,9 @@ const Auth = {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ type: 'logout', username })
         }).catch(() => {});
+        fetch('/api/auth?action=logout', { method: 'POST', credentials: 'same-origin' }).catch(() => {});
         this.user = null;
         this.token = null;
-        localStorage.removeItem('auth_token');
         this.updateUI();
         this.elements.userDropdown?.classList.remove('show');
         this.showToast('You have been logged out');
@@ -1088,7 +1241,8 @@ const Auth = {
      * Show error message
      */
     showError(form, message) {
-        const errorEl = form === 'login' ? this.elements.loginError : this.elements.signupError;
+        const errorMap = { login: this.elements.loginError, signup: this.elements.signupError, forgot: this.elements.forgotError, reset: this.elements.resetError };
+        const errorEl = errorMap[form];
         if (errorEl) {
             errorEl.textContent = message;
             errorEl.style.display = 'block';
@@ -1107,6 +1261,14 @@ const Auth = {
             this.elements.signupError.textContent = '';
             this.elements.signupError.style.display = 'none';
         }
+        if (this.elements.forgotError) {
+            this.elements.forgotError.textContent = '';
+            this.elements.forgotError.style.display = 'none';
+        }
+        if (this.elements.resetError) {
+            this.elements.resetError.textContent = '';
+            this.elements.resetError.style.display = 'none';
+        }
     },
 
     /**
@@ -1119,13 +1281,17 @@ const Auth = {
         document.getElementById('signup-email').value = '';
         document.getElementById('signup-password').value = '';
         document.getElementById('signup-confirm').value = '';
+        if (document.getElementById('forgot-email')) document.getElementById('forgot-email').value = '';
+        if (document.getElementById('reset-password')) document.getElementById('reset-password').value = '';
+        if (document.getElementById('reset-confirm')) document.getElementById('reset-confirm').value = '';
     },
 
     /**
      * Set loading state on submit button
      */
     setLoading(form, isLoading) {
-        const btn = form === 'login' ? this.elements.loginSubmit : this.elements.signupSubmit;
+        const buttonMap = { login: this.elements.loginSubmit, signup: this.elements.signupSubmit, forgot: this.elements.forgotSubmit, reset: this.elements.resetSubmit };
+        const btn = buttonMap[form];
         if (btn) {
             const text = btn.querySelector('.btn-text');
             const loader = btn.querySelector('.btn-loader');
