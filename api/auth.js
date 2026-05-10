@@ -7,6 +7,7 @@
  * GET /api/auth?action=me - Get current user from token
  * GET/POST /api/auth?action=rewards - XP/BP rewards system
  * POST /api/auth?action=prestige - Prestige at level 100
+ * POST /api/auth?action=flag-rename - Admin-only: require a user to rename
  */
 
 const { connectToDatabase } = require('../lib/mongodb');
@@ -74,6 +75,12 @@ module.exports = async function handler(req, res) {
                     return res.status(405).json({ success: false, error: 'Method not allowed' });
                 }
                 return await handlePrestige(req, res);
+
+            case 'flag-rename':
+                if (req.method !== 'POST') {
+                    return res.status(405).json({ success: false, error: 'Method not allowed' });
+                }
+                return await handleFlagRename(req, res);
             
             case 'user':
                 if (req.method !== 'GET') {
@@ -82,7 +89,7 @@ module.exports = async function handler(req, res) {
                 return await handleGetPublicProfile(req, res);
             
             default:
-                return res.status(400).json({ success: false, error: 'Invalid action. Use ?action=login, signup, me, profile, rewards, prestige, or user' });
+                return res.status(400).json({ success: false, error: 'Invalid action. Use ?action=login, signup, me, profile, rewards, prestige, flag-rename, or user' });
         }
     } catch (error) {
         console.error('Auth error:', error);
@@ -139,6 +146,7 @@ async function handleLogin(req, res) {
                 displayName: user.displayName,
                 avatar: user.avatar,
                 role: user.role,
+                requiresUsernameChange: Boolean(user.requiresUsernameChange),
                 xp: user.xp || 0,
                 level: user.level || 1,
                 xpToNext: xpToNext(user.level || 1),
@@ -217,6 +225,7 @@ async function handleSignup(req, res) {
                 displayName: user.displayName,
                 avatar: user.avatar,
                 role: user.role,
+                requiresUsernameChange: Boolean(user.requiresUsernameChange),
                 xp: user.xp || 0,
                 level: user.level || 1,
                 battlePoints: user.battlePoints || 0,
@@ -259,6 +268,7 @@ async function handleMe(req, res) {
                 displayName: user.displayName,
                 avatar: user.avatar,
                 role: user.role,
+                requiresUsernameChange: Boolean(user.requiresUsernameChange),
                 xp: user.xp || 0,
                 level: user.level || 1,
                 battlePoints: user.battlePoints || 0,
@@ -305,6 +315,7 @@ async function handleGetProfile(req, res) {
                 displayName: user.displayName,
                 avatar: user.avatar,
                 role: user.role,
+                requiresUsernameChange: Boolean(user.requiresUsernameChange),
                 xp: user.xp || 0,
                 level: user.level || 1,
                 battlePoints: user.battlePoints || 0,
@@ -345,6 +356,7 @@ async function handleUpdateProfile(req, res) {
     }
 
     const { displayName, username, profileAnimal } = req.body;
+    let publicNameChanged = false;
 
     // Handle username change (login credential) - 3/week limit
     if (username !== undefined && username !== user.username) {
@@ -376,13 +388,14 @@ async function handleUpdateProfile(req, res) {
             return res.status(400).json({ success: false, error: 'Username is already taken' });
         }
 
-        // Check weekly change limit (3 per week)
+        // Check weekly change limit (3 per week). Moderation-required renames must not
+        // trap a user in a blocked state, so they bypass this self-service limit.
         const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
         const recentChanges = (user.usernameChanges || []).filter(
             change => new Date(change.changedAt) > oneWeekAgo
         );
         
-        if (recentChanges.length >= 3) {
+        if (!user.requiresUsernameChange && recentChanges.length >= 3) {
             const oldestChange = recentChanges[0];
             const resetDate = new Date(new Date(oldestChange.changedAt).getTime() + 7 * 24 * 60 * 60 * 1000);
             return res.status(400).json({ 
@@ -403,6 +416,7 @@ async function handleUpdateProfile(req, res) {
 
         // Update username
         user.username = newUsername;
+        publicNameChanged = true;
     }
 
     // Handle display name change - unlimited
@@ -423,6 +437,22 @@ async function handleUpdateProfile(req, res) {
         }
         
         user.displayName = newDisplayName;
+        publicNameChanged = true;
+    }
+
+    // Clear forced rename moderation once the user has successfully saved allowed
+    // public names. This only updates moderation metadata and keeps account history,
+    // XP, votes, comments, and other linked records intact.
+    if (user.requiresUsernameChange && publicNameChanged) {
+        const usernameModeration = validatePublicName(user.username);
+        const displayNameModeration = validatePublicName(user.displayName || user.username);
+
+        if (usernameModeration.valid && displayNameModeration.valid) {
+            user.requiresUsernameChange = false;
+            user.moderationReason = null;
+            user.moderatedAt = null;
+            user.moderatedBy = null;
+        }
     }
 
     // Update profile animal
@@ -454,6 +484,7 @@ async function handleUpdateProfile(req, res) {
                 displayName: user.displayName || user.username,
                 avatar: user.avatar,
                 role: user.role,
+                requiresUsernameChange: Boolean(user.requiresUsernameChange),
                 xp: user.xp || 0,
                 level: user.level || 1,
                 battlePoints: user.battlePoints || 0,
@@ -468,6 +499,73 @@ async function handleUpdateProfile(req, res) {
                 isPrestigeReady: (user.level || 1) >= 100,
                 createdAt: user.createdAt,
                 lastLogin: user.lastLogin
+            }
+        }
+    });
+}
+
+
+// ==================== ADMIN FLAG RENAME ====================
+async function handleFlagRename(req, res) {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        return res.status(401).json({ success: false, error: 'Authentication required' });
+    }
+
+    const token = authHeader.split(' ')[1];
+
+    let decoded;
+    try {
+        decoded = jwt.verify(token, JWT_SECRET);
+    } catch (_err) {
+        return res.status(401).json({ success: false, error: 'Invalid or expired token' });
+    }
+
+    const adminUser = await User.findById(decoded.userId);
+    if (!adminUser) {
+        return res.status(401).json({ success: false, error: 'Admin user not found' });
+    }
+
+    if (adminUser.role !== 'admin') {
+        return res.status(403).json({ success: false, error: 'Admin access required' });
+    }
+
+    const { userId, username, reason } = req.body || {};
+    if (!userId && !username) {
+        return res.status(400).json({ success: false, error: 'Provide userId or username to flag' });
+    }
+
+    const targetQuery = userId
+        ? { _id: userId }
+        : { username: { $regex: new RegExp(`^${String(username).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') } };
+
+    const targetUser = await User.findOne(targetQuery);
+    if (!targetUser) {
+        return res.status(404).json({ success: false, error: 'User not found' });
+    }
+
+    targetUser.requiresUsernameChange = true;
+    targetUser.moderationReason = String(reason || 'Public name requires moderation review').trim();
+    targetUser.moderatedAt = new Date();
+    targetUser.moderatedBy = adminUser._id;
+    targetUser.previousModeratedUsername = targetUser.username;
+
+    await targetUser.save();
+
+    return res.status(200).json({
+        success: true,
+        message: 'User flagged for required rename',
+        data: {
+            user: {
+                id: targetUser._id,
+                username: targetUser.username,
+                displayName: targetUser.displayName || targetUser.username,
+                role: targetUser.role,
+                requiresUsernameChange: Boolean(targetUser.requiresUsernameChange),
+                moderationReason: targetUser.moderationReason,
+                moderatedAt: targetUser.moderatedAt,
+                moderatedBy: targetUser.moderatedBy,
+                previousModeratedUsername: targetUser.previousModeratedUsername
             }
         }
     });

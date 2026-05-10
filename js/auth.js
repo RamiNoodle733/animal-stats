@@ -26,6 +26,10 @@ const Auth = {
     // DOM Elements
     elements: {},
 
+    // Forced rename moderation state
+    renameNotice: null,
+    routerGuardInstalled: false,
+
     /**
      * Initialize auth module
      */
@@ -34,6 +38,7 @@ const Auth = {
         this.bindEvents();
         this.bindPageEvents();
         this.bindCloseButtons();
+        this.installRenameNavigationGuard();
         this.checkExistingSession();
     },
 
@@ -299,7 +304,12 @@ const Auth = {
                 this.user = result.data.user;
                 localStorage.setItem('auth_token', this.token);
                 this.updateUI();
+                this.enforceRequiredUsernameChange();
                 this.showToast(`Welcome back, ${this.user.displayName}!`);
+
+                if (this.user.requiresUsernameChange) {
+                    return;
+                }
                 
                 // Redirect to return URL or home after successful login
                 if (window.Router) {
@@ -358,6 +368,7 @@ const Auth = {
                 this.user = result.data.user;
                 localStorage.setItem('auth_token', this.token);
                 this.updateUI();
+                this.enforceRequiredUsernameChange();
                 this.showToast(`Welcome to Animal Battle Stats, ${this.user.displayName}!`);
                 
                 // Redirect to return URL or home after successful signup
@@ -427,6 +438,7 @@ const Auth = {
                     this.token = token;
                     this.user = result.data.user;
                     this.updateUI();
+                    this.enforceRequiredUsernameChange();
                     
                     // If on login/signup page and already logged in, redirect to home
                     if (window.Router) {
@@ -501,6 +513,7 @@ const Auth = {
                 localStorage.setItem('auth_token', this.token);
                 this.updateUI();
                 this.hideModal();
+                this.enforceRequiredUsernameChange();
                 
                 // Play success sound
                 if (window.AudioManager) {
@@ -571,6 +584,7 @@ const Auth = {
                 localStorage.setItem('auth_token', this.token);
                 this.updateUI();
                 this.hideModal();
+                this.enforceRequiredUsernameChange();
                 
                 // Play success sound
                 if (window.AudioManager) {
@@ -591,6 +605,226 @@ const Auth = {
             this.showError('signup', 'Network error. Please try again.');
         } finally {
             this.setLoading('signup', false);
+        }
+    },
+
+
+    /**
+     * Install a lightweight router guard that keeps moderation-required users on
+     * their own profile until they save an allowed public name.
+     */
+    installRenameNavigationGuard() {
+        if (this.routerGuardInstalled || !window.Router?.navigate) return;
+
+        const originalNavigate = window.Router.navigate.bind(window.Router);
+        window.Router.navigate = (url, options = {}) => {
+            if (this.user?.requiresUsernameChange && !options.allowRequiredRenameNavigation) {
+                const targetPath = window.Router.normalizePath ? window.Router.normalizePath(url) : url;
+                const ownProfilePath = this.user?.username ? `/profile/${encodeURIComponent(this.user.username)}` : '/profile';
+
+                if (targetPath !== ownProfilePath && targetPath !== '/profile') {
+                    this.enforceRequiredUsernameChange();
+                    this.showToast('Please choose an allowed public name before continuing.');
+                    return;
+                }
+            }
+
+            return originalNavigate(url, options);
+        };
+
+        window.addEventListener('popstate', () => {
+            if (!this.user?.requiresUsernameChange || !window.Router) return;
+
+            const ownProfilePath = this.user?.username ? `/profile/${encodeURIComponent(this.user.username)}` : '/profile';
+            const currentPath = window.Router.normalizePath(window.location.pathname);
+            if (currentPath !== ownProfilePath && currentPath !== '/profile') {
+                window.Router.navigate(ownProfilePath, {
+                    replace: true,
+                    allowRequiredRenameNavigation: true
+                });
+                this.enforceRequiredUsernameChange();
+            }
+        });
+
+        this.routerGuardInstalled = true;
+    },
+
+    /**
+     * Show the blocking rename notice when moderation has flagged the account.
+     */
+    enforceRequiredUsernameChange() {
+        if (!this.user?.requiresUsernameChange) {
+            this.hideRequiredRenameNotice();
+            return;
+        }
+
+        this.showRequiredRenameNotice();
+
+        if (window.Router && this.user?.username) {
+            const ownProfilePath = `/profile/${encodeURIComponent(this.user.username)}`;
+            const currentPath = window.Router.normalizePath(window.location.pathname);
+            if (currentPath !== ownProfilePath && currentPath !== '/profile') {
+                window.Router.navigate(ownProfilePath, {
+                    replace: true,
+                    allowRequiredRenameNavigation: true
+                });
+            }
+        }
+    },
+
+    /**
+     * Build and display the forced rename modal.
+     */
+    showRequiredRenameNotice() {
+        if (!this.renameNotice) {
+            const notice = document.createElement('div');
+            notice.id = 'required-rename-notice';
+            notice.setAttribute('role', 'dialog');
+            notice.setAttribute('aria-modal', 'true');
+            notice.innerHTML = `
+                <div class="required-rename-backdrop"></div>
+                <div class="required-rename-card">
+                    <h2>Choose a new public name</h2>
+                    <p>Your account is still active, but an administrator requires you to update your username or display name before continuing.</p>
+                    <label>
+                        Username
+                        <input id="required-rename-username" type="text" maxlength="20" autocomplete="username">
+                    </label>
+                    <label>
+                        Display name
+                        <input id="required-rename-display" type="text" maxlength="30" autocomplete="nickname">
+                    </label>
+                    <div id="required-rename-error" class="required-rename-error" aria-live="polite"></div>
+                    <button id="required-rename-save" type="button">Save and continue</button>
+                </div>
+            `;
+
+            const style = document.createElement('style');
+            style.textContent = `
+                #required-rename-notice { position: fixed; inset: 0; z-index: 100000; display: none; align-items: center; justify-content: center; padding: 1rem; }
+                #required-rename-notice.show { display: flex; }
+                .required-rename-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.78); backdrop-filter: blur(4px); }
+                .required-rename-card { position: relative; width: min(92vw, 440px); background: #111827; color: #fff; border: 2px solid #f59e0b; border-radius: 16px; box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45); padding: 1.5rem; }
+                .required-rename-card h2 { margin: 0 0 0.75rem; font-size: 1.35rem; }
+                .required-rename-card p { margin: 0 0 1rem; color: #d1d5db; line-height: 1.45; }
+                .required-rename-card label { display: block; margin: 0 0 0.85rem; font-weight: 700; }
+                .required-rename-card input { width: 100%; box-sizing: border-box; margin-top: 0.35rem; padding: 0.7rem; border: 1px solid #4b5563; border-radius: 10px; background: #030712; color: #fff; font: inherit; }
+                .required-rename-error { min-height: 1.25rem; margin: 0.25rem 0 0.85rem; color: #fca5a5; font-weight: 700; }
+                #required-rename-save { width: 100%; padding: 0.8rem 1rem; border: 0; border-radius: 10px; background: #f59e0b; color: #111827; font-weight: 800; cursor: pointer; }
+                #required-rename-save:disabled { opacity: 0.65; cursor: wait; }
+            `;
+            notice.appendChild(style);
+            document.body.appendChild(notice);
+
+            notice.querySelector('#required-rename-save')?.addEventListener('click', () => this.saveRequiredRename());
+            notice.querySelector('#required-rename-display')?.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') this.saveRequiredRename();
+            });
+            notice.querySelector('#required-rename-username')?.addEventListener('keypress', (event) => {
+                if (event.key === 'Enter') this.saveRequiredRename();
+            });
+
+            this.renameNotice = notice;
+        }
+
+        const usernameInput = this.renameNotice.querySelector('#required-rename-username');
+        const displayInput = this.renameNotice.querySelector('#required-rename-display');
+        if (usernameInput && document.activeElement !== usernameInput) usernameInput.value = this.user.username || '';
+        if (displayInput && document.activeElement !== displayInput) displayInput.value = this.user.displayName || this.user.username || '';
+
+        this.renameNotice.classList.add('show');
+        usernameInput?.focus();
+    },
+
+    /**
+     * Hide the forced rename notice once moderation requirements are cleared.
+     */
+    hideRequiredRenameNotice() {
+        this.renameNotice?.classList.remove('show');
+    },
+
+    /**
+     * Save the required rename through the regular profile endpoint so linked
+     * account data remains attached to the same user id.
+     */
+    async saveRequiredRename() {
+        if (!this.token || !this.renameNotice) return;
+
+        const username = this.renameNotice.querySelector('#required-rename-username')?.value.trim();
+        const displayName = this.renameNotice.querySelector('#required-rename-display')?.value.trim();
+        const errorEl = this.renameNotice.querySelector('#required-rename-error');
+        const saveBtn = this.renameNotice.querySelector('#required-rename-save');
+
+        const showError = (message) => {
+            if (errorEl) errorEl.textContent = message;
+        };
+
+        if (!username || username.length < 3) {
+            showError('Username must be at least 3 characters.');
+            return;
+        }
+        if (username.length > 20) {
+            showError('Username cannot exceed 20 characters.');
+            return;
+        }
+        if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+            showError('Username can only contain letters, numbers, and underscores.');
+            return;
+        }
+        if (!displayName) {
+            showError('Display name cannot be empty.');
+            return;
+        }
+        if (displayName.length > 30) {
+            showError('Display name cannot exceed 30 characters.');
+            return;
+        }
+        if (username === this.user.username && displayName === (this.user.displayName || this.user.username)) {
+            showError('Please change your username or display name before continuing.');
+            return;
+        }
+
+        try {
+            if (saveBtn) {
+                saveBtn.disabled = true;
+                saveBtn.textContent = 'Saving...';
+            }
+            showError('');
+
+            const response = await fetch('/api/auth?action=profile', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.token}`
+                },
+                body: JSON.stringify({ username, displayName })
+            });
+            const result = await response.json();
+
+            if (!result.success) {
+                showError(result.error || 'Failed to save your new name.');
+                return;
+            }
+
+            this.user = { ...this.user, ...result.data.user };
+            this.updateUI();
+            this.updateUserStatsBar();
+
+            if (this.user.requiresUsernameChange) {
+                showError('Please choose a different allowed public name.');
+                return;
+            }
+
+            this.hideRequiredRenameNotice();
+            this.showToast('Public name updated. Welcome back!');
+        } catch (error) {
+            console.error('Required rename save error:', error);
+            showError('Network error. Please try again.');
+        } finally {
+            if (saveBtn) {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save and continue';
+            }
         }
     },
 
@@ -1238,6 +1472,7 @@ const Auth = {
 
             if (result.success) {
                 this.user = { ...this.user, ...result.data.user };
+                this.enforceRequiredUsernameChange();
 
                 // Update original values
                 this.originalValues = {
