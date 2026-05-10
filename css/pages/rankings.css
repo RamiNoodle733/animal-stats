@@ -424,3 +424,124 @@
         display: none;
     }
 }
+
+/* ========================================
+   FULL-SCREEN RANKINGS POLISH
+   Final route-level layout authority for the current rankings console.
+   ======================================== */
+
+#rankings-view.active-view {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: clamp(8px, 1.35vw, 18px) clamp(12px, 1.8vw, 28px);
+    box-sizing: border-box;
+}
+
+#rankings-view .rankings-console {
+    width: 100%;
+    max-width: min(1760px, 100%);
+    margin: 0 auto;
+    padding: 0;
+    gap: clamp(10px, 1.4vh, 16px);
+    box-sizing: border-box;
+}
+
+#rankings-view .rankings-hero-banner,
+#rankings-view .rankings-main-content {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+}
+
+#rankings-view .rankings-hero-banner {
+    margin-bottom: 0;
+    padding: clamp(12px, 1.45vw, 22px) clamp(18px, 2vw, 30px);
+}
+
+#rankings-view .rankings-main-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(320px, 26vw, 380px);
+    gap: clamp(16px, 1.7vw, 28px);
+    align-items: stretch;
+}
+
+#rankings-view .rankings-list-column {
+    min-width: 0;
+    width: 100%;
+}
+
+#rankings-view .rankings-right-column {
+    width: auto;
+    min-width: 0;
+    height: 100%;
+}
+
+#rankings-view .rankings-detail-panel {
+    min-height: 0;
+    max-height: 100%;
+}
+
+#rankings-view .rankings-list-header {
+    grid-template-columns: 70px minmax(190px, 1fr) minmax(180px, 0.85fr) 110px 148px;
+}
+
+#rankings-view .ranking-row {
+    grid-template-columns: 70px minmax(210px, 1fr) minmax(92px, 110px) minmax(148px, 174px);
+}
+
+#rankings-view .row-votes {
+    justify-content: flex-end;
+}
+
+@media (max-width: 1180px) {
+    #rankings-view.active-view {
+        padding-inline: 12px;
+    }
+
+    #rankings-view .rankings-main-content {
+        grid-template-columns: minmax(0, 1fr) 320px;
+        gap: 14px;
+    }
+
+    #rankings-view .rankings-list-header {
+        grid-template-columns: 62px minmax(170px, 1fr) minmax(150px, 0.75fr) 95px 130px;
+    }
+
+    #rankings-view .ranking-row {
+        grid-template-columns: 62px minmax(180px, 1fr) 92px 140px;
+        gap: 8px;
+        padding-inline: 12px;
+    }
+}
+
+@media (max-width: 900px) {
+    #rankings-view.active-view {
+        padding: 0;
+    }
+
+    #rankings-view .rankings-console {
+        max-width: none;
+        padding: 10px 8px calc(var(--mobile-nav-height, 60px) + 8px);
+        gap: 10px;
+    }
+
+    #rankings-view .rankings-main-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #rankings-view .rankings-right-column {
+        display: none;
+    }
+
+    #rankings-view .rankings-hero-banner {
+        margin: 0 auto;
+        width: min(100%, 640px);
+    }
+
+    #rankings-view .rankings-list-column {
+        width: min(100%, 640px);
+        margin: 0 auto;
+    }
+}
