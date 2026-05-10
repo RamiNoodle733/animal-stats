@@ -24,6 +24,8 @@ const Auth = {
         profileAnimal: null
     },
 
+    originalNotificationPreferences: null,
+
     // DOM Elements
     elements: {},
 
@@ -119,7 +121,15 @@ const Auth = {
             linkGoogleBtn: document.getElementById('link-google-btn'),
             unlinkGoogleBtn: document.getElementById('unlink-google-btn'),
             googleLinkStatus: document.getElementById('google-link-status'),
-            googleLinkError: document.getElementById('google-link-error')
+            googleLinkError: document.getElementById('google-link-error'),
+            notificationPreferencesForm: document.getElementById('notification-preferences-form'),
+            notificationEnabled: document.getElementById('email-notifications-enabled'),
+            notificationWeeklyDigest: document.getElementById('email-notifications-weekly'),
+            notificationNewFeatures: document.getElementById('email-notifications-features'),
+            notificationCommentReplies: document.getElementById('email-notifications-replies'),
+            notificationTournamentUpdates: document.getElementById('email-notifications-tournaments'),
+            notificationStatus: document.getElementById('email-notifications-status'),
+            notificationSaveBtn: document.getElementById('email-notifications-save')
         };
     },
 
@@ -162,6 +172,10 @@ const Auth = {
         });
         this.elements.linkGoogleBtn?.addEventListener('click', () => this.startGoogleLink());
         this.elements.unlinkGoogleBtn?.addEventListener('click', () => this.unlinkGoogle());
+        this.elements.notificationPreferencesForm?.querySelectorAll('[data-notification-key]').forEach((input) => {
+            input.addEventListener('change', () => this.handleNotificationPreferenceChange());
+        });
+        this.elements.notificationSaveBtn?.addEventListener('click', () => this.saveNotificationPreferences());
         this.elements.loginSubmit?.addEventListener('click', () => this.handleLogin());
         this.elements.signupSubmit?.addEventListener('click', () => this.handleSignup());
         this.elements.forgotSubmit?.addEventListener('click', () => this.handleForgotPassword('modal'));
@@ -1444,6 +1458,7 @@ const Auth = {
 
         // Fetch fresh profile data
         await this.fetchProfile();
+        await this.fetchNotificationPreferences();
 
         // Store original values for change detection
         this.originalValues = {
@@ -1451,6 +1466,7 @@ const Auth = {
             username: this.user.username || '',
             profileAnimal: this.user.profileAnimal || null
         };
+        this.originalNotificationPreferences = this.normalizeNotificationPreferences(this.user.emailNotifications || {});
 
         // Reset pending changes
         this.pendingChanges = {
@@ -1466,6 +1482,7 @@ const Auth = {
         if (this.elements.retroUsername) {
             this.elements.retroUsername.value = this.user.username || '';
         }
+        this.populateNotificationPreferences();
 
         // Reset save button state
         this.updateSaveButtonState();
@@ -1527,6 +1544,154 @@ const Auth = {
         
         if (this.elements.avatarPreviewName) {
             this.elements.avatarPreviewName.textContent = animal?.name || 'None';
+        }
+    },
+
+
+    normalizeNotificationPreferences(preferences = {}) {
+        return {
+            enabled: Boolean(preferences.enabled),
+            weeklyDigest: Boolean(preferences.weeklyDigest),
+            newFeatures: Boolean(preferences.newFeatures),
+            commentReplies: Boolean(preferences.commentReplies),
+            tournamentUpdates: Boolean(preferences.tournamentUpdates),
+            unsubscribedAt: preferences.unsubscribedAt || null
+        };
+    },
+
+    getNotificationPreferenceInputs() {
+        return {
+            enabled: this.elements.notificationEnabled,
+            weeklyDigest: this.elements.notificationWeeklyDigest,
+            newFeatures: this.elements.notificationNewFeatures,
+            commentReplies: this.elements.notificationCommentReplies,
+            tournamentUpdates: this.elements.notificationTournamentUpdates
+        };
+    },
+
+    getNotificationPreferencesFromForm() {
+        const inputs = this.getNotificationPreferenceInputs();
+        return {
+            enabled: Boolean(inputs.enabled?.checked),
+            weeklyDigest: Boolean(inputs.weeklyDigest?.checked),
+            newFeatures: Boolean(inputs.newFeatures?.checked),
+            commentReplies: Boolean(inputs.commentReplies?.checked),
+            tournamentUpdates: Boolean(inputs.tournamentUpdates?.checked)
+        };
+    },
+
+    populateNotificationPreferences() {
+        const preferences = this.normalizeNotificationPreferences(this.user?.emailNotifications || {});
+        this.originalNotificationPreferences = preferences;
+        const inputs = this.getNotificationPreferenceInputs();
+
+        Object.entries(inputs).forEach(([key, input]) => {
+            if (input) input.checked = Boolean(preferences[key]);
+        });
+
+        this.updateNotificationPreferenceState();
+    },
+
+    handleNotificationPreferenceChange() {
+        this.updateNotificationPreferenceState();
+    },
+
+    updateNotificationPreferenceState() {
+        const inputs = this.getNotificationPreferenceInputs();
+        const enabled = Boolean(inputs.enabled?.checked);
+
+        ['weeklyDigest', 'newFeatures', 'commentReplies', 'tournamentUpdates'].forEach((key) => {
+            if (inputs[key]) inputs[key].disabled = !enabled;
+        });
+
+        const current = this.getNotificationPreferencesFromForm();
+        const original = this.originalNotificationPreferences || this.normalizeNotificationPreferences();
+        const changed = ['enabled', 'weeklyDigest', 'newFeatures', 'commentReplies', 'tournamentUpdates']
+            .some((key) => Boolean(current[key]) !== Boolean(original[key]));
+
+        if (this.elements.notificationSaveBtn) {
+            this.elements.notificationSaveBtn.disabled = !changed;
+        }
+        if (this.elements.notificationStatus && !changed) {
+            const unsubscribedAt = original.unsubscribedAt ? new Date(original.unsubscribedAt).toLocaleDateString() : null;
+            this.elements.notificationStatus.textContent = unsubscribedAt
+                ? `Unsubscribed on ${unsubscribedAt}. Enable notifications to opt back in.`
+                : '';
+        }
+    },
+
+    async fetchNotificationPreferences() {
+        if (!this.token) return;
+
+        try {
+            const response = await fetch('/api/auth?action=notification-preferences', {
+                headers: {
+                    'Authorization': `Bearer ${this.token}`
+                },
+                credentials: 'same-origin'
+            });
+            const result = await response.json();
+            if (response.ok && result.success) {
+                this.user = {
+                    ...this.user,
+                    emailNotifications: result.data.emailNotifications
+                };
+                this.populateNotificationPreferences();
+            }
+        } catch (error) {
+            console.error('Notification preferences fetch error:', error);
+        }
+    },
+
+    async saveNotificationPreferences() {
+        if (!this.token) return;
+
+        const btn = this.elements.notificationSaveBtn;
+        const status = this.elements.notificationStatus;
+        const preferences = this.getNotificationPreferencesFromForm();
+
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        }
+        if (status) status.textContent = '';
+
+        try {
+            const response = await fetch('/api/auth?action=notification-preferences', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${this.token}`
+                },
+                credentials: 'same-origin',
+                body: JSON.stringify(preferences)
+            });
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                this.user = {
+                    ...this.user,
+                    emailNotifications: result.data.emailNotifications
+                };
+                this.originalNotificationPreferences = this.normalizeNotificationPreferences(result.data.emailNotifications);
+                this.populateNotificationPreferences();
+                if (status) status.textContent = 'Email preferences saved.';
+                this.showToast('Email preferences saved!');
+            } else {
+                const message = result.error || 'Failed to save email preferences';
+                if (status) status.textContent = message;
+                this.showToast(message);
+                this.updateNotificationPreferenceState();
+            }
+        } catch (error) {
+            console.error('Notification preferences save error:', error);
+            if (status) status.textContent = 'Network error saving email preferences.';
+            this.showToast('Network error saving email preferences');
+            this.updateNotificationPreferenceState();
+        } finally {
+            if (btn) {
+                btn.innerHTML = '<i class="fas fa-envelope"></i> Save Email Preferences';
+            }
         }
     },
 

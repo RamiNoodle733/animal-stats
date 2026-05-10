@@ -793,6 +793,36 @@
                                         </div>
                                         <div class="abs-google-error" id="google-link-error"></div>
                                     </div>
+                                    <div class="abs-form-group abs-notification-group">
+                                        <label>Email notifications</label>
+                                        <p class="abs-form-hint">Choose which Animal Battle Stats updates can reach your inbox. You can unsubscribe any time.</p>
+                                        <div class="abs-notification-options" id="notification-preferences-form">
+                                            <label class="checkbox-option">
+                                                <input type="checkbox" id="email-notifications-enabled" data-notification-key="enabled">
+                                                <span>Enable email notifications</span>
+                                            </label>
+                                            <label class="checkbox-option">
+                                                <input type="checkbox" id="email-notifications-weekly" data-notification-key="weeklyDigest">
+                                                <span>Weekly digest: new animals, rankings, replies, XP/BP, tournaments, and community highlights</span>
+                                            </label>
+                                            <label class="checkbox-option">
+                                                <input type="checkbox" id="email-notifications-features" data-notification-key="newFeatures">
+                                                <span>New feature announcements</span>
+                                            </label>
+                                            <label class="checkbox-option">
+                                                <input type="checkbox" id="email-notifications-replies" data-notification-key="commentReplies">
+                                                <span>Replies to my comments</span>
+                                            </label>
+                                            <label class="checkbox-option">
+                                                <input type="checkbox" id="email-notifications-tournaments" data-notification-key="tournamentUpdates">
+                                                <span>Tournament updates and community events</span>
+                                            </label>
+                                        </div>
+                                        <p class="abs-form-hint" id="email-notifications-status" aria-live="polite"></p>
+                                        <button type="button" class="abs-save-btn" id="email-notifications-save" disabled>
+                                            <i class="fas fa-envelope"></i> Save Email Preferences
+                                        </button>
+                                    </div>
                                     <div class="abs-form-actions">
                                         <span class="abs-unsaved-indicator" id="retro-unsaved-indicator">
                                             <i class="fas fa-exclamation-circle"></i> Unsaved changes
