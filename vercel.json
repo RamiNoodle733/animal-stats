@@ -7,28 +7,36 @@
       "destination": "/api/:path*"
     },
     {
+      "source": "/",
+      "destination": "/api/seo?path=/"
+    },
+    {
+      "source": "/about",
+      "destination": "/api/seo?path=/about"
+    },
+    {
       "source": "/stats/:slug",
-      "destination": "/index.html"
+      "destination": "/api/seo?path=/stats/:slug"
     },
     {
       "source": "/stats",
-      "destination": "/index.html"
+      "destination": "/api/seo?path=/stats"
     },
     {
       "source": "/compare",
-      "destination": "/index.html"
+      "destination": "/api/seo?path=/compare"
     },
     {
       "source": "/rankings",
-      "destination": "/index.html"
+      "destination": "/api/seo?path=/rankings"
     },
     {
       "source": "/community",
-      "destination": "/index.html"
+      "destination": "/api/seo?path=/community"
     },
     {
       "source": "/tournament",
-      "destination": "/index.html"
+      "destination": "/api/seo?path=/tournament"
     },
     {
       "source": "/profile",
@@ -48,10 +56,6 @@
     },
     {
       "source": "/profile/:username",
-      "destination": "/index.html"
-    },
-    {
-      "source": "/about",
       "destination": "/index.html"
     },
     {
