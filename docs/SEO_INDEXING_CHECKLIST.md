@@ -13,7 +13,8 @@ That made many discovered animal URLs look duplicate or thin to crawlers even th
 
 ## What Changed
 
-- Public routes now render crawlable HTML through `api/seo.js` while keeping the same browser URLs and client-side app behavior.
+- The first SEO fix rendered crawlable pages through `api/seo.js`, but that added a 13th Vercel Serverless Function and failed on the Hobby plan.
+- Public SEO routes now use committed static prerendered HTML files instead of a serverless renderer.
 - Animal pages at `/stats/<slug>` include unique title, description, canonical, H1, structured data, stats, habitat, diet, measurements, description, and internal links.
 - `sitemap.xml` is generated from `animal_stats.json` and includes only canonical public URLs.
 - `robots.txt` remains permissive and points to the sitemap.
@@ -21,9 +22,10 @@ That made many discovered animal URLs look duplicate or thin to crawlers even th
 
 ## How To Run The Audit
 
-Regenerate the sitemap:
+Regenerate static SEO pages and the sitemap:
 
 ```bash
+npm run seo:prerender
 npm run seo:sitemap
 ```
 
@@ -33,10 +35,10 @@ Audit production:
 npm run seo:audit -- --write
 ```
 
-Audit a local Vercel dev server:
+Audit a local clean-URL static server:
 
 ```bash
-vercel dev
+npx http-server . -p 3000 -c-1 --proxy http://localhost:3000/index.html
 npm run seo:audit -- --sitemap sitemap.xml --base http://localhost:3000 --write
 ```
 
@@ -60,6 +62,7 @@ The JSON report is written to `reports/seo-audit.json` when `--write` is passed.
 
 ## Ongoing Checks
 
+- Run `npm run seo:prerender` whenever animal data or route SEO templates change.
 - Run `npm run seo:sitemap` whenever animal data changes.
 - Run `npm run seo:audit -- --write` after each deployment that touches routes, metadata, sitemap, or animal data.
 - Keep auth, profile, API, and other private or low-value utility routes out of the sitemap.

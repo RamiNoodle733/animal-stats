@@ -1,42 +1,12 @@
 {
   "version": 2,
   "public": true,
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     {
       "source": "/api/:path*",
       "destination": "/api/:path*"
-    },
-    {
-      "source": "/",
-      "destination": "/api/seo?path=/"
-    },
-    {
-      "source": "/about",
-      "destination": "/api/seo?path=/about"
-    },
-    {
-      "source": "/stats/:slug",
-      "destination": "/api/seo?path=/stats/:slug"
-    },
-    {
-      "source": "/stats",
-      "destination": "/api/seo?path=/stats"
-    },
-    {
-      "source": "/compare",
-      "destination": "/api/seo?path=/compare"
-    },
-    {
-      "source": "/rankings",
-      "destination": "/api/seo?path=/rankings"
-    },
-    {
-      "source": "/community",
-      "destination": "/api/seo?path=/community"
-    },
-    {
-      "source": "/tournament",
-      "destination": "/api/seo?path=/tournament"
     },
     {
       "source": "/profile",
