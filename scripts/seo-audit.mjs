@@ -55,6 +55,11 @@ function h1Count(html) {
   return (html.match(/<h1\b/gi) || []).length;
 }
 
+function hasValidH1(url, count) {
+  const pathname = new URL(url).pathname;
+  return pathname === '/' ? count > 0 : count === 1;
+}
+
 function titleFrom(html) {
   return getTag(html, /<title[^>]*>([\s\S]*?)<\/title>/i).replace(/\s+/g, ' ');
 }
@@ -96,6 +101,7 @@ async function auditUrl(url, options) {
 
   const canonical = canonicalFrom(html);
   const expectedCanonical = url;
+  const primaryH1Count = h1Count(html);
 
   return {
     url,
@@ -110,8 +116,8 @@ async function auditUrl(url, options) {
     canonical,
     canonicalMatches: canonical === expectedCanonical,
     noindex: hasNoindex(html),
-    h1Count: h1Count(html),
-    hasH1: h1Count(html) > 0
+    h1Count: primaryH1Count,
+    hasH1: hasValidH1(url, primaryH1Count)
   };
 }
 
