@@ -343,6 +343,7 @@ class AnimalStatsApp {
         if (path.startsWith('/compare')) return 'compare';
         if (path.startsWith('/rankings')) return 'rankings';
         if (path.startsWith('/community')) return 'community';
+        if (path.startsWith('/tournament')) return 'tournament';
         if (path.startsWith('/battlepoints')) return 'battlepoints';
         if (path.startsWith('/about')) return 'about';
         if (path.startsWith('/login')) return 'login';

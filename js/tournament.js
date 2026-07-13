@@ -260,21 +260,22 @@ class TournamentManager {
     }
 
     bindEvents() {
+        const openTournament = () => {
+            if (window.Router) {
+                const currentPath = window.Router.getCurrentPath?.() || window.location.pathname;
+                if (currentPath === '/tournament') {
+                    this.showSetup();
+                } else {
+                    window.Router.navigate('/tournament');
+                }
+                return;
+            }
+            this.showSetup();
+        };
+
         // Open tournament modal button (both hero and sidebar) - use router
-        this.dom.openBtn?.addEventListener('click', () => {
-            if (window.Router) {
-                window.Router.navigate('/tournament');
-            } else {
-                this.showSetup();
-            }
-        });
-        document.getElementById('hero-tournament-btn')?.addEventListener('click', () => {
-            if (window.Router) {
-                window.Router.navigate('/tournament');
-            } else {
-                this.showSetup();
-            }
-        });
+        this.dom.openBtn?.addEventListener('click', openTournament);
+        document.getElementById('hero-tournament-btn')?.addEventListener('click', openTournament);
         
         // Start tournament button - now actually starts the tournament
         this.dom.startBtn?.addEventListener('click', () => this.startTournament());
