@@ -32,6 +32,7 @@ class RankingsManager {
             rankingsList: document.getElementById('rankings-list'),
             rankingsSearch: document.getElementById('rankings-search'),
             loginPrompt: document.getElementById('rankings-login-prompt'),
+            heroTournamentBtn: document.getElementById('hero-tournament-btn'),
             
             // Detail Panel Elements (use rankings- prefix to avoid ID conflicts with stats page)
             detailPanel: document.getElementById('rankings-detail-panel'),
@@ -200,6 +201,21 @@ class RankingsManager {
         // Escape key closes modal
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') this.hideCommentsModal();
+        });
+
+        // Hero tournament CTA
+        this.dom.heroTournamentBtn?.addEventListener('click', () => {
+            if (window.Router) {
+                const currentPath = window.Router.getCurrentPath?.() || window.location.pathname;
+                if (currentPath === '/tournament') {
+                    this.app.ensureTournamentManager()?.showSetup();
+                } else {
+                    window.Router.navigate('/tournament');
+                }
+                return;
+            }
+
+            this.app.ensureTournamentManager()?.showSetup();
         });
     }
     

@@ -481,11 +481,11 @@ class AnimalStatsApp {
 
         // Rankings route
         router.on('/rankings', async () => {
-            await Promise.all([
-                this.ensureFullAnimalData(),
-                window.loadRouteAssets?.('rankings')
-            ]);
+            await window.loadRouteAssets?.('rankings');
             this.switchView('rankings', false);
+            this.ensureFullAnimalData().catch((error) => {
+                console.warn('Background full animal data load failed on rankings route:', error);
+            });
         });
 
         const handleCommunityRoute = async (tabName = 'chat', options = {}) => {
