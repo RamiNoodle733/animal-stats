@@ -91,7 +91,10 @@ if (path.dirname(outputRoot) !== repoRoot || path.basename(outputRoot) !== 'dist
     throw new Error(`Refusing to clear unexpected output directory: ${outputRoot}`);
 }
 
-execFileSync(process.execPath, [path.join(repoRoot, 'scripts', 'security', 'check-sensitive-exports.js')], {
+execFileSync(process.execPath, [
+    path.join(repoRoot, 'scripts', 'security', 'check-sensitive-exports.js'),
+    '--workspace'
+], {
     cwd: repoRoot,
     stdio: 'inherit'
 });

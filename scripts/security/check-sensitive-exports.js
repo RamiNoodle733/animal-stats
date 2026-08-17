@@ -15,12 +15,52 @@ const forbiddenPathPatterns = [
 const forbiddenHeaderPatterns = [
     /(^|,)\s*(ip|ip_address|email|username|session(id|_id)?|user_agent|referr?er)\s*(,|$)/i
 ];
+const workspaceIgnoredDirectories = new Set([
+    '.git',
+    '.vercel',
+    'dist',
+    'node_modules'
+]);
+
+function hasGitRepository() {
+    try {
+        return execFileSync('git', ['rev-parse', '--is-inside-work-tree'], {
+            cwd: repoRoot,
+            encoding: 'utf8',
+            stdio: ['ignore', 'pipe', 'ignore']
+        }).trim() === 'true';
+    } catch {
+        return false;
+    }
+}
 
 function trackedFiles() {
     return execFileSync('git', ['ls-files', '-z'], { cwd: repoRoot })
         .toString('utf8')
         .split('\0')
         .filter(Boolean);
+}
+
+function workspaceFiles() {
+    const files = [];
+    const pending = [repoRoot];
+
+    while (pending.length > 0) {
+        const directory = pending.pop();
+        for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+            if (entry.isSymbolicLink()) continue;
+            if (entry.isDirectory() && workspaceIgnoredDirectories.has(entry.name)) continue;
+
+            const absolutePath = path.join(directory, entry.name);
+            if (entry.isDirectory()) {
+                pending.push(absolutePath);
+            } else if (entry.isFile()) {
+                files.push(path.relative(repoRoot, absolutePath));
+            }
+        }
+    }
+
+    return files;
 }
 
 function gitOutput(args, options = {}) {
@@ -107,17 +147,23 @@ function revisionViolations(revisionRange) {
     return violations;
 }
 
-const tracked = trackedFiles();
-const presentTrackedFiles = tracked.filter((file) => fs.existsSync(path.join(repoRoot, file)));
 const revisionRanges = getRevisionRanges();
-const violations = presentTrackedFiles.filter((file) => isForbiddenPath(file) || inspectCsvHeader(file));
+const forceWorkspaceScan = process.argv.includes('--workspace');
+const usingGit = !forceWorkspaceScan && hasGitRepository();
+const candidateFiles = usingGit ? trackedFiles() : workspaceFiles();
+const presentCandidateFiles = candidateFiles.filter((file) => fs.existsSync(path.join(repoRoot, file)));
+const violations = presentCandidateFiles.filter((file) => isForbiddenPath(file) || inspectCsvHeader(file));
+
+if (revisionRanges.length > 0 && !hasGitRepository()) {
+    throw new Error('Git history is required when --rev-range is provided');
+}
 
 revisionRanges.forEach((revisionRange) => {
     revisionViolations(revisionRange).forEach((violation) => violations.push(violation));
 });
 
 if (violations.length > 0) {
-    console.error('Sensitive analytics export guard failed. Remove these tracked files:');
+    console.error('Sensitive analytics export guard failed. Remove these files from the repository or deployment input:');
     violations.forEach((file) => console.error(`  - ${file}`));
     process.exit(1);
 }
@@ -125,4 +171,5 @@ if (violations.length > 0) {
 const rangeSummary = revisionRanges.length > 0
     ? ` and ${revisionRanges.length} outgoing revision range(s)`
     : '';
-console.log(`Sensitive analytics export guard passed (${presentTrackedFiles.length} tracked files${rangeSummary} checked).`);
+const sourceLabel = usingGit ? 'tracked files' : 'workspace files';
+console.log(`Sensitive analytics export guard passed (${presentCandidateFiles.length} ${sourceLabel}${rangeSummary} checked).`);
