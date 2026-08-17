@@ -7,11 +7,15 @@
   "rewrites": [
     {
       "source": "/site-activity_xV4PFzoF89",
-      "destination": "/api/gone"
+      "destination": "/api/community?action=gone"
     },
     {
       "source": "/site-activity_xV4PFzoF89/:path*",
-      "destination": "/api/gone"
+      "destination": "/api/community?action=gone"
+    },
+    {
+      "source": "/api/admin/analytics",
+      "destination": "/api/community?action=admin-analytics"
     },
     {
       "source": "/api/:path*",

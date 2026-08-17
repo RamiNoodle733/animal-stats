@@ -5,13 +5,16 @@
  * GET /api/community?action=leaderboard - Get user leaderboard by XP/level
  * GET /api/community?action=presence - Get online users list
  * GET /api/community?action=stats - Get site statistics
+ * GET /api/community?action=admin-analytics - Get owner-only detailed analytics
+ * ALL /api/community?action=gone - Return 410 for removed sensitive exports
  * POST /api/community?action=ping - Update user presence (heartbeat)
  * POST /api/community?action=visit - Increment site visit counter
  */
 
 const { connectToDatabase } = require('../lib/mongodb');
-const { verifyToken } = require('../lib/auth');
+const { verifyToken, getAuthUser } = require('../lib/auth');
 const { setCorsHeaders } = require('../lib/cors');
+const { sanitizeEventData } = require('../lib/activity-logger');
 
 // In-memory presence store with TTL (would use Redis in production)
 // Structure: { odId: { username, displayName, profileAnimal, lastSeen, page } }
@@ -143,7 +146,146 @@ function toPublicDay(value) {
     return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())).toISOString();
 }
 
+function handleGone(_req, res) {
+    res.setHeader('Cache-Control', 'public, max-age=300, s-maxage=3600');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    return res.status(410).json({
+        success: false,
+        error: 'Gone'
+    });
+}
+
+function buildOwnerEventDetails(event) {
+    const safe = sanitizeEventData(event.eventType, {
+        ...(event.metadata || {}),
+        username: event.username,
+        page: event.page,
+        location: {
+            city: event.city,
+            region: event.region,
+            country: event.country
+        },
+        device: event.device,
+        browser: event.browser,
+        os: event.os,
+        screenSize: event.screenSize,
+        language: event.language
+    });
+
+    const details = { ...safe };
+    [
+        'username',
+        'user',
+        'page',
+        'route',
+        'location',
+        'device',
+        'browser',
+        'os',
+        'screenSize',
+        'language',
+        'referrer',
+        'sessionHash'
+    ].forEach((field) => delete details[field]);
+
+    return {
+        id: String(event._id),
+        occurredAt: event.occurredAt,
+        eventType: event.eventType,
+        username: safe.username || safe.user || 'Anonymous',
+        visitorPseudonym: event.visitorHash || null,
+        page: safe.page || null,
+        location: safe.location || null,
+        coordinates: event.coordinates || null,
+        device: safe.device || null,
+        browser: safe.browser || null,
+        os: safe.os || null,
+        referrer: safe.referrer || null,
+        screenSize: safe.screenSize || null,
+        language: safe.language || null,
+        sessionPseudonym: safe.sessionHash || null,
+        details
+    };
+}
+
+async function handleAdminAnalytics(req, res) {
+    const mongoose = require('mongoose');
+    const User = require('../lib/models/User');
+    const SiteActivity = require('../lib/models/SiteActivity');
+    const defaultLimit = 50;
+    const maxLimit = 100;
+
+    setCorsHeaders(req, res, {
+        methods: 'GET, OPTIONS',
+        credentials: true
+    });
+    res.setHeader('Cache-Control', 'private, no-store');
+    res.setHeader('Vary', 'Authorization, Cookie, Origin');
+
+    if (req.method === 'OPTIONS') return res.status(200).end();
+    if (req.method !== 'GET') {
+        res.setHeader('Allow', 'GET, OPTIONS');
+        return res.status(405).json({ success: false, error: 'Method not allowed' });
+    }
+
+    const authUser = getAuthUser(req);
+    if (!authUser?.id) {
+        return res.status(401).json({ success: false, error: 'Authentication required' });
+    }
+
+    await connectToDatabase();
+
+    const owner = await User.findById(authUser.id).select('role').lean();
+    if (!owner || owner.role !== 'admin') {
+        return res.status(403).json({ success: false, error: 'Administrator access required' });
+    }
+
+    const key = typeof req.query.key === 'string' ? req.query.key.trim().slice(0, 320) : '';
+    const cursor = typeof req.query.cursor === 'string' ? req.query.cursor.trim() : '';
+    const requestedLimit = Number.parseInt(req.query.limit, 10);
+    const limit = Math.min(Math.max(requestedLimit || defaultLimit, 1), maxLimit);
+    const query = {};
+
+    if (key) query.locationKey = key;
+    if (cursor) {
+        if (!mongoose.isValidObjectId(cursor)) {
+            return res.status(400).json({ success: false, error: 'Invalid cursor' });
+        }
+        query._id = { $lt: cursor };
+    }
+
+    const events = await SiteActivity.find(query)
+        .sort({ _id: -1 })
+        .limit(limit + 1)
+        .select('occurredAt eventType username visitorHash page locationRaw city region country coordinates device browser os screenSize language metadata')
+        .lean();
+
+    const hasMore = events.length > limit;
+    const page = hasMore ? events.slice(0, limit) : events;
+
+    return res.status(200).json({
+        success: true,
+        data: {
+            events: page.map(buildOwnerEventDetails),
+            nextCursor: hasMore ? String(page[page.length - 1]._id) : null
+        }
+    });
+}
+
 module.exports = async function handler(req, res) {
+    const requestedActions = Array.isArray(req.query?.action)
+        ? req.query.action
+        : [req.query?.action];
+
+    // These rewritten compatibility routes have distinct cache/auth behavior and
+    // must run before the shared community headers and database connection.
+    if (requestedActions.includes('gone')) {
+        return handleGone(req, res);
+    }
+    if (requestedActions.includes('admin-analytics')) {
+        return handleAdminAnalytics(req, res);
+    }
+
     setCorsHeaders(req, res, {
         methods: 'GET, POST, OPTIONS',
         credentials: true
@@ -156,7 +298,7 @@ module.exports = async function handler(req, res) {
 
     try {
         await connectToDatabase();
-        const { action } = req.query;
+        const [action] = requestedActions;
 
         switch (action) {
             case 'leaderboard':
