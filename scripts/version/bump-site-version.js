@@ -6,7 +6,7 @@ const path = require('path');
 
 const repoRoot = path.resolve(__dirname, '..', '..');
 const packageJsonPath = path.join(repoRoot, 'package.json');
-const indexHtmlPath = path.join(repoRoot, 'index.html');
+const packageLockPath = path.join(repoRoot, 'package-lock.json');
 
 const args = process.argv.slice(2);
 const syncOnly = args.includes('--sync-only');
@@ -48,22 +48,47 @@ function writeJson(filePath, jsonValue) {
     fs.writeFileSync(filePath, `${JSON.stringify(jsonValue, null, 2)}\n`, 'utf8');
 }
 
-function syncIndexVersion(indexContent, version) {
+function syncHtmlVersion(htmlContent, version, filePath) {
     const portalPattern = /(<span class="portal-version">)v\d+\.\d+\.\d+(<\/span>)/;
     const aboutPattern = /(<p class="about-version">Version )\d+\.\d+\.\d+/;
 
-    if (!portalPattern.test(indexContent)) {
-        throw new Error('Could not find portal version markup in index.html');
+    if (!portalPattern.test(htmlContent)) {
+        throw new Error(`Could not find portal version markup in ${path.relative(repoRoot, filePath)}`);
     }
 
-    if (!aboutPattern.test(indexContent)) {
-        throw new Error('Could not find about version markup in index.html');
+    if (!aboutPattern.test(htmlContent)) {
+        throw new Error(`Could not find about version markup in ${path.relative(repoRoot, filePath)}`);
     }
 
-    let updated = indexContent.replace(portalPattern, `$1v${version}$2`);
+    let updated = htmlContent.replace(portalPattern, `$1v${version}$2`);
     updated = updated.replace(aboutPattern, `$1${version}`);
 
     return updated;
+}
+
+function getGeneratedHtmlPaths() {
+    const rootPages = fs.readdirSync(repoRoot, { withFileTypes: true })
+        .filter((entry) => entry.isFile() && entry.name.endsWith('.html'))
+        .map((entry) => path.join(repoRoot, entry.name));
+    const statsDir = path.join(repoRoot, 'stats');
+    const animalPages = fs.existsSync(statsDir)
+        ? fs.readdirSync(statsDir, { withFileTypes: true })
+            .filter((entry) => entry.isFile() && entry.name.endsWith('.html'))
+            .map((entry) => path.join(statsDir, entry.name))
+        : [];
+
+    return [...rootPages, ...animalPages];
+}
+
+function syncPackageLock(version) {
+    if (!fs.existsSync(packageLockPath)) return;
+
+    const packageLock = JSON.parse(fs.readFileSync(packageLockPath, 'utf8'));
+    packageLock.version = version;
+    if (packageLock.packages?.['']) {
+        packageLock.packages[''].version = version;
+    }
+    writeJson(packageLockPath, packageLock);
 }
 
 const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
@@ -80,10 +105,15 @@ if (!syncOnly) {
     writeJson(packageJsonPath, packageJson);
 }
 
-const indexHtml = fs.readFileSync(indexHtmlPath, 'utf8');
-const updatedIndexHtml = syncIndexVersion(indexHtml, nextVersion);
-if (updatedIndexHtml !== indexHtml) {
-    fs.writeFileSync(indexHtmlPath, updatedIndexHtml, 'utf8');
-}
+syncPackageLock(nextVersion);
 
-process.stdout.write(nextVersion);
+const htmlPaths = getGeneratedHtmlPaths();
+htmlPaths.forEach((htmlPath) => {
+    const html = fs.readFileSync(htmlPath, 'utf8');
+    const updatedHtml = syncHtmlVersion(html, nextVersion, htmlPath);
+    if (updatedHtml !== html) {
+        fs.writeFileSync(htmlPath, updatedHtml, 'utf8');
+    }
+});
+
+process.stdout.write(`${nextVersion} (${htmlPaths.length} HTML files synchronized)`);

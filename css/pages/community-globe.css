@@ -683,6 +683,49 @@
     color: rgba(209, 234, 247, 0.82);
 }
 
+#community-view .globe-owner-analytics {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(108, 197, 239, 0.24);
+}
+
+#community-view .globe-owner-heading,
+#community-view .globe-owner-event-heading {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+#community-view .globe-owner-heading {
+    margin-bottom: 7px;
+    color: #90e8ff;
+    font-size: 0.68rem;
+}
+
+#community-view .globe-owner-heading span,
+#community-view .globe-owner-event-heading span {
+    color: rgba(186, 215, 228, 0.72);
+    font-weight: 400;
+}
+
+#community-view .globe-owner-events {
+    display: grid;
+    gap: 6px;
+    max-height: 360px;
+    overflow: auto;
+}
+
+#community-view .globe-owner-event {
+    padding: 7px;
+    border: 1px solid rgba(66, 164, 222, 0.2);
+    border-radius: 7px;
+    background: rgba(6, 21, 34, 0.78);
+    color: rgba(214, 239, 250, 0.82);
+    font-size: 0.64rem;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+}
+
 #community-view .globe-mini-item strong {
     color: #87e3ff;
 }

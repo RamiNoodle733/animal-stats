@@ -1,0 +1,18 @@
+# Local-only and repository-only files
+.git/
+.github/
+.githooks/
+node_modules/
+ui-snapshots/
+
+# Sensitive analytics exports must never enter a deployment bundle
+site-activity*/
+**/site-activity*.csv
+activity-exports/
+sensitive-exports/
+
+# Development and audit material
+.env*
+AUDIT.md
+REVIEW.md
+Stat operation tests/

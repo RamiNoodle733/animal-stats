@@ -17,6 +17,7 @@ const { setCorsHeaders } = require('../lib/cors');
 // Structure: { odId: { username, displayName, profileAnimal, lastSeen, page } }
 const presenceStore = new Map();
 const PRESENCE_TTL = 90 * 1000; // 90 seconds
+const PUBLIC_ANALYTICS_MIN_COHORT = 10;
 
 const ACTION_LABELS = Object.freeze({
     site_visit: 'Site Visits',
@@ -99,7 +100,7 @@ function normalizePagePath(rawPath) {
     return path;
 }
 
-function cleanActionBuckets(items) {
+function cleanActionBuckets(items, minimumCohortSize = PUBLIC_ANALYTICS_MIN_COHORT) {
     const grouped = new Map();
 
     (Array.isArray(items) ? items : []).forEach((item) => {
@@ -112,10 +113,11 @@ function cleanActionBuckets(items) {
 
     return Array.from(grouped.entries())
         .map(([key, count]) => ({ key, count }))
+        .filter((item) => item.count >= minimumCohortSize)
         .sort((a, b) => b.count - a.count);
 }
 
-function cleanPageBuckets(items, limit = 8) {
+function cleanPageBuckets(items, limit = 8, minimumCohortSize = PUBLIC_ANALYTICS_MIN_COHORT) {
     const grouped = new Map();
 
     (Array.isArray(items) ? items : []).forEach((item) => {
@@ -130,8 +132,15 @@ function cleanPageBuckets(items, limit = 8) {
 
     return Array.from(grouped.entries())
         .map(([key, count]) => ({ key, count }))
+        .filter((item) => item.count >= minimumCohortSize)
         .sort((a, b) => b.count - a.count)
         .slice(0, Math.max(1, Number(limit) || 8));
+}
+
+function toPublicDay(value) {
+    const date = value ? new Date(value) : null;
+    if (!date || Number.isNaN(date.getTime())) return null;
+    return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())).toISOString();
 }
 
 module.exports = async function handler(req, res) {
@@ -514,18 +523,47 @@ async function handleGlobe(req, res) {
                     lastSeen: 1
                 }
             },
+            { $match: { uniqueVisitors: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } },
             { $sort: { totalEvents: -1 } },
             { $limit: 1000 }
         ]),
         SiteActivity.aggregate([
-            { $group: { _id: '$eventType', count: { $sum: 1 } } },
-            { $project: { _id: 0, key: '$_id', count: 1 } },
+            {
+                $group: {
+                    _id: '$eventType',
+                    count: { $sum: 1 },
+                    visitors: { $addToSet: '$visitorHash' }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    key: '$_id',
+                    count: 1,
+                    cohortSize: { $size: { $setDifference: ['$visitors', [null, '']] } }
+                }
+            },
+            { $match: { cohortSize: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } },
             { $sort: { count: -1 } }
         ]),
         SiteActivity.aggregate([
             { $match: { page: { $ne: null } } },
-            { $group: { _id: '$page', count: { $sum: 1 } } },
-            { $project: { _id: 0, key: '$_id', count: 1 } },
+            {
+                $group: {
+                    _id: '$page',
+                    count: { $sum: 1 },
+                    visitors: { $addToSet: '$visitorHash' }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    key: '$_id',
+                    count: 1,
+                    cohortSize: { $size: { $setDifference: ['$visitors', [null, '']] } }
+                }
+            },
+            { $match: { cohortSize: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } },
             { $sort: { count: -1 } },
             { $limit: 8 }
         ]),
@@ -544,7 +582,8 @@ async function handleGlobe(req, res) {
                         $sum: {
                             $cond: [{ $eq: ['$eventType', 'site_visit'] }, 1, 0]
                         }
-                    }
+                    },
+                    visitors: { $addToSet: '$visitorHash' }
                 }
             },
             { $sort: { _id: 1 } },
@@ -553,17 +592,44 @@ async function handleGlobe(req, res) {
                     _id: 0,
                     day: '$_id',
                     events: 1,
-                    visits: 1
+                    visits: 1,
+                    cohortSize: { $size: { $setDifference: ['$visitors', [null, '']] } }
                 }
-            }
+            },
+            { $match: { cohortSize: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } }
         ])
     ]);
 
-    const [last24h, last7d, last30d] = await Promise.all([
-        SiteActivity.countDocuments({ occurredAt: { $gte: oneDayAgo } }),
-        SiteActivity.countDocuments({ occurredAt: { $gte: sevenDaysAgo } }),
-        SiteActivity.countDocuments({ occurredAt: { $gte: thirtyDaysAgo } })
+    const cohortSafeWindow = (since) => ([
+        { $match: { occurredAt: { $gte: since } } },
+        {
+            $group: {
+                _id: null,
+                count: { $sum: 1 },
+                visitors: { $addToSet: '$visitorHash' }
+            }
+        },
+        {
+            $project: {
+                _id: 0,
+                count: 1,
+                cohortSize: { $size: { $setDifference: ['$visitors', [null, '']] } }
+            }
+        },
+        { $match: { cohortSize: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } }
     ]);
+    const [windowAgg = {}] = await SiteActivity.aggregate([
+        {
+            $facet: {
+                last24h: cohortSafeWindow(oneDayAgo),
+                last7d: cohortSafeWindow(sevenDaysAgo),
+                last30d: cohortSafeWindow(thirtyDaysAgo)
+            }
+        }
+    ]);
+    const last24h = windowAgg.last24h?.[0]?.count || 0;
+    const last7d = windowAgg.last7d?.[0]?.count || 0;
+    const last30d = windowAgg.last30d?.[0]?.count || 0;
 
     const cleanedActions = cleanActionBuckets(actionsAgg);
     const cleanedPages = cleanPageBuckets(pagesAgg, 8);
@@ -577,7 +643,12 @@ async function handleGlobe(req, res) {
                 last7d,
                 last30d
             },
-            points: pointsAgg,
+            points: pointsAgg.map((point) => ({
+                ...point,
+                lat: Number(Number(point.lat).toFixed(1)),
+                lng: Number(Number(point.lng).toFixed(1)),
+                lastSeen: toPublicDay(point.lastSeen)
+            })),
             actions: cleanedActions,
             pages: cleanedPages,
             trend: trendAgg,
@@ -588,17 +659,17 @@ async function handleGlobe(req, res) {
 
 /**
  * GET /api/community?action=globe-point&key=<locationKey>
- * Returns drilldown analytics for a single location hotspot.
+ * Returns cohort-safe aggregate analytics for a single location hotspot.
  */
 async function handleGlobePoint(req, res) {
     const SiteActivity = require('../lib/models/SiteActivity');
-    const key = typeof req.query.key === 'string' ? req.query.key.trim() : '';
+    const key = typeof req.query.key === 'string' ? req.query.key.trim().slice(0, 320) : '';
 
     if (!key) {
         return res.status(400).json({ success: false, error: 'Location key is required' });
     }
 
-    const [summaryAgg, pagesAgg, actionsAgg, devicesAgg, usersAgg, recentAgg] = await Promise.all([
+    const [summaryAgg, pagesAgg, actionsAgg, devicesAgg] = await Promise.all([
         SiteActivity.aggregate([
             { $match: { locationKey: key } },
             {
@@ -637,19 +708,48 @@ async function handleGlobePoint(req, res) {
                     firstSeen: 1,
                     lastSeen: 1
                 }
-            }
+            },
+            { $match: { uniqueVisitors: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } }
         ]),
         SiteActivity.aggregate([
             { $match: { locationKey: key, page: { $ne: null } } },
-            { $group: { _id: '$page', count: { $sum: 1 } } },
-            { $project: { _id: 0, key: '$_id', count: 1 } },
+            {
+                $group: {
+                    _id: '$page',
+                    count: { $sum: 1 },
+                    visitors: { $addToSet: '$visitorHash' }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    key: '$_id',
+                    count: 1,
+                    cohortSize: { $size: { $setDifference: ['$visitors', [null, '']] } }
+                }
+            },
+            { $match: { cohortSize: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } },
             { $sort: { count: -1 } },
             { $limit: 15 }
         ]),
         SiteActivity.aggregate([
             { $match: { locationKey: key } },
-            { $group: { _id: '$eventType', count: { $sum: 1 } } },
-            { $project: { _id: 0, key: '$_id', count: 1 } },
+            {
+                $group: {
+                    _id: '$eventType',
+                    count: { $sum: 1 },
+                    visitors: { $addToSet: '$visitorHash' }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    key: '$_id',
+                    count: 1,
+                    cohortSize: { $size: { $setDifference: ['$visitors', [null, '']] } }
+                }
+            },
+            { $match: { cohortSize: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } },
             { $sort: { count: -1 } }
         ]),
         SiteActivity.aggregate([
@@ -661,7 +761,8 @@ async function handleGlobePoint(req, res) {
                         browser: '$browser',
                         os: '$os'
                     },
-                    count: { $sum: 1 }
+                    count: { $sum: 1 },
+                    visitors: { $addToSet: '$visitorHash' }
                 }
             },
             {
@@ -670,24 +771,14 @@ async function handleGlobePoint(req, res) {
                     device: '$_id.device',
                     browser: '$_id.browser',
                     os: '$_id.os',
-                    count: 1
+                    count: 1,
+                    cohortSize: { $size: { $setDifference: ['$visitors', [null, '']] } }
                 }
             },
+            { $match: { cohortSize: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } },
             { $sort: { count: -1 } },
             { $limit: 12 }
-        ]),
-        SiteActivity.aggregate([
-            { $match: { locationKey: key, username: { $ne: null } } },
-            { $group: { _id: '$username', count: { $sum: 1 } } },
-            { $project: { _id: 0, key: '$_id', count: 1 } },
-            { $sort: { count: -1 } },
-            { $limit: 12 }
-        ]),
-        SiteActivity.find({ locationKey: key })
-            .sort({ occurredAt: -1 })
-            .limit(25)
-            .select('occurredAt eventType username page device browser os metadata')
-            .lean()
+        ])
     ]);
 
     if (!summaryAgg[0]) {
@@ -696,16 +787,23 @@ async function handleGlobePoint(req, res) {
 
     const cleanedActions = cleanActionBuckets(actionsAgg);
     const cleanedPages = cleanPageBuckets(pagesAgg, 15);
+    const summary = summaryAgg[0];
 
     return res.status(200).json({
         success: true,
+        privacy: {
+            minimumCohortSize: PUBLIC_ANALYTICS_MIN_COHORT,
+            detailLevel: 'aggregate'
+        },
         data: {
-            summary: summaryAgg[0],
+            summary: {
+                ...summary,
+                firstSeen: toPublicDay(summary.firstSeen),
+                lastSeen: toPublicDay(summary.lastSeen)
+            },
             pages: cleanedPages,
             actions: cleanedActions,
-            devices: devicesAgg,
-            users: usersAgg,
-            recent: recentAgg
+            devices: devicesAgg
         }
     });
 }

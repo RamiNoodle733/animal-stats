@@ -1,0 +1,52 @@
+name: Security and release guard
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  sensitive-export-guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Reject sensitive exports
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          BEFORE_SHA: ${{ github.event.before }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          npm run security:exports
+          range="$GITHUB_SHA"
+          if [[ "$EVENT_NAME" == "push" && -n "$BEFORE_SHA" && "$BEFORE_SHA" != "0000000000000000000000000000000000000000" ]]; then
+            range="$BEFORE_SHA..$GITHUB_SHA"
+          elif [[ "$EVENT_NAME" == "pull_request" && -n "$BASE_SHA" && -n "$HEAD_SHA" ]]; then
+            range="$BASE_SHA..$HEAD_SHA"
+          fi
+          node scripts/security/check-sensitive-exports.js --rev-range "$range"
+
+      - name: Lint JavaScript
+        run: npm run lint
+
+      - name: Verify release version agreement
+        run: npm run version:check
+
+      - name: Build allowlisted deployment artifact
+        run: npm run build

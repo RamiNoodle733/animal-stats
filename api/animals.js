@@ -11,6 +11,7 @@
  */
 
 const { connectToDatabase } = require('../lib/mongodb');
+const { waitUntil } = require('@vercel/functions');
 const Animal = require('../lib/models/Animal');
 const { getAuthUser } = require('../lib/auth');
 const { notifyDiscord } = require('../lib/discord');
@@ -107,7 +108,9 @@ async function handleNotification(req, res) {
         if (typeof body === 'string') {
             try { body = JSON.parse(body); } catch (_e) { body = {}; }
         }
-        const { type, username, page, referrer, sessionId, duration, screenSize, language } = body || {};
+        const { type, page, referrer, sessionId, duration, screenSize, language } = body || {};
+        const authenticatedUser = getAuthUser(req);
+        const username = authenticatedUser?.username || 'Anonymous';
         
         // Build notification data with all available info
         const notifyData = {
@@ -120,14 +123,21 @@ async function handleNotification(req, res) {
             language: language || null
         };
         
-        if (type === 'logout') {
-            await notifyDiscord('logout', { username: username || 'Unknown' }, req);
-        } else if (type === 'site_leave') {
-            await notifyDiscord('site_leave', notifyData, req);
-        } else {
-            await notifyDiscord('site_visit', notifyData, req);
-        }
-        return res.status(200).json({ success: true });
+        const notificationType = type === 'logout'
+            ? 'logout'
+            : type === 'site_leave'
+                ? 'site_leave'
+                : 'site_visit';
+        const notificationData = notificationType === 'logout'
+            ? { username: username || 'Unknown' }
+            : notifyData;
+
+        const response = res.status(200).json({ success: true });
+        waitUntil(
+            notifyDiscord(notificationType, notificationData, req)
+                .catch((error) => console.error('Background notification error:', error))
+        );
+        return response;
     } catch (error) {
         console.error('Notification error:', error);
         return res.status(200).json({ success: true }); // Silent fail

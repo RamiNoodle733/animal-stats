@@ -1,17 +1,28 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if [[ "${ABS_SKIP_VERSION_HOOK:-0}" == "1" ]]; then
-    exit 0
-fi
-
 repo_root="$(git rev-parse --show-toplevel)"
 cd "$repo_root"
+
+node scripts/security/check-sensitive-exports.js
+node scripts/version/check-site-version.js
+
+skip_version_hook="${ABS_SKIP_VERSION_HOOK:-0}"
 
 zero_sha="0000000000000000000000000000000000000000"
 version_updated_in_push=0
 
+read_package_version() {
+    git show "${1}:package.json" 2>/dev/null \
+        | node -e "let input=''; process.stdin.on('data', chunk => input += chunk); process.stdin.on('end', () => process.stdout.write(JSON.parse(input).version || ''));"
+}
+
 while read -r local_ref local_sha remote_ref remote_sha; do
+    local_ref="${local_ref%$'\r'}"
+    local_sha="${local_sha%$'\r'}"
+    remote_ref="${remote_ref%$'\r'}"
+    remote_sha="${remote_sha%$'\r'}"
+
     if [[ -z "${local_ref:-}" ]]; then
         continue
     fi
@@ -30,20 +41,37 @@ while read -r local_ref local_sha remote_ref remote_sha; do
         range="$remote_sha..$local_sha"
     fi
 
-    if git log -p --format= "$range" -- package.json index.html | grep -Eq '^[+-].*("version": "|portal-version">v|about-version">Version )'; then
+    node scripts/security/check-sensitive-exports.js --rev-range "$range"
+
+    if [[ "$skip_version_hook" == "1" ]]; then
+        continue
+    fi
+
+    if [[ "$remote_sha" == "$zero_sha" ]]; then
         version_updated_in_push=1
-        break
+        continue
+    fi
+
+    local_version="$(read_package_version "$local_sha" || true)"
+    remote_version="$(read_package_version "$remote_sha" || true)"
+    if [[ -n "$local_version" && "$local_version" != "$remote_version" ]]; then
+        version_updated_in_push=1
     fi
 done
+
+if [[ "$skip_version_hook" == "1" ]]; then
+    exit 0
+fi
 
 if [[ "$version_updated_in_push" -eq 1 ]]; then
     exit 0
 fi
 
-new_version="$(node scripts/version/bump-site-version.js --bump patch)"
-git add package.json index.html
+version_output="$(node scripts/version/bump-site-version.js --bump patch)"
+new_version="${version_output%% *}"
+git add package.json package-lock.json -- '*.html' 'stats/*.html'
 
-if git diff --cached --quiet -- package.json index.html; then
+if git diff --cached --quiet -- package.json package-lock.json '*.html' 'stats/*.html'; then
     exit 0
 fi
 

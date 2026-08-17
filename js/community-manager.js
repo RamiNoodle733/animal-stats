@@ -628,6 +628,8 @@ class CommunityManager {
                 this.selectedGlobeKey = payload.points[0].key;
                 this.loadGlobePointDetails(this.selectedGlobeKey);
                 this.highlightSelectedCityRow();
+            } else if (!this.selectedGlobeKey && Auth.user?.role === 'admin') {
+                this.loadOwnerAnalyticsOverview();
             }
         } catch (error) {
             console.error('Error loading globe analytics:', error);
@@ -1016,14 +1018,51 @@ class CommunityManager {
             if (!response.ok) throw new Error('Failed to load point details');
 
             const result = await response.json();
-            this.renderGlobePointDetails(result.data || {});
+            let ownerAnalytics = null;
+
+            if (Auth.user?.role === 'admin') {
+                const token = Auth.getToken();
+                const ownerResponse = await fetch('/api/admin/analytics?limit=25', {
+                    credentials: 'same-origin',
+                    headers: token ? { Authorization: `Bearer ${token}` } : {}
+                });
+
+                if (ownerResponse.ok) {
+                    const ownerResult = await ownerResponse.json();
+                    ownerAnalytics = ownerResult.data || null;
+                }
+            }
+
+            this.renderGlobePointDetails(result.data || {}, ownerAnalytics);
         } catch (error) {
             console.error('Error loading point details:', error);
             detailsEl.innerHTML = '<div class="globe-point-error">Failed to load location detail.</div>';
         }
     }
 
-    renderGlobePointDetails(data) {
+    async loadOwnerAnalyticsOverview() {
+        const detailsEl = document.getElementById('globe-point-details');
+        if (!detailsEl || Auth.user?.role !== 'admin') return;
+
+        const token = Auth.getToken();
+        try {
+            const response = await fetch('/api/admin/analytics?limit=25', {
+                credentials: 'same-origin',
+                headers: token ? { Authorization: `Bearer ${token}` } : {}
+            });
+            if (!response.ok) return;
+
+            const result = await response.json();
+            detailsEl.innerHTML = `
+                <div class="globe-point-placeholder">Public locations appear after reaching the privacy threshold.</div>
+                ${this.renderOwnerAnalytics(result.data || null)}
+            `;
+        } catch (error) {
+            console.error('Error loading owner analytics:', error);
+        }
+    }
+
+    renderGlobePointDetails(data, ownerAnalytics = null) {
         const detailsEl = document.getElementById('globe-point-details');
         if (!detailsEl) return;
 
@@ -1057,9 +1096,49 @@ class CommunityManager {
                     ${this.renderDeviceList(devices)}
                 </div>
             </div>
+            ${this.renderOwnerAnalytics(ownerAnalytics)}
         `;
 
         this.updateGlobeContextChips();
+    }
+
+    renderOwnerAnalytics(ownerAnalytics) {
+        const events = Array.isArray(ownerAnalytics?.events) ? ownerAnalytics.events : [];
+        if (!events.length) return '';
+
+        const rows = events.map((event) => {
+            const environment = [event.device, event.browser, event.os].filter(Boolean).join(' • ');
+            const detailText = Object.entries(event.details || {})
+                .map(([key, value]) => {
+                    const printable = typeof value === 'object' ? JSON.stringify(value) : String(value);
+                    return `${key}: ${printable}`;
+                })
+                .join(' • ')
+                .slice(0, 500);
+
+            return `
+                <div class="globe-owner-event">
+                    <div class="globe-owner-event-heading">
+                        <strong>${this.escapeHtml(event.username || 'Anonymous')}</strong>
+                        <span>${this.escapeHtml(event.eventType || 'event')} • ${this.escapeHtml(this.formatDateTime(event.occurredAt))}</span>
+                    </div>
+                    <div>${this.escapeHtml(event.page || '/')} ${environment ? `• ${this.escapeHtml(environment)}` : ''}</div>
+                    ${event.referrer ? `<div>Referrer: ${this.escapeHtml(event.referrer)}</div>` : ''}
+                    ${event.screenSize || event.language ? `<div>${this.escapeHtml([event.screenSize, event.language].filter(Boolean).join(' • '))}</div>` : ''}
+                    ${detailText ? `<div>${this.escapeHtml(detailText)}</div>` : ''}
+                </div>
+            `;
+        }).join('');
+
+        return `
+            <section class="globe-owner-analytics" aria-label="Owner-only detailed analytics">
+                <div class="globe-owner-heading">
+                    <strong>Owner-only latest events</strong>
+                    <span>All locations • sanitized • latest ${events.length}</span>
+                </div>
+                <div class="globe-owner-events">${rows}</div>
+            </section>
+        `;
     }
 
     renderMiniList(items) {

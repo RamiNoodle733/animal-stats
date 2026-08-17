@@ -62,3 +62,12 @@ images/animals/silhouettes/manifest.json
 # Internal documentation
 AUDIT.md
 IMAGE_UPDATER_README.md
+
+# Sensitive analytics exports (never commit or deploy)
+site-activity*/
+**/site-activity*.csv
+activity-exports/
+sensitive-exports/
+
+# Generated deployment output
+dist/

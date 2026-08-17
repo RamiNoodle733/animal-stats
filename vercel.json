@@ -1,8 +1,18 @@
 {
   "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
+    {
+      "source": "/site-activity_xV4PFzoF89",
+      "destination": "/api/gone"
+    },
+    {
+      "source": "/site-activity_xV4PFzoF89/:path*",
+      "destination": "/api/gone"
+    },
     {
       "source": "/api/:path*",
       "destination": "/api/:path*"
@@ -33,23 +43,6 @@
     }
   ],
   "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET,OPTIONS,PATCH,DELETE,POST,PUT"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version, Authorization, Stripe-Signature"
-        }
-      ]
-    },
     {
       "source": "/images/(.*)",
       "headers": [
