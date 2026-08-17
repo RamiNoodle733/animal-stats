@@ -11,6 +11,7 @@ skip_version_hook="${ABS_SKIP_VERSION_HOOK:-0}"
 
 zero_sha="0000000000000000000000000000000000000000"
 version_updated_in_push=0
+branch_ref_in_push=0
 
 read_package_version() {
     git show "${1}:package.json" 2>/dev/null \
@@ -30,6 +31,8 @@ while read -r local_ref local_sha remote_ref remote_sha; do
     if [[ "$local_ref" != refs/heads/* ]]; then
         continue
     fi
+
+    branch_ref_in_push=1
 
     if [[ "$local_sha" == "$zero_sha" ]]; then
         continue
@@ -60,6 +63,10 @@ while read -r local_ref local_sha remote_ref remote_sha; do
 done
 
 if [[ "$skip_version_hook" == "1" ]]; then
+    exit 0
+fi
+
+if [[ "$branch_ref_in_push" -eq 0 ]]; then
     exit 0
 fi
 
