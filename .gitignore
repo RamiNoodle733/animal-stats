@@ -71,3 +71,7 @@ sensitive-exports/
 
 # Generated deployment output
 dist/
+
+# Local environment files may contain deployment credentials.
+.env*
+!.env.example

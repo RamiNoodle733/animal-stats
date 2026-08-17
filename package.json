@@ -1,13 +1,12 @@
 {
   "name": "animal-battle-stats",
-  "version": "2.2.5",
+  "version": "2.2.6",
   "description": "Animal Battle Stats - A scientifically accurate wildlife statistics website with MongoDB backend",
   "main": "api/index.js",
   "scripts": {
     "dev": "echo 'Use: vercel dev'",
     "start": "echo 'Use: vercel dev'",
     "build": "node scripts/build-production.js",
-    "vercel-build": "npm run build",
     "seed": "node scripts/seed-database.js",
     "hooks:install": "git config core.hooksPath .githooks",
     "security:exports": "node scripts/security/check-sensitive-exports.js",
@@ -49,6 +48,6 @@
     "vercel": "^33.0.0"
   },
   "engines": {
-    "node": "20.x"
+    "node": "24.x"
   }
 }
