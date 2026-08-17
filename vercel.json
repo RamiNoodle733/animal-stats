@@ -23,27 +23,35 @@
     },
     {
       "source": "/profile",
-      "destination": "/index.html"
+      "destination": "/"
     },
     {
       "source": "/login",
-      "destination": "/index.html"
+      "destination": "/"
     },
     {
       "source": "/signup",
-      "destination": "/index.html"
+      "destination": "/"
+    },
+    {
+      "source": "/forgot-password",
+      "destination": "/"
+    },
+    {
+      "source": "/reset-password",
+      "destination": "/"
     },
     {
       "source": "/battlepoints",
-      "destination": "/index.html"
+      "destination": "/"
     },
     {
       "source": "/profile/:username",
-      "destination": "/index.html"
+      "destination": "/"
     },
     {
-      "source": "/((?!api/).*)",
-      "destination": "/index.html"
+      "source": "/community/:tab",
+      "destination": "/community"
     }
   ],
   "headers": [
