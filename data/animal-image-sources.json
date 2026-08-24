@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-08-24",
+  "entries": [
+    {
+      "animal": "Yak",
+      "scientificName": "Bos grunniens",
+      "status": "source-selected",
+      "sourceTitle": "File:Yak in Khövsgöl 02.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File%3AYak_in_Kh%C3%B6vsg%C3%B6l_02.jpg",
+      "creator": "Bernard Gagnon",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceWidth": 3931,
+      "sourceHeight": 2621,
+      "selectionNotes": "Real side-view photograph with the entire animal visible."
+    },
+    {
+      "animal": "Piranha",
+      "scientificName": "Pygocentrus nattereri",
+      "status": "source-selected",
+      "sourceTitle": "File:Pygocentrus nattereri - Karlsruhe Zoo 01.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File%3APygocentrus_nattereri_-_Karlsruhe_Zoo_01.jpg",
+      "creator": "H. Zell",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "sourceWidth": 6000,
+      "sourceHeight": 4000,
+      "selectionNotes": "Featured real photograph with a clear lateral view of the correct species."
+    },
+    {
+      "animal": "Baboon",
+      "scientificName": "Papio anubis",
+      "status": "source-selected",
+      "sourceTitle": "File:060 Olive baboon walking at Queen Elizabeth National Park Photo by Giles Laurent.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File%3A060_Olive_baboon_walking_at_Queen_Elizabeth_National_Park_Photo_by_Giles_Laurent.jpg",
+      "creator": "Giles Laurent",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "sourceWidth": 6877,
+      "sourceHeight": 4585,
+      "selectionNotes": "Real full-body olive baboon photograph with a clean silhouette."
+    },
+    {
+      "animal": "Saltwater Crocodile",
+      "scientificName": "Crocodylus porosus",
+      "status": "source-selected",
+      "sourceTitle": "File:Saltwater crocodile (Crocodylus porosus) juvenile Rock Islands.jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File%3ASaltwater_crocodile_(Crocodylus_porosus)_juvenile_Rock_Islands.jpg",
+      "creator": "Charles J. Sharp",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "sourceWidth": 6945,
+      "sourceHeight": 3472,
+      "selectionNotes": "Real full-body photograph verified as Crocodylus porosus."
+    },
+    {
+      "animal": "Bongo",
+      "scientificName": "Tragelaphus eurycerus",
+      "status": "source-selected",
+      "sourceTitle": "File:Bongo (28857049261).jpg",
+      "sourcePage": "https://commons.wikimedia.org/wiki/File%3ABongo_(28857049261).jpg",
+      "creator": "Mathias Appel",
+      "license": "CC0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "sourceWidth": 3081,
+      "sourceHeight": 4652,
+      "selectionNotes": "Real full-body bongo photograph replacing the unrelated domestic-cat asset."
+    }
+  ]
+}

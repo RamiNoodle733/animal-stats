@@ -72,6 +72,14 @@ Run `npm run assets:audit` to inspect decoding, transparency, dimensions, byte s
 npm run assets:audit -- --report .cache/image-audit/report.json --contact-sheets .cache/image-audit
 ```
 
+Candidate photos are sourced into the ignored `.cache` directory and never replace a live asset automatically. The sourcing command accepts only reusable Commons licenses, records creator/license/source metadata, and generates one review sheet per animal:
+
+```bash
+npm run assets:source -- --animal "Yak" --animal "Piranha" --limit 6
+```
+
+Only visually approved sources are recorded in `data/animal-image-sources.json`. A registry entry marked `source-selected` is not yet a live asset; it must still pass transparent-cutout and edge-quality review.
+
 ## 📁 Project Structure
 
 ```

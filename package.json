@@ -1,6 +1,6 @@
 {
   "name": "animal-battle-stats",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "description": "Animal Battle Stats - A scientifically accurate wildlife statistics website with MongoDB backend",
   "main": "api/index.js",
   "scripts": {
@@ -26,6 +26,7 @@
     "seo:sitemap": "node scripts/generate-sitemap.mjs",
     "seo:audit": "node scripts/seo-audit.mjs",
     "assets:audit": "node scripts/assets/audit-animal-images.js",
+    "assets:source": "node scripts/assets/source-animal-images.js",
     "assets:generate-silhouettes": "node scripts/assets/generate-silhouettes.js"
   },
   "keywords": [
