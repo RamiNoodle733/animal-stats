@@ -45,6 +45,49 @@ function optionValue(name, fallback = null) {
     return optionValues(name).at(-1) || fallback;
 }
 
+function parseQueryOverrides(values) {
+    const overrides = new Map();
+    for (const value of values) {
+        const separator = value.indexOf('=');
+        if (separator <= 0 || separator === value.length - 1) {
+            throw new Error(`Invalid --query value: ${value}. Use "Animal Name=Commons search terms".`);
+        }
+        const animal = value.slice(0, separator).trim().toLowerCase();
+        const query = value.slice(separator + 1).trim();
+        if (!animal || !query) throw new Error(`Invalid --query value: ${value}.`);
+        const queries = overrides.get(animal) || [];
+        queries.push(query);
+        overrides.set(animal, queries);
+    }
+    return overrides;
+}
+
+function parseSourcePageOverrides(values) {
+    const overrides = new Map();
+    for (const value of values) {
+        const separator = value.indexOf('=');
+        if (separator <= 0 || separator === value.length - 1) {
+            throw new Error(`Invalid --source-page value: ${value}. Use "Animal Name=https://commons.wikimedia.org/wiki/File:...".`);
+        }
+        const animal = value.slice(0, separator).trim().toLowerCase();
+        const sourcePage = value.slice(separator + 1).trim();
+        let parsed;
+        try {
+            parsed = new URL(sourcePage);
+        } catch {
+            throw new Error(`Invalid Commons source page: ${sourcePage}`);
+        }
+        const title = decodeURIComponent(parsed.pathname.replace(/^\/wiki\//, '')).replaceAll('_', ' ');
+        if (parsed.protocol !== 'https:' || parsed.hostname !== 'commons.wikimedia.org' || !title.startsWith('File:')) {
+            throw new Error(`Invalid Commons source page: ${sourcePage}`);
+        }
+        const sources = overrides.get(animal) || [];
+        sources.push({ sourcePage, title });
+        overrides.set(animal, sources);
+    }
+    return overrides;
+}
+
 function slugify(value) {
     return String(value)
         .toLowerCase()
@@ -166,18 +209,44 @@ async function searchCommons(query, limit) {
     return (payload.query?.pages || []).map(normalizePage).filter(Boolean);
 }
 
-async function findCandidates(animal, limit) {
-    const searches = [
+async function fetchCommonsSource(source) {
+    const parameters = new URLSearchParams({
+        action: 'query',
+        format: 'json',
+        formatversion: '2',
+        titles: source.title,
+        prop: 'imageinfo',
+        iiprop: 'url|mime|size|extmetadata',
+        iiurlwidth: '900',
+        origin: '*'
+    });
+    const response = await fetchWithRetry(`${COMMONS_API}?${parameters}`, {
+        headers: { 'User-Agent': USER_AGENT }
+    });
+    if (!response.ok) throw new Error(`Commons source lookup failed with HTTP ${response.status}.`);
+    const payload = await response.json();
+    const candidate = (payload.query?.pages || []).map(normalizePage).find(Boolean);
+    if (!candidate) throw new Error(`Commons source page did not resolve to an image: ${source.sourcePage}`);
+    return { ...candidate, exactSource: true };
+}
+
+async function findCandidates(animal, limit, queryOverrides = [], sourcePageOverrides = []) {
+    const searches = [...new Set([
+        ...queryOverrides,
         `"${animal.scientific_name}" filetype:bitmap`,
         `"${animal.name}" animal filetype:bitmap`
-    ];
-    const results = (await Promise.all(searches.map((query) => searchCommons(query, limit)))).flat();
+    ])];
+    const [searched, exact] = await Promise.all([
+        Promise.all(searches.map((query) => searchCommons(query, limit))),
+        Promise.all(sourcePageOverrides.map(fetchCommonsSource))
+    ]);
+    const results = [...exact, ...searched.flat()];
     const unique = new Map(results.map((candidate) => [candidate.pageId, candidate]));
     return [...unique.values()]
         .filter(isAllowedLicense)
         .map((candidate) => ({
             ...candidate,
-            score: Number(candidateScore(candidate, animal).toFixed(3))
+            score: Number((candidateScore(candidate, animal) + (candidate.exactSource ? 1_000 : 0)).toFixed(3))
         }))
         .sort((left, right) => right.score - left.score || left.title.localeCompare(right.title))
         .slice(0, limit);
@@ -236,10 +305,10 @@ async function renderContactSheet(animal, candidates, directory) {
         .toFile(path.join(directory, `${slugify(animal.name)}-candidates.webp`));
 }
 
-async function sourceAnimal(animal, outputRoot, limit) {
+async function sourceAnimal(animal, outputRoot, limit, queryOverrides = [], sourcePageOverrides = []) {
     const directory = path.join(outputRoot, slugify(animal.name));
     await fs.mkdir(directory, { recursive: true });
-    const candidates = await findCandidates(animal, limit);
+    const candidates = await findCandidates(animal, limit, queryOverrides, sourcePageOverrides);
     const sourced = [];
     for (let index = 0; index < candidates.length; index += 1) {
         const candidate = candidates[index];
@@ -258,6 +327,8 @@ async function sourceAnimal(animal, outputRoot, limit) {
             scientificName: animal.scientific_name
         },
         source: 'Wikimedia Commons',
+        searchQueries: queryOverrides,
+        exactSourcePages: sourcePageOverrides.map((source) => source.sourcePage),
         candidates: sourced
     };
     await fs.writeFile(path.join(directory, 'candidates.json'), `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
@@ -268,6 +339,8 @@ async function main() {
     const names = optionValues('--animal');
     if (names.length === 0) throw new Error('Provide at least one --animal "Name" option.');
     const limit = Math.min(Math.max(Number(optionValue('--limit', '9')) || 9, 1), 12);
+    const queryOverrides = parseQueryOverrides(optionValues('--query'));
+    const sourcePageOverrides = parseSourcePageOverrides(optionValues('--source-page'));
     const outputRoot = resolveOutputDirectory(optionValue('--output', DEFAULT_OUTPUT));
     const animals = JSON.parse(await fs.readFile(DATA_PATH, 'utf8'));
     const byName = new Map(animals.map((animal) => [animal.name.toLowerCase(), animal]));
@@ -279,7 +352,13 @@ async function main() {
 
     const results = [];
     for (const animal of selected) {
-        results.push(await sourceAnimal(animal, outputRoot, limit));
+        results.push(await sourceAnimal(
+            animal,
+            outputRoot,
+            limit,
+            queryOverrides.get(animal.name.toLowerCase()) || [],
+            sourcePageOverrides.get(animal.name.toLowerCase()) || []
+        ));
     }
     console.log(JSON.stringify({ output: path.relative(ROOT, outputRoot), results }, null, 2));
 }
@@ -295,6 +374,8 @@ module.exports = {
     candidateScore,
     isAllowedLicense,
     normalizePage,
+    parseQueryOverrides,
+    parseSourcePageOverrides,
     resolveOutputDirectory,
     slugify,
     stripHtml

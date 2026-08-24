@@ -6,6 +6,7 @@ const test = require('node:test');
 const {
     alphaRange,
     findDuplicates,
+    isVerifiedPhotoSource,
     resolveAnimalImage,
     summarize
 } = require('../scripts/assets/audit-animal-images');
@@ -96,6 +97,8 @@ test('audit summary distinguishes transparency, decoding, and duplicate issues',
         notTransparent: 1,
         duplicateGroups: 1,
         undersized: 0,
+        provenanceVerified: 0,
+        provenanceUnverified: 5,
         sourceBytes: 800
     });
     assert.deepEqual(
@@ -106,4 +109,36 @@ test('audit summary distinguishes transparency, decoding, and duplicate issues',
         report.records.find((record) => record.name === 'Piranha').issues,
         ['unreadable']
     );
+});
+
+test('audit verifies active photo provenance against the exact asset checksum', () => {
+    const record = {
+        name: 'Lion',
+        image: '/images/animals/lion.png?v=123456789abc',
+        sha256: 'checksum',
+        bytes: 100,
+        width: 800,
+        height: 600,
+        hasTransparentPixels: true,
+        error: null
+    };
+    const source = {
+        animal: 'Lion',
+        status: 'active',
+        sourcePage: 'https://commons.wikimedia.org/wiki/File:Lion.jpg',
+        creator: 'Photographer',
+        license: 'CC BY 4.0',
+        licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
+        reviewStatus: 'reviewed',
+        asset: record.image,
+        assetSha256: record.sha256
+    };
+
+    assert.equal(isVerifiedPhotoSource(record, source), true);
+    assert.equal(isVerifiedPhotoSource(record, { ...source, assetSha256: 'different' }), false);
+
+    const report = summarize([record], { entries: [{ ...source, assetSha256: 'different' }] });
+    assert.equal(report.totals.provenanceVerified, 0);
+    assert.equal(report.totals.provenanceUnverified, 1);
+    assert.deepEqual(report.records[0].issues, ['unverified-photo-provenance']);
 });

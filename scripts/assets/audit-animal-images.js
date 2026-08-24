@@ -8,6 +8,7 @@ const sharp = require('sharp');
 
 const ROOT = path.resolve(__dirname, '../..');
 const DATA_PATH = path.join(ROOT, 'animal_stats.json');
+const SOURCE_REGISTRY_PATH = path.join(ROOT, 'data', 'animal-image-sources.json');
 const ANIMAL_IMAGE_ROOT = path.join(ROOT, 'images', 'animals');
 const args = process.argv.slice(2);
 
@@ -113,7 +114,21 @@ function findDuplicates(records) {
         .map(([sha256, names]) => ({ sha256, names }));
 }
 
-function summarize(records) {
+function isVerifiedPhotoSource(record, source) {
+    return Boolean(
+        source
+        && source.status === 'active'
+        && source.reviewStatus
+        && source.sourcePage
+        && source.creator
+        && source.license
+        && source.licenseUrl
+        && source.asset === record.image
+        && source.assetSha256 === record.sha256
+    );
+}
+
+function summarize(records, sourceRegistry = null) {
     const duplicates = findDuplicates(records);
     const duplicateNames = new Set(duplicates.flatMap((group) => group.names));
     const unreadable = records.filter((record) => record.error);
@@ -122,18 +137,30 @@ function summarize(records) {
         !record.error && (record.width < 300 || record.height < 300)
     ));
 
-    const reviewedRecords = records.map((record) => ({
-        ...record,
-        issues: [
-            ...(record.error ? ['unreadable'] : []),
-            ...(!record.error && !record.hasTransparentPixels ? ['not-transparent'] : []),
-            ...(duplicateNames.has(record.name) ? ['duplicate-content'] : []),
-            ...(!record.error && (record.width < 300 || record.height < 300) ? ['under-300px'] : [])
-        ]
-    }));
+    const sourceByAnimal = new Map((sourceRegistry?.entries || []).map((source) => [source.animal, source]));
+    const enforceProvenance = sourceRegistry !== null;
+    const reviewedRecords = records.map((record) => {
+        const source = sourceByAnimal.get(record.name) || null;
+        const provenanceVerified = isVerifiedPhotoSource(record, source);
+        return {
+            ...record,
+            provenanceVerified,
+            sourceStatus: source?.status || 'unregistered',
+            sourcePage: source?.sourcePage || null,
+            license: source?.license || null,
+            issues: [
+                ...(record.error ? ['unreadable'] : []),
+                ...(!record.error && !record.hasTransparentPixels ? ['not-transparent'] : []),
+                ...(duplicateNames.has(record.name) ? ['duplicate-content'] : []),
+                ...(!record.error && (record.width < 300 || record.height < 300) ? ['under-300px'] : []),
+                ...(enforceProvenance && !provenanceVerified ? ['unverified-photo-provenance'] : [])
+            ]
+        };
+    });
+    const provenanceVerified = reviewedRecords.filter((record) => record.provenanceVerified).length;
 
     return {
-        schemaVersion: 1,
+        schemaVersion: 2,
         totals: {
             animals: records.length,
             readable: records.length - unreadable.length,
@@ -142,6 +169,8 @@ function summarize(records) {
             notTransparent: opaque.length,
             duplicateGroups: duplicates.length,
             undersized: undersized.length,
+            provenanceVerified,
+            provenanceUnverified: records.length - provenanceVerified,
             sourceBytes: records.reduce((sum, record) => sum + (record.bytes || 0), 0)
         },
         duplicateGroups: duplicates,
@@ -212,13 +241,16 @@ async function renderContactSheets(report, outputDirectory) {
 }
 
 async function main() {
-    const animals = JSON.parse(await fs.readFile(DATA_PATH, 'utf8'));
+    const [animals, sourceRegistry] = await Promise.all([
+        fs.readFile(DATA_PATH, 'utf8').then(JSON.parse),
+        fs.readFile(SOURCE_REGISTRY_PATH, 'utf8').then(JSON.parse)
+    ]);
     const records = [];
     for (const animal of animals) {
         records.push(await inspectAnimal(animal));
     }
 
-    const report = summarize(records);
+    const report = summarize(records, sourceRegistry);
     const reportPath = argumentValue('--report');
     const contactSheetPath = argumentValue('--contact-sheets');
 
@@ -243,7 +275,9 @@ async function main() {
     const hasBlockingIssues = report.totals.unreadable > 0
         || report.totals.notTransparent > 0
         || report.totals.duplicateGroups > 0;
-    if (args.includes('--strict') && hasBlockingIssues) {
+    const hasUnverifiedProvenance = report.totals.provenanceUnverified > 0;
+    if ((args.includes('--strict') && hasBlockingIssues)
+        || (args.includes('--strict-provenance') && (hasBlockingIssues || hasUnverifiedProvenance))) {
         process.exitCode = 1;
     }
 }
@@ -258,6 +292,7 @@ if (require.main === module) {
 module.exports = {
     alphaRange,
     findDuplicates,
+    isVerifiedPhotoSource,
     resolveAnimalImage,
     summarize
 };

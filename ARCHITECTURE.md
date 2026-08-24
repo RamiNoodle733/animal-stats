@@ -72,7 +72,7 @@ animal-stats/
 ├── scripts/                # Development & migration scripts
 │   ├── migrations/         # Database migrations
 │   ├── data-tools/         # Data import/export tools
-│   └── image-tools/        # Image processing scripts
+│   └── assets/             # Audited, dry-run-first animal image pipeline
 │
 ├── images/                 # Static images
 ├── index.html              # Main HTML entry point

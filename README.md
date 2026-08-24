@@ -66,7 +66,7 @@ npm run dev
 
 New or replacement animal artwork must be a real photograph of the correct animal with genuine transparent pixels. Cartoons, illustrations, generated or stylized animals, 3D renders, watermarked previews, opaque backgrounds, and reused files for different species are not accepted.
 
-Run `npm run assets:audit` to inspect decoding, transparency, dimensions, byte size, and exact duplicates. Add `-- --strict` when validating a replacement-ready set. The audit can also produce labeled visual-review sheets because photographic authenticity cannot be proven from file metadata alone:
+Use `npm run assets:pipeline -- --help` for the single supported workflow. Run `npm run assets:audit` to inspect decoding, transparency, dimensions, byte size, exact duplicates, and verified photo provenance. Add `-- --strict` for technical validation or `-- --strict-provenance` for the final all-assets quality gate. The audit can also produce labeled visual-review sheets because photographic authenticity cannot be proven from file metadata alone:
 
 ```bash
 npm run assets:audit -- --report .cache/image-audit/report.json --contact-sheets .cache/image-audit
@@ -76,6 +76,8 @@ Candidate photos are sourced into the ignored `.cache` directory and never repla
 
 ```bash
 npm run assets:source -- --animal "Yak" --animal "Piranha" --limit 6
+npm run assets:source -- --animal "Orca" --query "Orca=Orcinus orca underwater full body side" --limit 8
+npm run assets:source -- --animal "Gorilla" --source-page "Gorilla=https://commons.wikimedia.org/wiki/File%3AGorilla_gorilla04.jpg" --limit 8
 ```
 
 Only visually approved sources are recorded in `data/animal-image-sources.json`. A registry entry marked `source-selected` is not yet a live asset; it must still pass transparent-cutout and edge-quality review. Keep reviewed cutouts in the ignored `.cache` directory, inspect the dry run, and promote them explicitly:
@@ -165,7 +167,7 @@ animal-battle-stats/
 ├── scripts/                # Admin/development scripts
 │   ├── migrations/         # Database migrations
 │   ├── data-tools/         # Data manipulation tools
-│   └── image-tools/        # Image processing tools
+│   └── assets/             # Audited, dry-run-first animal image pipeline
 │
 ├── images/                 # Static images
 └── animal_stats.json       # Backup animal data

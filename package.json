@@ -1,6 +1,6 @@
 {
   "name": "animal-battle-stats",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "Animal Battle Stats - A scientifically accurate wildlife statistics website with MongoDB backend",
   "main": "api/index.js",
   "scripts": {
@@ -28,10 +28,11 @@
     "seo:prerender": "node scripts/prerender-seo-pages.mjs",
     "seo:sitemap": "node scripts/generate-sitemap.mjs",
     "seo:audit": "node scripts/seo-audit.mjs",
-    "assets:audit": "node scripts/assets/audit-animal-images.js",
-    "assets:promote": "node scripts/assets/promote-animal-cutouts.js",
-    "assets:sync-images": "node scripts/migrations/sync-active-animal-images.js",
-    "assets:source": "node scripts/assets/source-animal-images.js",
+    "assets:pipeline": "node scripts/assets/animal-image-pipeline.js",
+    "assets:audit": "node scripts/assets/animal-image-pipeline.js audit",
+    "assets:promote": "node scripts/assets/animal-image-pipeline.js promote",
+    "assets:sync-images": "node scripts/assets/animal-image-pipeline.js sync",
+    "assets:source": "node scripts/assets/animal-image-pipeline.js source",
     "assets:generate-silhouettes": "node scripts/assets/generate-silhouettes.js"
   },
   "keywords": [

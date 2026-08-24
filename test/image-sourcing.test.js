@@ -10,6 +10,8 @@ const sharp = require('sharp');
 const {
     candidateScore,
     isAllowedLicense,
+    parseQueryOverrides,
+    parseSourcePageOverrides,
     resolveOutputDirectory,
     stripHtml
 } = require('../scripts/assets/source-animal-images');
@@ -49,6 +51,37 @@ test('candidate output cannot enter tracked project directories', () => {
 
 test('Commons HTML metadata is reduced to readable text', () => {
     assert.equal(stripHtml('<a href="/wiki/User:Example">Example</a> &amp; Team<br/>Photo'), 'Example & Team Photo');
+});
+
+test('custom Commons queries are grouped by animal and reject malformed input', () => {
+    const overrides = parseQueryOverrides([
+        'Orca=Orcinus orca underwater full body side',
+        'ORCA=killer whale lateral photograph',
+        'Gorilla=western lowland gorilla full body'
+    ]);
+
+    assert.deepEqual(overrides.get('orca'), [
+        'Orcinus orca underwater full body side',
+        'killer whale lateral photograph'
+    ]);
+    assert.deepEqual(overrides.get('gorilla'), ['western lowland gorilla full body']);
+    assert.throws(() => parseQueryOverrides(['Orca']), /Invalid --query value/);
+    assert.throws(() => parseQueryOverrides(['=underwater']), /Invalid --query value/);
+});
+
+test('exact Commons file pages are validated and grouped by animal', () => {
+    const pages = parseSourcePageOverrides([
+        'Gorilla=https://commons.wikimedia.org/wiki/File%3AGorilla_gorilla04.jpg'
+    ]);
+    assert.deepEqual(pages.get('gorilla'), [{
+        sourcePage: 'https://commons.wikimedia.org/wiki/File%3AGorilla_gorilla04.jpg',
+        title: 'File:Gorilla gorilla04.jpg'
+    }]);
+    assert.throws(
+        () => parseSourcePageOverrides(['Orca=https://example.com/wiki/File:Orca.jpg']),
+        /Invalid Commons source page/
+    );
+    assert.throws(() => parseSourcePageOverrides(['Orca=not-a-url']), /Invalid Commons source page/);
 });
 
 test('approved source registry is unique, traceable, and active assets are verified', async () => {
