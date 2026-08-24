@@ -1,0 +1,180 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+
+const canonical = 'https://animalbattlestats.com/about';
+const title = 'Methodology, Sources, and About | Animal Battle Stats';
+const description = 'How Animal Battle Stats defines comparative ratings, reviews wildlife facts, handles sources and images, and corrects the 225-animal dataset.';
+const updated = '2026-08-24';
+const sources = [
+    {
+        name: 'Catalogue of Life',
+        use: 'Taxonomic names and classification cross-checks',
+        href: 'https://www.catalogueoflife.org/about/catalogueoflife'
+    },
+    {
+        name: 'Animal Diversity Web',
+        use: 'Natural history, distribution, behavior, and bibliography discovery',
+        href: 'https://animaldiversity.org/about/'
+    },
+    {
+        name: 'IUCN Red List',
+        use: 'Reviewed species assessments and conservation context',
+        href: 'https://nrl.iucnredlist.org/assessment/process'
+    },
+    {
+        name: 'NOAA Fisheries Species Directory',
+        use: 'Marine-species identity, biology, range, and status cross-checks',
+        href: 'https://www.fisheries.noaa.gov/species-directory'
+    }
+];
+const definitions = [
+    ['Attack', 'Capacity to inflict damage using natural weapons, striking force, bite, venom, constriction, or comparable offensive tools.'],
+    ['Defense', 'Protection and durability from armor, hide, shell, body mass, pain tolerance, and resistance to an opponent’s attacks.'],
+    ['Agility', 'Acceleration, reflexes, turning, balance, and control of movement—not simply top speed.'],
+    ['Stamina', 'Ability to sustain exertion, recover, and keep functioning during a prolonged encounter.'],
+    ['Intelligence', 'Problem solving, learning, tactical flexibility, perception, communication, and useful social coordination.'],
+    ['Special', 'Unusual matchup-changing tools that do not fit cleanly elsewhere, such as venom, electricity, camouflage, echolocation, or regeneration.']
+];
+const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {
+            '@type': 'AboutPage',
+            name: 'Animal Battle Stats methodology and source policy',
+            description,
+            url: canonical,
+            dateModified: updated,
+            isPartOf: { '@type': 'WebSite', name: 'Animal Battle Stats', url: 'https://animalbattlestats.com/' },
+            creator: { '@type': 'Person', name: 'Rami Abdelrazzaq' },
+            mainEntity: { '@id': `${canonical}#dataset` }
+        },
+        {
+            '@id': `${canonical}#dataset`,
+            '@type': 'Dataset',
+            name: 'Animal Battle Stats comparative animal dataset',
+            description: 'A versioned collection of wildlife facts and editorial 0–100 ratings for hypothetical animal matchups.',
+            url: 'https://animalbattlestats.com/stats',
+            dateModified: updated,
+            measurementTechnique: 'Published wildlife references are reviewed for factual fields; six comparative battle ratings are normalized editorial judgments rather than scientific measurements.',
+            variableMeasured: definitions.map(([name, definition]) => ({ '@type': 'PropertyValue', name, description: definition })),
+            citation: sources.map((source) => source.href),
+            creator: { '@type': 'Person', name: 'Rami Abdelrazzaq' }
+        },
+        {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://animalbattlestats.com/' },
+                { '@type': 'ListItem', position: 2, name: 'Methodology and About', item: canonical }
+            ]
+        }
+    ]
+};
+---
+
+<SiteLayout
+    title={title}
+    description={description}
+    canonical={canonical}
+    jsonLd={jsonLd}
+    styles={['/css/pages/about-static.css']}
+    footerLabel="Methodology and source policy"
+>
+    <main id="main-content" class="about-main">
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><span aria-current="page">Methodology &amp; About</span></nav>
+
+        <section class="about-hero" aria-labelledby="about-title">
+            <div>
+                <p class="about-kicker">SYSTEM DOCUMENT / METHODOLOGY</p>
+                <h1 id="about-title">The rules behind the ratings.</h1>
+                <p class="about-lede">Animal Battle Stats combines real wildlife facts with a transparent editorial model for hypothetical matchups. Facts and ratings are not the same thing—and this page keeps that line visible.</p>
+                <div class="about-actions">
+                    <a class="about-action-primary" href="/stats">Explore animal profiles</a>
+                    <a href="/compare">Open the comparison arena</a>
+                </div>
+            </div>
+            <aside class="status-card" aria-label="Dataset status">
+                <span>DATASET STATUS</span>
+                <strong>225 profiles</strong>
+                <dl>
+                    <div><dt>Rating scale</dt><dd>0–100</dd></div>
+                    <div><dt>Release model</dt><dd>Versioned</dd></div>
+                    <div><dt>Last policy update</dt><dd><time datetime={updated}>August 24, 2026</time></dd></div>
+                </dl>
+                <p>Per-field citation migration is in progress. Legacy entries without complete source trails remain labeled as editorial data, not proven scientific measurements.</p>
+            </aside>
+        </section>
+
+        <section class="about-section" aria-labelledby="model-title">
+            <div class="about-section-heading"><p>THE MODEL</p><h2 id="model-title">What each battle stat means</h2><span>Comparative ratings, not laboratory units</span></div>
+            <div class="definition-grid">
+                {definitions.map(([name, definition], index) => (
+                    <article><span>{String(index + 1).padStart(2, '0')}</span><h3>{name}</h3><p>{definition}</p></article>
+                ))}
+            </div>
+        </section>
+
+        <section class="process-grid" aria-label="Profile methodology">
+            <article class="about-section process-card">
+                <div class="about-section-heading"><p>WORKFLOW</p><h2>How a profile is built</h2></div>
+                <ol class="process-list">
+                    <li><strong>Identify the animal.</strong><span>Confirm the common name, scientific name, and intended taxon.</span></li>
+                    <li><strong>Review factual ranges.</strong><span>Compare credible references for adult size, mass, movement, defenses, natural weapons, behavior, and habitat.</span></li>
+                    <li><strong>Resolve context.</strong><span>Prefer representative healthy adults and explain sex, age, region, or environment differences when they materially change a matchup.</span></li>
+                    <li><strong>Assign comparative ratings.</strong><span>Translate the reviewed profile into six 0–100 editorial scores, avoiding double-counting the same advantage across categories.</span></li>
+                    <li><strong>Version and correct.</strong><span>Publish changes in a numbered release and revise records when stronger evidence or a clear error is found.</span></li>
+                </ol>
+            </article>
+
+            <article class="about-section limits-card">
+                <div class="about-section-heading"><p>BOUNDARIES</p><h2>What the numbers cannot prove</h2></div>
+                <ul class="boundary-list">
+                    <li>There is no universal scientific “attack” or “special” score for an animal.</li>
+                    <li>A single number cannot capture every age, sex, population, terrain, or encounter.</li>
+                    <li>Top speed, body mass, and bite-force reports may be estimates or ranges and can conflict.</li>
+                    <li>Higher total stats do not guarantee a win; matchup mechanics and environment still matter.</li>
+                    <li>The site is an educational powerscaling project, not veterinary, wildlife-handling, or safety advice.</li>
+                </ul>
+            </article>
+        </section>
+
+        <section class="about-section" aria-labelledby="sources-title">
+            <div class="about-section-heading"><p>REFERENCE POLICY</p><h2 id="sources-title">How sources are selected</h2><span>Prefer named, reviewable records over unattributed summaries</span></div>
+            <p class="section-intro">These resources are starting points and cross-checks, not a claim that one database settles every field. Individual records should ultimately link to the exact pages, papers, or institutional references used.</p>
+            <div class="source-grid">
+                {sources.map((source) => (
+                    <a href={source.href} rel="noreferrer">
+                        <span>EXTERNAL REFERENCE</span><h3>{source.name}</h3><p>{source.use}</p><strong>Visit source →</strong>
+                    </a>
+                ))}
+            </div>
+            <div class="source-rules">
+                <h3>Conflict rule</h3>
+                <p>When reputable sources disagree, the profile should show a range or explain the context instead of silently choosing the most dramatic value. Scientific names are cross-checked separately from combat interpretation.</p>
+            </div>
+        </section>
+
+        <section class="about-section image-policy" aria-labelledby="image-policy-title">
+            <div class="about-section-heading"><p>IMAGE STANDARD</p><h2 id="image-policy-title">Real animals, transparent presentation</h2></div>
+            <div class="policy-columns">
+                <div><h3>Replacement standard</h3><p>New animal assets must begin with a real photograph of the correct animal. The subject is isolated onto a genuinely transparent background; cartoons, generated animals, 3D renders, watermarked stock previews, and unrelated species are rejected.</p></div>
+                <div><h3>Traceability</h3><p>Approved replacements record the creator, source page, license, asset checksum, dimensions, and review status. Existing legacy art is being replaced progressively rather than being mislabeled as already verified.</p></div>
+            </div>
+        </section>
+
+        <section class="about-section corrections" aria-labelledby="corrections-title">
+            <div>
+                <p class="about-kicker">CORRECTIONS / CONTRIBUTIONS</p>
+                <h2 id="corrections-title">Found a bad fact or wrong animal?</h2>
+                <p>Send the animal name, field, proposed correction, and the strongest source you have. Clear corrections are reviewed for a versioned release.</p>
+            </div>
+            <a href="mailto:animalbattlestats@gmail.com?subject=Animal%20Battle%20Stats%20correction">Submit a correction</a>
+        </section>
+
+        <section class="about-section faq" aria-labelledby="faq-title">
+            <div class="about-section-heading"><p>QUICK ANSWERS</p><h2 id="faq-title">Common questions</h2></div>
+            <details><summary>Are the battle scores scientific measurements?</summary><p>No. Factual fields can be sourced from wildlife references, while the six battle scores are transparent editorial ratings for comparison.</p></details>
+            <details><summary>Does the highest total always win?</summary><p>No. Totals summarize broad capability; size, weapons, environment, behavior, and matchup-specific advantages can change the outcome.</p></details>
+            <details><summary>Who created Animal Battle Stats?</summary><p>Animal Battle Stats was designed and developed by Rami Abdelrazzaq as an evolving animal powerscaling and community project.</p></details>
+        </section>
+    </main>
+</SiteLayout>

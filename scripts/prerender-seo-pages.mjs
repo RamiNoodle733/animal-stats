@@ -9,9 +9,9 @@ const { getAnimals, renderHtml } = require('../lib/seo-renderer.js');
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const astroOutput = path.join(root, '.cache', 'astro-dist', 'stats');
 const statsOutput = path.join(root, 'stats');
+const astroRootPages = ['about.html'];
 
 const fixedPages = [
-  { route: '/about', file: 'about.html' },
   { route: '/stats', file: 'stats.html' },
   { route: '/compare', file: 'compare.html' },
   { route: '/rankings', file: 'rankings.html' },
@@ -29,7 +29,7 @@ function writeRenderedPage(route, filePath) {
   fs.writeFileSync(filePath, html);
 }
 
-function buildAstroAnimalPages() {
+function buildAstroPages() {
   execFileSync(process.execPath, [path.join(root, 'scripts', 'assets', 'generate-animal-image-dimensions.js')], {
     cwd: root,
     stdio: 'inherit'
@@ -52,6 +52,12 @@ function buildAstroAnimalPages() {
   }
   for (const entry of generated) {
     fs.copyFileSync(path.join(astroOutput, entry.name), path.join(statsOutput, entry.name));
+  }
+
+  for (const fileName of astroRootPages) {
+    const source = path.join(root, '.cache', 'astro-dist', fileName);
+    if (!fs.existsSync(source)) throw new Error(`Astro did not produce ${fileName}.`);
+    fs.copyFileSync(source, path.join(root, fileName));
   }
 }
 
@@ -81,7 +87,8 @@ for (const animal of getAnimals()) {
   written += 1;
 }
 
-buildAstroAnimalPages();
+buildAstroPages();
 removeStaleAnimalPages(validAnimalFiles);
+written += astroRootPages.length;
 
-console.log(`Prerendered ${fixedPages.length} compatibility pages and ${getAnimals().length} Astro animal pages (${written} total).`);
+console.log(`Prerendered ${fixedPages.length} compatibility pages and ${getAnimals().length + astroRootPages.length} Astro pages (${written} total).`);

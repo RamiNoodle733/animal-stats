@@ -1,60 +1,19 @@
 ---
-import packageJson from '../../../package.json';
+import SiteLayout from './SiteLayout.astro';
 
 const { title, description, canonical, image, jsonLd } = Astro.props;
-const version = packageJson.version;
 ---
 
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="theme-color" content="#070912" />
-        <meta name="color-scheme" content="dark" />
-        <meta name="robots" content="index, follow, max-image-preview:large" />
-        <meta name="abs-version" content={version} />
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <link rel="canonical" href={canonical} />
-        <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32.png" />
-        <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
-        <link rel="stylesheet" href={`/css/pages/animal-static.css?v=${version}`} />
-        <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Animal Battle Stats" />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:url" content={canonical} />
-        <meta property="og:image" content={new URL(image, 'https://animalbattlestats.com').href} />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={title} />
-        <meta name="twitter:description" content={description} />
-        <meta name="twitter:image" content={new URL(image, 'https://animalbattlestats.com').href} />
-        <script type="application/ld+json" set:html={JSON.stringify(jsonLd).replace(/</g, '\\u003c')} />
-    </head>
-    <body>
-        <a class="skip-link" href="#main-content">Skip to animal stats</a>
-        <header class="site-header">
-            <a class="brand" href="/" aria-label="Animal Battle Stats home">
-                <img src="/images/logo.png" alt="" width="48" height="48" />
-                <span><strong>ANIMAL BATTLE</strong><small>STATS</small></span>
-            </a>
-            <nav class="primary-nav" aria-label="Primary navigation">
-                <a class="active" href="/stats">Stats</a>
-                <a href="/compare">Compare</a>
-                <a href="/rankings">Rankings</a>
-                <a href="/community">Community</a>
-                <a href="/tournament">Tournament</a>
-            </nav>
-        </header>
-        <slot />
-        <footer class="site-footer">
-            <div>
-                <span class="portal-version">v{version}</span>
-                <span aria-hidden="true">•</span>
-                <a href="/about">Methodology &amp; About</a>
-            </div>
-            <p class="about-version">Version {version} • Static animal profile</p>
-        </footer>
-    </body>
-</html>
+<SiteLayout
+    title={title}
+    description={description}
+    canonical={canonical}
+    image={image}
+    jsonLd={jsonLd}
+    activeNav="stats"
+    styles={['/css/pages/animal-static.css']}
+    skipLabel="Skip to animal stats"
+    footerLabel="Static animal profile"
+>
+    <slot />
+</SiteLayout>

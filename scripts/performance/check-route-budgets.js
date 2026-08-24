@@ -24,10 +24,6 @@ const routeAssets = Object.freeze({
         scripts: ['js/homepage.js', 'js/social.js'],
         styles: ['css/pages/homepage.css']
     },
-    about: {
-        scripts: ['js/social.js'],
-        styles: ['css/pages/homepage.css']
-    },
     stats: { scripts: [], styles: [] },
     rankings: { scripts: ['js/rankings.js'], styles: ['css/pages/rankings.css'] },
     tournament: {
@@ -139,6 +135,10 @@ for (const { name, assets } of animalStaticAssets) {
     assertWithin(`stats/${name} static styles`, styles.gzip, budgets.staticPageStylesGzip);
 }
 
+const aboutStaticAssets = collectInitialAssets(fs.readFileSync(path.join(repoRoot, 'about.html'), 'utf8'));
+assertWithin('about.html static JavaScript', measure(aboutStaticAssets.scripts).gzip, budgets.staticPageJavaScriptGzip);
+assertWithin('about.html static styles', measure(aboutStaticAssets.styles).gzip, budgets.staticPageStylesGzip);
+
 for (const htmlFile of htmlFiles) {
     const html = fs.readFileSync(path.join(repoRoot, htmlFile), 'utf8');
     for (const forbidden of forbiddenInitialAssets) {
@@ -166,6 +166,13 @@ assertWithin('Initial local JavaScript', initialJs.gzip, budgets.initialJavaScri
 assertWithin('Initial local styles', initialCss.gzip, budgets.initialStylesGzip);
 
 const rows = [];
+rows.push({
+    route: 'about-static',
+    initialJsGzip: formatKb(measure(aboutStaticAssets.scripts).gzip),
+    routeJsGzip: formatKb(0),
+    initialCssGzip: formatKb(measure(aboutStaticAssets.styles).gzip),
+    routeCssGzip: formatKb(0)
+});
 const representativeStaticAssets = animalStaticAssets[0]?.assets || { scripts: [], styles: [] };
 rows.push({
     route: 'animal-static',
