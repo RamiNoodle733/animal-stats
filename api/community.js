@@ -716,7 +716,7 @@ async function handleVisit(req, res) {
             },
             { 
                 upsert: true, 
-                new: true,
+                returnDocument: 'after',
                 setDefaultsOnInsert: true
             }
         );

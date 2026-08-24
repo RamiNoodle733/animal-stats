@@ -257,7 +257,7 @@ module.exports = async function handler(req, res) {
                     powerScore: r.powerScore
                 }))
             },
-            { upsert: true, new: true }
+            { upsert: true, returnDocument: 'after' }
         ).catch(err => console.error('Error saving rank history:', err));
 
         return res.status(200).json({

@@ -1467,7 +1467,7 @@ async function handleRewards(req, res) {
                     battlePoints: totalBpEarned
                 }
             },
-            { new: true }
+            { returnDocument: 'after' }
         );
 
         const leveledUp = result.levelsGained.length > 0;
@@ -1551,7 +1551,7 @@ async function handlePrestige(req, res) {
                 battlePoints: prestigeResult.prestigeReward.bp
             }
         },
-        { new: true }
+        { returnDocument: 'after' }
     );
 
     await notifyDiscord('prestige', { 
