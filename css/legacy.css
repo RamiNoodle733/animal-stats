@@ -66,6 +66,11 @@
     padding: 0;
 }
 
+/* Keep responsive image format negotiation from changing existing flex/grid layouts. */
+.responsive-animal-picture {
+    display: contents;
+}
+
 body {
     font-family: var(--font-body);
     background: 

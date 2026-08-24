@@ -642,8 +642,11 @@ class RankingsManager {
                 ${streakBadge}
             </div>
             <div class="row-animal">
-                <img src="${animal.image}" alt="${animal.name}" class="row-animal-img" 
-                    onerror="this.src=FALLBACK_IMAGE">
+                ${window.CoreUtils.buildAnimalPicture(animal, {
+                    alt: animal.name,
+                    className: 'row-animal-img',
+                    sizes: '(max-width: 720px) 64px, 88px'
+                })}
                 <div class="row-animal-info">
                     <div class="row-animal-name-line">
                         <span class="row-animal-name">${animal.name}</span>
@@ -1025,8 +1028,7 @@ class RankingsManager {
         // Portrait with animation
         if (this.dom.detailPortrait) {
             this.dom.detailPortrait.style.opacity = '0';
-            this.dom.detailPortrait.src = animal.image;
-            this.dom.detailPortrait.onerror = () => { this.dom.detailPortrait.src = FALLBACK_IMAGE; };
+            window.CoreUtils.applyResponsiveAnimalImage(this.dom.detailPortrait, animal, '(max-width: 720px) 70vw, 420px');
             setTimeout(() => {
                 this.dom.detailPortrait.style.opacity = '1';
                 this.dom.detailPortrait.style.transition = 'opacity 0.3s ease';

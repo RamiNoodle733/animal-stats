@@ -945,8 +945,7 @@
             const scientific2 = document.getElementById('introFighter2Scientific');
 
             if (img1) {
-                img1.src = left.image || '';
-                img1.onerror = () => { img1.src = 'images/fallback.png'; };
+                window.CoreUtils.applyResponsiveAnimalImage(img1, left, '(max-width: 720px) 42vw, 420px');
             }
             this.fitText(name1, (left.name || 'FIGHTER 1').toUpperCase(), {
                 maxLines: 1,
@@ -957,8 +956,7 @@
                 font: "500 0.9rem 'Inter', sans-serif"
             });
             if (img2) {
-                img2.src = right.image || '';
-                img2.onerror = () => { img2.src = 'images/fallback.png'; };
+                window.CoreUtils.applyResponsiveAnimalImage(img2, right, '(max-width: 720px) 42vw, 420px');
             }
             this.fitText(name2, (right.name || 'FIGHTER 2').toUpperCase(), {
                 maxLines: 1,
@@ -1433,8 +1431,7 @@
             const championName = document.getElementById('championName');
             
             if (championImg) {
-                championImg.src = result.winner.image || '';
-                championImg.onerror = () => { championImg.src = 'images/fallback.png'; };
+                window.CoreUtils.applyResponsiveAnimalImage(championImg, result.winner, '(max-width: 720px) 72vw, 520px');
             }
             this.fitText(championName, result.winner.name.toUpperCase(), {
                 maxLines: 1,
@@ -1452,8 +1449,7 @@
             const defeatedName = document.getElementById('defeatedName');
             
             if (defeatedImg) {
-                defeatedImg.src = result.loser.image || '';
-                defeatedImg.onerror = () => { defeatedImg.src = 'images/fallback.png'; };
+                window.CoreUtils.applyResponsiveAnimalImage(defeatedImg, result.loser, '(max-width: 720px) 56vw, 380px');
             }
             if (defeatedName) defeatedName.textContent = result.loser.name;
 

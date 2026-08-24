@@ -897,7 +897,7 @@ class AnimalStatsApp {
     }
 
     getAnimalsCacheKey() {
-        return 'abs_animals_cache_v1';
+        return 'abs_animals_cache_v2';
     }
 
     readAnimalsCache() {
@@ -1803,7 +1803,11 @@ class AnimalStatsApp {
             const card = document.createElement('div');
             const animalKey = animal._id || animal.id || animal.name;
             const safeName = escapeHtml(animal.name || 'Unknown');
-            const safeImage = escapeHtml(animal.image || FALLBACK_IMAGE);
+            const picture = window.CoreUtils.buildAnimalPicture(animal, {
+                alt: animal.name || 'Unknown',
+                className: 'character-card-image',
+                sizes: '(max-width: 480px) 42vw, (max-width: 900px) 28vw, 180px'
+            });
 
             card.className = 'character-card';
             card.dataset.id = animalKey; // Fallback to name if ID missing
@@ -1826,7 +1830,7 @@ class AnimalStatsApp {
 
             card.innerHTML = `
                 <span class="card-tier-badge tier-${tierClass}">${overallTier}</span>
-                <img src="${safeImage}" alt="${safeName}" class="character-card-image" loading="lazy" decoding="async" onerror="this.src=FALLBACK_IMAGE">
+                ${picture}
                 <div class="character-card-name" data-text-source="${safeName}">${safeName}</div>
                 <div class="card-hover-stats">
                     <div class="hover-stat"><i class="fas fa-fist-raised"></i>${Math.round(animal.attack || 0)}</div>
@@ -2039,7 +2043,7 @@ class AnimalStatsApp {
         // Image
         this.dom.charSilhouette.style.display = 'none';
         this.dom.charImage.style.display = 'block';
-        this.dom.charImage.src = animal.image;
+        window.CoreUtils.applyResponsiveAnimalImage(this.dom.charImage, animal, '(max-width: 720px) 78vw, 460px');
         this.dom.charImage.onerror = () => { 
             this.dom.charImage.style.display = 'none';
             this.dom.charSilhouette.style.display = 'flex';
@@ -2541,8 +2545,7 @@ class AnimalStatsApp {
         if (els.placeholder) els.placeholder.style.display = 'none';
         if (els.img) {
             els.img.style.display = 'block';
-            els.img.src = animal.image;
-            els.img.onerror = () => { els.img.src = FALLBACK_IMAGE; };
+            window.CoreUtils.applyResponsiveAnimalImage(els.img, animal, '(max-width: 720px) 42vw, 320px');
         }
         
         if (els.name) els.name.textContent = animal.name.toUpperCase();

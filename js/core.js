@@ -74,6 +74,84 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+function isSafeAnimalImageUrl(value) {
+    return typeof value === 'string'
+        && /^\/images\/animals\/[a-z0-9/_-]+\.(?:png|webp|avif)(?:\?v=[a-f0-9]{12})?$/.test(value);
+}
+
+function responsiveSourceSet(entries) {
+    if (!Array.isArray(entries)) return '';
+    return entries
+        .filter((entry) => Number.isFinite(entry?.width) && entry.width > 0 && isSafeAnimalImageUrl(entry.src))
+        .map((entry) => `${entry.src} ${entry.width}w`)
+        .join(', ');
+}
+
+function normalizedAnimalImageSet(animal) {
+    const imageSet = animal?.imageSet;
+    if (!imageSet || !isSafeAnimalImageUrl(imageSet.fallback)) return null;
+    const avif = responsiveSourceSet(imageSet.avif);
+    const webp = responsiveSourceSet(imageSet.webp);
+    const width = Number(imageSet.width);
+    const height = Number(imageSet.height);
+    if (!avif || !webp || !Number.isFinite(width) || width <= 0 || !Number.isFinite(height) || height <= 0) {
+        return null;
+    }
+    return {
+        fallback: imageSet.fallback,
+        width: Math.round(width),
+        height: Math.round(height),
+        avif,
+        webp
+    };
+}
+
+function handleAnimalImageError(image) {
+    if (!image) return;
+    image.onerror = null;
+    image.removeAttribute('srcset');
+    image.removeAttribute('sizes');
+    if (image.parentElement?.tagName === 'PICTURE') {
+        image.parentElement.querySelectorAll('source').forEach((source) => source.remove());
+    }
+    image.src = FALLBACK_IMAGE;
+}
+
+function buildAnimalPicture(animal, options = {}) {
+    const imageSet = normalizedAnimalImageSet(animal);
+    const fallback = imageSet?.fallback || (isSafeAnimalImageUrl(animal?.image) ? animal.image : FALLBACK_IMAGE);
+    const alt = escapeHtml(options.alt ?? animal?.name ?? 'Animal');
+    const className = escapeHtml(options.className || '');
+    const sizes = escapeHtml(options.sizes || '100vw');
+    const loading = options.loading === 'eager' ? 'eager' : 'lazy';
+    const fetchPriority = options.fetchPriority === 'high' ? ' fetchpriority="high"' : '';
+    const dimensions = imageSet
+        ? ` width="${imageSet.width}" height="${imageSet.height}"`
+        : '';
+    const image = `<img src="${escapeHtml(fallback)}" alt="${alt}" class="${className}" loading="${loading}" decoding="async"${dimensions}${fetchPriority} onerror="window.CoreUtils.handleAnimalImageError(this)">`;
+    if (!imageSet) return image;
+    return `<picture class="responsive-animal-picture"><source type="image/avif" srcset="${escapeHtml(imageSet.avif)}" sizes="${sizes}"><source type="image/webp" srcset="${escapeHtml(imageSet.webp)}" sizes="${sizes}">${image}</picture>`;
+}
+
+function applyResponsiveAnimalImage(image, animal, sizes = '100vw') {
+    if (!image) return;
+    const imageSet = normalizedAnimalImageSet(animal);
+    const fallback = imageSet?.fallback || (isSafeAnimalImageUrl(animal?.image) ? animal.image : FALLBACK_IMAGE);
+    image.src = fallback;
+    image.onerror = () => handleAnimalImageError(image);
+    if (imageSet) {
+        image.srcset = imageSet.webp;
+        image.sizes = sizes;
+        image.width = imageSet.width;
+        image.height = imageSet.height;
+    } else {
+        image.removeAttribute('srcset');
+        image.removeAttribute('sizes');
+        image.removeAttribute('width');
+        image.removeAttribute('height');
+    }
+}
+
 /**
  * Format relative time (e.g., "5m ago", "2h ago")
  */
@@ -280,6 +358,12 @@ window.CoreUtils = {
     getDietType,
     apiRequest,
     authApiRequest,
+    applyResponsiveAnimalImage,
+    buildAnimalPicture,
+    handleAnimalImageError,
+    isSafeAnimalImageUrl,
+    normalizedAnimalImageSet,
+    responsiveSourceSet,
     FALLBACK_IMAGE,
     API_CONFIG
 };

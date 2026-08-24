@@ -21,7 +21,7 @@
  * Scripts/styles are injected once and cached for repeat navigations.
  */
 const CHART_JS_URL = 'https://cdn.jsdelivr.net/npm/chart.js';
-const ASSET_REVISION = '2.4.5';
+const ASSET_REVISION = '2.4.6';
 
 function versionedAsset(path) {
     return `${path}?v=${ASSET_REVISION}`;

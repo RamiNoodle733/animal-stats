@@ -845,12 +845,10 @@ class TournamentManager {
         const scientificRight = document.getElementById('intro-scientific-right');
         
         if (imageLeft) {
-            imageLeft.src = animal1.image || '';
-            imageLeft.onerror = () => { imageLeft.src = 'images/fallback.png'; };
+            window.CoreUtils.applyResponsiveAnimalImage(imageLeft, animal1, '(max-width: 720px) 42vw, 360px');
         }
         if (imageRight) {
-            imageRight.src = animal2.image || '';
-            imageRight.onerror = () => { imageRight.src = 'images/fallback.png'; };
+            window.CoreUtils.applyResponsiveAnimalImage(imageRight, animal2, '(max-width: 720px) 42vw, 360px');
         }
         this.fitText(nameLeft, (animal1.name || 'FIGHTER 1').toUpperCase(), {
             maxLines: 1,
@@ -2166,8 +2164,7 @@ class TournamentManager {
         this.notifyTournamentComplete(champion, finalFour);
         
         // Update champion card
-        this.dom.championImg.src = champion.image;
-        this.dom.championImg.onerror = () => { this.dom.championImg.src = FALLBACK_IMAGE; };
+        window.CoreUtils.applyResponsiveAnimalImage(this.dom.championImg, champion, '(max-width: 720px) 72vw, 480px');
         this.fitText(this.dom.championName, champion.name, {
             maxLines: 1,
             font: "800 2rem 'Bebas Neue', sans-serif"
@@ -2202,8 +2199,11 @@ class TournamentManager {
                     podiumHtml += `
                         <div class="t-podium-card" data-animal-slug="${slug}" title="View ${animal.name} stats">
                             <div class="t-podium-pos">${positions[posIdx]} PLACE</div>
-                            <img src="${animal.image}" alt="${animal.name}" class="t-podium-img" 
-                                onerror="this.onerror=null;this.src='${FALLBACK_IMAGE}'">
+                            ${window.CoreUtils.buildAnimalPicture(animal, {
+                                alt: animal.name,
+                                className: 't-podium-img',
+                                sizes: '(max-width: 720px) 28vw, 180px'
+                            })}
                             <div class="t-podium-name">${animal.name}</div>
                         </div>
                     `;
