@@ -13,9 +13,24 @@
 const { connectToDatabase } = require('../lib/mongodb');
 const { waitUntil } = require('@vercel/functions');
 const Animal = require('../lib/models/Animal');
-const { getAuthUser } = require('../lib/auth');
+const { getAuthUser, authorizeRequest } = require('../lib/auth');
 const { notifyDiscord } = require('../lib/discord');
 const { setCorsHeaders } = require('../lib/cors');
+
+const ANIMAL_WRITE_FIELDS = Object.freeze([
+    'name', 'scientific_name', 'description', 'type', 'class', 'habitat', 'size',
+    'weight_kg', 'height_cm', 'length_cm', 'speed_mps', 'lifespan_years', 'bite_force_psi',
+    'size_score', 'isNocturnal', 'isSocial', 'diet', 'attack', 'defense', 'agility',
+    'stamina', 'intelligence', 'special_attack', 'substats', 'battle_profile',
+    'unique_traits', 'special_abilities', 'image'
+]);
+
+function pickAnimalWriteFields(input = {}) {
+    return ANIMAL_WRITE_FIELDS.reduce((result, field) => {
+        if (input[field] !== undefined) result[field] = input[field];
+        return result;
+    }, {});
+}
 
 module.exports = async function handler(req, res) {
     setCorsHeaders(req, res, {
@@ -309,12 +324,12 @@ async function handleGet(req, res) {
  * Create a new animal
  */
 async function handlePost(req, res) {
-    const user = getAuthUser(req);
-    if (!user) {
-        return res.status(401).json({ success: false, error: 'Authentication required' });
+    const authorization = await authorizeRequest(req, ['admin']);
+    if (!authorization.ok) {
+        return res.status(authorization.status).json({ success: false, error: authorization.error });
     }
 
-    const animalData = req.body;
+    const animalData = pickAnimalWriteFields(req.body || {});
 
     // Validate required fields
     if (!animalData.name) {

@@ -12,33 +12,16 @@
 
 const { connectToDatabase } = require('../lib/mongodb');
 const BattleStats = require('../lib/models/BattleStats');
-const { verifyToken: _verifyToken } = require('../lib/auth');
+const Animal = require('../lib/models/Animal');
+const MatchupVote = require('../lib/models/MatchupVote');
+const MatchupVoteBallot = require('../lib/models/MatchupVoteBallot');
+const { getAuthUser } = require('../lib/auth');
+const { awardUserReward } = require('../lib/rewards');
 const { notifyDiscord } = require('../lib/discord');
-const mongoose = require('mongoose');
 const { setCorsHeaders } = require('../lib/cors');
 
 // ELO K-factor (how much ratings change per battle)
 const K_FACTOR = 20;
-
-// ============================================
-// Matchup Vote Schema (for "Guess the Majority")
-// ============================================
-const MatchupVoteSchema = new mongoose.Schema({
-    matchupKey: { type: String, required: true, unique: true, index: true },
-    animal1Name: { type: String, required: true },
-    animal2Name: { type: String, required: true },
-    animal1Votes: { type: Number, default: 0 },
-    animal2Votes: { type: Number, default: 0 },
-    totalVotes: { type: Number, default: 0 },
-    lastVoteAt: { type: Date, default: Date.now }
-}, { timestamps: true });
-
-let MatchupVote;
-try {
-    MatchupVote = mongoose.model('MatchupVote');
-} catch {
-    MatchupVote = mongoose.model('MatchupVote', MatchupVoteSchema);
-}
 
 function generateMatchupKey(animal1, animal2) {
     const sorted = [animal1, animal2].sort();
@@ -122,33 +105,89 @@ async function getMatchupVotes(req, res) {
 }
 
 async function recordMatchupVote(req, res) {
-    const { animal1, animal2, votedFor } = req.body;
+    const user = getAuthUser(req);
+    if (!user) return res.status(401).json({ success: false, error: 'Authentication required' });
+
+    const { animal1, animal2, votedFor } = req.body || {};
     if (!animal1 || !animal2 || !votedFor) {
         return res.status(400).json({ success: false, error: 'animal1, animal2, and votedFor required' });
+    }
+    if ([animal1, animal2, votedFor].some((value) => typeof value !== 'string' || value.length > 100)) {
+        return res.status(400).json({ success: false, error: 'Invalid animal name' });
+    }
+    if (animal1 === animal2) {
+        return res.status(400).json({ success: false, error: 'A matchup requires two different animals' });
     }
     if (votedFor !== animal1 && votedFor !== animal2) {
         return res.status(400).json({ success: false, error: 'votedFor must match animal1 or animal2' });
     }
+
     try {
         const matchupKey = generateMatchupKey(animal1, animal2);
         const sorted = [animal1, animal2].sort();
         const isVotedForFirst = votedFor === sorted[0];
-        let matchup = await MatchupVote.findOne({ matchupKey });
-        if (!matchup) {
-            matchup = new MatchupVote({ matchupKey, animal1Name: sorted[0], animal2Name: sorted[1], animal1Votes: 0, animal2Votes: 0, totalVotes: 0 });
+
+        const validAnimals = await Animal.countDocuments({ name: { $in: sorted } });
+        if (validAnimals !== 2) {
+            return res.status(400).json({ success: false, error: 'Both matchup animals must exist' });
         }
-        if (isVotedForFirst) matchup.animal1Votes += 1;
-        else matchup.animal2Votes += 1;
-        matchup.totalVotes = matchup.animal1Votes + matchup.animal2Votes;
-        matchup.lastVoteAt = new Date();
-        await matchup.save();
-        const isOriginalOrder = sorted[0] === animal1;
-        const leftVotes = isOriginalOrder ? matchup.animal1Votes : matchup.animal2Votes;
-        const rightVotes = isOriginalOrder ? matchup.animal2Votes : matchup.animal1Votes;
-        const leftPct = matchup.totalVotes > 0 ? Math.round((leftVotes / matchup.totalVotes) * 100) : 50;
+
+        const dayKey = new Date().toISOString().split('T')[0];
+        try {
+            await MatchupVoteBallot.create({
+                matchupKey,
+                userId: user.id,
+                dayKey,
+                votedFor,
+                votedAt: new Date()
+            });
+        } catch (error) {
+            if (error?.code !== 11000) throw error;
+            const existing = await MatchupVote.findOne({ matchupKey });
+            return res.status(200).json({
+                success: true,
+                duplicate: true,
+                data: formatMatchupVote(existing, animal1, animal2, votedFor),
+                reward: null,
+                message: 'You already voted on this matchup today.'
+            });
+        }
+
+        const increments = isVotedForFirst
+            ? { animal1Votes: 1, totalVotes: 1 }
+            : { animal2Votes: 1, totalVotes: 1 };
+        const matchup = await MatchupVote.findOneAndUpdate(
+            { matchupKey },
+            {
+                $setOnInsert: { animal1Name: sorted[0], animal2Name: sorted[1] },
+                $set: { lastVoteAt: new Date() },
+                $inc: increments
+            },
+            { upsert: true, returnDocument: 'after', setDefaultsOnInsert: true }
+        );
+
+        let reward = null;
+        try {
+            reward = await awardUserReward({
+                userId: user.id,
+                action: 'daily_matchup_vote',
+                sourceId: dayKey
+            });
+        } catch (rewardError) {
+            console.error('Matchup reward failed:', rewardError.message);
+        }
+
+        await notifyDiscord('vote', {
+            user: user.username,
+            animal: `${animal1} vs ${animal2}`,
+            voteType: votedFor
+        }, req);
+
         return res.status(200).json({
             success: true,
-            data: { animal1Name: animal1, animal2Name: animal2, animal1Votes: leftVotes, animal2Votes: rightVotes, totalVotes: matchup.totalVotes, animal1Percentage: leftPct, animal2Percentage: 100 - leftPct, votedFor, majorityWinner: leftVotes > rightVotes ? animal1 : (rightVotes > leftVotes ? animal2 : null) }
+            duplicate: false,
+            data: formatMatchupVote(matchup, animal1, animal2, votedFor),
+            reward
         });
     } catch (error) {
         console.error('Error recording matchup vote:', error);
@@ -156,18 +195,81 @@ async function recordMatchupVote(req, res) {
     }
 }
 
+function formatMatchupVote(matchup, animal1, animal2, votedFor = null) {
+    if (!matchup) {
+        return {
+            animal1Name: animal1,
+            animal2Name: animal2,
+            animal1Votes: 0,
+            animal2Votes: 0,
+            totalVotes: 0,
+            animal1Percentage: 50,
+            animal2Percentage: 50,
+            votedFor,
+            majorityWinner: null
+        };
+    }
+
+    const sorted = [animal1, animal2].sort();
+    const isOriginalOrder = sorted[0] === animal1;
+    const leftVotes = isOriginalOrder ? matchup.animal1Votes : matchup.animal2Votes;
+    const rightVotes = isOriginalOrder ? matchup.animal2Votes : matchup.animal1Votes;
+    const leftPct = matchup.totalVotes > 0 ? Math.round((leftVotes / matchup.totalVotes) * 100) : 50;
+    return {
+        animal1Name: animal1,
+        animal2Name: animal2,
+        animal1Votes: leftVotes,
+        animal2Votes: rightVotes,
+        totalVotes: matchup.totalVotes,
+        animal1Percentage: leftPct,
+        animal2Percentage: 100 - leftPct,
+        votedFor,
+        majorityWinner: leftVotes > rightVotes ? animal1 : (rightVotes > leftVotes ? animal2 : null)
+    };
+}
+
 /**
  * Handle tournament completion notification
  * Also saves tournament placements (1st, 2nd, 3rd, 4th)
  */
 async function handleTournamentComplete(req, res) {
+    const authenticatedUser = getAuthUser(req);
+    if (!authenticatedUser) {
+        return res.status(401).json({ success: false, error: 'Authentication required' });
+    }
     // Parse body - handle both JSON and text/plain from sendBeacon
     let body = req.body;
     if (typeof body === 'string') {
         try { body = JSON.parse(body); } catch (_e) { body = {}; }
     }
     
-    const { user, bracketSize, totalMatches, champion, runnerUp, thirdFourth, matchHistory } = body || {};
+    const { bracketSize, totalMatches, champion, runnerUp, thirdFourth, matchHistory } = body || {};
+
+    const parsedBracketSize = Number(bracketSize);
+    const parsedTotalMatches = Number(totalMatches);
+    const validBracket = Number.isInteger(parsedBracketSize)
+        && parsedBracketSize >= 4
+        && parsedBracketSize <= 64
+        && (parsedBracketSize & (parsedBracketSize - 1)) === 0;
+    if (!validBracket || parsedTotalMatches !== parsedBracketSize - 1) {
+        return res.status(400).json({ success: false, error: 'Invalid tournament structure' });
+    }
+    if (!Array.isArray(matchHistory) || matchHistory.length !== parsedTotalMatches) {
+        return res.status(400).json({ success: false, error: 'Complete match history required' });
+    }
+    if (typeof champion !== 'string' || !champion || champion.length > 100) {
+        return res.status(400).json({ success: false, error: 'Valid champion required' });
+    }
+
+    const tournamentNames = [...new Set(matchHistory.flatMap((match) => [match?.winner, match?.loser])
+        .filter((name) => typeof name === 'string' && name.length > 0 && name.length <= 100))];
+    if (tournamentNames.length < parsedBracketSize || !tournamentNames.includes(champion)) {
+        return res.status(400).json({ success: false, error: 'Tournament participants are incomplete' });
+    }
+    const existingAnimals = await Animal.countDocuments({ name: { $in: tournamentNames } });
+    if (existingAnimals !== tournamentNames.length) {
+        return res.status(400).json({ success: false, error: 'Tournament contains an unknown animal' });
+    }
     
     // Save tournament placements to database
     try {
@@ -214,7 +316,7 @@ async function handleTournamentComplete(req, res) {
     }
     
     await notifyDiscord('tournament_complete', {
-        user: user || 'Anonymous',
+        user: authenticatedUser.username,
         bracketSize: bracketSize || 0,
         totalMatches: totalMatches || 0,
         champion: champion || 'Unknown',
@@ -222,8 +324,19 @@ async function handleTournamentComplete(req, res) {
         thirdFourth: thirdFourth || 'N/A',
         matchHistory: matchHistory || []
     }, req);
-    
-    return res.status(200).json({ success: true });
+
+    let reward = null;
+    try {
+        reward = await awardUserReward({
+            userId: authenticatedUser.id,
+            action: 'tournament_participate',
+            sourceId: new Date().toISOString().split('T')[0]
+        });
+    } catch (rewardError) {
+        console.error('Tournament reward failed:', rewardError.message);
+    }
+
+    return res.status(200).json({ success: true, reward });
 }
 
 /**
@@ -264,16 +377,21 @@ async function incrementTournamentsPlayed(animalName) {
  * Handle tournament quit notification
  */
 async function handleTournamentQuit(req, res) {
+    const authenticatedUser = getAuthUser(req);
+    if (!authenticatedUser) {
+        return res.status(401).json({ success: false, error: 'Authentication required' });
+    }
+
     // Parse body - handle both JSON and text/plain from sendBeacon
     let body = req.body;
     if (typeof body === 'string') {
         try { body = JSON.parse(body); } catch (_e) { body = {}; }
     }
     
-    const { user, bracketSize, totalMatches, completedMatches, matchHistory } = body || {};
+    const { bracketSize, totalMatches, completedMatches, matchHistory } = body || {};
     
     await notifyDiscord('tournament_quit', {
-        user: user || 'Anonymous',
+        user: authenticatedUser.username,
         bracketSize: bracketSize || 0,
         totalMatches: totalMatches || 0,
         completedMatches: completedMatches || 0,
@@ -289,7 +407,12 @@ async function handleTournamentQuit(req, res) {
  * Body: { winner: "Animal Name", loser: "Animal Name" }
  */
 async function recordBattle(req, res) {
-    const { winner, loser } = req.body;
+    const authenticatedUser = getAuthUser(req);
+    if (!authenticatedUser) {
+        return res.status(401).json({ success: false, error: 'Authentication required' });
+    }
+
+    const { winner, loser } = req.body || {};
 
     if (!winner || !loser) {
         return res.status(400).json({ 
@@ -303,6 +426,15 @@ async function recordBattle(req, res) {
             success: false, 
             error: 'Winner and loser cannot be the same animal' 
         });
+    }
+
+    if ([winner, loser].some((name) => typeof name !== 'string' || name.length > 100)) {
+        return res.status(400).json({ success: false, error: 'Invalid animal name' });
+    }
+
+    const knownAnimals = await Animal.countDocuments({ name: { $in: [winner, loser] } });
+    if (knownAnimals !== 2) {
+        return res.status(400).json({ success: false, error: 'Both battle animals must exist' });
     }
 
     try {

@@ -3365,12 +3365,15 @@ class AnimalStatsApp {
      * Notify Discord about a fight comparison
      */
     async notifyFight(animal1, animal2) {
+        if (!Auth.isLoggedIn()) return;
         try {
-            const user = Auth.isLoggedIn() ? Auth.getUser()?.username : 'Anonymous';
             await fetch('/api/rankings?action=fight', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ animal1, animal2, user })
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                },
+                body: JSON.stringify({ animal1, animal2 })
             });
         } catch (_e) {
             // Silently fail - not critical

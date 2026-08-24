@@ -14,6 +14,7 @@ const Comment = require('../lib/models/Comment');
 const Animal = require('../lib/models/Animal');
 const BattleStats = require('../lib/models/BattleStats');
 const RankHistory = require('../lib/models/RankHistory');
+const { getAuthUser } = require('../lib/auth');
 const { notifyDiscord } = require('../lib/discord');
 const { setCorsHeaders } = require('../lib/cors');
 
@@ -30,12 +31,21 @@ module.exports = async function handler(req, res) {
 
     // Handle fight notifications
     if (req.method === 'POST' && req.query.action === 'fight') {
-        const { animal1, animal2, user } = req.body;
-        await notifyDiscord('fight', { animal1, animal2, user: user || 'Anonymous' }, req);
+        const user = getAuthUser(req);
+        if (!user) return res.status(401).json({ success: false, error: 'Authentication required' });
+        const { animal1, animal2 } = req.body || {};
+        if ([animal1, animal2].some((name) => typeof name !== 'string' || !name || name.length > 100) || animal1 === animal2) {
+            return res.status(400).json({ success: false, error: 'Two valid animals are required' });
+        }
+
+        await connectToDatabase();
+        const animalCount = await Animal.countDocuments({ name: { $in: [animal1, animal2] } });
+        if (animalCount !== 2) return res.status(400).json({ success: false, error: 'Unknown animal' });
+
+        await notifyDiscord('fight', { animal1, animal2, user: user.username }, req);
         
         // Increment comparison count for both animals
         try {
-            await connectToDatabase();
             await BattleStats.updateOne(
                 { animalName: animal1 },
                 { $inc: { comparisonCount: 1 } },

@@ -2015,7 +2015,8 @@ class TournamentManager {
             const response = await fetch('/api/battles', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
                 },
                 body: JSON.stringify({ winner: winner.name, loser: loser.name })
             });
@@ -2070,7 +2071,8 @@ class TournamentManager {
             await fetch('/api/battles?action=matchup_votes', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
                 },
                 body: JSON.stringify({ animal1, animal2, votedFor })
             });
@@ -2104,7 +2106,8 @@ class TournamentManager {
             const response = await fetch('/api/battles', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
                 },
                 body: JSON.stringify({ winner: winnerName, loser: loserName })
             });
@@ -2226,9 +2229,6 @@ class TournamentManager {
                 });
             });
         }
-        
-        // Award XP/BP for completing a tournament (with guess bonus)
-        this.awardTournamentReward();
         
         // Switch to results screen
         this.dom.setup.style.display = 'none';
@@ -2465,63 +2465,17 @@ class TournamentManager {
     }
     
     /**
-     * Award XP/BP for completing a tournament (including guess bonus)
+     * Render a reward granted by the verified tournament-completion endpoint.
      */
-    async awardTournamentReward() {
-        // Calculate guess bonus XP
-        let guessBonus = 0;
-        if (this.guessModeEnabled && this.totalGuesses > 0) {
-            // 5 XP per correct guess
-            guessBonus = this.correctGuesses * 5;
+    applyTournamentReward(reward) {
+        if (!reward?.awarded) return;
+        if (this.dom.bonusXp) this.dom.bonusXp.textContent = `+${reward.xpAdded} XP`;
+        if (this.dom.bonusBp) this.dom.bonusBp.textContent = `+${reward.bpAdded} BP`;
+        this.showXpPopup(reward.xpAdded, reward.bpAdded);
+        if (reward.leveledUp) {
+            this.showLevelUpPopup(reward.newLevel, reward.levelUpBpReward || 0);
         }
-        
-        // Update bonus display - use the wrap element for visibility
-        if (this.dom.bonusGuess && this.dom.bonusGuessWrap) {
-            if (guessBonus > 0) {
-                this.dom.bonusGuess.textContent = `+${guessBonus} XP (${this.correctGuesses}/${this.totalGuesses} guesses)`;
-                this.dom.bonusGuessWrap.style.display = 'flex';
-            } else {
-                this.dom.bonusGuessWrap.style.display = 'none';
-            }
-        }
-        
-        if (!Auth.isLoggedIn()) return;
-        
-        try {
-            const response = await fetch('/api/auth?action=rewards', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${Auth.getToken()}`
-                },
-                body: JSON.stringify({ 
-                    action: 'tournament_participate',
-                    bonusXp: guessBonus 
-                })
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                // Update bonus display
-                if (this.dom.bonusXp) {
-                    this.dom.bonusXp.textContent = `+${result.data.xpAdded} XP`;
-                }
-                if (this.dom.bonusBp) {
-                    this.dom.bonusBp.textContent = `+${result.data.bpAdded} BP`;
-                }
-                
-                this.showXpPopup(result.data.xpAdded, result.data.bpAdded);
-                
-                if (result.data.leveledUp) {
-                    this.showLevelUpPopup(result.data.newLevel, result.data.levelUpBpReward || 0);
-                }
-                
-                Auth.refreshUserStats();
-            }
-        } catch (error) {
-            console.error('Error awarding tournament reward:', error);
-        }
+        Auth.refreshUserStats();
     }
     
     showXpPopup(xp, bp) {
@@ -2580,7 +2534,8 @@ class TournamentManager {
     /**
      * Send tournament completion notification to Discord
      */
-    notifyTournamentComplete(champion, finalFour) {
+    async notifyTournamentComplete(champion, finalFour) {
+        if (!Auth.isLoggedIn()) return;
         try {
             const runnerUps = finalFour.filter(a => a.name !== champion.name);
             const matchHistoryData = this.matchHistory.map(m => ({
@@ -2588,18 +2543,25 @@ class TournamentManager {
                 loser: m.loser.name
             }));
             
-            const data = JSON.stringify({
-                user: Auth.isLoggedIn() ? Auth.getUser()?.username : 'Anonymous',
+            const data = {
                 bracketSize: this.bracketSize,
                 totalMatches: this.totalMatches,
                 champion: champion.name,
                 runnerUp: runnerUps[0]?.name || 'N/A',
                 thirdFourth: runnerUps.slice(1).map(a => a.name).join(', ') || 'N/A',
                 matchHistory: matchHistoryData
+            };
+
+            const response = await fetch('/api/battles?action=tournament_complete', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${Auth.getToken()}`
+                },
+                body: JSON.stringify(data)
             });
-            
-            // Use sendBeacon for more reliable delivery
-            navigator.sendBeacon('/api/battles?action=tournament_complete', new Blob([data], { type: 'application/json' }));
+            const result = await response.json();
+            if (response.ok && result.success) this.applyTournamentReward(result.reward);
         } catch (error) {
             console.error('Failed to notify tournament completion:', error);
         }

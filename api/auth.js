@@ -5,7 +5,7 @@
  * POST /api/auth?action=login - Authenticate user
  * POST /api/auth?action=signup - Create new user
  * GET /api/auth?action=me - Get current user from token
- * GET/POST /api/auth?action=rewards - XP/BP rewards system
+ * GET /api/auth?action=rewards - Read progression; verified actions award rewards
  * POST /api/auth?action=prestige - Prestige at level 100
  * POST /api/auth?action=flag-rename - Admin-only: require a user to rename
  * GET /api/auth?action=google-start - Begin Google OAuth sign in
@@ -18,10 +18,9 @@
 
 const { connectToDatabase } = require('../lib/mongodb');
 const User = require('../lib/models/User');
-const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const { notifyDiscord } = require('../lib/discord');
-const { verifyToken, JWT_SECRET } = require('../lib/auth');
+const { verifyToken, signToken } = require('../lib/auth');
 const { setCorsHeaders } = require('../lib/cors');
 const { validatePublicName } = require('../lib/moderation');
 const {
@@ -30,9 +29,7 @@ const {
     verifyUnsubscribeToken
 } = require('../lib/email');
 const { 
-    XP_REWARDS, 
     xpToNext, 
-    processXpAward, 
     processPrestige,
     buildProgressionPayload 
 } = require('../lib/xpSystem');
@@ -226,9 +223,8 @@ function clearGoogleStateCookie(res) {
 }
 
 function signSessionToken(user) {
-    return jwt.sign(
+    return signToken(
         { userId: user._id, username: user.username },
-        JWT_SECRET,
         { expiresIn: '7d' }
     );
 }
@@ -430,13 +426,7 @@ function decodeGoogleState(value) {
 function getAuthenticatedUserFromRequest(req) {
     const token = getRequestToken(req);
     if (!token) return null;
-
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        return { id: decoded.userId, username: decoded.username };
-    } catch (_err) {
-        return null;
-    }
+    return verifyToken(token);
 }
 
 function findLinkedProvider(user, provider = GOOGLE_PROVIDER) {
@@ -948,13 +938,7 @@ async function handleResetPassword(req, res) {
 function getAuthenticatedRequestUser(req) {
     const token = getRequestToken(req);
     if (!token) return null;
-
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        return { id: decoded.userId, username: decoded.username };
-    } catch (_err) {
-        return null;
-    }
+    return verifyToken(token);
 }
 
 function pickNotificationPreferenceUpdates(body = {}) {
@@ -1065,14 +1049,12 @@ async function handleMe(req, res) {
         return res.status(401).json({ success: false, error: 'No token provided' });
     }
 
-    let decoded;
-    try {
-        decoded = jwt.verify(token, JWT_SECRET);
-    } catch (_err) {
+    const decoded = verifyToken(token);
+    if (!decoded) {
         return res.status(401).json({ success: false, error: 'Invalid or expired token' });
     }
 
-    const user = await User.findById(decoded.userId);
+    const user = await User.findById(decoded.id);
     if (!user) {
         return res.status(404).json({ success: false, error: 'User not found' });
     }
@@ -1095,14 +1077,12 @@ async function handleGetProfile(req, res) {
 
     const token = authHeader.split(' ')[1];
 
-    let decoded;
-    try {
-        decoded = jwt.verify(token, JWT_SECRET);
-    } catch (_err) {
+    const decoded = verifyToken(token);
+    if (!decoded) {
         return res.status(401).json({ success: false, error: 'Invalid or expired token' });
     }
 
-    const user = await User.findById(decoded.userId);
+    const user = await User.findById(decoded.id);
     if (!user) {
         return res.status(404).json({ success: false, error: 'User not found' });
     }
@@ -1153,14 +1133,12 @@ async function handleUpdateProfile(req, res) {
 
     const token = authHeader.split(' ')[1];
 
-    let decoded;
-    try {
-        decoded = jwt.verify(token, JWT_SECRET);
-    } catch (_err) {
+    const decoded = verifyToken(token);
+    if (!decoded) {
         return res.status(401).json({ success: false, error: 'Invalid or expired token' });
     }
 
-    const user = await User.findById(decoded.userId);
+    const user = await User.findById(decoded.id);
     if (!user) {
         return res.status(404).json({ success: false, error: 'User not found' });
     }
@@ -1328,14 +1306,12 @@ async function handleFlagRename(req, res) {
 
     const token = authHeader.split(' ')[1];
 
-    let decoded;
-    try {
-        decoded = jwt.verify(token, JWT_SECRET);
-    } catch (_err) {
+    const decoded = verifyToken(token);
+    if (!decoded) {
         return res.status(401).json({ success: false, error: 'Invalid or expired token' });
     }
 
-    const adminUser = await User.findById(decoded.userId);
+    const adminUser = await User.findById(decoded.id);
     if (!adminUser) {
         return res.status(401).json({ success: false, error: 'Admin user not found' });
     }
@@ -1414,98 +1390,9 @@ async function handleRewards(req, res) {
     }
 
     if (req.method === 'POST') {
-        const { action, customXp, customBp } = req.body;
-
-        // Get reward amounts from config
-        let xpToAward = 0;
-        let bpToAward = 0;
-
-        if (action && XP_REWARDS[action]) {
-            xpToAward = XP_REWARDS[action].xp;
-            bpToAward = XP_REWARDS[action].bp;
-        } else if (customXp !== undefined || customBp !== undefined) {
-            xpToAward = parseInt(customXp) || 0;
-            bpToAward = parseInt(customBp) || 0;
-        } else {
-            return res.status(400).json({ 
-                success: false, 
-                error: 'Invalid action or reward amount',
-                validActions: Object.keys(XP_REWARDS)
-            });
-        }
-
-        // Cap rewards to prevent abuse
-        xpToAward = Math.min(Math.max(xpToAward, 0), 500);
-        bpToAward = Math.min(Math.max(bpToAward, 0), 100);
-
-        // Get current user state
-        const dbUser = await User.findById(user.id);
-        if (!dbUser) {
-            return res.status(404).json({ success: false, error: 'User not found' });
-        }
-
-        // Process XP award with leveling
-        const result = processXpAward(
-            dbUser.level || 1,
-            dbUser.xp || 0,
-            xpToAward
-        );
-
-        // Calculate total BP: action BP + level-up BP rewards
-        const totalBpEarned = bpToAward + result.totalBpEarned;
-
-        // Update user in database with NEW level and XP values
-        const updatedUser = await User.findByIdAndUpdate(
-            user.id,
-            {
-                $set: {
-                    level: result.level,
-                    xp: result.xp
-                },
-                $inc: {
-                    lifetimeXp: xpToAward,
-                    battlePoints: totalBpEarned
-                }
-            },
-            { returnDocument: 'after' }
-        );
-
-        const leveledUp = result.levelsGained.length > 0;
-        const levelsGained = result.levelsGained;
-
-        // Build response message
-        let message = `+${xpToAward} XP`;
-        if (bpToAward > 0) message += `, +${bpToAward} BP`;
-        
-        if (leveledUp) {
-            const newLevel = result.level;
-            const bpReward = result.totalBpEarned;
-            if (levelsGained.length === 1) {
-                message = `🎉 Level Up! You reached level ${newLevel}! +${bpReward} BP`;
-            } else {
-                message = `🎉 ${levelsGained.length}x Level Up! You reached level ${newLevel}! +${bpReward} BP`;
-            }
-        }
-
-        return res.status(200).json({
-            success: true,
-            data: {
-                xpAdded: xpToAward,
-                bpAdded: totalBpEarned,
-                level: result.level,
-                xp: result.xp,
-                xpToNext: result.xpToNext,
-                xpPercent: Math.min(100, Math.round((result.xp / result.xpToNext) * 100)),
-                prestige: updatedUser.prestige || 0,
-                lifetimeXp: updatedUser.lifetimeXp || 0,
-                battlePoints: updatedUser.battlePoints || 0,
-                isPrestigeReady: result.isPrestigeReady,
-                leveledUp,
-                levelsGained,
-                newLevel: leveledUp ? result.level : null,
-                levelUpBpReward: result.totalBpEarned
-            },
-            message
+        return res.status(410).json({
+            success: false,
+            error: 'Rewards are granted by verified action endpoints and cannot be claimed directly.'
         });
     }
 

@@ -14,7 +14,7 @@ const { connectToDatabase } = require('../lib/mongodb');
 const ChatMessage = require('../lib/models/ChatMessage');
 const Comment = require('../lib/models/Comment');
 const Animal = require('../lib/models/Animal');
-const { verifyToken } = require('../lib/auth');
+const { getAuthUser, authorizeRequest } = require('../lib/auth');
 const { notifyDiscord } = require('../lib/discord');
 const { maskBlockedTerms } = require('../lib/moderation');
 const { setCorsHeaders } = require('../lib/cors');
@@ -298,15 +298,9 @@ async function handleGet(req, res) {
 
 // POST: Send a new chat message or reply
 async function handlePost(req, res) {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ success: false, error: 'Authentication required' });
-    }
-
-    const token = authHeader.split(' ')[1];
-    const user = verifyToken(token);
+    const user = getAuthUser(req);
     if (!user) {
-        return res.status(401).json({ success: false, error: 'Invalid token' });
+        return res.status(401).json({ success: false, error: 'Authentication required' });
     }
 
     const { content, parentId } = req.body;
@@ -371,15 +365,9 @@ async function handlePost(req, res) {
 
 // PATCH: Vote on a message (up/down)
 async function handlePatch(req, res) {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ success: false, error: 'Authentication required' });
-    }
-
-    const token = authHeader.split(' ')[1];
-    const user = verifyToken(token);
+    const user = getAuthUser(req);
     if (!user) {
-        return res.status(401).json({ success: false, error: 'Invalid token' });
+        return res.status(401).json({ success: false, error: 'Authentication required' });
     }
 
     const { messageId, voteType } = req.body;
@@ -429,16 +417,11 @@ async function handlePatch(req, res) {
 
 // DELETE: Delete a message (admin/mod only or own message)
 async function handleDelete(req, res) {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ success: false, error: 'Authentication required' });
+    const authorization = await authorizeRequest(req);
+    if (!authorization.ok) {
+        return res.status(authorization.status).json({ success: false, error: authorization.error });
     }
-
-    const token = authHeader.split(' ')[1];
-    const user = verifyToken(token);
-    if (!user) {
-        return res.status(401).json({ success: false, error: 'Invalid token' });
-    }
+    const user = authorization.auth;
 
     const { messageId } = req.query;
 
@@ -453,7 +436,7 @@ async function handleDelete(req, res) {
 
     // Check if user owns the message or is admin/mod
     const isOwner = message.authorId.toString() === user.id;
-    const isAdminOrMod = user.role === 'admin' || user.role === 'moderator';
+    const isAdminOrMod = authorization.user.role === 'admin' || authorization.user.role === 'moderator';
 
     if (!isOwner && !isAdminOrMod) {
         return res.status(403).json({ success: false, error: 'Not authorized to delete this message' });

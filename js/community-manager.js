@@ -313,7 +313,7 @@ class CommunityManager {
         }
     }
     
-    voteMatchup(fighter) {
+    async voteMatchup(fighter) {
         if (!Auth.isLoggedIn()) {
             Auth.showToast('Log in to vote!');
             Auth.showModal('login');
@@ -324,48 +324,42 @@ class CommunityManager {
             return; // Already voted for this
         }
         
-        this.userMatchupVote = fighter;
-        
-        // Update vote counts
-        if (fighter === 1) {
-            this.dailyMatchup.votes1++;
-        } else {
-            this.dailyMatchup.votes2++;
-        }
-        
-        this.renderDailyMatchup();
-        
-        // Award XP for daily matchup voting
-        this.awardMatchupReward();
-        Auth.showToast('Vote recorded!');
-    }
-    
-    async awardMatchupReward() {
-        if (!Auth.isLoggedIn()) return;
-        
         try {
-            const response = await fetch('/api/auth?action=rewards', {
+            const votedFor = fighter === 1 ? this.dailyMatchup.fighter1.name : this.dailyMatchup.fighter2.name;
+            const response = await fetch('/api/battles?action=matchup_votes', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${Auth.getToken()}`
                 },
-                body: JSON.stringify({ customXp: 10, customBp: 2 })
+                body: JSON.stringify({
+                    animal1: this.dailyMatchup.fighter1.name,
+                    animal2: this.dailyMatchup.fighter2.name,
+                    votedFor
+                })
             });
-
             const result = await response.json();
+            if (!response.ok || !result.success) {
+                Auth.showToast(result.error || 'Unable to record vote');
+                return;
+            }
 
-            if (result.success) {
-                this.showXpPopup(result.data.xpAdded, result.data.bpAdded);
-                
-                if (result.data.leveledUp) {
-                    this.showLevelUpPopup(result.data.newLevel, result.data.levelUpBpReward || 0);
+            this.userMatchupVote = fighter;
+            this.dailyMatchup.votes1 = result.data.animal1Votes;
+            this.dailyMatchup.votes2 = result.data.animal2Votes;
+            this.renderDailyMatchup();
+
+            if (result.reward?.awarded) {
+                this.showXpPopup(result.reward.xpAdded, result.reward.bpAdded);
+                if (result.reward.leveledUp) {
+                    this.showLevelUpPopup(result.reward.newLevel, result.reward.levelUpBpReward || 0);
                 }
-                
                 Auth.refreshUserStats();
             }
+            Auth.showToast(result.message || 'Vote recorded!');
         } catch (error) {
-            console.error('Error awarding matchup reward:', error);
+            console.error('Error recording matchup vote:', error);
+            Auth.showToast('Unable to record vote');
         }
     }
     

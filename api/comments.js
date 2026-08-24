@@ -5,7 +5,8 @@
 
 const { connectToDatabase } = require('../lib/mongodb');
 const Comment = require('../lib/models/Comment');
-const { verifyToken } = require('../lib/auth');
+const { getAuthUser, authorizeRequest } = require('../lib/auth');
+const { awardUserReward } = require('../lib/rewards');
 const { notifyDiscord } = require('../lib/discord');
 const { maskBlockedTerms } = require('../lib/moderation');
 const { setCorsHeaders } = require('../lib/cors');
@@ -155,15 +156,9 @@ async function handleGet(req, res) {
 
 // POST: Create a new comment or reply
 async function handlePost(req, res) {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ success: false, error: 'Authentication required' });
-    }
-
-    const token = authHeader.split(' ')[1];
-    const user = verifyToken(token);
+    const user = getAuthUser(req);
     if (!user) {
-        return res.status(401).json({ success: false, error: 'Invalid token' });
+        return res.status(401).json({ success: false, error: 'Authentication required' });
     }
 
     const { targetType, animalId, animalName, comparisonKey, content, parentId, isAnonymous } = req.body;
@@ -192,6 +187,9 @@ async function handlePost(req, res) {
         upvotes: [],
         downvotes: []
     };
+    let notificationType;
+    let notificationData;
+    let rewardAction;
 
     // If this is a reply, get parent info
     if (parentId) {
@@ -208,12 +206,14 @@ async function handlePost(req, res) {
         // Notify Discord about reply (show actual username even for anonymous, for moderation)
         const displayName = isAnonymous ? `Anonymous (${user.username})` : user.username;
         const parentAuthor = parent.isAnonymous ? 'Anonymous' : parent.authorUsername;
-        await notifyDiscord('comment_reply', {
+        notificationType = 'comment_reply';
+        notificationData = {
             user: displayName,
             replyTo: parentAuthor,
             target: parent.animalName || parent.comparisonKey || 'Unknown',
             content: publicContent.substring(0, 100) + (publicContent.length > 100 ? '...' : '')
-        }, req);
+        };
+        rewardAction = 'reply';
     } else {
         // New top-level comment
         if (!targetType) {
@@ -232,37 +232,49 @@ async function handlePost(req, res) {
                 return res.status(400).json({ success: false, error: 'Comparison key required' });
             }
             commentData.comparisonKey = comparisonKey;
+        } else {
+            return res.status(400).json({ success: false, error: 'Invalid target type' });
         }
         
         // Notify Discord about new comment (show actual username even for anonymous, for moderation)
         const displayName = isAnonymous ? `Anonymous (${user.username})` : user.username;
-        await notifyDiscord('comment', {
+        notificationType = 'comment';
+        notificationData = {
             user: displayName,
             target: targetType === 'animal' ? animalName : comparisonKey,
             content: publicContent.substring(0, 100) + (publicContent.length > 100 ? '...' : '')
-        }, req);
+        };
+        rewardAction = 'comment';
     }
 
     const comment = await Comment.create(commentData);
+    let reward = null;
+    try {
+        reward = await awardUserReward({
+            userId: user.id,
+            action: rewardAction,
+            sourceId: comment._id.toString()
+        });
+    } catch (rewardError) {
+        console.error('Comment reward failed:', rewardError.message);
+    }
+
+    await notifyDiscord(notificationType, notificationData, req);
 
     return res.status(201).json({
         success: true,
-        data: comment
+        data: comment,
+        reward
     });
 }
 
 // DELETE: Delete a comment (only by author)
 async function handleDelete(req, res) {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ success: false, error: 'Authentication required' });
+    const authorization = await authorizeRequest(req);
+    if (!authorization.ok) {
+        return res.status(authorization.status).json({ success: false, error: authorization.error });
     }
-
-    const token = authHeader.split(' ')[1];
-    const user = verifyToken(token);
-    if (!user) {
-        return res.status(401).json({ success: false, error: 'Invalid token' });
-    }
+    const user = authorization.auth;
 
     const { commentId, id } = req.query;
     const targetId = commentId || id;
@@ -275,7 +287,9 @@ async function handleDelete(req, res) {
         return res.status(404).json({ success: false, error: 'Comment not found' });
     }
 
-    if (comment.authorId.toString() !== user.id) {
+    const isOwner = comment.authorId?.toString() === user.id;
+    const isModerator = ['admin', 'moderator'].includes(authorization.user.role);
+    if (!isOwner && !isModerator) {
         return res.status(403).json({ success: false, error: 'Not authorized to delete this comment' });
     }
 
@@ -299,15 +313,9 @@ async function handleDelete(req, res) {
 
 // PATCH: Upvote/downvote a comment
 async function handlePatch(req, res) {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ success: false, error: 'Authentication required' });
-    }
-
-    const token = authHeader.split(' ')[1];
-    const user = verifyToken(token);
+    const user = getAuthUser(req);
     if (!user) {
-        return res.status(401).json({ success: false, error: 'Invalid token' });
+        return res.status(401).json({ success: false, error: 'Authentication required' });
     }
 
     const { id } = req.query;

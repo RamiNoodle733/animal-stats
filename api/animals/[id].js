@@ -9,7 +9,7 @@
 
 const { connectToDatabase } = require('../../lib/mongodb');
 const Animal = require('../../lib/models/Animal');
-const { getAuthUser } = require('../../lib/auth');
+const { authorizeRequest } = require('../../lib/auth');
 const mongoose = require('mongoose');
 const { setCorsHeaders } = require('../../lib/cors');
 
@@ -98,9 +98,9 @@ async function handleGet(req, res, id) {
  * PUT /api/animals/[id]
  */
 async function handlePut(req, res, id) {
-    const user = getAuthUser(req);
-    if (!user) {
-        return res.status(401).json({ success: false, error: 'Authentication required' });
+    const authorization = await authorizeRequest(req, ['admin']);
+    if (!authorization.ok) {
+        return res.status(authorization.status).json({ success: false, error: authorization.error });
     }
 
     const animal = await findAnimal(id);
@@ -112,10 +112,7 @@ async function handlePut(req, res, id) {
         });
     }
 
-    const updateData = req.body;
-
-    // Prevent changing the _id
-    delete updateData._id;
+    const updateData = req.body || {};
 
     // Check for name conflict if name is being changed
     if (updateData.name && updateData.name !== animal.name) {
@@ -153,9 +150,9 @@ async function handlePut(req, res, id) {
  * DELETE /api/animals/[id]
  */
 async function handleDelete(req, res, id) {
-    const user = getAuthUser(req);
-    if (!user) {
-        return res.status(401).json({ success: false, error: 'Authentication required' });
+    const authorization = await authorizeRequest(req, ['admin']);
+    if (!authorization.ok) {
+        return res.status(authorization.status).json({ success: false, error: authorization.error });
     }
 
     const animal = await findAnimal(id);

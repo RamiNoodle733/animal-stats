@@ -825,8 +825,7 @@ class RankingsManager {
                     const result = await response.json();
                     if (result.success) {
                         inputEl.value = '';
-                        // Award XP for commenting
-                        await this.awardReward('comment');
+                        this.applyServerReward(result.reward);
                         Auth.showToast('Comment posted!');
                         // Refresh the inline panel
                         this.toggleInlineComments(row, animal);
@@ -1249,9 +1248,7 @@ class RankingsManager {
                 this.updateRowVotes(this.selectedRankIndex, result.data.upvotes, result.data.downvotes, animalId, false);
 
                 // Award XP only if xpAwarded is true (first vote of the day for this animal)
-                if (result.xpAwarded) {
-                    await this.awardReward('vote');
-                }
+                this.applyServerReward(result.reward);
                 Auth.showToast(result.message || 'Vote recorded!');
             } else {
                 Auth.showToast(result.error || 'Failed to vote');
@@ -1377,9 +1374,7 @@ class RankingsManager {
                 }
 
                 // Award XP only if xpAwarded is true (first vote of the day for this animal)
-                if (result.xpAwarded) {
-                    await this.awardReward('vote');
-                }
+                this.applyServerReward(result.reward);
                 Auth.showToast(result.message || 'Vote recorded!');
             } else {
                 Auth.showToast(result.error || 'Failed to vote');
@@ -1454,9 +1449,7 @@ class RankingsManager {
                 }
 
                 // Award XP only if xpAwarded is true (first vote of the day for this animal)
-                if (result.xpAwarded) {
-                    await this.awardReward('vote');
-                }
+                this.applyServerReward(result.reward);
                 Auth.showToast(result.message || 'Vote recorded!');
             } else {
                 Auth.showToast(result.error || 'Failed to vote');
@@ -1468,39 +1461,15 @@ class RankingsManager {
     }
 
     /**
-     * Award XP/BP rewards via the API (actually adds to user account)
-     * @param {string} action - The action type (vote, comment, reply, tournament_win, etc.)
+     * Render a reward that was atomically granted by the mutation endpoint.
      */
-    async awardReward(action) {
-        if (!Auth.isLoggedIn()) return;
-        
-        try {
-            const response = await fetch('/api/auth?action=rewards', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${Auth.getToken()}`
-                },
-                body: JSON.stringify({ action })
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-                // Show XP popup with actual amounts from API
-                this.showXpPopup(result.data.xpAdded, result.data.bpAdded);
-                
-                // Check for level up - show BP reward earned
-                if (result.data.leveledUp) {
-                    this.showLevelUpPopup(result.data.newLevel, result.data.levelUpBpReward || 0);
-                }
-                
-                // Update auth display (XP bar, BP count)
-                Auth.refreshUserStats();
-            }
-        } catch (error) {
-            console.error('Error awarding reward:', error);
+    applyServerReward(reward) {
+        if (!reward?.awarded) return;
+        this.showXpPopup(reward.xpAdded, reward.bpAdded);
+        if (reward.leveledUp) {
+            this.showLevelUpPopup(reward.newLevel, reward.levelUpBpReward || 0);
         }
+        Auth.refreshUserStats();
     }
 
     showXpPopup(xp, bp) {
@@ -1815,8 +1784,7 @@ class RankingsManager {
                 // Update comment counts in row and detail panel
                 this.updateCommentCounts(this.comments.length);
 
-                // Award XP for commenting
-                await this.awardReward(wasReply ? 'reply' : 'comment');
+                this.applyServerReward(result.reward);
                 Auth.showToast(wasReply ? 'Reply posted!' : 'Comment posted!');
             } else {
                 Auth.showToast(result.error || 'Failed to post comment');

@@ -9,9 +9,12 @@
  */
 
 const { connectToDatabase } = require('../lib/mongodb');
+const mongoose = require('mongoose');
 const Vote = require('../lib/models/Vote');
 const XpClaim = require('../lib/models/XpClaim');
-const { verifyToken } = require('../lib/auth');
+const Animal = require('../lib/models/Animal');
+const { getAuthUser } = require('../lib/auth');
+const { awardUserReward } = require('../lib/rewards');
 const { notifyDiscord } = require('../lib/discord');
 const { setCorsHeaders } = require('../lib/cors');
 
@@ -47,27 +50,21 @@ module.exports = async function handler(req, res) {
 
 // GET: Get user's votes for TODAY, or vote counts for an animal
 async function handleGet(req, res) {
-    const { animalId, userId, myVotes, timeZone } = req.query;
+    const { animalId, myVotes } = req.query;
     const today = Vote.getTodayString();
 
     // If myVotes flag is set, get all TODAY's votes by current user
     if (myVotes) {
-        const authHeader = req.headers.authorization;
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return res.status(401).json({ success: false, error: 'Authentication required' });
-        }
-
-        const token = authHeader.split(' ')[1];
-        const user = verifyToken(token);
+        const user = getAuthUser(req);
         if (!user) {
-            return res.status(401).json({ success: false, error: 'Invalid token' });
+            return res.status(401).json({ success: false, error: 'Authentication required' });
         }
 
         // Get only TODAY's votes for the user
         const voteMap = await Vote.getUserTodayVotes(user.id);
         
-        // Also get XP claims for today (in user's timezone)
-        const dayKey = timeZone ? XpClaim.getDayKey(timeZone) : today;
+        // Reward boundaries are server-authoritative and use UTC.
+        const dayKey = today;
         const xpClaims = await XpClaim.getUserDayClaims(user.id, dayKey);
         const xpClaimedMap = {};
         xpClaims.forEach(claim => {
@@ -84,18 +81,20 @@ async function handleGet(req, res) {
     }
 
     if (animalId) {
+        if (!mongoose.isValidObjectId(animalId)) {
+            return res.status(400).json({ success: false, error: 'Invalid animal ID' });
+        }
         // Get ALL-TIME vote counts for specific animal (for power rankings)
         const votes = await Vote.getVoteCounts(animalId);
         
-        // If userId provided, get user's vote for TODAY
+        // Only expose the authenticated caller's vote state.
         let userVote = null;
         let xpClaimedToday = false;
-        if (userId) {
-            userVote = await Vote.getTodayVote(animalId, userId);
+        const requestUser = getAuthUser(req);
+        if (requestUser) {
+            userVote = await Vote.getTodayVote(animalId, requestUser.id);
             
-            // Check if XP was claimed today (in user's timezone)
-            const dayKey = timeZone ? XpClaim.getDayKey(timeZone) : today;
-            xpClaimedToday = await XpClaim.hasClaimedXp(userId, animalId, dayKey);
+            xpClaimedToday = await XpClaim.hasClaimedXp(requestUser.id, animalId, today);
         }
 
         return res.status(200).json({
@@ -116,31 +115,29 @@ async function handleGet(req, res) {
 // POST: Cast or update a vote (can change anytime, XP only once per day)
 async function handlePost(req, res) {
     // Verify authentication
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const user = getAuthUser(req);
+    if (!user) {
         return res.status(401).json({ success: false, error: 'Authentication required' });
     }
 
-    const token = authHeader.split(' ')[1];
-    const user = verifyToken(token);
-    if (!user) {
-        return res.status(401).json({ success: false, error: 'Invalid token' });
-    }
-
-    const { animalId, animalName, voteType, timeZone } = req.body;
+    const { animalId, voteType } = req.body || {};
     const today = Vote.getTodayString();
 
-    if (!animalId || !animalName) {
-        return res.status(400).json({ success: false, error: 'Animal ID and name required' });
+    if (!animalId) {
+        return res.status(400).json({ success: false, error: 'Animal ID required' });
     }
+
+    const animal = await Animal.findById(animalId).select('_id name').lean().catch(() => null);
+    if (!animal) return res.status(404).json({ success: false, error: 'Animal not found' });
+    const animalName = animal.name;
 
     // voteType can be 'up', 'down', or 'clear' (to remove vote)
     if (voteType && !['up', 'down', 'clear'].includes(voteType)) {
         return res.status(400).json({ success: false, error: 'Invalid vote type' });
     }
 
-    // Compute dayKey using user's timezone
-    const dayKey = timeZone ? XpClaim.getDayKey(timeZone) : today;
+    // Reward boundaries are server-authoritative and use UTC.
+    const dayKey = today;
     
     // Check for existing vote TODAY
     const existingTodayVote = await Vote.findOne({ 
@@ -152,6 +149,7 @@ async function handlePost(req, res) {
     let action = 'none';
     let xpAwarded = false;
     let xpAmount = 0;
+    let reward = null;
 
     // Handle vote clear
     if (voteType === 'clear') {
@@ -208,13 +206,26 @@ async function handlePost(req, res) {
         }
         
         // Award XP if not already claimed today (in user's timezone)
-        const alreadyClaimedXp = await XpClaim.hasClaimedXp(user.id, animalId, dayKey);
-        if (!alreadyClaimedXp) {
-            const claim = await XpClaim.recordClaim(user.id, animalId, animalName, dayKey, 5);
-            if (claim) {
-                xpAwarded = true;
-                xpAmount = 5;
-            }
+        let claim = await XpClaim.findOne({ userId: user.id, animalId, dayKey });
+        if (!claim) {
+            claim = await XpClaim.recordClaim(user.id, animalId, animalName, dayKey, 5);
+            if (!claim) claim = await XpClaim.findOne({ userId: user.id, animalId, dayKey });
+        }
+
+        // Legacy claims have no rewardStatus and were paid by the former client endpoint.
+        // Only new/pending claims enter the server-authoritative reward transaction.
+        if (claim?.rewardStatus === 'pending') {
+            reward = await awardUserReward({
+                userId: user.id,
+                action: 'vote',
+                sourceId: `${animalId}:${dayKey}`
+            });
+            await XpClaim.updateOne(
+                { _id: claim._id },
+                { $set: { rewardStatus: 'applied', rewardAppliedAt: new Date() } }
+            );
+            xpAwarded = reward.awarded;
+            xpAmount = reward.xpAdded;
         }
     }
 
@@ -231,6 +242,7 @@ async function handlePost(req, res) {
         },
         xpAwarded: xpAwarded,
         xpAmount: xpAmount,
+        reward,
         message: xpAwarded 
             ? `Vote recorded! +${xpAmount} XP earned!` 
             : (action === 'created' || action === 'updated' ? 'Vote updated!' : 'Vote cleared!')
@@ -239,15 +251,9 @@ async function handlePost(req, res) {
 
 // DELETE: Remove TODAY's vote (legacy endpoint, now also supports POST with clear)
 async function handleDelete(req, res) {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return res.status(401).json({ success: false, error: 'Authentication required' });
-    }
-
-    const token = authHeader.split(' ')[1];
-    const user = verifyToken(token);
+    const user = getAuthUser(req);
     if (!user) {
-        return res.status(401).json({ success: false, error: 'Invalid token' });
+        return res.status(401).json({ success: false, error: 'Authentication required' });
     }
 
     const { animalId } = req.query;
