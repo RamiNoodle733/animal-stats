@@ -7,6 +7,7 @@ const path = require('path');
 const repoRoot = path.resolve(__dirname, '..', '..');
 const packageJsonPath = path.join(repoRoot, 'package.json');
 const packageLockPath = path.join(repoRoot, 'package-lock.json');
+const routerPath = path.join(repoRoot, 'js', 'router.js');
 
 const args = process.argv.slice(2);
 const syncOnly = args.includes('--sync-only');
@@ -62,8 +63,25 @@ function syncHtmlVersion(htmlContent, version, filePath) {
 
     let updated = htmlContent.replace(portalPattern, `$1v${version}$2`);
     updated = updated.replace(aboutPattern, `$1${version}`);
+    updated = updated.replace(
+        /((?:src|href)=["']\/[^"']+\.(?:js|css))(?:\?v=\d+\.\d+\.\d+)?(["'])/g,
+        `$1?v=${version}$2`
+    );
 
     return updated;
+}
+
+function syncRouterAssetRevision(version) {
+    const routerSource = fs.readFileSync(routerPath, 'utf8');
+    const revisionPattern = /(const ASSET_REVISION = ')[^']+(';)/;
+    if (!revisionPattern.test(routerSource)) {
+        throw new Error('Could not find ASSET_REVISION in js/router.js');
+    }
+    fs.writeFileSync(
+        routerPath,
+        routerSource.replace(revisionPattern, `$1${version}$2`),
+        'utf8'
+    );
 }
 
 function getGeneratedHtmlPaths() {
@@ -106,6 +124,7 @@ if (!syncOnly) {
 }
 
 syncPackageLock(nextVersion);
+syncRouterAssetRevision(nextVersion);
 
 const htmlPaths = getGeneratedHtmlPaths();
 htmlPaths.forEach((htmlPath) => {

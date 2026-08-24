@@ -21,6 +21,11 @@
  * Scripts/styles are injected once and cached for repeat navigations.
  */
 const CHART_JS_URL = 'https://cdn.jsdelivr.net/npm/chart.js';
+const ASSET_REVISION = '2.4.1';
+
+function versionedAsset(path) {
+    return `${path}?v=${ASSET_REVISION}`;
+}
 
 const ROUTE_ASSET_DEFINITIONS = {
     stats: {
@@ -28,33 +33,33 @@ const ROUTE_ASSET_DEFINITIONS = {
         scripts: [CHART_JS_URL]
     },
     rankings: {
-        styles: ['/css/pages/rankings.css'],
-        scripts: ['/js/rankings.js']
+        styles: [versionedAsset('/css/pages/rankings.css')],
+        scripts: [versionedAsset('/js/rankings.js')]
     },
     tournament: {
-        styles: ['/tournament-v4.css', '/css/pages/tournament.css'],
-        scripts: [CHART_JS_URL, '/js/tournament.js']
+        styles: [versionedAsset('/tournament-v4.css'), versionedAsset('/css/pages/tournament.css')],
+        scripts: [CHART_JS_URL, versionedAsset('/js/tournament.js')]
     },
     community: {
         styles: [
-            '/community-page.css',
-            '/css/pages/community.css',
-            '/css/pages/community-globe.css'
+            versionedAsset('/community-page.css'),
+            versionedAsset('/css/pages/community.css'),
+            versionedAsset('/css/pages/community-globe.css')
         ],
         scripts: [
             CHART_JS_URL,
-            '/js/community-globe.js',
-            '/js/community-manager.js',
-            '/js/community.js'
+            versionedAsset('/js/community-globe.js'),
+            versionedAsset('/js/community-manager.js'),
+            versionedAsset('/js/community.js')
         ]
     },
     compare: {
-        styles: ['/compare-page.css', '/css/pages/compare.css'],
-        scripts: [CHART_JS_URL, '/js/compare.js']
+        styles: [versionedAsset('/compare-page.css'), versionedAsset('/css/pages/compare.css')],
+        scripts: [CHART_JS_URL, versionedAsset('/js/compare.js')]
     },
     battlepoints: {
-        styles: ['/css/pages/battlepoints.css'],
-        scripts: ['/js/battlepoints.js']
+        styles: [versionedAsset('/css/pages/battlepoints.css')],
+        scripts: [versionedAsset('/js/battlepoints.js')]
     }
 };
 

@@ -29,12 +29,20 @@ const portalMarker = `<span class="portal-version">v${version}</span>`;
 const aboutMarker = `<p class="about-version">Version ${version}`;
 const mismatches = htmlFiles.filter((filePath) => {
     const html = fs.readFileSync(filePath, 'utf8');
-    return !html.includes(portalMarker) || !html.includes(aboutMarker);
+    const localAssetUrls = [...html.matchAll(/(?:src|href)=["'](\/[^"']+\.(?:js|css)(?:\?[^"']*)?)["']/g)]
+        .map((match) => match[1]);
+    const hasStaleAsset = localAssetUrls.some((url) => !url.endsWith(`?v=${version}`));
+    return !html.includes(portalMarker) || !html.includes(aboutMarker) || hasStaleAsset;
 });
 
 if (mismatches.length > 0) {
     const relative = mismatches.slice(0, 10).map((filePath) => path.relative(repoRoot, filePath));
     throw new Error(`Version ${version} is missing from ${mismatches.length} HTML file(s): ${relative.join(', ')}`);
+}
+
+const routerSource = fs.readFileSync(path.join(repoRoot, 'js', 'router.js'), 'utf8');
+if (!routerSource.includes(`const ASSET_REVISION = '${version}';`)) {
+    throw new Error(`js/router.js asset revision does not match ${version}`);
 }
 
 console.log(`Version agreement passed (${version}, ${htmlFiles.length} HTML files).`);
