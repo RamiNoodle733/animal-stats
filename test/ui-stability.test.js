@@ -24,7 +24,7 @@ test('compare animals retain useful desktop and mobile display sizes', () => {
     const compare = read('js/compare.js');
     const main = read('js/main.js');
 
-    assert.match(css, /width:\s*clamp\(210px,\s*30vh,\s*320px\)/);
+    assert.match(css, /width:\s*clamp\(260px,\s*38vh,\s*420px\)/);
     assert.match(css, /#compare-view:not\(\.active-view\)\s*\{\s*display:\s*none;/);
     assert.match(css, /#compare-view \.fighter-display\s*\{[\s\S]*?width:\s*124px !important;/);
     assert.match(css, /#compare-view \.fighter-image\s*\{[\s\S]*?max-width:\s*120px !important;/);
@@ -42,5 +42,11 @@ test('animal search does not advertise itself as a credential field', () => {
     assert.match(search, /autocomplete="off"/);
     assert.doesNotMatch(search, /autocomplete="(?:new-password|username|current-password)"/);
     assert.match(main, /input\.matches\(':-webkit-autofill'\)/);
-    assert.match(main, /if \(!isAutofilled\) return false;/);
+    assert.match(main, /savedIdentity/);
+    assert.match(main, /this\._animalSearchUserInteracted/);
+});
+
+test('inactive SPA routes cannot leak into the active page layout', () => {
+    const css = read('css/legacy.css');
+    assert.match(css, /\.view-container:not\(\.active-view\)\s*\{\s*display:\s*none !important;/);
 });

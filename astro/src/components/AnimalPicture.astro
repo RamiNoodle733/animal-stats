@@ -1,0 +1,18 @@
+---
+const { animal, image, priority = false } = Astro.props;
+const srcset = (variants) => variants.map((variant) => `${variant.src} ${variant.width}w`).join(', ');
+---
+
+<picture class="animal-picture">
+    {image.avif.length > 0 && <source type="image/avif" srcset={srcset(image.avif)} sizes="(max-width: 760px) 86vw, 520px" />}
+    {image.webp.length > 0 && <source type="image/webp" srcset={srcset(image.webp)} sizes="(max-width: 760px) 86vw, 520px" />}
+    <img
+        src={image.fallback}
+        alt={`${animal.name}, transparent animal profile image`}
+        width={image.width}
+        height={image.height}
+        loading={priority ? 'eager' : 'lazy'}
+        fetchpriority={priority ? 'high' : 'auto'}
+        decoding="async"
+    />
+</picture>

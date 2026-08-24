@@ -54,6 +54,7 @@ ui-snapshots/
 *.tmp
 *.temp
 .cache/
+.astro/
 
 # Generated silhouette assets (created by npm run assets:generate-silhouettes)
 images/animals/silhouettes/*.webp

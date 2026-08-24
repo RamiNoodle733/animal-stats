@@ -25,9 +25,12 @@ async function inspect(viewport) {
     page.on('pageerror', (error) => pageErrors.push(error.message));
 
     try {
-        await page.goto(`${baseUrl}/compare`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+        await page.goto(`${baseUrl}/compare?animal=saltwater-crocodile`, { waitUntil: 'domcontentloaded', timeout: 30000 });
         await page.waitForFunction(() => window.app?.state?.animals?.length > 100, null, { timeout: 30000 });
         await page.waitForSelector('#matchupIntroOverlay', { state: 'attached', timeout: 10000 });
+        await page.waitForFunction(() => window.app?.state?.compare?.left?.name === 'Saltwater Crocodile');
+
+        const querySelected = await page.evaluate(() => window.app.state.compare.left.name);
 
         const inactiveOverlay = await page.locator('#matchupIntroOverlay').evaluate((overlay) => ({
             display: getComputedStyle(overlay).display,
@@ -42,17 +45,29 @@ async function inspect(viewport) {
         const autofillCleanup = await page.evaluate(() => {
             const input = document.getElementById('search-input');
             const originalMatches = input.matches.bind(input);
+            const originalUser = window.Auth.user;
             input.value = 'SavedUsername';
             input.matches = (selector) => selector === ':-webkit-autofill';
             const cleared = window.app.clearAutofilledAnimalSearch();
+            window.Auth.user = { username: 'SavedUsername', displayName: 'Saved Username' };
+            window.app._animalSearchUserInteracted = false;
+            input.value = 'SavedUsername';
+            input.matches = () => false;
+            const identityCleared = window.app.clearAutofilledAnimalSearch();
+            window.app._animalSearchUserInteracted = true;
+            input.value = 'SavedUsername';
+            const manualPreserved = !window.app.clearAutofilledAnimalSearch() && input.value === 'SavedUsername';
             input.value = 'Yak';
             input.matches = () => false;
             const preserved = !window.app.clearAutofilledAnimalSearch() && input.value === 'Yak';
             input.matches = originalMatches;
             input.value = '';
-            return { cleared, preserved };
+            window.Auth.user = originalUser;
+            window.app._animalSearchUserInteracted = false;
+            return { cleared, identityCleared, manualPreserved, preserved };
         });
-        if (!autofillCleanup.cleared || !autofillCleanup.preserved) {
+        if (!autofillCleanup.cleared || !autofillCleanup.identityCleared
+            || !autofillCleanup.manualPreserved || !autofillCleanup.preserved) {
             throw new Error(`${label}: animal search autofill guard failed: ${JSON.stringify(autofillCleanup)}`);
         }
 
@@ -118,7 +133,7 @@ async function inspect(viewport) {
         await page.screenshot({ path: path.join(screenshotDir, `stats-after-compare-${label}.png`) });
         if (pageErrors.length) throw new Error(`${label}: page errors: ${JSON.stringify(pageErrors)}`);
 
-        return { label, inactiveOverlay, autofillCleanup, fighterSizes, statsState };
+        return { label, querySelected, inactiveOverlay, autofillCleanup, fighterSizes, statsState };
     } finally {
         await browser.close();
     }
@@ -128,6 +143,7 @@ async function main() {
     fs.mkdirSync(screenshotDir, { recursive: true });
     const checks = [];
     checks.push(await inspect({ width: 1440, height: 1000 }));
+    checks.push(await inspect({ width: 1366, height: 768 }));
     checks.push(await inspect({ width: 390, height: 844 }));
     console.log(JSON.stringify({ success: true, baseUrl, checks }, null, 2));
 }

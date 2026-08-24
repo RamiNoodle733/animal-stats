@@ -473,8 +473,11 @@ class AnimalStatsApp {
                 window.loadRouteAssets?.('stats')
             ]);
             this.switchView('stats', false);
-            // Select first animal if none selected
-            if (!this.state.selectedAnimal && this.state.filteredAnimals.length > 0) {
+            const requestedSlug = new URLSearchParams(window.location.search).get('animal');
+            const requestedAnimal = requestedSlug ? this.findAnimalBySlug(requestedSlug) : null;
+            if (requestedAnimal) {
+                this.selectAnimal(requestedAnimal, false);
+            } else if (!this.state.selectedAnimal && this.state.filteredAnimals.length > 0) {
                 this.selectAnimal(this.state.filteredAnimals[0], false);
             }
         });
@@ -486,6 +489,12 @@ class AnimalStatsApp {
                 window.loadRouteAssets?.('compare')
             ]);
             this.switchView('compare', false);
+            const requestedSlug = new URLSearchParams(window.location.search).get('animal');
+            const requestedAnimal = requestedSlug ? this.findAnimalBySlug(requestedSlug) : null;
+            if (requestedAnimal && !this.state.compare.left) {
+                this.setSelectingSide('left');
+                this.selectFighter(requestedAnimal);
+            }
         });
 
         // Rankings route
@@ -1106,6 +1115,18 @@ class AnimalStatsApp {
         
         // Search & Filter
         this.dom.searchInput.addEventListener('input', this.debouncedSearch);
+        this.dom.searchInput.addEventListener('pointerdown', () => {
+            this._animalSearchUserInteracted = true;
+        }, { passive: true });
+        this.dom.searchInput.addEventListener('keydown', () => {
+            this._animalSearchUserInteracted = true;
+        });
+        this.dom.searchInput.addEventListener('paste', () => {
+            this._animalSearchUserInteracted = true;
+        });
+        this.dom.searchInput.addEventListener('focus', () => {
+            requestAnimationFrame(() => this.clearAutofilledAnimalSearch());
+        });
         this.scheduleAnimalSearchAutofillCleanup();
         this.dom.classFilter.addEventListener('change', this.handleFilter);
         this.dom.dietFilter.addEventListener('change', this.handleFilter);
@@ -1339,7 +1360,13 @@ class AnimalStatsApp {
             return false;
         }
 
-        if (!isAutofilled) return false;
+        const normalizedValue = input.value.trim().toLowerCase();
+        const user = window.Auth?.getUser?.() || window.Auth?.user || null;
+        const savedIdentity = [user?.username, user?.displayName]
+            .filter(Boolean)
+            .some((value) => String(value).trim().toLowerCase() === normalizedValue);
+
+        if (!isAutofilled && (!savedIdentity || this._animalSearchUserInteracted)) return false;
 
         input.value = '';
         this.state.filters.search = '';

@@ -56,6 +56,8 @@ const routeAssets = Object.freeze({
 const budgets = Object.freeze({
     initialJavaScriptGzip: 62 * 1024,
     initialStylesGzip: 80 * 1024,
+    staticPageJavaScriptGzip: 50 * 1024,
+    staticPageStylesGzip: 30 * 1024,
     routeJavaScriptGzip: 30 * 1024,
     routeStylesGzip: 25 * 1024
 });
@@ -126,6 +128,17 @@ const initial = collectInitialAssets(indexHtml);
 const initialJs = measure(initial.scripts);
 const initialCss = measure(initial.styles);
 
+const animalStaticAssets = fs.readdirSync(path.join(repoRoot, 'stats'))
+    .filter((name) => name.endsWith('.html'))
+    .map((name) => ({ name, assets: collectInitialAssets(fs.readFileSync(path.join(repoRoot, 'stats', name), 'utf8')) }));
+
+for (const { name, assets } of animalStaticAssets) {
+    const scripts = measure(assets.scripts);
+    const styles = measure(assets.styles);
+    assertWithin(`stats/${name} static JavaScript`, scripts.gzip, budgets.staticPageJavaScriptGzip);
+    assertWithin(`stats/${name} static styles`, styles.gzip, budgets.staticPageStylesGzip);
+}
+
 for (const htmlFile of htmlFiles) {
     const html = fs.readFileSync(path.join(repoRoot, htmlFile), 'utf8');
     for (const forbidden of forbiddenInitialAssets) {
@@ -153,6 +166,14 @@ assertWithin('Initial local JavaScript', initialJs.gzip, budgets.initialJavaScri
 assertWithin('Initial local styles', initialCss.gzip, budgets.initialStylesGzip);
 
 const rows = [];
+const representativeStaticAssets = animalStaticAssets[0]?.assets || { scripts: [], styles: [] };
+rows.push({
+    route: 'animal-static',
+    initialJsGzip: formatKb(measure(representativeStaticAssets.scripts).gzip),
+    routeJsGzip: formatKb(0),
+    initialCssGzip: formatKb(measure(representativeStaticAssets.styles).gzip),
+    routeCssGzip: formatKb(0)
+});
 for (const [route, assets] of Object.entries(routeAssets)) {
     const scripts = measure(assets.scripts);
     const styles = measure(assets.styles);
@@ -169,4 +190,4 @@ for (const [route, assets] of Object.entries(routeAssets)) {
 
 console.table(rows);
 console.log(`Initial asset budgets passed (${initial.scripts.length} local scripts, ${initial.styles.length} local styles).`);
-console.log('Long-term static-page JavaScript target remains 50 KB gzip; this budget is a regression ceiling and will tighten with the static migration.');
+console.log(`${animalStaticAssets.length} Astro animal pages passed the 50 KB static JavaScript target.`);

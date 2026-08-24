@@ -1,6 +1,6 @@
 {
   "name": "animal-battle-stats",
-  "version": "2.5.1",
+  "version": "2.6.0",
   "description": "Animal Battle Stats - A scientifically accurate wildlife statistics website with MongoDB backend",
   "main": "api/index.js",
   "scripts": {
@@ -26,10 +26,12 @@
     "verify:ui-stability": "node scripts/verification/verify-ui-stability-browser.js",
     "verify:community": "node scripts/verification/verify-community-browser.js",
     "seo:prerender": "node scripts/prerender-seo-pages.mjs",
+    "astro:build": "astro build",
     "seo:sitemap": "node scripts/generate-sitemap.mjs",
     "seo:audit": "node scripts/seo-audit.mjs",
     "assets:pipeline": "node scripts/assets/animal-image-pipeline.js",
     "assets:audit": "node scripts/assets/animal-image-pipeline.js audit",
+    "assets:dimensions": "node scripts/assets/generate-animal-image-dimensions.js",
     "assets:promote": "node scripts/assets/animal-image-pipeline.js promote",
     "assets:sync-images": "node scripts/assets/animal-image-pipeline.js sync",
     "assets:source": "node scripts/assets/animal-image-pipeline.js source",
@@ -53,6 +55,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "astro": "7.2.6",
     "dotenv": "^16.3.1",
     "eslint": "^9.39.4",
     "globals": "^17.0.0",

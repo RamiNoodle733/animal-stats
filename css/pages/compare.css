@@ -228,8 +228,8 @@
 
 .fighter__display,
 #compare-view .fighter-display {
-    width: clamp(210px, 30vh, 320px);
-    height: clamp(210px, 30vh, 320px);
+    width: clamp(260px, 38vh, 420px);
+    height: clamp(260px, 38vh, 420px);
     
     display: flex;
     align-items: center;

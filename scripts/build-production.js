@@ -98,6 +98,10 @@ execFileSync(process.execPath, [
     cwd: repoRoot,
     stdio: 'inherit'
 });
+execFileSync(process.execPath, [path.join(repoRoot, 'scripts', 'prerender-seo-pages.mjs')], {
+    cwd: repoRoot,
+    stdio: 'inherit'
+});
 execFileSync(process.execPath, [path.join(repoRoot, 'scripts', 'version', 'check-site-version.js')], {
     cwd: repoRoot,
     stdio: 'inherit'
