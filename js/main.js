@@ -508,7 +508,7 @@ class AnimalStatsApp {
 
         const handleCommunityRoute = async (tabName = 'chat', options = {}) => {
             await window.loadRouteAssets?.('community');
-            const requestedTab = typeof tabName === 'string' ? tabName.toLowerCase() : 'chat';
+            const requestedTab = typeof tabName === 'string' ? tabName.toLowerCase() : 'map';
             const communityManager = this.ensureCommunityManager();
             if (!communityManager) {
                 this.switchView('community', false);
@@ -544,7 +544,7 @@ class AnimalStatsApp {
         // Legacy/default community route fallback
         router.on('/community', () => {
             const legacyTab = new URLSearchParams(window.location.search).get('tab');
-            return handleCommunityRoute(legacyTab || 'chat', { replace: true });
+            return handleCommunityRoute(legacyTab || 'map', { replace: true });
         });
 
         // Battle Points route

@@ -102,13 +102,13 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     
     <!-- Main stylesheet (all styles) -->
-    <link rel="stylesheet" href="/css/legacy.css?v=2.8.1">
+    <link rel="stylesheet" href="/css/legacy.css?v=2.9.0">
     
     <!-- Shared component styles; page/feature styles are loaded by js/router.js -->
-    <link rel="stylesheet" href="/css/components/about-info-btn.css?v=2.8.1">
+    <link rel="stylesheet" href="/css/components/about-info-btn.css?v=2.9.0">
     
     <!-- Mobile-specific styles (loaded last to override) -->
-    <link rel="stylesheet" href="/css/mobile.css?v=2.8.1" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="/css/mobile.css?v=2.9.0" media="print" onload="this.media='all'">
     
     <!-- Non-critical external resources loaded async -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" media="print" onload="this.media='all'">
@@ -396,7 +396,7 @@ html.js #seo-content{display:none!important}
 
             <!-- Footer with About link - OUTSIDE home-portal to avoid screen shake effects -->
             <footer class="portal-footer">
-                <span class="portal-version">v2.8.1</span>
+                <span class="portal-version">v2.9.0</span>
                 <div class="portal-footer-divider"></div>
                 <a href="/about" class="portal-footer-link">About</a>
                 <div class="portal-footer-divider"></div>
@@ -435,7 +435,7 @@ html.js #seo-content{display:none!important}
                     </div>
                     
                     <div class="about-version-section">
-                        <p class="about-version">Version 2.8.1 • Built with <i class="fas fa-heart" style="color: #ff4d6a;"></i> and JavaScript</p>
+                        <p class="about-version">Version 2.9.0 • Built with <i class="fas fa-heart" style="color: #ff4d6a;"></i> and JavaScript</p>
                     </div>
                 </div>
             </div>
@@ -1535,8 +1535,8 @@ html.js #seo-content{display:none!important}
             <section class="community-overview" aria-labelledby="community-page-title">
                 <div class="community-overview__copy">
                     <span class="community-overview__eyebrow"><i class="fas fa-satellite-dish"></i> FIELD NETWORK // LIVE</span>
-                    <div id="community-page-title" data-original-heading="h1">Community Command Center</div>
-                    <p>Battle talk, matchup activity, and the anonymous global footprint of Animal Battle Stats.</p>
+                    <div id="community-page-title" data-original-heading="h1">Community Activity Map</div>
+                    <p>Explore anonymous location activity, community totals, comments, and conversations from across Animal Battle Stats.</p>
                 </div>
                 <div class="community-overview__signals" aria-label="Community information">
                     <span class="community-signal community-signal--live"><i class="fas fa-circle"></i> Network online</span>
@@ -1545,17 +1545,14 @@ html.js #seo-content{display:none!important}
             </section>
 
             <div class="community-tab-bar" role="tablist" aria-label="Community sections">
-                <button type="button" class="community-tab-btn active" data-tab="chat" role="tab" aria-selected="true">
-                    <i class="fas fa-comments"></i> <span class="tab-label">Discuss</span>
+                <button type="button" class="community-tab-btn active" data-tab="map" role="tab" aria-selected="true">
+                    <i class="fas fa-globe-americas"></i> <span class="tab-label">Location Map</span>
                 </button>
                 <button type="button" class="community-tab-btn" data-tab="feed" role="tab" aria-selected="false">
-                    <i class="fas fa-stream"></i> <span class="tab-label">Activity</span>
+                    <i class="fas fa-comment-dots"></i> <span class="tab-label">Comments &amp; Activity</span>
                 </button>
-                <button type="button" class="community-tab-btn" data-tab="map" role="tab" aria-selected="false">
-                    <i class="fas fa-globe-americas"></i> <span class="tab-label">World Map</span>
-                </button>
-                <button type="button" class="community-tab-btn mobile-only-tab" data-tab="hub" role="tab" aria-selected="false">
-                    <i class="fas fa-chart-bar"></i> <span class="tab-label">Arena Hub</span>
+                <button type="button" class="community-tab-btn" data-tab="chat" role="tab" aria-selected="false">
+                    <i class="fas fa-comments"></i> <span class="tab-label">Discuss</span>
                 </button>
             </div>
 
@@ -1565,8 +1562,8 @@ html.js #seo-content{display:none!important}
                     <!-- Globe Analytics Module (Main Focus) -->
                     <div class="sidebar-module globe-focus-module map-primary-module community-widget community-widget--with-brackets">
                         <div class="module-header community-widget__header">
-                            <span class="module-title community-widget__title"><i class="fas fa-globe-americas"></i> GLOBAL ACTIVITY</span>
-                            <span class="globe-live-pill">All-Time Cumulative</span>
+                            <span class="module-title community-widget__title"><i class="fas fa-globe-americas"></i> LOCATION ACTIVITY</span>
+                            <span class="globe-live-pill">Anonymous aggregates</span>
                             <button type="button" class="globe-open-map-btn" id="globe-open-map-btn" aria-label="Open the full world activity map">
                                 Open map <i class="fas fa-arrow-right"></i>
                             </button>
@@ -1612,6 +1609,24 @@ html.js #seo-content{display:none!important}
                             <div class="globe-total-card">
                                 <span class="globe-total-label">Unique Visitors</span>
                                 <span class="globe-total-value" id="globe-total-visitors">0</span>
+                            </div>
+                        </div>
+
+                        <div class="community-hud-module community-summary-module">
+                            <div class="hud-header">
+                                <span class="hud-title"><i class="fas fa-chart-line"></i> COMMUNITY TOTALS</span>
+                                <a class="community-summary-link" href="/community/feed">View comments &amp; activity <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                            <div class="hud-live-badges">
+                                <span class="hud-online-badge"><i class="fas fa-circle online-dot"></i> <span id="hud-online-count">0</span> Online</span>
+                                <span class="hud-visits-badge"><i class="fas fa-eye"></i> <span id="hud-total-visits">0</span> Visits</span>
+                            </div>
+                            <div class="hud-stats-grid">
+                                <div class="hud-stat-item"><span class="hud-stat-value" id="hud-stat-members">--</span><span class="hud-stat-label">Members</span></div>
+                                <div class="hud-stat-item"><span class="hud-stat-value" id="hud-stat-votes">--</span><span class="hud-stat-label">Votes</span></div>
+                                <div class="hud-stat-item"><span class="hud-stat-value" id="hud-stat-comments">--</span><span class="hud-stat-label">Comments</span></div>
+                                <div class="hud-stat-item"><span class="hud-stat-value" id="hud-stat-tournaments">--</span><span class="hud-stat-label">Tournaments</span></div>
+                                <div class="hud-stat-item"><span class="hud-stat-value" id="hud-stat-matches">--</span><span class="hud-stat-label">Matches</span></div>
                             </div>
                         </div>
 
@@ -1689,85 +1704,6 @@ html.js #seo-content{display:none!important}
                         </div>
                     </div>
 
-                    <!-- Community HUD Module -->
-                    <div class="community-hud-module hub-only-module">
-                        <div class="hud-header">
-                            <span class="hud-title"><i class="fas fa-gamepad"></i> COMMUNITY HUD</span>
-                        </div>
-                        <div class="hud-live-badges">
-                            <span class="hud-online-badge">
-                                <i class="fas fa-circle online-dot"></i> <span id="hud-online-count">0</span> Online
-                            </span>
-                            <span class="hud-visits-badge">
-                                <i class="fas fa-eye"></i> <span id="hud-total-visits">0</span> Visits
-                            </span>
-                        </div>
-                        <div class="hud-stats-grid">
-                            <div class="hud-stat-item">
-                                <span class="hud-stat-value" id="hud-stat-members">--</span>
-                                <span class="hud-stat-label">Members</span>
-                            </div>
-                            <div class="hud-stat-item">
-                                <span class="hud-stat-value" id="hud-stat-votes">--</span>
-                                <span class="hud-stat-label">Votes</span>
-                            </div>
-                            <div class="hud-stat-item">
-                                <span class="hud-stat-value" id="hud-stat-comments">--</span>
-                                <span class="hud-stat-label">Comments</span>
-                            </div>
-                            <div class="hud-stat-item">
-                                <span class="hud-stat-value" id="hud-stat-tournaments">--</span>
-                                <span class="hud-stat-label">Tournaments</span>
-                            </div>
-                            <div class="hud-stat-item">
-                                <span class="hud-stat-value" id="hud-stat-matches">--</span>
-                                <span class="hud-stat-label">Matches</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Daily Matchup Module -->
-                    <div class="sidebar-module daily-matchup-module hub-only-module">
-                        <div class="module-header">
-                            <span class="module-title"><i class="fas fa-fire"></i> DAILY MATCHUP</span>
-                            <span class="matchup-timer" id="matchup-timer">--:--:--</span>
-                        </div>
-                        <div class="matchup-arena">
-                            <div class="matchup-fighter" id="matchup-fighter-1">
-                                <img src="" alt="" class="matchup-fighter-img" id="matchup-img-1">
-                                <span class="matchup-fighter-name" id="matchup-name-1">...</span>
-                                <div class="matchup-vote-bar">
-                                    <div class="matchup-bar-fill" id="matchup-bar-1"></div>
-                                </div>
-                                <span class="matchup-pct" id="matchup-pct-1">50%</span>
-                                <button class="matchup-vote-btn" id="matchup-vote-1" data-fighter="1">
-                                    <i class="fas fa-crown"></i> VOTE
-                                </button>
-                            </div>
-                            <div class="matchup-vs">VS</div>
-                            <div class="matchup-fighter" id="matchup-fighter-2">
-                                <img src="" alt="" class="matchup-fighter-img" id="matchup-img-2">
-                                <span class="matchup-fighter-name" id="matchup-name-2">...</span>
-                                <div class="matchup-vote-bar">
-                                    <div class="matchup-bar-fill" id="matchup-bar-2"></div>
-                                </div>
-                                <span class="matchup-pct" id="matchup-pct-2">50%</span>
-                                <button class="matchup-vote-btn" id="matchup-vote-2" data-fighter="2">
-                                    <i class="fas fa-crown"></i> VOTE
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Top Players Module -->
-                    <div class="sidebar-module leaderboard-module hub-only-module">
-                        <div class="module-header">
-                            <span class="module-title"><i class="fas fa-trophy"></i> TOP PLAYERS</span>
-                        </div>
-                        <div class="leaderboard-list" id="leaderboard-list">
-                            <div class="module-loading"><i class="fas fa-spinner fa-spin"></i></div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Main Chat/Feed Column (RIGHT) -->
@@ -1776,6 +1712,7 @@ html.js #seo-content{display:none!important}
                         <div class="community-channel-header__icon" id="community-channel-icon" aria-hidden="true">
                             <i class="fas fa-comments"></i>
                         </div>
+
                         <div class="community-channel-header__copy">
                             <span class="community-channel-kicker" id="community-channel-kicker">COMMUNITY CHANNEL</span>
                             <h2 id="community-channel-title">Battle Discussion</h2>
@@ -3255,18 +3192,18 @@ html.js #seo-content{display:none!important}
     <!-- Data loaded from MongoDB API - no local data.js needed -->
     
     <!-- Core utilities - shared across all modules -->
-    <script src="/js/core.js?v=2.8.1"></script>
-    <script src="/js/text-layout.js?v=2.8.1"></script>
+    <script src="/js/core.js?v=2.9.0"></script>
+    <script src="/js/text-layout.js?v=2.9.0"></script>
     
     <!-- Application modules - load order matters -->
-    <script src="/js/router.js?v=2.8.1"></script>
-    <script src="/js/auth.js?v=2.8.1"></script>
+    <script src="/js/router.js?v=2.9.0"></script>
+    <script src="/js/auth.js?v=2.9.0"></script>
     
     <!-- Audio Manager (must load before other scripts) -->
-    <script src="/js/audio.js?v=2.8.1"></script>
+    <script src="/js/audio.js?v=2.9.0"></script>
     
     <!-- Main app (initializes everything) -->
-    <script src="/js/main.js?v=2.8.1" defer></script>
+    <script src="/js/main.js?v=2.9.0" defer></script>
     
 </body>
 </html>

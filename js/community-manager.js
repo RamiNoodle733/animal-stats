@@ -2,7 +2,7 @@
  * ============================================
  * COMMUNITY PAGE - community.js (Manager)
  * ============================================
- * Handles: Community page, chat, activity feed, daily matchup
+ * Handles: Community page, location analytics, comments feed, and discussion
  * DOM Container: #community-view
  */
 
@@ -10,7 +10,7 @@
 
 // SECTION: COMMUNITY MANAGER
 // ========================================
-// Handles: Community page, chat, activity feed, daily matchup
+// Handles: Community page, location analytics, comments feed, and discussion
 // DOM Container: #community-view
 // Enhancements: js/community.js (heartbeat, online users)
 // ========================================
@@ -27,11 +27,7 @@ class CommunityManager {
         this.feedHasMore = true;
         this.chatPollingInterval = null;
         this.lastChatTime = null;
-        this.currentTab = 'chat';
-        
-        // Daily Matchup
-        this.dailyMatchup = null;
-        this.userMatchupVote = null;
+        this.currentTab = 'map';
         
         // Hub features
         this.presenceInterval = null;
@@ -68,11 +64,7 @@ class CommunityManager {
     init() {
         this.setupEventListeners();
         this.updateLoginState();
-        this.loadDailyMatchup();
-        this.startMatchupCountdown();
-        
-        // Load hub data
-        this.loadLeaderboard();
+        // Load community totals and location analytics.
         this.loadSiteStats();
         this.loadOnlineCount();
         this.initGlobeModule();
@@ -154,10 +146,6 @@ class CommunityManager {
             loadMoreBtn.addEventListener('click', () => this.loadMoreFeed());
         }
         
-        // Daily Matchup vote buttons
-        document.getElementById('matchup-vote-1')?.addEventListener('click', () => this.voteMatchup(1));
-        document.getElementById('matchup-vote-2')?.addEventListener('click', () => this.voteMatchup(2));
-        
         // Mobile sidebar toggle
         const mobileSidebarToggle = document.getElementById('mobile-sidebar-toggle');
         if (mobileSidebarToggle) {
@@ -166,19 +154,9 @@ class CommunityManager {
     }
 
     normalizeTabName(tabName) {
-        const rawTab = typeof tabName === 'string' ? tabName.toLowerCase() : 'chat';
-        const allowedTabs = new Set(['chat', 'feed', 'map', 'hub']);
-        let normalizedTab = allowedTabs.has(rawTab) ? rawTab : 'chat';
-
-        const desktopViewport = typeof window !== 'undefined'
-            && window.matchMedia
-            && window.matchMedia('(min-width: 901px)').matches;
-
-        if (desktopViewport && normalizedTab === 'hub') {
-            normalizedTab = 'chat';
-        }
-
-        return normalizedTab;
+        const rawTab = typeof tabName === 'string' ? tabName.toLowerCase() : 'map';
+        if (rawTab === 'hub') return 'map';
+        return new Set(['map', 'feed', 'chat']).has(rawTab) ? rawTab : 'map';
     }
 
     getRouteForTab(tabName) {
@@ -216,234 +194,6 @@ class CommunityManager {
         }
     }
 
-    // ==================== DAILY MATCHUP ====================
-    
-    async loadDailyMatchup() {
-        // Generate daily matchup based on date (deterministic)
-        const animals = this.app?.state?.animals || [];
-        if (animals.length < 2) {
-            setTimeout(() => this.loadDailyMatchup(), 500);
-            return;
-        }
-        
-        // Use date as seed for consistent daily matchup
-        const today = new Date().toISOString().split('T')[0];
-        const seed = this.hashCode(today);
-        const shuffled = [...animals].sort((a, b) => {
-            return this.seededRandom(seed + this.hashCode(a.name)) - 
-                   this.seededRandom(seed + this.hashCode(b.name));
-        });
-        
-        this.dailyMatchup = {
-            fighter1: shuffled[0],
-            fighter2: shuffled[1],
-            votes1: Math.floor(Math.random() * 50) + 20,
-            votes2: Math.floor(Math.random() * 50) + 20
-        };
-        
-        this.renderDailyMatchup();
-    }
-    
-    hashCode(str) {
-        let hash = 0;
-        for (let i = 0; i < str.length; i++) {
-            const char = str.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash;
-        }
-        return Math.abs(hash);
-    }
-    
-    seededRandom(seed) {
-        const x = Math.sin(seed) * 10000;
-        return x - Math.floor(x);
-    }
-    
-    renderDailyMatchup() {
-        if (!this.dailyMatchup) return;
-        
-        const { fighter1, fighter2, votes1, votes2 } = this.dailyMatchup;
-        const total = votes1 + votes2;
-        const percent1 = total > 0 ? Math.round((votes1 / total) * 100) : 50;
-        const percent2 = 100 - percent1;
-        
-        // Fighter 1 - new IDs
-        const img1 = document.getElementById('matchup-img-1');
-        const name1 = document.getElementById('matchup-name-1');
-        const bar1 = document.getElementById('matchup-bar-1');
-        const pct1 = document.getElementById('matchup-pct-1');
-        
-        if (img1) {
-            window.CoreUtils.applyResponsiveAnimalImage(img1, fighter1, '(max-width: 480px) 35vw, 130px');
-        }
-        if (name1) name1.textContent = fighter1.name;
-        if (bar1) bar1.style.width = `${percent1}%`;
-        if (pct1) pct1.textContent = `${percent1}%`;
-        
-        // Fighter 2 - new IDs
-        const img2 = document.getElementById('matchup-img-2');
-        const name2 = document.getElementById('matchup-name-2');
-        const bar2 = document.getElementById('matchup-bar-2');
-        const pct2 = document.getElementById('matchup-pct-2');
-        
-        if (img2) {
-            window.CoreUtils.applyResponsiveAnimalImage(img2, fighter2, '(max-width: 480px) 35vw, 130px');
-        }
-        if (name2) name2.textContent = fighter2.name;
-        if (bar2) bar2.style.width = `${percent2}%`;
-        if (pct2) pct2.textContent = `${percent2}%`;
-        
-        // Update vote button states
-        this.updateMatchupVoteButtons();
-    }
-    
-    updateMatchupVoteButtons() {
-        const btn1 = document.getElementById('matchup-vote-1');
-        const btn2 = document.getElementById('matchup-vote-2');
-        
-        if (!Auth.isLoggedIn()) {
-            btn1?.setAttribute('disabled', 'true');
-            btn2?.setAttribute('disabled', 'true');
-            return;
-        }
-        
-        btn1?.removeAttribute('disabled');
-        btn2?.removeAttribute('disabled');
-        
-        if (this.userMatchupVote === 1) {
-            btn1?.classList.add('voted');
-            btn2?.classList.remove('voted');
-        } else if (this.userMatchupVote === 2) {
-            btn1?.classList.remove('voted');
-            btn2?.classList.add('voted');
-        }
-    }
-    
-    async voteMatchup(fighter) {
-        if (!Auth.isLoggedIn()) {
-            Auth.showToast('Log in to vote!');
-            Auth.showModal('login');
-            return;
-        }
-        
-        if (this.userMatchupVote === fighter) {
-            return; // Already voted for this
-        }
-        
-        try {
-            const votedFor = fighter === 1 ? this.dailyMatchup.fighter1.name : this.dailyMatchup.fighter2.name;
-            const response = await fetch('/api/battles?action=matchup_votes', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${Auth.getToken()}`
-                },
-                body: JSON.stringify({
-                    animal1: this.dailyMatchup.fighter1.name,
-                    animal2: this.dailyMatchup.fighter2.name,
-                    votedFor
-                })
-            });
-            const result = await response.json();
-            if (!response.ok || !result.success) {
-                Auth.showToast(result.error || 'Unable to record vote');
-                return;
-            }
-
-            this.userMatchupVote = fighter;
-            this.dailyMatchup.votes1 = result.data.animal1Votes;
-            this.dailyMatchup.votes2 = result.data.animal2Votes;
-            this.renderDailyMatchup();
-
-            if (result.reward?.awarded) {
-                this.showXpPopup(result.reward.xpAdded, result.reward.bpAdded);
-                if (result.reward.leveledUp) {
-                    this.showLevelUpPopup(result.reward.newLevel, result.reward.levelUpBpReward || 0);
-                }
-                Auth.refreshUserStats();
-            }
-            Auth.showToast(result.message || 'Vote recorded!');
-        } catch (error) {
-            console.error('Error recording matchup vote:', error);
-            Auth.showToast('Unable to record vote');
-        }
-    }
-    
-    startMatchupCountdown() {
-        const updateCountdown = () => {
-            const now = new Date();
-            const tomorrow = new Date(now);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            tomorrow.setHours(0, 0, 0, 0);
-            
-            const diff = tomorrow - now;
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-            
-            const countdown = document.getElementById('matchup-timer');
-            if (countdown) {
-                countdown.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }
-        };
-        
-        updateCountdown();
-        setInterval(updateCountdown, 1000);
-    }
-    
-    // ==================== HUB LEADERBOARD ====================
-    
-    async loadLeaderboard() {
-        const container = document.getElementById('leaderboard-list');
-        if (!container) return;
-        
-        try {
-            const response = await fetch('/api/community?action=leaderboard&limit=10');
-            if (!response.ok) throw new Error('Failed to load leaderboard');
-            
-            const result = await response.json();
-            const users = result.data || [];
-            
-            if (users.length === 0) {
-                container.innerHTML = '<div class="module-loading">No users yet</div>';
-                return;
-            }
-            
-            container.innerHTML = users.map((user, index) => {
-                const rank = index + 1;
-                const rankClass = rank === 1 ? 'gold' : rank === 2 ? 'silver' : rank === 3 ? 'bronze' : 'default';
-                const avatarHtml = this.getHubAvatarHtml(user.profileAnimal, user.displayName?.charAt(0) || '?');
-                
-                return `
-                    <div class="leaderboard-item">
-                        <span class="leaderboard-rank ${rankClass}">${rank}</span>
-                        <div class="leaderboard-avatar">${avatarHtml}</div>
-                        <div class="leaderboard-info">
-                            <div class="leaderboard-name">${this.escapeHtml(user.displayName || user.username)}</div>
-                            <div class="leaderboard-xp"><i class="fas fa-star"></i> ${this.formatNumber(user.xp || 0)} XP</div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            
-        } catch (error) {
-            console.error('Error loading leaderboard:', error);
-            container.innerHTML = '<div class="module-loading">Failed to load</div>';
-        }
-    }
-    
-    getHubAvatarHtml(profileAnimal, fallback) {
-        if (profileAnimal && this.app?.state?.animals) {
-            const animal = this.app.state.animals.find(a => 
-                a.name.toLowerCase() === profileAnimal.toLowerCase()
-            );
-            if (animal?.image) {
-                return `<img src="${animal.image}" alt="${profileAnimal}">`;
-            }
-        }
-        return fallback;
-    }
-    
     // ==================== HUD SITE STATS ====================
     
     async loadSiteStats() {
@@ -1485,13 +1235,12 @@ class CommunityManager {
 
         if (communityView) {
             communityView.classList.toggle('map-tab-active', normalizedTab === 'map');
-            communityView.classList.toggle('hub-tab-active', normalizedTab === 'hub');
             communityView.classList.toggle('globe-compact-mode', normalizedTab !== 'map');
         }
 
         this.scheduleGlobeResize();
 
-        if (normalizedTab === 'hub' || normalizedTab === 'map') {
+        if (normalizedTab === 'map') {
             if (sidebar) sidebar.classList.add('mobile-sidebar-active');
             if (feedColumn) feedColumn.classList.add('mobile-feed-hidden');
             this.stopChatPolling();
@@ -1526,15 +1275,15 @@ class CommunityManager {
         const metadata = {
             chat: {
                 icon: 'fa-comments',
-                kicker: 'COMMUNITY CHANNEL',
-                title: 'Battle Discussion',
+                kicker: 'COMMUNITY DISCUSSION',
+                title: 'Animal & Matchup Discussion',
                 description: 'Talk matchups, animal stats, and powerscaling with the community.'
             },
             feed: {
-                icon: 'fa-stream',
-                kicker: 'SITE ACTIVITY',
-                title: 'Arena Activity',
-                description: 'Follow recent votes, comments, battles, and community milestones.'
+                icon: 'fa-comment-dots',
+                kicker: 'COMMENTS & ACTIVITY',
+                title: 'Community Conversations',
+                description: 'Read recent animal comments, replies, votes, battles, and community milestones.'
             }
         };
         const active = metadata[tabName] || metadata.chat;
@@ -1557,8 +1306,7 @@ class CommunityManager {
         this.globe?.setPaused(false);
         this.scheduleGlobeResize();
         
-        // Refresh hub data
-        this.loadLeaderboard();
+        // Refresh community totals and location analytics.
         this.loadSiteStats();
         this.loadOnlineCount();
         this.loadGlobeAnalytics({ silent: true });

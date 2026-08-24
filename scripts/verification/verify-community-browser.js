@@ -23,7 +23,7 @@ async function openCommunity(page) {
     await page.waitForFunction(() => (
         window.communityManager
         && document.querySelector('#community-view.active-view')
-        && document.querySelectorAll('.community-tab-btn').length === 4
+        && document.querySelectorAll('.community-tab-btn').length === 3
     ), null, { timeout: 30000 });
     await page.waitForFunction(() => (
         !document.querySelector('#feed-posts-container .feed-loading-indicator')
@@ -75,10 +75,10 @@ async function inspect(viewport) {
         });
 
         assert(chat.path === '/community/chat', `${label} did not open chat`, chat);
-        assert(chat.overviewVisible && chat.title === 'Battle Discussion', `${label} Community heading failed`, chat);
+        assert(chat.overviewVisible && chat.title === 'Animal & Matchup Discussion', `${label} Community heading failed`, chat);
         assert(chat.communityV2Index > chat.mobileStylesIndex && chat.mobileStylesIndex >= 0, `${label} final Community CSS order failed`, chat);
         const visibleTabs = chat.tabs.filter((tab) => tab.visible);
-        assert(visibleTabs.length === (viewport.width <= 900 ? 4 : 3), `${label} Community tab count is wrong`, chat);
+        assert(visibleTabs.length === 3, `${label} Community tab count is wrong`, chat);
         assert(visibleTabs.every((tab) => tab.left >= chat.bar.left - 1 && tab.right <= chat.bar.right + 1), `${label} Community tabs clip or overflow`, chat);
         assert(chat.bodyOverflow <= 1, `${label} Community page scrolls horizontally`, chat);
         if (viewport.width > 900) {
@@ -87,7 +87,7 @@ async function inspect(viewport) {
         await page.screenshot({ path: path.join(screenshotDir, `community-chat-${label}.png`) });
 
         await page.locator('.community-tab-btn[data-tab="feed"]').click();
-        await page.waitForFunction(() => location.pathname === '/community/feed' && document.getElementById('community-channel-title')?.textContent === 'Arena Activity');
+        await page.waitForFunction(() => location.pathname === '/community/feed' && document.getElementById('community-channel-title')?.textContent === 'Community Conversations');
         const feedTitle = await page.locator('#community-channel-title').textContent();
 
         await page.locator('.community-tab-btn[data-tab="map"]').click();
@@ -107,49 +107,19 @@ async function inspect(viewport) {
                 feedDisplay: getComputedStyle(feed).display,
                 stage: { width: stage.width, height: stage.height },
                 mapSelected: mapTab.getAttribute('aria-selected'),
+                summaryVisible: document.querySelector('.community-summary-module')?.getBoundingClientRect().height > 0,
+                dailyMatchupExists: Boolean(document.querySelector('.daily-matchup-module')),
                 bodyOverflow: document.documentElement.scrollWidth - innerWidth
             };
         });
         assert(map.sidebarDisplay !== 'none' && map.feedDisplay === 'none', `${label} Map surface mode failed`, map);
         assert(map.stage.width > 250 && map.stage.height >= 240 && map.mapSelected === 'true', `${label} Map stage is not usable`, map);
+        assert(map.summaryVisible && !map.dailyMatchupExists, `${label} Community focus modules are wrong`, map);
         assert(map.bodyOverflow <= 1, `${label} Map page scrolls horizontally`, map);
         await page.screenshot({ path: path.join(screenshotDir, `community-map-${label}.png`) });
 
-        let hub = null;
-        if (viewport.width <= 900) {
-            await page.locator('.community-tab-btn[data-tab="hub"]').click();
-            await page.waitForFunction(() => (
-                location.pathname === '/community/hub'
-                && document.getElementById('community-view')?.classList.contains('hub-tab-active')
-            ));
-            hub = await page.evaluate(() => ({
-                path: location.pathname,
-                sidebarDisplay: getComputedStyle(document.querySelector('.community-sidebar-column')).display,
-                feedDisplay: getComputedStyle(document.querySelector('.community-feed-column')).display,
-                mapDisplay: getComputedStyle(document.querySelector('.map-primary-module')).display,
-                hudVisible: document.querySelector('.community-hud-module')?.getBoundingClientRect().height > 0,
-                matchupVisible: document.querySelector('.daily-matchup-module')?.getBoundingClientRect().height > 0,
-                hubSelected: document.querySelector('.community-tab-btn[data-tab="hub"]')?.getAttribute('aria-selected'),
-                activeTabs: [...document.querySelectorAll('.community-tab-btn.active')].map((tab) => tab.dataset.tab)
-            }));
-            assert(
-                hub.sidebarDisplay !== 'none'
-                && hub.feedDisplay === 'none'
-                && hub.mapDisplay === 'none'
-                && hub.hudVisible
-                && hub.matchupVisible
-                && hub.hubSelected === 'true'
-                && hub.activeTabs.length === 1
-                && hub.activeTabs[0] === 'hub',
-                `${label} Arena Hub mode failed`,
-                hub
-            );
-            await page.waitForTimeout(250);
-            await page.screenshot({ path: path.join(screenshotDir, `community-hub-${label}.png`) });
-        }
-
         assert(pageErrors.length === 0, `${label} browser errors`, pageErrors);
-        return { label, chat, feedTitle, map, hub };
+        return { label, chat, feedTitle, map };
     } finally {
         await browser.close();
     }

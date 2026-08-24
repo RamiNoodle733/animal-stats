@@ -15,6 +15,58 @@
         linear-gradient(155deg, #050b13 0%, #07101c 45%, #04080f 100%);
 }
 
+/* v2.9 community focus: location activity first, conversations second. */
+#community-view .community-summary-module {
+    margin: 14px 0;
+    padding: 14px;
+    border: 1px solid rgba(38, 215, 255, 0.18);
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(9, 28, 42, 0.88), rgba(7, 17, 29, 0.92));
+}
+
+#community-view .community-summary-module .hud-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 10px;
+}
+
+#community-view .community-summary-link {
+    color: #62f7d3;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.045em;
+    text-transform: uppercase;
+}
+
+#community-view .community-summary-link:hover { color: #fff; }
+
+#community-view .community-summary-module .hud-stats-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+#community-view .community-summary-module .hud-stat-item {
+    min-width: 0;
+    padding: 10px 6px;
+}
+
+#community-view .community-summary-module .hud-stat-value {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+@media (max-width: 720px) {
+    #community-view .community-summary-module .hud-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    #community-view .community-summary-module .hud-stats-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
 #community-view::before {
     content: '';
     position: absolute;
@@ -468,7 +520,7 @@
         top: auto !important;
         z-index: 20 !important;
         display: grid !important;
-        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
         width: calc(100% - 20px) !important;
         min-width: 0 !important;
         min-height: 50px !important;
@@ -754,7 +806,7 @@
         position: relative !important;
         top: auto !important;
         display: grid !important;
-        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
         width: calc(100% - 20px) !important;
         min-width: 0 !important;
         margin: 0 10px 8px !important;
