@@ -18,6 +18,10 @@ const {
     sanitizeDeliveryError,
     createEmbed
 } = require('../lib/discord');
+const {
+    dueRepairQuery,
+    sanitizeRepairError
+} = require('../lib/geolocation-repair');
 
 const {
     isValidPublicPoint,
@@ -101,6 +105,14 @@ test('Discord retry timing is bounded and webhook secrets are redacted', () => {
         sanitizeDeliveryError(new Error('failed https://discord.com/api/webhooks/123/secret-token')),
         'failed [redacted-webhook]'
     );
+});
+
+test('geolocation repair remains retryable and sanitizes stored errors', () => {
+    const query = dueRepairQuery(new Date('2026-08-24T00:00:00.000Z'));
+    assert.equal(Array.isArray(query.$and), true);
+    assert.equal(JSON.stringify(query).includes('resolverVersion'), true);
+    assert.equal(JSON.stringify(query).includes('nextRepairAt'), true);
+    assert.equal(sanitizeRepairError(new Error('x'.repeat(800))).length, 500);
 });
 
 test('every supported Discord event produces a safe embed', () => {

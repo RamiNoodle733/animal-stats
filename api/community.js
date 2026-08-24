@@ -15,6 +15,7 @@ const { connectToDatabase } = require('../lib/mongodb');
 const { verifyToken, getAuthUser } = require('../lib/auth');
 const { setCorsHeaders } = require('../lib/cors');
 const { sanitizeEventData } = require('../lib/activity-logger');
+const { waitUntil } = require('@vercel/functions');
 
 // In-memory presence store with TTL (would use Redis in production)
 // Structure: { odId: { username, displayName, profileAnimal, lastSeen, page } }
@@ -193,6 +194,20 @@ function toPublicPoint(point = {}) {
         uniqueVisitors: Number(point.uniqueVisitors) || 0,
         lastSeen: toPublicDay(point.lastSeen)
     };
+}
+
+function scheduleGeolocationRepair(limit = 5) {
+    const { repairGeolocationBatch } = require('../lib/geolocation-repair');
+    const work = repairGeolocationBatch({ limit }).catch((error) => {
+        console.error('Background geolocation repair failed:', String(error?.message || error).slice(0, 500));
+    });
+
+    try {
+        waitUntil(work);
+    } catch {
+        // The promise has already started and has its own error handler. This
+        // fallback is used by local/test runtimes without a Vercel request context.
+    }
 }
 
 function handleGone(_req, res) {
@@ -403,6 +418,7 @@ async function handleAdminRetryDiscord(req, res) {
 
 async function handleDiscordRetryCron(req, res) {
     const { retryDueDiscordDeliveries } = require('../lib/discord');
+    const { repairGeolocationBatch } = require('../lib/geolocation-repair');
     const expected = String(process.env.CRON_SECRET || '');
     const authorization = String(req.headers.authorization || '');
     res.setHeader('Cache-Control', 'private, no-store');
@@ -412,8 +428,11 @@ async function handleDiscordRetryCron(req, res) {
     }
     if (req.method !== 'GET') return res.status(405).json({ success: false, error: 'Method not allowed' });
 
-    const result = await retryDueDiscordDeliveries({ limit: 50 });
-    return res.status(200).json({ success: true, data: result });
+    const [discord, geolocations] = await Promise.all([
+        retryDueDiscordDeliveries({ limit: 50 }),
+        repairGeolocationBatch({ limit: 25 })
+    ]);
+    return res.status(200).json({ success: true, data: { discord, geolocations } });
 }
 
 module.exports = async function handler(req, res) {
@@ -924,6 +943,7 @@ async function handleGlobe(req, res) {
     const publicPoints = pointsAgg
         .filter(isValidPublicPoint)
         .map(toPublicPoint);
+    scheduleGeolocationRepair(5);
 
     return res.status(200).json({
         success: true,
