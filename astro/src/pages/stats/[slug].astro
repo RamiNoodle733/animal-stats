@@ -80,7 +80,7 @@ const jsonLd = {
                 <p class="scientific-name"><em>{animal.scientific_name || 'Scientific classification unavailable'}</em></p>
                 <p class="hero-description">{animal.description || `${animal.name} comparative animal profile.`}</p>
                 <div class="hero-actions">
-                    <a class="action-primary" href="/stats#roster-title">Browse full roster</a>
+                    <a class="action-primary" href={`/stats?animal=${animal.slug}`}>Open interactive profile</a>
                     <a class="action-secondary" href={`/compare?animal=${animal.slug}`}>Compare this animal</a>
                 </div>
                 <p class="method-note">Scores are comparative editorial ratings for hypothetical matchups, not direct scientific measurements.</p>

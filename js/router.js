@@ -21,7 +21,7 @@
  * Scripts/styles are injected once and cached for repeat navigations.
  */
 const CHART_JS_URL = 'https://cdn.jsdelivr.net/npm/chart.js';
-const ASSET_REVISION = '2.8.0';
+const ASSET_REVISION = '2.8.1';
 
 function versionedAsset(path) {
     return `${path}?v=${ASSET_REVISION}`;
@@ -229,15 +229,6 @@ class Router {
         const normalizedUrl = this.normalizePath(url);
         const currentPath = this.normalizePath(window.location.pathname);
 
-        // Stats directory and animal profiles are static-first routes. Leave
-        // the legacy application shell so these navigations receive the small,
-        // canonical Astro documents instead of rebuilding the old routed view.
-        if (normalizedUrl === '/stats' || normalizedUrl.startsWith('/stats/')) {
-            const destination = new URL(url, window.location.origin);
-            window.location.assign(`${destination.pathname}${destination.search}${destination.hash}`);
-            return;
-        }
-
         // Prevent duplicate navigation
         if (this.isNavigating) return;
         
@@ -396,9 +387,6 @@ class Router {
         // API routes
         if (link.pathname.startsWith('/api/')) return false;
 
-        // Allow the browser to load static-first Stats documents directly.
-        if (link.pathname === '/stats' || link.pathname.startsWith('/stats/')) return false;
-        
         // Hash-only links
         if (link.getAttribute('href').startsWith('#')) return false;
 

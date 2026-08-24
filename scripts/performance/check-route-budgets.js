@@ -24,6 +24,7 @@ const routeAssets = Object.freeze({
         scripts: ['js/homepage.js', 'js/social.js'],
         styles: ['css/pages/homepage.css']
     },
+    stats: { scripts: [], styles: [] },
     rankings: { scripts: ['js/rankings.js'], styles: ['css/pages/rankings.css'] },
     tournament: {
         scripts: ['js/tournament.js'],
@@ -137,10 +138,6 @@ for (const { name, assets } of animalStaticAssets) {
 const aboutStaticAssets = collectInitialAssets(fs.readFileSync(path.join(repoRoot, 'about.html'), 'utf8'));
 assertWithin('about.html static JavaScript', measure(aboutStaticAssets.scripts).gzip, budgets.staticPageJavaScriptGzip);
 assertWithin('about.html static styles', measure(aboutStaticAssets.styles).gzip, budgets.staticPageStylesGzip);
-const statsStaticAssets = collectInitialAssets(fs.readFileSync(path.join(repoRoot, 'stats.html'), 'utf8'));
-assertWithin('stats.html static JavaScript', measure(statsStaticAssets.scripts).gzip, budgets.staticPageJavaScriptGzip);
-assertWithin('stats.html static styles', measure(statsStaticAssets.styles).gzip, budgets.staticPageStylesGzip);
-
 for (const htmlFile of htmlFiles) {
     const html = fs.readFileSync(path.join(repoRoot, htmlFile), 'utf8');
     for (const forbidden of forbiddenInitialAssets) {
@@ -173,13 +170,6 @@ rows.push({
     initialJsGzip: formatKb(measure(aboutStaticAssets.scripts).gzip),
     routeJsGzip: formatKb(0),
     initialCssGzip: formatKb(measure(aboutStaticAssets.styles).gzip),
-    routeCssGzip: formatKb(0)
-});
-rows.push({
-    route: 'stats-static',
-    initialJsGzip: formatKb(measure(statsStaticAssets.scripts).gzip),
-    routeJsGzip: formatKb(0),
-    initialCssGzip: formatKb(measure(statsStaticAssets.styles).gzip),
     routeCssGzip: formatKb(0)
 });
 const representativeStaticAssets = animalStaticAssets[0]?.assets || { scripts: [], styles: [] };

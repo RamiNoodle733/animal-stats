@@ -9,9 +9,10 @@ const { getAnimals, renderHtml } = require('../lib/seo-renderer.js');
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const astroOutput = path.join(root, '.cache', 'astro-dist', 'stats');
 const statsOutput = path.join(root, 'stats');
-const astroRootPages = ['about.html', 'stats.html'];
+const astroRootPages = ['about.html'];
 
 const fixedPages = [
+  { route: '/stats', file: 'stats.html' },
   { route: '/compare', file: 'compare.html' },
   { route: '/rankings', file: 'rankings.html' },
   { route: '/community', file: 'community.html' },
