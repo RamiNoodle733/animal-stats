@@ -48,6 +48,14 @@ Check [DATA_PROGRESS.md](./DATA_PROGRESS.md) to see which animals still need wor
 - **Metric units** - convert if needed
 - **Keep JSON valid** - make sure the file still parses
 
+### Animal image requirements
+
+- Use a real photograph of the named animal, not an illustration, cartoon, generated/stylized substitute, or 3D render.
+- The background must contain genuine transparency; a white or checkerboard background baked into the pixels does not qualify.
+- Do not submit watermarked previews or reuse one animal's file for another species.
+- Record the original source page, creator, and reuse license for every replacement.
+- Run `npm run assets:audit -- --strict` and visually review the generated contact sheet before submitting.
+
 ### Questions?
 
 Open an issue or join our [Discord](https://discord.gg/BAaJFCXNTN).

@@ -18,7 +18,7 @@ A web application that presents animal statistics in an engaging fighting game-s
 ### 🎮 Fighting Game Interface
 - **Character Select Screen**: Stats view with centered character display and flanking stat panels
 - **VS Battle Mode**: Compare two fighters head-to-head with dramatic VS badge
-- **Transparent PNG Images**: All animals feature clean, background-free images
+- **Photographic Animal Cutouts**: Animal assets are being standardized on real photos with genuine transparency and traceable sources
 - **Responsive Design**: Optimized for desktop, tablet, and mobile devices
 
 ### 📊 Comprehensive Stats
@@ -60,6 +60,16 @@ npm run seed
 
 # Start development server
 npm run dev
+```
+
+### Animal image quality gate
+
+New or replacement animal artwork must be a real photograph of the correct animal with genuine transparent pixels. Cartoons, illustrations, generated or stylized animals, 3D renders, watermarked previews, opaque backgrounds, and reused files for different species are not accepted.
+
+Run `npm run assets:audit` to inspect decoding, transparency, dimensions, byte size, and exact duplicates. Add `-- --strict` when validating a replacement-ready set. The audit can also produce labeled visual-review sheets because photographic authenticity cannot be proven from file metadata alone:
+
+```bash
+npm run assets:audit -- --report .cache/image-audit/report.json --contact-sheets .cache/image-audit
 ```
 
 ## 📁 Project Structure
