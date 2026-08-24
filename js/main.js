@@ -244,7 +244,10 @@ class AnimalStatsApp {
             // still load the full dataset up front.
             this.state.view = this.getInitialViewFromPath();
 
-            await this.fetchData();
+            const initialRouteAssets = ['home', 'about'].includes(this.state.view)
+                ? window.loadRouteAssets?.(this.state.view)
+                : Promise.resolve();
+            await Promise.all([this.fetchData(), initialRouteAssets]);
             this.populateClassFilter();
             this.setupEventListeners();
             
@@ -435,7 +438,8 @@ class AnimalStatsApp {
         const router = window.Router;
 
         // Home route
-        router.on('/', () => {
+        router.on('/', async () => {
+            await window.loadRouteAssets?.('home');
             this.switchView('home', false);
         });
 
@@ -541,7 +545,8 @@ class AnimalStatsApp {
         });
 
         // About route
-        router.on('/about', () => {
+        router.on('/about', async () => {
+            await window.loadRouteAssets?.('about');
             this.switchView('about', false);
         });
 
@@ -1101,6 +1106,7 @@ class AnimalStatsApp {
         
         // Search & Filter
         this.dom.searchInput.addEventListener('input', this.debouncedSearch);
+        this.scheduleAnimalSearchAutofillCleanup();
         this.dom.classFilter.addEventListener('change', this.handleFilter);
         this.dom.dietFilter.addEventListener('change', this.handleFilter);
         this.dom.biomeFilter.addEventListener('change', this.handleFilter);
@@ -1315,6 +1321,38 @@ class AnimalStatsApp {
                 if (this.state.compare.selectingSide) this.setSelectingSide(null);
             }
         });
+    }
+
+    /**
+     * Password managers can fill the first visible text-like field after the
+     * hidden auth forms. Only clear values that Chrome itself marks as
+     * autofilled so intentional animal searches are never discarded.
+     */
+    clearAutofilledAnimalSearch() {
+        const input = this.dom.searchInput;
+        if (!input?.value) return false;
+
+        let isAutofilled = false;
+        try {
+            isAutofilled = input.matches(':-webkit-autofill');
+        } catch {
+            return false;
+        }
+
+        if (!isAutofilled) return false;
+
+        input.value = '';
+        this.state.filters.search = '';
+        this.applyFilters({ renderGrid: this.shouldRenderGridImmediately() });
+        return true;
+    }
+
+    scheduleAnimalSearchAutofillCleanup() {
+        const clear = () => this.clearAutofilledAnimalSearch();
+        clear();
+        requestAnimationFrame(clear);
+        setTimeout(clear, 250);
+        setTimeout(clear, 1000);
     }
 
     /**
@@ -2622,6 +2660,8 @@ class AnimalStatsApp {
     }
 
     updateFightButton() {
+        if (!this.dom.fightBtn) return;
+
         const { left, right } = this.state.compare;
         if (left && right) {
             this.dom.fightBtn.disabled = false;

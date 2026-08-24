@@ -30,6 +30,10 @@ async function inspectPage(page, route, viewport) {
     await page.goto(`${baseUrl}${route}`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForSelector('#character-grid .character-card', { timeout: 30000 });
     await page.locator('#search-input').fill('Yak');
+    await page.waitForFunction(() => (
+        window.app?.state?.filters?.search === 'yak'
+        && document.querySelectorAll('#character-grid .character-card').length > 0
+    ), null, { timeout: 10000 });
 
     const yakCard = page.locator('#character-grid .character-card').filter({ hasText: 'Yak' }).first();
     await yakCard.waitFor({ state: 'visible', timeout: 10000 });

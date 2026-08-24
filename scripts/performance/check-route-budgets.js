@@ -20,7 +20,14 @@ const htmlFiles = [
 ];
 
 const routeAssets = Object.freeze({
-    home: { scripts: [], styles: [] },
+    home: {
+        scripts: ['js/homepage.js', 'js/social.js'],
+        styles: ['css/pages/homepage.css']
+    },
+    about: {
+        scripts: ['js/social.js'],
+        styles: ['css/pages/homepage.css']
+    },
     stats: { scripts: [], styles: [] },
     rankings: { scripts: ['js/rankings.js'], styles: ['css/pages/rankings.css'] },
     tournament: {
@@ -33,7 +40,7 @@ const routeAssets = Object.freeze({
     },
     compare: {
         scripts: ['js/compare.js'],
-        styles: ['compare-page.css', 'css/pages/compare.css']
+        styles: ['css/components/match-intro.css', 'compare-page.css', 'css/pages/compare.css']
     },
     battlepoints: {
         scripts: ['js/battlepoints.js'],
@@ -42,13 +49,16 @@ const routeAssets = Object.freeze({
 });
 
 const budgets = Object.freeze({
-    initialJavaScriptGzip: 85 * 1024,
-    initialStylesGzip: 90 * 1024,
+    initialJavaScriptGzip: 62 * 1024,
+    initialStylesGzip: 80 * 1024,
     routeJavaScriptGzip: 30 * 1024,
     routeStylesGzip: 25 * 1024
 });
 
 const forbiddenInitialAssets = [
+    '/js/homepage.js',
+    '/js/social.js',
+    '/css/pages/homepage.css',
     '/js/rankings.js',
     '/js/tournament.js',
     '/js/community-globe.js',

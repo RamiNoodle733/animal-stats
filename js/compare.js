@@ -269,6 +269,14 @@
             fightBtn.id = 'fight-btn';
             fightBtn.innerHTML = '<i class="fas fa-bolt"></i> FIGHT <i class="fas fa-bolt"></i>';
             vsSection.after(fightBtn);
+
+            // Compare assets are route-loaded after the app caches its DOM.
+            // Refresh the late-created control and bind the app action here.
+            if (window.app?.dom) {
+                window.app.dom.fightBtn = fightBtn;
+                fightBtn.addEventListener('click', window.app.startFight);
+                window.app.updateFightButton();
+            }
             
             // Add stat bars after radar chart - use Tournament's t-stats-compact for identical styling
             const statsCompact = document.createElement('div');

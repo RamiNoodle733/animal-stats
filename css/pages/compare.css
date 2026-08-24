@@ -42,6 +42,11 @@
     display: flex;
 }
 
+/* Route CSS stays loaded during SPA navigation; inactive Compare must remain hidden. */
+#compare-view:not(.active-view) {
+    display: none;
+}
+
 /* ========================
    FIGHT ARENA
    ======================== */
@@ -223,8 +228,8 @@
 
 .fighter__display,
 #compare-view .fighter-display {
-    width: clamp(70px, 12vh, 150px);
-    height: clamp(70px, 12vh, 150px);
+    width: clamp(210px, 30vh, 320px);
+    height: clamp(210px, 30vh, 320px);
     
     display: flex;
     align-items: center;
@@ -712,4 +717,31 @@
 #compare-view .compare-stats-panel,
 #compare-view .radar-chart-container {
     display: none !important;
+}
+
+/* Compare stability: keep real animal cutouts legible on phone-sized arenas. */
+@media (max-width: 480px) {
+    #compare-view .c-hero-section {
+        width: 130px !important;
+        min-height: 124px !important;
+        padding: 4px !important;
+    }
+
+    #compare-view .fighter-display {
+        width: 124px !important;
+        height: 120px !important;
+    }
+
+    #compare-view .fighter-image {
+        max-width: 120px !important;
+        max-height: 116px !important;
+    }
+
+    #compare-view .c-fighter-name {
+        min-height: 2.2em !important;
+        font-size: 0.72rem !important;
+        line-height: 1.1 !important;
+        white-space: normal !important;
+        overflow-wrap: anywhere !important;
+    }
 }

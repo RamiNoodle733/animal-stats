@@ -21,13 +21,21 @@
  * Scripts/styles are injected once and cached for repeat navigations.
  */
 const CHART_JS_URL = 'https://cdn.jsdelivr.net/npm/chart.js';
-const ASSET_REVISION = '2.4.6';
+const ASSET_REVISION = '2.4.7';
 
 function versionedAsset(path) {
     return `${path}?v=${ASSET_REVISION}`;
 }
 
 const ROUTE_ASSET_DEFINITIONS = {
+    home: {
+        styles: [versionedAsset('/css/pages/homepage.css')],
+        scripts: [versionedAsset('/js/homepage.js'), versionedAsset('/js/social.js')]
+    },
+    about: {
+        styles: [versionedAsset('/css/pages/homepage.css')],
+        scripts: [versionedAsset('/js/social.js')]
+    },
     stats: {
         styles: [],
         scripts: [CHART_JS_URL]
@@ -54,7 +62,11 @@ const ROUTE_ASSET_DEFINITIONS = {
         ]
     },
     compare: {
-        styles: [versionedAsset('/compare-page.css'), versionedAsset('/css/pages/compare.css')],
+        styles: [
+            versionedAsset('/css/components/match-intro.css'),
+            versionedAsset('/compare-page.css'),
+            versionedAsset('/css/pages/compare.css')
+        ],
         scripts: [CHART_JS_URL, versionedAsset('/js/compare.js')]
     },
     battlepoints: {
