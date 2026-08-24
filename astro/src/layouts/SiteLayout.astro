@@ -9,6 +9,7 @@ const {
     jsonLd,
     activeNav = '',
     styles = [],
+    scripts = [],
     skipLabel = 'Skip to main content',
     footerLabel = 'Static page'
 } = Astro.props;
@@ -73,5 +74,6 @@ const navItems = [
             </div>
             <p class="about-version">Version {version} • {footerLabel}</p>
         </footer>
+        {scripts.map((script) => <script is:inline type="module" src={`${script}?v=${version}`}></script>)}
     </body>
 </html>

@@ -1,0 +1,200 @@
+---
+import AnimalPicture from '../components/AnimalPicture.astro';
+import SiteLayout from '../layouts/SiteLayout.astro';
+import { animals, clampScore, formatScore, imageFor, stats } from '../lib/animals.js';
+import sourceRegistry from '../../../data/animal-image-sources.json';
+
+const canonical = 'https://animalbattlestats.com/stats';
+const title = 'Animal Stats Database — 225 Battle Profiles | Animal Battle Stats';
+const description = 'Search and filter 225 animal battle profiles by species group, rank, attack, defense, agility, stamina, intelligence, and special abilities.';
+const updated = sourceRegistry.updatedAt || '2026-08-24';
+const verifiedNames = new Set(sourceRegistry.entries
+    .filter((entry) => entry.status === 'active')
+    .map((entry) => entry.animal));
+const featuredAnimals = animals.filter((animal) => verifiedNames.has(animal.name));
+const animalTypes = [...new Set(animals.map((animal) => animal.type).filter(Boolean))]
+    .sort((left, right) => left.localeCompare(right));
+const typeCounts = new Map(animalTypes.map((type) => [type, animals.filter((animal) => animal.type === type).length]));
+const statKeys = stats.map(([key]) => key);
+const strongestStat = (animal) => stats.reduce((strongest, candidate) => (
+    clampScore(animal[candidate[0]]) > clampScore(animal[strongest[0]]) ? candidate : strongest
+), stats[0]);
+const powerIndex = (animal) => animal.totalStats / stats.length;
+const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {
+            '@type': 'CollectionPage',
+            name: 'Animal Stats Database',
+            headline: '225 comparative animal battle profiles',
+            description,
+            url: canonical,
+            dateModified: updated,
+            isPartOf: { '@type': 'WebSite', name: 'Animal Battle Stats', url: 'https://animalbattlestats.com/' },
+            mainEntity: { '@id': `${canonical}#directory` }
+        },
+        {
+            '@id': `${canonical}#directory`,
+            '@type': 'ItemList',
+            name: 'Animal Battle Stats directory',
+            numberOfItems: animals.length,
+            itemListElement: animals.map((animal) => ({
+                '@type': 'ListItem',
+                position: animal.rank,
+                name: animal.name,
+                url: `${canonical}/${animal.slug}`
+            }))
+        },
+        {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://animalbattlestats.com/' },
+                { '@type': 'ListItem', position: 2, name: 'Animal Stats', item: canonical }
+            ]
+        }
+    ]
+};
+---
+
+<SiteLayout
+    title={title}
+    description={description}
+    canonical={canonical}
+    jsonLd={jsonLd}
+    activeNav="stats"
+    styles={['/css/pages/stats-directory.css']}
+    scripts={['/js/stats-directory.js']}
+    skipLabel="Skip to animal directory"
+    footerLabel="Static animal directory"
+>
+    <main id="main-content" class="directory-main">
+        <nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a><span>/</span><span aria-current="page">Animal Stats</span></nav>
+
+        <section class="directory-hero" aria-labelledby="directory-title">
+            <div class="directory-hero-copy">
+                <p class="directory-kicker">FIELD INDEX / 225 PROFILES</p>
+                <h1 id="directory-title">Every animal.<br /><span>One field manual.</span></h1>
+                <p>Search the complete roster, compare the six editorial battle ratings, and open a profile for measurements, habitat, abilities, and matchup context.</p>
+                <div class="directory-summary" aria-label="Directory summary">
+                    <div><strong>225</strong><span>animal profiles</span></div>
+                    <div><strong>6</strong><span>battle dimensions</span></div>
+                    <div><strong>13</strong><span>species groups</span></div>
+                </div>
+                <p class="directory-update">Directory interface updated <time datetime={updated}>August 24, 2026</time> · Versioned releases</p>
+            </div>
+
+            <div class="verified-showcase" aria-label="Verified real-photo animal assets">
+                <div class="showcase-heading"><span>VERIFIED IMAGE STANDARD</span><a href="/about#image-policy-title">Read the policy</a></div>
+                <div class="showcase-stack">
+                    {featuredAnimals.map((animal, index) => (
+                        <a href={`/stats/${animal.slug}`} aria-label={`Open ${animal.name} profile`}>
+                            <AnimalPicture animal={animal} image={imageFor(animal)} priority={index < 2} />
+                            <span>{animal.name}</span>
+                        </a>
+                    ))}
+                </div>
+                <p>Only reviewed real photographs with transparent backgrounds appear in this showcase. Legacy roster artwork is being replaced progressively.</p>
+            </div>
+        </section>
+
+        <section class="directory-panel" aria-labelledby="roster-title">
+            <div class="directory-heading">
+                <div><p>ANIMAL DATABASE</p><h2 id="roster-title">Browse the full roster</h2></div>
+                <p><strong id="directory-result-count">{animals.length}</strong> profiles shown</p>
+            </div>
+
+            <form class="directory-controls" id="directory-controls" role="search" autocomplete="off">
+                <label class="directory-search" for="animal-directory-query">
+                    <span>Search animals</span>
+                    <input
+                        id="animal-directory-query"
+                        name="animal-directory-query"
+                        type="search"
+                        placeholder="Name, scientific name, habitat, or class"
+                        autocomplete="off"
+                        autocapitalize="off"
+                        spellcheck="false"
+                        data-form-type="other"
+                        data-lpignore="true"
+                        data-1p-ignore="true"
+                    />
+                    <button type="button" id="directory-clear" aria-label="Clear animal search" hidden>×</button>
+                </label>
+                <label class="directory-sort" for="directory-sort">
+                    <span>Sort roster</span>
+                    <select id="directory-sort" name="sort">
+                        <option value="rank">Overall rank</option>
+                        <option value="name">Animal name</option>
+                        <option value="attack">Attack</option>
+                        <option value="defense">Defense</option>
+                        <option value="agility">Agility</option>
+                        <option value="stamina">Stamina</option>
+                        <option value="intelligence">Intelligence</option>
+                        <option value="special">Special</option>
+                        <option value="weight">Body weight</option>
+                    </select>
+                </label>
+            </form>
+
+            <div class="type-filter" aria-label="Filter by species group">
+                <button type="button" class="active" data-type="all" aria-pressed="true">All <span>{animals.length}</span></button>
+                {animalTypes.map((type) => <button type="button" data-type={type.toLowerCase()} aria-pressed="false">{type} <span>{typeCounts.get(type)}</span></button>)}
+            </div>
+
+            <div class="roster-grid" id="animal-directory" data-stat-keys={statKeys.join(',')}>
+                {animals.map((animal) => {
+                    const [dominantKey, dominantLabel] = strongestStat(animal);
+                    return (
+                        <article
+                            class="roster-card"
+                            data-slug={animal.slug}
+                            data-name={animal.name.toLowerCase()}
+                            data-search={`${animal.name} ${animal.scientific_name || ''} ${animal.type || ''} ${animal.class || ''} ${animal.habitat || ''}`.toLowerCase()}
+                            data-type={(animal.type || '').toLowerCase()}
+                            data-rank={animal.rank}
+                            data-weight={Number(animal.weight_kg) || 0}
+                            data-attack={clampScore(animal.attack)}
+                            data-defense={clampScore(animal.defense)}
+                            data-agility={clampScore(animal.agility)}
+                            data-stamina={clampScore(animal.stamina)}
+                            data-intelligence={clampScore(animal.intelligence)}
+                            data-special={clampScore(animal.special)}
+                        >
+                            <a class="roster-card-main" href={`/stats/${animal.slug}`}>
+                                <div class="roster-rank"><span>#</span>{animal.rank}</div>
+                                <div class="roster-identity">
+                                    <span>{animal.type || 'Animal'} · {animal.class || 'Unclassified'}</span>
+                                    <h3>{animal.name}</h3>
+                                    <p>{animal.scientific_name || 'Scientific name unavailable'}</p>
+                                </div>
+                                <div class="roster-power">
+                                    <span>POWER INDEX</span><strong>{formatScore(powerIndex(animal))}</strong><small>/ 100</small>
+                                </div>
+                            </a>
+                            <div class="roster-stats" aria-label={`${animal.name} battle ratings`}>
+                                {stats.map(([key, label, abbreviation]) => (
+                                    <div class={key === dominantKey ? 'dominant' : undefined} title={`${label}: ${formatScore(animal[key])}`}>
+                                        <span>{abbreviation}</span><i><b style={`width:${clampScore(animal[key])}%`}></b></i><strong>{formatScore(animal[key])}</strong>
+                                    </div>
+                                ))}
+                            </div>
+                            <div class="roster-footer"><span>Strongest: {dominantLabel}</span><a href={`/compare?animal=${animal.slug}`}>Compare →</a></div>
+                        </article>
+                    );
+                })}
+            </div>
+
+            <div class="directory-empty" id="directory-empty" hidden>
+                <strong>No animals match those filters.</strong>
+                <p>Clear the search or choose another species group.</p>
+                <button type="button" id="directory-reset">Reset directory</button>
+            </div>
+        </section>
+
+        <section class="directory-method" aria-labelledby="directory-method-title">
+            <div><p>READ BEFORE COMPARING</p><h2 id="directory-method-title">Ratings are editorial. Facts should be sourced.</h2></div>
+            <p>The six 0–100 ratings create a consistent powerscaling model; they are not laboratory measurements. Read the definitions, evidence policy, and correction process before treating a number as a wildlife fact.</p>
+            <a href="/about">Open methodology →</a>
+        </section>
+    </main>
+</SiteLayout>

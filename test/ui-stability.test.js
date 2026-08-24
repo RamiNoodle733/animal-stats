@@ -50,3 +50,11 @@ test('inactive SPA routes cannot leak into the active page layout', () => {
     const css = read('css/legacy.css');
     assert.match(css, /\.view-container:not\(\.active-view\)\s*\{\s*display:\s*none !important;/);
 });
+
+test('legacy navigation yields Stats routes to their static documents', () => {
+    const router = read('js/router.js');
+
+    assert.match(router, /normalizedUrl === '\/stats' \|\| normalizedUrl\.startsWith\('\/stats\/'\)/);
+    assert.match(router, /window\.location\.assign\(`\$\{destination\.pathname\}\$\{destination\.search\}\$\{destination\.hash\}`\)/);
+    assert.match(router, /link\.pathname === '\/stats' \|\| link\.pathname\.startsWith\('\/stats\/'\)/);
+});
