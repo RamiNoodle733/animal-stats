@@ -186,7 +186,7 @@ function toPublicPoint(point = {}) {
         region: point.region || null,
         country: point.country || null,
         granularity: getPublicGranularity(point),
-        coordinateQuality: point.coordinateSource === 'geocode-city' ? 'high' : 'medium',
+        coordinateQuality: ['geocode-city', 'verified-city-centroid'].includes(point.coordinateSource) ? 'high' : 'medium',
         lat: Number(Number(point.lat).toFixed(1)),
         lng: Number(Number(point.lng).toFixed(1)),
         totalEvents: Number(point.totalEvents) || 0,

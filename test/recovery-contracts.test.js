@@ -10,7 +10,8 @@ const assert = require('node:assert/strict');
 const {
     validateCoordinateResult,
     getLocationGranularity,
-    coordinatesAreFinite
+    coordinatesAreFinite,
+    getVerifiedCityCentroid
 } = require('../lib/activity-logger');
 const communityApi = require('../api/community');
 const {
@@ -54,6 +55,18 @@ test('valid city, region, and country results retain their granularity', () => {
     );
     assert.equal(houston.valid, true);
     assert.equal(houston.confidence, 'high');
+});
+
+test('verified centroids cover known geocoder failures without country ambiguity', () => {
+    assert.deepEqual(
+        getVerifiedCityCentroid({ city: 'Sugar Land', region: 'TX', country: 'United States' }),
+        { lat: 29.61968, lng: -95.63495, source: 'verified-city-centroid' }
+    );
+    assert.deepEqual(
+        getVerifiedCityCentroid({ city: 'Volketswil', region: 'ZH', country: 'Switzerland' }),
+        { lat: 47.39016, lng: 8.69085, source: 'verified-city-centroid' }
+    );
+    assert.equal(getVerifiedCityCentroid({ city: 'Sugar Land', country: 'CA' }), null);
 });
 
 test('public point serializer exposes anonymous aggregate fields only', () => {
