@@ -9,6 +9,7 @@
 
 const { connectToDatabase } = require('../lib/mongodb');
 const Animal = require('../lib/models/Animal');
+const { applyCanonicalAnimalImages } = require('../lib/animal-images');
 const { setCorsHeaders } = require('../lib/cors');
 
 module.exports = async function handler(req, res) {
@@ -102,11 +103,11 @@ module.exports = async function handler(req, res) {
                 byClass: classBreakdown.reduce((acc, c) => ({ ...acc, [c._id]: c.count }), {}),
                 bySize: sizeBreakdown.reduce((acc, s) => ({ ...acc, [s._id]: s.count }), {}),
                 leaderboards: {
-                    attack: topAttack,
-                    defense: topDefense,
-                    agility: topAgility,
-                    intelligence: topIntelligence,
-                    overall: topOverall
+                    attack: applyCanonicalAnimalImages(topAttack),
+                    defense: applyCanonicalAnimalImages(topDefense),
+                    agility: applyCanonicalAnimalImages(topAgility),
+                    intelligence: applyCanonicalAnimalImages(topIntelligence),
+                    overall: applyCanonicalAnimalImages(topOverall)
                 }
             }
         });

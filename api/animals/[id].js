@@ -9,6 +9,7 @@
 
 const { connectToDatabase } = require('../../lib/mongodb');
 const Animal = require('../../lib/models/Animal');
+const { applyCanonicalAnimalImage } = require('../../lib/animal-images');
 const { authorizeRequest } = require('../../lib/auth');
 const mongoose = require('mongoose');
 const { setCorsHeaders } = require('../../lib/cors');
@@ -90,7 +91,7 @@ async function handleGet(req, res, id) {
 
     return res.status(200).json({
         success: true,
-        data: animal
+        data: applyCanonicalAnimalImage(animal)
     });
 }
 
@@ -142,7 +143,7 @@ async function handlePut(req, res, id) {
 
     return res.status(200).json({
         success: true,
-        data: animal
+        data: applyCanonicalAnimalImage(animal)
     });
 }
 

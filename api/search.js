@@ -6,6 +6,7 @@
 
 const { connectToDatabase } = require('../lib/mongodb');
 const Animal = require('../lib/models/Animal');
+const { applyCanonicalAnimalImages } = require('../lib/animal-images');
 const { setCorsHeaders } = require('../lib/cors');
 
 module.exports = async function handler(req, res) {
@@ -147,7 +148,7 @@ module.exports = async function handler(req, res) {
 
         return res.status(200).json({
             success: true,
-            data: animals,
+            data: applyCanonicalAnimalImages(animals),
             pagination: {
                 page: parseInt(page),
                 limit: parseInt(limit),

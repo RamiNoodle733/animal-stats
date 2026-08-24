@@ -12,6 +12,7 @@ const { connectToDatabase } = require('../lib/mongodb');
 const Vote = require('../lib/models/Vote');
 const Comment = require('../lib/models/Comment');
 const Animal = require('../lib/models/Animal');
+const { applyCanonicalAnimalImage } = require('../lib/animal-images');
 const BattleStats = require('../lib/models/BattleStats');
 const RankHistory = require('../lib/models/RankHistory');
 const { getAuthUser } = require('../lib/auth');
@@ -135,7 +136,8 @@ module.exports = async function handler(req, res) {
         const clamp = (val, min, max) => Math.max(min, Math.min(max, val));
 
         // Combine data and calculate power rankings using new algorithm
-        const rankings = animals.map(animal => {
+        const rankings = animals.map((databaseAnimal) => {
+            const animal = applyCanonicalAnimalImage(databaseAnimal);
             const votes = voteMap[animal.name] || { upvotes: 0, downvotes: 0, score: 0 };
             const battle = battleMap[animal.name] || { 
                 battleRating: 1000, 
@@ -189,6 +191,7 @@ module.exports = async function handler(req, res) {
                     _id: animal._id,
                     name: animal.name,
                     image: animal.image,
+                    imageSet: animal.imageSet,
                     attack: animal.attack,
                     defense: animal.defense,
                     agility: animal.agility,

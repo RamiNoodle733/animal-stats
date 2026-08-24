@@ -14,6 +14,7 @@ const { connectToDatabase } = require('../lib/mongodb');
 const { waitUntil } = require('@vercel/functions');
 const Animal = require('../lib/models/Animal');
 const { getAuthUser, authorizeRequest } = require('../lib/auth');
+const { applyCanonicalAnimalImage, applyCanonicalAnimalImages } = require('../lib/animal-images');
 const { notifyDiscord } = require('../lib/discord');
 const { setCorsHeaders } = require('../lib/cors');
 
@@ -207,7 +208,7 @@ async function handleHomeView(_req, res) {
     ]);
 
     const total = await Animal.countDocuments();
-    const rankedAnimals = animals.map((animal, index) => ({
+    const rankedAnimals = applyCanonicalAnimalImages(animals).map((animal, index) => ({
         ...animal,
         rank: index + 1
     }));
@@ -294,7 +295,7 @@ async function handleGet(req, res) {
         return res.status(200).json({
             success: true,
             count: animals.length,
-            data: animals
+            data: applyCanonicalAnimalImages(animals)
         });
     }
 
@@ -315,7 +316,7 @@ async function handleGet(req, res) {
         success: true,
         count: animals.length,
         total,
-        data: animals
+        data: applyCanonicalAnimalImages(animals)
     });
 }
 
@@ -353,6 +354,6 @@ async function handlePost(req, res) {
 
     return res.status(201).json({
         success: true,
-        data: animal
+        data: applyCanonicalAnimalImage(animal)
     });
 }

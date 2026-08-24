@@ -14,6 +14,7 @@ const { connectToDatabase } = require('../lib/mongodb');
 const ChatMessage = require('../lib/models/ChatMessage');
 const Comment = require('../lib/models/Comment');
 const Animal = require('../lib/models/Animal');
+const { getCanonicalAnimalImage } = require('../lib/animal-images');
 const { getAuthUser, authorizeRequest } = require('../lib/auth');
 const { notifyDiscord } = require('../lib/discord');
 const { maskBlockedTerms } = require('../lib/moderation');
@@ -178,7 +179,7 @@ async function handleGetFeed(req, res) {
         let animalImage = null;
         if (comment.targetType === 'animal' && comment.animalName) {
             const animal = await Animal.findOne({ name: comment.animalName }).select('image').lean();
-            animalImage = animal?.image || null;
+            animalImage = getCanonicalAnimalImage(comment.animalName, animal?.image || null);
         }
 
         return {

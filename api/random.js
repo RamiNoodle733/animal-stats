@@ -6,6 +6,7 @@
 
 const { connectToDatabase } = require('../lib/mongodb');
 const Animal = require('../lib/models/Animal');
+const { applyCanonicalAnimalImage, applyCanonicalAnimalImages } = require('../lib/animal-images');
 const { setCorsHeaders } = require('../lib/cors');
 
 module.exports = async function handler(req, res) {
@@ -55,7 +56,9 @@ module.exports = async function handler(req, res) {
         return res.status(200).json({
             success: true,
             count: animals.length,
-            data: numAnimals === 1 ? animals[0] : animals
+            data: numAnimals === 1
+                ? applyCanonicalAnimalImage(animals[0])
+                : applyCanonicalAnimalImages(animals)
         });
 
     } catch (error) {
