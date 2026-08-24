@@ -1,6 +1,6 @@
 {
   "name": "animal-battle-stats",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "Animal Battle Stats - A scientifically accurate wildlife statistics website with MongoDB backend",
   "main": "api/index.js",
   "scripts": {
