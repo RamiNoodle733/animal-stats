@@ -53,6 +53,12 @@ jobs:
       - name: Lint JavaScript
         run: npm run lint
 
+      - name: Run unit and contract tests
+        run: npm test
+
+      - name: Enforce route performance budgets
+        run: npm run perf:budget
+
       - name: Verify release version agreement
         run: npm run version:check
 

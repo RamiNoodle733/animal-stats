@@ -104,15 +104,9 @@
     <!-- Main stylesheet (all styles) -->
     <link rel="stylesheet" href="/css/legacy.css">
     
-    <!-- Page styles loaded deterministically to keep route layouts stable -->
+    <!-- Shared page styles; feature-route styles are loaded by js/router.js -->
     <link rel="stylesheet" href="/css/pages/homepage.css">
     <link rel="stylesheet" href="/css/components/about-info-btn.css">
-    <link rel="stylesheet" href="/tournament-v4.css" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="/compare-page.css" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="/css/pages/rankings.css?v=2e926f0" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="/community-page.css" media="print" onload="this.media='all'">
-    <link rel="stylesheet" href="/css/pages/community-globe.css">
-    <link rel="stylesheet" href="/css/pages/battlepoints.css" media="print" onload="this.media='all'">
     
     <!-- Mobile-specific styles (loaded last to override) -->
     <link rel="stylesheet" href="/css/mobile.css" media="print" onload="this.media='all'">
@@ -123,8 +117,6 @@
     <!-- Google Fonts - loaded async -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Bebas+Neue&family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     
-    <!-- Chart.js - defer loading since not needed immediately -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
     <!-- Prevent flash of content on home/auth pages -->
     <script>
         (function() {
@@ -381,7 +373,7 @@
 
             <!-- Footer with About link - OUTSIDE home-portal to avoid screen shake effects -->
             <footer class="portal-footer">
-                <span class="portal-version">v2.3.6</span>
+                <span class="portal-version">v2.4.0</span>
                 <div class="portal-footer-divider"></div>
                 <a href="/about" class="portal-footer-link">About</a>
                 <div class="portal-footer-divider"></div>
@@ -420,7 +412,7 @@
                     </div>
                     
                     <div class="about-version-section">
-                        <p class="about-version">Version 2.3.6 • Built with <i class="fas fa-heart" style="color: #ff4d6a;"></i> and JavaScript</p>
+                        <p class="about-version">Version 2.4.0 • Built with <i class="fas fa-heart" style="color: #ff4d6a;"></i> and JavaScript</p>
                     </div>
                 </div>
             </div>
@@ -3223,14 +3215,6 @@
     <!-- Audio Manager (must load before other scripts) -->
     <script src="/js/audio.js"></script>
     
-    <!-- Route modules loaded deterministically; route handlers initialize them on demand -->
-    <script src="/js/rankings.js"></script>
-    <script src="/js/tournament.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.min.js"></script>
-    <script src="/js/community-globe.js"></script>
-    <script src="/js/community-manager.js"></script>
-    <script src="/js/battlepoints.js"></script>
-
     <!-- Lightweight shared modules -->
     <script src="/js/homepage.js"></script>
     <script src="/js/social.js"></script>
@@ -3238,8 +3222,5 @@
     <!-- Main app (initializes everything) -->
     <script src="/js/main.js" defer></script>
     
-    <!-- Page-specific enhancements -->
-    <script src="/js/compare.js" defer></script>
-    <script src="/js/community.js" defer></script>
 </body>
 </html>

@@ -416,8 +416,7 @@ class AnimalStatsApp {
         if (this._deferredInitStarted) return;
         this._deferredInitStarted = true;
 
-        // Route-heavy managers are loaded by index.html in a stable order and
-        // initialized only when their route is entered.
+        // Route-heavy managers and their styles are loaded only when entered.
     }
 
     /**
@@ -443,7 +442,10 @@ class AnimalStatsApp {
         // Stats routes - register more specific route first
         router.on('/stats/:slug', async (params) => {
             try {
-                await this.ensureFullAnimalData();
+                await Promise.all([
+                    this.ensureFullAnimalData(),
+                    window.loadRouteAssets?.('stats')
+                ]);
                 this.switchView('stats', false);
                 const animal = this.findAnimalBySlug(params.slug);
                 if (animal) {
@@ -462,7 +464,10 @@ class AnimalStatsApp {
         });
 
         router.on('/stats', async () => {
-            await this.ensureFullAnimalData();
+            await Promise.all([
+                this.ensureFullAnimalData(),
+                window.loadRouteAssets?.('stats')
+            ]);
             this.switchView('stats', false);
             // Select first animal if none selected
             if (!this.state.selectedAnimal && this.state.filteredAnimals.length > 0) {

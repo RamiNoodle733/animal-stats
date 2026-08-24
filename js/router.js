@@ -20,30 +20,40 @@
  * Route asset loader registry.
  * Scripts/styles are injected once and cached for repeat navigations.
  */
+const CHART_JS_URL = 'https://cdn.jsdelivr.net/npm/chart.js';
+
 const ROUTE_ASSET_DEFINITIONS = {
-    rankings: {
+    stats: {
         styles: [],
+        scripts: [CHART_JS_URL]
+    },
+    rankings: {
+        styles: ['/css/pages/rankings.css'],
         scripts: ['/js/rankings.js']
     },
     tournament: {
-        styles: [],
-        scripts: ['/js/tournament.js']
+        styles: ['/tournament-v4.css', '/css/pages/tournament.css'],
+        scripts: [CHART_JS_URL, '/js/tournament.js']
     },
     community: {
-        styles: [],
+        styles: [
+            '/community-page.css',
+            '/css/pages/community.css',
+            '/css/pages/community-globe.css'
+        ],
         scripts: [
-            'https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.min.js',
+            CHART_JS_URL,
             '/js/community-globe.js',
             '/js/community-manager.js',
             '/js/community.js'
         ]
     },
     compare: {
-        styles: [],
-        scripts: ['/js/compare.js']
+        styles: ['/compare-page.css', '/css/pages/compare.css'],
+        scripts: [CHART_JS_URL, '/js/compare.js']
     },
     battlepoints: {
-        styles: [],
+        styles: ['/css/pages/battlepoints.css'],
         scripts: ['/js/battlepoints.js']
     }
 };
@@ -69,7 +79,11 @@ function loadStylesheetOnce(href) {
         link.dataset.routeAsset = 'true';
         link.onload = () => resolve(link);
         link.onerror = () => reject(new Error(`Failed to load stylesheet: ${href}`));
-        document.head.appendChild(link);
+        // Route styles must remain before the mobile override sheet. Appending
+        // them at the end caused the layout regressions that originally led to
+        // every route stylesheet being loaded globally.
+        const mobileOverrides = document.querySelector('link[rel="stylesheet"][href^="/css/mobile.css"]');
+        document.head.insertBefore(link, mobileOverrides || null);
     });
 
     routeStylePromises.set(href, promise);

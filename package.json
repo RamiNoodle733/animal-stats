@@ -1,6 +1,6 @@
 {
   "name": "animal-battle-stats",
-  "version": "2.3.6",
+  "version": "2.4.0",
   "description": "Animal Battle Stats - A scientifically accurate wildlife statistics website with MongoDB backend",
   "main": "api/index.js",
   "scripts": {
@@ -20,6 +20,8 @@
     "version:bump:major": "node scripts/version/bump-site-version.js --bump major",
     "lint": "eslint js/ api/ lib/",
     "lint:fix": "eslint js/ api/ lib/ --fix",
+    "perf:budget": "node scripts/performance/check-route-budgets.js",
+    "preview:readonly": "node scripts/verification/serve-readonly-preview.js",
     "seo:prerender": "node scripts/prerender-seo-pages.mjs",
     "seo:sitemap": "node scripts/generate-sitemap.mjs",
     "seo:audit": "node scripts/seo-audit.mjs",
