@@ -102,13 +102,13 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     
     <!-- Main stylesheet (all styles) -->
-    <link rel="stylesheet" href="/css/legacy.css?v=2.4.7">
+    <link rel="stylesheet" href="/css/legacy.css?v=2.5.0">
     
     <!-- Shared component styles; page/feature styles are loaded by js/router.js -->
-    <link rel="stylesheet" href="/css/components/about-info-btn.css?v=2.4.7">
+    <link rel="stylesheet" href="/css/components/about-info-btn.css?v=2.5.0">
     
     <!-- Mobile-specific styles (loaded last to override) -->
-    <link rel="stylesheet" href="/css/mobile.css?v=2.4.7" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="/css/mobile.css?v=2.5.0" media="print" onload="this.media='all'">
     
     <!-- Non-critical external resources loaded async -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" media="print" onload="this.media='all'">
@@ -372,7 +372,7 @@
 
             <!-- Footer with About link - OUTSIDE home-portal to avoid screen shake effects -->
             <footer class="portal-footer">
-                <span class="portal-version">v2.4.7</span>
+                <span class="portal-version">v2.5.0</span>
                 <div class="portal-footer-divider"></div>
                 <a href="/about" class="portal-footer-link">About</a>
                 <div class="portal-footer-divider"></div>
@@ -411,7 +411,7 @@
                     </div>
                     
                     <div class="about-version-section">
-                        <p class="about-version">Version 2.4.7 • Built with <i class="fas fa-heart" style="color: #ff4d6a;"></i> and JavaScript</p>
+                        <p class="about-version">Version 2.5.0 • Built with <i class="fas fa-heart" style="color: #ff4d6a;"></i> and JavaScript</p>
                     </div>
                 </div>
             </div>
@@ -1508,18 +1508,30 @@
         
         <!-- Community View -->
         <div id="community-view" class="view-container community">
-            <div class="community-tab-bar">
-                <button class="community-tab-btn active" data-tab="chat">
-                    <i class="fas fa-comments"></i> <span class="tab-label">Chat</span>
+            <section class="community-overview" aria-labelledby="community-page-title">
+                <div class="community-overview__copy">
+                    <span class="community-overview__eyebrow"><i class="fas fa-satellite-dish"></i> FIELD NETWORK // LIVE</span>
+                    <h1 id="community-page-title">Community Command Center</h1>
+                    <p>Battle talk, matchup activity, and the anonymous global footprint of Animal Battle Stats.</p>
+                </div>
+                <div class="community-overview__signals" aria-label="Community information">
+                    <span class="community-signal community-signal--live"><i class="fas fa-circle"></i> Network online</span>
+                    <span class="community-signal"><i class="fas fa-user-shield"></i> Map data is anonymous</span>
+                </div>
+            </section>
+
+            <div class="community-tab-bar" role="tablist" aria-label="Community sections">
+                <button type="button" class="community-tab-btn active" data-tab="chat" role="tab" aria-selected="true">
+                    <i class="fas fa-comments"></i> <span class="tab-label">Discuss</span>
                 </button>
-                <button class="community-tab-btn" data-tab="feed">
-                    <i class="fas fa-stream"></i> <span class="tab-label">Feed</span>
+                <button type="button" class="community-tab-btn" data-tab="feed" role="tab" aria-selected="false">
+                    <i class="fas fa-stream"></i> <span class="tab-label">Activity</span>
                 </button>
-                <button class="community-tab-btn" data-tab="map">
-                    <i class="fas fa-globe-americas"></i> <span class="tab-label">Map</span>
+                <button type="button" class="community-tab-btn" data-tab="map" role="tab" aria-selected="false">
+                    <i class="fas fa-globe-americas"></i> <span class="tab-label">World Map</span>
                 </button>
-                <button class="community-tab-btn mobile-only-tab" data-tab="hub">
-                    <i class="fas fa-chart-bar"></i> <span class="tab-label">Hub</span>
+                <button type="button" class="community-tab-btn mobile-only-tab" data-tab="hub" role="tab" aria-selected="false">
+                    <i class="fas fa-chart-bar"></i> <span class="tab-label">Arena Hub</span>
                 </button>
             </div>
 
@@ -1531,6 +1543,9 @@
                         <div class="module-header community-widget__header">
                             <span class="module-title community-widget__title"><i class="fas fa-globe-americas"></i> GLOBAL ACTIVITY</span>
                             <span class="globe-live-pill">All-Time Cumulative</span>
+                            <button type="button" class="globe-open-map-btn" id="globe-open-map-btn" aria-label="Open the full world activity map">
+                                Open map <i class="fas fa-arrow-right"></i>
+                            </button>
                         </div>
 
                         <div class="globe-mode-switch" role="group" aria-label="Map display mode">
@@ -1733,6 +1748,18 @@
 
                 <!-- Main Chat/Feed Column (RIGHT) -->
                 <div class="community-feed-column">
+                    <header class="community-channel-header">
+                        <div class="community-channel-header__icon" id="community-channel-icon" aria-hidden="true">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <div class="community-channel-header__copy">
+                            <span class="community-channel-kicker" id="community-channel-kicker">COMMUNITY CHANNEL</span>
+                            <h2 id="community-channel-title">Battle Discussion</h2>
+                            <p id="community-channel-description">Talk matchups, animal stats, and powerscaling with the community.</p>
+                        </div>
+                        <span class="community-channel-live"><i class="fas fa-circle"></i> Live</span>
+                    </header>
+
                     <!-- Scrollable Feed Area (middle region) -->
                     <div class="feed-scroll-region" id="feed-scroll-region">
                         <!-- Feed Posts Container -->
@@ -3204,18 +3231,18 @@
     <!-- Data loaded from MongoDB API - no local data.js needed -->
     
     <!-- Core utilities - shared across all modules -->
-    <script src="/js/core.js?v=2.4.7"></script>
-    <script src="/js/text-layout.js?v=2.4.7"></script>
+    <script src="/js/core.js?v=2.5.0"></script>
+    <script src="/js/text-layout.js?v=2.5.0"></script>
     
     <!-- Application modules - load order matters -->
-    <script src="/js/router.js?v=2.4.7"></script>
-    <script src="/js/auth.js?v=2.4.7"></script>
+    <script src="/js/router.js?v=2.5.0"></script>
+    <script src="/js/auth.js?v=2.5.0"></script>
     
     <!-- Audio Manager (must load before other scripts) -->
-    <script src="/js/audio.js?v=2.4.7"></script>
+    <script src="/js/audio.js?v=2.5.0"></script>
     
     <!-- Main app (initializes everything) -->
-    <script src="/js/main.js?v=2.4.7" defer></script>
+    <script src="/js/main.js?v=2.5.0" defer></script>
     
 </body>
 </html>

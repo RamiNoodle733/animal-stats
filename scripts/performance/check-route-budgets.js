@@ -36,7 +36,12 @@ const routeAssets = Object.freeze({
     },
     community: {
         scripts: ['js/community-globe.js', 'js/community-manager.js', 'js/community.js'],
-        styles: ['community-page.css', 'css/pages/community.css', 'css/pages/community-globe.css']
+        styles: [
+            'community-page.css',
+            'css/pages/community.css',
+            'css/pages/community-globe.css',
+            'css/pages/community-v2.css'
+        ]
     },
     compare: {
         scripts: ['js/compare.js'],
@@ -136,6 +141,9 @@ for (const htmlFile of htmlFiles) {
 const routerSource = fs.readFileSync(path.join(repoRoot, 'js', 'router.js'), 'utf8');
 if (!routerSource.includes('insertBefore(link, mobileOverrides || null)')) {
     throw new Error('Route styles must be inserted before the mobile override stylesheet');
+}
+if (!routerSource.includes('mobileOverrides.after(link)')) {
+    throw new Error('Final route layout layers must support loading after mobile overrides');
 }
 if (routerSource.includes('three@0.165.0')) {
     throw new Error('The route loader still references the unused Three.js renderer');

@@ -111,6 +111,14 @@ class CommunityManager {
             });
         });
 
+        document.getElementById('globe-open-map-btn')?.addEventListener('click', () => {
+            if (window.Router) {
+                window.Router.navigate('/community/map');
+            } else {
+                this.switchTab('map');
+            }
+        });
+
         // Compose input (new structure)
         const composeInput = document.getElementById('compose-input');
         const composeSendBtn = document.getElementById('compose-send-btn');
@@ -266,8 +274,7 @@ class CommunityManager {
         const pct1 = document.getElementById('matchup-pct-1');
         
         if (img1) {
-            img1.src = fighter1.image;
-            img1.alt = fighter1.name;
+            window.CoreUtils.applyResponsiveAnimalImage(img1, fighter1, '(max-width: 480px) 35vw, 130px');
         }
         if (name1) name1.textContent = fighter1.name;
         if (bar1) bar1.style.width = `${percent1}%`;
@@ -280,8 +287,7 @@ class CommunityManager {
         const pct2 = document.getElementById('matchup-pct-2');
         
         if (img2) {
-            img2.src = fighter2.image;
-            img2.alt = fighter2.name;
+            window.CoreUtils.applyResponsiveAnimalImage(img2, fighter2, '(max-width: 480px) 35vw, 130px');
         }
         if (name2) name2.textContent = fighter2.name;
         if (bar2) bar2.style.width = `${percent2}%`;
@@ -1465,8 +1471,12 @@ class CommunityManager {
 
         // Update tab buttons (new unified tabs)
         document.querySelectorAll('.community-tab-btn').forEach(tab => {
-            tab.classList.toggle('active', tab.dataset.tab === normalizedTab);
+            const isActive = tab.dataset.tab === normalizedTab;
+            tab.classList.toggle('active', isActive);
+            tab.setAttribute('aria-selected', String(isActive));
         });
+
+        this.updateChannelHeader(normalizedTab);
 
         // Handle mobile sidebar/feed visibility
         const sidebar = document.querySelector('.community-sidebar-column');
@@ -1475,6 +1485,7 @@ class CommunityManager {
 
         if (communityView) {
             communityView.classList.toggle('map-tab-active', normalizedTab === 'map');
+            communityView.classList.toggle('hub-tab-active', normalizedTab === 'hub');
             communityView.classList.toggle('globe-compact-mode', normalizedTab !== 'map');
         }
 
@@ -1509,6 +1520,33 @@ class CommunityManager {
         }
 
         this.ensureActiveTabVisible(normalizedTab, !options.silent);
+    }
+
+    updateChannelHeader(tabName) {
+        const metadata = {
+            chat: {
+                icon: 'fa-comments',
+                kicker: 'COMMUNITY CHANNEL',
+                title: 'Battle Discussion',
+                description: 'Talk matchups, animal stats, and powerscaling with the community.'
+            },
+            feed: {
+                icon: 'fa-stream',
+                kicker: 'SITE ACTIVITY',
+                title: 'Arena Activity',
+                description: 'Follow recent votes, comments, battles, and community milestones.'
+            }
+        };
+        const active = metadata[tabName] || metadata.chat;
+        const icon = document.querySelector('#community-channel-icon i');
+        const kicker = document.getElementById('community-channel-kicker');
+        const title = document.getElementById('community-channel-title');
+        const description = document.getElementById('community-channel-description');
+
+        if (icon) icon.className = `fas ${active.icon}`;
+        if (kicker) kicker.textContent = active.kicker;
+        if (title) title.textContent = active.title;
+        if (description) description.textContent = active.description;
     }
 
     onViewEnter() {

@@ -21,7 +21,7 @@
  * Scripts/styles are injected once and cached for repeat navigations.
  */
 const CHART_JS_URL = 'https://cdn.jsdelivr.net/npm/chart.js';
-const ASSET_REVISION = '2.4.7';
+const ASSET_REVISION = '2.5.0';
 
 function versionedAsset(path) {
     return `${path}?v=${ASSET_REVISION}`;
@@ -54,6 +54,7 @@ const ROUTE_ASSET_DEFINITIONS = {
             versionedAsset('/css/pages/community.css'),
             versionedAsset('/css/pages/community-globe.css')
         ],
+        stylesAfterMobile: [versionedAsset('/css/pages/community-v2.css')],
         scripts: [
             CHART_JS_URL,
             versionedAsset('/js/community-globe.js'),
@@ -79,13 +80,15 @@ const routeAssetPromises = new Map();
 const routeStylePromises = new Map();
 const routeScriptPromises = new Map();
 
-function loadStylesheetOnce(href) {
-    if (routeStylePromises.has(href)) return routeStylePromises.get(href);
+function loadStylesheetOnce(href, options = {}) {
+    const afterMobile = options.afterMobile === true;
+    const cacheKey = `${href}:${afterMobile ? 'after-mobile' : 'before-mobile'}`;
+    if (routeStylePromises.has(cacheKey)) return routeStylePromises.get(cacheKey);
 
     const existing = document.querySelector(`link[rel="stylesheet"][href="${href}"]`);
     if (existing) {
         const promise = Promise.resolve(existing);
-        routeStylePromises.set(href, promise);
+        routeStylePromises.set(cacheKey, promise);
         return promise;
     }
 
@@ -100,10 +103,14 @@ function loadStylesheetOnce(href) {
         // them at the end caused the layout regressions that originally led to
         // every route stylesheet being loaded globally.
         const mobileOverrides = document.querySelector('link[rel="stylesheet"][href^="/css/mobile.css"]');
-        document.head.insertBefore(link, mobileOverrides || null);
+        if (afterMobile && mobileOverrides) {
+            mobileOverrides.after(link);
+        } else {
+            document.head.insertBefore(link, mobileOverrides || null);
+        }
     });
 
-    routeStylePromises.set(href, promise);
+    routeStylePromises.set(cacheKey, promise);
     return promise;
 }
 
@@ -137,6 +144,9 @@ function loadRouteAssets(routeName) {
 
     const promise = (async () => {
         await Promise.all((assets.styles || []).map(loadStylesheetOnce));
+        await Promise.all((assets.stylesAfterMobile || []).map((href) => (
+            loadStylesheetOnce(href, { afterMobile: true })
+        )));
 
         // Load scripts in order so route dependencies are available before managers initialize.
         for (const src of (assets.scripts || [])) {
