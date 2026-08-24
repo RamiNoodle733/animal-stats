@@ -111,6 +111,10 @@ function handleAnimalImageError(image) {
     image.onerror = null;
     image.removeAttribute('srcset');
     image.removeAttribute('sizes');
+    image.removeAttribute('data-subject-fit');
+    image.style?.removeProperty('--compare-subject-width');
+    image.style?.removeProperty('--compare-subject-left');
+    image.style?.removeProperty('--compare-subject-top');
     if (image.parentElement?.tagName === 'PICTURE') {
         image.parentElement.querySelectorAll('source').forEach((source) => source.remove());
     }

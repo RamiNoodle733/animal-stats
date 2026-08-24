@@ -84,7 +84,7 @@
         inset 0 1px 0 rgba(255, 255, 255, 0.03),
         inset 0 0 60px rgba(0, 0, 0, 0.3);
     
-    transition: all var(--transition-slow);
+    transition: transform var(--transition-slow), box-shadow var(--transition-slow);
 }
 
 /* Rim light effect */
@@ -242,7 +242,7 @@
     overflow: hidden;
     
     cursor: pointer;
-    transition: all var(--transition-base);
+    transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
     box-shadow: var(--shadow-md), inset 0 0 30px rgba(0, 0, 0, 0.5);
 }
 
@@ -279,9 +279,24 @@
     transition: transform var(--transition-base);
 }
 
+/* Fit the visible animal rather than transparent canvas padding. */
+#compare-view .fighter-image[data-subject-fit="true"] {
+    position: absolute;
+    width: var(--compare-subject-width);
+    height: auto;
+    max-width: none !important;
+    max-height: none !important;
+    left: var(--compare-subject-left);
+    top: var(--compare-subject-top);
+}
+
 .fighter__display:hover .fighter__image,
 #compare-view .fighter-display:hover .fighter-image {
     transform: scale(1.08);
+}
+
+#compare-view .fighter-display:hover .fighter-image[data-subject-fit="true"] {
+    transform: none;
 }
 
 /* Placeholder */
@@ -743,5 +758,22 @@
         line-height: 1.1 !important;
         white-space: normal !important;
         overflow-wrap: anywhere !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #compare-view .fighter-section,
+    #compare-view .fight-center,
+    #compare-view .c-vs-badge,
+    #compare-view .c-fight-btn,
+    #compare-view .fighter-display.selecting {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    #compare-view .fighter-section:hover,
+    #compare-view .fighter-display:hover,
+    #compare-view .fighter-display:hover .fighter-image {
+        transform: none !important;
     }
 }

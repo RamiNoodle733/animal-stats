@@ -24,6 +24,8 @@
         _pendingResult: null,
         initialized: false,
         menuCollapsed: false,
+        imageSubjects: null,
+        imageSubjectsPromise: null,
 
         /**
          * Initialize compare page enhancements
@@ -36,6 +38,77 @@
             this.injectResultOverlay();
             this.setupTournamentLayout();
             this.setupEventListeners();
+            this.loadImageSubjects();
+        },
+
+        async loadImageSubjects() {
+            if (this.imageSubjects) return this.imageSubjects;
+            if (this.imageSubjectsPromise) return this.imageSubjectsPromise;
+
+            const revision = window.routeAssetRegistry?.revision || 'current';
+            this.imageSubjectsPromise = fetch(`/data/animal-image-dimensions.json?v=${encodeURIComponent(revision)}`)
+                .then((response) => {
+                    if (!response.ok) throw new Error(`Image subject registry returned ${response.status}`);
+                    return response.json();
+                })
+                .then((registry) => {
+                    if (registry?.schemaVersion !== 2 || !registry.images) {
+                        throw new Error('Image subject registry has an unsupported schema');
+                    }
+                    this.imageSubjects = registry.images;
+                    this.refreshFighterSubjectFits();
+                    return this.imageSubjects;
+                })
+                .catch((error) => {
+                    console.warn('Compare image subject fitting is unavailable:', error.message);
+                    this.imageSubjectsPromise = null;
+                    return null;
+                });
+
+            return this.imageSubjectsPromise;
+        },
+
+        getImageAssetPath(animal) {
+            const value = String(animal?.imageSet?.fallback || animal?.image || '');
+            if (!/^\/images\/animals\/[a-z0-9/_-]+\.(?:png|jpe?g|webp|avif)(?:[?#].*)?$/i.test(value)) {
+                return '';
+            }
+            return value.split(/[?#]/, 1)[0];
+        },
+
+        applyFighterSubjectFit(side, animal) {
+            const image = document.getElementById(side === 'left' ? 'animal-1-image' : 'animal-2-image');
+            if (!image) return false;
+
+            const entry = this.imageSubjects?.[this.getImageAssetPath(animal)];
+            const subject = entry?.subject;
+            const values = [entry?.width, entry?.height, subject?.left, subject?.top, subject?.width, subject?.height];
+            if (!values.every(Number.isFinite) || entry.width <= 0 || entry.height <= 0
+                || subject.width <= 0 || subject.height <= 0) {
+                image.removeAttribute('data-subject-fit');
+                image.style.removeProperty('--compare-subject-width');
+                image.style.removeProperty('--compare-subject-left');
+                image.style.removeProperty('--compare-subject-top');
+                return false;
+            }
+
+            const longestSubjectSide = Math.max(subject.width, subject.height);
+            const fill = 0.9;
+            const widthPercent = (entry.width / longestSubjectSide) * fill * 100;
+            const leftPercent = 50 - ((subject.left + (subject.width / 2)) / longestSubjectSide) * fill * 100;
+            const topPercent = 50 - ((subject.top + (subject.height / 2)) / longestSubjectSide) * fill * 100;
+
+            image.dataset.subjectFit = 'true';
+            image.style.setProperty('--compare-subject-width', `${widthPercent.toFixed(4)}%`);
+            image.style.setProperty('--compare-subject-left', `${leftPercent.toFixed(4)}%`);
+            image.style.setProperty('--compare-subject-top', `${topPercent.toFixed(4)}%`);
+            return true;
+        },
+
+        refreshFighterSubjectFits() {
+            const compare = window.app?.state?.compare;
+            if (compare?.left) this.applyFighterSubjectFit('left', compare.left);
+            if (compare?.right) this.applyFighterSubjectFit('right', compare.right);
         },
 
         fitText(el, text, options = {}) {
@@ -374,6 +447,7 @@
             if (!animal) return;
             
             const num = side === 'left' ? 1 : 2;
+            this.applyFighterSubjectFit(side, animal);
             
             // Update name
             const nameEl = document.getElementById(`c-name-${num}`);

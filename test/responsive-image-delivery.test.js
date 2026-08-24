@@ -104,6 +104,7 @@ test('existing image elements receive responsive WebP candidates and safe fallba
     let removedSources = 0;
     const removedAttributes = [];
     const image = {
+        style: { removeProperty() {} },
         parentElement: {
             tagName: 'PICTURE',
             querySelectorAll() {
@@ -121,7 +122,7 @@ test('existing image elements receive responsive WebP candidates and safe fallba
     image.onerror();
     assert.equal(image.src, core.FALLBACK_IMAGE);
     assert.equal(removedSources, 2);
-    assert.deepEqual(removedAttributes, ['srcset', 'sizes']);
+    assert.deepEqual(removedAttributes, ['srcset', 'sizes', 'data-subject-fit']);
 });
 
 test('animal cache revision changes with the responsive response contract', () => {

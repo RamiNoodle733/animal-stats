@@ -21,7 +21,7 @@
  * Scripts/styles are injected once and cached for repeat navigations.
  */
 const CHART_JS_URL = 'https://cdn.jsdelivr.net/npm/chart.js';
-const ASSET_REVISION = '2.9.0';
+const ASSET_REVISION = '2.9.1';
 
 function versionedAsset(path) {
     return `${path}?v=${ASSET_REVISION}`;
@@ -160,6 +160,7 @@ function loadRouteAssets(routeName) {
 
 window.loadRouteAssets = loadRouteAssets;
 window.routeAssetRegistry = {
+    revision: ASSET_REVISION,
     definitions: ROUTE_ASSET_DEFINITIONS,
     loaded: routeAssetPromises
 };

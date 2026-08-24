@@ -81,18 +81,35 @@ async function inspect(viewport) {
         });
         await page.waitForFunction(() => {
             const images = [...document.querySelectorAll('#compare-view .fighter-image')];
-            return images.length === 2 && images.every((image) => image.complete && getComputedStyle(image).display !== 'none');
+            return images.length === 2 && images.every((image) => (
+                image.complete
+                && getComputedStyle(image).display !== 'none'
+                && image.dataset.subjectFit === 'true'
+            ));
         }, null, { timeout: 10000 });
 
-        const fighterSizes = await page.locator('#compare-view .fighter-image').evaluateAll((images) => (
+        const fighterFits = await page.locator('#compare-view .fighter-image').evaluateAll((images) => (
             images.map((image) => {
                 const bounds = image.getBoundingClientRect();
-                return { width: bounds.width, height: bounds.height };
+                const display = image.closest('.fighter-display').getBoundingClientRect();
+                const animal = image.id === 'animal-1-image'
+                    ? window.app.state.compare.left
+                    : window.app.state.compare.right;
+                const asset = String(animal.imageSet?.fallback || animal.image || '').split(/[?#]/, 1)[0];
+                const entry = window.ComparePageEnhancements.imageSubjects[asset];
+                const scale = bounds.width / entry.width;
+                const visibleWidth = entry.subject.width * scale;
+                const visibleHeight = entry.subject.height * scale;
+                return {
+                    image: { width: bounds.width, height: bounds.height },
+                    display: { width: display.width, height: display.height },
+                    visible: { width: visibleWidth, height: visibleHeight },
+                    occupancy: Math.max(visibleWidth / display.width, visibleHeight / display.height)
+                };
             })
         ));
-        const minimumSize = viewport.width <= 480 ? 112 : 200;
-        if (fighterSizes.some(({ width, height }) => Math.max(width, height) < minimumSize)) {
-            throw new Error(`${label}: Compare animals are too small: ${JSON.stringify(fighterSizes)}`);
+        if (fighterFits.some(({ occupancy }) => occupancy < 0.86 || occupancy > 0.94)) {
+            throw new Error(`${label}: visible Compare animals do not fill their frames: ${JSON.stringify(fighterFits)}`);
         }
 
         await page.screenshot({ path: path.join(screenshotDir, `compare-stable-${label}.png`) });
@@ -133,7 +150,7 @@ async function inspect(viewport) {
         await page.screenshot({ path: path.join(screenshotDir, `stats-after-compare-${label}.png`) });
         if (pageErrors.length) throw new Error(`${label}: page errors: ${JSON.stringify(pageErrors)}`);
 
-        return { label, querySelected, inactiveOverlay, autofillCleanup, fighterSizes, statsState };
+        return { label, querySelected, inactiveOverlay, autofillCleanup, fighterFits, statsState };
     } finally {
         await browser.close();
     }

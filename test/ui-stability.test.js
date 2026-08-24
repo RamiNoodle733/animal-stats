@@ -28,9 +28,19 @@ test('compare animals retain useful desktop and mobile display sizes', () => {
     assert.match(css, /#compare-view:not\(\.active-view\)\s*\{\s*display:\s*none;/);
     assert.match(css, /#compare-view \.fighter-display\s*\{[\s\S]*?width:\s*124px !important;/);
     assert.match(css, /#compare-view \.fighter-image\s*\{[\s\S]*?max-width:\s*120px !important;/);
+    assert.match(css, /\.fighter-image\[data-subject-fit="true"\]/);
+    assert.match(css, /width:\s*var\(--compare-subject-width\)/);
+    assert.match(compare, /animal-image-dimensions\.json/);
+    assert.match(compare, /applyFighterSubjectFit\(side, animal\)/);
     assert.match(compare, /window\.app\.dom\.fightBtn = fightBtn;/);
     assert.match(compare, /fightBtn\.addEventListener\('click', window\.app\.startFight\);/);
     assert.match(main, /updateFightButton\(\)\s*\{\s*if \(!this\.dom\.fightBtn\) return;/);
+});
+
+test('Compare honors reduced motion without removing its static design', () => {
+    const css = read('css/pages/compare.css');
+    assert.match(css, /@media \(prefers-reduced-motion:\s*reduce\)/);
+    assert.match(css, /#compare-view \.fighter-section:hover[\s\S]*?transform:\s*none !important/);
 });
 
 test('animal search does not advertise itself as a credential field', () => {
