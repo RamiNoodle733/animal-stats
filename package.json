@@ -1,6 +1,6 @@
 {
   "name": "animal-battle-stats",
-  "version": "2.2.7",
+  "version": "2.3.0",
   "description": "Animal Battle Stats - A scientifically accurate wildlife statistics website with MongoDB backend",
   "main": "api/index.js",
   "scripts": {
@@ -10,6 +10,9 @@
     "seed": "node scripts/seed-database.js",
     "hooks:install": "git config core.hooksPath .githooks",
     "security:exports": "node scripts/security/check-sensitive-exports.js",
+    "test": "node --test test/**/*.test.js",
+    "recovery:geolocations": "node scripts/migrations/repair-activity-geolocations.js",
+    "recovery:import-activity": "node scripts/migrations/import-site-activity.js",
     "version:sync": "node scripts/version/bump-site-version.js --sync-only",
     "version:check": "node scripts/version/check-site-version.js",
     "version:bump:patch": "node scripts/version/bump-site-version.js --bump patch",

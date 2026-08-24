@@ -20,7 +20,9 @@ const { sanitizeEventData } = require('../lib/activity-logger');
 // Structure: { odId: { username, displayName, profileAnimal, lastSeen, page } }
 const presenceStore = new Map();
 const PRESENCE_TTL = 90 * 1000; // 90 seconds
-const PUBLIC_ANALYTICS_MIN_COHORT = 10;
+const PUBLIC_LOCATION_MINIMUM = 1;
+const PUBLIC_GLOBE_SCHEMA_VERSION = 2;
+const INVALID_PUBLIC_COORDINATE_SOURCES = new Set(['world-center', 'world-hash', 'country-hash', 'unresolved']);
 
 const ACTION_LABELS = Object.freeze({
     site_visit: 'Site Visits',
@@ -103,7 +105,7 @@ function normalizePagePath(rawPath) {
     return path;
 }
 
-function cleanActionBuckets(items, minimumCohortSize = PUBLIC_ANALYTICS_MIN_COHORT) {
+function cleanActionBuckets(items, minimumCohortSize = PUBLIC_LOCATION_MINIMUM) {
     const grouped = new Map();
 
     (Array.isArray(items) ? items : []).forEach((item) => {
@@ -120,7 +122,7 @@ function cleanActionBuckets(items, minimumCohortSize = PUBLIC_ANALYTICS_MIN_COHO
         .sort((a, b) => b.count - a.count);
 }
 
-function cleanPageBuckets(items, limit = 8, minimumCohortSize = PUBLIC_ANALYTICS_MIN_COHORT) {
+function cleanPageBuckets(items, limit = 8, minimumCohortSize = PUBLIC_LOCATION_MINIMUM) {
     const grouped = new Map();
 
     (Array.isArray(items) ? items : []).forEach((item) => {
@@ -144,6 +146,53 @@ function toPublicDay(value) {
     const date = value ? new Date(value) : null;
     if (!date || Number.isNaN(date.getTime())) return null;
     return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate())).toISOString();
+}
+
+function escapeRegex(value) {
+    return String(value || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function getPublicGranularity(location = {}) {
+    if (location.city) return 'city';
+    if (location.region) return 'region';
+    if (location.country) return 'country';
+    return 'unknown';
+}
+
+function buildPublicLocationLabel(location = {}) {
+    return [location.city, location.region, location.country].filter(Boolean).join(', ') || 'Unknown location';
+}
+
+function isValidPublicPoint(point = {}) {
+    const lat = Number(point.lat);
+    const lng = Number(point.lng);
+    const source = String(point.coordinateSource || '').trim();
+    const granularity = getPublicGranularity(point);
+
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return false;
+    if (lat < -90 || lat > 90 || lng < -180 || lng > 180) return false;
+    if (Math.abs(lat) < 0.00001 && Math.abs(lng) < 0.00001) return false;
+    if (INVALID_PUBLIC_COORDINATE_SOURCES.has(source)) return false;
+    if ((granularity === 'city' || granularity === 'region') && source === 'country-center') return false;
+    return true;
+}
+
+function toPublicPoint(point = {}) {
+    return {
+        key: point.key,
+        label: buildPublicLocationLabel(point),
+        city: point.city || null,
+        region: point.region || null,
+        country: point.country || null,
+        granularity: getPublicGranularity(point),
+        coordinateQuality: point.coordinateSource === 'geocode-city' ? 'high' : 'medium',
+        lat: Number(Number(point.lat).toFixed(1)),
+        lng: Number(Number(point.lng).toFixed(1)),
+        totalEvents: Number(point.totalEvents) || 0,
+        totalVisits: Number(point.totalVisits) || 0,
+        uniqueVisitors: Number(point.uniqueVisitors) || 0,
+        lastSeen: toPublicDay(point.lastSeen)
+    };
 }
 
 function handleGone(_req, res) {
@@ -204,6 +253,17 @@ function buildOwnerEventDetails(event) {
         screenSize: safe.screenSize || null,
         language: safe.language || null,
         sessionPseudonym: safe.sessionHash || null,
+        locationKey: event.locationKey || null,
+        discordDelivery: event.discordDelivery ? {
+            status: event.discordDelivery.status || null,
+            eventId: event.discordDelivery.eventId || null,
+            messageId: event.discordDelivery.messageId || null,
+            attempts: Number(event.discordDelivery.attempts) || 0,
+            lastAttemptAt: event.discordDelivery.lastAttemptAt || null,
+            nextAttemptAt: event.discordDelivery.nextAttemptAt || null,
+            sentAt: event.discordDelivery.sentAt || null,
+            lastError: event.discordDelivery.lastError || null
+        } : null,
         details
     };
 }
@@ -241,12 +301,36 @@ async function handleAdminAnalytics(req, res) {
     }
 
     const key = typeof req.query.key === 'string' ? req.query.key.trim().slice(0, 320) : '';
+    const eventType = typeof req.query.eventType === 'string' ? req.query.eventType.trim().slice(0, 64) : '';
+    const username = typeof req.query.user === 'string' ? req.query.user.trim().slice(0, 100) : '';
+    const deliveryStatus = typeof req.query.deliveryStatus === 'string' ? req.query.deliveryStatus.trim().toLowerCase() : '';
+    const from = typeof req.query.from === 'string' ? new Date(req.query.from) : null;
+    const to = typeof req.query.to === 'string' ? new Date(req.query.to) : null;
     const cursor = typeof req.query.cursor === 'string' ? req.query.cursor.trim() : '';
     const requestedLimit = Number.parseInt(req.query.limit, 10);
     const limit = Math.min(Math.max(requestedLimit || defaultLimit, 1), maxLimit);
     const query = {};
 
     if (key) query.locationKey = key;
+    if (eventType) query.eventType = eventType;
+    if (username) query.username = { $regex: escapeRegex(username), $options: 'i' };
+    if (deliveryStatus) {
+        if (!['pending', 'sent', 'failed'].includes(deliveryStatus)) {
+            return res.status(400).json({ success: false, error: 'Invalid Discord delivery status' });
+        }
+        query['discordDelivery.status'] = deliveryStatus;
+    }
+    if (from || to) {
+        query.occurredAt = {};
+        if (from) {
+            if (Number.isNaN(from.getTime())) return res.status(400).json({ success: false, error: 'Invalid from date' });
+            query.occurredAt.$gte = from;
+        }
+        if (to) {
+            if (Number.isNaN(to.getTime())) return res.status(400).json({ success: false, error: 'Invalid to date' });
+            query.occurredAt.$lte = to;
+        }
+    }
     if (cursor) {
         if (!mongoose.isValidObjectId(cursor)) {
             return res.status(400).json({ success: false, error: 'Invalid cursor' });
@@ -257,7 +341,7 @@ async function handleAdminAnalytics(req, res) {
     const events = await SiteActivity.find(query)
         .sort({ _id: -1 })
         .limit(limit + 1)
-        .select('occurredAt eventType username visitorHash page locationRaw city region country coordinates device browser os screenSize language metadata')
+        .select('occurredAt eventType username visitorHash page locationKey locationRaw city region country coordinates device browser os screenSize language metadata discordDelivery')
         .lean();
 
     const hasMore = events.length > limit;
@@ -267,9 +351,69 @@ async function handleAdminAnalytics(req, res) {
         success: true,
         data: {
             events: page.map(buildOwnerEventDetails),
-            nextCursor: hasMore ? String(page[page.length - 1]._id) : null
+            nextCursor: hasMore ? String(page[page.length - 1]._id) : null,
+            filters: {
+                key: key || null,
+                eventType: eventType || null,
+                user: username || null,
+                deliveryStatus: deliveryStatus || null,
+                from: from && !Number.isNaN(from.getTime()) ? from.toISOString() : null,
+                to: to && !Number.isNaN(to.getTime()) ? to.toISOString() : null
+            }
         }
     });
+}
+
+async function requireAdministrator(req, res) {
+    const User = require('../lib/models/User');
+    const authUser = getAuthUser(req);
+    if (!authUser?.id) {
+        res.status(401).json({ success: false, error: 'Authentication required' });
+        return null;
+    }
+
+    await connectToDatabase();
+    const owner = await User.findById(authUser.id).select('role').lean();
+    if (!owner || owner.role !== 'admin') {
+        res.status(403).json({ success: false, error: 'Administrator access required' });
+        return null;
+    }
+    return owner;
+}
+
+async function handleAdminRetryDiscord(req, res) {
+    const mongoose = require('mongoose');
+    const { retryDueDiscordDeliveries } = require('../lib/discord');
+    setCorsHeaders(req, res, { methods: 'POST, OPTIONS', credentials: true });
+    res.setHeader('Cache-Control', 'private, no-store');
+
+    if (req.method === 'OPTIONS') return res.status(200).end();
+    if (req.method !== 'POST') return res.status(405).json({ success: false, error: 'Method not allowed' });
+    if (!await requireAdministrator(req, res)) return null;
+
+    const rawIds = Array.isArray(req.body?.ids) ? req.body.ids : [];
+    const ids = [...new Set(rawIds.map((id) => String(id || '').trim()))].slice(0, 50);
+    if (!ids.length || ids.some((id) => !mongoose.isValidObjectId(id))) {
+        return res.status(400).json({ success: false, error: 'One or more valid activity IDs are required' });
+    }
+
+    const result = await retryDueDiscordDeliveries({ limit: ids.length, forceIds: ids });
+    return res.status(200).json({ success: true, data: result });
+}
+
+async function handleDiscordRetryCron(req, res) {
+    const { retryDueDiscordDeliveries } = require('../lib/discord');
+    const expected = String(process.env.CRON_SECRET || '');
+    const authorization = String(req.headers.authorization || '');
+    res.setHeader('Cache-Control', 'private, no-store');
+
+    if (!expected || authorization !== `Bearer ${expected}`) {
+        return res.status(401).json({ success: false, error: 'Unauthorized' });
+    }
+    if (req.method !== 'GET') return res.status(405).json({ success: false, error: 'Method not allowed' });
+
+    const result = await retryDueDiscordDeliveries({ limit: 50 });
+    return res.status(200).json({ success: true, data: result });
 }
 
 module.exports = async function handler(req, res) {
@@ -284,6 +428,12 @@ module.exports = async function handler(req, res) {
     }
     if (requestedActions.includes('admin-analytics')) {
         return handleAdminAnalytics(req, res);
+    }
+    if (requestedActions.includes('admin-retry-discord')) {
+        return handleAdminRetryDiscord(req, res);
+    }
+    if (requestedActions.includes('discord-retry-cron')) {
+        return handleDiscordRetryCron(req, res);
     }
 
     setCorsHeaders(req, res, {
@@ -572,6 +722,7 @@ async function handleVisit(req, res) {
  */
 async function handleGlobe(req, res) {
     const SiteActivity = require('../lib/models/SiteActivity');
+    res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=60, stale-while-revalidate=300');
 
     const trendRange = String(req.query.range || 'all').trim().toLowerCase();
     const now = new Date();
@@ -635,6 +786,7 @@ async function handleGlobe(req, res) {
                     locationRaw: { $first: '$locationRaw' },
                     lat: { $avg: '$coordinates.lat' },
                     lng: { $avg: '$coordinates.lng' },
+                    coordinateSource: { $first: '$coordinates.source' },
                     totalEvents: { $sum: 1 },
                     totalVisits: {
                         $sum: {
@@ -653,6 +805,7 @@ async function handleGlobe(req, res) {
                     region: 1,
                     country: 1,
                     locationRaw: 1,
+                    coordinateSource: 1,
                     lat: { $round: ['$lat', 5] },
                     lng: { $round: ['$lng', 5] },
                     totalEvents: 1,
@@ -665,7 +818,6 @@ async function handleGlobe(req, res) {
                     lastSeen: 1
                 }
             },
-            { $match: { uniqueVisitors: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } },
             { $sort: { totalEvents: -1 } },
             { $limit: 1000 }
         ]),
@@ -685,7 +837,6 @@ async function handleGlobe(req, res) {
                     cohortSize: { $size: { $setDifference: ['$visitors', [null, '']] } }
                 }
             },
-            { $match: { cohortSize: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } },
             { $sort: { count: -1 } }
         ]),
         SiteActivity.aggregate([
@@ -705,7 +856,6 @@ async function handleGlobe(req, res) {
                     cohortSize: { $size: { $setDifference: ['$visitors', [null, '']] } }
                 }
             },
-            { $match: { cohortSize: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } },
             { $sort: { count: -1 } },
             { $limit: 8 }
         ]),
@@ -737,35 +887,31 @@ async function handleGlobe(req, res) {
                     visits: 1,
                     cohortSize: { $size: { $setDifference: ['$visitors', [null, '']] } }
                 }
-            },
-            { $match: { cohortSize: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } }
+            }
         ])
     ]);
 
-    const cohortSafeWindow = (since) => ([
+    const activityWindow = (since) => ([
         { $match: { occurredAt: { $gte: since } } },
         {
             $group: {
                 _id: null,
-                count: { $sum: 1 },
-                visitors: { $addToSet: '$visitorHash' }
+                count: { $sum: 1 }
             }
         },
         {
             $project: {
                 _id: 0,
-                count: 1,
-                cohortSize: { $size: { $setDifference: ['$visitors', [null, '']] } }
+                count: 1
             }
-        },
-        { $match: { cohortSize: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } }
+        }
     ]);
     const [windowAgg = {}] = await SiteActivity.aggregate([
         {
             $facet: {
-                last24h: cohortSafeWindow(oneDayAgo),
-                last7d: cohortSafeWindow(sevenDaysAgo),
-                last30d: cohortSafeWindow(thirtyDaysAgo)
+                last24h: activityWindow(oneDayAgo),
+                last7d: activityWindow(sevenDaysAgo),
+                last30d: activityWindow(thirtyDaysAgo)
             }
         }
     ]);
@@ -775,22 +921,27 @@ async function handleGlobe(req, res) {
 
     const cleanedActions = cleanActionBuckets(actionsAgg);
     const cleanedPages = cleanPageBuckets(pagesAgg, 8);
+    const publicPoints = pointsAgg
+        .filter(isValidPublicPoint)
+        .map(toPublicPoint);
 
     return res.status(200).json({
         success: true,
+        schemaVersion: PUBLIC_GLOBE_SCHEMA_VERSION,
+        privacy: {
+            minimumLocationCount: PUBLIC_LOCATION_MINIMUM,
+            detailLevel: 'anonymous-location-aggregate',
+            coordinatePrecision: 'approximate-city'
+        },
         data: {
+            schemaVersion: PUBLIC_GLOBE_SCHEMA_VERSION,
             summary: summaryAgg[0] || { totalEvents: 0, totalVisits: 0, uniqueVisitors: 0 },
             windows: {
                 last24h,
                 last7d,
                 last30d
             },
-            points: pointsAgg.map((point) => ({
-                ...point,
-                lat: Number(Number(point.lat).toFixed(1)),
-                lng: Number(Number(point.lng).toFixed(1)),
-                lastSeen: toPublicDay(point.lastSeen)
-            })),
+            points: publicPoints,
             actions: cleanedActions,
             pages: cleanedPages,
             trend: trendAgg,
@@ -805,6 +956,7 @@ async function handleGlobe(req, res) {
  */
 async function handleGlobePoint(req, res) {
     const SiteActivity = require('../lib/models/SiteActivity');
+    res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=60, stale-while-revalidate=300');
     const key = typeof req.query.key === 'string' ? req.query.key.trim().slice(0, 320) : '';
 
     if (!key) {
@@ -851,7 +1003,6 @@ async function handleGlobePoint(req, res) {
                     lastSeen: 1
                 }
             },
-            { $match: { uniqueVisitors: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } }
         ]),
         SiteActivity.aggregate([
             { $match: { locationKey: key, page: { $ne: null } } },
@@ -870,7 +1021,6 @@ async function handleGlobePoint(req, res) {
                     cohortSize: { $size: { $setDifference: ['$visitors', [null, '']] } }
                 }
             },
-            { $match: { cohortSize: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } },
             { $sort: { count: -1 } },
             { $limit: 15 }
         ]),
@@ -891,7 +1041,6 @@ async function handleGlobePoint(req, res) {
                     cohortSize: { $size: { $setDifference: ['$visitors', [null, '']] } }
                 }
             },
-            { $match: { cohortSize: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } },
             { $sort: { count: -1 } }
         ]),
         SiteActivity.aggregate([
@@ -917,7 +1066,6 @@ async function handleGlobePoint(req, res) {
                     cohortSize: { $size: { $setDifference: ['$visitors', [null, '']] } }
                 }
             },
-            { $match: { cohortSize: { $gte: PUBLIC_ANALYTICS_MIN_COHORT } } },
             { $sort: { count: -1 } },
             { $limit: 12 }
         ])
@@ -933,13 +1081,23 @@ async function handleGlobePoint(req, res) {
 
     return res.status(200).json({
         success: true,
+        schemaVersion: PUBLIC_GLOBE_SCHEMA_VERSION,
         privacy: {
-            minimumCohortSize: PUBLIC_ANALYTICS_MIN_COHORT,
-            detailLevel: 'aggregate'
+            minimumLocationCount: PUBLIC_LOCATION_MINIMUM,
+            detailLevel: 'anonymous-location-aggregate',
+            coordinatePrecision: 'approximate-city'
         },
         data: {
             summary: {
-                ...summary,
+                key: summary.key,
+                label: buildPublicLocationLabel(summary),
+                city: summary.city || null,
+                region: summary.region || null,
+                country: summary.country || null,
+                granularity: getPublicGranularity(summary),
+                totalEvents: Number(summary.totalEvents) || 0,
+                totalVisits: Number(summary.totalVisits) || 0,
+                uniqueVisitors: Number(summary.uniqueVisitors) || 0,
                 firstSeen: toPublicDay(summary.firstSeen),
                 lastSeen: toPublicDay(summary.lastSeen)
             },
@@ -949,3 +1107,12 @@ async function handleGlobePoint(req, res) {
         }
     });
 }
+
+module.exports._test = {
+    buildPublicLocationLabel,
+    cleanActionBuckets,
+    cleanPageBuckets,
+    getPublicGranularity,
+    isValidPublicPoint,
+    toPublicPoint
+};

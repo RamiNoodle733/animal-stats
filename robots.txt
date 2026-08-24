@@ -4,6 +4,19 @@
 User-agent: *
 Allow: /
 
+# AI/search discovery crawlers are explicitly welcome.
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
 # Point to sitemap
 Sitemap: https://animalbattlestats.com/sitemap.xml
 

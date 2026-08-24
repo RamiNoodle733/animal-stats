@@ -111,6 +111,21 @@ Object.entries(directoryExtensions).forEach(([directory, extensions]) => {
     copyAllowedDirectory(directory, extensions);
 });
 
+const packageJson = JSON.parse(fs.readFileSync(path.join(repoRoot, 'package.json'), 'utf8'));
+let commit = process.env.VERCEL_GIT_COMMIT_SHA || process.env.GITHUB_SHA || null;
+if (!commit) {
+    try {
+        commit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: repoRoot, encoding: 'utf8' }).trim();
+    } catch {
+        commit = null;
+    }
+}
+fs.writeFileSync(path.join(outputRoot, 'version.json'), `${JSON.stringify({
+    version: packageJson.version,
+    commit,
+    builtAt: new Date().toISOString()
+}, null, 2)}\n`, 'utf8');
+
 const deployedFiles = [];
 const pending = [outputRoot];
 while (pending.length > 0) {

@@ -58,3 +58,60 @@ jobs:
 
       - name: Build allowlisted deployment artifact
         run: npm run build
+
+  release-production:
+    needs: sensitive-export-guard
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Wait for matching Vercel production deployment
+        env:
+          EXPECTED_COMMIT: ${{ github.sha }}
+        shell: bash
+        run: |
+          for attempt in $(seq 1 60); do
+            payload="$(curl --fail --silent --show-error --max-time 10 "https://animalbattlestats.com/version.json?commit=$EXPECTED_COMMIT" || true)"
+            deployed_commit="$(node -e "try { const value=JSON.parse(process.argv[1]); process.stdout.write(value.commit || '') } catch {}" "$payload")"
+            if [[ "$deployed_commit" == "$EXPECTED_COMMIT" ]]; then
+              echo "Production is serving $EXPECTED_COMMIT"
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Production did not publish the expected commit within ten minutes."
+          exit 1
+
+      - name: Smoke test recovery API
+        run: |
+          curl --fail --silent --show-error --max-time 20 \
+            'https://animalbattlestats.com/api/community?action=globe' \
+            | node -e "let raw=''; process.stdin.on('data', c => raw += c); process.stdin.on('end', () => { const body=JSON.parse(raw); if (!body.success || body.schemaVersion !== 2 || !Array.isArray(body.data?.points)) process.exit(1); })"
+
+      - name: Create version tag and GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          tag="v$version"
+          if git rev-parse "$tag" >/dev/null 2>&1; then
+            echo "Tag $tag already exists; refusing to overwrite it."
+            exit 1
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git tag --annotate "$tag" --message "Animal Battle Stats $tag"
+          git push origin "$tag"
+          gh release create "$tag" --verify-tag --generate-notes --title "Animal Battle Stats $tag"

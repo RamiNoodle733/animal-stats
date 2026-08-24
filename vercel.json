@@ -18,6 +18,14 @@
       "destination": "/api/community?action=admin-analytics"
     },
     {
+      "source": "/api/admin/discord-retry",
+      "destination": "/api/community?action=admin-retry-discord"
+    },
+    {
+      "source": "/api/cron/discord-retry",
+      "destination": "/api/community?action=discord-retry-cron"
+    },
+    {
       "source": "/api/:path*",
       "destination": "/api/:path*"
     },
@@ -92,6 +100,15 @@
       ]
     },
     {
+      "source": "/version.json",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store, max-age=0"
+        }
+      ]
+    },
+    {
       "source": "/(.*)",
       "headers": [
         {
@@ -111,7 +128,13 @@
   ],
   "functions": {
     "api/**/*.js": {
-      "maxDuration": 10
+      "maxDuration": 60
     }
-  }
+  },
+  "crons": [
+    {
+      "path": "/api/cron/discord-retry",
+      "schedule": "17 8 * * *"
+    }
+  ]
 }

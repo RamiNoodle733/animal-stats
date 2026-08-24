@@ -49,6 +49,15 @@ class CommunityManager {
         this.globeControlsBound = false;
         this.globeCityFilter = '';
         this.globeTrendRange = 'all';
+        this.currentGlobePointData = null;
+        this.ownerAnalyticsData = null;
+        this.ownerAnalyticsFilters = {
+            eventType: '',
+            user: '',
+            from: '',
+            to: '',
+            deliveryStatus: ''
+        };
         this.globeCharts = {
             trend: null,
             country: null
@@ -575,7 +584,10 @@ class CommunityManager {
     startGlobeRefresh() {
         this.stopGlobeRefresh();
         this.globeRefreshInterval = setInterval(() => {
-            this.loadGlobeAnalytics({ silent: true });
+            const canvas = document.getElementById('community-globe-canvas');
+            if (document.visibilityState === 'visible' && canvas?.offsetParent !== null) {
+                this.loadGlobeAnalytics({ silent: true });
+            }
         }, 60000);
     }
 
@@ -624,11 +636,7 @@ class CommunityManager {
                 empty.style.display = 'none';
             }
 
-            if (!this.selectedGlobeKey && Array.isArray(payload.points) && payload.points.length > 0) {
-                this.selectedGlobeKey = payload.points[0].key;
-                this.loadGlobePointDetails(this.selectedGlobeKey);
-                this.highlightSelectedCityRow();
-            } else if (!this.selectedGlobeKey && Auth.user?.role === 'admin') {
+            if (!this.selectedGlobeKey && Auth.user?.role === 'admin') {
                 this.loadOwnerAnalyticsOverview();
             }
         } catch (error) {
@@ -1018,11 +1026,13 @@ class CommunityManager {
             if (!response.ok) throw new Error('Failed to load point details');
 
             const result = await response.json();
+            this.currentGlobePointData = result.data || {};
             let ownerAnalytics = null;
 
             if (Auth.user?.role === 'admin') {
                 const token = Auth.getToken();
-                const ownerResponse = await fetch('/api/admin/analytics?limit=25', {
+                const ownerQuery = this.buildOwnerAnalyticsQuery({ key: locationKey });
+                const ownerResponse = await fetch(`/api/admin/analytics?${ownerQuery.toString()}`, {
                     credentials: 'same-origin',
                     headers: token ? { Authorization: `Bearer ${token}` } : {}
                 });
@@ -1033,7 +1043,8 @@ class CommunityManager {
                 }
             }
 
-            this.renderGlobePointDetails(result.data || {}, ownerAnalytics);
+            this.ownerAnalyticsData = ownerAnalytics;
+            this.renderGlobePointDetails(this.currentGlobePointData, ownerAnalytics);
         } catch (error) {
             console.error('Error loading point details:', error);
             detailsEl.innerHTML = '<div class="globe-point-error">Failed to load location detail.</div>';
@@ -1046,17 +1057,20 @@ class CommunityManager {
 
         const token = Auth.getToken();
         try {
-            const response = await fetch('/api/admin/analytics?limit=25', {
+            const ownerQuery = this.buildOwnerAnalyticsQuery();
+            const response = await fetch(`/api/admin/analytics?${ownerQuery.toString()}`, {
                 credentials: 'same-origin',
                 headers: token ? { Authorization: `Bearer ${token}` } : {}
             });
             if (!response.ok) return;
 
             const result = await response.json();
+            this.ownerAnalyticsData = result.data || null;
             detailsEl.innerHTML = `
-                <div class="globe-point-placeholder">Public locations appear after reaching the privacy threshold.</div>
-                ${this.renderOwnerAnalytics(result.data || null)}
+                <div class="globe-point-placeholder">Select an anonymous hotspot for location totals, or use the private admin stream below.</div>
+                ${this.renderOwnerAnalytics(this.ownerAnalyticsData)}
             `;
+            this.bindOwnerAnalyticsControls();
         } catch (error) {
             console.error('Error loading owner analytics:', error);
         }
@@ -1099,12 +1113,58 @@ class CommunityManager {
             ${this.renderOwnerAnalytics(ownerAnalytics)}
         `;
 
+        this.bindOwnerAnalyticsControls();
         this.updateGlobeContextChips();
+    }
+
+    buildOwnerAnalyticsQuery({ key = this.selectedGlobeKey, cursor = '' } = {}) {
+        const query = new URLSearchParams({ limit: '25' });
+        if (key) query.set('key', key);
+        if (cursor) query.set('cursor', cursor);
+        Object.entries(this.ownerAnalyticsFilters).forEach(([name, value]) => {
+            if (value) query.set(name, value);
+        });
+        return query;
+    }
+
+    async refreshOwnerAnalytics({ append = false } = {}) {
+        if (Auth.user?.role !== 'admin') return;
+        const token = Auth.getToken();
+        const cursor = append ? this.ownerAnalyticsData?.nextCursor : '';
+        if (append && !cursor) return;
+
+        try {
+            const query = this.buildOwnerAnalyticsQuery({ cursor });
+            const response = await fetch(`/api/admin/analytics?${query.toString()}`, {
+                credentials: 'same-origin',
+                headers: token ? { Authorization: `Bearer ${token}` } : {}
+            });
+            if (!response.ok) throw new Error('Failed to load owner analytics');
+            const result = await response.json();
+            const nextData = result.data || { events: [], nextCursor: null };
+            if (append) {
+                nextData.events = [...(this.ownerAnalyticsData?.events || []), ...(nextData.events || [])];
+            }
+            this.ownerAnalyticsData = nextData;
+
+            const detailsEl = document.getElementById('globe-point-details');
+            if (this.selectedGlobeKey && this.currentGlobePointData) {
+                this.renderGlobePointDetails(this.currentGlobePointData, nextData);
+            } else if (detailsEl) {
+                detailsEl.innerHTML = `
+                    <div class="globe-point-placeholder">Select an anonymous hotspot for location totals, or use the private admin stream below.</div>
+                    ${this.renderOwnerAnalytics(nextData)}
+                `;
+                this.bindOwnerAnalyticsControls();
+            }
+        } catch (error) {
+            console.error('Error refreshing owner analytics:', error);
+        }
     }
 
     renderOwnerAnalytics(ownerAnalytics) {
         const events = Array.isArray(ownerAnalytics?.events) ? ownerAnalytics.events : [];
-        if (!events.length) return '';
+        if (Auth.user?.role !== 'admin') return '';
 
         const rows = events.map((event) => {
             const environment = [event.device, event.browser, event.os].filter(Boolean).join(' • ');
@@ -1125,20 +1185,87 @@ class CommunityManager {
                     <div>${this.escapeHtml(event.page || '/')} ${environment ? `• ${this.escapeHtml(environment)}` : ''}</div>
                     ${event.referrer ? `<div>Referrer: ${this.escapeHtml(event.referrer)}</div>` : ''}
                     ${event.screenSize || event.language ? `<div>${this.escapeHtml([event.screenSize, event.language].filter(Boolean).join(' • '))}</div>` : ''}
+                    ${event.discordDelivery ? `<div>Discord: ${this.escapeHtml(event.discordDelivery.status || 'legacy')} • ${this.formatExactNumber(event.discordDelivery.attempts || 0)} attempts${event.discordDelivery.lastError ? ` • ${this.escapeHtml(event.discordDelivery.lastError)}` : ''}</div>` : '<div>Discord: legacy event</div>'}
                     ${detailText ? `<div>${this.escapeHtml(detailText)}</div>` : ''}
+                    ${event.discordDelivery?.status === 'failed' ? `<button type="button" class="globe-owner-retry" data-activity-id="${this.escapeHtml(event.id)}">Retry Discord</button>` : ''}
                 </div>
             `;
         }).join('');
+
+        const filters = this.ownerAnalyticsFilters;
+        const selectedScope = this.selectedGlobeKey ? 'Selected location' : 'All locations';
 
         return `
             <section class="globe-owner-analytics" aria-label="Owner-only detailed analytics">
                 <div class="globe-owner-heading">
                     <strong>Owner-only latest events</strong>
-                    <span>All locations • sanitized • latest ${events.length}</span>
+                    <span>${selectedScope} • sanitized • ${events.length} shown</span>
                 </div>
-                <div class="globe-owner-events">${rows}</div>
+                <form class="globe-owner-filters" id="globe-owner-filters">
+                    <input name="eventType" value="${this.escapeHtml(filters.eventType)}" placeholder="Event type">
+                    <input name="user" value="${this.escapeHtml(filters.user)}" placeholder="Username">
+                    <input name="from" value="${this.escapeHtml(filters.from)}" type="date" aria-label="From date">
+                    <input name="to" value="${this.escapeHtml(filters.to)}" type="date" aria-label="To date">
+                    <select name="deliveryStatus" aria-label="Discord delivery status">
+                        <option value="">All Discord states</option>
+                        ${['pending', 'sent', 'failed'].map(status => `<option value="${status}" ${filters.deliveryStatus === status ? 'selected' : ''}>${this.escapeHtml(status)}</option>`).join('')}
+                    </select>
+                    <button type="submit">Apply</button>
+                    <button type="button" data-owner-clear>Clear</button>
+                </form>
+                <div class="globe-owner-events">${rows || '<div class="globe-mini-empty">No private events match these filters.</div>'}</div>
+                ${ownerAnalytics?.nextCursor ? '<button type="button" class="globe-owner-load-more" data-owner-load-more>Load more</button>' : ''}
             </section>
         `;
+    }
+
+    bindOwnerAnalyticsControls() {
+        const form = document.getElementById('globe-owner-filters');
+        if (!form) return;
+
+        form.addEventListener('submit', (event) => {
+            event.preventDefault();
+            const formData = new FormData(form);
+            Object.keys(this.ownerAnalyticsFilters).forEach((name) => {
+                this.ownerAnalyticsFilters[name] = String(formData.get(name) || '').trim();
+            });
+            this.refreshOwnerAnalytics();
+        });
+
+        form.querySelector('[data-owner-clear]')?.addEventListener('click', () => {
+            Object.keys(this.ownerAnalyticsFilters).forEach((name) => {
+                this.ownerAnalyticsFilters[name] = '';
+            });
+            this.refreshOwnerAnalytics();
+        });
+
+        document.querySelector('[data-owner-load-more]')?.addEventListener('click', () => {
+            this.refreshOwnerAnalytics({ append: true });
+        });
+
+        document.querySelectorAll('.globe-owner-retry').forEach((button) => {
+            button.addEventListener('click', async () => {
+                const id = button.dataset.activityId;
+                const token = Auth.getToken();
+                button.disabled = true;
+                try {
+                    const response = await fetch('/api/admin/discord-retry', {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            ...(token ? { Authorization: `Bearer ${token}` } : {})
+                        },
+                        body: JSON.stringify({ ids: [id] })
+                    });
+                    if (!response.ok) throw new Error('Discord retry failed');
+                    await this.refreshOwnerAnalytics();
+                } catch (error) {
+                    console.error('Error retrying Discord delivery:', error);
+                    button.disabled = false;
+                }
+            });
+        });
     }
 
     renderMiniList(items) {
