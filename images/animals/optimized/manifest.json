@@ -1,0 +1,220 @@
+{
+  "schemaVersion": 1,
+  "animals": {
+    "yak": {
+      "animal": "Yak",
+      "fallback": "/images/animals/yak.png?v=bdcc998cd5a2",
+      "sourceSha256": "bdcc998cd5a28505e19107e70f20435c7de785bb413f61c3742857d5a23ba2d4",
+      "width": 960,
+      "height": 640,
+      "variants": {
+        "avif": [
+          {
+            "src": "/images/animals/optimized/yak-bdcc998cd5a2-320.avif",
+            "width": 320,
+            "bytes": 7598
+          },
+          {
+            "src": "/images/animals/optimized/yak-bdcc998cd5a2-640.avif",
+            "width": 640,
+            "bytes": 23131
+          },
+          {
+            "src": "/images/animals/optimized/yak-bdcc998cd5a2-960.avif",
+            "width": 960,
+            "bytes": 43922
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/animals/optimized/yak-bdcc998cd5a2-320.webp",
+            "width": 320,
+            "bytes": 10064
+          },
+          {
+            "src": "/images/animals/optimized/yak-bdcc998cd5a2-640.webp",
+            "width": 640,
+            "bytes": 31230
+          },
+          {
+            "src": "/images/animals/optimized/yak-bdcc998cd5a2-960.webp",
+            "width": 960,
+            "bytes": 60764
+          }
+        ]
+      }
+    },
+    "piranha": {
+      "animal": "Piranha",
+      "fallback": "/images/animals/piranha.png?v=a8f74973c4a9",
+      "sourceSha256": "a8f74973c4a93b67dbbb46f49c67e34eafc3232eac1d86bdcc17d5188439cf50",
+      "width": 960,
+      "height": 640,
+      "variants": {
+        "avif": [
+          {
+            "src": "/images/animals/optimized/piranha-a8f74973c4a9-320.avif",
+            "width": 320,
+            "bytes": 10268
+          },
+          {
+            "src": "/images/animals/optimized/piranha-a8f74973c4a9-640.avif",
+            "width": 640,
+            "bytes": 34394
+          },
+          {
+            "src": "/images/animals/optimized/piranha-a8f74973c4a9-960.avif",
+            "width": 960,
+            "bytes": 68226
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/animals/optimized/piranha-a8f74973c4a9-320.webp",
+            "width": 320,
+            "bytes": 11946
+          },
+          {
+            "src": "/images/animals/optimized/piranha-a8f74973c4a9-640.webp",
+            "width": 640,
+            "bytes": 41540
+          },
+          {
+            "src": "/images/animals/optimized/piranha-a8f74973c4a9-960.webp",
+            "width": 960,
+            "bytes": 82960
+          }
+        ]
+      }
+    },
+    "baboon": {
+      "animal": "Baboon",
+      "fallback": "/images/animals/baboon.png?v=ed6363c2304a",
+      "sourceSha256": "ed6363c2304afe4c6c108f4ceca003a952905d8caef1c5e4ad00719dee2447a1",
+      "width": 960,
+      "height": 640,
+      "variants": {
+        "avif": [
+          {
+            "src": "/images/animals/optimized/baboon-ed6363c2304a-320.avif",
+            "width": 320,
+            "bytes": 8448
+          },
+          {
+            "src": "/images/animals/optimized/baboon-ed6363c2304a-640.avif",
+            "width": 640,
+            "bytes": 25246
+          },
+          {
+            "src": "/images/animals/optimized/baboon-ed6363c2304a-960.avif",
+            "width": 960,
+            "bytes": 50349
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/animals/optimized/baboon-ed6363c2304a-320.webp",
+            "width": 320,
+            "bytes": 11594
+          },
+          {
+            "src": "/images/animals/optimized/baboon-ed6363c2304a-640.webp",
+            "width": 640,
+            "bytes": 35774
+          },
+          {
+            "src": "/images/animals/optimized/baboon-ed6363c2304a-960.webp",
+            "width": 960,
+            "bytes": 70884
+          }
+        ]
+      }
+    },
+    "saltwater-crocodile": {
+      "animal": "Saltwater Crocodile",
+      "fallback": "/images/animals/saltwater-crocodile.png?v=817a66c488be",
+      "sourceSha256": "817a66c488be31029d8c2ebc2626ebce8b1e388753316bdc786768e1508a3107",
+      "width": 960,
+      "height": 480,
+      "variants": {
+        "avif": [
+          {
+            "src": "/images/animals/optimized/saltwater-crocodile-817a66c488be-320.avif",
+            "width": 320,
+            "bytes": 4500
+          },
+          {
+            "src": "/images/animals/optimized/saltwater-crocodile-817a66c488be-640.avif",
+            "width": 640,
+            "bytes": 13117
+          },
+          {
+            "src": "/images/animals/optimized/saltwater-crocodile-817a66c488be-960.avif",
+            "width": 960,
+            "bytes": 24137
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/animals/optimized/saltwater-crocodile-817a66c488be-320.webp",
+            "width": 320,
+            "bytes": 5978
+          },
+          {
+            "src": "/images/animals/optimized/saltwater-crocodile-817a66c488be-640.webp",
+            "width": 640,
+            "bytes": 17192
+          },
+          {
+            "src": "/images/animals/optimized/saltwater-crocodile-817a66c488be-960.webp",
+            "width": 960,
+            "bytes": 30548
+          }
+        ]
+      }
+    },
+    "bongo": {
+      "animal": "Bongo",
+      "fallback": "/images/animals/bongo.png?v=029836f8ab2f",
+      "sourceSha256": "029836f8ab2f8c4c0197ff3cac7086d38231fc91ecdbec82743eb7e75cec9a0c",
+      "width": 960,
+      "height": 1450,
+      "variants": {
+        "avif": [
+          {
+            "src": "/images/animals/optimized/bongo-029836f8ab2f-320.avif",
+            "width": 320,
+            "bytes": 20814
+          },
+          {
+            "src": "/images/animals/optimized/bongo-029836f8ab2f-640.avif",
+            "width": 640,
+            "bytes": 60380
+          },
+          {
+            "src": "/images/animals/optimized/bongo-029836f8ab2f-960.avif",
+            "width": 960,
+            "bytes": 116771
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/animals/optimized/bongo-029836f8ab2f-320.webp",
+            "width": 320,
+            "bytes": 26724
+          },
+          {
+            "src": "/images/animals/optimized/bongo-029836f8ab2f-640.webp",
+            "width": 640,
+            "bytes": 82976
+          },
+          {
+            "src": "/images/animals/optimized/bongo-029836f8ab2f-960.webp",
+            "width": 960,
+            "bytes": 161214
+          }
+        ]
+      }
+    }
+  }
+}

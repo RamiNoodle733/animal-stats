@@ -78,7 +78,21 @@ Candidate photos are sourced into the ignored `.cache` directory and never repla
 npm run assets:source -- --animal "Yak" --animal "Piranha" --limit 6
 ```
 
-Only visually approved sources are recorded in `data/animal-image-sources.json`. A registry entry marked `source-selected` is not yet a live asset; it must still pass transparent-cutout and edge-quality review.
+Only visually approved sources are recorded in `data/animal-image-sources.json`. A registry entry marked `source-selected` is not yet a live asset; it must still pass transparent-cutout and edge-quality review. Keep reviewed cutouts in the ignored `.cache` directory, inspect the dry run, and promote them explicitly:
+
+```bash
+npm run assets:promote -- --input-dir .cache/reviewed-cutouts
+npm run assets:promote -- --input-dir .cache/reviewed-cutouts --apply
+```
+
+Promotion verifies PNG transparency, opaque subject pixels, safe edge padding, dimensions, and foreground coverage. It then records the checksum and review state, updates the canonical dataset, and generates transparent AVIF/WebP variants plus `images/animals/optimized/manifest.json`. Fallback URLs and variant filenames use content fingerprints so immutable browser/CDN caching cannot preserve an older animal. Re-running the same reviewed input is safe and deterministic.
+
+After the new static files are deployed, synchronize only the registered active image paths into MongoDB. The command is a dry run unless `--apply` is supplied, updates no other animal fields, and verifies every applied value:
+
+```bash
+npm run assets:sync-images -- --env-file .cache/production.env
+npm run assets:sync-images -- --env-file .cache/production.env --apply
+```
 
 ## 📁 Project Structure
 

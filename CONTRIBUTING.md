@@ -55,6 +55,7 @@ Check [DATA_PROGRESS.md](./DATA_PROGRESS.md) to see which animals still need wor
 - Do not submit watermarked previews or reuse one animal's file for another species.
 - Record the original source page, creator, and reuse license for every replacement.
 - Run `npm run assets:audit -- --strict` and visually review the generated contact sheet before submitting.
+- Keep cutout inputs under `.cache`, run `npm run assets:promote -- --input-dir .cache/<folder>` first, and add `--apply` only after reviewing the dry-run report. Promotion creates the PNG fallback, responsive AVIF/WebP files, and provenance manifest together.
 
 ### Questions?
 

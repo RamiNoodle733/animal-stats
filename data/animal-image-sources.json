@@ -5,7 +5,7 @@
     {
       "animal": "Yak",
       "scientificName": "Bos grunniens",
-      "status": "source-selected",
+      "status": "active",
       "sourceTitle": "File:Yak in Khövsgöl 02.jpg",
       "sourcePage": "https://commons.wikimedia.org/wiki/File%3AYak_in_Kh%C3%B6vsg%C3%B6l_02.jpg",
       "creator": "Bernard Gagnon",
@@ -13,12 +13,56 @@
       "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
       "sourceWidth": 3931,
       "sourceHeight": 2621,
-      "selectionNotes": "Real side-view photograph with the entire animal visible."
+      "selectionNotes": "Real side-view photograph with the entire animal visible.",
+      "asset": "/images/animals/yak.png?v=bdcc998cd5a2",
+      "assetSha256": "bdcc998cd5a28505e19107e70f20435c7de785bb413f61c3742857d5a23ba2d4",
+      "assetWidth": 960,
+      "assetHeight": 640,
+      "activatedAt": "2026-08-24",
+      "backgroundRemoval": "Adobe Photoshop API select-subject cutout",
+      "reviewStatus": "first-pass-reviewed",
+      "reviewNotes": "Correct real animal and transparent background verified; minor natural edge color may remain.",
+      "variants": {
+        "avif": [
+          {
+            "src": "/images/animals/optimized/yak-bdcc998cd5a2-320.avif",
+            "width": 320,
+            "bytes": 7598
+          },
+          {
+            "src": "/images/animals/optimized/yak-bdcc998cd5a2-640.avif",
+            "width": 640,
+            "bytes": 23131
+          },
+          {
+            "src": "/images/animals/optimized/yak-bdcc998cd5a2-960.avif",
+            "width": 960,
+            "bytes": 43922
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/animals/optimized/yak-bdcc998cd5a2-320.webp",
+            "width": 320,
+            "bytes": 10064
+          },
+          {
+            "src": "/images/animals/optimized/yak-bdcc998cd5a2-640.webp",
+            "width": 640,
+            "bytes": 31230
+          },
+          {
+            "src": "/images/animals/optimized/yak-bdcc998cd5a2-960.webp",
+            "width": 960,
+            "bytes": 60764
+          }
+        ]
+      }
     },
     {
       "animal": "Piranha",
       "scientificName": "Pygocentrus nattereri",
-      "status": "source-selected",
+      "status": "active",
       "sourceTitle": "File:Pygocentrus nattereri - Karlsruhe Zoo 01.jpg",
       "sourcePage": "https://commons.wikimedia.org/wiki/File%3APygocentrus_nattereri_-_Karlsruhe_Zoo_01.jpg",
       "creator": "H. Zell",
@@ -26,12 +70,56 @@
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/",
       "sourceWidth": 6000,
       "sourceHeight": 4000,
-      "selectionNotes": "Featured real photograph with a clear lateral view of the correct species."
+      "selectionNotes": "Featured real photograph with a clear lateral view of the correct species.",
+      "asset": "/images/animals/piranha.png?v=a8f74973c4a9",
+      "assetSha256": "a8f74973c4a93b67dbbb46f49c67e34eafc3232eac1d86bdcc17d5188439cf50",
+      "assetWidth": 960,
+      "assetHeight": 640,
+      "activatedAt": "2026-08-24",
+      "backgroundRemoval": "Adobe Photoshop API select-subject cutout",
+      "reviewStatus": "first-pass-reviewed",
+      "reviewNotes": "Correct real animal and transparent background verified; minor natural edge color may remain.",
+      "variants": {
+        "avif": [
+          {
+            "src": "/images/animals/optimized/piranha-a8f74973c4a9-320.avif",
+            "width": 320,
+            "bytes": 10268
+          },
+          {
+            "src": "/images/animals/optimized/piranha-a8f74973c4a9-640.avif",
+            "width": 640,
+            "bytes": 34394
+          },
+          {
+            "src": "/images/animals/optimized/piranha-a8f74973c4a9-960.avif",
+            "width": 960,
+            "bytes": 68226
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/animals/optimized/piranha-a8f74973c4a9-320.webp",
+            "width": 320,
+            "bytes": 11946
+          },
+          {
+            "src": "/images/animals/optimized/piranha-a8f74973c4a9-640.webp",
+            "width": 640,
+            "bytes": 41540
+          },
+          {
+            "src": "/images/animals/optimized/piranha-a8f74973c4a9-960.webp",
+            "width": 960,
+            "bytes": 82960
+          }
+        ]
+      }
     },
     {
       "animal": "Baboon",
       "scientificName": "Papio anubis",
-      "status": "source-selected",
+      "status": "active",
       "sourceTitle": "File:060 Olive baboon walking at Queen Elizabeth National Park Photo by Giles Laurent.jpg",
       "sourcePage": "https://commons.wikimedia.org/wiki/File%3A060_Olive_baboon_walking_at_Queen_Elizabeth_National_Park_Photo_by_Giles_Laurent.jpg",
       "creator": "Giles Laurent",
@@ -39,12 +127,56 @@
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
       "sourceWidth": 6877,
       "sourceHeight": 4585,
-      "selectionNotes": "Real full-body olive baboon photograph with a clean silhouette."
+      "selectionNotes": "Real full-body olive baboon photograph with a clean silhouette.",
+      "asset": "/images/animals/baboon.png?v=ed6363c2304a",
+      "assetSha256": "ed6363c2304afe4c6c108f4ceca003a952905d8caef1c5e4ad00719dee2447a1",
+      "assetWidth": 960,
+      "assetHeight": 640,
+      "activatedAt": "2026-08-24",
+      "backgroundRemoval": "Adobe Photoshop API select-subject cutout",
+      "reviewStatus": "first-pass-reviewed",
+      "reviewNotes": "Correct real animal and transparent background verified; minor natural edge color may remain.",
+      "variants": {
+        "avif": [
+          {
+            "src": "/images/animals/optimized/baboon-ed6363c2304a-320.avif",
+            "width": 320,
+            "bytes": 8448
+          },
+          {
+            "src": "/images/animals/optimized/baboon-ed6363c2304a-640.avif",
+            "width": 640,
+            "bytes": 25246
+          },
+          {
+            "src": "/images/animals/optimized/baboon-ed6363c2304a-960.avif",
+            "width": 960,
+            "bytes": 50349
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/animals/optimized/baboon-ed6363c2304a-320.webp",
+            "width": 320,
+            "bytes": 11594
+          },
+          {
+            "src": "/images/animals/optimized/baboon-ed6363c2304a-640.webp",
+            "width": 640,
+            "bytes": 35774
+          },
+          {
+            "src": "/images/animals/optimized/baboon-ed6363c2304a-960.webp",
+            "width": 960,
+            "bytes": 70884
+          }
+        ]
+      }
     },
     {
       "animal": "Saltwater Crocodile",
       "scientificName": "Crocodylus porosus",
-      "status": "source-selected",
+      "status": "active",
       "sourceTitle": "File:Saltwater crocodile (Crocodylus porosus) juvenile Rock Islands.jpg",
       "sourcePage": "https://commons.wikimedia.org/wiki/File%3ASaltwater_crocodile_(Crocodylus_porosus)_juvenile_Rock_Islands.jpg",
       "creator": "Charles J. Sharp",
@@ -52,12 +184,56 @@
       "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
       "sourceWidth": 6945,
       "sourceHeight": 3472,
-      "selectionNotes": "Real full-body photograph verified as Crocodylus porosus."
+      "selectionNotes": "Real full-body photograph verified as Crocodylus porosus.",
+      "asset": "/images/animals/saltwater-crocodile.png?v=817a66c488be",
+      "assetSha256": "817a66c488be31029d8c2ebc2626ebce8b1e388753316bdc786768e1508a3107",
+      "assetWidth": 960,
+      "assetHeight": 480,
+      "activatedAt": "2026-08-24",
+      "backgroundRemoval": "Adobe Photoshop API select-subject cutout",
+      "reviewStatus": "first-pass-reviewed",
+      "reviewNotes": "Correct real animal and transparent background verified; minor natural edge color may remain.",
+      "variants": {
+        "avif": [
+          {
+            "src": "/images/animals/optimized/saltwater-crocodile-817a66c488be-320.avif",
+            "width": 320,
+            "bytes": 4500
+          },
+          {
+            "src": "/images/animals/optimized/saltwater-crocodile-817a66c488be-640.avif",
+            "width": 640,
+            "bytes": 13117
+          },
+          {
+            "src": "/images/animals/optimized/saltwater-crocodile-817a66c488be-960.avif",
+            "width": 960,
+            "bytes": 24137
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/animals/optimized/saltwater-crocodile-817a66c488be-320.webp",
+            "width": 320,
+            "bytes": 5978
+          },
+          {
+            "src": "/images/animals/optimized/saltwater-crocodile-817a66c488be-640.webp",
+            "width": 640,
+            "bytes": 17192
+          },
+          {
+            "src": "/images/animals/optimized/saltwater-crocodile-817a66c488be-960.webp",
+            "width": 960,
+            "bytes": 30548
+          }
+        ]
+      }
     },
     {
       "animal": "Bongo",
       "scientificName": "Tragelaphus eurycerus",
-      "status": "source-selected",
+      "status": "active",
       "sourceTitle": "File:Bongo (28857049261).jpg",
       "sourcePage": "https://commons.wikimedia.org/wiki/File%3ABongo_(28857049261).jpg",
       "creator": "Mathias Appel",
@@ -65,7 +241,51 @@
       "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
       "sourceWidth": 3081,
       "sourceHeight": 4652,
-      "selectionNotes": "Real full-body bongo photograph replacing the unrelated domestic-cat asset."
+      "selectionNotes": "Real full-body bongo photograph replacing the unrelated domestic-cat asset.",
+      "asset": "/images/animals/bongo.png?v=029836f8ab2f",
+      "assetSha256": "029836f8ab2f8c4c0197ff3cac7086d38231fc91ecdbec82743eb7e75cec9a0c",
+      "assetWidth": 960,
+      "assetHeight": 1450,
+      "activatedAt": "2026-08-24",
+      "backgroundRemoval": "Adobe Photoshop API select-subject cutout",
+      "reviewStatus": "first-pass-reviewed",
+      "reviewNotes": "Correct real animal and transparent background verified; minor natural edge color may remain.",
+      "variants": {
+        "avif": [
+          {
+            "src": "/images/animals/optimized/bongo-029836f8ab2f-320.avif",
+            "width": 320,
+            "bytes": 20814
+          },
+          {
+            "src": "/images/animals/optimized/bongo-029836f8ab2f-640.avif",
+            "width": 640,
+            "bytes": 60380
+          },
+          {
+            "src": "/images/animals/optimized/bongo-029836f8ab2f-960.avif",
+            "width": 960,
+            "bytes": 116771
+          }
+        ],
+        "webp": [
+          {
+            "src": "/images/animals/optimized/bongo-029836f8ab2f-320.webp",
+            "width": 320,
+            "bytes": 26724
+          },
+          {
+            "src": "/images/animals/optimized/bongo-029836f8ab2f-640.webp",
+            "width": 640,
+            "bytes": 82976
+          },
+          {
+            "src": "/images/animals/optimized/bongo-029836f8ab2f-960.webp",
+            "width": 960,
+            "bytes": 161214
+          }
+        ]
+      }
     }
   ]
 }

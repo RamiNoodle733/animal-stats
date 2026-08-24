@@ -4,6 +4,7 @@ const assert = require('node:assert/strict');
 const test = require('node:test');
 
 const {
+    alphaRange,
     findDuplicates,
     resolveAnimalImage,
     summarize
@@ -19,9 +20,15 @@ test('animal image paths cannot leave the dedicated asset directory', () => {
         /must be local/
     );
     assert.match(
-        resolveAnimalImage('/images/animals/african-lion.png'),
+        resolveAnimalImage('/images/animals/african-lion.png?v=0123456789ab#subject'),
         /images[\\/]animals[\\/]african-lion\.png$/
     );
+});
+
+test('alpha range reads transparency bytes directly', () => {
+    assert.deepEqual(alphaRange(Buffer.from([0, 64, 128, 255])), { minimum: 0, maximum: 255 });
+    assert.deepEqual(alphaRange(Buffer.from([255, 255])), { minimum: 255, maximum: 255 });
+    assert.throws(() => alphaRange(Buffer.alloc(0)), /empty/);
 });
 
 test('duplicate image bytes are grouped by checksum', () => {

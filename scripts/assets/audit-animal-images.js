@@ -34,12 +34,24 @@ function resolveAnimalImage(imageUrl) {
         throw new Error(`Image URL must be local under /images/animals/: ${imageUrl}`);
     }
 
-    const resolved = path.resolve(ROOT, imageUrl.slice(1));
+    const pathname = imageUrl.split(/[?#]/, 1)[0];
+    const resolved = path.resolve(ROOT, pathname.slice(1));
     const relative = path.relative(ANIMAL_IMAGE_ROOT, resolved);
     if (!relative || relative.startsWith('..') || path.isAbsolute(relative)) {
         throw new Error(`Image URL escapes the animal image directory: ${imageUrl}`);
     }
     return resolved;
+}
+
+function alphaRange(alpha) {
+    if (!Buffer.isBuffer(alpha) || alpha.length === 0) throw new Error('Alpha channel is empty.');
+    let minimum = 255;
+    let maximum = 0;
+    for (const value of alpha) {
+        minimum = Math.min(minimum, value);
+        maximum = Math.max(maximum, value);
+    }
+    return { minimum, maximum };
 }
 
 async function inspectAnimal(animal) {
@@ -53,11 +65,13 @@ async function inspectAnimal(animal) {
         let alphaMaximum = null;
 
         if (metadata.hasAlpha) {
-            const alphaStats = await sharp(contents)
+            const alpha = await sharp(contents)
                 .extractChannel('alpha')
-                .stats();
-            alphaMinimum = alphaStats.channels[0].min;
-            alphaMaximum = alphaStats.channels[0].max;
+                .raw()
+                .toBuffer();
+            const range = alphaRange(alpha);
+            alphaMinimum = range.minimum;
+            alphaMaximum = range.maximum;
         }
 
         return {
@@ -242,6 +256,7 @@ if (require.main === module) {
 }
 
 module.exports = {
+    alphaRange,
     findDuplicates,
     resolveAnimalImage,
     summarize
