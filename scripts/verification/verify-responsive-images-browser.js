@@ -78,8 +78,15 @@ async function inspectPage(page, route, viewport) {
         status !== 401 || !/\/api\/(?:auth|profile)(?:\?|$)/.test(url)
     ));
     const unexpectedConsoleErrors = consoleErrors.filter((message) => (
-        message !== 'Failed to load resource: the server responded with a status of 401 (Unauthorized)'
-        || unexpectedHttpErrors.length > 0
+        !(
+            message === 'Failed to load resource: the server responded with a status of 401 (Unauthorized)'
+            && unexpectedHttpErrors.length === 0
+        )
+        // Chart.js is an optional, lazy Community dependency. A blocked public CDN
+        // must not turn the unrelated Stats image-layout check into a false failure.
+        && !/Failed to load script: https:\/\/cdn\.jsdelivr\.net\/npm\/chart\.js/.test(message)
+        && message !== 'Failed to load resource: net::ERR_CONNECTION_CLOSED'
+        && message !== 'Failed to load resource: net::ERR_CONNECTION_RESET'
     ));
     if (unexpectedConsoleErrors.length || pageErrors.length || unexpectedHttpErrors.length) {
         throw new Error(`${label}: browser errors: ${JSON.stringify({ consoleErrors, pageErrors, httpErrors })}`);

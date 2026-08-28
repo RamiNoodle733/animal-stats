@@ -4,6 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
+const { transformSync } = require('esbuild');
 
 const repoRoot = path.resolve(__dirname, '..', '..');
 const htmlFiles = [
@@ -28,20 +29,19 @@ const routeAssets = Object.freeze({
     rankings: { scripts: ['js/rankings.js'], styles: ['css/pages/rankings.css'] },
     tournament: {
         scripts: ['js/tournament.js'],
-        styles: ['tournament-v4.css', 'css/pages/tournament.css']
+        styles: ['tournament-v4.css']
     },
     community: {
         scripts: ['js/community-globe.js', 'js/community-manager.js', 'js/community.js'],
         styles: [
             'community-page.css',
-            'css/pages/community.css',
             'css/pages/community-globe.css',
             'css/pages/community-v2.css'
         ]
     },
     compare: {
         scripts: ['js/compare.js'],
-        styles: ['css/components/match-intro.css', 'compare-page.css', 'css/pages/compare.css']
+        styles: ['css/components/match-intro.css', 'compare-page.css']
     },
     battlepoints: {
         scripts: ['js/battlepoints.js'],
@@ -50,12 +50,13 @@ const routeAssets = Object.freeze({
 });
 
 const budgets = Object.freeze({
-    initialJavaScriptGzip: 62 * 1024,
-    initialStylesGzip: 80 * 1024,
+    initialJavaScriptGzip: 60 * 1024,
+    initialStylesGzip: 65 * 1024,
     staticPageJavaScriptGzip: 50 * 1024,
     staticPageStylesGzip: 30 * 1024,
-    routeJavaScriptGzip: 30 * 1024,
-    routeStylesGzip: 25 * 1024
+    routeJavaScriptGzip: 24 * 1024,
+    routeStylesGzip: 18 * 1024,
+    interactiveTotalJavaScriptGzip: 150 * 1024
 });
 
 const forbiddenInitialAssets = [
@@ -103,8 +104,25 @@ function measure(files) {
             throw new Error(`Performance manifest references missing asset: ${relativePath}`);
         }
         const content = fs.readFileSync(absolutePath);
-        total.raw += content.length;
-        total.gzip += zlib.gzipSync(content, { level: 9 }).length;
+        const extension = path.extname(relativePath).toLowerCase();
+        let deployed = content;
+
+        if (extension === '.css' || extension === '.js') {
+            const text = content[0] === 0xff && content[1] === 0xfe
+                ? content.subarray(2).toString('utf16le')
+                : content.toString('utf8');
+            deployed = transformSync(text, {
+                loader: extension === '.css' ? 'css' : 'js',
+                target: 'es2020',
+                legalComments: 'none',
+                minifyWhitespace: true,
+                minifySyntax: true,
+                minifyIdentifiers: extension === '.css'
+            }).code;
+        }
+
+        total.raw += deployed.length;
+        total.gzip += zlib.gzipSync(deployed, { level: 9 }).length;
         return total;
     }, { raw: 0, gzip: 0 });
 }
@@ -154,7 +172,7 @@ const routerSource = fs.readFileSync(path.join(repoRoot, 'js', 'router.js'), 'ut
 if (!routerSource.includes('insertBefore(link, mobileOverrides || null)')) {
     throw new Error('Route styles must be inserted before the mobile override stylesheet');
 }
-if (!routerSource.includes('mobileOverrides.after(link)')) {
+if (!routerSource.includes('document.head.appendChild(link)')) {
     throw new Error('Final route layout layers must support loading after mobile overrides');
 }
 if (routerSource.includes('three@0.165.0')) {
@@ -185,6 +203,7 @@ for (const [route, assets] of Object.entries(routeAssets)) {
     const styles = measure(assets.styles);
     assertWithin(`${route} route JavaScript`, scripts.gzip, budgets.routeJavaScriptGzip);
     assertWithin(`${route} route styles`, styles.gzip, budgets.routeStylesGzip);
+    assertWithin(`${route} interactive JavaScript total`, initialJs.gzip + scripts.gzip, budgets.interactiveTotalJavaScriptGzip);
     rows.push({
         route,
         initialJsGzip: formatKb(initialJs.gzip),

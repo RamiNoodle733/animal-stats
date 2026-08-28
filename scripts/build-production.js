@@ -4,6 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const { execFileSync } = require('child_process');
+const { transformSync } = require('esbuild');
 
 const repoRoot = path.resolve(__dirname, '..');
 const outputRoot = path.join(repoRoot, 'dist');
@@ -87,6 +88,47 @@ function copyAllowedDirectory(directory, allowedExtensions) {
     }
 }
 
+function decodeTextAsset(buffer) {
+    if (buffer[0] === 0xff && buffer[1] === 0xfe) {
+        return buffer.subarray(2).toString('utf16le');
+    }
+    return buffer.toString('utf8');
+}
+
+function minifyDeploymentAssets() {
+    const pending = [outputRoot];
+    let optimized = 0;
+
+    while (pending.length > 0) {
+        const current = pending.pop();
+        for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+            const absolutePath = path.join(current, entry.name);
+            if (entry.isDirectory()) {
+                pending.push(absolutePath);
+                continue;
+            }
+            if (!entry.isFile()) continue;
+
+            const extension = path.extname(entry.name).toLowerCase();
+            if (extension !== '.css' && extension !== '.js') continue;
+
+            const result = transformSync(decodeTextAsset(fs.readFileSync(absolutePath)), {
+                loader: extension === '.css' ? 'css' : 'js',
+                target: 'es2020',
+                legalComments: 'none',
+                minifyWhitespace: true,
+                minifySyntax: true,
+                // Classic client scripts share public globals across files.
+                minifyIdentifiers: extension === '.css'
+            });
+            fs.writeFileSync(absolutePath, result.code, 'utf8');
+            optimized += 1;
+        }
+    }
+
+    return optimized;
+}
+
 if (path.dirname(outputRoot) !== repoRoot || path.basename(outputRoot) !== 'dist') {
     throw new Error(`Refusing to clear unexpected output directory: ${outputRoot}`);
 }
@@ -114,6 +156,8 @@ rootFiles.forEach(copyFile);
 Object.entries(directoryExtensions).forEach(([directory, extensions]) => {
     copyAllowedDirectory(directory, extensions);
 });
+
+const optimizedAssetCount = minifyDeploymentAssets();
 
 const packageJson = JSON.parse(fs.readFileSync(path.join(repoRoot, 'package.json'), 'utf8'));
 let commit = process.env.VERCEL_GIT_COMMIT_SHA || process.env.GITHUB_SHA || null;
@@ -151,3 +195,4 @@ if (forbidden.length > 0) {
 }
 
 console.log(`Production allowlist built ${deployedFiles.length} files into dist/.`);
+console.log(`Minified ${optimizedAssetCount} deployment CSS/JavaScript assets without changing source files.`);

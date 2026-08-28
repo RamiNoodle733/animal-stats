@@ -21,7 +21,7 @@
  * Scripts/styles are injected once and cached for repeat navigations.
  */
 const CHART_JS_URL = 'https://cdn.jsdelivr.net/npm/chart.js';
-const ASSET_REVISION = '2.9.1';
+const ASSET_REVISION = '2.10.0';
 
 function versionedAsset(path) {
     return `${path}?v=${ASSET_REVISION}`;
@@ -30,33 +30,36 @@ function versionedAsset(path) {
 const ROUTE_ASSET_DEFINITIONS = {
     home: {
         styles: [versionedAsset('/css/pages/homepage.css')],
+        stylesAfterMobile: [versionedAsset('/css/arcade.css')],
         scripts: [versionedAsset('/js/homepage.js'), versionedAsset('/js/social.js')]
     },
     about: {
         styles: [versionedAsset('/css/pages/homepage.css')],
+        stylesAfterMobile: [versionedAsset('/css/arcade.css')],
         scripts: [versionedAsset('/js/social.js')]
     },
     stats: {
         styles: [],
+        stylesAfterMobile: [versionedAsset('/css/arcade.css')],
         scripts: [CHART_JS_URL]
     },
     rankings: {
         styles: [versionedAsset('/css/pages/rankings.css')],
+        stylesAfterMobile: [versionedAsset('/css/arcade.css')],
         scripts: [versionedAsset('/js/rankings.js')]
     },
     tournament: {
-        styles: [versionedAsset('/tournament-v4.css'), versionedAsset('/css/pages/tournament.css')],
+        styles: [versionedAsset('/tournament-v4.css')],
+        stylesAfterMobile: [versionedAsset('/css/arcade.css')],
         scripts: [CHART_JS_URL, versionedAsset('/js/tournament.js')]
     },
     community: {
         styles: [
             versionedAsset('/community-page.css'),
-            versionedAsset('/css/pages/community.css'),
             versionedAsset('/css/pages/community-globe.css')
         ],
-        stylesAfterMobile: [versionedAsset('/css/pages/community-v2.css')],
+        stylesAfterMobile: [versionedAsset('/css/pages/community-v2.css'), versionedAsset('/css/arcade.css')],
         scripts: [
-            CHART_JS_URL,
             versionedAsset('/js/community-globe.js'),
             versionedAsset('/js/community-manager.js'),
             versionedAsset('/js/community.js')
@@ -65,13 +68,14 @@ const ROUTE_ASSET_DEFINITIONS = {
     compare: {
         styles: [
             versionedAsset('/css/components/match-intro.css'),
-            versionedAsset('/compare-page.css'),
-            versionedAsset('/css/pages/compare.css')
+            versionedAsset('/compare-page.css')
         ],
+        stylesAfterMobile: [versionedAsset('/css/arcade.css')],
         scripts: [CHART_JS_URL, versionedAsset('/js/compare.js')]
     },
     battlepoints: {
         styles: [versionedAsset('/css/pages/battlepoints.css')],
+        stylesAfterMobile: [versionedAsset('/css/arcade.css')],
         scripts: [versionedAsset('/js/battlepoints.js')]
     }
 };
@@ -87,6 +91,7 @@ function loadStylesheetOnce(href, options = {}) {
 
     const existing = document.querySelector(`link[rel="stylesheet"][href="${href}"]`);
     if (existing) {
+        if (afterMobile) document.head.appendChild(existing);
         const promise = Promise.resolve(existing);
         routeStylePromises.set(cacheKey, promise);
         return promise;
@@ -103,8 +108,8 @@ function loadStylesheetOnce(href, options = {}) {
         // them at the end caused the layout regressions that originally led to
         // every route stylesheet being loaded globally.
         const mobileOverrides = document.querySelector('link[rel="stylesheet"][href^="/css/mobile.css"]');
-        if (afterMobile && mobileOverrides) {
-            mobileOverrides.after(link);
+        if (afterMobile) {
+            document.head.appendChild(link);
         } else {
             document.head.insertBefore(link, mobileOverrides || null);
         }
@@ -143,14 +148,23 @@ function loadRouteAssets(routeName) {
     if (routeAssetPromises.has(routeName)) return routeAssetPromises.get(routeName);
 
     const promise = (async () => {
-        await Promise.all((assets.styles || []).map(loadStylesheetOnce));
-        await Promise.all((assets.stylesAfterMobile || []).map((href) => (
-            loadStylesheetOnce(href, { afterMobile: true })
-        )));
+        for (const href of (assets.styles || [])) {
+            await loadStylesheetOnce(href);
+        }
+        for (const href of (assets.stylesAfterMobile || [])) {
+            await loadStylesheetOnce(href, { afterMobile: true });
+        }
 
         // Load scripts in order so route dependencies are available before managers initialize.
         for (const src of (assets.scripts || [])) {
-            await loadScriptOnce(src);
+            try {
+                await loadScriptOnce(src);
+            } catch (error) {
+                if (src !== CHART_JS_URL) throw error;
+                // Charts are visual enhancement only. Keep the route usable when
+                // the public CDN is temporarily unavailable.
+                console.warn('Chart.js is unavailable; continuing without charts.');
+            }
         }
     })();
 
@@ -256,7 +270,14 @@ class Router {
 
         // Handle the route
         if (!skipHandler) {
-            this.handleRoute(normalizedUrl);
+            const renderRoute = () => this.handleRoute(normalizedUrl);
+            const canTransition = typeof document.startViewTransition === 'function'
+                && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (canTransition) {
+                document.startViewTransition(renderRoute);
+            } else {
+                renderRoute();
+            }
         }
 
         this.isNavigating = false;
@@ -279,6 +300,10 @@ class Router {
      */
     handleRoute(path) {
         const normalizedPath = this.normalizePath(path);
+
+        window.dispatchEvent(new CustomEvent('abs:route-leave', {
+            detail: { path: this.currentRoute }
+        }));
 
         this.previousRoute = this.currentRoute;
         this.currentRoute = normalizedPath;
@@ -316,10 +341,15 @@ class Router {
 
                 // Call handler. Route handlers may lazily load assets before switching views.
                 const result = route.handler(params);
+                const announceRoute = () => window.dispatchEvent(new CustomEvent('abs:route-enter', {
+                    detail: { path: normalizedPath, routeName: this.getRouteName(normalizedPath) }
+                }));
                 if (result && typeof result.catch === 'function') {
                     result.catch((error) => {
                         console.error(`Error handling route ${route.path}:`, error);
-                    });
+                    }).finally(announceRoute);
+                } else {
+                    requestAnimationFrame(announceRoute);
                 }
                 return;
             }
@@ -353,6 +383,21 @@ class Router {
         }
 
         return pathname || '/';
+    }
+
+    getRouteName(path) {
+        if (path === '/') return 'home';
+        if (path.startsWith('/stats')) return 'stats';
+        if (path.startsWith('/compare')) return 'compare';
+        if (path.startsWith('/rankings')) return 'rankings';
+        if (path.startsWith('/community')) return 'community';
+        if (path.startsWith('/tournament')) return 'tournament';
+        if (path.startsWith('/battlepoints')) return 'battlepoints';
+        if (path.startsWith('/profile')) return 'profile';
+        if (path.startsWith('/signup')) return 'signup';
+        if (path.startsWith('/login') || path.startsWith('/forgot-password') || path.startsWith('/reset-password')) return 'login';
+        if (path.startsWith('/about')) return 'about';
+        return null;
     }
 
     /**

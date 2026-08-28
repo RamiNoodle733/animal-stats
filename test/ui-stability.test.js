@@ -43,6 +43,32 @@ test('Compare honors reduced motion without removing its static design', () => {
     assert.match(css, /#compare-view \.fighter-section:hover[\s\S]*?transform:\s*none !important/);
 });
 
+test('Compare exposes clear disabled and ready fight states', () => {
+    const compare = read('js/compare.js');
+    const main = read('js/main.js');
+    const arcade = read('css/arcade.css');
+
+    assert.match(compare, /SELECT 2 ANIMALS/);
+    assert.match(main, /START FIGHT/);
+    assert.match(main, /classList\.add\('is-ready'\)/);
+    assert.match(arcade, /width:\s*clamp\(184px, 17vw, 220px\)/);
+    assert.match(arcade, /min-height:\s*54px/);
+});
+
+test('sound effects are muted for first-time visitors and available on mobile', () => {
+    const html = read('index.html');
+    const audio = read('js/audio.js');
+    const main = read('js/main.js');
+
+    assert.match(audio, /enabled:\s*false/);
+    assert.match(audio, /this\.enabled = p\.enabled === true/);
+    assert.match(html, /id="audio-toggle-btn-mobile"/);
+    assert.match(html, /aria-pressed="false"/);
+    assert.match(main, /button\.setAttribute\('aria-pressed'/);
+    assert.doesNotMatch(html, /<script src="\/js\/audio\.js/);
+    assert.match(main, /dataset\.audioManager = 'true'/);
+});
+
 test('animal search does not advertise itself as a credential field', () => {
     const html = read('index.html');
     const main = read('js/main.js');

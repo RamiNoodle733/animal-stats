@@ -69,6 +69,7 @@ async function inspect(viewport) {
                 sidebar: { left: sidebar.left, right: sidebar.right, width: sidebar.width },
                 feed: { left: feed.left, right: feed.right, width: feed.width },
                 bodyOverflow: document.documentElement.scrollWidth - innerWidth,
+                pageScroll: document.documentElement.scrollHeight - innerHeight,
                 mobileStylesIndex: links.findIndex((href) => href.includes('/css/mobile.css')),
                 communityV2Index: links.findIndex((href) => href.includes('/css/pages/community-v2.css'))
             };
@@ -81,14 +82,18 @@ async function inspect(viewport) {
         assert(visibleTabs.length === 3, `${label} Community tab count is wrong`, chat);
         assert(visibleTabs.every((tab) => tab.left >= chat.bar.left - 1 && tab.right <= chat.bar.right + 1), `${label} Community tabs clip or overflow`, chat);
         assert(chat.bodyOverflow <= 1, `${label} Community page scrolls horizontally`, chat);
+        assert(chat.pageScroll <= 1, `${label} Discuss should scroll inside its feed, not the page`, chat);
         if (viewport.width > 900) {
-            assert(chat.sidebar.width >= 300 && chat.feed.width > chat.sidebar.width && chat.feed.left > chat.sidebar.right, `${label} desktop columns are not coherent`, chat);
+            const centered = Math.abs(((chat.feed.left + chat.feed.right) / 2) - (viewport.width / 2)) <= 2;
+            assert(chat.sidebar.width === 0 && chat.feed.width >= 700 && centered, `${label} desktop conversation feed is not centered`, chat);
         }
         await page.screenshot({ path: path.join(screenshotDir, `community-chat-${label}.png`) });
 
         await page.locator('.community-tab-btn[data-tab="feed"]').click();
         await page.waitForFunction(() => location.pathname === '/community/feed' && document.getElementById('community-channel-title')?.textContent === 'Community Conversations');
         const feedTitle = await page.locator('#community-channel-title').textContent();
+        const feedPageScroll = await page.evaluate(() => document.documentElement.scrollHeight - innerHeight);
+        assert(feedPageScroll <= 1, `${label} Comments should scroll inside its feed, not the page`, { feedPageScroll });
 
         await page.locator('.community-tab-btn[data-tab="map"]').click();
         await page.waitForFunction(() => (
@@ -107,15 +112,20 @@ async function inspect(viewport) {
                 feedDisplay: getComputedStyle(feed).display,
                 stage: { width: stage.width, height: stage.height },
                 mapSelected: mapTab.getAttribute('aria-selected'),
-                summaryVisible: document.querySelector('.community-summary-module')?.getBoundingClientRect().height > 0,
+                drawerClosed: !document.getElementById('community-more-stats')?.open,
+                metricCount: document.querySelectorAll('.globe-totals-grid .globe-total-card').length,
+                privacyVisible: document.querySelector('.community-privacy-note')?.getBoundingClientRect().height > 0,
+                chartLoaded: Boolean(document.querySelector('script[data-community-charts]')),
                 dailyMatchupExists: Boolean(document.querySelector('.daily-matchup-module')),
-                bodyOverflow: document.documentElement.scrollWidth - innerWidth
+                bodyOverflow: document.documentElement.scrollWidth - innerWidth,
+                pageScroll: document.documentElement.scrollHeight - innerHeight
             };
         });
         assert(map.sidebarDisplay !== 'none' && map.feedDisplay === 'none', `${label} Map surface mode failed`, map);
         assert(map.stage.width > 250 && map.stage.height >= 240 && map.mapSelected === 'true', `${label} Map stage is not usable`, map);
-        assert(map.summaryVisible && !map.dailyMatchupExists, `${label} Community focus modules are wrong`, map);
+        assert(map.drawerClosed && map.metricCount === 4 && map.privacyVisible && !map.chartLoaded && !map.dailyMatchupExists, `${label} Community focus modules are wrong`, map);
         assert(map.bodyOverflow <= 1, `${label} Map page scrolls horizontally`, map);
+        assert(map.pageScroll <= 1, `${label} Map should fit without page scrolling`, map);
         await page.screenshot({ path: path.join(screenshotDir, `community-map-${label}.png`) });
 
         assert(pageErrors.length === 0, `${label} browser errors`, pageErrors);

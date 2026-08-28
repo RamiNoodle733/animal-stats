@@ -8,7 +8,8 @@
     padding: clamp(45px, 7vw, 86px) clamp(26px, 5vw, 74px);
     overflow: hidden;
     border: 1px solid var(--line);
-    border-radius: 30px;
+    border-radius: 10px;
+    clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
     background:
         linear-gradient(115deg, rgba(19, 25, 42, 0.97), rgba(10, 14, 25, 0.78)),
         radial-gradient(circle at 85% 25%, rgba(69, 238, 202, 0.16), transparent 30rem);
@@ -48,6 +49,8 @@ h1 {
     line-height: 0.9;
     letter-spacing: -0.055em;
     text-wrap: balance;
+    font-family: "Orbitron", Inter, sans-serif;
+    letter-spacing: -0.035em;
 }
 .scientific-name { margin: 18px 0 24px; color: #b6c1d7; font-size: 1.05rem; }
 .hero-description { max-width: 62ch; margin-bottom: 28px; color: #c8d0df; font-size: 1.05rem; }
@@ -58,7 +61,7 @@ h1 {
     padding: 0 18px;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
+    border-radius: 6px;
     font-size: 0.78rem;
     font-weight: 850;
     letter-spacing: 0.08em;
@@ -66,7 +69,7 @@ h1 {
     transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
 }
 .hero-actions a:hover { transform: translateY(-2px); }
-.action-primary { color: #06110f; background: var(--cyan); }
+.action-primary { color: #1d0d00; background: linear-gradient(180deg, #ff9a4d, #ff6a24 55%, #c53809); box-shadow: inset 0 2px rgba(255,255,255,.3), 0 4px 0 #702000; }
 .action-secondary { color: var(--text); border: 1px solid var(--line); background: rgba(255,255,255,0.035); }
 .action-secondary:hover { border-color: rgba(98,247,211,0.55); }
 .method-note { max-width: 58ch; margin: 20px 0 0; color: #7f8ba3; font-size: 0.75rem; }

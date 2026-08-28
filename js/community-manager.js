@@ -43,6 +43,9 @@ class CommunityManager {
         this.globeModeBound = false;
         this.globeDirectoryBound = false;
         this.globeControlsBound = false;
+        this.globeMoreStatsBound = false;
+        this.globeRequestController = null;
+        this.chartLoaderPromise = null;
         this.globeCityFilter = '';
         this.globeTrendRange = 'all';
         this.currentGlobePointData = null;
@@ -265,6 +268,7 @@ class CommunityManager {
         this.bindGlobeModeSwitch();
         this.bindGlobeDirectoryControls();
         this.bindGlobeAnalyticsControls();
+        this.bindMoreStatsDrawer();
         this.applyGlobeMode(this.globeMode);
 
         this.loadGlobeAnalytics();
@@ -321,6 +325,45 @@ class CommunityManager {
         this.globeControlsBound = true;
     }
 
+    bindMoreStatsDrawer() {
+        if (this.globeMoreStatsBound) return;
+        const drawer = document.getElementById('community-more-stats');
+        if (!drawer) return;
+
+        drawer.addEventListener('toggle', () => {
+            if (!drawer.open) return;
+            this.ensureChartJs().then(() => {
+                const payload = this.lastGlobePayload || {};
+                this.renderGlobeTrendChart(payload.trend || []);
+                this.renderGlobeCountryChart(payload.points || []);
+            }).catch((error) => {
+                console.warn('Community charts could not be loaded:', error?.message || error);
+            });
+        });
+        this.globeMoreStatsBound = true;
+    }
+
+    ensureChartJs() {
+        if (window.Chart) return Promise.resolve(window.Chart);
+        if (this.chartLoaderPromise) return this.chartLoaderPromise;
+
+        this.chartLoaderPromise = new Promise((resolve, reject) => {
+            const existing = document.querySelector('script[src="https://cdn.jsdelivr.net/npm/chart.js"]');
+            if (existing) {
+                existing.addEventListener('load', () => resolve(window.Chart), { once: true });
+                existing.addEventListener('error', reject, { once: true });
+                return;
+            }
+            const script = document.createElement('script');
+            script.src = 'https://cdn.jsdelivr.net/npm/chart.js';
+            script.dataset.communityCharts = 'true';
+            script.onload = () => resolve(window.Chart);
+            script.onerror = () => reject(new Error('Failed to load Chart.js'));
+            document.body.appendChild(script);
+        });
+        return this.chartLoaderPromise;
+    }
+
     applyGlobeMode(mode) {
         const normalized = mode === 'flat' ? 'flat' : 'globe';
         this.globeMode = normalized;
@@ -357,12 +400,16 @@ class CommunityManager {
             empty.textContent = 'Loading global activity...';
         }
 
+        this.globeRequestController?.abort();
+        this.globeRequestController = new AbortController();
+        const { signal } = this.globeRequestController;
+
         try {
             const query = new URLSearchParams({
                 action: 'globe',
                 range: this.globeTrendRange || 'all'
             });
-            const response = await fetch(`/api/community?${query.toString()}`);
+            const response = await fetch(`/api/community?${query.toString()}`, { signal });
             if (!response.ok) throw new Error('Failed to load globe analytics');
 
             const result = await response.json();
@@ -377,8 +424,10 @@ class CommunityManager {
             this.renderGlobeBreakdown('globe-actions-list', payload.actions || []);
             this.renderGlobeBreakdown('globe-pages-list', payload.pages || []);
             this.renderGlobeInsights(payload);
-            this.renderGlobeTrendChart(payload.trend || []);
-            this.renderGlobeCountryChart(payload.points || []);
+            if (document.getElementById('community-more-stats')?.open && window.Chart) {
+                this.renderGlobeTrendChart(payload.trend || []);
+                this.renderGlobeCountryChart(payload.points || []);
+            }
             this.renderGlobeCityDirectory(payload.points || []);
             this.updateGlobeContextChips(payload.trendRange);
 
@@ -406,6 +455,7 @@ class CommunityManager {
             ['globe-total-events', summary.totalEvents],
             ['globe-total-visits', summary.totalVisits],
             ['globe-total-visitors', summary.uniqueVisitors],
+            ['globe-total-locations', Array.isArray(payload.points) ? payload.points.length : 0],
             ['globe-window-24h', windows.last24h],
             ['globe-window-7d', windows.last7d],
             ['globe-window-30d', windows.last30d]
@@ -908,6 +958,7 @@ class CommunityManager {
                 this.bindOwnerAnalyticsControls();
             }
         } catch (error) {
+            if (error?.name === 'AbortError') return;
             console.error('Error refreshing owner analytics:', error);
         }
     }
@@ -1319,6 +1370,8 @@ class CommunityManager {
         this.stopPresencePing();
         this.stopGlobeRefresh();
         this.globe?.setPaused(true);
+        this.globeRequestController?.abort();
+        this.globeRequestController = null;
         this.destroyGlobeCharts();
         
         // Reset mobile sidebar state

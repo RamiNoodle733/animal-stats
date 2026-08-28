@@ -111,6 +111,8 @@
             this.flatPanY = 0;
 
             this.isPaused = false;
+            this.isIntersecting = true;
+            this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             this.isDragging = false;
             this.dragDistance = 0;
             this.lastPointerX = 0;
@@ -185,6 +187,24 @@
         bindEvents() {
             this.onResize = () => this.resize();
             window.addEventListener('resize', this.onResize, { passive: true });
+            this.onVisibilityChange = () => {
+                if (document.visibilityState === 'visible') this.animate();
+                else if (this.animationFrame) cancelAnimationFrame(this.animationFrame);
+                if (document.visibilityState !== 'visible') this.animationFrame = null;
+            };
+            document.addEventListener('visibilitychange', this.onVisibilityChange);
+
+            if ('IntersectionObserver' in window) {
+                this.observer = new IntersectionObserver(([entry]) => {
+                    this.isIntersecting = Boolean(entry?.isIntersecting);
+                    if (this.isIntersecting) this.animate();
+                    else if (this.animationFrame) {
+                        cancelAnimationFrame(this.animationFrame);
+                        this.animationFrame = null;
+                    }
+                }, { rootMargin: '80px' });
+                this.observer.observe(this.canvas);
+            }
 
             this.canvas.addEventListener('pointerdown', (event) => {
                 this.isDragging = true;
@@ -225,6 +245,7 @@
 
                     this.lastPointerX = event.clientX;
                     this.lastPointerY = event.clientY;
+                    this.draw();
                 }
 
                 this.handleHover(event);
@@ -238,6 +259,7 @@
                 this.isDragging = false;
                 this.dragVector = null;
                 this.canvas.releasePointerCapture(event.pointerId);
+                this.animate();
             });
 
             this.canvas.addEventListener('pointerleave', () => {
@@ -276,10 +298,12 @@
                     this.clampFlatPan();
                     this.flatBaseHash = '';
                 }
+                this.draw();
                 return;
             }
 
             this.globeZoom = clamp(this.globeZoom + delta, 0.65, 2.25);
+            this.draw();
         }
 
         projectPointerToTrackball(event) {
@@ -311,6 +335,8 @@
             if (this.tooltipEl) {
                 this.tooltipEl.style.display = 'none';
             }
+            this.draw();
+            if (this.mode === 'globe') this.animate();
         }
 
         setPoints(points = []) {
@@ -318,6 +344,7 @@
                 ? points.filter((point) => typeof point.lat === 'number' && typeof point.lng === 'number')
                 : [];
             this.maxEvents = Math.max(...this.points.map((point) => point.totalEvents || 1), 1);
+            this.draw();
         }
 
         setOnPointSelect(handler) {
@@ -326,6 +353,13 @@
 
         setPaused(paused) {
             this.isPaused = Boolean(paused);
+            if (this.isPaused && this.animationFrame) {
+                cancelAnimationFrame(this.animationFrame);
+                this.animationFrame = null;
+                this.draw();
+            } else if (!this.isPaused) {
+                this.animate();
+            }
         }
 
         resize() {
@@ -340,11 +374,25 @@
             this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
             this.flatBaseHash = '';
+            this.draw();
         }
 
         animate() {
+            if (this.animationFrame || this.isPaused || this.mode !== 'globe'
+                || this.reducedMotion || !this.isIntersecting || document.visibilityState !== 'visible') {
+                if (!this.animationFrame) this.draw();
+                return;
+            }
+
             const tick = () => {
-                if (!this.isPaused && this.mode === 'globe' && !this.isDragging) {
+                this.animationFrame = null;
+                if (this.isPaused || this.mode !== 'globe' || this.reducedMotion
+                    || !this.isIntersecting || document.visibilityState !== 'visible') {
+                    this.draw();
+                    return;
+                }
+
+                if (!this.isDragging) {
                     if (this.inertiaSpeed > 0.00005) {
                         const inertiaDelta = rotationMatrixFromAxisAngle(this.inertiaAxis, this.inertiaSpeed);
                         this.rotationMatrix = multiplyMatrices(inertiaDelta, this.rotationMatrix);

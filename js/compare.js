@@ -340,8 +340,29 @@
             const fightBtn = document.createElement('button');
             fightBtn.className = 'fight-btn c-fight-btn';
             fightBtn.id = 'fight-btn';
-            fightBtn.innerHTML = '<i class="fas fa-bolt"></i> FIGHT <i class="fas fa-bolt"></i>';
+            fightBtn.innerHTML = '<i class="fas fa-paw" aria-hidden="true"></i><span>SELECT 2 ANIMALS</span>';
+            fightBtn.disabled = true;
             vsSection.after(fightBtn);
+
+            // On phones the action becomes a full-width dock above the animal picker.
+            // Keep one real button so fight state and event handling stay authoritative.
+            const compareView = document.getElementById('compare-view');
+            const fightScreen = compareView?.querySelector('.fight-screen');
+            let actionDock = compareView?.querySelector('.compare-action-dock');
+            if (compareView && !actionDock) {
+                actionDock = document.createElement('div');
+                actionDock.className = 'compare-action-dock';
+                actionDock.setAttribute('aria-label', 'Fight action');
+                fightScreen?.after(actionDock);
+            }
+
+            const mobileFightLayout = window.matchMedia('(max-width: 640px)');
+            const placeFightButton = () => {
+                if (mobileFightLayout.matches && actionDock) actionDock.appendChild(fightBtn);
+                else vsSection.after(fightBtn);
+            };
+            placeFightButton();
+            mobileFightLayout.addEventListener?.('change', placeFightButton);
 
             // Compare assets are route-loaded after the app caches its DOM.
             // Refresh the late-created control and bind the app action here.

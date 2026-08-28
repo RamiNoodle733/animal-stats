@@ -1,16 +1,16 @@
 :root {
     color-scheme: dark;
-    --bg: #070912;
-    --panel: rgba(15, 20, 34, 0.82);
-    --panel-solid: #101522;
-    --line: rgba(154, 170, 203, 0.18);
+    --bg: #04070c;
+    --panel: rgba(12, 19, 32, 0.94);
+    --panel-solid: #0c1420;
+    --line: rgba(56, 216, 255, 0.22);
     --text: #f4f7ff;
     --muted: #98a4bd;
-    --cyan: #62f7d3;
+    --cyan: #38d8ff;
     --blue: #68a7ff;
-    --amber: #ffcb66;
+    --amber: #ffc83d;
     --red: #ff7187;
-    --radius: 22px;
+    --radius: 10px;
     --content: 1180px;
     font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -23,9 +23,9 @@ body {
     min-width: 320px;
     color: var(--text);
     background:
-        radial-gradient(circle at 75% 12%, rgba(67, 112, 231, 0.16), transparent 29rem),
-        radial-gradient(circle at 16% 32%, rgba(38, 207, 173, 0.09), transparent 24rem),
-        linear-gradient(180deg, #070912 0%, #090c15 52%, #070912 100%);
+        radial-gradient(circle at 75% 12%, rgba(35, 123, 176, 0.17), transparent 29rem),
+        radial-gradient(circle at 16% 32%, rgba(56, 216, 255, 0.08), transparent 24rem),
+        linear-gradient(180deg, #07101b 0%, #04070c 65%, #020306 100%);
     line-height: 1.55;
 }
 
@@ -36,10 +36,7 @@ body::before {
     content: "";
     opacity: 0.25;
     pointer-events: none;
-    background-image:
-        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
-    background-size: 52px 52px;
+    background-image: repeating-linear-gradient(0deg, transparent 0 3px, rgba(133, 215, 255, 0.035) 3px 4px);
     mask-image: linear-gradient(to bottom, black, transparent 78%);
 }
 
@@ -68,27 +65,29 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
     margin: 0 auto;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid rgba(56, 216, 255, .4);
+    box-shadow: 0 12px 28px rgba(0,0,0,.25);
 }
 
 .brand { display: inline-flex; align-items: center; gap: 12px; }
 .brand img { width: 46px; height: 46px; object-fit: contain; }
 .brand span { display: grid; line-height: 1; letter-spacing: 0.08em; }
-.brand strong { font-size: 0.9rem; }
+.brand strong { font-family: "Orbitron", Inter, sans-serif; font-size: 0.9rem; }
 .brand small { margin-top: 5px; color: var(--cyan); font-size: 0.72rem; letter-spacing: 0.32em; }
 
 .primary-nav { display: flex; align-items: center; gap: 5px; }
 .primary-nav a {
     padding: 10px 13px;
     color: var(--muted);
-    border-radius: 10px;
+    border: 1px solid transparent;
+    border-radius: 6px;
     font-size: 0.78rem;
     font-weight: 750;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     transition: color 160ms ease, background 160ms ease;
 }
-.primary-nav a:hover, .primary-nav .active { color: var(--text); background: rgba(255,255,255,0.06); }
+.primary-nav a:hover, .primary-nav .active { color: var(--text); border-color: rgba(56,216,255,.42); background: linear-gradient(180deg, rgba(56,216,255,.16), rgba(56,216,255,.04)); box-shadow: inset 0 -2px var(--cyan); }
 
 main { width: min(calc(100% - 40px), var(--content)); margin: 0 auto; }
 .breadcrumbs { display: flex; min-height: 64px; align-items: center; gap: 10px; color: var(--muted); font-size: 0.8rem; }

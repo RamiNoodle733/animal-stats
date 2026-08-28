@@ -102,13 +102,14 @@
     <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
     
     <!-- Main stylesheet (all styles) -->
-    <link rel="stylesheet" href="/css/legacy.css?v=2.9.1">
+    <link rel="stylesheet" href="/css/legacy.css?v=2.10.0">
     
     <!-- Shared component styles; page/feature styles are loaded by js/router.js -->
-    <link rel="stylesheet" href="/css/components/about-info-btn.css?v=2.9.1">
+    <link rel="stylesheet" href="/css/components/about-info-btn.css?v=2.10.0">
     
     <!-- Mobile-specific styles (loaded last to override) -->
-    <link rel="stylesheet" href="/css/mobile.css?v=2.9.1" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="/css/mobile.css?v=2.10.0" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="/css/arcade.css?v=2.10.0">
     
     <!-- Non-critical external resources loaded async -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" media="print" onload="this.media='all'">
@@ -318,6 +319,9 @@ html.js #seo-content{display:none!important}
             <button type="button" class="about-info-btn mobile-about-btn" id="about-info-btn-mobile" aria-label="About">
                 <span class="about-info-icon">i</span>
             </button>
+            <button type="button" class="audio-toggle-btn mobile-audio-btn" id="audio-toggle-btn-mobile" aria-label="Enable sound effects" aria-pressed="false" title="Enable sound effects">
+                <i class="fas fa-volume-mute" id="audio-toggle-icon-mobile" aria-hidden="true"></i>
+            </button>
         </header>
         
         <!-- Home View (Landing Page) - Redesigned Portal -->
@@ -362,6 +366,13 @@ html.js #seo-content{display:none!important}
                     <p class="portal-description">Compare matchups, rank the roster, and run tournaments to see who comes out on top.</p>
                 </div>
 
+                <!-- Tournament is the main play action -->
+                <a href="/tournament" class="portal-tournament-btn" id="portal-tournament-btn">
+                    <i class="fas fa-gamepad btn-icon"></i>
+                    <span class="btn-label">PLAY TOURNAMENT</span>
+                    <i class="fas fa-chevron-right btn-chevron"></i>
+                </a>
+
                 <!-- Main Navigation Buttons (4 core pages) -->
                 <nav class="portal-nav" id="portal-nav">
                     <a href="/stats" class="portal-nav-btn" data-section="stats">
@@ -386,17 +397,11 @@ html.js #seo-content{display:none!important}
                     </a>
                 </nav>
 
-                <!-- Tournament CTA Button (Separate from main nav) -->
-                <a href="/tournament" class="portal-tournament-btn" id="portal-tournament-btn">
-                    <i class="fas fa-gamepad btn-icon"></i>
-                    <span class="btn-label">PLAY TOURNAMENT</span>
-                    <i class="fas fa-chevron-right btn-chevron"></i>
-                </a>
             </div>
 
             <!-- Footer with About link - OUTSIDE home-portal to avoid screen shake effects -->
             <footer class="portal-footer">
-                <span class="portal-version">v2.9.1</span>
+                <span class="portal-version">v2.10.0</span>
                 <div class="portal-footer-divider"></div>
                 <a href="/about" class="portal-footer-link">About</a>
                 <div class="portal-footer-divider"></div>
@@ -435,7 +440,7 @@ html.js #seo-content{display:none!important}
                     </div>
                     
                     <div class="about-version-section">
-                        <p class="about-version">Version 2.9.1 • Built with <i class="fas fa-heart" style="color: #ff4d6a;"></i> and JavaScript</p>
+                        <p class="about-version">Version 2.10.0 • Built with <i class="fas fa-heart" style="color: #ff4d6a;"></i> and JavaScript</p>
                     </div>
                 </div>
             </div>
@@ -1313,7 +1318,7 @@ html.js #seo-content{display:none!important}
                             <span class="btn-light-sweep"></span>
                             <span class="btn-inner">
                                 <i class="fas fa-play"></i>
-                                <span>PLAY NOW</span>
+                                <span>PLAY TOURNAMENT</span>
                             </span>
                         </button>
                         <span class="hero-subtitle">Vote head-to-head in rapid matchups to shape the Power Rankings</span>
@@ -1534,13 +1539,8 @@ html.js #seo-content{display:none!important}
         <div id="community-view" class="view-container community">
             <section class="community-overview" aria-labelledby="community-page-title">
                 <div class="community-overview__copy">
-                    <span class="community-overview__eyebrow"><i class="fas fa-satellite-dish"></i> FIELD NETWORK // LIVE</span>
-                    <div id="community-page-title" data-original-heading="h1">Community Activity Map</div>
-                    <p>Explore anonymous location activity, community totals, comments, and conversations from across Animal Battle Stats.</p>
-                </div>
-                <div class="community-overview__signals" aria-label="Community information">
-                    <span class="community-signal community-signal--live"><i class="fas fa-circle"></i> Network online</span>
-                    <span class="community-signal"><i class="fas fa-user-shield"></i> Map data is anonymous</span>
+                    <div id="community-page-title" data-original-heading="h1">Community</div>
+                    <p>See where visitors are exploring Animal Battle Stats, read comments, or join the discussion.</p>
                 </div>
             </section>
 
@@ -1557,151 +1557,100 @@ html.js #seo-content{display:none!important}
             </div>
 
             <div class="community-feed-layout community__layout">
-                <!-- Sidebar Column (LEFT) -->
+                <!-- Map section -->
                 <div class="community-sidebar-column community__sidebar">
-                    <!-- Globe Analytics Module (Main Focus) -->
                     <div class="sidebar-module globe-focus-module map-primary-module community-widget community-widget--with-brackets">
                         <div class="module-header community-widget__header">
-                            <span class="module-title community-widget__title"><i class="fas fa-globe-americas"></i> LOCATION ACTIVITY</span>
-                            <span class="globe-live-pill">Anonymous aggregates</span>
-                            <button type="button" class="globe-open-map-btn" id="globe-open-map-btn" aria-label="Open the full world activity map">
-                                Open map <i class="fas fa-arrow-right"></i>
-                            </button>
+                            <div>
+                                <span class="module-title community-widget__title"><i class="fas fa-globe-americas"></i> Activity Map</span>
+                                <p>Choose a hotspot or search the location directory.</p>
+                            </div>
                         </div>
 
-                        <div class="globe-mode-switch" role="group" aria-label="Map display mode">
-                            <button type="button" class="globe-mode-btn active" id="globe-mode-globe" data-mode="globe">3D Globe</button>
-                            <button type="button" class="globe-mode-btn" id="globe-mode-flat" data-mode="flat">Flat Map</button>
-                        </div>
-
-                        <div class="globe-context-bar">
+                        <div class="community-map-controls">
+                            <div class="globe-mode-switch" role="group" aria-label="Map display mode">
+                                <button type="button" class="globe-mode-btn active" id="globe-mode-globe" data-mode="globe">Globe</button>
+                                <button type="button" class="globe-mode-btn" id="globe-mode-flat" data-mode="flat">Flat map</button>
+                            </div>
                             <div class="globe-context-item">
-                                <span class="globe-context-label">Trend Window</span>
-                                <select id="globe-trend-range" class="globe-context-select" aria-label="Select activity trend time range">
-                                    <option value="all" selected>All Time</option>
-                                    <option value="14d">Last 14 Days</option>
-                                    <option value="30d">Last 30 Days</option>
-                                    <option value="90d">Last 90 Days</option>
-                                    <option value="365d">Last 12 Months</option>
+                                <label class="globe-context-label" for="globe-trend-range">Time range</label>
+                                <select id="globe-trend-range" class="globe-context-select" aria-label="Select activity time range">
+                                    <option value="all" selected>All time</option>
+                                    <option value="14d">Last 14 days</option>
+                                    <option value="30d">Last 30 days</option>
+                                    <option value="90d">Last 90 days</option>
+                                    <option value="365d">Last 12 months</option>
                                 </select>
                             </div>
-                            <div class="globe-context-item">
-                                <span class="globe-context-label">Location Scope</span>
-                                <span id="globe-location-scope" class="globe-context-pill">Global</span>
-                            </div>
+                            <span id="globe-location-scope" class="globe-context-pill">Global</span>
                         </div>
 
-                        <div class="globe-stage">
-                            <canvas id="community-globe-canvas" width="520" height="520" aria-label="Interactive global activity map"></canvas>
-                            <div id="community-globe-empty" class="globe-empty">Loading global activity...</div>
-                            <div id="community-globe-tooltip" class="globe-tooltip" style="display: none;"></div>
+                        <div class="community-map-grid">
+                            <div class="globe-stage">
+                                <canvas id="community-globe-canvas" width="520" height="520" aria-label="Interactive global activity map"></canvas>
+                                <div id="community-globe-empty" class="globe-empty">Loading map...</div>
+                                <div id="community-globe-tooltip" class="globe-tooltip" style="display: none;"></div>
+                            </div>
+                            <aside class="community-location-panel" aria-label="Location search and details">
+                                <div class="globe-city-directory">
+                                    <div class="globe-city-directory-head">
+                                        <h4>Locations</h4>
+                                        <span class="globe-city-count" id="globe-city-count">0 locations</span>
+                                    </div>
+                                    <input type="search" id="globe-city-search" class="globe-city-search" placeholder="Search city, region, or country" autocomplete="off">
+                                    <div class="globe-city-list" id="globe-city-list">
+                                        <div class="globe-directory-empty">Loading locations...</div>
+                                    </div>
+                                </div>
+                                <div class="globe-point-details" id="globe-point-details">
+                                    <div class="globe-point-placeholder">Choose a hotspot to view its anonymous totals.</div>
+                                </div>
+                            </aside>
                         </div>
 
-                        <div class="globe-totals-grid">
-                            <div class="globe-total-card">
-                                <span class="globe-total-label">Total Events</span>
-                                <span class="globe-total-value" id="globe-total-events">0</span>
-                            </div>
-                            <div class="globe-total-card">
-                                <span class="globe-total-label">Site Visits</span>
-                                <span class="globe-total-value" id="globe-total-visits">0</span>
-                            </div>
-                            <div class="globe-total-card">
-                                <span class="globe-total-label">Unique Visitors</span>
-                                <span class="globe-total-value" id="globe-total-visitors">0</span>
-                            </div>
+                        <div class="globe-totals-grid" aria-label="Map totals">
+                            <div class="globe-total-card"><span class="globe-total-label">Events</span><span class="globe-total-value" id="globe-total-events">0</span></div>
+                            <div class="globe-total-card"><span class="globe-total-label">Visits</span><span class="globe-total-value" id="globe-total-visits">0</span></div>
+                            <div class="globe-total-card"><span class="globe-total-label">Visitors</span><span class="globe-total-value" id="globe-total-visitors">0</span></div>
+                            <div class="globe-total-card"><span class="globe-total-label">Locations</span><span class="globe-total-value" id="globe-total-locations">0</span></div>
                         </div>
 
-                        <div class="community-hud-module community-summary-module">
-                            <div class="hud-header">
-                                <span class="hud-title"><i class="fas fa-chart-line"></i> COMMUNITY TOTALS</span>
-                                <a class="community-summary-link" href="/community/feed">View comments &amp; activity <i class="fas fa-arrow-right"></i></a>
-                            </div>
-                            <div class="hud-live-badges">
-                                <span class="hud-online-badge"><i class="fas fa-circle online-dot"></i> <span id="hud-online-count">0</span> Online</span>
-                                <span class="hud-visits-badge"><i class="fas fa-eye"></i> <span id="hud-total-visits">0</span> Visits</span>
-                            </div>
-                            <div class="hud-stats-grid">
-                                <div class="hud-stat-item"><span class="hud-stat-value" id="hud-stat-members">--</span><span class="hud-stat-label">Members</span></div>
-                                <div class="hud-stat-item"><span class="hud-stat-value" id="hud-stat-votes">--</span><span class="hud-stat-label">Votes</span></div>
-                                <div class="hud-stat-item"><span class="hud-stat-value" id="hud-stat-comments">--</span><span class="hud-stat-label">Comments</span></div>
-                                <div class="hud-stat-item"><span class="hud-stat-value" id="hud-stat-tournaments">--</span><span class="hud-stat-label">Tournaments</span></div>
-                                <div class="hud-stat-item"><span class="hud-stat-value" id="hud-stat-matches">--</span><span class="hud-stat-label">Matches</span></div>
-                            </div>
-                        </div>
+                        <p class="community-privacy-note"><i class="fas fa-user-shield" aria-hidden="true"></i> Locations are anonymous, approximate city, region, or country points. No precise addresses or individual trails are shown.</p>
 
-                        <div class="globe-window-row">
-                            <div class="globe-window-pill">
-                                <span class="window-label">24h</span>
-                                <span class="window-value" id="globe-window-24h">0</span>
-                            </div>
-                            <div class="globe-window-pill">
-                                <span class="window-label">7d</span>
-                                <span class="window-value" id="globe-window-7d">0</span>
-                            </div>
-                            <div class="globe-window-pill">
-                                <span class="window-label">30d</span>
-                                <span class="window-value" id="globe-window-30d">0</span>
-                            </div>
-                        </div>
-
-                        <div class="globe-insights-grid">
-                            <div class="globe-insight-card">
-                                <span class="globe-insight-label">Hottest Location</span>
-                                <strong class="globe-insight-value" id="globe-insight-hottest">No data</strong>
-                            </div>
-                            <div class="globe-insight-card">
-                                <span class="globe-insight-label">Top Country</span>
-                                <strong class="globe-insight-value" id="globe-insight-country">No data</strong>
-                            </div>
-                            <div class="globe-insight-card">
-                                <span class="globe-insight-label">Momentum</span>
-                                <strong class="globe-insight-value" id="globe-insight-momentum">No data</strong>
-                            </div>
-                        </div>
-
-                        <div class="globe-advanced-grid">
-                            <div class="globe-chart-card">
-                                <h4 id="globe-trend-title">Activity Trend (All Time)</h4>
-                                <div class="globe-chart-wrap">
-                                    <canvas id="globe-trend-chart" aria-label="Daily events and visits trend"></canvas>
+                        <details class="community-more-stats" id="community-more-stats">
+                            <summary><span><i class="fas fa-chart-line" aria-hidden="true"></i> More location stats</span><i class="fas fa-chevron-down" aria-hidden="true"></i></summary>
+                            <div class="community-more-stats__body">
+                                <div class="community-hud-module community-summary-module">
+                                    <div class="hud-stats-grid">
+                                        <div class="hud-stat-item"><span class="hud-stat-value" id="hud-online-count">0</span><span class="hud-stat-label">Online</span></div>
+                                        <div class="hud-stat-item"><span class="hud-stat-value" id="hud-total-visits">0</span><span class="hud-stat-label">Visits</span></div>
+                                        <div class="hud-stat-item"><span class="hud-stat-value" id="hud-stat-members">--</span><span class="hud-stat-label">Members</span></div>
+                                        <div class="hud-stat-item"><span class="hud-stat-value" id="hud-stat-votes">--</span><span class="hud-stat-label">Votes</span></div>
+                                        <div class="hud-stat-item"><span class="hud-stat-value" id="hud-stat-comments">--</span><span class="hud-stat-label">Comments</span></div>
+                                        <div class="hud-stat-item"><span class="hud-stat-value" id="hud-stat-tournaments">--</span><span class="hud-stat-label">Tournaments</span></div>
+                                        <div class="hud-stat-item"><span class="hud-stat-value" id="hud-stat-matches">--</span><span class="hud-stat-label">Matches</span></div>
+                                    </div>
+                                </div>
+                                <div class="globe-window-row">
+                                    <div class="globe-window-pill"><span class="window-label">24 hours</span><span class="window-value" id="globe-window-24h">0</span></div>
+                                    <div class="globe-window-pill"><span class="window-label">7 days</span><span class="window-value" id="globe-window-7d">0</span></div>
+                                    <div class="globe-window-pill"><span class="window-label">30 days</span><span class="window-value" id="globe-window-30d">0</span></div>
+                                </div>
+                                <div class="globe-insights-grid">
+                                    <div class="globe-insight-card"><span class="globe-insight-label">Most active location</span><strong class="globe-insight-value" id="globe-insight-hottest">No data</strong></div>
+                                    <div class="globe-insight-card"><span class="globe-insight-label">Top country</span><strong class="globe-insight-value" id="globe-insight-country">No data</strong></div>
+                                    <div class="globe-insight-card"><span class="globe-insight-label">Trend</span><strong class="globe-insight-value" id="globe-insight-momentum">No data</strong></div>
+                                </div>
+                                <div class="globe-advanced-grid">
+                                    <div class="globe-chart-card"><h4 id="globe-trend-title">Activity trend</h4><div class="globe-chart-wrap"><canvas id="globe-trend-chart" aria-label="Daily events and visits trend"></canvas></div></div>
+                                    <div class="globe-chart-card"><h4>Top countries</h4><div class="globe-chart-wrap"><canvas id="globe-country-chart" aria-label="Top countries by event volume"></canvas></div></div>
+                                </div>
+                                <div class="globe-breakdown-grid">
+                                    <div class="globe-breakdown-col"><h4>Top actions</h4><div id="globe-actions-list" class="globe-breakdown-list"></div></div>
+                                    <div class="globe-breakdown-col"><h4>Top pages</h4><div id="globe-pages-list" class="globe-breakdown-list"></div></div>
                                 </div>
                             </div>
-                            <div class="globe-chart-card">
-                                <h4>Top Countries by Events</h4>
-                                <div class="globe-chart-wrap">
-                                    <canvas id="globe-country-chart" aria-label="Top countries by event volume"></canvas>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="globe-breakdown-grid">
-                            <div class="globe-breakdown-col">
-                                <h4>Top Actions</h4>
-                                <div id="globe-actions-list" class="globe-breakdown-list"></div>
-                            </div>
-                            <div class="globe-breakdown-col">
-                                <h4>Top Pages</h4>
-                                <div id="globe-pages-list" class="globe-breakdown-list"></div>
-                            </div>
-                        </div>
-
-                        <div class="globe-city-directory">
-                            <div class="globe-city-directory-head">
-                                <h4>Location Directory</h4>
-                                <span class="globe-city-count" id="globe-city-count">0 locations</span>
-                            </div>
-                            <input type="search" id="globe-city-search" class="globe-city-search" placeholder="Search city, region, or country">
-                            <div class="globe-city-list" id="globe-city-list">
-                                <div class="globe-directory-empty">Loading locations...</div>
-                            </div>
-                        </div>
-
-                        <div class="globe-point-details" id="globe-point-details">
-                            <div class="globe-point-placeholder">
-                                Click a hotspot to view exact location stats.
-                            </div>
-                        </div>
+                        </details>
                     </div>
 
                 </div>
@@ -1714,11 +1663,10 @@ html.js #seo-content{display:none!important}
                         </div>
 
                         <div class="community-channel-header__copy">
-                            <span class="community-channel-kicker" id="community-channel-kicker">COMMUNITY CHANNEL</span>
+                            <span class="community-channel-kicker" id="community-channel-kicker">DISCUSSION</span>
                             <h2 id="community-channel-title">Battle Discussion</h2>
                             <p id="community-channel-description">Talk matchups, animal stats, and powerscaling with the community.</p>
                         </div>
-                        <span class="community-channel-live"><i class="fas fa-circle"></i> Live</span>
                     </header>
 
                     <!-- Scrollable Feed Area (middle region) -->
@@ -1760,20 +1708,12 @@ html.js #seo-content{display:none!important}
         <!-- Battle Points Shop View -->
         <div id="battlepoints-view" class="view-container">
             <div class="bp-shop-page bp-shop-unavailable">
-                <!-- Not Available Overlay -->
-                <div class="bp-unavailable-overlay">
-                    <div class="bp-unavailable-content">
-                        <i class="fas fa-lock"></i>
-                        <h2>NOT AVAILABLE</h2>
-                        <p>Contact animalbattlestats@gmail.com for inquiries</p>
-                    </div>
-                </div>
-                
-                <!-- Pack Grid (Preview - Greyed Out) -->
-                <div class="bp-packs-section bp-packs-preview">
-                    <div class="bp-packs-grid" id="bp-packs-grid">
-                        <!-- Static preview packs -->
-                    </div>
+                <div class="bp-unavailable-content">
+                    <span class="bp-coming-icon"><i class="fas fa-coins" aria-hidden="true"></i></span>
+                    <p class="bp-coming-kicker">Battle Points</p>
+                    <h2>Coming later</h2>
+                    <p>The Battle Points shop is not available yet. Your current balance remains saved.</p>
+                    <a href="/rankings" class="bp-coming-action"><i class="fas fa-trophy" aria-hidden="true"></i> Play Tournament</a>
                 </div>
             </div>
         </div>
@@ -3192,18 +3132,16 @@ html.js #seo-content{display:none!important}
     <!-- Data loaded from MongoDB API - no local data.js needed -->
     
     <!-- Core utilities - shared across all modules -->
-    <script src="/js/core.js?v=2.9.1"></script>
-    <script src="/js/text-layout.js?v=2.9.1"></script>
+    <script src="/js/core.js?v=2.10.0"></script>
+    <script src="/js/text-layout.js?v=2.10.0"></script>
     
     <!-- Application modules - load order matters -->
-    <script src="/js/router.js?v=2.9.1"></script>
-    <script src="/js/auth.js?v=2.9.1"></script>
-    
-    <!-- Audio Manager (must load before other scripts) -->
-    <script src="/js/audio.js?v=2.9.1"></script>
+    <script src="/js/router.js?v=2.10.0"></script>
+    <script src="/js/motion.js?v=2.10.0"></script>
+    <script src="/js/auth.js?v=2.10.0"></script>
     
     <!-- Main app (initializes everything) -->
-    <script src="/js/main.js?v=2.9.1" defer></script>
+    <script src="/js/main.js?v=2.10.0" defer></script>
     
 </body>
 </html>

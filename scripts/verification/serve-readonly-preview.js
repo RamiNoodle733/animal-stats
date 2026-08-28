@@ -7,6 +7,7 @@ const path = require('path');
 
 const repoRoot = path.resolve(__dirname, '..', '..');
 const port = Number(process.argv[2]) || 3000;
+const contentRoot = process.argv[3] ? path.resolve(repoRoot, process.argv[3]) : repoRoot;
 const productionOrigin = 'https://animalbattlestats.com';
 const allowedExtensions = new Set([
     '.html', '.css', '.js', '.json', '.geojson', '.png', '.jpg', '.jpeg',
@@ -53,7 +54,7 @@ function sendJson(res, status, body) {
 function resolveRoute(pathname) {
     if (fixedRoutes.has(pathname)) return fixedRoutes.get(pathname);
     if (pathname.startsWith('/community/')) return 'community.html';
-    if (pathname.startsWith('/profile/') || ['/login', '/signup', '/forgot-password', '/reset-password'].includes(pathname)) {
+    if (pathname.startsWith('/profile/') || ['/profile', '/login', '/signup', '/forgot-password', '/reset-password', '/battlepoints'].includes(pathname)) {
         return 'index.html';
     }
     if (pathname.startsWith('/stats/')) return `${pathname.slice(1)}.html`;
@@ -62,8 +63,8 @@ function resolveRoute(pathname) {
 
 function resolveSafeFile(relativePath) {
     const normalized = path.normalize(relativePath);
-    const absolute = path.resolve(repoRoot, normalized);
-    const relative = path.relative(repoRoot, absolute);
+    const absolute = path.resolve(contentRoot, normalized);
+    const relative = path.relative(contentRoot, absolute);
     if (!relative || relative.startsWith('..') || path.isAbsolute(relative)) return null;
     if (!allowedExtensions.has(path.extname(absolute).toLowerCase())) return null;
     if (/^(?:api|lib|scripts|test|node_modules|\.git|\.vercel)(?:[\\/]|$)/i.test(relative)) return null;

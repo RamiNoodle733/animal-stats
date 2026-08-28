@@ -1292,6 +1292,9 @@ class TournamentManager {
         // If no animals, don't render
         if (!animal1 && !animal2) return;
 
+        // The radar is optional; never block tournament progression on a CDN.
+        if (typeof window.Chart !== 'function') return;
+
         const ctx = canvas.getContext('2d');
         
         const data = {

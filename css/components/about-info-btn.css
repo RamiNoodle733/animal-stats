@@ -187,13 +187,12 @@
         font-size: 18px;
     }
 }
-    
-    /* Mobile tap feedback */
+
+/* Mobile tap feedback */
     .mobile-about-btn:active {
         transform: scale(0.9);
         background: rgba(0, 212, 255, 0.25);
     }
-}
 
 /* ========================
    PULSE ANIMATION (Subtle Attention)

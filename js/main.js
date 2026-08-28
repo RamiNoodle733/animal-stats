@@ -2535,6 +2535,10 @@ class AnimalStatsApp {
         // If no animals selected, don't render
         if (!left && !right) return;
 
+        // Chart.js is loaded as an optional route enhancement. Animal selection,
+        // comparison, and fights must still work if its CDN is unavailable.
+        if (typeof window.Chart !== 'function') return;
+
         const ctx = this.dom.radarCanvas.getContext('2d');
         
         const data = {
@@ -2690,14 +2694,30 @@ class AnimalStatsApp {
         if (!this.dom.fightBtn) return;
 
         const { left, right } = this.state.compare;
-        if (left && right) {
+        const isReady = Boolean(left && right);
+        const wasReady = this.dom.fightBtn.dataset.ready === 'true';
+        this.dom.fightBtn.dataset.ready = isReady ? 'true' : 'false';
+        this.dom.fightBtn.innerHTML = isReady
+            ? '<i class="fas fa-bolt" aria-hidden="true"></i><span>START FIGHT</span><i class="fas fa-bolt" aria-hidden="true"></i>'
+            : '<i class="fas fa-paw" aria-hidden="true"></i><span>SELECT 2 ANIMALS</span>';
+
+        if (isReady) {
             this.dom.fightBtn.disabled = false;
             this.dom.fightBtn.style.opacity = '1';
             this.dom.fightBtn.style.cursor = 'pointer';
+            if (!wasReady && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                this.dom.fightBtn.classList.remove('is-ready');
+                void this.dom.fightBtn.offsetWidth;
+                this.dom.fightBtn.classList.add('is-ready');
+                this.dom.fightBtn.addEventListener('animationend', () => {
+                    this.dom.fightBtn?.classList.remove('is-ready');
+                }, { once: true });
+            }
         } else {
             this.dom.fightBtn.disabled = true;
             this.dom.fightBtn.style.opacity = '0.5';
             this.dom.fightBtn.style.cursor = 'not-allowed';
+            this.dom.fightBtn.classList.remove('is-ready');
         }
     }
 
@@ -3332,34 +3352,83 @@ class AnimalStatsApp {
      * Setup the audio mute toggle button
      */
     setupAudioToggle() {
-        const audioBtn = document.getElementById('audio-toggle-btn');
-        const audioIcon = document.getElementById('audio-toggle-icon');
-        
-        if (!audioBtn || !audioIcon) return;
-        
-        // Update icon based on current state
-        const updateIcon = () => {
+        const controls = [
+            [document.getElementById('audio-toggle-btn'), document.getElementById('audio-toggle-icon')],
+            [document.getElementById('audio-toggle-btn-mobile'), document.getElementById('audio-toggle-icon-mobile')]
+        ].filter(([button, icon]) => button && icon);
+
+        if (!controls.length) return;
+
+        let savedEnabled = false;
+        try {
+            savedEnabled = JSON.parse(localStorage.getItem('abs_audio_prefs') || 'null')?.enabled === true;
+        } catch (_error) {
+            savedEnabled = false;
+        }
+
+        let audioLoader = null;
+        const loadAudioManager = () => {
             if (window.AudioManager) {
-                const enabled = AudioManager.isEnabled();
-                audioIcon.className = enabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
-                audioBtn.title = enabled ? 'Mute Sound Effects' : 'Unmute Sound Effects';
+                window.AudioManager.init();
+                return Promise.resolve(window.AudioManager);
             }
+            if (audioLoader) return audioLoader;
+
+            audioLoader = new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                const revision = window.routeAssetRegistry?.revision || '2.10.0';
+                script.src = `/js/audio.js?v=${revision}`;
+                script.dataset.audioManager = 'true';
+                script.onload = () => {
+                    if (!window.AudioManager) {
+                        reject(new Error('Audio manager did not initialize'));
+                        return;
+                    }
+                    window.AudioManager.init();
+                    resolve(window.AudioManager);
+                };
+                script.onerror = () => reject(new Error('Sound effects could not be loaded'));
+                document.body.appendChild(script);
+            });
+            return audioLoader;
         };
-        
-        // Initial state
-        updateIcon();
-        
-        // Toggle on click
-        audioBtn.addEventListener('click', () => {
-            if (window.AudioManager) {
-                AudioManager.toggleMute();
-                updateIcon();
-                // Play a small click to confirm unmute
-                if (AudioManager.isEnabled()) {
-                    AudioManager.click();
+
+        const updateControls = () => {
+            const enabled = window.AudioManager?.isEnabled() ?? savedEnabled;
+            controls.forEach(([button, icon]) => {
+                icon.className = enabled ? 'fas fa-volume-up' : 'fas fa-volume-mute';
+                button.title = enabled ? 'Mute sound effects' : 'Enable sound effects';
+                button.setAttribute('aria-label', button.title);
+                button.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+            });
+        };
+
+        updateControls();
+        controls.forEach(([button]) => {
+            button.addEventListener('click', async () => {
+                button.disabled = true;
+                try {
+                    const manager = await loadAudioManager();
+                    manager.toggleMute();
+                    savedEnabled = manager.isEnabled();
+                    updateControls();
+                    if (savedEnabled) manager.click();
+                } catch (error) {
+                    console.warn('Sound effects unavailable:', error?.message || error);
+                } finally {
+                    button.disabled = false;
                 }
-            }
+            });
         });
+
+        // Returning visitors who opted in keep sound enabled; everyone else avoids
+        // downloading or initializing Web Audio until they press the control.
+        if (savedEnabled) {
+            loadAudioManager().then(updateControls).catch(() => {
+                savedEnabled = false;
+                updateControls();
+            });
+        }
     }
 
     /**

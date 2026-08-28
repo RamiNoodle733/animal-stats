@@ -19,7 +19,8 @@
 const AudioManager = {
     ctx: null,
     masterGain: null,
-    enabled: true,
+    // First-time visitors are muted. A previously saved choice is preserved.
+    enabled: false,
     volume: 0.5,
     buffers: { white: null, pink: null, brown: null, crackle: null },
     cooldowns: {},
@@ -116,9 +117,10 @@ const AudioManager = {
     
     loadPreferences() {
         try {
-            const p = JSON.parse(localStorage.getItem('abs_audio_prefs'));
+            const stored = localStorage.getItem('abs_audio_prefs');
+            const p = stored ? JSON.parse(stored) : null;
             if (p) {
-                this.enabled = p.enabled !== false;
+                this.enabled = p.enabled === true;
                 this.volume = typeof p.volume === 'number' ? p.volume : 0.5;
                 if (this.masterGain) this.masterGain.gain.value = this.enabled ? this.volume : 0;
             }
